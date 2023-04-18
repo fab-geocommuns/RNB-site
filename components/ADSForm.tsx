@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-
+import BdgOperations from './BdgOperations';
 
 
 
@@ -97,6 +97,11 @@ export default function ADSForm({ads = {} }) {
                  onChange={handleInputChange}
                  />
              </div>
+
+            <div>
+            <BdgOperations ads={formData} />
+            </div>
+
             <div>
                 <button type="submit">Enregistrer</button>
             </div>
