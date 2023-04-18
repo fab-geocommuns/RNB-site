@@ -4,20 +4,20 @@ import { useState } from 'react';
 import ADSMap from './ADSMap';
 import styles from './BdgOperations.module.css'
 
-export default function BdgOperations({ads = {} }) {
+export default function BdgOperations({initialBdgOps = [] }) {
 
-    const [formData, setFormData] = useState(ads);
+    const [bdgsOps, setOperations] = useState(initialBdgOps);
 
     return (
         <>
             <div className={styles.grid}>
             <div>
-                <ADSMap />
+                <ADSMap bdgsOps={bdgsOps} />
             </div>
             <div>
             <div>Liste des opérations</div>
                 <ul>
-                    {ads?.buildings_operations?.map((bdgop) => (
+                    {bdgsOps?.map((bdgop) => (
                         <li key={bdgop.building.rnb_id}>{bdgop.building.rnb_id} - {bdgop.operation}</li>
                     ))}
                 </ul>

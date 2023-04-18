@@ -99,7 +99,7 @@ export default function ADSForm({ads = {} }) {
              </div>
 
             <div>
-            <BdgOperations ads={formData} />
+            <BdgOperations initialBdgOps={ads.buildings_operations} />
             </div>
 
             <div>

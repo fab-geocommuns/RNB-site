@@ -5,7 +5,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { log } from 'console';
 
-export default function ADSMap() {
+export default function ADSMap({bdgsOps = [] }) {
 
     const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
     
@@ -25,16 +25,13 @@ export default function ADSMap() {
     }
 
     const newQuery = () => {
-        console.log('new query')
+
         // Reset bdgs
         bdgs = []
 
         let prom = launchQuery()
 
         prom.then(() => {
-
-            console.log('back from server')
-            console.log(map)
 
             const geojson = convertBdgToGeojson();
             map.getSource('bdgs').setData(geojson);
@@ -74,6 +71,8 @@ export default function ADSMap() {
     const initDataLayer = () => {
 
         map.on('style.load', () => {
+
+            console.log('map is loaded')
       
             map.addSource('bdgs', {
               type: 'geojson',
@@ -86,12 +85,17 @@ export default function ADSMap() {
               type: 'circle',
               source: 'bdgs',
               paint: {
-                'circle-radius': 5,
+                'circle-radius': 4,
                 'circle-color': [
-                  'case',
-                  ['boolean', ['feature-state', 'hover'], false],
-                  '#80ffdb',
-                  '#f72585'
+                  'match',
+                  ['get', 'operation'],
+                    'build',
+                    '#f72585',
+                    'modify',
+                    '#7209b7',
+                    'demolish',
+                    '#3a0ca3',
+                    '#0f4c5c'
                 ]
               }})
           
@@ -118,8 +122,6 @@ export default function ADSMap() {
         
             };
         
-        
-            
         
           });
 
@@ -192,6 +194,7 @@ export default function ADSMap() {
 
         initMapControls();
         initMapEvents();
+        initDataLayer();
 
     }, []);
 
