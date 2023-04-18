@@ -5,9 +5,7 @@ import Link from 'next/link'
 
 async function fetchADSList() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
-  console.log(url)
   const res = await fetch(url, {cache: 'no-cache'})
-  console.log(res)
   const data = await res.json()
   return data
   
