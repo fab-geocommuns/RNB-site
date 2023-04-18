@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import Link from 'next/link'
 import ADSForm from '../../components/ADSForm'
 
 
@@ -17,7 +17,7 @@ export default async function ADSDetail({params}: any) {
 
     return (
         <>
-        
+        <p><Link href={`/`}>&larr; retour</Link></p>
         <h1>{ads.issue_number}</h1>
         <h2>Detail</h2>
         <ADSForm

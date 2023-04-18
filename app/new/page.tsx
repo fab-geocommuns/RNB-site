@@ -1,17 +1,17 @@
-import Head from 'next/head'
+import Link from 'next/link'
+import ADSForm from '../../components/ADSForm'
 
 
 
 export default function NewADS() {
 
-    
 
     return (
         <>
-        
-        <h1>ONE ADS</h1>
+        <p><Link href={`/`}>&larr; retour</Link></p>
+        <h1>Nouvelles ADS</h1>
         <h2>Detail</h2>
-        
+        <ADSForm />
         </>
     )
 }

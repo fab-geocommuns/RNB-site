@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 
 
-export default function ADSForm({ads}) {
+export default function ADSForm({ads = {} }) {
 
     const [formData, setFormData] = useState(ads);
 
@@ -84,6 +84,16 @@ export default function ADSForm({ads}) {
                  name="issue_date" 
                  id="issue_date" 
                  value={formData.issue_date}
+                 onChange={handleInputChange}
+                 />
+             </div>
+             <div>
+                <label htmlFor="insee_code">Code INSEE</label>
+                <input
+                 type="text" 
+                 name="insee_code" 
+                 id="insee_code" 
+                 value={formData.insee_code}
                  onChange={handleInputChange}
                  />
              </div>

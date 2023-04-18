@@ -24,6 +24,11 @@ export default async function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
         <h1>Autorisation de droit des sols</h1>
+
+        <p>
+        <Link href={`/new`}>Nouvelle ADS</Link>
+        </p>
+
         <h2>Listing</h2>
         
         <ul>
