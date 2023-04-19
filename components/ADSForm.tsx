@@ -2,15 +2,16 @@
 
 import { useState } from 'react';
 import BdgOperations from './BdgOperations';
+import { AdsContext } from './AdsContext';
+import Ads from '../logic/ads';
 
+export default function ADSForm({data = {} }) {
 
-
-export default function ADSForm({ads = {} }) {
-
-    const [formData, setFormData] = useState(ads);
+    let ads = new Ads(data)
+    const [ctx, setCtx] = useState(ads);
 
     const getActionURL = () => {
-        if (isCreation()) {
+        if (ads.isSaved()) {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/'
         } else {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + ads.issue_number + "/"
@@ -19,23 +20,27 @@ export default function ADSForm({ads = {} }) {
     }
 
     const getActionMethod = () => {
-        if (isCreation()) {
+        if (ads.isSaved()) {
             return 'POST'
         } else {
             return 'PUT'
         }
     }
 
-    const isCreation = () => {
-        return ads.issue_number === undefined
-    }
+    
 
     const handleInputChange = (e) => {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        setFormData({...formData, [name]: value})
+        console.log('TODO : adapt handleInputChange to context management')
+
+        ads.data[name] = value
+        setCtx(ads.clone())
+    
     }
+
+
 
     const submitForm = async (e) => {
 
@@ -52,7 +57,7 @@ export default function ADSForm({ads = {} }) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Token 3d4dbc70f60d0666fbd8ead6df4eb0c3fcf376bf',
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(ctx.data)
         })
         const data = await res.json()
 
@@ -63,17 +68,18 @@ export default function ADSForm({ads = {} }) {
     }
 
     return (
+        <AdsContext.Provider value={[ctx, setCtx]}>
         <form onSubmit={submitForm}>
 
-            <h3>{ads.issue_number}</h3>
-            <p>{ads.insee_code}</p>
+            <h3>{ads.data.issue_number}--</h3>
+            <p>{ads.data.insee_code}</p>
             <div>
             <label htmlFor="issue_number">Numéro d'ADS</label>
             <input 
                 type="text" 
                 name="issue_number" 
                 id="issue_number"
-                value={formData.issue_number}
+                value={ctx.issue_number}
                 onChange={handleInputChange}
              />
              </div>
@@ -83,7 +89,7 @@ export default function ADSForm({ads = {} }) {
                  type="date" 
                  name="issue_date" 
                  id="issue_date" 
-                 value={formData.issue_date}
+                 value={ctx.issue_date}
                  onChange={handleInputChange}
                  />
              </div>
@@ -93,13 +99,16 @@ export default function ADSForm({ads = {} }) {
                  type="text" 
                  name="insee_code" 
                  id="insee_code" 
-                 value={formData.insee_code}
+                 value={ctx.insee_code}
                  onChange={handleInputChange}
                  />
              </div>
 
             <div>
-            <BdgOperations initialBdgOps={ads.buildings_operations} />
+
+
+
+            <BdgOperations />
             </div>
 
             <div>
@@ -108,6 +117,7 @@ export default function ADSForm({ads = {} }) {
 
             
         </form>
+        </AdsContext.Provider>
     )
 
 }

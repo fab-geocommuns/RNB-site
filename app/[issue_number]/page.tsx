@@ -21,7 +21,7 @@ export default async function ADSDetail({params}: any) {
         <h1>{ads.issue_number}</h1>
         <h2>Detail</h2>
         <ADSForm
-            ads={ads}
+            data={ads}
          />
         </>
     )

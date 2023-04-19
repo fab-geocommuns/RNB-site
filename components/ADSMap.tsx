@@ -5,21 +5,39 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 
-export default function ADSMap({bdgsOps = [] }) {
+
+
+export default function ADSMap({bdgsOps = [], onToggleRnbId}) {
+
+    
 
     const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
     
     const minZoom = 16
     const mapContainer = useRef(null);
 
-    let map = null;
+    const map = useRef(null);
+    
     let bdgs = []
 
 
     const initMapEvents = () => {
 
-        map.on('moveend', () => {
+        console.log('init map events')
+
+        map.current.on('moveend', () => {
             newQuery()
+        });
+
+        map.current.on('click', 'bdgs', function(e) {
+
+            console.log('click')
+
+            const rnb_id = e.features[0].properties.rnb_id
+
+            // emit onToggleBdg event
+            onToggleRnbId(rnb_id)
+
         });
 
     }
@@ -34,7 +52,7 @@ export default function ADSMap({bdgsOps = [] }) {
         prom.then(() => {
 
             const geojson = convertBdgToGeojson();
-            map.getSource('bdgs').setData(geojson);
+            map.current.getSource('bdgs').setData(geojson);
 
         })
 
@@ -85,17 +103,17 @@ export default function ADSMap({bdgsOps = [] }) {
 
     const initDataLayer = () => {
 
-        map.on('style.load', () => {
+        map.current.on('style.load', () => {
 
             console.log('map is loaded')
       
-            map.addSource('bdgs', {
+            map.current.addSource('bdgs', {
               type: 'geojson',
               data: convertBdgToGeojson(),
               promoteId: 'rnb_id'
             });
           
-            map.addLayer({
+            map.current.addLayer({
               id: 'bdgs',
               type: 'circle',
               source: 'bdgs',
@@ -124,7 +142,7 @@ export default function ADSMap({bdgsOps = [] }) {
 
         return new Promise((resolve, reject) => {
     
-            if (map.getZoom() < minZoom) {
+            if (map.current.getZoom() < minZoom) {
               // Zoom is too low
               resolve();
             } else {
@@ -172,7 +190,7 @@ export default function ADSMap({bdgsOps = [] }) {
 
     const getFirstUrl = ():URL => {
 
-        const bbox = map.getBounds();
+        const bbox = map.current.getBounds();
         const bbox_nw = bbox.getNorthWest();
         const bbox_se = bbox.getSouthEast();
       
@@ -193,7 +211,7 @@ export default function ADSMap({bdgsOps = [] }) {
             showZoom: true
         })
 
-        map.addControl(controls, 'top-right')
+        map.current.addControl(controls, 'top-right')
 
     }
 
@@ -205,27 +223,27 @@ export default function ADSMap({bdgsOps = [] }) {
                 bdgsOps.forEach(bdgOp => {
                     bounds.extend([bdgOp.building.lng, bdgOp.building.lat])
                 })
-                map.fitBounds(bounds, { padding: 50, linear: true })
+                map.current.fitBounds(bounds, { padding: 50, linear: true })
     
             }
     }
 
     useEffect(() => {
-        if (map) return; // map already initialized
 
-        map = new maplibregl.Map({
-            container: mapContainer.current,
-            style: 'https://api.maptiler.com/maps/bright-v2/style.json?key=k5TGaasSmJpsWugdpmtP',
-            center: [5.366093814439828, 45.871081537689264],
-            zoom: 15
-        });
+            if (map.current) return; // initialize map (
 
-        fitOnOperations();
-
-        initMapControls();
-        initMapEvents();
-        initDataLayer();
-
+            map.current = new maplibregl.Map({
+                container: mapContainer.current,
+                style: 'https://api.maptiler.com/maps/bright-v2/style.json?key=k5TGaasSmJpsWugdpmtP',
+                center: [5.366093814439828, 45.871081537689264],
+                zoom: 15
+            });
+    
+            fitOnOperations();
+            initMapControls();
+            initMapEvents();
+            initDataLayer();
+        
     });
 
     return (
