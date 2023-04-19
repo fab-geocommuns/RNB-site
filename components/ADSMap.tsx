@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { log } from 'console';
+
 
 export default function ADSMap({bdgsOps = [] }) {
 
@@ -49,13 +49,16 @@ export default function ADSMap({bdgsOps = [] }) {
         
           bdgs.forEach(bdg => {
         
+            const operation = getBdgOperation(bdg.rnb_id)
+
             const feature = {
               type: "Feature",
               geometry: bdg.point,
               properties: {
                 rnb_id: bdg.rnb_id,
                 source: bdg.source,
-                addresses: bdg.addresses
+                addresses: bdg.addresses,
+                operation: operation
               }
             }
     
@@ -66,6 +69,18 @@ export default function ADSMap({bdgsOps = [] }) {
           return geojson;
 
 
+    }
+
+    const getBdgOperation = (rnb_id: string) => {
+            
+            const bdgOp = bdgsOps.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
+    
+            if (bdgOp) {
+                return bdgOp.operation
+            } else {
+                return null
+            }
+    
     }
 
     const initDataLayer = () => {
@@ -94,8 +109,8 @@ export default function ADSMap({bdgsOps = [] }) {
                     'modify',
                     '#7209b7',
                     'demolish',
-                    '#3a0ca3',
-                    '#0f4c5c'
+                    '#ff0000',
+                    '#999999'
                 ]
               }})
           
@@ -182,21 +197,36 @@ export default function ADSMap({bdgsOps = [] }) {
 
     }
 
+    const fitOnOperations = () => {
+            
+            if (bdgsOps.length > 0) {
+    
+                let bounds = new maplibregl.LngLatBounds();
+                bdgsOps.forEach(bdgOp => {
+                    bounds.extend([bdgOp.building.lng, bdgOp.building.lat])
+                })
+                map.fitBounds(bounds, { padding: 50, linear: true })
+    
+            }
+    }
+
     useEffect(() => {
         if (map) return; // map already initialized
 
         map = new maplibregl.Map({
             container: mapContainer.current,
             style: 'https://api.maptiler.com/maps/bright-v2/style.json?key=k5TGaasSmJpsWugdpmtP',
-            center: [5.726183005054572, 45.18272088002974],
+            center: [5.366093814439828, 45.871081537689264],
             zoom: 15
         });
+
+        fitOnOperations();
 
         initMapControls();
         initMapEvents();
         initDataLayer();
 
-    }, []);
+    });
 
     return (
         <div style={{ width: '800px', height: '400px' }} ref={mapContainer} />

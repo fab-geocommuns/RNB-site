@@ -18,7 +18,8 @@ export default function BdgOperations({initialBdgOps = [] }) {
             <div>Liste des opérations</div>
                 <ul>
                     {bdgsOps?.map((bdgop) => (
-                        <li key={bdgop.building.rnb_id}>{bdgop.building.rnb_id} - {bdgop.operation}</li>
+                        <li key={bdgop.building.rnb_id}>{bdgop.building.rnb_id} - {bdgop.operation}<br />
+                        lat {bdgop.building.lat} - lng {bdgop.building.lng}</li>
                     ))}
                 </ul>
             </div>
