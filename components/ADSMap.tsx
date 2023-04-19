@@ -1,21 +1,18 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { AdsContext } from './AdsContext';
 
+export default function ADSMap() {
 
-
-
-export default function ADSMap({bdgsOps = [], onToggleRnbId}) {
-
-    
+    const [ads, setAds] = useContext(AdsContext)    
 
     const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
     
     const minZoom = 16
     const mapContainer = useRef(null);
-
     const map = useRef(null);
     
     let bdgs = []
@@ -31,12 +28,12 @@ export default function ADSMap({bdgsOps = [], onToggleRnbId}) {
 
         map.current.on('click', 'bdgs', function(e) {
 
-            console.log('click')
+            console.log('click on a marker')
 
             const rnb_id = e.features[0].properties.rnb_id
 
-            // emit onToggleBdg event
-            onToggleRnbId(rnb_id)
+            ads.toggleRnbId(rnb_id)
+            setAds(ads.clone())
 
         });
 
@@ -91,7 +88,7 @@ export default function ADSMap({bdgsOps = [], onToggleRnbId}) {
 
     const getBdgOperation = (rnb_id: string) => {
             
-            const bdgOp = bdgsOps.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
+            const bdgOp = ads.ops.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
     
             if (bdgOp) {
                 return bdgOp.operation
@@ -217,10 +214,10 @@ export default function ADSMap({bdgsOps = [], onToggleRnbId}) {
 
     const fitOnOperations = () => {
             
-            if (bdgsOps.length > 0) {
+            if (ads.ops.length > 0) {
     
                 let bounds = new maplibregl.LngLatBounds();
-                bdgsOps.forEach(bdgOp => {
+                ads.ops.forEach(bdgOp => {
                     bounds.extend([bdgOp.building.lng, bdgOp.building.lat])
                 })
                 map.current.fitBounds(bounds, { padding: 50, linear: true })

@@ -16,7 +16,6 @@ export default function ADSForm({data = {} }) {
         } else {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + ads.issue_number + "/"
         }
-        
     }
 
     const getActionMethod = () => {
@@ -27,24 +26,17 @@ export default function ADSForm({data = {} }) {
         }
     }
 
-    
-
     const handleInputChange = (e) => {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        console.log('TODO : adapt handleInputChange to context management')
-
         ads.data[name] = value
         setCtx(ads.clone())
-    
     }
 
 
 
     const submitForm = async (e) => {
-
-        console.log('submit form')
 
         e.preventDefault();
         

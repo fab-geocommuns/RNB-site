@@ -11,50 +11,13 @@ export default function BdgOperations() {
 
     const [ads, setAds] = useContext(AdsContext)    
 
-    const handleTogleRnbId = (rnbid: string) => {
-        console.log('Handle toggle rnbid: ' + rnbid)
-        toggleRnbId(rnbid)
-    }
-
-    const toggleRnbId = (rnbid: string) => {
-
-        console.log('toggle rnbid: ' + rnbid)
-
-        const hasRnbId = containsRnbId(rnbid)
-        console.log(hasRnbId)
-    
-        if (hasRnbId) {
-            // remove
-            removeRnbId(rnbid)
-            
-            
-        } else {
-            // add
-            addRnbId(rnbid)
-            
-        }
-
-    }
-
-    const containsRnbId = (rnbid: string): boolean => {
-        
-        
-    }
-
-    const removeRnbId = (rnbid: string) => {
-
-    }
-
-    const addRnbId = (rnbid: string) => {
-
-        
-    }
+ 
 
     return (
         <>
             <div className={styles.grid}>
             <div>
-                
+                <ADSMap />
             </div>
             <div>
             <div>Liste des opérations</div>
