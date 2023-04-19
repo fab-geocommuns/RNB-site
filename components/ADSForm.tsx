@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import BdgOperations from './BdgOperations';
 import { AdsContext } from './AdsContext';
 import Ads from '../logic/ads';
@@ -9,12 +9,13 @@ export default function ADSForm({data = {} }) {
 
     let ads = new Ads(data)
     const [ctx, setCtx] = useState(ads);
+    const init_issue_number = useRef(data.issue_number.slice())
 
     const getActionURL = () => {
         if (ads.isSaved()) {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/'
         } else {
-            return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + ads.issue_number + "/"
+            return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_issue_number.current + "/"
         }
     }
 
@@ -52,8 +53,6 @@ export default function ADSForm({data = {} }) {
             body: JSON.stringify(ctx.data)
         })
         const data = await res.json()
-
-        console.log(data)
         
         return
 
@@ -63,11 +62,13 @@ export default function ADSForm({data = {} }) {
         <AdsContext.Provider value={[ctx, setCtx]}>
         <form onSubmit={submitForm}>
 
-            <h3>{ads.data.issue_number}--</h3>
-            <p>{ads.data.insee_code}</p>
+            
             <div>
-            <label htmlFor="issue_number">Numéro d'ADS</label>
+            <label 
+                className="fr-label" 
+                htmlFor="issue_number">Numéro d'ADS</label>
             <input 
+                className="fr-input"
                 type="text" 
                 name="issue_number" 
                 id="issue_number"
@@ -76,8 +77,9 @@ export default function ADSForm({data = {} }) {
              />
              </div>
              <div>
-                <label htmlFor="issue_date">Date d'émission</label>
+                <label className="fr-label"  htmlFor="issue_date">Date d'émission</label>
                 <input
+                className="fr-input"
                  type="date" 
                  name="issue_date" 
                  id="issue_date" 
@@ -86,8 +88,9 @@ export default function ADSForm({data = {} }) {
                  />
              </div>
              <div>
-                <label htmlFor="insee_code">Code INSEE</label>
+                <label className="fr-label"  htmlFor="insee_code">Code INSEE</label>
                 <input
+                className="fr-input"
                  type="text" 
                  name="insee_code" 
                  id="insee_code" 
@@ -104,7 +107,7 @@ export default function ADSForm({data = {} }) {
             </div>
 
             <div>
-                <button type="submit">Enregistrer</button>
+                <button className='fr-btn' type="submit">Enregistrer</button>
             </div>
 
             

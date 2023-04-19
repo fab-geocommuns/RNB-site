@@ -11,8 +11,6 @@ export default function BdgOperations() {
 
     const [ads, setAds] = useContext(AdsContext)    
 
- 
-
     return (
         <>
             <div className={styles.grid}>

@@ -20,15 +20,11 @@ export default function ADSMap() {
 
     const initMapEvents = () => {
 
-        console.log('init map events')
-
         map.current.on('moveend', () => {
             newQuery()
         });
 
         map.current.on('click', 'bdgs', function(e) {
-
-            console.log('click on a marker')
 
             const rnb_id = e.features[0].properties.rnb_id
 
@@ -120,12 +116,12 @@ export default function ADSMap() {
                   'match',
                   ['get', 'operation'],
                     'build',
-                    '#f72585',
+                    '#3bea7e',
                     'modify',
-                    '#7209b7',
+                    '#0078f3',
                     'demolish',
-                    '#ff0000',
-                    '#999999'
+                    '#e1000f',
+                    '#aaaaaa'
                 ]
               }})
           
