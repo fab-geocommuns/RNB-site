@@ -9,7 +9,7 @@ export default function ADSForm({data = {} }) {
 
     let ads = new Ads(data)
     const [ctx, setCtx] = useState(ads);
-    const init_issue_number = useRef(data.issue_number.slice())
+    const init_issue_number = useRef(data.issue_number.slice()) // slice() to clone the string
 
     const getActionURL = () => {
         if (ads.isSaved()) {

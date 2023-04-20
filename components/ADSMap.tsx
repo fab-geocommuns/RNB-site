@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { AdsContext } from './AdsContext';
+import { log } from 'console';
 
 export default function ADSMap() {
 
@@ -15,7 +16,7 @@ export default function ADSMap() {
     const mapContainer = useRef(null);
     const map = useRef(null);
     
-    let bdgs = []
+    const bdgs = useRef([])
 
 
     const initMapEvents = () => {
@@ -37,15 +38,18 @@ export default function ADSMap() {
 
     const newQuery = () => {
 
+      console.log('new query')
+
         // Reset bdgs
-        bdgs = []
+        bdgs.current = []
 
         let prom = launchQuery()
 
         prom.then(() => {
 
-            const geojson = convertBdgToGeojson();
-            map.current.getSource('bdgs').setData(geojson);
+          
+          map.current.getSource('bdgs').setData(convertBdgToGeojson())
+          
 
         })
 
@@ -58,7 +62,7 @@ export default function ADSMap() {
             "features": []
           }
         
-          bdgs.forEach(bdg => {
+          bdgs.current.forEach(bdg => {
         
             const operation = getBdgOperation(bdg.rnb_id)
 
@@ -69,7 +73,7 @@ export default function ADSMap() {
                 rnb_id: bdg.rnb_id,
                 source: bdg.source,
                 addresses: bdg.addresses,
-                operation: operation
+                //operation: operation
               }
             }
     
@@ -98,7 +102,6 @@ export default function ADSMap() {
 
         map.current.on('style.load', () => {
 
-            console.log('map is loaded')
       
             map.current.addSource('bdgs', {
               type: 'geojson',
@@ -112,7 +115,7 @@ export default function ADSMap() {
               source: 'bdgs',
               paint: {
                 'circle-radius': 4,
-                'circle-color': [
+                "circle-color": [
                   'match',
                   ['get', 'operation'],
                     'build',
@@ -124,6 +127,8 @@ export default function ADSMap() {
                     '#aaaaaa'
                 ]
               }})
+
+              
           
           });
 
@@ -160,8 +165,10 @@ export default function ADSMap() {
             fetch(url.href)
             .then(response => response.json())
             .then(data => {
-        
-              bdgs = bdgs.concat(data.results);
+
+              bdgs.current = [...bdgs.current, ...data.results]
+
+              
         
               if (data.next) {
                 const nextUrl = new URL(data.next);
@@ -223,24 +230,50 @@ export default function ADSMap() {
 
     useEffect(() => {
 
-            if (map.current) return; // initialize map (
-
-            map.current = new maplibregl.Map({
+            if (!map.current) {
+              map.current = new maplibregl.Map({
                 container: mapContainer.current,
                 style: 'https://api.maptiler.com/maps/bright-v2/style.json?key=k5TGaasSmJpsWugdpmtP',
                 center: [5.366093814439828, 45.871081537689264],
                 zoom: 15
-            });
+              });
     
-            fitOnOperations();
-            initMapControls();
-            initMapEvents();
-            initDataLayer();
+              fitOnOperations();
+              initMapControls();
+              initMapEvents();
+              initDataLayer();
+
+            }
         
     });
 
+     useEffect(function() {
+    
+        
+      bdgs.current.forEach(bdg => {
+
+        map.current.setFeatureState(
+          {
+            source: 'bdgs',
+            id: bdg.rnb_id
+          },
+          {
+            operation: getBdgOperation(bdg.rnb_id)
+          }
+          )
+
+      });  
+
+    }, [ads.data.buildings_operations])
+
+    
+
+  
     return (
-        <div style={{ width: '800px', height: '400px' }} ref={mapContainer} />
+      <>
+      <div style={{ width: '800px', height: '400px' }} ref={mapContainer} />
+      </>
+        
     );
 };
 
