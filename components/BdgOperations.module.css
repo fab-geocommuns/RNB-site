@@ -1,3 +1,28 @@
 .grid {
     display: flex;
 }
+
+.active {
+    background:rgba(192, 252, 252, .5);
+}
+
+.op {
+    margin-bottom: 10px;
+}
+
+.opOption {
+    margin-right:10px;
+    font-size: .9em;
+}
+.opOption__build {
+    
+}
+
+.opOption:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.opOption.active:hover {
+    text-decoration: none;
+}

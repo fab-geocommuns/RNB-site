@@ -26,6 +26,20 @@ export default class Ads {
         return this.data.buildings_operations
     }
 
+
+    updateBdgOperation(op: string, rnb_id: string) {
+
+
+        this.data.buildings_operations = this.data.buildings_operations.map((bdgop: any) => {
+            if (bdgop.building.rnb_id == rnb_id) {
+                bdgop.operation = op
+            }
+            return bdgop
+        }
+        )
+
+    }
+
     toggleRnbId(rnbid: string) {
 
         console.log('toggleRnbId: ' + rnbid)

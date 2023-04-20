@@ -253,8 +253,6 @@ export default function ADSMap() {
           source.setData(convertBdgToGeojson())
         }
 
-        
-        
       }
       
         
