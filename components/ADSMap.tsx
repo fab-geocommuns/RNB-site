@@ -46,11 +46,7 @@ export default function ADSMap() {
         let prom = launchQuery()
 
         prom.then(() => {
-
-          
           map.current.getSource('bdgs').setData(convertBdgToGeojson())
-          
-
         })
 
     }
@@ -73,7 +69,7 @@ export default function ADSMap() {
                 rnb_id: bdg.rnb_id,
                 source: bdg.source,
                 addresses: bdg.addresses,
-                //operation: operation
+                operation: operation
               }
             }
     
@@ -249,22 +245,22 @@ export default function ADSMap() {
 
      useEffect(function() {
     
+      if (map.current) {
+
+        const source = map.current.getSource('bdgs')
+
+        if (source) {
+          source.setData(convertBdgToGeojson())
+        }
+
         
-      bdgs.current.forEach(bdg => {
+        
+      }
+      
+        
+     })
 
-        map.current.setFeatureState(
-          {
-            source: 'bdgs',
-            id: bdg.rnb_id
-          },
-          {
-            operation: getBdgOperation(bdg.rnb_id)
-          }
-          )
 
-      });  
-
-    }, [ads.data.buildings_operations])
 
     
 
