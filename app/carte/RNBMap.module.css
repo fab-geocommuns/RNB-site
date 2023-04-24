@@ -1,0 +1,14 @@
+.geodisplay {
+    height: calc(100% - 159.5px);
+    display: flex;
+}
+
+.geodisplay__panel {
+    min-width: 300px;
+    padding:10px;
+}
+
+.geodisplay__map {
+    height: 100%;
+    flex:1;
+}
