@@ -1,0 +1,13 @@
+.rnbidShell {
+    background: var(--background-alt-blue-france);
+}
+.rnbidShell__title {
+    padding:.1rem .4rem;
+    opacity: .9;
+    font-size: .85rem;
+}
+.rnbidShell__id {
+    padding: 1.3rem 1rem;
+    font-size: 1.2em;
+    text-align:center;
+}

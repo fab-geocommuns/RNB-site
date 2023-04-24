@@ -57,9 +57,9 @@ export default function RootLayout({
       <body>
         <DsfrProvider defaultColorScheme={defaultColorScheme}>
           <Header 
-          brandTop="RNB" 
-          serviceTitle="rnb.beta.gouv.fr"
-          serviceTagline="Référentiel National des Bâtiments"
+          brandTop={<>République<br/>Française</>}
+          serviceTitle="RNB"
+          serviceTagline="Le Référentiel National des Bâtiments"
           navigation={nav}
            />
           

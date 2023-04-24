@@ -18,13 +18,13 @@ export default function RNBMap() {
             <MapContext.Provider value={[mapCtx, setMapCtx]}>
             <div className={styles.geodisplay}>    
                 <div className={styles.geodisplay__panel}>
-                    <div>
+                    <div className={'fr-mt-2v'}>
                         <div>
                             <label className="fr-label">Rechercher une adresse</label>
                             </div>
                         <AddressSearch />
                     </div>
-                    <div>
+                    <div className={'fr-mt-8v'}>
                         <VisuPanel />
                     </div>
                     </div>    
