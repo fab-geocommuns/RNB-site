@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import ADSMap from './ADSMap';
 import styles from './BdgOperations.module.css'
 import { AdsContext } from './AdsContext';
-
 
 
 export default function BdgOperations() {

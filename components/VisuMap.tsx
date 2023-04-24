@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useRef, useEffect, useContext, useState } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import vector from './styles/vector.json'
+import {MapContext} from '@/components/MapContext'
 
 export default function VisuMap() {
 
@@ -12,6 +13,8 @@ export default function VisuMap() {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const bdgs = useRef([])
+
+    const [mapCtx, setMapCtx] = useContext(MapContext)
 
     const STYLES = {
         vector,
@@ -173,6 +176,25 @@ export default function VisuMap() {
 
     }
 
+    const jumpToFeature = (feature) => {
+
+      let zoom = 17
+
+      if (feature.properties.type == "municipality") {
+        zoom = 13
+      }
+      if (feature.properties.type == "housenumber") {
+        zoom = 18
+      }
+
+      map.current.flyTo({
+        center: feature.geometry.coordinates,
+        zoom: zoom
+      })
+
+
+  }
+
     const initDataLayer = () => {
 
         map.current.on('style.load', () => {
@@ -215,9 +237,15 @@ export default function VisuMap() {
           initDataLayer();
 
         }
+    });
 
-    
-});
+    useEffect(() => {
+
+        if (mapCtx.data.best_point) {
+            jumpToFeature(mapCtx.data.best_point)
+        }
+
+    }, [mapCtx.data.best_point]);
 
 return (
     <>

@@ -4,14 +4,17 @@ import VisuMap from '@/components/VisuMap'
 import AddressSearch from '@/components/AddressSearch'
 import { MapContext } from '@/components/MapContext';
 import styles from './RNBMap.module.css'
+import BuildingsMap from '@/logic/map';
 
 export default function RNBMap() {
 
-    const [mapCtx, setMapCtx] = useState({})
+    let bdgmap = new BuildingsMap({})
+
+    const [mapCtx, setMapCtx] = useState(bdgmap)
 
     return (
         <>
-            <MapContext.Provider value={{mapCtx, setMapCtx}}>
+            <MapContext.Provider value={[mapCtx, setMapCtx]}>
             <div className={styles.geodisplay}>    
                 <div className={styles.geodisplay__panel}>
                     <div>
