@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import VisuMap from '@/components/VisuMap'
+import VisuPanel from '@/components/VisuPanel'
 import AddressSearch from '@/components/AddressSearch'
 import { MapContext } from '@/components/MapContext';
 import styles from './RNBMap.module.css'
@@ -23,7 +24,9 @@ export default function RNBMap() {
                             </div>
                         <AddressSearch />
                     </div>
-                    <p>todo : result</p>
+                    <div>
+                        <VisuPanel />
+                    </div>
                     </div>    
                 <div className={styles.geodisplay__map}><VisuMap /></div>
             </div>

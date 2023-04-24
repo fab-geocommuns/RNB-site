@@ -50,11 +50,11 @@ export default function AddressSearch() {
         <>
         <form action="#" onSubmit={handleSubmitForm}>
         <input 
-        className="fr-input" 
-        type="text" 
-        name="address" 
-        id="address"
-        ref={addressInput}
+            className="fr-input" 
+            type="text" 
+            name="address" 
+            id="address"
+            ref={addressInput}
          />
         </form>
         </>

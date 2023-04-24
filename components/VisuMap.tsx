@@ -39,12 +39,26 @@ export default function VisuMap() {
 
     const initMapControls = () => {
 
-        const controls = new maplibregl.NavigationControl({
+        // Zoom
+        const navControl = new maplibregl.NavigationControl({
             showCompass: false,
             showZoom: true
         })
+        map.current.addControl(navControl, 'top-right')
 
-        map.current.addControl(controls, 'top-right')
+        // Geoloc
+        const geolocControl = new maplibregl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true,
+            showUserLocation: true,
+            showAccuracyCircle: true,
+            fitBoundsOptions: {
+                maxZoom: 18
+            }
+        })
+        map.current.addControl(geolocControl, 'top-right')
 
     }
 
@@ -55,6 +69,9 @@ export default function VisuMap() {
         });
 
         map.current.on('click', 'bdgs', function(e) {
+
+          mapCtx.data.panel_bdg = e.features[0].properties
+          setMapCtx(mapCtx.clone())
 
             //const rnb_id = e.features[0].properties.rnb_id
             // todo : display bdg detail
