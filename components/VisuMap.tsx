@@ -6,6 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import vector from './styles/vector.json'
 import {MapContext} from '@/components/MapContext'
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
+import { fr } from "@codegouvfr/react-dsfr";
 
 export default function VisuMap() {
 
@@ -74,7 +75,8 @@ export default function VisuMap() {
         // Style switcher
         const styleSwitcher = new MapStyleSwitcherControl({
             styles: STYLES,
-            chosenStyle: 'vector'
+            chosenStyle: 'vector',
+            icon: fr.cx("fr-icon-road-map-fill")
         })
         map.current.addControl(styleSwitcher, 'top-left')
 
@@ -166,7 +168,11 @@ export default function VisuMap() {
     }
 
     const calcBdgSource = () => {
+      
       map.current.getSource('bdgs').setData(convertBdgToGeojson())
+
+
+
     }
 
     const convertBdgToGeojson = () => {
@@ -179,28 +185,15 @@ export default function VisuMap() {
           }
         
           bdgs.current.forEach(bdg => {
-        
-
-            const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id)
-
-            
-
-
+    
             const feature = {
               type: "Feature",
               geometry: bdg.point,
               properties: {
                 rnb_id: bdg.rnb_id,
                 source: bdg.source,
-                addresses: bdg.addresses,
-                in_panel: in_panel
+                addresses: bdg.addresses
               }
-            }
-
-            if (bdg.rnb_id == "G99AV-RC24B-61FQ2") {
-              console.log(bdg)
-              console.log(in_panel)
-              console.log(feature)
             }
     
             geojson.features.push(feature)
@@ -273,6 +266,8 @@ export default function VisuMap() {
 
     const initDataLayer = () => {
 
+        
+
         map.current.on('style.load', () => {
 
             map.current.addSource('bdgs', {
@@ -297,7 +292,25 @@ export default function VisuMap() {
                 ]
               }})
           
+              initFeaturesState()
+
           });
+
+    }
+
+    const initFeaturesState = () => {
+
+      bdgs.current.forEach(bdg => {
+
+        const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id) ? true : false
+
+
+        map.current.setFeatureState(
+          { source: 'bdgs', id: bdg.rnb_id },
+          { in_panel: in_panel }
+        );
+      })
+
 
     }
 
