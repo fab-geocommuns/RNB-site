@@ -8,7 +8,7 @@ import { AdsContext } from './AdsContext';
 
 export default function BdgOperations() {
 
-    const [ads, setAds] = useContext(AdsContext)    
+    const {ads, setAds} = useContext(AdsContext)    
 
     const chooseOpOption = (op: string, rnb_id: string) => {
         

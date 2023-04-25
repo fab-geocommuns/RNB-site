@@ -4,7 +4,7 @@ import { getColorSchemeHtmlAttributes } from "@codegouvfr/react-dsfr/next-appdir
 import StartDsfr from "./StartDsfr";
 import { defaultColorScheme } from "./defaultColorScheme";
 import { Header } from "@codegouvfr/react-dsfr/Header";
-import  "./layout.css";
+import  "./global.css";
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -28,7 +28,7 @@ const nav = [
   {
     text:"Définition du bâtiment",
     linkProps: {
-      href: '/defintion',
+      href: '/definition',
     }
   },
   // {

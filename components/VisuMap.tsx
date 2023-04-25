@@ -76,7 +76,7 @@ export default function VisuMap() {
         const styleSwitcher = new MapStyleSwitcherControl({
             styles: STYLES,
             chosenStyle: 'vector',
-            icon: fr.cx("fr-icon-road-map-fill")
+            icon: fr.cx("fr-icon-road-map-line")
         })
         map.current.addControl(styleSwitcher, 'top-left')
 
@@ -319,11 +319,10 @@ export default function VisuMap() {
         if (!map.current) {
           map.current = new maplibregl.Map({
             container: mapContainer.current,
-            //style: STYLES[default_style].style,
-            //center: [2.852577494863663, 46.820936580547134],
-            //zoom: 5,
-            center: [5.72136679451732, 45.18198677999707],
-            zoom: 19
+            center: [2.852577494863663, 46.820936580547134],
+            zoom: 5,
+            //center: [5.72136679451732, 45.18198677999707],
+            //zoom: 19
             
           });
 

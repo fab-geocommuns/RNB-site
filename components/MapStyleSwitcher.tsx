@@ -20,10 +20,11 @@ export default class MapStyleSwitcherControl {
         this._switcher.classList.add("maplibregl-ctrl-styles");
         
 
-        const iconEl = document.createElement("span");
+        const iconEl = document.createElement("i");
         iconEl.classList.add(this._options.icon);
 
         this._switcherLabel = document.createElement("span");
+        this._switcherLabel.classList.add("maplibregl-ctrl-styles-label");
 
         this._switcher.appendChild(iconEl);
         this._switcher.appendChild(this._switcherLabel);
@@ -68,8 +69,6 @@ export default class MapStyleSwitcherControl {
     }
 
     setStyle(styleKey) {
-
-        console.log('set map style ' + styleKey)
 
         this._options.chosenStyle = styleKey;
         this._map.setStyle(this._options.styles[styleKey].style);

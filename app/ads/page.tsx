@@ -1,5 +1,4 @@
 
-import { log } from 'console'
 import Head from 'next/head'
 import Link from 'next/link'
 
@@ -32,8 +31,8 @@ export default async function Home() {
         <h2>Listing</h2>
         
         <ul>
-          {response?.results?.map((ads) => (
-              <li>
+          {response?.results?.map((ads: any) => (
+              <li key={ads.issue_number}>
                 <Link href={`/${ads.issue_number}`}>{ads.issue_number}</Link>
               </li>
           ))}

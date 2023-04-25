@@ -71,7 +71,7 @@ export default function ADSForm({data = {
             <div>
             <label 
                 className="fr-label" 
-                htmlFor="issue_number">Numéro d'ADS</label>
+                htmlFor="issue_number">Numéro d&apos;ADS</label>
             <input 
                 className="fr-input"
                 type="text" 
@@ -82,7 +82,7 @@ export default function ADSForm({data = {
              />
              </div>
              <div>
-                <label className="fr-label"  htmlFor="issue_date">Date d'émission</label>
+                <label className="fr-label"  htmlFor="issue_date">Date d&apos;émission</label>
                 <input
                 className="fr-input"
                  type="date" 
