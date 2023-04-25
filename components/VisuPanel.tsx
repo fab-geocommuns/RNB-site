@@ -25,7 +25,7 @@ export default function VisuPanel() {
         return (
             <>
             <div>
-                <h6><b>Identifiant RNB</b></h6>
+                <div className={styles.title}>Identifiant RNB</div>
 
                 <div className={styles.rnbidShell}>
                     <div className={styles.rnbidShell__id}>{mapCtx.data.panel_bdg.rnb_id}</div>

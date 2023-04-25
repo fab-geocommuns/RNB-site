@@ -1,3 +1,7 @@
+
+.title {
+    margin-bottom:4px;
+}
 .rnbidShell {
     background: var(--background-alt-blue-france);
 }
@@ -8,7 +12,7 @@
     text-align:center;
 }
 .rnbidShell__copy i {
-    opacity: .7;
+    opacity: .8;
 }
 .rnbidShell__copy:hover {
     background: var(--background-contrast-blue-france-hover);
@@ -18,4 +22,5 @@
     padding: 1.3rem 1rem;
     font-size: 1.2em;
     text-align:center;
+    font-weight: 500;
 }

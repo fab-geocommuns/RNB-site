@@ -5,6 +5,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import vector from './styles/vector.json'
 import {MapContext} from '@/components/MapContext'
+import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 
 export default function VisuMap() {
 
@@ -16,25 +17,35 @@ export default function VisuMap() {
 
     const [mapCtx, setMapCtx] = useContext(MapContext)
 
+    const default_style = 'vector'
     const STYLES = {
-        vector,
-        ortho: {
-          version: 8,
-          glyphs: 'https://orangemug.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf',
-          sources: {
-            'raster-tiles': {
+
+        vector: {
+          name: "Plan",
+          style: vector
+        },
+
+        satellite: {
+          name: "Satellite",
+          style: {
+            version: 8,
+            glyphs: 'https://orangemug.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf',
+            sources: {
+              'raster-tiles': {
+                type: 'raster',
+                tiles: ['https://wxs.ign.fr/essentiels/geoportail/wmts?layer=ORTHOIMAGERY.ORTHOPHOTOS&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&TileMatrix={z}&TileCol={x}&TileRow={y}'],
+                tileSize: 256,
+                attribution: '<a target="_blank" href="https://geoservices.ign.fr/documentation/donnees/ortho/bdortho" /> © IGN </a>'
+              }
+            },
+            layers: [{
+              id: 'simple-tiles',
               type: 'raster',
-              tiles: ['https://wxs.ign.fr/essentiels/geoportail/wmts?layer=ORTHOIMAGERY.ORTHOPHOTOS&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&TileMatrix={z}&TileCol={x}&TileRow={y}'],
-              tileSize: 256,
-              attribution: '<a target="_blank" href="https://geoservices.ign.fr/documentation/donnees/ortho/bdortho" /> © IGN </a>'
-            }
-          },
-          layers: [{
-            id: 'simple-tiles',
-            type: 'raster',
-            source: 'raster-tiles'
-          }]
+              source: 'raster-tiles'
+            }]
+          }
         }
+        
       }
 
     const initMapControls = () => {
@@ -60,6 +71,13 @@ export default function VisuMap() {
         })
         map.current.addControl(geolocControl, 'top-right')
 
+        // Style switcher
+        const styleSwitcher = new MapStyleSwitcherControl({
+            styles: STYLES,
+            chosenStyle: 'vector'
+        })
+        map.current.addControl(styleSwitcher, 'top-left')
+
     }
 
     const initMapEvents = () => {
@@ -70,13 +88,37 @@ export default function VisuMap() {
 
         map.current.on('click', 'bdgs', function(e) {
 
-          mapCtx.data.panel_bdg = e.features[0].properties
-          setMapCtx(mapCtx.clone())
-
-            //const rnb_id = e.features[0].properties.rnb_id
-            // todo : display bdg detail
+          if (e.features.length > 0) {
+            setBdgInPanel(e.features[0].properties)
+          }
         
         });
+
+    }
+
+    const setBdgInPanel = (bdg) => {
+
+      // ## Change map point state
+      
+      // first, the old one
+      if (mapCtx.data.panel_bdg) {
+        map.current.setFeatureState(
+          { source: 'bdgs', id: mapCtx.data.panel_bdg.rnb_id },
+          { in_panel: false }
+        );
+      }
+
+      // then, the new one
+      map.current.setFeatureState(
+        { source: 'bdgs', id: bdg.rnb_id },
+        { in_panel: true }
+      );
+
+      // ## Change the context
+
+      mapCtx.data.panel_bdg = bdg
+      setMapCtx(mapCtx.clone())
+
 
     }
 
@@ -118,12 +160,18 @@ export default function VisuMap() {
         let prom = launchQuery()
 
         prom.then(() => {
-          map.current.getSource('bdgs').setData(convertBdgToGeojson())
+          calcBdgSource()
         })
 
     }
 
+    const calcBdgSource = () => {
+      map.current.getSource('bdgs').setData(convertBdgToGeojson())
+    }
+
     const convertBdgToGeojson = () => {
+
+        console.log('convertBdgToGeojson')
 
         let geojson = {
             "type": "FeatureCollection",
@@ -132,7 +180,11 @@ export default function VisuMap() {
         
           bdgs.current.forEach(bdg => {
         
+
+            const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id)
+
             
+
 
             const feature = {
               type: "Feature",
@@ -140,8 +192,15 @@ export default function VisuMap() {
               properties: {
                 rnb_id: bdg.rnb_id,
                 source: bdg.source,
-                addresses: bdg.addresses
+                addresses: bdg.addresses,
+                in_panel: in_panel
               }
+            }
+
+            if (bdg.rnb_id == "G99AV-RC24B-61FQ2") {
+              console.log(bdg)
+              console.log(in_panel)
+              console.log(feature)
             }
     
             geojson.features.push(feature)
@@ -216,7 +275,6 @@ export default function VisuMap() {
 
         map.current.on('style.load', () => {
 
-      
             map.current.addSource('bdgs', {
               type: 'geojson',
               data: convertBdgToGeojson(),
@@ -228,11 +286,16 @@ export default function VisuMap() {
               type: 'circle',
               source: 'bdgs',
               paint: {
-                'circle-radius': 4,
-                "circle-color": "#ff0000"
+                'circle-radius': 5,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 1,
+                "circle-color": [
+                  "case",
+                  ["boolean", ["feature-state", "in_panel"], false],
+                  '#31e060',
+                  '#1452e3'
+                ]
               }})
-
-              
           
           });
 
@@ -243,9 +306,12 @@ export default function VisuMap() {
         if (!map.current) {
           map.current = new maplibregl.Map({
             container: mapContainer.current,
-            style: STYLES.ortho,
-            center: [5.366093814439828, 45.871081537689264],
-            zoom: 15
+            //style: STYLES[default_style].style,
+            //center: [2.852577494863663, 46.820936580547134],
+            //zoom: 5,
+            center: [5.72136679451732, 45.18198677999707],
+            zoom: 19
+            
           });
 
           

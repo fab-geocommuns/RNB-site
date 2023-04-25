@@ -61,6 +61,10 @@ export default function RootLayout({
           serviceTitle="RNB"
           serviceTagline="Le Référentiel National des Bâtiments"
           navigation={nav}
+          homeLinkProps={{
+            href: '/',
+            title: 'Accueil RNB',
+          }}
            />
           
           {children}

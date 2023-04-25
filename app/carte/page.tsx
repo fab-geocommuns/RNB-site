@@ -6,7 +6,7 @@ import AddressSearch from '@/components/AddressSearch'
 import { MapContext } from '@/components/MapContext';
 import styles from './RNBMap.module.css'
 import BuildingsMap from '@/logic/map';
-
+import { Notice } from "@codegouvfr/react-dsfr/Notice";
 export default function RNBMap() {
 
     let bdgmap = new BuildingsMap({})
@@ -18,6 +18,7 @@ export default function RNBMap() {
             <MapContext.Provider value={[mapCtx, setMapCtx]}>
             <div className={styles.geodisplay}>    
                 <div className={styles.geodisplay__panel}>
+
                     <div className={'fr-mt-2v'}>
                         <div>
                             <label className="fr-label">Rechercher une adresse</label>
