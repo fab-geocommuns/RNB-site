@@ -1,45 +1,38 @@
+import Highlight, { Card } from "@codegouvfr/react-dsfr/Card"
 
-import { log } from 'console'
-import Head from 'next/head'
-import Link from 'next/link'
+export default function Home() {
 
-async function fetchADSList() {
-  const url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
-  const res = await fetch(url, {cache: 'no-cache'})
-  const data = await res.json()
-  return data
-  
-}
-
-export default async function Home() {
-
-  const response = await fetchADSList()
-
+    
     return (
         <>
-        <Head>
-        <title>RNB - ADS</title>
-        <meta name="description" content="Liste des ADS" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-        <h1>Autorisation de droit des sols</h1>
+            <div className="fr-container fr-py-12v">
 
-        <p>
-        <Link href={`/new`}>Nouvelle ADS</Link>
-        </p>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12 fr-col-md-4 ">
+<Card
+    desc="Consultez les données du référentiel sur la carte. Accédez aux identifiants RNB de chaque bâtiment."
+    linkProps={{ href: "/carte" }}
+    title="Carte des bâtiments"
 
-        <h2>Listing</h2>
-        
-        <ul>
-          {response?.results?.map((ads) => (
-              <li>
-                <Link href={`/${ads.issue_number}`}>{ads.issue_number}</Link>
-              </li>
-          ))}
-            
-        </ul>
+/>
+                    </div>
 
+                    <div className="fr-col-12 fr-col-md-4 ">
+<Card
+    desc="Consultez la définition retenue d'un bâtiment."
+    linkProps={{ href: "/definition" }}
+    title="Définition du bâtiment"
+
+/>
+                    </div>
+
+                </div>
+
+
+                
+
+
+            </div>
         </>
     )
 }

@@ -5,11 +5,16 @@ import BdgOperations from './BdgOperations';
 import { AdsContext } from './AdsContext';
 import Ads from '../logic/ads';
 
-export default function ADSForm({data = {} }) {
+export default function ADSForm({data = {
+    issue_number: "",
+    insee_code: "",
+    issue_date: "",
+    buildings_operations: []
+} }) {
 
     let ads = new Ads(data)
     const [ctx, setCtx] = useState(ads);
-    const init_issue_number = useRef(data.issue_number.slice()) // slice() to clone the string
+    const init_issue_number = useRef(data.issue_number ? data.issue_number.slice() : "") // slice() to clone the string
 
     const getActionURL = () => {
         if (ads.isSaved()) {
@@ -66,7 +71,7 @@ export default function ADSForm({data = {} }) {
             <div>
             <label 
                 className="fr-label" 
-                htmlFor="issue_number">Numéro d'ADS</label>
+                htmlFor="issue_number">Numéro d&apos;ADS</label>
             <input 
                 className="fr-input"
                 type="text" 
@@ -77,7 +82,7 @@ export default function ADSForm({data = {} }) {
              />
              </div>
              <div>
-                <label className="fr-label"  htmlFor="issue_date">Date d'émission</label>
+                <label className="fr-label"  htmlFor="issue_date">Date d&apos;émission</label>
                 <input
                 className="fr-input"
                  type="date" 

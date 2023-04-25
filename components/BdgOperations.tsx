@@ -1,15 +1,14 @@
 'use client'
 
-import { useState, useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import ADSMap from './ADSMap';
 import styles from './BdgOperations.module.css'
 import { AdsContext } from './AdsContext';
 
 
-
 export default function BdgOperations() {
 
-    const [ads, setAds] = useContext(AdsContext)    
+    const {ads, setAds} = useContext(AdsContext)    
 
     const chooseOpOption = (op: string, rnb_id: string) => {
         

@@ -1,23 +1,80 @@
-import '@gouvfr/dsfr/dist/dsfr/dsfr.min.css'
+import { DsfrHead } from "@codegouvfr/react-dsfr/next-appdir/DsfrHead";
+import { DsfrProvider } from "@codegouvfr/react-dsfr/next-appdir/DsfrProvider";
+import { getColorSchemeHtmlAttributes } from "@codegouvfr/react-dsfr/next-appdir/getColorSchemeHtmlAttributes";
+import StartDsfr from "./StartDsfr";
+import { defaultColorScheme } from "./defaultColorScheme";
+import { Header } from "@codegouvfr/react-dsfr/Header";
+import  "./global.css";
 
 export const metadata = {
-  title: 'Gestion des ADS pour le Référentiel National des Bâtiments',
-  description: 'Gestion des Autorisations de Droit des Sols',
+  title: 'Référentiel National des Bâtiments',
+  description: '...',
 }
+
+
+const nav = [
+  {
+    text: 'Accueil',
+    linkProps: {
+      href: '/',
+    }
+  },
+  {
+    text:"Carte",
+    linkProps: {
+      href: '/carte',
+    }
+  },
+  {
+    text:"Définition du bâtiment",
+    linkProps: {
+      href: '/definition',
+    }
+  },
+  // {
+  //   text:"Gestion des ADS",
+  //   linkProps: {
+  //     href: '/ads',
+  //   }
+  // },
+]
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
+  
+
   return (    
-    <html lang="fr">
+    
+    <html lang="fr" {...getColorSchemeHtmlAttributes({ defaultColorScheme })} >
+      <head>
+        <StartDsfr />
+        <DsfrHead defaultColorScheme={defaultColorScheme} />
+      </head>
       <body>
-        <div className="fr-container">
-        {children}
-        </div>
-        
+        <DsfrProvider defaultColorScheme={defaultColorScheme}>
+          <Header 
+          brandTop={<>République<br/>Française</>}
+          serviceTitle="RNB"
+          serviceTagline="Le Référentiel National des Bâtiments"
+          navigation={nav}
+          homeLinkProps={{
+            href: '/',
+            title: 'Accueil RNB',
+          }}
+           />
+          
+          {children}
+          
+        </DsfrProvider>
         </body>
     </html>
+    
   )
 }
+
+
+

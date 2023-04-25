@@ -42,8 +42,6 @@ export default class Ads {
 
     toggleRnbId(rnbid: string) {
 
-        console.log('toggleRnbId: ' + rnbid)
-
         if (this.hasRnbId(rnbid)) {
             this.removeRnbId(rnbid)
         } else {
@@ -59,12 +57,10 @@ export default class Ads {
     }
 
     removeRnbId(rnbid: string) {
-        console.log('removeRnbId')
         this.data.buildings_operations = this.data.buildings_operations.filter((bdgop: any) => bdgop.building.rnb_id != rnbid)
     }
 
     addRnbId(rnbid: string) {
-        console.log('addRnbId')
         this.data.buildings_operations.push({
             "building": {
                 "rnb_id": rnbid,

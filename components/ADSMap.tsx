@@ -38,8 +38,6 @@ export default function ADSMap() {
 
     const newQuery = () => {
 
-      console.log('new query')
-
         // Reset bdgs
         bdgs.current = []
 
@@ -84,6 +82,8 @@ export default function ADSMap() {
 
     const getBdgOperation = (rnb_id: string) => {
             
+            
+
             const bdgOp = ads.ops.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
     
             if (bdgOp) {
@@ -213,7 +213,7 @@ export default function ADSMap() {
 
     const fitOnOperations = () => {
             
-            if (ads.ops.length > 0) {
+            if (ads.ops && ads.ops.length > 0) {
     
                 let bounds = new maplibregl.LngLatBounds();
                 ads.ops.forEach(bdgOp => {
