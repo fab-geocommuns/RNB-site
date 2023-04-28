@@ -15,6 +15,7 @@ export default function VisuMap() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const bdgs = useRef([])
+  const addressMarker = useRef(null)
 
   const [mapCtx, setMapCtx] = useContext(MapContext)
 
@@ -320,10 +321,7 @@ export default function VisuMap() {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         center: [2.852577494863663, 46.820936580547134],
-        zoom: 5,
-        //center: [5.72136679451732, 45.18198677999707],
-        //zoom: 19
-
+        zoom: 5
       });
 
 
@@ -334,9 +332,28 @@ export default function VisuMap() {
     }
   });
 
+  const buildAddresseMarker = (feature) => {
+
+    if (addressMarker.current) {
+      if (addressMarker.current instanceof maplibregl.Marker) {
+        addressMarker.current.remove();
+      }
+    }
+    
+
+    addressMarker.current = new maplibregl.Marker({
+      color: "#1452e3",
+      draggable: false
+    }).setLngLat(feature.geometry.coordinates)
+
+    addressMarker.current.addTo(map.current);
+
+  }
+
   useEffect(() => {
 
     if (mapCtx.data.best_point) {
+      buildAddresseMarker(mapCtx.data.best_point)
       jumpToFeature(mapCtx.data.best_point)
     }
 
