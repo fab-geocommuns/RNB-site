@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import ADSForm from '../../../components/ADSForm'
+import ADSForm from '@/components/ADSForm'
 
 
 async function fetchADSDetail(issue_number: string) {

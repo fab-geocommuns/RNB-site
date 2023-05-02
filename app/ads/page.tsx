@@ -33,7 +33,7 @@ export default async function Home() {
         <ul>
           {response?.results?.map((ads: any) => (
               <li key={ads.issue_number}>
-                <Link href={`/${ads.issue_number}`}>{ads.issue_number}</Link>
+                <Link href={`/ads/${ads.issue_number}`}>{ads.issue_number}</Link>
               </li>
           ))}
             

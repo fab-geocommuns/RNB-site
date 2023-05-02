@@ -1,7 +1,3 @@
-.grid {
-    display: flex;
-}
-
 .active {
     background:rgba(192, 252, 252, .5);
 }

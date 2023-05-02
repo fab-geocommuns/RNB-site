@@ -1,14 +1,14 @@
 'use client'
 
 import { useContext } from 'react';
-import ADSMap from './ADSMap';
 import styles from './BdgOperations.module.css'
 import { AdsContext } from './AdsContext';
 
 
+
 export default function BdgOperations() {
 
-    const {ads, setAds} = useContext(AdsContext)    
+    const [ads, setAds] = useContext(AdsContext)    
 
     const chooseOpOption = (op: string, rnb_id: string) => {
         
@@ -20,9 +20,7 @@ export default function BdgOperations() {
     return (
         <>
             <div className={styles.grid}>
-            <div>
-                <ADSMap />
-            </div>
+            
             <div>
             <div>Liste des opérations</div>
                 <ul>
@@ -37,7 +35,9 @@ export default function BdgOperations() {
                     ))}
                 </ul>
             </div>
-            
+            <div className={styles.mapShell}>
+                
+            </div>
             </div>
             
 

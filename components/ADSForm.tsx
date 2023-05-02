@@ -2,10 +2,13 @@
 
 import { useState, useRef } from 'react';
 import BdgOperations from './BdgOperations';
+import ADSMap from './ADSMap';
 import { AdsContext } from './AdsContext';
 import Ads from '../logic/ads';
+import styles from './ADSForm.module.css'
 
-export default function ADSForm({data = {
+
+export default function ADSForm({ data = {
     issue_number: "",
     insee_code: "",
     issue_date: "",
@@ -45,7 +48,7 @@ export default function ADSForm({data = {
     const submitForm = async (e) => {
 
         e.preventDefault();
-        
+
         const url = getActionURL()
         const method = getActionMethod()
         const res = await fetch(url, {
@@ -58,65 +61,77 @@ export default function ADSForm({data = {
             body: JSON.stringify(ctx.data)
         })
         const data = await res.json()
-        
+
         return
 
     }
 
     return (
         <AdsContext.Provider value={[ctx, setCtx]}>
-        <form onSubmit={submitForm}>
-
-            
-            <div>
-            <label 
-                className="fr-label" 
-                htmlFor="issue_number">Numéro d&apos;ADS</label>
-            <input 
-                className="fr-input"
-                type="text" 
-                name="issue_number" 
-                id="issue_number"
-                value={ctx.issue_number}
-                onChange={handleInputChange}
-             />
-             </div>
-             <div>
-                <label className="fr-label"  htmlFor="issue_date">Date d&apos;émission</label>
-                <input
-                className="fr-input"
-                 type="date" 
-                 name="issue_date" 
-                 id="issue_date" 
-                 value={ctx.issue_date}
-                 onChange={handleInputChange}
-                 />
-             </div>
-             <div>
-                <label className="fr-label"  htmlFor="insee_code">Code INSEE</label>
-                <input
-                className="fr-input"
-                 type="text" 
-                 name="insee_code" 
-                 id="insee_code" 
-                 value={ctx.insee_code}
-                 onChange={handleInputChange}
-                 />
-             </div>
-
-            <div>
 
 
+            <div className={styles.grid}>
+                <div className={styles.formCol}>
+                    <form onSubmit={submitForm}>
 
-            <BdgOperations />
+
+                        <div className={styles.fieldcontainer}>
+
+                            <label
+                                className="fr-label"
+                                htmlFor="issue_number">Numéro d&apos;ADS</label>
+                            <input
+                                className="fr-input"
+                                type="text"
+                                name="issue_number"
+                                id="issue_number"
+                                value={ctx.issue_number}
+                                onChange={handleInputChange}
+                            />
+
+                        </div>
+                        <div className={styles.fieldcontainer}>
+                            <label className="fr-label" htmlFor="issue_date">Date d&apos;émission</label>
+                            <input
+                                className="fr-input"
+                                type="date"
+                                name="issue_date"
+                                id="issue_date"
+                                value={ctx.issue_date}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className={styles.fieldcontainer}>
+                            <label className="fr-label" htmlFor="insee_code">Code INSEE</label>
+                            <input
+                                className="fr-input"
+                                type="text"
+                                name="insee_code"
+                                id="insee_code"
+                                value={ctx.insee_code}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div>
+
+
+
+                            <BdgOperations />
+                        </div>
+
+                        <div>
+                            <button className='fr-btn' type="submit">Enregistrer</button>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div className={styles.mapCol}>
+                    <ADSMap />
+                </div>
             </div>
 
-            <div>
-                <button className='fr-btn' type="submit">Enregistrer</button>
-            </div>
-
-            
-        </form>
         </AdsContext.Provider>
     )
 

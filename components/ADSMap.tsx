@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useContext, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { AdsContext } from './AdsContext';
-import { log } from 'console';
+import styles from './ADSMap.module.css'
 
 export default function ADSMap() {
 
@@ -265,7 +265,7 @@ export default function ADSMap() {
   
     return (
       <>
-      <div style={{ width: '800px', height: '400px' }} ref={mapContainer} />
+      <div className={styles.mapShell} ref={mapContainer} />
       </>
         
     );
