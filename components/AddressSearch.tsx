@@ -51,6 +51,7 @@ export default function AddressSearch() {
         <form action="#" onSubmit={handleSubmitForm}>
         <input 
         className="fr-input" 
+        placeholder='Chercher une adresse'
         type="text" 
         name="address" 
         id="address"

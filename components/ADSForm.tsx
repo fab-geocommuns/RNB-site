@@ -6,6 +6,9 @@ import ADSMap from './ADSMap';
 import { AdsContext } from './AdsContext';
 import Ads from '../logic/ads';
 import styles from './ADSForm.module.css'
+import { MapContext } from '@/components/MapContext';
+import BuildingsMap from '@/logic/map';
+import AddressSearch from '@/components/AddressSearch'
 
 
 export default function ADSForm({ data = {
@@ -14,6 +17,10 @@ export default function ADSForm({ data = {
     issue_date: "",
     buildings_operations: []
 } }) {
+
+    let bdgmap = new BuildingsMap({})
+
+    const [mapCtx, setMapCtx] = useState(bdgmap)
 
     let ads = new Ads(data)
     const [ctx, setCtx] = useState(ads);
@@ -67,72 +74,79 @@ export default function ADSForm({ data = {
     }
 
     return (
-        <AdsContext.Provider value={[ctx, setCtx]}>
+        <MapContext.Provider value={[mapCtx, setMapCtx]}>
+            <AdsContext.Provider value={[ctx, setCtx]}>
 
 
-            <div className={styles.grid}>
-                <div className={styles.formCol}>
-                    <form onSubmit={submitForm}>
+                <div className={styles.grid}>
+                    <div className={styles.formCol}>
+                        <form onSubmit={submitForm}>
 
 
-                        <div className={styles.fieldcontainer}>
+                            <div className={styles.fieldcontainer}>
 
-                            <label
-                                className="fr-label"
-                                htmlFor="issue_number">Numéro d&apos;ADS</label>
-                            <input
-                                className="fr-input"
-                                type="text"
-                                name="issue_number"
-                                id="issue_number"
-                                value={ctx.issue_number}
-                                onChange={handleInputChange}
-                            />
+                                <label
+                                    className="fr-label"
+                                    htmlFor="issue_number">Numéro d&apos;ADS</label>
+                                <input
+                                    className="fr-input"
+                                    type="text"
+                                    name="issue_number"
+                                    id="issue_number"
+                                    value={ctx.issue_number}
+                                    onChange={handleInputChange}
+                                />
 
+                            </div>
+                            <div className={styles.fieldcontainer}>
+                                <label className="fr-label" htmlFor="issue_date">Date d&apos;émission</label>
+                                <input
+                                    className="fr-input"
+                                    type="date"
+                                    name="issue_date"
+                                    id="issue_date"
+                                    value={ctx.issue_date}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className={styles.fieldcontainer}>
+                                <label className="fr-label" htmlFor="insee_code">Code INSEE</label>
+                                <input
+                                    className="fr-input"
+                                    type="text"
+                                    name="insee_code"
+                                    id="insee_code"
+                                    value={ctx.insee_code}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <div>
+
+
+
+                                <BdgOperations />
+                            </div>
+
+                            <div>
+                                <button className='fr-btn' type="submit">Enregistrer</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <div className={styles.mapCol}>
+                        <div className={styles.mapShell}>
+                            <div className={styles.addresseSearchShell}>
+                                <AddressSearch />
+                            </div>
+                            <ADSMap />
                         </div>
-                        <div className={styles.fieldcontainer}>
-                            <label className="fr-label" htmlFor="issue_date">Date d&apos;émission</label>
-                            <input
-                                className="fr-input"
-                                type="date"
-                                name="issue_date"
-                                id="issue_date"
-                                value={ctx.issue_date}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className={styles.fieldcontainer}>
-                            <label className="fr-label" htmlFor="insee_code">Code INSEE</label>
-                            <input
-                                className="fr-input"
-                                type="text"
-                                name="insee_code"
-                                id="insee_code"
-                                value={ctx.insee_code}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-
-                        <div>
-
-
-
-                            <BdgOperations />
-                        </div>
-
-                        <div>
-                            <button className='fr-btn' type="submit">Enregistrer</button>
-                        </div>
-
-
-                    </form>
+                    </div>
                 </div>
-                <div className={styles.mapCol}>
-                    <ADSMap />
-                </div>
-            </div>
 
-        </AdsContext.Provider>
+            </AdsContext.Provider>
+        </MapContext.Provider>
     )
 
 }

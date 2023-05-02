@@ -6,7 +6,6 @@ import AddressSearch from '@/components/AddressSearch'
 import { MapContext } from '@/components/MapContext';
 import styles from './RNBMap.module.css'
 import BuildingsMap from '@/logic/map';
-import { Notice } from "@codegouvfr/react-dsfr/Notice";
 export default function RNBMap() {
 
     let bdgmap = new BuildingsMap({})

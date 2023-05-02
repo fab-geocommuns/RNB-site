@@ -3,7 +3,8 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import vector from './styles/vector.json'
+import vector from '@/components/mapstyles/vector.json'
+import satellitle from '@/components/mapstyles/satellite.json'
 import { MapContext } from '@/components/MapContext'
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 import { fr } from "@codegouvfr/react-dsfr";
@@ -29,23 +30,7 @@ export default function VisuMap() {
 
     satellite: {
       name: "Satellite",
-      style: {
-        version: 8,
-        glyphs: 'https://orangemug.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf',
-        sources: {
-          'raster-tiles': {
-            type: 'raster',
-            tiles: ['https://wxs.ign.fr/essentiels/geoportail/wmts?layer=ORTHOIMAGERY.ORTHOPHOTOS&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&TileMatrix={z}&TileCol={x}&TileRow={y}'],
-            tileSize: 256,
-            attribution: '<a target="_blank" href="https://geoservices.ign.fr/documentation/donnees/ortho/bdortho" /> © IGN </a>'
-          }
-        },
-        layers: [{
-          id: 'simple-tiles',
-          type: 'raster',
-          source: 'raster-tiles'
-        }]
-      }
+      style: satellitle
     }
 
   }
