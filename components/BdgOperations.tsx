@@ -27,6 +27,11 @@ export default function BdgOperations() {
 
     }
 
+    const removeBdg = (rnbId: string) => {
+        ads.toggleRnbId(rnbId)
+        setAds(ads.clone())
+    }
+
     return (
         <>
             <div className={styles.grid}>
@@ -46,6 +51,8 @@ export default function BdgOperations() {
                         <span onClick={() => {chooseOpOption("modify", bdgop.building.rnb_id)}} className={`${styles.opOption} ${styles.opOption__modify} ${bdgop.operation == "modify" ? styles.active : ""}`}>Modification</span>
                         <span onClick={() => {chooseOpOption("demolish", bdgop.building.rnb_id)}} className={`${styles.opOption} ${styles.opOption__demolish}  ${bdgop.operation == "demolish" ? styles.active : ""}`}>Démolition</span> 
                         
+                        <span title="Retirer ce bâtiment de l'ADS" onClick={() => {removeBdg(bdgop.building.rnb_id)}} className={styles.opRemove}><i className={fr.cx("fr-icon-delete-line")}></i></span> 
+
                         </li>
                     ))}
                 </ul>

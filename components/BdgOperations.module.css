@@ -5,6 +5,7 @@
 
 .op {
     margin-bottom: 10px;
+    position: relative;
 }
 .opIdentifierShell {
     font-size: .9em;
@@ -77,8 +78,33 @@
     background:#fdc5c5;
 }
 
-
-
 .opOption.active:hover {
     text-decoration: none;
 }
+
+.opRemove {
+    position: absolute;
+    right:0;
+    top:0;
+    display: inline-block;
+    width: 56.75px;
+    height: 56.75px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    cursor:pointer;
+
+}
+.opRemove i::before {
+    width: 20px;
+}
+
+.opRemove:hover {
+    background: #fcbfbf;
+}
+.opRemove:hover i::before {
+    color: #e1000f;
+}
+
