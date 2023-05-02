@@ -252,7 +252,7 @@ export default function ADSMap() {
       ads.ops.forEach(bdgOp => {
         bounds.extend([bdgOp.building.lng, bdgOp.building.lat])
       })
-      map.current.fitBounds(bounds, { padding: 50, linear: true })
+      map.current.fitBounds(bounds, { padding: 100, linear: true })
 
     }
   }
@@ -276,21 +276,19 @@ export default function ADSMap() {
 
   });
 
-  const jumpToFeature = (feature) => {
+  const jumpToPosition = (position) => {
 
-    let zoom = 17
 
-    if (feature.properties.type == "municipality") {
-      zoom = 13
+      console.log('jump to position', position)
+
+    if (mapCtx.data.position.zoom && mapCtx.data.position.center) {
+      map.current.flyTo({
+        center: position.center,
+        zoom: position.zoom
+      })
     }
-    if (feature.properties.type == "housenumber") {
-      zoom = 18
-    }
 
-    map.current.flyTo({
-      center: feature.geometry.coordinates,
-      zoom: zoom
-    })
+    
 
 
   }
@@ -307,12 +305,16 @@ export default function ADSMap() {
 
   useEffect(() => {
 
-    if (mapCtx.data.best_point) {
-      //buildAddresseMarker(mapCtx.data.best_point)
-      jumpToFeature(mapCtx.data.best_point)
+
+    console.log('mapCtx.data.position', mapCtx.data.position)
+    if (mapCtx.data.position) {
+
+      
+        jumpToPosition(mapCtx.data.position)
+      
     }
 
-  }, [mapCtx.data.best_point]);
+  }, [mapCtx.data.position]);
 
 
 

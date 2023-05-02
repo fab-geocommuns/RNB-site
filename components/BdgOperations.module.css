@@ -1,23 +1,83 @@
-.active {
-    background:rgba(192, 252, 252, .5);
+.opsList {
+    list-style: none;
+    padding: 0;
 }
 
 .op {
     margin-bottom: 10px;
 }
+.opIdentifierShell {
+    font-size: .9em;
+    text-decoration: none;
+    cursor: pointer;
+    position:relative;
+    margin-bottom: 3px;
+}
+.centerHelp {
+    display: none;
+}
+.opIdentifier {
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+.opIdentifierShell:hover .centerHelp {
+    display: inline;
+    margin-left: 10px;
+    font-size: .9em;
+    color:#0078f3;
+    position:absolute;
+    white-space: nowrap;
+}
+.centerHelp i::before {
+    width:15px;
+    margin-right: 1px;
+    
+}
+.opIdentifierShell:hover .opIdentifier {
+    text-decoration-color: black;
+}
+
 
 .opOption {
     margin-right:10px;
-    font-size: .9em;
+    font-size: .8em;
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
 }
-.opOption__build {
-    
+.opOption:not(.active) {
+    background:#fafafa;
 }
-
-.opOption:hover {
-    text-decoration: underline;
+.opOption:hover:not(.active) {
     cursor: pointer;
 }
+
+
+
+.opOption__build.active {
+    background:#c3fad5
+    
+}
+.opOption__build:hover:not(.active) {
+    background:#77eda5;
+}
+
+
+.opOption__modify.active {
+    background:#e6eefe;   
+}
+.opOption__modify:hover:not(.active) {
+    background:#bcd3fc;
+}
+
+.opOption__demolish.active {
+    background:#fee9e9;
+}
+.opOption__demolish:hover:not(.active) {
+    background:#fdc5c5;
+}
+
+
 
 .opOption.active:hover {
     text-decoration: none;

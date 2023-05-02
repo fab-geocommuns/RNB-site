@@ -18,7 +18,12 @@ export default function ADSForm({ data = {
     buildings_operations: []
 } }) {
 
-    let bdgmap = new BuildingsMap({})
+    let bdgmap = new BuildingsMap({
+        position: {
+            center: null,
+            zoom: null
+        }
+    })
 
     const [mapCtx, setMapCtx] = useState(bdgmap)
 
@@ -83,7 +88,7 @@ export default function ADSForm({ data = {
                         <form onSubmit={submitForm}>
 
 
-                            <div className={styles.fieldcontainer}>
+                            <div className="fr-input-group">
 
                                 <label
                                     className="fr-label"
@@ -98,7 +103,7 @@ export default function ADSForm({ data = {
                                 />
 
                             </div>
-                            <div className={styles.fieldcontainer}>
+                            <div className="fr-input-group">
                                 <label className="fr-label" htmlFor="issue_date">Date d&apos;émission</label>
                                 <input
                                     className="fr-input"
@@ -109,7 +114,7 @@ export default function ADSForm({ data = {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div className={styles.fieldcontainer}>
+                            <div className="fr-input-group">
                                 <label className="fr-label" htmlFor="insee_code">Code INSEE</label>
                                 <input
                                     className="fr-input"
@@ -122,8 +127,6 @@ export default function ADSForm({ data = {
                             </div>
 
                             <div>
-
-
 
                                 <BdgOperations />
                             </div>

@@ -230,20 +230,11 @@ export default function VisuMap() {
 
   }
 
-  const jumpToFeature = (feature) => {
-
-    let zoom = 17
-
-    if (feature.properties.type == "municipality") {
-      zoom = 13
-    }
-    if (feature.properties.type == "housenumber") {
-      zoom = 18
-    }
+  const jumpToPosition = (position) => {
 
     map.current.flyTo({
-      center: feature.geometry.coordinates,
-      zoom: zoom
+      center: position.center,
+      zoom: position.zoom
     })
 
 
@@ -317,7 +308,7 @@ export default function VisuMap() {
     }
   });
 
-  const buildAddresseMarker = (feature) => {
+  const buildAddresseMarker = (position) => {
 
     if (addressMarker.current) {
       if (addressMarker.current instanceof maplibregl.Marker) {
@@ -329,7 +320,7 @@ export default function VisuMap() {
     addressMarker.current = new maplibregl.Marker({
       color: "#1452e3",
       draggable: false
-    }).setLngLat(feature.geometry.coordinates)
+    }).setLngLat(position.center)
 
     addressMarker.current.addTo(map.current);
 
@@ -337,12 +328,12 @@ export default function VisuMap() {
 
   useEffect(() => {
 
-    if (mapCtx.data.best_point) {
-      buildAddresseMarker(mapCtx.data.best_point)
-      jumpToFeature(mapCtx.data.best_point)
+    if (mapCtx.data.position) {
+      buildAddresseMarker(mapCtx.data.position)
+      jumpToPosition(mapCtx.data.position)
     }
 
-  }, [mapCtx.data.best_point]);
+  }, [mapCtx.data.position]);
 
   return (
     <>

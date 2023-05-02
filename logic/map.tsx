@@ -1,3 +1,5 @@
+import { json } from "stream/consumers";
+
 export default class BuildingsMap {
 
     data:any;
@@ -7,7 +9,11 @@ export default class BuildingsMap {
     }
 
     clone() {
-        return new BuildingsMap(this.data)
+        
+        const newData = JSON.parse(JSON.stringify(this.data))
+        return new BuildingsMap(newData)
+
+
     }
 
 }

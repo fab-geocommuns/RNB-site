@@ -8,14 +8,40 @@ export default function AddressSearch() {
     const addressInput = useRef(null)
 
     const handleSubmitForm = async (e) => {
-        
+
         e.preventDefault();
         const best_point = await geocode(addressInput.current.value);
-        mapCtx.data.best_point = best_point
-        setMapCtx(mapCtx.clone())
+
+        if (best_point) {
+             const position = featureToPosition(best_point)
+             console.log(position)
+             mapCtx.data.position = position
+             setMapCtx(mapCtx.clone())
+        }
+        
 
     }
+
+    const featureToPosition = (feature: any) => {
+
+        const mapPosition = {
+            center: feature.geometry.coordinates,
+            zoom: 17
+        }
+
+        if (feature.properties.type == "municipality") {
+            mapPosition.zoom = 13
+          }
+          if (feature.properties.type == "housenumber") {
+            mapPosition.zoom = 18
+          }
+          return mapPosition
+
+    }
+
     const geocode = async (query: string) => {
+
+        console.log('geocode', query)
 
         let best_point = null;
         let result = await fetchBanAPI(query);
