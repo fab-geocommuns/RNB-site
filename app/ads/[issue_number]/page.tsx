@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import ADSForm from '@/components/ADSForm'
-
+import Link from 'next/link'
 
 async function fetchADSDetail(issue_number: string) {
 
@@ -17,11 +16,9 @@ export default async function ADSDetail({params}: any) {
 
     return (
         <>
-        <p><Link href={`/`}>&larr; retour</Link></p>
+        <p><Link href={`/ads`}>&larr; retour</Link></p>
         <h1>{ads.issue_number}</h1>
-        <ADSForm
-            data={ads}
-         />
+        <ADSForm data={ads} />
         </>
     )
 }

@@ -10,7 +10,9 @@ export default function DashboardLayout({
     return (
     <>
     
-    <div className={"fr-container"}>{children}</div>
+    <div className={"fr-container"}>
+      {children}
+      </div>
     
     </>
     )

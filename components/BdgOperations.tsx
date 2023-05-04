@@ -15,6 +15,11 @@ export default function BdgOperations() {
 
     }
 
+    const handleCreateNewBdg = (e) => {
+        e.preventDefault()
+        createNewBdg()
+    }
+
     return (
         <>
             <div className={styles.grid}>
@@ -22,7 +27,8 @@ export default function BdgOperations() {
             <div>
             <div>Bâtiments concernés par l'ADS</div>
 
-                <p>Séléctionnez les bâtiments concernés sur la carte ou <span onClick={createNewBdg} className='fr-link'>créez un nouveau bâtiment</span>.</p>
+                <p className={styles.helpText}>Séléctionnez les bâtiments concernés sur la carte <br />
+                ou <a href="#" onClick={handleCreateNewBdg} className={`"fr-link" ${styles.createLink}`}>créez un nouveau bâtiment</a>.</p>
 
                 <ul className={styles.opsList}>
                     {ads.state.data.buildings_operations?.map((bdgop) => (

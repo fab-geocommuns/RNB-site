@@ -11,15 +11,7 @@ import BuildingsMap from '@/logic/map';
 import AddressSearch from '@/components/AddressSearch'
 
 
-export default function ADSForm({ data = {
-    
-        issue_number: "",
-        insee_code: "",
-        issue_date: "",
-        buildings_operations: []
-    
-    
-} }) {
+export default function ADSForm({ data }) {
 
     let bdgmap = new BuildingsMap({
         position: {
@@ -35,6 +27,9 @@ export default function ADSForm({ data = {
     }
 
     let ads = new AdsEditing(editingState)
+
+
+    
     const [ctx, setCtx] = useState(ads);
     const init_issue_number = useRef(editingState.data.issue_number ? editingState.data.issue_number.slice() : "") // slice() to clone the string
 
@@ -138,7 +133,7 @@ export default function ADSForm({ data = {
                                 <BdgOperations />
                             </div>
 
-                            <div>
+                            <div className="fr-my-10v">
                                 <button className='fr-btn' type="submit">Enregistrer</button>
                             </div>
 

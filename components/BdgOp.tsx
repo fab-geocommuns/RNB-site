@@ -29,12 +29,10 @@ export default function BdgOp({data=null}) {
             setMapCtx(mapCtx.clone())
         }
 
-        
-
     }
 
-    const removeBdg = (identifier: string) => {
-        ads.removeIdentifier(identifier)
+    const removeBdg = () => {
+        ads.removeIdentifier(data.building.identifier)
         setAds(ads.clone())
     }
 
@@ -60,6 +58,12 @@ export default function BdgOp({data=null}) {
             }
 
             
+        } else {
+
+            if (!hasPosition()) {
+                return "Bâtiment non positionné"
+            }
+
         }
         
 
@@ -79,6 +83,29 @@ export default function BdgOp({data=null}) {
 
     }
 
+    const moveBtnTitle = () => {
+
+        if (isEditing()) {
+            return "Valider le déplacement" 
+        }
+
+        return "Déplacer ce bâtiment"
+
+    }
+
+    const toggleEditing = () => {
+
+        if (isEditing()) {
+            ads.state.bdg_move = null
+        } else {
+            ads.state.bdg_move = data.building.identifier
+        }
+
+        setAds(ads.clone())
+        return
+
+    }
+
     return (
         <>
         <li className={styles.op} key={data.building.rnb_id}>
@@ -93,14 +120,18 @@ export default function BdgOp({data=null}) {
                 <span onClick={() => {chooseOpOption("demolish", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__demolish}  ${data.operation == "demolish" ? styles.active : ""}`}>Démolition</span> 
                         
                 <span className={styles.opToolsShell}>
-                    {isNew() && <span title="Déplacer ce bâtiment" onClick={() => {}} className={`${styles.opTool} ${styles.opMove} ${isEditing() ? styles.opMove__active : ""}`}><i className={fr.cx("fr-icon-drag-move-2-line")}></i></span>}
-                    <span title="Retirer ce bâtiment de l'ADS" onClick={() => {removeBdg(data.building.rnb_id)}} className={`${styles.opTool} ${styles.opRemove}`}><i className={fr.cx("fr-icon-delete-line")}></i></span>
+                    {isNew() && (
+                        <span 
+                            title={moveBtnTitle()}
+                            onClick={toggleEditing} 
+                            className={`${styles.opTool} ${styles.opMove} ${isEditing() ? styles.opTool__active : ""}`}>
+                                <i className={` ${styles.opToolIconActive} ${fr.cx("fr-icon-drag-move-2-line")}`}></i>
+                                <i className={` ${styles.opToolIconHover} ${fr.cx("fr-icon-check-line")}`}></i>
+                        </span>)}
+                    <span title="Retirer ce bâtiment de l'ADS" onClick={removeBdg} className={`${styles.opTool} ${styles.opRemove}`}><i className={fr.cx("fr-icon-delete-line")}></i></span>
                     
                 </span>
-
-
                 
-
                         </li>
         </>
     )

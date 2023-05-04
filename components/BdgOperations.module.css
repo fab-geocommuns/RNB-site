@@ -4,3 +4,13 @@
 }
 
 
+.helpText {
+    margin-top: 10px;
+    font-size: .85em;
+    line-height: 1.45em;
+}
+
+
+.createLink {
+    color:#0078f3;
+}

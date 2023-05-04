@@ -62,10 +62,13 @@ export default function ADSMap() {
       } else {
           // We can only add existing bdg
           const rnb_id = e.features[0].properties.rnb_id
-          ads.addExistingBdg(rnb_id)
+          const coords = e.features[0].geometry.coordinates
+          ads.addExistingBdg(rnb_id, coords[1], coords[0])
       }
 
-      setAds(ads.clone())      
+      const newads = ads.clone()
+
+      setAds(newads)      
 
     });
 
@@ -126,7 +129,7 @@ export default function ADSMap() {
 
     });
 
-    // Add bdgs from the state
+    // Add new bdgs from the state
     ads.newBdgOps.forEach(bdgOp => {
 
       const feature = {
@@ -326,18 +329,12 @@ export default function ADSMap() {
 
   const jumpToPosition = (position) => {
 
-
-      console.log('jump to position', position)
-
     if (mapCtx.data.position.zoom && mapCtx.data.position.center) {
       map.current.flyTo({
         center: position.center,
         zoom: position.zoom
       })
     }
-
-    
-
 
   }
 
@@ -356,7 +353,6 @@ export default function ADSMap() {
 
     console.log('mapCtx.data.position', mapCtx.data.position)
     if (mapCtx.data.position) {
-
       
         jumpToPosition(mapCtx.data.position)
       

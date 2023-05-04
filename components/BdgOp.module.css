@@ -93,6 +93,7 @@
     border-radius: 0.25rem;
     cursor:pointer;
     margin-right: 4px;
+    color:#cecece;
 }
 .opTool:last-child {
     margin-right: 0;
@@ -101,11 +102,33 @@
     width: 20px;
 }
 
-.opMove:hover:not(.opMove__active) {
+.opToolIconActive {
+
+}
+.opTool__active:hover .opToolIconActive {
+    display: none;
+}
+
+.opToolIconHover {
+    display: none;
+}
+.opTool__active:hover .opToolIconHover {
+    display: inline;
+}
+
+
+.opMove:hover {
+    color: #417DC4;
+}
+
+
+
+.opMove:hover:not(.opTool__active) {
     background: #bcd3fc;
 }
-.opMove__active {
+.opMove.opTool__active {
     background: #9fc3fc;
+    color:#417DC4;
 }
 
 .opRemove:hover {

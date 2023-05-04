@@ -12,7 +12,8 @@
     
 }
 .mapShell {
-    position:relative
+    position:sticky;
+    top:10px;
 }
 
 .addresseSearchShell {

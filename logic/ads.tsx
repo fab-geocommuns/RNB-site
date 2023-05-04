@@ -139,13 +139,15 @@ export default class AdsEditing {
         this.state.data.buildings_operations = this.state.data.buildings_operations.filter((bdgop: any) => bdgop.building.identifier != identifier)
     }
 
-    addExistingBdg(rnb_id: string) {
+    addExistingBdg(rnb_id: string, lat: number, lng: number) {
 
 
         const op = {
             building: {
                 rnb_id: rnb_id,
-                identifier: rnb_id
+                identifier: rnb_id,
+                lat: lat,
+                lng: lng
             },
             operation: "build"
         }
@@ -172,7 +174,10 @@ export default class AdsEditing {
 
     clone() {
 
-        return new AdsEditing(this.state)
+
+        const newState = JSON.parse(JSON.stringify(this.state))
+
+        return new AdsEditing(newState)
 
     }
 
