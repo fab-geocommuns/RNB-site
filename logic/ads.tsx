@@ -111,10 +111,10 @@ export default class AdsEditing {
     }
 
 
-    updateBdgOperation(op: string, rnb_id: string) {
+    updateBdgOperation(op: string, identifier: string) {
 
         this.state.data.buildings_operations = this.state.data.buildings_operations.map((bdgop: any) => {
-            if (bdgop.building.rnb_id == rnb_id) {
+            if (bdgop.building.identifier == identifier) {
                 bdgop.operation = op
             }
             return bdgop
@@ -123,51 +123,51 @@ export default class AdsEditing {
 
     }
 
-    toggleRnbId(rnbid: string) {
+    
 
-        if (this.hasRnbId(rnbid)) {
-            this.removeRnbId(rnbid)
-        } else {
-            this.addRnbId(rnbid)
-        }
+    addOp(op: any) {
+
+        this.state.data.buildings_operations.unshift(op)
 
     }
 
-    hasRnbId(rnbid: string) {
-        return this.state.data.buildings_operations.some((bdgop: any) => bdgop.building.rnb_id == rnbid)    
+    hasIdentifier(identifier: string) {
+        return this.state.data.buildings_operations.some((bdgop: any) => bdgop.building.identifier == identifier)    
     }
 
-    removeRnbId(rnbid: string) {
-        this.state.data.buildings_operations = this.state.data.buildings_operations.filter((bdgop: any) => bdgop.building.rnb_id != rnbid)
+    removeIdentifier(identifier: string) {
+        this.state.data.buildings_operations = this.state.data.buildings_operations.filter((bdgop: any) => bdgop.building.identifier != identifier)
     }
 
-    addBdg(rnbid: string) {
+    addExistingBdg(rnb_id: string) {
 
-        let identifier = rnbid;
-        if (rnbid == "new") {
-            identifier = this.createNewBdgIdentifier()
-        }
 
-        const bdg = {
-            "building": {
-                "rnb_id": rnbid,
-                "identifier": identifier
+        const op = {
+            building: {
+                rnb_id: rnb_id,
+                identifier: rnb_id
             },
-            "operation": "build"
+            operation: "build"
         }
 
-        this.state.data.buildings_operations.unshift(bdg)
+        this.addOp(op)
+        return op
 
-        return bdg
-
-    }
-
-    addRnbId(rnbid: string) {
-        return this.addBdg(rnbid)
     }
 
     addNewBdg() {
-        return this.addBdg("new")
+
+        const op = {
+            building: {
+                rnb_id: "new",
+                identifier: this.createNewBdgIdentifier()
+            },
+            operation: "build"
+        }
+
+        this.addOp(op)
+        return op
+
     }
 
     clone() {

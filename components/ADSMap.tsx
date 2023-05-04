@@ -53,9 +53,18 @@ export default function ADSMap() {
         return;
       }
 
-      const rnb_id = e.features[0].properties.rnb_id
+      const identifier = e.features[0].properties.identifier
+      
 
-      ads.toggleRnbId(rnb_id)
+      if (ads.hasIdentifier(identifier)) {
+          // We can remove both new and existing bdg
+          ads.removeIdentifier(identifier)
+      } else {
+          // We can only add existing bdg
+          const rnb_id = e.features[0].properties.rnb_id
+          ads.addExistingBdg(rnb_id)
+      }
+
       setAds(ads.clone())      
 
     });
@@ -108,6 +117,7 @@ export default function ADSMap() {
         geometry: bdg.point,
         properties: {
           rnb_id: bdg.rnb_id,
+          identifier: bdg.rnb_id,
           operation: operation
         }
       }

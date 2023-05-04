@@ -22,12 +22,11 @@ export default function BdgOperations() {
             <div>
             <div>Bâtiments concernés par l'ADS</div>
 
-                <p>moving {ads.state.bdg_move}</p>
                 <p>Séléctionnez les bâtiments concernés sur la carte ou <span onClick={createNewBdg} className='fr-link'>créez un nouveau bâtiment</span>.</p>
 
                 <ul className={styles.opsList}>
                     {ads.state.data.buildings_operations?.map((bdgop) => (
-                        <BdgOp data={bdgop} />
+                        <BdgOp key={bdgop.building.identifier} data={bdgop} />
                     ))}
                 </ul>
             </div>

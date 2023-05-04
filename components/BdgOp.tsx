@@ -13,9 +13,9 @@ export default function BdgOp({data=null}) {
     const [ads, setAds] = useContext(AdsContext)    
     const [mapCtx, setMapCtx] = useContext(MapContext)
 
-    const chooseOpOption = (op: string, rnb_id: string) => {
+    const chooseOpOption = (op: string, idenfitier: string) => {
         
-        ads.updateBdgOperation(op, rnb_id)
+        ads.updateBdgOperation(op, idenfitier)
         setAds(ads.clone())
 
     }
@@ -29,8 +29,8 @@ export default function BdgOp({data=null}) {
 
     }
 
-    const removeBdg = (rnbId: string) => {
-        ads.toggleRnbId(rnbId)
+    const removeBdg = (identifier: string) => {
+        ads.removeIdentifier(identifier)
         setAds(ads.clone())
     }
 
@@ -48,9 +48,9 @@ export default function BdgOp({data=null}) {
                             {isEditing() ? " (en cours d'édition)" : ""}
                             </span>
                     </div>
-                <span onClick={() => {chooseOpOption("build", data.building.rnb_id)}} className={`${styles.opOption} ${styles.opOption__build} ${data.operation == "build" ? styles.active : ""}`}>Construction</span> 
-                <span onClick={() => {chooseOpOption("modify", data.building.rnb_id)}} className={`${styles.opOption} ${styles.opOption__modify} ${data.operation == "modify" ? styles.active : ""}`}>Modification</span>
-                <span onClick={() => {chooseOpOption("demolish", data.building.rnb_id)}} className={`${styles.opOption} ${styles.opOption__demolish}  ${data.operation == "demolish" ? styles.active : ""}`}>Démolition</span> 
+                <span onClick={() => {chooseOpOption("build", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__build} ${data.operation == "build" ? styles.active : ""}`}>Construction</span> 
+                <span onClick={() => {chooseOpOption("modify", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__modify} ${data.operation == "modify" ? styles.active : ""}`}>Modification</span>
+                <span onClick={() => {chooseOpOption("demolish", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__demolish}  ${data.operation == "demolish" ? styles.active : ""}`}>Démolition</span> 
                         
                 <span title="Retirer ce bâtiment de l'ADS" onClick={() => {removeBdg(data.building.rnb_id)}} className={styles.opRemove}><i className={fr.cx("fr-icon-delete-line")}></i></span> 
 
