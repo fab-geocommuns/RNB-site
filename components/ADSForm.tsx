@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import BdgOperations from './BdgOperations';
 import ADSMap from './ADSMap';
 import { AdsContext } from './AdsContext';
-import Ads from '../logic/ads';
+import AdsEditing from '../logic/ads';
 import styles from './ADSForm.module.css'
 import { MapContext } from '@/components/MapContext';
 import BuildingsMap from '@/logic/map';
@@ -12,10 +12,13 @@ import AddressSearch from '@/components/AddressSearch'
 
 
 export default function ADSForm({ data = {
-    issue_number: "",
-    insee_code: "",
-    issue_date: "",
-    buildings_operations: []
+    
+        issue_number: "",
+        insee_code: "",
+        issue_date: "",
+        buildings_operations: []
+    
+    
 } }) {
 
     let bdgmap = new BuildingsMap({
@@ -27,9 +30,13 @@ export default function ADSForm({ data = {
 
     const [mapCtx, setMapCtx] = useState(bdgmap)
 
-    let ads = new Ads(data)
+    const editingState = {
+            data: data
+    }
+
+    let ads = new AdsEditing(editingState)
     const [ctx, setCtx] = useState(ads);
-    const init_issue_number = useRef(data.issue_number ? data.issue_number.slice() : "") // slice() to clone the string
+    const init_issue_number = useRef(editingState.data.issue_number ? editingState.data.issue_number.slice() : "") // slice() to clone the string
 
     const getActionURL = () => {
         if (ads.isSaved()) {
@@ -51,7 +58,7 @@ export default function ADSForm({ data = {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        ads.data[name] = value
+        ads.state.data[name] = value
         setCtx(ads.clone())
     }
 
@@ -70,7 +77,7 @@ export default function ADSForm({ data = {
                 'Content-Type': 'application/json',
                 'Authorization': 'Token 3d4dbc70f60d0666fbd8ead6df4eb0c3fcf376bf',
             },
-            body: JSON.stringify(ctx.data)
+            body: JSON.stringify(ctx.state.data)
         })
         const data = await res.json()
 

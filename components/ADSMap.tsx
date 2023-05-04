@@ -49,14 +49,34 @@ export default function ADSMap() {
 
     map.current.on('click', 'bdgs', function (e) {
 
+      if (ads.isEditingNewBdg()) {
+        return;
+      }
+
       const rnb_id = e.features[0].properties.rnb_id
 
       ads.toggleRnbId(rnb_id)
-      setAds(ads.clone())
+      setAds(ads.clone())      
+
+    });
+
+    map.current.on('click', function (e) {
+
+      if (ads.isEditingNewBdg()) {
+
+        const lngLat = e.lngLat
+
+        ads.updateNewBdgLngLat(lngLat.lng, lngLat.lat)
+        setAds(ads.clone())
+
+
+      }
 
     });
 
   }
+
+
 
   const newQuery = () => {
 
@@ -78,6 +98,7 @@ export default function ADSMap() {
       "features": []
     }
 
+    // Add bdgs from the query
     bdgs.current.forEach(bdg => {
 
       const operation = getBdgOperation(bdg.rnb_id)
@@ -87,8 +108,6 @@ export default function ADSMap() {
         geometry: bdg.point,
         properties: {
           rnb_id: bdg.rnb_id,
-          source: bdg.source,
-          addresses: bdg.addresses,
           operation: operation
         }
       }
@@ -97,14 +116,33 @@ export default function ADSMap() {
 
     });
 
+    // Add bdgs from the state
+    ads.newBdgOps.forEach(bdgOp => {
+
+      const feature = {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [bdgOp.building.lng, bdgOp.building.lat]
+        },
+        properties: {
+          rnb_id: bdgOp.building.rnb_id,
+          identifier: bdgOp.building.identifier,
+          operation: bdgOp.operation
+      }
+    }
+
+    geojson.features.push(feature)
+
+    });
+
+
     return geojson;
 
 
   }
 
   const getBdgOperation = (rnb_id: string) => {
-
-
 
     const bdgOp = ads.ops.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
 
