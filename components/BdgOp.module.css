@@ -9,21 +9,19 @@
     position:relative;
     margin-bottom: 3px;
 }
-.centerHelp {
-    display: none;
-}
 .opIdentifier {
     text-decoration: underline;
     text-decoration-color: white;
 }
-.opIdentifierShell:hover .centerHelp {
+.centerHelp {
     display: inline;
     margin-left: 10px;
     font-size: .9em;
     color:#0078f3;
-    position:absolute;
+    
     white-space: nowrap;
 }
+
 .centerHelp i::before {
     width:15px;
     margin-right: 1px;
@@ -77,10 +75,14 @@
     text-decoration: none;
 }
 
-.opRemove {
+.opToolsShell {
     position: absolute;
     right:0;
     top:0;
+    display: flex;
+}
+
+.opTool {
     display: inline-block;
     width: 56.75px;
     height: 56.75px;
@@ -90,10 +92,20 @@
     justify-content: center;
     border-radius: 0.25rem;
     cursor:pointer;
-
+    margin-right: 4px;
 }
-.opRemove i::before {
+.opTool:last-child {
+    margin-right: 0;
+}
+.opTool i::before {
     width: 20px;
+}
+
+.opMove:hover:not(.opMove__active) {
+    background: #bcd3fc;
+}
+.opMove__active {
+    background: #9fc3fc;
 }
 
 .opRemove:hover {

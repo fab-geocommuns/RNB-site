@@ -22,10 +22,14 @@ export default function BdgOp({data=null}) {
 
     const centerMap = (lat: number, lng: number) => {
 
-        mapCtx.data.position.center = [lng, lat]
-        mapCtx.data.position.zoom = 20
+        if (hasPosition()) {
+            mapCtx.data.position.center = [data.building.lng, data.building.lat]
+            mapCtx.data.position.zoom = 20
+    
+            setMapCtx(mapCtx.clone())
+        }
 
-        setMapCtx(mapCtx.clone())
+        
 
     }
 
@@ -37,22 +41,65 @@ export default function BdgOp({data=null}) {
     const isEditing = () => {
         return ads.state.bdg_move == data.building.identifier
     }
+    const isNew = () => {
+        return data.building.rnb_id == "new"
+    }
+
+    const hasPosition = () => {
+        return data.building.lat != null && data.building.lng != null
+    }
+
+    const helpText = () => {
+
+        if (isEditing()) {
+
+            if (hasPosition()) {
+                return "Déplacez le bâtiment en clickant sur la carte"
+            } else {
+                return "Placez le bâtiment en clickant sur la carte"
+            }
+
+            
+        }
+        
+
+
+        return ""
+
+
+    }
+
+    const opLabel = () => {
+
+        if (isNew()) {
+            return "Nouveau"
+        }
+
+        return data.building.rnb_id
+
+    }
 
     return (
         <>
         <li className={styles.op} key={data.building.rnb_id}>
                     <div>
                         <span className={styles.opIdentifierShell}>
-                        <span onClick={() => {centerMap(data.building.lat, data.building.lng)}} className={styles.opIdentifier}>{data.building.rnb_id}</span>
-                            <span className={styles.centerHelp}><i className={fr.cx("fr-icon-map-pin-2-line")}></i>Centrer la carte</span>
-                            {isEditing() ? " (en cours d'édition)" : ""}
+                        <span onClick={() => {centerMap()}} className={styles.opIdentifier}>{opLabel()}</span>
+                            <span className={styles.centerHelp}>{helpText()}</span>
                             </span>
                     </div>
                 <span onClick={() => {chooseOpOption("build", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__build} ${data.operation == "build" ? styles.active : ""}`}>Construction</span> 
                 <span onClick={() => {chooseOpOption("modify", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__modify} ${data.operation == "modify" ? styles.active : ""}`}>Modification</span>
                 <span onClick={() => {chooseOpOption("demolish", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__demolish}  ${data.operation == "demolish" ? styles.active : ""}`}>Démolition</span> 
                         
-                <span title="Retirer ce bâtiment de l'ADS" onClick={() => {removeBdg(data.building.rnb_id)}} className={styles.opRemove}><i className={fr.cx("fr-icon-delete-line")}></i></span> 
+                <span className={styles.opToolsShell}>
+                    {isNew() && <span title="Déplacer ce bâtiment" onClick={() => {}} className={`${styles.opTool} ${styles.opMove} ${isEditing() ? styles.opMove__active : ""}`}><i className={fr.cx("fr-icon-drag-move-2-line")}></i></span>}
+                    <span title="Retirer ce bâtiment de l'ADS" onClick={() => {removeBdg(data.building.rnb_id)}} className={`${styles.opTool} ${styles.opRemove}`}><i className={fr.cx("fr-icon-delete-line")}></i></span>
+                    
+                </span>
+
+
+                
 
                         </li>
         </>
