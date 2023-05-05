@@ -13,12 +13,14 @@ async function fetchADSDetail(issue_number: string) {
 export default async function ADSDetail({params}: any) {
 
     const ads = await fetchADSDetail(params.issue_number)
+    const isNewAds = false
+
 
     return (
         <>
         <p><Link href={`/ads`}>&larr; retour</Link></p>
         <h1>{ads.issue_number}</h1>
-        <ADSForm data={ads} />
+        <ADSForm data={ads} isNewAds={isNewAds} />
         </>
     )
 }

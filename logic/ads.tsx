@@ -44,10 +44,6 @@ export default class AdsEditing {
         return this.state.bdg_move != undefined || this.state.bdg_move == '';
     }
     
-    isSaved() {
-        return this.issue_number == undefined
-    }
-    
     get issue_number() {
         return this.state.data.issue_number
     }

@@ -1,40 +1,60 @@
 'use client'
 
 import { useState, useRef } from 'react';
+
+// Comps
 import BdgOperations from './BdgOperations';
 import ADSMap from './ADSMap';
-import { AdsContext } from './AdsContext';
-import AdsEditing from '../logic/ads';
-import styles from './ADSForm.module.css'
-import { MapContext } from '@/components/MapContext';
-import BuildingsMap from '@/logic/map';
 import AddressSearch from '@/components/AddressSearch'
+import Select from 'react-select'
+import Async, { useAsync } from 'react-select/async';
+
+// Contexts
+import { AdsContext } from './AdsContext';
+import { MapContext } from '@/components/MapContext';
+
+// Logic
+import AdsEditing from '@/logic/ads';
+import BuildingsMap from '@/logic/map';
+
+// DSFR and styles
+import styles from './ADSForm.module.css'
 
 
-export default function ADSForm({ data }) {
 
+export default function ADSForm({ data, isNewAds }) {
+
+    //////////////
+    // Contexts
+
+    // ADS
+    const editingState = {
+            data: data
+    }
+    let ads = new AdsEditing(editingState)
+    const [ctx, setCtx] = useState(ads);
+
+    // Map
     let bdgmap = new BuildingsMap({
         position: {
             center: null,
             zoom: null
         }
     })
-
     const [mapCtx, setMapCtx] = useState(bdgmap)
 
-    const editingState = {
-            data: data
-    }
-
-    let ads = new AdsEditing(editingState)
-
-
-    
-    const [ctx, setCtx] = useState(ads);
+    //////////////
     const init_issue_number = useRef(editingState.data.issue_number ? editingState.data.issue_number.slice() : "") // slice() to clone the string
 
+
+    const dummyOpts = [
+  { value: '38185', label: 'Grenoble' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+]
+
     const getActionURL = () => {
-        if (ads.isSaved()) {
+        if (isNewAds) {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/'
         } else {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_issue_number.current + "/"
@@ -42,7 +62,7 @@ export default function ADSForm({ data }) {
     }
 
     const getActionMethod = () => {
-        if (ads.isSaved()) {
+        if (isNewAds) {
             return 'POST'
         } else {
             return 'PUT'
@@ -57,6 +77,10 @@ export default function ADSForm({ data }) {
         setCtx(ads.clone())
     }
 
+    const handleCitySelectChange = (choice) => {
+        ads.state.data["insee_code"] = choice.value
+        setCtx(ads.clone())
+    }
 
 
     const submitForm = async (e) => {
@@ -65,6 +89,7 @@ export default function ADSForm({ data }) {
 
         const url = getActionURL()
         const method = getActionMethod()
+
         const res = await fetch(url, {
             cache: 'no-cache',
             method: method,
@@ -118,14 +143,15 @@ export default function ADSForm({ data }) {
                             </div>
                             <div className="fr-input-group">
                                 <label className="fr-label" htmlFor="insee_code">Code INSEE</label>
-                                <input
-                                    className="fr-input"
-                                    type="text"
-                                    name="insee_code"
-                                    id="insee_code"
-                                    value={ctx.insee_code}
-                                    onChange={handleInputChange}
-                                />
+                                
+                                <div>insee code : {ctx.insee_code}</div>
+                                  <Select 
+                                  name="hello"
+                                  options={dummyOpts} 
+                                  onChange={handleCitySelectChange}
+                                  
+                                  />
+
                             </div>
 
                             <div>
