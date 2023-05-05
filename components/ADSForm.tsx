@@ -7,7 +7,7 @@ import BdgOperations from './BdgOperations';
 import ADSMap from './ADSMap';
 import AddressSearch from '@/components/AddressSearch'
 import Select from 'react-select'
-import Async, { useAsync } from 'react-select/async';
+import AsyncSelect from 'react-select/async';
 
 // Contexts
 import { AdsContext } from './AdsContext';
@@ -21,8 +21,7 @@ import BuildingsMap from '@/logic/map';
 import styles from './ADSForm.module.css'
 
 
-
-export default function ADSForm({ data, isNewAds }) {
+export default function ADSForm({ data, isNewAds, defaultCity }) {
 
     //////////////
     // Contexts
@@ -43,8 +42,17 @@ export default function ADSForm({ data, isNewAds }) {
     })
     const [mapCtx, setMapCtx] = useState(bdgmap)
 
-    //////////////
+    ////////////// 
+    // Starting values
     const init_issue_number = useRef(editingState.data.issue_number ? editingState.data.issue_number.slice() : "") // slice() to clone the string
+
+    let city = null
+    if (defaultCity) {
+        city = {
+            "value": defaultCity.code_insee,
+            "label": defaultCity.name
+        }
+    }
 
 
     const dummyOpts = [
@@ -105,6 +113,30 @@ export default function ADSForm({ data, isNewAds }) {
 
     }
 
+    const searchCities = async (inputValue: string) => {
+
+        const url = new URL(process.env.NEXT_PUBLIC_API_BASE + '/cities/')
+        url.searchParams.set('q', inputValue);
+
+        return new Promise((resolve, reject) => {
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const options = data.results.map(d => ({
+                    "value": d.code_insee,
+                    "label": d.name
+                }))
+                resolve(options)
+            })
+            .catch(err => {
+                reject(err)
+            })
+
+        })
+
+    }
+
     return (
         <MapContext.Provider value={[mapCtx, setMapCtx]}>
             <AdsContext.Provider value={[ctx, setCtx]}>
@@ -142,14 +174,22 @@ export default function ADSForm({ data, isNewAds }) {
                                 />
                             </div>
                             <div className="fr-input-group">
-                                <label className="fr-label" htmlFor="insee_code">Code INSEE</label>
+                                <label className="fr-label" htmlFor="insee_code">Ville</label>
                                 
-                                <div>insee code : {ctx.insee_code}</div>
-                                  <Select 
-                                  name="hello"
-                                  options={dummyOpts} 
+                                  <AsyncSelect 
+                                  name="insee_code"
+                                defaultValue={city}
                                   onChange={handleCitySelectChange}
-                                  
+                                  loadOptions={searchCities}
+                                  loadingMessage={() => "Chargement..."}
+                                  noOptionsMessage={(e) => {
+                                        if (e.inputValue.length > 0) {
+                                            return "Aucune ville trouvée"
+                                        }
+                                        return "Chercher par nom ou code INSEE"
+                                        
+                                  }}
+                                  placeholder="Aucun ville séléctionnée"
                                   />
 
                             </div>
