@@ -10,7 +10,7 @@ export default function DashboardLayout({
     return (
     <>
     
-    <div className={"fr-container"}>
+    <div className={"fr-container fr-py-8v"}>
       {children}
       </div>
     

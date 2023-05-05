@@ -303,7 +303,7 @@ export default function ADSMap() {
       ads.ops.forEach(bdgOp => {
         bounds.extend([bdgOp.building.lng, bdgOp.building.lat])
       })
-      map.current.fitBounds(bounds, { padding: 100, linear: true })
+      map.current.fitBounds(bounds, { padding: 100, linear: true, maxZoom: 20 })
 
     }
   }
@@ -314,8 +314,8 @@ export default function ADSMap() {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         style: 'https://api.maptiler.com/maps/bright-v2/style.json?key=k5TGaasSmJpsWugdpmtP',
-        center: [5.366093814439828, 45.871081537689264],
-        zoom: 15
+        center: [2.4330540504881846, 46.76956015861486],
+        zoom: 4
       });
 
       fitOnOperations();
@@ -359,9 +359,6 @@ export default function ADSMap() {
     }
 
   }, [mapCtx.data.position]);
-
-
-
 
 
 

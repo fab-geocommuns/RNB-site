@@ -6,7 +6,6 @@ import { useState, useRef } from 'react';
 import BdgOperations from './BdgOperations';
 import ADSMap from './ADSMap';
 import AddressSearch from '@/components/AddressSearch'
-import Select from 'react-select'
 import AsyncSelect from 'react-select/async';
 
 // Contexts
@@ -178,6 +177,7 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
                                 
                                   <AsyncSelect 
                                   name="insee_code"
+                                  //unstyled={true}
                                 defaultValue={city}
                                   onChange={handleCitySelectChange}
                                   loadOptions={searchCities}

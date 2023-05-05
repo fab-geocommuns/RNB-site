@@ -1,10 +1,14 @@
+// DSFR and styles
 import { DsfrHead } from "@codegouvfr/react-dsfr/next-appdir/DsfrHead";
 import { DsfrProvider } from "@codegouvfr/react-dsfr/next-appdir/DsfrProvider";
 import { getColorSchemeHtmlAttributes } from "@codegouvfr/react-dsfr/next-appdir/getColorSchemeHtmlAttributes";
 import StartDsfr from "./StartDsfr";
 import { defaultColorScheme } from "./defaultColorScheme";
-import { Header } from "@codegouvfr/react-dsfr/Header";
 import  "./global.css";
+
+// Components
+import { Header } from "@codegouvfr/react-dsfr/Header";
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -70,6 +74,7 @@ export default function RootLayout({
           {children}
           
         </DsfrProvider>
+        <Analytics />
         </body>
     </html>
     
