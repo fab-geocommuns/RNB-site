@@ -6,10 +6,10 @@ import StartDsfr from "./StartDsfr";
 import { defaultColorScheme } from "./defaultColorScheme";
 import  "./global.css";
 
+
 // Components
 import { Header } from "@codegouvfr/react-dsfr/Header";
 import { Analytics } from '@vercel/analytics/react';
-
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -50,6 +50,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
 
+
+  
+
   return (    
     
     <html lang="fr" {...getColorSchemeHtmlAttributes({ defaultColorScheme })} >
@@ -72,7 +75,7 @@ export default function RootLayout({
           
           {children}
           
-          
+        
 
         </DsfrProvider>
         <Analytics />

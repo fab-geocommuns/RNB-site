@@ -1,0 +1,87 @@
+'use client'
+
+// Hooks
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+// Comps
+import Link from 'next/link'
+import ADSSearch from '@/components/ADSSearch'
+
+// Styles
+import styles from '@/components/ADSList.module.css'
+
+async function fetchADSList(query: string | null ) {
+
+  
+    let url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
+    if (query != null) {
+      url = url + '?q=' + query
+    }
+    const res = await fetch(url, {cache: 'no-cache'})
+    const data = await res.json()
+    return data
+    
+  }
+
+export default function ADSList() {
+
+    
+    const params = useSearchParams()
+    
+    
+    const [adsList, setAdsList] = useState([])
+    
+    
+    useEffect(() => {
+    
+        fetchADSList(params.get('q') ).then((data) => {
+            setAdsList(data['results'])
+        })
+
+    }, [params.get('q')])
+
+    return (
+        <>
+        <div className={styles.listShell}>
+            <div className={styles.searchShell}>
+            <ADSSearch />
+            </div>
+        
+        <table className='fr-table'>
+          <thead>
+            <tr>
+              <th>Numéro</th>
+              <th>Date d&apos;émission</th>
+              <th>Ville</th>
+              <th># bâtiments</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+          {adsList.map((ads: any) => (
+            
+              <tr key={ads.issue_number}>
+                <td>
+                  <Link href={`/ads/${ads.issue_number}`}>{ads.issue_number}</Link>
+                </td>
+                <td>
+                  {ads.issue_date}
+                </td>
+                <td>
+                  {ads.code_insee}
+                </td>
+                <td className=''>{ads.buildings_operations.length}</td>
+                
+              </tr>
+              
+          ))}
+          </tbody>
+
+        </table>
+        </div>
+        </>
+    )
+
+}

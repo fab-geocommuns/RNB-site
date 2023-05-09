@@ -1,8 +1,7 @@
 "use client";
 
-import { FormEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { time } from 'console';
 
 export default function ADSSearch() {
 
@@ -27,14 +26,12 @@ export default function ADSSearch() {
 
     return (
         <>
-        
             <input 
                 onChange={handleChange}
                 type="text" 
                 value={query}
                 className='fr-input' 
                 placeholder='Chercher une ADS' />
-        
         </>
     )
 
