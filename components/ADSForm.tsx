@@ -214,6 +214,7 @@ export default function ADSForm({ data, defaultCity }) {
                                     className="fr-label"
                                     htmlFor="issue_number">Numéro d&apos;ADS</label>
                                 <input
+                                    required
                                     className="fr-input"
                                     type="text"
                                     name="issue_number"

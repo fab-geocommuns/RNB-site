@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation'
 async function fetchADSList(query = null) {
 
 
-  let url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
+  let url = process.env.NEXT_PUBLIC_API_BASE + '/ads/'
   if (query) {
     url = url + '?q=' + query
   }
