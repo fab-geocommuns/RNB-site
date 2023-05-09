@@ -1,15 +1,23 @@
 'use client'
 
+// React tools
 import React, { useRef, useEffect, useContext, useState } from 'react';
-import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+
+// Contexts
 import { AdsContext } from './AdsContext';
-import styles from './ADSMap.module.css'
-import vector from '@/components/mapstyles/vector.json'
 import { MapContext } from '@/components/MapContext'
+
+// Styles (UI)
+import 'maplibre-gl/dist/maplibre-gl.css';
+import maplibregl from 'maplibre-gl';
+import styles from './ADSMap.module.css'
+import { fr } from "@codegouvfr/react-dsfr";
+
+// Map Tools
+import vector from '@/components/mapstyles/vector.json'
 import satellitle from '@/components/mapstyles/satellite.json'
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
-import { fr } from "@codegouvfr/react-dsfr";
+
 
 export default function ADSMap() {
 
@@ -278,6 +286,14 @@ export default function ADSMap() {
 
   const initMapControls = () => {
 
+
+    const styleSwitcher = new MapStyleSwitcherControl({
+      styles: STYLES,
+      chosenStyle: 'vector',
+      icon: fr.cx("fr-icon-road-map-line")
+    })
+    map.current.addControl(styleSwitcher, 'bottom-right')
+
     const controls = new maplibregl.NavigationControl({
       showCompass: false,
       showZoom: true
@@ -285,13 +301,6 @@ export default function ADSMap() {
 
     map.current.addControl(controls, 'bottom-right')
 
-
-    const styleSwitcher = new MapStyleSwitcherControl({
-      styles: STYLES,
-      chosenStyle: 'vector',
-      icon: fr.cx("fr-icon-road-map-line")
-    })
-    map.current.addControl(styleSwitcher, 'bottom-left')
 
   }
 

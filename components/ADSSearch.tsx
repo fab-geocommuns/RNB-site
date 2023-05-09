@@ -1,31 +1,40 @@
 "use client";
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { time } from 'console';
 
 export default function ADSSearch() {
 
-    const search = useSearchParams()
+    const timeout = useRef(0)
 
+    const search = useSearchParams()
     const [query, setQuery] = useState(search.get('q') || '')
     const router = useRouter()
 
-    const handleSearch = (e: FormEvent) => {
-        e.preventDefault()
-        const encodedQuery = encodeURI(query)
-        router.push(`/ads?q=${encodedQuery}`)
+    const handleChange = (e: any) => {
+
+        setQuery(e.target.value)
+
+        if (timeout.current) clearTimeout(timeout.current)
+
+        timeout.current = setTimeout(() => {            
+            const encodedQuery = encodeURI(e.target.value)
+            router.push(`/ads?q=${encodedQuery}`)
+        }, 300)
+
     }
 
     return (
         <>
-        <form onSubmit={handleSearch}>
+        
             <input 
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={handleChange}
                 type="text" 
                 value={query}
                 className='fr-input' 
                 placeholder='Chercher une ADS' />
-        </form>
+        
         </>
     )
 

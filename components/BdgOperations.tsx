@@ -25,7 +25,7 @@ export default function BdgOperations() {
             <div className={styles.grid}>
             
             <div>
-            <div>Bâtiments concernés par l'ADS</div>
+            
 
                 <p className={styles.helpText}>Séléctionnez les bâtiments concernés sur la carte <br />
                 ou <a href="#" onClick={handleCreateNewBdg} className={`"fr-link" ${styles.createLink}`}>créez un nouveau bâtiment</a>.</p>

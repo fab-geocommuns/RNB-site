@@ -10,14 +10,12 @@ export default function NewADS() {
         buildings_operations: [] 
     }
 
-    const isNewAds = true
-
 
     return (
         <>
         <p><Link href={`/ads`}>&larr; retour</Link></p>
         <h1>Nouvelles ADS</h1>
-        <ADSForm data={data} isNewAds={isNewAds} />
+        <ADSForm data={data} />
         </>
     )
 }

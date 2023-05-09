@@ -3,9 +3,11 @@
 import { useState, useRef } from 'react';
 
 // Comps
-import BdgOperations from './BdgOperations';
-import ADSMap from './ADSMap';
+import BdgOperations from '@/components/BdgOperations';
+import ADSMap from '@/components/ADSMap';
 import AddressSearch from '@/components/AddressSearch'
+import FlashMessage from '@/components/FlashMessage';
+import InputErrors from '@/components/InputErrors';
 import AsyncSelect from 'react-select/async';
 
 // Contexts
@@ -15,12 +17,14 @@ import { MapContext } from '@/components/MapContext';
 // Logic
 import AdsEditing from '@/logic/ads';
 import BuildingsMap from '@/logic/map';
+import Flash from '@/logic/flash';
 
 // DSFR and styles
 import styles from './ADSForm.module.css'
+import { useRouter } from 'next/navigation';
 
 
-export default function ADSForm({ data, isNewAds, defaultCity }) {
+export default function ADSForm({ data, defaultCity }) {
 
     //////////////
     // Contexts
@@ -32,6 +36,10 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
     let ads = new AdsEditing(editingState)
     const [ctx, setCtx] = useState(ads);
 
+    // Local UI State
+    const [isSaving, setIsSaving] = useState(false)
+    const [errors, setErrors] = useState({})
+
     // Map
     let bdgmap = new BuildingsMap({
         position: {
@@ -40,6 +48,14 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
         }
     })
     const [mapCtx, setMapCtx] = useState(bdgmap)
+    
+    // Flash msg
+    const [flash, setFlash] = useState(new Flash())
+    
+
+
+    // Router
+    const router = useRouter()
 
     ////////////// 
     // Starting values
@@ -53,23 +69,21 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
         }
     }
 
-
-    const dummyOpts = [
-  { value: '38185', label: 'Grenoble' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]
+    const isNewAds = () => {
+        return init_issue_number.current == ""
+    }
 
     const getActionURL = () => {
-        if (isNewAds) {
+        if (isNewAds()) {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/'
         } else {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_issue_number.current + "/"
         }
     }
 
+
     const getActionMethod = () => {
-        if (isNewAds) {
+        if (isNewAds()) {
             return 'POST'
         } else {
             return 'PUT'
@@ -94,6 +108,10 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
 
         e.preventDefault();
 
+        setIsSaving(true)
+        setErrors({})
+        closeFeedback()
+
         const url = getActionURL()
         const method = getActionMethod()
 
@@ -107,8 +125,50 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
             body: JSON.stringify(ctx.state.data)
         })
         const data = await res.json()
+        setIsSaving(false)
+
+        
+        if (res.status == 201 || res.status == 200) {
+            // We update the issue number so it can be used if we resubmit the form
+            init_issue_number.current = ctx.state.data.issue_number
+            showSuccess()
+        }
+
+        if (res.status == 400) {
+            setErrors(data)
+            showBadRequest(data)
+        }
 
         return
+
+    }
+
+    const closeFeedback = () => {
+        flash.open = false
+        setFlash({...flash})
+    }
+
+    const showBadRequest = (data) => {
+
+        flash.title = "Votre formulaire a une erreur"
+        flash.desc = data.detail
+        flash.open = true
+        flash.type = "error"
+        flash.closable = true
+
+        setFlash({...flash})
+
+    }
+
+    const showSuccess = () => {
+
+        flash.title = "ADS enregistrée"
+        flash.desc = ""
+        flash.open = true
+        flash.type = "success"
+        flash.closable = true
+
+        setFlash({...flash})
 
     }
 
@@ -140,9 +200,11 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
         <MapContext.Provider value={[mapCtx, setMapCtx]}>
             <AdsContext.Provider value={[ctx, setCtx]}>
 
+                <FlashMessage flash={flash} />
 
                 <div className={styles.grid}>
                     <div className={styles.formCol}>
+
                         <form onSubmit={submitForm}>
 
 
@@ -159,11 +221,13 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
                                     value={ctx.issue_number}
                                     onChange={handleInputChange}
                                 />
+                                <InputErrors errors={errors.issue_number} />
 
                             </div>
                             <div className="fr-input-group">
                                 <label className="fr-label" htmlFor="issue_date">Date d&apos;émission</label>
                                 <input
+                                    required
                                     className="fr-input"
                                     type="date"
                                     name="issue_date"
@@ -171,14 +235,15 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
                                     value={ctx.issue_date}
                                     onChange={handleInputChange}
                                 />
+                                <InputErrors errors={errors.issue_date} />
                             </div>
                             <div className="fr-input-group">
                                 <label className="fr-label" htmlFor="insee_code">Ville</label>
                                 
                                   <AsyncSelect 
+                                  required={true}
                                   name="insee_code"
-                                  //unstyled={true}
-                                defaultValue={city}
+                                  defaultValue={city}
                                   onChange={handleCitySelectChange}
                                   loadOptions={searchCities}
                                   loadingMessage={() => "Chargement..."}
@@ -191,16 +256,20 @@ export default function ADSForm({ data, isNewAds, defaultCity }) {
                                   }}
                                   placeholder="Aucun ville séléctionnée"
                                   />
+                                  <InputErrors errors={errors.insee_code} />
 
                             </div>
 
                             <div>
-
+                            <div>Bâtiments concernés par l'ADS</div>
+                                <InputErrors errors={errors.buildings_operations} />
                                 <BdgOperations />
                             </div>
 
                             <div className="fr-my-10v">
-                                <button className='fr-btn' type="submit">Enregistrer</button>
+                                <button 
+                                {...(isSaving ? {disabled: true} : {})}
+                                className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer"}</button>
                             </div>
 
 
