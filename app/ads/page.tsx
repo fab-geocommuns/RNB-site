@@ -6,10 +6,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-async function fetchADSList() {
-
-  const params = useSearchParams()
-  const query = params.get('q') || null
+async function fetchADSList(query = null) {
 
 
   let url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
@@ -23,6 +20,9 @@ async function fetchADSList() {
 }
 
 export default async function Home() {
+
+  const params = useSearchParams()
+  const query = params.get('q') || null
 
   const response = await fetchADSList()
 
@@ -49,7 +49,7 @@ export default async function Home() {
           <thead>
             <tr>
               <th>Numéro</th>
-              <th>Date d'émission</th>
+              <th>Date d&apos;émission</th>
               <th>Ville</th>
               <th># bâtiments</th>
             </tr>

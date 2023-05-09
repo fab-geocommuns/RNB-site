@@ -150,7 +150,7 @@ export default function ADSForm({ data, defaultCity }) {
 
     const showBadRequest = (data) => {
 
-        flash.title = "Votre formulaire a une erreur"
+        flash.title = "Votre ADS a une erreur"
         flash.desc = data.detail
         flash.open = true
         flash.type = "error"
@@ -261,7 +261,7 @@ export default function ADSForm({ data, defaultCity }) {
                             </div>
 
                             <div>
-                            <div>Bâtiments concernés par l'ADS</div>
+                            <div>Bâtiments concernés par l&apos;ADS</div>
                                 <InputErrors errors={errors.buildings_operations} />
                                 <BdgOperations />
                             </div>

@@ -317,6 +317,17 @@ export default function ADSMap() {
     }
   }
 
+  const jumpToPosition = (position) => {
+
+    if (mapCtx.data.position.zoom && mapCtx.data.position.center) {
+      map.current.flyTo({
+        center: position.center,
+        zoom: position.zoom
+      })
+    }
+
+  }
+
   useEffect(() => {
 
     if (!map.current) {
@@ -336,16 +347,7 @@ export default function ADSMap() {
 
   });
 
-  const jumpToPosition = (position) => {
-
-    if (mapCtx.data.position.zoom && mapCtx.data.position.center) {
-      map.current.flyTo({
-        center: position.center,
-        zoom: position.zoom
-      })
-    }
-
-  }
+  
 
   useEffect(function () {
 
@@ -359,12 +361,8 @@ export default function ADSMap() {
 
   useEffect(() => {
 
-
-    console.log('mapCtx.data.position', mapCtx.data.position)
-    if (mapCtx.data.position) {
-      
+    if (mapCtx.data.position) {      
         jumpToPosition(mapCtx.data.position)
-      
     }
 
   }, [mapCtx.data.position]);
