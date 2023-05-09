@@ -53,7 +53,7 @@ export default function ADSList() {
             <tr>
               <th>Numéro</th>
               <th>Date d&apos;émission</th>
-              <th>Ville</th>
+              <th>Code INSEE</th>
               <th># bâtiments</th>
             </tr>
 
@@ -70,7 +70,7 @@ export default function ADSList() {
                   {ads.issue_date}
                 </td>
                 <td>
-                  {ads.code_insee}
+                  {ads.insee_code}
                 </td>
                 <td className=''>{ads.buildings_operations.length}</td>
                 
