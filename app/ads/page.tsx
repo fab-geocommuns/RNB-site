@@ -2,7 +2,9 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import ADSList from '@/components/ADSList'
-import LoginForm from '@/components/LoginForm'
+import { Notice } from '@codegouvfr/react-dsfr/Notice'
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup'
+
 
 // Auth
 import { getServerSession } from 'next-auth'
@@ -31,8 +33,51 @@ export default async function Home() {
         </> 
         : 
         <>
-        <p>Vous devez être connecté pour accéder à cette page.</p>
-        <Link href={`/login?redirect=/ads`}>Se connecter</Link>
+
+          
+            <div className='fr-grid-row'>
+              <div className='fr-col-12 fr-col-md-8'>
+
+              <Notice title="Accès réservé aux communes" />
+
+<ul className="fr-my-8v">
+  <li>Mettez vos ADS à disposition de tous vos services</li>
+  <li>Soyez prévenus par la DGFIP des fins de travaux</li>
+  <li>Outil en ligne et/ou API disponibles</li>
+  <li>Gratuit et réservé aux communes</li>
+</ul>
+<div>
+
+<ButtonsGroup
+  inlineLayoutWhen="md and up"
+  buttons={[
+    {
+      children: 'Demander un accès',
+      linkProps: {
+        href: '#'
+      }
+    },
+    {
+      children: 'Se connecter',
+      priority: 'secondary',
+      linkProps: {
+        href: '/login?redirect=/ads'
+      }
+    }
+  ]}
+/>
+</div>
+
+  
+
+
+              </div>
+          
+                 
+          
+          </div>
+
+        
         </>
         }
 
