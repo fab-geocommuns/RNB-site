@@ -51,11 +51,11 @@ export default function ADSForm({ data, defaultCity }) {
     
     // Flash msg
     const [flash, setFlash] = useState(new Flash())
-    
-
 
     // Router
     const router = useRouter()
+
+    
 
     ////////////// 
     // Starting values
@@ -203,6 +203,7 @@ export default function ADSForm({ data, defaultCity }) {
                 <FlashMessage flash={flash} />
 
                 <div className={styles.grid}>
+
                     <div className={styles.formCol}>
 
                         <form onSubmit={submitForm}>

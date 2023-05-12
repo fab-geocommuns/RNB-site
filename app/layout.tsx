@@ -6,10 +6,13 @@ import StartDsfr from "./StartDsfr";
 import { defaultColorScheme } from "./defaultColorScheme";
 import  "./global.css";
 
+// Auth
+import RNBSessionProvider from '@/components/SessionProvider'
 
 // Components
 import { Header } from "@codegouvfr/react-dsfr/Header";
 import { Analytics } from '@vercel/analytics/react';
+import LoginBtn from "@/components/LoginBtn";
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -61,6 +64,7 @@ export default function RootLayout({
         <DsfrHead defaultColorScheme={defaultColorScheme} />
       </head>
       <body>
+        <RNBSessionProvider>
         <DsfrProvider defaultColorScheme={defaultColorScheme}>
           <Header 
           brandTop={<>République<br/>Française</>}
@@ -72,12 +76,15 @@ export default function RootLayout({
             title: 'Accueil RNB',
           }}
            />
+
+          <LoginBtn />
           
           {children}
           
         
 
         </DsfrProvider>
+        </RNBSessionProvider>
         <Analytics />
         </body>
     </html>

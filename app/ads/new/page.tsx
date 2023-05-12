@@ -14,7 +14,7 @@ export default function NewADS() {
     return (
         <>
         <p><Link href={`/ads`}>&larr; retour</Link></p>
-        <h1>Nouvelles ADS</h1>
+        <h1>Nouvelle ADS</h1>
         <ADSForm data={data} />
         </>
     )
