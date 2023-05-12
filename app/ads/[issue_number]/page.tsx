@@ -1,5 +1,11 @@
+// Comps
 import ADSForm from '@/components/ADSForm'
 import Link from 'next/link'
+
+// Auth
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { redirect } from 'next/navigation'
 
 async function fetchADSDetail(issue_number: string) {
 
@@ -19,6 +25,12 @@ async function fetchCity(insee_code: string) {
 }
 
 export default async function ADSDetail({params}: any) {
+
+    const session = await getServerSession(authOptions)
+
+    if (!session) {
+        redirect('/ads')
+    }
 
     const ads = await fetchADSDetail(params.issue_number)
     const city = await fetchCity(ads.insee_code)

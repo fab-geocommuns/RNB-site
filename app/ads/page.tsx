@@ -1,9 +1,16 @@
+// Comps
 import Head from 'next/head'
 import Link from 'next/link'
 import ADSList from '@/components/ADSList'
+import LoginForm from '@/components/LoginForm'
 
+// Auth
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
-export default function Home() {
+export default async function Home() {
+
+    const session = await getServerSession(authOptions)
 
     return (
         <>
@@ -16,12 +23,20 @@ export default function Home() {
 
         <h1>Autorisation de droit des sols</h1>
 
-        <p>
+        {session ? <>
+          <p>
         <Link className='fr-btn' href={`/ads/new`}>Nouvelle ADS</Link>
         </p>
-
         <ADSList />        
+        </> 
+        : 
+        <>
+        <p>Vous devez être connecté pour accéder à cette page.</p>
+        <Link href={`/login?redirect=/ads`}>Se connecter</Link>
+        </>
+        }
 
+      
         </>
     )
 }
