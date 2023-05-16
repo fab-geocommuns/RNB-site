@@ -10,7 +10,15 @@ export default function LoginPage() {
 
     return (
         <>
-        <LoginForm redirectUrl={redirectUrl} />
+        <div className="fr-container">
+        <div className="fr-grid-row">
+                    <div className="fr-col-12 fr-col-md-4 fr-py-12v">
+                    <LoginForm redirectUrl={redirectUrl} />
+                        </div>
+                        </div>
+        
+        
+        </div>
         </>
     )
 

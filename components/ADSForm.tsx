@@ -197,8 +197,9 @@ export default function ADSForm({ data, defaultCity }) {
     }
 
     return (
+        <AdsContext.Provider value={[ctx, setCtx]}>
         <MapContext.Provider value={[mapCtx, setMapCtx]}>
-            <AdsContext.Provider value={[ctx, setCtx]}>
+            
 
                 <FlashMessage flash={flash} />
 
@@ -286,9 +287,9 @@ export default function ADSForm({ data, defaultCity }) {
                         </div>
                     </div>
                 </div>
-
+                </MapContext.Provider>
             </AdsContext.Provider>
-        </MapContext.Provider>
+        
     )
 
 }

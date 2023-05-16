@@ -1,7 +1,7 @@
 'use client'
 
 // React tools
-import React, { useRef, useEffect, useContext, useState } from 'react';
+import React, { useRef, useEffect, useContext, useState, use } from 'react';
 
 // Contexts
 import { AdsContext } from './AdsContext';
@@ -22,6 +22,8 @@ import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 export default function ADSMap() {
 
   const [ads, setAds] = useContext(AdsContext)
+  const adsCopy = useRef(ads) // dirty copy of ads state so we can use it in listeners
+
 
   const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
 
@@ -30,6 +32,9 @@ export default function ADSMap() {
   const map = useRef(null);
 
   const bdgs = useRef([])
+
+  
+
 
   const [mapCtx, setMapCtx] = useContext(MapContext)
 
@@ -57,24 +62,23 @@ export default function ADSMap() {
 
     map.current.on('click', 'bdgs', function (e) {
 
-      if (ads.isEditingNewBdg()) {
+      if (adsCopy.current.isEditingNewBdg()) {
         return;
       }
 
       const identifier = e.features[0].properties.identifier
       
-
-      if (ads.hasIdentifier(identifier)) {
+      if (adsCopy.current.hasIdentifier(identifier)) {
           // We can remove both new and existing bdg
-          ads.removeIdentifier(identifier)
+          adsCopy.current.removeIdentifier(identifier)
       } else {
           // We can only add existing bdg
           const rnb_id = e.features[0].properties.rnb_id
           const coords = e.features[0].geometry.coordinates
-          ads.addExistingBdg(rnb_id, coords[1], coords[0])
+          adsCopy.current.addExistingBdg(rnb_id, coords[1], coords[0])
       }
 
-      const newads = ads.clone()
+      const newads = adsCopy.current.clone()
 
       setAds(newads)      
 
@@ -82,13 +86,14 @@ export default function ADSMap() {
 
     map.current.on('click', function (e) {
 
-      if (ads.isEditingNewBdg()) {
+
+      if (adsCopy.current.isEditingNewBdg()) {
 
         const lngLat = e.lngLat
 
-        ads.updateNewBdgLngLat(lngLat.lng, lngLat.lat)
-        setAds(ads.clone())
-
+        adsCopy.current.updateNewBdgLngLat(lngLat.lng, lngLat.lat)
+        const newADS = adsCopy.current.clone()
+        setAds(newADS)
 
       }
 
@@ -367,11 +372,19 @@ export default function ADSMap() {
 
   }, [mapCtx.data.position]);
 
+  useEffect(() => {
+
+    adsCopy.current = ads;
+
+  }, [ads])
 
 
   return (
     <>
-      <div className={styles.mapShell} ref={mapContainer} />
+    <div>
+      <div className={styles.mapShell} ref={mapContainer} ></div>
+      
+      </div>
     </>
 
   );

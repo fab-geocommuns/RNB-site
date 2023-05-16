@@ -43,6 +43,7 @@ export default async function Home() {
 <ul className="fr-my-8v">
   <li>Mettez vos ADS à disposition de tous vos services</li>
   <li>Soyez prévenus par la DGFIP des fins de travaux</li>
+  <li>Partagez un référentiel commun de tous les bâtiments de votre commune</li>
   <li>Outil en ligne et/ou API disponibles</li>
   <li>Gratuit et réservé aux communes</li>
 </ul>

@@ -162,8 +162,6 @@ export default function VisuMap() {
 
   const convertBdgToGeojson = () => {
 
-    console.log('convertBdgToGeojson')
-
     let geojson = {
       "type": "FeatureCollection",
       "features": []
@@ -197,7 +195,6 @@ export default function VisuMap() {
     const bbox_se = bbox.getSouthEast();
 
     const bb_param = `${bbox_nw.lat},${bbox_nw.lng},${bbox_se.lat},${bbox_se.lng}`
-    console.log(bdgSearchUrl)
     let queryUrl = new URL(bdgSearchUrl);
     queryUrl.searchParams.append('bb', bb_param);
 

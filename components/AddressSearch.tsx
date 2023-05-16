@@ -14,7 +14,6 @@ export default function AddressSearch() {
 
         if (best_point) {
              const position = featureToPosition(best_point)
-             console.log(position)
              mapCtx.data.position = position
              setMapCtx(mapCtx.clone())
         }
@@ -40,8 +39,6 @@ export default function AddressSearch() {
     }
 
     const geocode = async (query: string) => {
-
-        console.log('geocode', query)
 
         let best_point = null;
         let result = await fetchBanAPI(query);

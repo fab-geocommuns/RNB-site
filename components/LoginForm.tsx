@@ -3,13 +3,22 @@
 import { use, useEffect, useRef, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+
+import { Alert } from "@codegouvfr/react-dsfr/Alert"
 
 export default function LoginForm({redirectUrl = ''}) {
 
     const username = useRef('')
     const password = useRef('')
 
-    const [loginError, setLoginError] = useState(false)
+    // Credentials errors
+    let startWithError = false
+    const params = useSearchParams()
+    if (params.has('error') && params.get('error') == "CredentialsSignin") {
+        startWithError = true
+    }
+    const [loginError, setLoginError] = useState(true)
 
     
     const handleSubmit = async (e: any) => {
@@ -23,12 +32,6 @@ export default function LoginForm({redirectUrl = ''}) {
             username: username.current,
             password: password.current
         })
-
-        if (result?.error) {
-            setLoginError(true)
-        } else {
-            
-        }
             
 
     }
@@ -39,24 +42,34 @@ export default function LoginForm({redirectUrl = ''}) {
     return (
         <>
         
-        {loginError && <p>Vos identifiants sont incorrects</p>}
+        {loginError && <><div className="fr-mb-8v"><Alert title="Vos identifiant sont incorrects"
+                    severity="error"
+                /></div></>}
 
         <form action="api/auth/callback/credentials" method="post" onSubmit={handleSubmit} >
-        <label htmlFor="username">Identifiant</label>    
+
+        <div className="fr-input-group">
+
+        <label className="fr-label" htmlFor="username">Identifiant</label>    
         <input 
         onChange={(e) => {username.current = e.target.value}}
+        className="fr-input"
         type="text" 
         name="username" 
         id="username" />
+        </div>
 
-        <label htmlFor="password">Mot de passe</label>
+        <div className="fr-input-group">
+        <label className="fr-label" htmlFor="password">Mot de passe</label>
         <input 
         onChange={(e) => {password.current = e.target.value}}
+        className="fr-input"
         type="password" 
         name="password" 
         id="password" />
+        </div>
 
-        <button type="submit">Se connecter</button>
+        <button className="fr-btn" type="submit">Se connecter</button>
 
         </form>
 
