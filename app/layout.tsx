@@ -6,10 +6,15 @@ import StartDsfr from "./StartDsfr";
 import { defaultColorScheme } from "./defaultColorScheme";
 import  "./global.css";
 
+// Auth
+import RNBSessionProvider from '@/components/SessionProvider'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 // Components
-import { Header } from "@codegouvfr/react-dsfr/Header";
+import RNBHeader from "@/components/RNBHeader";
 import { Analytics } from '@vercel/analytics/react';
+
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -17,41 +22,30 @@ export const metadata = {
 }
 
 
-const nav = [
-  {
-    text: 'Accueil',
-    linkProps: {
-      href: '/',
-    }
-  },
-  {
-    text:"Carte",
-    linkProps: {
-      href: '/carte',
-    }
-  },
-  {
-    text:"Définition du bâtiment",
-    linkProps: {
-      href: '/definition',
-    }
-  },
-  // {
-  //   text:"Gestion des ADS",
-  //   linkProps: {
-  //     href: '/ads',
-  //   }
-  // },
-]
 
-export default function RootLayout({
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
 
 
-  
+  const session = await getServerSession(authOptions)
+
+  const loginQuickAccessItem = session ? {
+    iconId: 'fr-icon-lock-line',
+    linkProps: {
+      href: '/api/auth/signout'
+    },
+    text: 'Se déconnecter'
+  } : {
+    iconId: 'fr-icon-lock-line',
+    linkProps: {
+      href: '/login'
+    },
+    text: 'Se connecter'
+  }
 
   return (    
     
@@ -61,23 +55,18 @@ export default function RootLayout({
         <DsfrHead defaultColorScheme={defaultColorScheme} />
       </head>
       <body>
+        <RNBSessionProvider>
         <DsfrProvider defaultColorScheme={defaultColorScheme}>
-          <Header 
-          brandTop={<>République<br/>Française</>}
-          serviceTitle="RNB"
-          serviceTagline="Le Référentiel National des Bâtiments"
-          navigation={nav}
-          homeLinkProps={{
-            href: '/',
-            title: 'Accueil RNB',
-          }}
-           />
+          <RNBHeader />
+
+          
           
           {children}
           
         
 
         </DsfrProvider>
+        </RNBSessionProvider>
         <Analytics />
         </body>
     </html>

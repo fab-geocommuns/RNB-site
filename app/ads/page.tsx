@@ -1,9 +1,18 @@
+// Comps
 import Head from 'next/head'
 import Link from 'next/link'
 import ADSList from '@/components/ADSList'
+import { Notice } from '@codegouvfr/react-dsfr/Notice'
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup'
 
 
-export default function Home() {
+// Auth
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+
+export default async function Home() {
+
+    const session = await getServerSession(authOptions)
 
     return (
         <>
@@ -16,12 +25,64 @@ export default function Home() {
 
         <h1>Autorisation de droit des sols</h1>
 
-        <p>
+        {session ? <>
+          <p>
         <Link className='fr-btn' href={`/ads/new`}>Nouvelle ADS</Link>
         </p>
-
         <ADSList />        
+        </> 
+        : 
+        <>
 
+          
+            <div className='fr-grid-row'>
+              <div className='fr-col-12 fr-col-md-8'>
+
+              <Notice title="Accès réservé aux communes" />
+
+<ul className="fr-my-8v">
+  <li>Mettez vos ADS à disposition de tous vos services</li>
+  <li>Soyez prévenus par la DGFIP des fins de travaux</li>
+  <li>Partagez un référentiel commun de tous les bâtiments de votre commune</li>
+  <li>Outil en ligne et/ou API disponibles</li>
+  <li>Gratuit et réservé aux communes</li>
+</ul>
+<div>
+
+<ButtonsGroup
+  inlineLayoutWhen="md and up"
+  buttons={[
+    {
+      children: 'Demander un accès',
+      linkProps: {
+        href: '#'
+      }
+    },
+    {
+      children: 'Se connecter',
+      priority: 'secondary',
+      linkProps: {
+        href: '/login?redirect=/ads'
+      }
+    }
+  ]}
+/>
+</div>
+
+  
+
+
+              </div>
+          
+                 
+          
+          </div>
+
+        
+        </>
+        }
+
+      
         </>
     )
 }

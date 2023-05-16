@@ -14,8 +14,9 @@ export default function BdgOp({data=null}) {
     const [mapCtx, setMapCtx] = useContext(MapContext)
 
     const chooseOpOption = (op: string, idenfitier: string) => {
-        
+
         ads.updateBdgOperation(op, idenfitier)
+
         setAds(ads.clone())
 
     }
@@ -76,7 +77,7 @@ export default function BdgOp({data=null}) {
     const opLabel = () => {
 
         if (isNew()) {
-            return "Nouveau"
+            return "Bâtiment à ajouter au RNB"
         }
 
         return data.building.rnb_id
@@ -111,9 +112,13 @@ export default function BdgOp({data=null}) {
         <li className={styles.op} key={data.building.rnb_id}>
                     <div>
                         <span className={styles.opIdentifierShell}>
-                        <span onClick={() => {centerMap()}} className={styles.opIdentifier}>{opLabel()}</span>
+                        <span onClick={() => {centerMap()}} className={styles.opIdentifier}>
+                            {isNew() ? "" : "Identifiant : "}
+                            {opLabel()}
+                        </span>
                             <span className={styles.centerHelp}>{helpText()}</span>
                             </span>
+                            
                     </div>
                 <span onClick={() => {chooseOpOption("build", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__build} ${data.operation == "build" ? styles.active : ""}`}>Construction</span> 
                 <span onClick={() => {chooseOpOption("modify", data.building.identifier)}} className={`${styles.opOption} ${styles.opOption__modify} ${data.operation == "modify" ? styles.active : ""}`}>Modification</span>

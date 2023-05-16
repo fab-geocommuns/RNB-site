@@ -4,10 +4,6 @@ export default class MapStyleSwitcherControl {
         
         this._options = {...options}
 
-        console.log('MapStyleSwitcherControl constructor')
-        console.log(this._options)
-
-
         this.initSwitcher();
         this.initContainer();
       

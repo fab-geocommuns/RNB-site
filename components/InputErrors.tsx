@@ -1,6 +1,6 @@
 export default function InputErrors({errors}) {
 
-    if (errors) {
+    if (errors && errors.length > 0) {
         return (
             <>
             <p id="text-input-error-desc-error" class="fr-error-text">
