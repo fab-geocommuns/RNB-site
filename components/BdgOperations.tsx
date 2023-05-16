@@ -2,8 +2,9 @@ import { useContext } from 'react';
 import styles from './BdgOperations.module.css'
 import { AdsContext } from './AdsContext';
 import BdgOp from "@/components/BdgOp"
+import InputErrors from '@/components/InputErrors';
 
-export default function BdgOperations() {
+export default function BdgOperations({errors = null}) {
 
     const [ads, setAds] = useContext(AdsContext)    
 
@@ -25,14 +26,15 @@ export default function BdgOperations() {
     return (
         <>
             <div className={styles.grid}>
-            <div>editing {ads?.isEditingNewBdg() ? "oui": "non"}</div>
             
             <div>
                 
-                <p>Séléctionnez les bâtiments existants concernés sur la carte </p>
-                <p>Si le bâtiment n'existe pas, créez le</p>
+                <p>Sélectionnez sur la carte les bâtiments concernés par l'ADS.<br />
+                Si vous ne les trouvez pas, vous pouvez les ajouter au RNB.</p>
                 
-                <p><a href="#" onClick={handleCreateNewBdg} className={`"fr-btn" ${styles.createLink}`}>créez un nouveau bâtiment</a>.</p>
+                <p><a href="#" onClick={handleCreateNewBdg} className={`fr-btn fr-btn--secondary fr-btn--sm ${styles.createLink}`}>Ajouter un bâtiment au RNB</a></p>
+
+                <InputErrors errors={errors} />
 
                 <ul className={styles.opsList}>
                     {ads.state.data.buildings_operations?.map((bdgop) => (

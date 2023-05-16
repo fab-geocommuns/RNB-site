@@ -222,6 +222,7 @@ export default function ADSForm({ data, defaultCity }) {
                                     name="issue_number"
                                     id="issue_number"
                                     value={ctx.issue_number}
+                                    placeholder='Ex: 2023-0001-XXXX'
                                     onChange={handleInputChange}
                                 />
                                 <InputErrors errors={errors.issue_number} />
@@ -264,15 +265,15 @@ export default function ADSForm({ data, defaultCity }) {
                             </div>
 
                             <div>
-                            <div>Bâtiments concernés par l&apos;ADS</div>
+                            
                                 <InputErrors errors={errors.buildings_operations} />
-                                <BdgOperations />
+                                <BdgOperations errors={errors.buildings_operations} />
                             </div>
 
                             <div className="fr-my-10v">
                                 <button 
                                 {...(isSaving ? {disabled: true} : {})}
-                                className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer"}</button>
+                                className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer l'ADS"}</button>
                             </div>
 
 

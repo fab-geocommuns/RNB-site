@@ -77,7 +77,7 @@ export default function BdgOp({data=null}) {
     const opLabel = () => {
 
         if (isNew()) {
-            return "Nouveau"
+            return "Bâtiment à ajouter au RNB"
         }
 
         return data.building.rnb_id
@@ -112,7 +112,10 @@ export default function BdgOp({data=null}) {
         <li className={styles.op} key={data.building.rnb_id}>
                     <div>
                         <span className={styles.opIdentifierShell}>
-                        <span onClick={() => {centerMap()}} className={styles.opIdentifier}>{opLabel()}</span>
+                        <span onClick={() => {centerMap()}} className={styles.opIdentifier}>
+                            {isNew() ? "" : "Identifiant : "}
+                            {opLabel()}
+                        </span>
                             <span className={styles.centerHelp}>{helpText()}</span>
                             </span>
                             
