@@ -66,11 +66,8 @@ export default function BdgOp({data=null}) {
             }
 
         }
-        
-
 
         return ""
-
 
     }
 
