@@ -18,7 +18,7 @@ export default function LoginForm({redirectUrl = ''}) {
     if (params.has('error') && params.get('error') == "CredentialsSignin") {
         startWithError = true
     }
-    const [loginError, setLoginError] = useState(true)
+    const [loginError, setLoginError] = useState(startWithError)
 
     
     const handleSubmit = async (e: any) => {
@@ -26,13 +26,18 @@ export default function LoginForm({redirectUrl = ''}) {
 
         setLoginError(false)
 
-        const result = await signIn('credentials', {
+        signIn('credentials', {
             redirect: redirectUrl.length > 0 ? true : false,
             callbackUrl: redirectUrl,
             username: username.current,
             password: password.current
-        })
-            
+        }).then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+        
 
     }
 

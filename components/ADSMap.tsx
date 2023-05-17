@@ -33,8 +33,6 @@ export default function ADSMap() {
 
   const bdgs = useRef([])
 
-  
-
 
   const [mapCtx, setMapCtx] = useContext(MapContext)
 
@@ -53,12 +51,45 @@ export default function ADSMap() {
 
   }
 
+  // const setAds = (newAds) => {
+  //   _setAds(newAds)
+  //   adsCopy.current = newAds
+  // }
+
+  const getBdgHoverCursor = () => {
+
+    if (adsCopy.current.isEditingNewBdg()) {
+      return 'crosshair'
+    }
+    return "pointer"
+
+  }
+
+  const getMapCursor = () => {
+      
+      if (adsCopy.current.isEditingNewBdg()) {
+        return 'crosshair'
+      }
+      return ""
+  
+  }
 
   const initMapEvents = () => {
 
     map.current.on('moveend', () => {
       newQuery()
     });
+
+
+    map.current.on("mouseenter", "bdgs", function () {
+      map.current.getCanvas().style.cursor = getBdgHoverCursor();
+    });
+
+    map.current.on("mouseleave", "bdgs", function () {
+      map.current.getCanvas().style.cursor = getMapCursor();
+    });
+
+
 
     map.current.on('click', 'bdgs', function (e) {
 
@@ -92,6 +123,10 @@ export default function ADSMap() {
         const lngLat = e.lngLat
 
         adsCopy.current.updateNewBdgLngLat(lngLat.lng, lngLat.lat)
+
+        
+        console.log(adsCopy.current.buildings_operations)
+
         const newADS = adsCopy.current.clone()
         setAds(newADS)
 
@@ -143,7 +178,7 @@ export default function ADSMap() {
     });
 
     // Add new bdgs from the state
-    ads.newBdgOps.forEach(bdgOp => {
+    adsCopy.current.newBdgOps.forEach(bdgOp => {
 
       const feature = {
         type: "Feature",
@@ -374,17 +409,21 @@ export default function ADSMap() {
 
   useEffect(() => {
 
-    adsCopy.current = ads;
+    map.current.getCanvas().style.cursor = getMapCursor();
 
+  }, [ads.state.bdg_move])
+
+  useEffect(() => {
+    adsCopy.current = ads;
   }, [ads])
 
 
   return (
     <>
-    <div>
+  
       <div className={styles.mapShell} ref={mapContainer} ></div>
       
-      </div>
+      
     </>
 
   );
