@@ -170,18 +170,8 @@ export default class AdsEditing {
 
     clone() {
 
-        console.log("clone ADS")
-        console.log("old state")
-        console.log(this.state)
-
         const newState = JSON.parse(JSON.stringify(this.state))
         //const newState = {...this.state} // Shallow copy. Not good
-
-        //const newState = Object.assign({}, this.state)
-
-        console.log("new state")
-        console.log(newState)
-        
 
         return new AdsEditing(newState)
 

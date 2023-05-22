@@ -266,7 +266,7 @@ export default function ADSForm({ data, defaultCity }) {
 
                             <div>
                             
-                                <InputErrors errors={errors.buildings_operations} />
+                                
                                 <BdgOperations errors={errors.buildings_operations} />
                             </div>
 

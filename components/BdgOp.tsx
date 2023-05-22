@@ -53,9 +53,9 @@ export default function BdgOp({data=null}) {
         if (isEditing()) {
 
             if (hasPosition()) {
-                return "Déplacez le bâtiment en clickant sur la carte"
+                return "Déplacer le bâtiment sur la carte"
             } else {
-                return "Placez le bâtiment en clickant sur la carte"
+                return "Placez le bâtiment sur la carte"
             }
 
             
@@ -66,18 +66,15 @@ export default function BdgOp({data=null}) {
             }
 
         }
-        
-
 
         return ""
-
 
     }
 
     const opLabel = () => {
 
         if (isNew()) {
-            return "Bâtiment à ajouter au RNB"
+            return "Ajout au RNB"
         }
 
         return data.building.rnb_id
