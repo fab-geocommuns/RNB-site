@@ -32,8 +32,12 @@ export default class AdsEditing {
 
         const op = this.state.data.buildings_operations.find((bdgop: any) => bdgop.building.identifier == this.state.bdg_move)
         if (op != undefined) {
-            op.building.lat = lat
-            op.building.lng = lng
+
+            op.building.geometry = {
+                type: "Point",
+                coordinates: [lng, lat]
+            }
+
         }
         
     }

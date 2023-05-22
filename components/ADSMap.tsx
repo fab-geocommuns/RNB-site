@@ -51,11 +51,7 @@ export default function ADSMap() {
 
   }
 
-  // const setAds = (newAds) => {
-  //   _setAds(newAds)
-  //   adsCopy.current = newAds
-  // }
-
+ 
   const getBdgHoverCursor = () => {
 
     if (adsCopy.current.isEditingNewBdg()) {
@@ -182,10 +178,7 @@ export default function ADSMap() {
 
       const feature = {
         type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [bdgOp.building.lng, bdgOp.building.lat]
-        },
+        geometry: bdgOp.building.geometry,
         properties: {
           rnb_id: bdgOp.building.rnb_id,
           identifier: bdgOp.building.identifier,
@@ -205,7 +198,7 @@ export default function ADSMap() {
 
   const getBdgOperation = (rnb_id: string) => {
 
-    const bdgOp = ads.ops.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
+    const bdgOp = adsCopy.current.ops.find(bdgOp => bdgOp.building.rnb_id === rnb_id)
 
     if (bdgOp) {
       return bdgOp.operation
@@ -350,7 +343,7 @@ export default function ADSMap() {
 
       let bounds = new maplibregl.LngLatBounds();
       ads.ops.forEach(bdgOp => {
-        bounds.extend([bdgOp.building.lng, bdgOp.building.lat])
+        bounds.extend([bdgOp.building.geometry.coordinates[0], bdgOp.building.geometry.coordinates[1]])
       })
       map.current.fitBounds(bounds, { padding: 100, linear: true, maxZoom: 20 })
 
@@ -413,6 +406,7 @@ export default function ADSMap() {
 
   }, [ads.state.bdg_move])
 
+  // Manage a copy of the ADS to be used in the map events
   useEffect(() => {
     adsCopy.current = ads;
   }, [ads])
