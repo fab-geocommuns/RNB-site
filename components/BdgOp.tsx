@@ -45,7 +45,7 @@ export default function BdgOp({data=null}) {
     }
 
     const hasPosition = () => {
-        return data.building.lat != null && data.building.lng != null
+        return data.building.geometry != null
     }
 
     const helpText = () => {

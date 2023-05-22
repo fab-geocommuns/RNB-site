@@ -18,7 +18,9 @@ export default function VisuMap() {
   const bdgs = useRef([])
   const addressMarker = useRef(null)
 
+  // Map context
   const [mapCtx, setMapCtx] = useContext(MapContext)
+  const mapCtxCopy = useRef(mapCtx)
 
   const default_style = 'vector'
   const STYLES = {
@@ -229,6 +231,8 @@ export default function VisuMap() {
 
   const jumpToPosition = (position) => {
 
+    
+
     map.current.flyTo({
       center: position.center,
       zoom: position.zoom
@@ -323,14 +327,31 @@ export default function VisuMap() {
 
   }
 
+  // Manage copy of mapCtx
+  useEffect(() => {
+    mapCtxCopy.current = mapCtx 
+  }, [mapCtx]);
+
+
   useEffect(() => {
 
-    if (mapCtx.data.position) {
-      buildAddresseMarker(mapCtx.data.position)
-      jumpToPosition(mapCtx.data.position)
+    if (mapCtxCopy.current.data.position) {
+
+      if (mapCtx.data.position.center) {
+        buildAddresseMarker(mapCtxCopy.current.data.position)
+      }
+      if (mapCtx.data.position.center && mapCtx.data.position.zoom) {
+        jumpToPosition(mapCtxCopy.current.data.position)
+      }
+
+
+//      prevMapPosition.current = mapCtx.data.position
+
     }
 
-  }, [mapCtx.data.position]);
+  }, [mapCtxCopy.current.data.position.center, mapCtxCopy.current.data.position.zoom]);
+
+  
 
   return (
     <>

@@ -8,7 +8,12 @@ import styles from './RNBMap.module.css'
 import BuildingsMap from '@/logic/map';
 export default function RNBMap() {
 
-    let bdgmap = new BuildingsMap({})
+    let bdgmap = new BuildingsMap({
+        position: {
+            center: null,
+            zoom: null
+        }
+    })
 
     const [mapCtx, setMapCtx] = useState(bdgmap)
 
