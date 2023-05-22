@@ -10,6 +10,9 @@ import FlashMessage from '@/components/FlashMessage';
 import InputErrors from '@/components/InputErrors';
 import AsyncSelect from 'react-select/async';
 
+// Auth
+import { useSession } from 'next-auth/react'
+
 // Contexts
 import { AdsContext } from './AdsContext';
 import { MapContext } from '@/components/MapContext';
@@ -55,6 +58,8 @@ export default function ADSForm({ data, defaultCity }) {
     // Router
     const router = useRouter()
 
+    // Session
+    const { data: session, status } = useSession()
     
 
     ////////////// 
@@ -120,7 +125,7 @@ export default function ADSForm({ data, defaultCity }) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Token 3d4dbc70f60d0666fbd8ead6df4eb0c3fcf376bf',
+                'Authorization': 'Token ' + session?.accessToken,
             },
             body: JSON.stringify(ctx.state.data)
         })
@@ -204,6 +209,8 @@ export default function ADSForm({ data, defaultCity }) {
                 <FlashMessage flash={flash} />
 
                 <div className={styles.grid}>
+
+                    
 
                     <div className={styles.formCol}>
 
