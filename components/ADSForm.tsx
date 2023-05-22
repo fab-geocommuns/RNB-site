@@ -86,6 +86,8 @@ export default function ADSForm({ data, defaultCity }) {
         }
     }
 
+    
+
 
     const getActionMethod = () => {
         if (isNewAds()) {
@@ -146,6 +148,31 @@ export default function ADSForm({ data, defaultCity }) {
 
         return
 
+    }
+
+    const handleDelete = async () => {
+
+        console.log("Delete")
+
+        if (confirm("Voulez-vous vraiment supprimer cette ADS ?")) {
+
+            const deleteUrl = getActionURL()
+            const deleteMethod = 'DELETE'
+
+            const res = await fetch(deleteUrl, {
+                cache: 'no-cache',
+                method: deleteMethod,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + session?.accessToken,
+                }  
+            })
+
+            if (res.status == 204) {
+                router.push('/ads')
+            }
+
+        }
     }
 
     const closeFeedback = () => {
@@ -281,6 +308,10 @@ export default function ADSForm({ data, defaultCity }) {
                                 <button 
                                 {...(isSaving ? {disabled: true} : {})}
                                 className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer l'ADS"}</button>
+
+
+                                <button className='fr-btn fr-btn--secondary' type="button" onClick={() => {handleDelete()}}>Supprimer</button>
+
                             </div>
 
 
