@@ -146,8 +146,10 @@ export default class AdsEditing {
             building: {
                 rnb_id: rnb_id,
                 identifier: rnb_id,
-                lat: lat,
-                lng: lng
+                geometry: {
+                    type: "Point",
+                    coordinates: [lng, lat]
+                }
             },
             operation: "build"
         }
