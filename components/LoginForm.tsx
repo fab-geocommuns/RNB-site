@@ -2,7 +2,6 @@
 
 import { use, useEffect, useRef, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
 import { Alert } from "@codegouvfr/react-dsfr/Alert"
