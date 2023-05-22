@@ -24,3 +24,8 @@
     z-index: 10;
 
 }
+
+.btnGroup {
+    display: flex;
+    justify-content: space-between;
+}

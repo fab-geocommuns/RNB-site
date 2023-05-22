@@ -304,13 +304,13 @@ export default function ADSForm({ data, defaultCity }) {
                                 <BdgOperations errors={errors.buildings_operations} />
                             </div>
 
-                            <div className="fr-my-10v">
+                            <div className={`fr-my-10v ${styles.btnGroup}`}>
                                 <button 
                                 {...(isSaving ? {disabled: true} : {})}
                                 className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer l'ADS"}</button>
 
 
-                                <button className='fr-btn fr-btn--secondary' type="button" onClick={() => {handleDelete()}}>Supprimer</button>
+                                <button className='fr-btn fr-btn--tertiary-no-outline' type="button" onClick={() => {handleDelete()}}>Supprimer l&apos;ADS</button>
 
                             </div>
 
