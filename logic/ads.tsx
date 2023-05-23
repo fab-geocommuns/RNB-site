@@ -48,14 +48,14 @@ export default class AdsEditing {
         return this.state.bdg_move != null && this.state.bdg_move != undefined && this.state.bdg_move != "";
     }
     
-    get issue_number() {
-        return this.state.data.issue_number
+    get file_number() {
+        return this.state.data.file_number
     }
     get insee_code() {
         return this.state.data.insee_code
     }
-    get issue_date() {
-        return this.state.data.issue_date
+    get decision_date() {
+        return this.state.data.decision_date
     }
     get buildings_operations() {
         return this.state.data.buildings_operations

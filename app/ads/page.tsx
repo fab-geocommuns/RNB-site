@@ -27,7 +27,7 @@ export default async function Home() {
 
         {session ? <>
           <p>
-        <Link className='fr-btn' href={`/ads/new`}>Nouvelle ADS</Link>
+        <Link className='fr-btn' href={`/ads/new`}>Nouveau dossier ADS</Link>
         </p>
         <ADSList />        
         </> 
@@ -53,7 +53,7 @@ export default async function Home() {
   inlineLayoutWhen="md and up"
   buttons={[
     {
-      children: 'Demander un accès',
+      children: 'Obtenir des identifiants',
       linkProps: {
         href: '#'
       }

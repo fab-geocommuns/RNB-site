@@ -64,7 +64,7 @@ export default function ADSForm({ data, defaultCity }) {
 
     ////////////// 
     // Starting values
-    const init_issue_number = useRef(editingState.data.issue_number ? editingState.data.issue_number.slice() : "") // slice() to clone the string
+    const init_file_number = useRef(editingState.data.file_number ? editingState.data.file_number.slice() : "") // slice() to clone the string
 
     let city = null
     if (defaultCity) {
@@ -75,14 +75,14 @@ export default function ADSForm({ data, defaultCity }) {
     }
 
     const isNewAds = () => {
-        return init_issue_number.current == ""
+        return init_file_number.current == ""
     }
 
     const getActionURL = () => {
         if (isNewAds()) {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/'
         } else {
-            return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_issue_number.current + "/"
+            return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_file_number.current + "/"
         }
     }
 
@@ -137,7 +137,7 @@ export default function ADSForm({ data, defaultCity }) {
         
         if (res.status == 201 || res.status == 200) {
             // We update the issue number so it can be used if we resubmit the form
-            init_issue_number.current = ctx.state.data.issue_number
+            init_file_number.current = ctx.state.data.file_number
             showSuccess()
         }
 
@@ -154,7 +154,7 @@ export default function ADSForm({ data, defaultCity }) {
 
         console.log("Delete")
 
-        if (confirm("Voulez-vous vraiment supprimer cette ADS ?")) {
+        if (confirm("Voulez-vous vraiment supprimer ce dossier ADS ?")) {
 
             const deleteUrl = getActionURL()
             const deleteMethod = 'DELETE'
@@ -182,7 +182,7 @@ export default function ADSForm({ data, defaultCity }) {
 
     const showBadRequest = (data) => {
 
-        flash.title = "Votre ADS a une erreur"
+        flash.title = "Votre dossier ADS a une erreur"
         flash.desc = data.detail
         flash.open = true
         flash.type = "error"
@@ -194,7 +194,7 @@ export default function ADSForm({ data, defaultCity }) {
 
     const showSuccess = () => {
 
-        flash.title = "ADS enregistrée"
+        flash.title = "Dossier ADS enregistré"
         flash.desc = ""
         flash.open = true
         flash.type = "success"
@@ -248,32 +248,32 @@ export default function ADSForm({ data, defaultCity }) {
 
                                 <label
                                     className="fr-label"
-                                    htmlFor="issue_number">Numéro d&apos;ADS</label>
+                                    htmlFor="file_number">Numéro de dossier ADS</label>
                                 <input
                                     required
                                     className="fr-input"
                                     type="text"
-                                    name="issue_number"
-                                    id="issue_number"
-                                    value={ctx.issue_number}
-                                    placeholder='Ex: 2023-0001-XXXX'
+                                    name="file_number"
+                                    id="file_number"
+                                    value={ctx.file_number}
+                                    placeholder='Ex: PC12341234A1234'
                                     onChange={handleInputChange}
                                 />
-                                <InputErrors errors={errors.issue_number} />
+                                <InputErrors errors={errors.file_number} />
 
                             </div>
                             <div className="fr-input-group">
-                                <label className="fr-label" htmlFor="issue_date">Date d&apos;émission</label>
+                                <label className="fr-label" htmlFor="decision_date">Date de décision</label>
                                 <input
                                     required
                                     className="fr-input"
                                     type="date"
-                                    name="issue_date"
-                                    id="issue_date"
-                                    value={ctx.issue_date}
+                                    name="decision_date"
+                                    id="decision_date"
+                                    value={ctx.decision_date}
                                     onChange={handleInputChange}
                                 />
-                                <InputErrors errors={errors.issue_date} />
+                                <InputErrors errors={errors.decision_date} />
                             </div>
                             <div className="fr-input-group">
                                 <label className="fr-label" htmlFor="insee_code">Ville</label>
@@ -307,10 +307,10 @@ export default function ADSForm({ data, defaultCity }) {
                             <div className={`fr-my-10v ${styles.btnGroup}`}>
                                 <button 
                                 {...(isSaving ? {disabled: true} : {})}
-                                className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer l'ADS"}</button>
+                                className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer le dossier"}</button>
 
 
-                                <button className='fr-btn fr-btn--tertiary-no-outline' type="button" onClick={() => {handleDelete()}}>Supprimer l&apos;ADS</button>
+                                <button className='fr-btn fr-btn--tertiary-no-outline' type="button" onClick={() => {handleDelete()}}>Supprimer le dossier</button>
 
                             </div>
 
