@@ -51,8 +51,8 @@ export default function ADSList() {
         <table className='fr-table'>
           <thead>
             <tr>
-              <th>Numéro</th>
-              <th>Date d&apos;émission</th>
+              <th>N° de dossier</th>
+              <th>Date de décision</th>
               <th>Code INSEE</th>
               <th># bâtiments</th>
             </tr>
@@ -62,12 +62,12 @@ export default function ADSList() {
           <tbody>
           {adsList.map((ads: any) => (
             
-              <tr key={ads.issue_number}>
+              <tr key={ads.file_number}>
                 <td>
-                  <Link href={`/ads/${ads.issue_number}`}>{ads.issue_number}</Link>
+                  <Link href={`/ads/${ads.file_number}`}>{ads.file_number}</Link>
                 </td>
                 <td>
-                  {ads.issue_date}
+                  {ads.decision_date}
                 </td>
                 <td>
                   {ads.insee_code}

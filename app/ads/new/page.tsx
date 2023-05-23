@@ -4,9 +4,9 @@ import ADSForm from '@/components/ADSForm'
 export default function NewADS() {
 
     const data = {
-        issue_number: "",
+        file_number: "",
         insee_code: "",
-        issue_date: "",
+        decision_date: "",
         buildings_operations: [] 
     }
 
@@ -14,7 +14,7 @@ export default function NewADS() {
     return (
         <>
         <p><Link href={`/ads`}>&larr; retour</Link></p>
-        <h1>Nouvelle ADS</h1>
+        <h1>Nouveau dossier ADS</h1>
         <ADSForm data={data} />
         </>
     )
