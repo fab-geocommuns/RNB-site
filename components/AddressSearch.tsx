@@ -7,16 +7,26 @@ export default function AddressSearch() {
     const [mapCtx, setMapCtx] = useContext(MapContext)
     const addressInput = useRef(null)
 
-    const handleSubmitForm = async (e) => {
+    const handleKeyDown = async (e) => {
 
-        e.preventDefault();
-        const best_point = await geocode(addressInput.current.value);
+        console.log("key down")
+        console.log(e.key)
+
+        if (e.key === 'Enter') {
+
+
+
+            e.preventDefault();
+            const best_point = await geocode(addressInput.current.value);
 
         if (best_point) {
              const position = featureToPosition(best_point)
              mapCtx.data.position = position
              setMapCtx(mapCtx.clone())
         }
+        }
+
+        
         
 
     }
@@ -71,16 +81,18 @@ export default function AddressSearch() {
 
     return (
         <>
-        <form action="#" onSubmit={handleSubmitForm}>
+        
         <input 
         className="fr-input" 
         placeholder='Chercher une adresse'
         type="text" 
+        autoComplete='off'
         name="address" 
         id="address"
         ref={addressInput}
+        onKeyDown={handleKeyDown}
          />
-        </form>
+        
         </>
     )
 

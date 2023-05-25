@@ -29,10 +29,11 @@ export default function BdgOperations({errors = null}) {
             
             <div>
                 
-                <p>Sélectionnez sur la carte les bâtiments concernés par l&apos;ADS.<br />
-                Si vous ne les trouvez pas, vous pouvez les ajouter au RNB.</p>
+                <label className='fr-label' htmlFor="">Bâtiments</label>
+                <div className={styles.instructionShell}>Sélectionnez les bâtiments sur la carte à droite</div>
+                <div className={styles.bdgNotFound}>Vous ne trouvez pas le bâtiment ? <a onClick={handleCreateNewBdg} href="#">Ajoutez le à la carte</a>.</div>
                 
-                <p><a href="#" onClick={handleCreateNewBdg} className={`fr-btn fr-btn--secondary fr-btn--sm ${styles.createLink}`}>Ajouter un bâtiment au RNB</a></p>
+                
 
                 <InputErrors errors={errors} />
 

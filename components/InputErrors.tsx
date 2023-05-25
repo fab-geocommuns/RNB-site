@@ -1,4 +1,12 @@
+import { useEffect } from 'react';
+
 export default function InputErrors({errors}) {
+
+
+    useEffect(() => {
+        console.log('errors changed')
+        console.log(errors)
+    }, [errors])
 
     if (errors && errors.length > 0) {
         return (

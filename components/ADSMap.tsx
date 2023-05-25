@@ -1,7 +1,7 @@
 'use client'
 
 // React tools
-import React, { useRef, useEffect, useContext, useState, use } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 
 // Contexts
 import { AdsContext } from './AdsContext';
@@ -119,9 +119,7 @@ export default function ADSMap() {
         const lngLat = e.lngLat
 
         adsCopy.current.updateNewBdgLngLat(lngLat.lng, lngLat.lat)
-
-        
-        console.log(adsCopy.current.buildings_operations)
+        adsCopy.current.state.bdg_move = null
 
         const newADS = adsCopy.current.clone()
         setAds(newADS)
@@ -224,9 +222,9 @@ export default function ADSMap() {
         type: 'circle',
         source: 'bdgs',
         paint: {
-          'circle-radius': 4,
+          'circle-radius': 5,
           'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 1,
+          'circle-stroke-width': 3,
           "circle-color": [
             'match',
             ['get', 'operation'],
@@ -236,7 +234,7 @@ export default function ADSMap() {
             '#0078f3',
             'demolish',
             '#e1000f',
-            '#aaaaaa'
+            '#666666'
           ]
         }
       })
