@@ -53,7 +53,7 @@ export default function ADSList() {
             <tr>
               <th>N° de dossier</th>
               <th>Date de décision</th>
-              <th>Code INSEE</th>
+              <th>Ville</th>
               <th># bâtiments</th>
             </tr>
 
@@ -70,7 +70,7 @@ export default function ADSList() {
                   {ads.decision_date}
                 </td>
                 <td>
-                  {ads.insee_code}
+                  {ads.city.name}
                 </td>
                 <td className=''>{ads.buildings_operations.length}</td>
                 

@@ -21,11 +21,14 @@ export default function BdgOp({data=null}) {
 
     }
 
-    const centerMap = (lat: number, lng: number) => {
+    const centerMap = () => {
 
         if (hasPosition()) {
-            mapCtx.data.position.center = [data.building.lng, data.building.lat]
+
+            
+            mapCtx.data.position.center = [data.building.geometry.coordinates[0], data.building.geometry.coordinates[1]]
             mapCtx.data.position.zoom = 20
+
     
             setMapCtx(mapCtx.clone())
         }

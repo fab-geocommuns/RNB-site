@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // Comps
 import BdgOperations from '@/components/BdgOperations';
@@ -27,7 +27,7 @@ import styles from './ADSForm.module.css'
 import { useRouter } from 'next/navigation';
 
 
-export default function ADSForm({ data, defaultCity }) {
+export default function ADSForm({ data }) {
 
     //////////////
     // Contexts
@@ -38,6 +38,7 @@ export default function ADSForm({ data, defaultCity }) {
     }
     let ads = new AdsEditing(editingState)
     const [ctx, setCtx] = useState(ads);
+    const adsCopy = useRef(ctx)
 
     // Local UI State
     const [isSaving, setIsSaving] = useState(false)
@@ -66,14 +67,6 @@ export default function ADSForm({ data, defaultCity }) {
     // Starting values
     const init_file_number = useRef(editingState.data.file_number ? editingState.data.file_number.slice() : "") // slice() to clone the string
 
-    let city = null
-    if (defaultCity) {
-        city = {
-            "value": defaultCity.code_insee,
-            "label": defaultCity.name
-        }
-    }
-
     const isNewAds = () => {
         return init_file_number.current == ""
     }
@@ -85,9 +78,6 @@ export default function ADSForm({ data, defaultCity }) {
             return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_file_number.current + "/"
         }
     }
-
-    
-
 
     const getActionMethod = () => {
         if (isNewAds()) {
@@ -101,17 +91,16 @@ export default function ADSForm({ data, defaultCity }) {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        ads.state.data[name] = value
-        setCtx(ads.clone())
+        adsCopy.current.state.data[name] = value
+        setCtx(adsCopy.current.clone())
     }
 
-    const handleCitySelectChange = (choice) => {
-        ads.state.data["insee_code"] = choice.value
-        setCtx(ads.clone())
-    }
+    
 
 
     const submitForm = async (e) => {
+
+        console.log('submit')
 
         e.preventDefault();
 
@@ -129,7 +118,7 @@ export default function ADSForm({ data, defaultCity }) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Token ' + session?.accessToken,
             },
-            body: JSON.stringify(ctx.state.data)
+            body: JSON.stringify(adsCopy.current.state.data)
         })
         const data = await res.json()
         setIsSaving(false)
@@ -204,29 +193,11 @@ export default function ADSForm({ data, defaultCity }) {
 
     }
 
-    const searchCities = async (inputValue: string) => {
+    useEffect(() => {
+        adsCopy.current = ctx
+    }, [ctx])
 
-        const url = new URL(process.env.NEXT_PUBLIC_API_BASE + '/cities/')
-        url.searchParams.set('q', inputValue);
-
-        return new Promise((resolve, reject) => {
-
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                const options = data.results.map(d => ({
-                    "value": d.code_insee,
-                    "label": d.name
-                }))
-                resolve(options)
-            })
-            .catch(err => {
-                reject(err)
-            })
-
-        })
-
-    }
+   
 
     return (
         <AdsContext.Provider value={[ctx, setCtx]}>
@@ -275,27 +246,10 @@ export default function ADSForm({ data, defaultCity }) {
                                 />
                                 <InputErrors errors={errors.decision_date} />
                             </div>
+                            
                             <div className="fr-input-group">
-                                <label className="fr-label" htmlFor="insee_code">Ville</label>
-                                
-                                  <AsyncSelect 
-                                  required={true}
-                                  name="insee_code"
-                                  defaultValue={city}
-                                  onChange={handleCitySelectChange}
-                                  loadOptions={searchCities}
-                                  loadingMessage={() => "Chargement..."}
-                                  noOptionsMessage={(e) => {
-                                        if (e.inputValue.length > 0) {
-                                            return "Aucune ville trouvée"
-                                        }
-                                        return "Chercher par nom ou code INSEE"
-                                        
-                                  }}
-                                  placeholder="Aucun ville séléctionnée"
-                                  />
-                                  <InputErrors errors={errors.insee_code} />
-
+                                <label className="fr-label">Adresse</label>
+                                <AddressSearch />
                             </div>
 
                             <div>
@@ -310,7 +264,8 @@ export default function ADSForm({ data, defaultCity }) {
                                 className='fr-btn' type="submit">{isSaving ? "Enregistrement ..." : "Enregistrer le dossier"}</button>
 
 
-                                <button className='fr-btn fr-btn--tertiary-no-outline' type="button" onClick={() => {handleDelete()}}>Supprimer le dossier</button>
+                                { !isNewAds() && <><button className='fr-btn fr-btn--tertiary-no-outline' type="button" onClick={() => {handleDelete()}}>Supprimer le dossier</button></>}
+                                
 
                             </div>
 
@@ -320,7 +275,7 @@ export default function ADSForm({ data, defaultCity }) {
                     <div className={styles.mapCol}>
                         <div className={styles.mapShell}>
                             <div className={styles.addresseSearchShell}>
-                                <AddressSearch />
+                                
                             </div>
                             <ADSMap />
                         </div>
