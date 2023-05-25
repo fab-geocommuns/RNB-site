@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import BdgOperations from '@/components/BdgOperations';
 import ADSMap from '@/components/ADSMap';
 import AddressSearch from '@/components/AddressSearch'
-import FlashMessage from '@/components/FlashMessage';
+
 import InputErrors from '@/components/InputErrors';
 import AsyncSelect from 'react-select/async';
 
@@ -20,11 +20,14 @@ import { MapContext } from '@/components/MapContext';
 // Logic
 import AdsEditing from '@/logic/ads';
 import BuildingsMap from '@/logic/map';
-import Flash from '@/logic/flash';
+
 
 // DSFR and styles
 import styles from './ADSForm.module.css'
 import { useRouter } from 'next/navigation';
+
+// Bus
+import Bus from '@/utils/Bus';
 
 
 export default function ADSForm({ data }) {
@@ -53,8 +56,7 @@ export default function ADSForm({ data }) {
     })
     const [mapCtx, setMapCtx] = useState(bdgmap)
     
-    // Flash msg
-    const [flash, setFlash] = useState(new Flash())
+    
 
     // Router
     const router = useRouter()
@@ -100,13 +102,12 @@ export default function ADSForm({ data }) {
 
     const submitForm = async (e) => {
 
-        console.log('submit')
-
         e.preventDefault();
 
         setIsSaving(true)
         setErrors({})
-        closeFeedback()
+        
+        Bus.emit('flashClose')
 
         const url = getActionURL()
         const method = getActionMethod()
@@ -127,12 +128,25 @@ export default function ADSForm({ data }) {
         if (res.status == 201 || res.status == 200) {
             // We update the issue number so it can be used if we resubmit the form
             init_file_number.current = ctx.state.data.file_number
-            showSuccess()
+            
+            Bus.emit('flashAfterRedirect', {
+                msg:"Dossier enregistré",
+                type: "success"
+            })
+
+            router.push('/ads/')
+
         }
 
         if (res.status == 400) {
             setErrors(data)
-            showBadRequest(data)
+            
+            
+            Bus.emit('flash', {
+                msg:"Votre dossier a une erreur",
+                type: "error"
+            })
+
         }
 
         return
@@ -140,8 +154,6 @@ export default function ADSForm({ data }) {
     }
 
     const handleDelete = async () => {
-
-        console.log("Delete")
 
         if (confirm("Voulez-vous vraiment supprimer ce dossier ADS ?")) {
 
@@ -158,45 +170,24 @@ export default function ADSForm({ data }) {
             })
 
             if (res.status == 204) {
+                Bus.emit('flashAfterRedirect', {
+                    msg:"Dossier supprimé",
+                    type: "success"
+                })
                 router.push('/ads')
             }
 
         }
     }
 
-    const closeFeedback = () => {
-        flash.open = false
-        setFlash({...flash})
-    }
 
-    const showBadRequest = (data) => {
-
-        flash.title = "Votre dossier ADS a une erreur"
-        flash.desc = data.detail
-        flash.open = true
-        flash.type = "error"
-        flash.closable = true
-
-        setFlash({...flash})
-
-    }
-
-    const showSuccess = () => {
-
-        flash.title = "Dossier ADS enregistré"
-        flash.desc = ""
-        flash.open = true
-        flash.type = "success"
-        flash.closable = true
-
-        setFlash({...flash})
-
-    }
+   
 
     useEffect(() => {
         adsCopy.current = ctx
     }, [ctx])
 
+    
    
 
     return (
@@ -204,7 +195,7 @@ export default function ADSForm({ data }) {
         <MapContext.Provider value={[mapCtx, setMapCtx]}>
             
 
-                <FlashMessage flash={flash} />
+        
 
                 <div className={styles.grid}>
 
