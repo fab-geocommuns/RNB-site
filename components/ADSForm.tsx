@@ -106,7 +106,8 @@ export default function ADSForm({ data }) {
 
         setIsSaving(true)
         setErrors({})
-        closeFeedback()
+        
+        Bus.emit('flashClose')
 
         const url = getActionURL()
         const method = getActionMethod()
@@ -127,12 +128,25 @@ export default function ADSForm({ data }) {
         if (res.status == 201 || res.status == 200) {
             // We update the issue number so it can be used if we resubmit the form
             init_file_number.current = ctx.state.data.file_number
-            //showSuccess()
+            
+            Bus.emit('flashAfterRedirect', {
+                msg:"Dossier enregistré",
+                type: "success"
+            })
+
+            router.push('/ads/')
+
         }
 
         if (res.status == 400) {
             setErrors(data)
-            //showBadRequest(data)
+            
+            
+            Bus.emit('flash', {
+                msg:"Votre dossier a une erreur",
+                type: "error"
+            })
+
         }
 
         return
@@ -156,24 +170,16 @@ export default function ADSForm({ data }) {
             })
 
             if (res.status == 204) {
+                Bus.emit('flashAfterRedirect', {
+                    msg:"Dossier supprimé",
+                    type: "success"
+                })
                 router.push('/ads')
             }
 
         }
     }
 
-    
-
-    const showBadRequest = (e) => {
-        e.preventDefault();
-
-        Bus.emit('flashAfterRedirect', {
-            msg:"Erreur",
-            type: "error"
-        })
-        router.push('/ads')
-
-    }
 
    
 
@@ -181,9 +187,7 @@ export default function ADSForm({ data }) {
         adsCopy.current = ctx
     }, [ctx])
 
-    useEffect(() => {
-        Bus.emit('flash', {msg:"welcome", type: "success"})
-    }, [])
+    
    
 
     return (
@@ -191,7 +195,7 @@ export default function ADSForm({ data }) {
         <MapContext.Provider value={[mapCtx, setMapCtx]}>
             
 
-        <a href="#" onClick={showBadRequest}>Erreur !!!</a>
+        
 
                 <div className={styles.grid}>
 

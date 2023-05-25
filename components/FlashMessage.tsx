@@ -44,16 +44,24 @@ export default function FlashMessage() {
 
         })
 
+        Bus.addListener('flashClose', () => {
+
+            setIsOpen(false)
+            
+
+        })
+
         
     }, [])
 
     useEffect(() => {
 
         if (msgAfterRedirect.length > 0) {
-
             setIsOpen(true)
             setMsg(msgAfterRedirect)
             setMsgAfterRedirect('')
+        } else {
+            setIsOpen(false)
         }
       }, [pathname, searchParams]);
 
