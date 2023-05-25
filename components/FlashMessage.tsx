@@ -1,4 +1,6 @@
-import { useState } from "react"
+'use client'
+
+import { useEffect, useState } from "react"
 
 // Style
 import styles from "./FlashMessage.module.css"
@@ -6,9 +8,55 @@ import styles from "./FlashMessage.module.css"
 // DSFR comp
 import { Alert } from "@codegouvfr/react-dsfr/Alert"
 
-export default function FlashMessage({ flash }) {
+// Bus
+import Bus from "@/utils/Bus"
 
-    let isOpen = flash.open
+// Router
+import { usePathname, useSearchParams } from 'next/navigation';
+
+
+export default function FlashMessage() {
+
+    const [isOpen, setIsOpen] = useState(false)
+    const [closable, setClosable] = useState(true)
+    const [msg, setMsg] = useState('')
+    const [type, setType] = useState('success')
+
+    const [msgAfterRedirect, setMsgAfterRedirect] = useState('')
+
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        
+        Bus.addListener('flash', (data) => {
+
+            setIsOpen(true)
+            setMsg(data.msg)
+            setType(data.type)
+
+        })
+
+        Bus.addListener('flashAfterRedirect', (data) => {
+
+            setMsgAfterRedirect(data.msg)
+            setType(data.type)
+
+        })
+
+        
+    }, [])
+
+    useEffect(() => {
+
+        if (msgAfterRedirect.length > 0) {
+
+            setIsOpen(true)
+            setMsg(msgAfterRedirect)
+            setMsgAfterRedirect('')
+        }
+      }, [pathname, searchParams]);
+
 
     if (isOpen) {
         return (
@@ -16,9 +64,10 @@ export default function FlashMessage({ flash }) {
             
             <div className={styles.flashShell} role="alert">
                 <Alert
-                    closable={flash.closable}
-                    title={flash.title}
-                    severity={flash.type}
+                    closable={closable}
+                    onClose={() => setIsOpen(false)}
+                    title={msg}
+                    severity={type}
                 />
             </div>
             </>

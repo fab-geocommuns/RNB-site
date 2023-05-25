@@ -14,14 +14,13 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 // Components
 import RNBHeader from "@/components/RNBHeader";
 import { Analytics } from '@vercel/analytics/react';
+import FlashMessage from "@/components/FlashMessage";
 
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
   description: '...',
 }
-
-
 
 
 export default async function RootLayout({
@@ -58,10 +57,9 @@ export default async function RootLayout({
         <RNBSessionProvider>
         <DsfrProvider defaultColorScheme={defaultColorScheme}>
           <RNBHeader />
-
-          
-          
+          <FlashMessage />
           {children}
+          
           
         
 

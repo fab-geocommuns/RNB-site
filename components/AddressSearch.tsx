@@ -7,15 +7,9 @@ export default function AddressSearch() {
     const [mapCtx, setMapCtx] = useContext(MapContext)
     const addressInput = useRef(null)
 
-    const handleKeyDown = async (e) => {
-
-        console.log("key down")
-        console.log(e.key)
+    const handleKeyDown = async (e) => { 
 
         if (e.key === 'Enter') {
-
-
-
             e.preventDefault();
             const best_point = await geocode(addressInput.current.value);
 
