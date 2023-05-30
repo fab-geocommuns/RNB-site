@@ -1,8 +1,17 @@
-import React, { useRef, useEffect, useContext, useState } from 'react';
+
+// React
+import React, { useContext, useState } from 'react';
+
+// Context
 import {MapContext} from '@/components/MapContext'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+
+// Styles
 import { fr } from "@codegouvfr/react-dsfr";
 import styles from './VisuPanel.module.css'
+
+// UI Tools
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { addDash } from '@/utils/identifier';
 
 
 export default function VisuPanel() {
@@ -21,6 +30,10 @@ export default function VisuPanel() {
         }, 2000)
     }
 
+    const easyRnbId = () => {
+        return addDash(mapCtx.data.panel_bdg.rnb_id)
+    }
+
     if (hasBdg()) {
         return (
             <>
@@ -28,12 +41,12 @@ export default function VisuPanel() {
                 <div className={styles.title}>Identifiant RNB</div>
 
                 <div className={styles.rnbidShell}>
-                    <div className={styles.rnbidShell__id}>{mapCtx.data.panel_bdg.rnb_id}</div>
+                    <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
                     
                     <CopyToClipboard 
                         onCopy={() => handleCopy()}
-                        text={mapCtx.data.panel_bdg.rnb_id}>
+                        text={easyRnbId()}>
 
                     <div className={styles.rnbidShell__copy}>
                         {copied ? <span>Copié <i className={fr.cx("fr-icon-success-line")}></i></span> : <span>Copier <i className={fr.cx("fr-icon-clipboard-line")}></i></span>}
