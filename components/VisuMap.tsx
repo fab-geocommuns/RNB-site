@@ -260,7 +260,7 @@ export default function VisuMap() {
         paint: {
           'circle-radius': 5,
           'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 1,
+          'circle-stroke-width': 3,
           "circle-color": [
             "case",
             ["boolean", ["feature-state", "in_panel"], false],
