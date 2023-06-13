@@ -29,6 +29,21 @@ export default function VisuPanel() {
             setCopied(false)
         }, 2000)
     }
+    
+    const statusLabel = () => {
+        
+
+        
+
+//        const currentStatus = mapCtx.data.panel_bdg.status.find(s => s.is_current)
+
+        //if (currentStatus === undefined) return ""
+
+        //return currentStatus.label
+
+        return "helllo"
+
+    }
 
     const easyRnbId = () => {
         return addDash(mapCtx.data.panel_bdg.rnb_id)
@@ -54,6 +69,11 @@ export default function VisuPanel() {
                         </div>
                     
                     </CopyToClipboard>
+
+                    <div>
+                        Statut : {statusLabel()}
+                    </div>
+
 
                 </div>
 

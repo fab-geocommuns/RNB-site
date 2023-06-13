@@ -1,5 +1,9 @@
+// Context
 import {MapContext} from '@/components/MapContext'
 import { useContext, useRef } from 'react';
+
+// Bus
+import Bus from '@/utils/Bus';
 
 export default function AddressSearch() {
 
@@ -10,14 +14,22 @@ export default function AddressSearch() {
     const handleKeyDown = async (e) => { 
 
         if (e.key === 'Enter') {
+
+            console.log('Enter on address')
+
             e.preventDefault();
             const best_point = await geocode(addressInput.current.value);
 
-        if (best_point) {
-             const position = featureToPosition(best_point)
-             mapCtx.data.position = position
-             setMapCtx(mapCtx.clone())
-        }
+            if (best_point) {
+                const position = featureToPosition(best_point)
+                mapCtx.data.position = position
+                setMapCtx(mapCtx.clone())
+
+                console.log('Emit address:search')
+                Bus.emit('address:search', {
+                    search: best_point
+                })
+            }
         }
 
         
