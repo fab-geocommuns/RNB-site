@@ -67,7 +67,7 @@ export default function ADSList() {
                   <Link href={`/ads/${ads.file_number}`}>{ads.file_number}</Link>
                 </td>
                 <td>
-                  {ads.decision_date}
+                  {ads.decided_at}
                 </td>
                 <td>
                   {ads.city.name}

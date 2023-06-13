@@ -90,7 +90,7 @@ export default function AddressSearch() {
         
         <input 
         className="fr-input" 
-        placeholder='Chercher une adresse'
+        placeholder='ex : 1 rue de la paix, Paris'
         type="text" 
         autoComplete='off'
         name="address" 
