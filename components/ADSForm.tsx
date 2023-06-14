@@ -8,7 +8,6 @@ import ADSMap from '@/components/ADSMap';
 import AddressSearch from '@/components/AddressSearch'
 
 import InputErrors from '@/components/InputErrors';
-import AsyncSelect from 'react-select/async';
 
 // Auth
 import { useSession } from 'next-auth/react'
@@ -153,6 +152,8 @@ export default function ADSForm({ data }) {
 
     }
 
+    
+
     const handleDelete = async () => {
 
         if (confirm("Voulez-vous vraiment supprimer ce dossier ADS ?")) {
@@ -195,8 +196,6 @@ export default function ADSForm({ data }) {
         <MapContext.Provider value={[mapCtx, setMapCtx]}>
             
 
-        
-
                 <div className={styles.grid}>
 
                     
@@ -225,21 +224,21 @@ export default function ADSForm({ data }) {
 
                             </div>
                             <div className="fr-input-group">
-                                <label className="fr-label" htmlFor="decision_date">Date de décision</label>
+                                <label className="fr-label" htmlFor="decided_at">Date de décision</label>
                                 <input
                                     required
                                     className="fr-input"
                                     type="date"
-                                    name="decision_date"
-                                    id="decision_date"
-                                    value={ctx.decision_date}
+                                    name="decided_at"
+                                    id="decided_at"
+                                    value={ctx.decided_at}
                                     onChange={handleInputChange}
                                 />
-                                <InputErrors errors={errors.decision_date} />
+                                <InputErrors errors={errors.decided_at} />
                             </div>
                             
                             <div className="fr-input-group">
-                                <label className="fr-label">Adresse</label>
+                                <label className="fr-label">Centrer carte</label>
                                 <AddressSearch />
                             </div>
 

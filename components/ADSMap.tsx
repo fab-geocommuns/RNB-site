@@ -18,6 +18,9 @@ import vector from '@/components/mapstyles/vector.json'
 import satellitle from '@/components/mapstyles/satellite.json'
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 
+// Auth
+import { useSession } from 'next-auth/react'
+
 
 export default function ADSMap() {
 
@@ -33,6 +36,9 @@ export default function ADSMap() {
 
   const bdgs = useRef([])
 
+  
+
+  
 
   const [mapCtx, setMapCtx] = useContext(MapContext)
 
@@ -51,6 +57,9 @@ export default function ADSMap() {
 
   }
 
+  // Session
+  const { data: session, status } = useSession()
+  const accessToken = useRef(session?.accessToken)
  
   const getBdgHoverCursor = () => {
 
@@ -249,6 +258,8 @@ export default function ADSMap() {
 
     const firstUrl = getFirstUrl()
 
+
+
     return new Promise((resolve, reject) => {
 
       if (map.current.getZoom() < minZoom) {
@@ -271,15 +282,21 @@ export default function ADSMap() {
 
   const deepFetch = (url: URL): Promise<void> => {
 
+    console.log('deepFetch')
+    console.log(url)    
+
     return new Promise((resolve, reject) => {
 
-      fetch(url.href)
+      fetch(url.href, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + accessToken.current,
+      }  
+      })
         .then(response => response.json())
         .then(data => {
 
           bdgs.current = [...bdgs.current, ...data.results]
-
-
 
           if (data.next) {
             const nextUrl = new URL(data.next);
@@ -309,6 +326,7 @@ export default function ADSMap() {
 
     let queryUrl = new URL(bdgSearchUrl);
     queryUrl.searchParams.append('bb', bb_param);
+    queryUrl.searchParams.append('status', 'all');
 
     return queryUrl;
 
@@ -410,9 +428,14 @@ export default function ADSMap() {
   }, [ads])
 
 
+  useEffect(() => {
+    accessToken.current = session?.accessToken;
+  }, [session])
+
   return (
     <>
   
+
       <div className={styles.mapShell} ref={mapContainer} ></div>
       
       

@@ -5,7 +5,7 @@ export default function NewADS() {
 
     const data = {
         file_number: "",
-        decision_date: "",
+        decided_at: "",
         buildings_operations: [] 
     }
 

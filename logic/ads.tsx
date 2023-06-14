@@ -54,8 +54,8 @@ export default class AdsEditing {
     get insee_code() {
         return this.state.data.insee_code
     }
-    get decision_date() {
-        return this.state.data.decision_date
+    get decided_at() {
+        return this.state.data.decided_at
     }
     get buildings_operations() {
         return this.state.data.buildings_operations

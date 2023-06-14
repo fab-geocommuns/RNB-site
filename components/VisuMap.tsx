@@ -9,6 +9,10 @@ import { MapContext } from '@/components/MapContext'
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 import { fr } from "@codegouvfr/react-dsfr";
 
+// Bus
+import Bus from '@/utils/Bus';
+import { log } from 'console';
+
 export default function VisuMap() {
 
   const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
@@ -89,13 +93,16 @@ export default function VisuMap() {
 
     // ## Change map point state
 
+
     // first, the old one
-    if (mapCtx.data.panel_bdg) {
+    bdgs.current.forEach(bdg => {
       map.current.setFeatureState(
-        { source: 'bdgs', id: mapCtx.data.panel_bdg.rnb_id },
+        { source: 'bdgs', id: bdg.rnb_id },
         { in_panel: false }
       );
-    }
+    })
+      
+    
 
     // then, the new one
     map.current.setFeatureState(
@@ -105,10 +112,17 @@ export default function VisuMap() {
 
     // ## Change the context
 
-    mapCtx.data.panel_bdg = bdg
-    setMapCtx(mapCtx.clone())
+    
+
+    Bus.emit('map:bdgclick', getByRnbId(bdg.rnb_id))
 
 
+  }
+
+  const getByRnbId = (rnb_id) => {
+      
+      return bdgs.current.find(bdg => bdg.rnb_id == rnb_id)
+  
   }
 
   const deepFetch = (url: URL): Promise<void> => {
@@ -177,7 +191,8 @@ export default function VisuMap() {
         properties: {
           rnb_id: bdg.rnb_id,
           source: bdg.source,
-          addresses: bdg.addresses
+          addresses: bdg.addresses,
+          status: bdg.status
         }
       }
 
@@ -199,6 +214,7 @@ export default function VisuMap() {
     const bb_param = `${bbox_nw.lat},${bbox_nw.lng},${bbox_se.lat},${bbox_se.lng}`
     let queryUrl = new URL(bdgSearchUrl);
     queryUrl.searchParams.append('bb', bb_param);
+    queryUrl.searchParams.append('status', "all");
 
     return queryUrl;
 
