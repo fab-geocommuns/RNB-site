@@ -15,18 +15,21 @@ import { log } from 'console';
 
 export default function VisuMap() {
 
-  const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
-  const minZoom = 16
+  
+  const tilesUrl = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf'
+  
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const bdgs = useRef([])
+  
+  const clickedIdentifier = useRef(null)
+  
   const addressMarker = useRef(null)
 
   // Map context
   const [mapCtx, setMapCtx] = useContext(MapContext)
   const mapCtxCopy = useRef(mapCtx)
 
-  const default_style = 'vector'
+  
   const STYLES = {
 
     vector: {
@@ -75,179 +78,46 @@ export default function VisuMap() {
 
   const initMapEvents = () => {
 
-    map.current.on('moveend', () => {
-      newQuery()
-    });
+    
 
     map.current.on('click', 'bdgs', function (e) {
 
+      
       if (e.features.length > 0) {
-        setBdgInPanel(e.features[0].properties)
+        setBdgInPanel(e.features[0].properties.rnb_id)
       }
 
     });
 
   }
 
-  const setBdgInPanel = (bdg) => {
+  const setBdgInPanel = (rnb_id) => {
 
     // ## Change map point state
-
-
-    // first, the old one
-    bdgs.current.forEach(bdg => {
+    if (clickedIdentifier.current !== null) {
       map.current.setFeatureState(
-        { source: 'bdgs', id: bdg.rnb_id },
+        { source: 'bdgtiles', id: clickedIdentifier.current, sourceLayer: "default" },
         { in_panel: false }
       );
-    })
-      
+    }
     
 
     // then, the new one
     map.current.setFeatureState(
-      { source: 'bdgs', id: bdg.rnb_id },
+      { source: 'bdgtiles', id: rnb_id, sourceLayer: "default" },
       { in_panel: true }
     );
 
-    // ## Change the context
+    // Register this identifier as clicked
+    clickedIdentifier.current = rnb_id
 
-    
+    // Emit the info
+    Bus.emit('map:bdgclick', rnb_id)
 
-    Bus.emit('map:bdgclick', getByRnbId(bdg.rnb_id))
-
-
-  }
-
-  const getByRnbId = (rnb_id) => {
-      
-      return bdgs.current.find(bdg => bdg.rnb_id == rnb_id)
-  
-  }
-
-  const deepFetch = (url: URL): Promise<void> => {
-
-    return new Promise((resolve, reject) => {
-
-      fetch(url.href)
-        .then(response => response.json())
-        .then(data => {
-
-          bdgs.current = [...bdgs.current, ...data.results]
-
-
-
-          if (data.next) {
-            const nextUrl = new URL(data.next);
-            deepFetch(nextUrl).then(() => {
-              resolve();
-            })
-          } else {
-            resolve();
-          }
-
-        }).catch(error => {
-          reject(error);
-        })
-
-
-    })
-
-  }
-
-  const newQuery = () => {
-
-    // Reset bdgs
-    bdgs.current = []
-
-    let prom = launchQuery()
-
-    prom.then(() => {
-      calcBdgSource()
-    })
-
-  }
-
-  const calcBdgSource = () => {
-
-    map.current.getSource('bdgs').setData(convertBdgToGeojson())
-
-
-
-  }
-
-  const convertBdgToGeojson = () => {
-
-    let geojson = {
-      "type": "FeatureCollection",
-      "features": []
-    }
-
-    bdgs.current.forEach(bdg => {
-
-      const feature = {
-        type: "Feature",
-        geometry: bdg.point,
-        properties: {
-          rnb_id: bdg.rnb_id,
-          source: bdg.source,
-          addresses: bdg.addresses,
-          status: bdg.status
-        }
-      }
-
-      geojson.features.push(feature)
-
-    });
-
-    return geojson;
-
-
-  }
-
-  const getFirstUrl = (): URL => {
-
-    const bbox = map.current.getBounds();
-    const bbox_nw = bbox.getNorthWest();
-    const bbox_se = bbox.getSouthEast();
-
-    const bb_param = `${bbox_nw.lat},${bbox_nw.lng},${bbox_se.lat},${bbox_se.lng}`
-    let queryUrl = new URL(bdgSearchUrl);
-    queryUrl.searchParams.append('bb', bb_param);
-    queryUrl.searchParams.append('status', "all");
-
-    return queryUrl;
-
-
-  }
-
-  const launchQuery = () => {
-
-    const firstUrl = getFirstUrl()
-
-    return new Promise((resolve, reject) => {
-
-      if (map.current.getZoom() < minZoom) {
-        // Zoom is too low
-        resolve();
-      } else {
-
-        deepFetch(firstUrl).then(() => {
-          resolve();
-        }).catch(error => {
-          reject(error)
-        })
-
-      };
-
-
-    });
 
   }
 
   const jumpToPosition = (position) => {
-
-    
 
     map.current.flyTo({
       center: position.center,
@@ -263,16 +133,22 @@ export default function VisuMap() {
 
     map.current.on('style.load', () => {
 
-      map.current.addSource('bdgs', {
-        type: 'geojson',
-        data: convertBdgToGeojson(),
-        promoteId: 'rnb_id'
-      });
 
+      console.log('add source and layer')
+      map.current.addSource('bdgtiles', {
+        type: "vector",
+        tiles: [
+          tilesUrl
+        ],
+        minzoom: 16,
+        maxzoom: 22,
+        promoteId: 'rnb_id'
+      })
       map.current.addLayer({
-        id: 'bdgs',
-        type: 'circle',
-        source: 'bdgs',
+        id: "bdgs",
+        type: "circle",
+        source: "bdgtiles",
+        "source-layer": "default",
         paint: {
           'circle-radius': 5,
           'circle-stroke-color': '#ffffff',
@@ -284,29 +160,33 @@ export default function VisuMap() {
             '#1452e3'
           ]
         }
+        
       })
 
-      initFeaturesState()
+
+      
+
+      //initFeaturesState()
 
     });
 
   }
 
-  const initFeaturesState = () => {
+  // const initFeaturesState = () => {
 
-    bdgs.current.forEach(bdg => {
+  //   bdgs.current.forEach(bdg => {
 
-      const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id) ? true : false
-
-
-      map.current.setFeatureState(
-        { source: 'bdgs', id: bdg.rnb_id },
-        { in_panel: in_panel }
-      );
-    })
+  //     const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id) ? true : false
 
 
-  }
+  //     map.current.setFeatureState(
+  //       { source: 'bdgs', id: bdg.rnb_id },
+  //       { in_panel: in_panel }
+  //     );
+  //   })
+
+
+  // }
 
   useEffect(() => {
 
