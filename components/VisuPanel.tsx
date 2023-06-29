@@ -18,6 +18,9 @@ import va from "@vercel/analytics"
 
 export default function VisuPanel() {
 
+    
+
+    const [rnbId, setRnbId] = useState(null)
     const [bdg, setBdg] = useState(null)
 
     
@@ -37,13 +40,28 @@ export default function VisuPanel() {
     
 
     useEffect(() => {
-        Bus.on("map:bdgclick", setBdg)
+        Bus.on("map:bdgclick", setRnbId)
 
         return () => {
-            Bus.off("map:bdgclick", setBdg)
+            Bus.off("map:bdgclick", setRnbId)
         }
 
     }, [])
+
+    useEffect(() => {
+
+        if (rnbId === null) return
+
+        fetch(process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnbId)
+            .then(res => res.json())
+            .then(data => {
+                setBdg(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+    }, [rnbId])
 
     const statusLabel = () => {
         
@@ -56,7 +74,7 @@ export default function VisuPanel() {
     }
 
     const easyRnbId = () => {
-        return addDash(bdg.rnb_id)
+        return addDash(rnbId)
     }
 
     if (hasBdg()) {

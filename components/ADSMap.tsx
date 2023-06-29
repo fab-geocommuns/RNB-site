@@ -143,6 +143,8 @@ export default function ADSMap() {
 
   const newQuery = () => {
 
+    
+
     // Reset bdgs
     bdgs.current = []
 
@@ -261,6 +263,7 @@ export default function ADSMap() {
 
 
     return new Promise((resolve, reject) => {
+
 
       if (map.current.getZoom() < minZoom) {
         // Zoom is too low
