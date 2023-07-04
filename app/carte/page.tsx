@@ -24,14 +24,17 @@ export default function RNBMap() {
 
     const [mapCtx, setMapCtx] = useState(bdgmap)
 
-    const trackAddressSearch = (search) => {
+    const trackAddressSearch = (results) => {
 
-        let insee_code = search.results?.[0]?.properties?.citycode
+
+        let insee_code = results.search.features?.[0]?.properties?.citycode
         
         va.track("address-search-public-map", {
-            query: search.query,
+            query: results.search.query,
             result_insee_code: insee_code
         })
+
+
 
     }
 
