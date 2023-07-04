@@ -18,16 +18,19 @@ export default function AddressSearch() {
             console.log('Enter on address')
 
             e.preventDefault();
-            const best_point = await geocode(addressInput.current.value);
+            const geocode_result = await geocode(addressInput.current.value);
 
-            if (best_point) {
+            if (geocode_result.features.length > 0) {
+
+
+                const best_point = geocode_result.features[0]
+
                 const position = featureToPosition(best_point)
                 mapCtx.data.position = position
                 setMapCtx(mapCtx.clone())
 
-                console.log('Emit address:search')
                 Bus.emit('address:search', {
-                    search: best_point
+                    search: geocode_result
                 })
             }
         }
@@ -57,13 +60,7 @@ export default function AddressSearch() {
     const geocode = async (query: string) => {
 
         let best_point = null;
-        let result = await fetchBanAPI(query);
-
-        if (result.features.length > 0) {
-            best_point = result.features[0]
-        }
-
-        return best_point
+        return await fetchBanAPI(query);
 
     }
     const fetchBanAPI = async (query) => {
