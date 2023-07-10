@@ -37,6 +37,12 @@ export default function RNBHeader() {
             href: '/ads',
           }
         },
+        {
+          text:"API et documentation",
+          linkProps: {
+            href: 'https://batid.notion.site/Documentation-des-API-du-R-f-rentiel-National-du-B-timent-7b881d168030450f9ed8ed63c9b430a8?pvs=4',
+          }
+        },
       ]
 
     const handleSignout = (e) => {
