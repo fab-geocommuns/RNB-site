@@ -11,14 +11,22 @@ import ADSSearch from '@/components/ADSSearch'
 // Styles
 import styles from '@/components/ADSList.module.css'
 
-async function fetchADSList(query: string | null ) {
+// Auth
+import { useSession } from 'next-auth/react'
 
+async function fetchADSList(query: string | null, token: string | null ) {
   
     let url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
     if (query != null) {
       url = url + '?q=' + query
     }
-    const res = await fetch(url, {cache: 'no-cache'})
+    const res = await fetch(url, {
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + token,
+      },
+    })
     const data = await res.json()
     return data
     
@@ -26,16 +34,23 @@ async function fetchADSList(query: string | null ) {
 
 export default function ADSList() {
 
+    // Session
+    const { data: session, status } = useSession()
     
+    // Search query
     const params = useSearchParams()
-    
-    
+
+    // ADS List
     const [adsList, setAdsList] = useState([])
     
     
     useEffect(() => {
     
-        fetchADSList(params.get('q') ).then((data) => {
+        fetchADSList(params.get('q'), session?.accessToken ).then((data) => {
+
+            console.log('back from server')
+            console.log(data)
+
             setAdsList(data['results'])
         })
 
