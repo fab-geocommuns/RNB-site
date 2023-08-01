@@ -16,6 +16,7 @@ import { useSession } from 'next-auth/react'
 
 async function fetchADSList(query: string | null, token: string | null ) {
   
+
     let url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
     if (query != null) {
       url = url + '?q=' + query
@@ -46,15 +47,18 @@ export default function ADSList() {
     
     useEffect(() => {
     
-        fetchADSList(params.get('q'), session?.accessToken ).then((data) => {
+        if (status == 'authenticated') {
 
-            console.log('back from server')
-            console.log(data)
+          fetchADSList(params.get('q'), session?.accessToken ).then((data) => {
 
             setAdsList(data['results'])
         })
 
-    }, [params.get('q')])
+        }
+
+        
+
+    }, [params.get('q'), status])
 
     return (
         <>
