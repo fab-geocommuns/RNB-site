@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  redirects: async () => {
+    return [
+      {
+        source: '/doc',
+        destination: 'https://batid.notion.site/Documentation-des-API-du-R-f-rentiel-National-du-B-timent-7b881d168030450f9ed8ed63c9b430a8?pvs=4',
+        permanent: false,
+      },
+    ]
+  },
   reactStrictMode: true,
   swcMinify: false,
   productionBrowserSourceMaps: true,
