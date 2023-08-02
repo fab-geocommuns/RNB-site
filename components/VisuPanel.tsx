@@ -15,6 +15,7 @@ import Bus from '@/utils/Bus';
 
 // Analytics
 import va from "@vercel/analytics"
+import { log } from 'console';
 
 export default function VisuPanel() {
 
@@ -77,11 +78,18 @@ export default function VisuPanel() {
         return addDash(rnbId)
     }
 
+    const banAddresses = () => {
+
+        return bdg?.addresses?.filter(a => a.source === "BAN")
+    }
+
     if (hasBdg()) {
         return (
             <>
             <div>
-                <div className={styles.title}>Identifiant RNB</div>
+                <hr />
+                <div className={styles.section}>
+                <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
 
                 <div className={styles.rnbidShell}>
                     <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
@@ -102,10 +110,45 @@ export default function VisuPanel() {
 
 
                 </div>
+                </div>
 
-                <div className='fr-mt-8v'>
-                        Statut du bâtiment : {statusLabel()}
+                <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>Statut du bâtiment</h2>
+                        <div className={styles.sectionBody}>
+                        {statusLabel()}
+                        </div>
+                </div>
+                <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>Adresses</h2>
+                        <div className={styles.sectionBody}>
+
+                            {banAddresses()?.length === 0 ? (
+                                
+                                <div>Aucune adresse liée</div>
+                            
+
+                            ) : (
+                                banAddresses()?.map(a => (
+                                    <div key={a.id} className={styles.address}>
+                                        {a.street_number}{a.street_rep} {a.street_type} {a.street_name}<br />
+                                        {a.city_zipcode} {a.city_name}<br />
+                                        <small>(Idenfitiant BAN : {a.id})</small>
+                                    </div>
+                                ))
+                            )}
+
+
+                            
+
+                        
+                        </div>
+                </div>
+                <div className={styles.section}>
+                    <h2 className={styles.sectionTitle}>Identifiant BD Topo</h2>
+                    <div className={styles.sectionBody}>
+                    {bdg?.ext_bdtopo_id}
                     </div>
+                </div>
 
                 
                 

@@ -6,9 +6,12 @@
 .geodisplay__panel {
     min-width: 300px;
     padding:10px;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .geodisplay__map {
     height: 100%;
     flex:1;
+    
 }
