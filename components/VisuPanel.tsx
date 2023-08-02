@@ -156,7 +156,7 @@ export default function VisuPanel() {
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle}>Identifiant BD Topo</h2>
                     <div className={styles.sectionBody}>
-                        {bdg?.ext_bdtopo_id.length === 0 ? (<em>Aucun identifiant lié</em>) : bdg?.ext_bdtopo_id}
+                        {bdg?.ext_bdtopo_id?.length === 0 ? (<em>Aucun identifiant lié</em>) : bdg?.ext_bdtopo_id}
                     
                     </div>
                 </div>
