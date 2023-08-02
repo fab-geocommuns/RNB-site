@@ -53,7 +53,9 @@ export default function VisuPanel() {
 
         if (rnbId === null) return
 
-        fetch(process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnbId)
+        
+
+        fetch(apiUrl())
             .then(res => res.json())
             .then(data => {
                 setBdg(data)
@@ -63,6 +65,14 @@ export default function VisuPanel() {
             })
 
     }, [rnbId])
+
+    const apiUrl = () => {
+
+        if (rnbId === null) return null
+
+        return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnbId
+
+    }
 
     const statusLabel = () => {
         
@@ -124,7 +134,7 @@ export default function VisuPanel() {
 
                             {banAddresses()?.length === 0 ? (
                                 
-                                <div>Aucune adresse liée</div>
+                                <div><em>Aucune adresse liée</em></div>
                             
 
                             ) : (
@@ -146,10 +156,18 @@ export default function VisuPanel() {
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle}>Identifiant BD Topo</h2>
                     <div className={styles.sectionBody}>
-                        {bdg?.ext_bdtopo_id.length === 0 ? "Aucun identifiant lié" : bdg?.ext_bdtopo_id}
+                        {bdg?.ext_bdtopo_id.length === 0 ? (<em>Aucun identifiant lié</em>) : bdg?.ext_bdtopo_id}
                     
                     </div>
                 </div>
+
+                <div className={styles.section}>
+                <h2 className={styles.sectionTitle}>Lien API</h2>
+                    <div className={styles.sectionBody}>
+                        <a href={apiUrl()} target="_blank">Format JSON</a>
+                    </div>
+                </div>
+
 
                 
                 
