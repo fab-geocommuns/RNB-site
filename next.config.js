@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/doc',
-        destination: 'https://batid.notion.site/Documentation-des-API-du-R-f-rentiel-National-du-B-timent-7b881d168030450f9ed8ed63c9b430a8?pvs=4',
+        destination: 'https://rnb-fr.gitbook.io/documentation',
         permanent: false
       },
     ]
