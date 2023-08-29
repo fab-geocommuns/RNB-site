@@ -13,13 +13,14 @@ import { addDash } from '@/utils/identifier';
 // Bus
 import Bus from '@/utils/Bus';
 
+// Store
+import { useDispatch, useSelector } from "react-redux";
+
 // Analytics
 import va from "@vercel/analytics"
-import { log } from 'console';
+
 
 export default function VisuPanel() {
-
-    
 
     const [rnbId, setRnbId] = useState(null)
     const [bdg, setBdg] = useState(null)
@@ -39,10 +40,11 @@ export default function VisuPanel() {
         }, 2000)
     }
     
+    
 
     useEffect(() => {
 
-        
+
         Bus.on("map:bdgclick", setRnbId)
 
         return () => {
@@ -101,6 +103,7 @@ export default function VisuPanel() {
             <div>
                 <hr />
                 <div className={styles.section}>
+                    
                 <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
 
                 <div className={styles.rnbidShell}>
@@ -177,7 +180,9 @@ export default function VisuPanel() {
             </>
         )
     } else {
-        return (<></>)
+        return (<>
+        
+        </>)
     }
 
     

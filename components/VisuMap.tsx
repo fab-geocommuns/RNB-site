@@ -17,12 +17,20 @@ import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 
 // Hooks
 import { useSearchParams } from 'next/navigation'
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, use } from 'react';
 
 // Bus
 import Bus from '@/utils/Bus';
 
+// Store
+import { useDispatch, useSelector } from "react-redux";
+
 export default function VisuMap() {
+
+
+  // Store
+  const moveTo = useSelector((state) => state.moveTo)
+  console.log('moveTo', moveTo)
 
   
   const tilesUrl = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf'
@@ -129,7 +137,7 @@ export default function VisuMap() {
   const jumpToPosition = (position) => {
 
     map.current.flyTo({
-      center: position.center,
+      center: [position.lng, position.lat],
       zoom: position.zoom
     })
 
@@ -188,8 +196,8 @@ export default function VisuMap() {
     if (!map.current) {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
-        center: [2.852577494863663, 46.820936580547134],
-        zoom: 5
+        center: [moveTo.lng, moveTo.lat],
+        zoom: moveTo.zoom
       });
 
 
@@ -242,6 +250,14 @@ export default function VisuMap() {
 
   }, [mapCtxCopy.current.data.position.center, mapCtxCopy.current.data.position.zoom]);
 
+
+  useEffect(() => {
+
+    console.log('moveTo changed')
+
+    jumpToPosition(moveTo)
+
+  }, [moveTo])
   
 
   return (

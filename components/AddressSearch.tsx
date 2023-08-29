@@ -1,11 +1,20 @@
 // Context
 import {MapContext} from '@/components/MapContext'
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 
 // Bus
 import Bus from '@/utils/Bus';
 
+// Store
+import { useDispatch, useSelector } from "react-redux";
+import { setMoveTo } from '@/stores/map/slice';
+
 export default function AddressSearch() {
+
+
+    // State
+    const moveTo = useSelector((state) => state.moveTo)
+    const dispatch = useDispatch()
 
     const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
     const [mapCtx, setMapCtx] = useContext(MapContext)
@@ -26,6 +35,7 @@ export default function AddressSearch() {
                 const best_point = geocode_result.features[0]
 
                 const position = featureToPosition(best_point)
+                dispatch(setMoveTo(position))
                 mapCtx.data.position = position
                 setMapCtx(mapCtx.clone())
 
@@ -43,7 +53,8 @@ export default function AddressSearch() {
     const featureToPosition = (feature: any) => {
 
         const mapPosition = {
-            center: feature.geometry.coordinates,
+            lat: feature.geometry.coordinates[1],
+            lng: feature.geometry.coordinates[0],
             zoom: 17
         }
 
@@ -82,9 +93,10 @@ export default function AddressSearch() {
 
     }
 
+    
+
     return (
         <>
-        
         <input 
         className="fr-input" 
         placeholder='ex : 1 rue de la paix, Paris'

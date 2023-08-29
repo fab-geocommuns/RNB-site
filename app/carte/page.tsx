@@ -21,6 +21,9 @@ import va from "@vercel/analytics"
 // Bus
 import Bus from "@/utils/Bus"
 
+// Store
+import { Providers } from '@/stores/map/provider';
+
 async function loadBdg(rnb_id) {
 
     if (rnb_id === null) return
@@ -103,6 +106,7 @@ export default function RNBMap() {
     return (
         <>
             <MapContext.Provider value={[mapCtx, setMapCtx]}>
+                <Providers>
             <div className={styles.geodisplay}>    
                 <div className={styles.geodisplay__panel}>
 
@@ -118,6 +122,7 @@ export default function RNBMap() {
                     </div>    
                 <div className={styles.geodisplay__map}><VisuMap /></div>
             </div>
+            </Providers>
             </MapContext.Provider>
         </>
     )
