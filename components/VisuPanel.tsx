@@ -41,6 +41,8 @@ export default function VisuPanel() {
     
 
     useEffect(() => {
+
+        
         Bus.on("map:bdgclick", setRnbId)
 
         return () => {

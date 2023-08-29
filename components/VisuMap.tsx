@@ -1,17 +1,26 @@
 'use client'
 
-import React, { useRef, useEffect, useContext } from 'react';
-import maplibregl from 'maplibre-gl';
+// Context
+import { MapContext } from '@/components/MapContext'
+
+// Style
+import { fr } from "@codegouvfr/react-dsfr";
 import 'maplibre-gl/dist/maplibre-gl.css';
+
+// Map style
 import vector from '@/components/mapstyles/vector.json'
 import satellitle from '@/components/mapstyles/satellite.json'
-import { MapContext } from '@/components/MapContext'
+
+// Comps
+import maplibregl from 'maplibre-gl';
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
-import { fr } from "@codegouvfr/react-dsfr";
+
+// Hooks
+import { useSearchParams } from 'next/navigation'
+import React, { useRef, useEffect, useContext } from 'react';
 
 // Bus
 import Bus from '@/utils/Bus';
-import { log } from 'console';
 
 export default function VisuMap() {
 
@@ -172,21 +181,7 @@ export default function VisuMap() {
 
   }
 
-  // const initFeaturesState = () => {
-
-  //   bdgs.current.forEach(bdg => {
-
-  //     const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id) ? true : false
-
-
-  //     map.current.setFeatureState(
-  //       { source: 'bdgs', id: bdg.rnb_id },
-  //       { in_panel: in_panel }
-  //     );
-  //   })
-
-
-  // }
+  
 
   useEffect(() => {
 

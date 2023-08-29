@@ -1,10 +1,18 @@
 'use client'
-import { useEffect, useState } from 'react';
+
+
+import { MapContext } from '@/components/MapContext';
+import styles from './RNBMap.module.css'
+
+
+// Hooks
+import { useSearchParams } from 'next/navigation'
+import { use, useEffect, useRef, useState } from 'react';
+
+// Components
 import VisuMap from '@/components/VisuMap'
 import VisuPanel from '@/components/VisuPanel'
 import AddressSearch from '@/components/AddressSearch'
-import { MapContext } from '@/components/MapContext';
-import styles from './RNBMap.module.css'
 import BuildingsMap from '@/logic/map';
 
 // Analytics
@@ -13,7 +21,22 @@ import va from "@vercel/analytics"
 // Bus
 import Bus from "@/utils/Bus"
 
+async function loadBdg(rnb_id) {
+
+    if (rnb_id === null) return
+
+    const url = process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnb_id
+
+    const res = await fetch(url)
+    const bdg = await res.json()
+
+    return bdg
+
+
+}
+
 export default function RNBMap() {
+
 
     let bdgmap = new BuildingsMap({
         position: {
@@ -21,11 +44,39 @@ export default function RNBMap() {
             zoom: null
         }
     })
-
     const [mapCtx, setMapCtx] = useState(bdgmap)
+    
+    
 
+    const params = useSearchParams()
+    const [searchParams, setSearchParams] = useState(params)
+
+    useEffect( () => {
+
+        console.log('params changed ' + searchParams.get('id'))
+        loadBdg(searchParams.get('id')).then((bdg) => {
+
+            console.log('bck from server')
+            console.log(bdg)
+
+            // Change context
+            const bdgmap = new BuildingsMap({
+                position: {
+                    center: bdg?.point?.coordinates,
+                    zoom: 18
+                }
+            })
+            setMapCtx(bdgmap)
+
+        })
+
+
+
+    }, [searchParams.get('id')])
+    
+
+    // Tracking address search
     const trackAddressSearch = (results) => {
-
 
         let insee_code = results.search.features?.[0]?.properties?.citycode
         
@@ -34,20 +85,19 @@ export default function RNBMap() {
             result_insee_code: insee_code
         })
 
-
-
     }
 
     useEffect(() => {
         
         Bus.on('address:search', trackAddressSearch)
-
         return () => {
             Bus.off('address:search', trackAddressSearch)
         }
         
 
     }, []);
+
+
 
 
     return (
