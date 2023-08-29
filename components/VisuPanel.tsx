@@ -15,6 +15,7 @@ import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
+import { bdgApiUrl } from '@/stores/map/slice';
 
 // Analytics
 import va from "@vercel/analytics"
@@ -22,8 +23,11 @@ import va from "@vercel/analytics"
 
 export default function VisuPanel() {
 
-    const [rnbId, setRnbId] = useState(null)
-    const [bdg, setBdg] = useState(null)
+    // Store
+    const bdg = useSelector((state) => state.panelBdg)
+
+    
+    
 
     
     const [copied, setCopied] = useState(false);
@@ -39,44 +43,13 @@ export default function VisuPanel() {
             setCopied(false)
         }, 2000)
     }
-    
-    
-
-    useEffect(() => {
-
-
-        Bus.on("map:bdgclick", setRnbId)
-
-        return () => {
-            Bus.off("map:bdgclick", setRnbId)
-        }
-
-    }, [])
-
-    useEffect(() => {
-
-        if (rnbId === null) return
-
-        
-
-        fetch(apiUrl())
-            .then(res => res.json())
-            .then(data => {
-                setBdg(data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-    }, [rnbId])
 
     const apiUrl = () => {
-
-        if (rnbId === null) return null
-
-        return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnbId
-
+        return bdgApiUrl(bdg?.rnb_id)
     }
+
+
+  
 
     const statusLabel = () => {
         
@@ -89,7 +62,7 @@ export default function VisuPanel() {
     }
 
     const easyRnbId = () => {
-        return addDash(rnbId)
+        return addDash(bdg?.rnb_id)
     }
 
     const banAddresses = () => {

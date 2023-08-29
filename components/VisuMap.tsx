@@ -1,8 +1,5 @@
 'use client'
 
-// Context
-import { MapContext } from '@/components/MapContext'
-
 // Style
 import { fr } from "@codegouvfr/react-dsfr";
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -16,36 +13,32 @@ import maplibregl from 'maplibre-gl';
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 
 // Hooks
-import { useSearchParams } from 'next/navigation'
-import React, { useRef, useEffect, useContext, use } from 'react';
-
-// Bus
-import Bus from '@/utils/Bus';
+import React, { useRef, useEffect } from 'react';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
+import { fetchBdg } from "@/stores/map/slice";
 
 export default function VisuMap() {
 
 
   // Store
-  const moveTo = useSelector((state) => state.moveTo)
-  console.log('moveTo', moveTo)
+  const dispatch = useDispatch()
+  const stateMoveTo = useSelector((state) => state.moveTo)
+  const stateMarker = useSelector((state) => state.marker)
 
+  // Marker
+  const marker = useRef(null)
   
+  // Buildings tiles
   const tilesUrl = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf'
   
+  // Map container and object
   const mapContainer = useRef(null);
   const map = useRef(null);
   
+  // Clicked identifier
   const clickedIdentifier = useRef(null)
-  
-  const addressMarker = useRef(null)
-
-  // Map context
-  const [mapCtx, setMapCtx] = useContext(MapContext)
-  const mapCtxCopy = useRef(mapCtx)
-
   
   const STYLES = {
 
@@ -99,7 +92,6 @@ export default function VisuMap() {
 
     map.current.on('click', 'bdgs', function (e) {
 
-      
       if (e.features.length > 0) {
         setBdgInPanel(e.features[0].properties.rnb_id)
       }
@@ -127,9 +119,9 @@ export default function VisuMap() {
 
     // Register this identifier as clicked
     clickedIdentifier.current = rnb_id
-
-    // Emit the info
-    Bus.emit('map:bdgclick', rnb_id)
+    
+    // Dispatch to store
+    dispatch(fetchBdg(rnb_id))
 
 
   }
@@ -145,8 +137,6 @@ export default function VisuMap() {
   }
 
   const initDataLayer = () => {
-
-
 
     map.current.on('style.load', () => {
 
@@ -183,21 +173,44 @@ export default function VisuMap() {
 
       
 
-      //initFeaturesState()
-
     });
 
   }
 
+  const buildMarker = (stateMarker) => {
+
+
+    if (marker.current) {
+      if (marker.current instanceof maplibregl.Marker) {
+        marker.current.remove();
+      }
+    }
+
+    if (stateMarker.lat != null && stateMarker.lng != null) {
+      
+      marker.current = new maplibregl.Marker({
+        color: "#1452e3",
+        draggable: false
+      }).setLngLat([stateMarker.lng, stateMarker.lat])
+  
+      marker.current.addTo(map.current);
+
+    }
   
 
+  }
+
+  
+  // //////////////////
+  // Init the map once
+  // //////////////////
   useEffect(() => {
 
     if (!map.current) {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
-        center: [moveTo.lng, moveTo.lat],
-        zoom: moveTo.zoom
+        center: [2.852577494863663, 46.820936580547134],
+        zoom: 5
       });
 
 
@@ -208,56 +221,29 @@ export default function VisuMap() {
     }
   });
 
-  const buildAddresseMarker = (position) => {
-
-    if (addressMarker.current) {
-      if (addressMarker.current instanceof maplibregl.Marker) {
-        addressMarker.current.remove();
-      }
-    }
-    
-
-    addressMarker.current = new maplibregl.Marker({
-      color: "#1452e3",
-      draggable: false
-    }).setLngLat(position.center)
-
-    addressMarker.current.addTo(map.current);
-
-  }
-
-  // Manage copy of mapCtx
+  // //////////////////
+  // Move the map on demand
+  // //////////////////
   useEffect(() => {
-    mapCtxCopy.current = mapCtx 
-  }, [mapCtx]);
+    if (stateMoveTo.lat != null && 
+      stateMoveTo.lng != null && 
+      stateMoveTo.zoom != null) {
 
-
-  useEffect(() => {
-
-    if (mapCtxCopy.current.data.position) {
-
-      if (mapCtx.data.position.center) {
-        buildAddresseMarker(mapCtxCopy.current.data.position)
-      }
-      if (mapCtx.data.position.center && mapCtx.data.position.zoom) {
-        jumpToPosition(mapCtxCopy.current.data.position)
-      }
-
-
-//      prevMapPosition.current = mapCtx.data.position
+      jumpToPosition(stateMoveTo)
 
     }
 
-  }, [mapCtxCopy.current.data.position.center, mapCtxCopy.current.data.position.zoom]);
+  }, [stateMoveTo])
 
 
+  // //////////////////
+  // Add/remove/change the marker on demand
+  // //////////////////
   useEffect(() => {
 
-    console.log('moveTo changed')
+    buildMarker(stateMarker)
 
-    jumpToPosition(moveTo)
-
-  }, [moveTo])
+  }, [stateMarker])
   
 
   return (

@@ -1,13 +1,13 @@
 // Context
 import {MapContext} from '@/components/MapContext'
-import { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef } from 'react';
 
 // Bus
 import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
-import { setMoveTo } from '@/stores/map/slice';
+import { setMoveTo, setAddressSearchQuery, setAddressSearchResults, setMarker } from '@/stores/map/slice';
 
 export default function AddressSearch() {
 
@@ -24,20 +24,27 @@ export default function AddressSearch() {
 
         if (e.key === 'Enter') {
 
-            console.log('Enter on address')
-
             e.preventDefault();
+
+            // Add the query to the store
             const geocode_result = await geocode(addressInput.current.value);
+
+            dispatch(setAddressSearchQuery(addressInput.current.value))
+            dispatch(setAddressSearchResults(geocode_result.features))
+
 
             if (geocode_result.features.length > 0) {
 
+                const position = featureToPosition(geocode_result.features[0])
 
-                const best_point = geocode_result.features[0]
+                // Add a marker to the map
+                dispatch(setMarker({
+                    lat: position.lat,
+                    lng: position.lng
+                }))
 
-                const position = featureToPosition(best_point)
+                // Move the map to the position
                 dispatch(setMoveTo(position))
-                mapCtx.data.position = position
-                setMapCtx(mapCtx.clone())
 
                 Bus.emit('address:search', {
                     search: geocode_result
