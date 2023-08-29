@@ -1,6 +1,6 @@
-// Context
-import {MapContext} from '@/components/MapContext'
-import { useContext, useRef } from 'react';
+// Hooks
+import { use, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation'
 
 // Bus
 import Bus from '@/utils/Bus';
@@ -11,13 +11,15 @@ import { setMoveTo, setAddressSearchQuery, setAddressSearchResults, setMarker } 
 
 export default function AddressSearch() {
 
+    // URL params
+    const params = useSearchParams()
+    const [query, setQuery] = useState(params.get('q') || '')
 
     // State
     const moveTo = useSelector((state) => state.moveTo)
     const dispatch = useDispatch()
 
     const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
-    const [mapCtx, setMapCtx] = useContext(MapContext)
     const addressInput = useRef(null)
 
     const handleKeyDown = async (e) => { 
@@ -25,37 +27,41 @@ export default function AddressSearch() {
         if (e.key === 'Enter') {
 
             e.preventDefault();
-
-            // Add the query to the store
-            const geocode_result = await geocode(addressInput.current.value);
-
-            dispatch(setAddressSearchQuery(addressInput.current.value))
-            dispatch(setAddressSearchResults(geocode_result.features))
-
-
-            if (geocode_result.features.length > 0) {
-
-                const position = featureToPosition(geocode_result.features[0])
-
-                // Add a marker to the map
-                dispatch(setMarker({
-                    lat: position.lat,
-                    lng: position.lng
-                }))
-
-                // Move the map to the position
-                dispatch(setMoveTo(position))
-
-                Bus.emit('address:search', {
-                    search: geocode_result
-                })
-            }
+            search()
+            
         }
 
-        
-        
+    }
+
+    const search = async () => {
+
+        // Add the query to the store
+        const geocode_result = await geocode(addressInput.current.value);
+
+        dispatch(setAddressSearchQuery(addressInput.current.value))
+        dispatch(setAddressSearchResults(geocode_result.features))
+
+
+        if (geocode_result.features.length > 0) {
+
+            const position = featureToPosition(geocode_result.features[0])
+
+            // Add a marker to the map
+            dispatch(setMarker({
+                lat: position.lat,
+                lng: position.lng
+            }))
+
+            // Move the map to the position
+            dispatch(setMoveTo(position))
+
+            Bus.emit('address:search', {
+                search: geocode_result
+            })
+        }
 
     }
+    
 
     const featureToPosition = (feature: any) => {
 
@@ -77,7 +83,6 @@ export default function AddressSearch() {
 
     const geocode = async (query: string) => {
 
-        let best_point = null;
         return await fetchBanAPI(query);
 
     }
@@ -100,6 +105,17 @@ export default function AddressSearch() {
 
     }
 
+    useEffect(() => {
+
+        if (params.get('q') !== null) {
+
+            search()
+
+        }
+
+
+    }, [])
+
     
 
     return (
@@ -110,6 +126,8 @@ export default function AddressSearch() {
         type="text" 
         autoComplete='off'
         name="address" 
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         id="address"
         ref={addressInput}
         onKeyDown={handleKeyDown}
