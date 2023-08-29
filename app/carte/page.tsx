@@ -24,23 +24,14 @@ import Bus from "@/utils/Bus"
 // Store
 import { Providers } from '@/stores/map/provider';
 
-async function loadBdg(rnb_id) {
-
-    if (rnb_id === null) return
-
-    const url = process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnb_id
-
-    const res = await fetch(url)
-    const bdg = await res.json()
-
-    return bdg
 
 
-}
 
 export default function RNBMap() {
 
+    
 
+    // Map ctx
     let bdgmap = new BuildingsMap({
         position: {
             center: null,
@@ -50,32 +41,6 @@ export default function RNBMap() {
     const [mapCtx, setMapCtx] = useState(bdgmap)
     
     
-
-    const params = useSearchParams()
-    const [searchParams, setSearchParams] = useState(params)
-
-    useEffect( () => {
-
-        console.log('params changed ' + searchParams.get('id'))
-        loadBdg(searchParams.get('id')).then((bdg) => {
-
-            console.log('bck from server')
-            console.log(bdg)
-
-            // Change context
-            const bdgmap = new BuildingsMap({
-                position: {
-                    center: bdg?.point?.coordinates,
-                    zoom: 18
-                }
-            })
-            setMapCtx(bdgmap)
-
-        })
-
-
-
-    }, [searchParams.get('id')])
     
 
     // Tracking address search

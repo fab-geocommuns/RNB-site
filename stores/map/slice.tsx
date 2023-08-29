@@ -44,9 +44,8 @@ export const mapSlice = createSlice({
             }
 
         },
-  
-
     },
+      
     extraReducers(builder) {
         builder.addCase(fetchBdg.fulfilled, (state, action) => {
             state.panelBdg = action.payload

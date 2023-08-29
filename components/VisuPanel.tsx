@@ -1,6 +1,6 @@
-
-// React
+// Hooks
 import React, { use, useContext, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation'
 
 // Styles
 import { fr } from "@codegouvfr/react-dsfr";
@@ -10,12 +10,9 @@ import styles from './VisuPanel.module.css'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { addDash } from '@/utils/identifier';
 
-// Bus
-import Bus from '@/utils/Bus';
-
 // Store
-import { useDispatch, useSelector } from "react-redux";
-import { bdgApiUrl } from '@/stores/map/slice';
+import { useSelector, useDispatch } from "react-redux";
+import { bdgApiUrl, fetchBdg, setMoveTo } from '@/stores/map/slice';
 
 // Analytics
 import va from "@vercel/analytics"
@@ -24,12 +21,12 @@ import va from "@vercel/analytics"
 export default function VisuPanel() {
 
     // Store
+    const dispatch = useDispatch()
     const bdg = useSelector((state) => state.panelBdg)
 
-    
-    
+    // URL params
+    const params = useSearchParams()
 
-    
     const [copied, setCopied] = useState(false);
 
     const hasBdg = () => {
@@ -47,9 +44,6 @@ export default function VisuPanel() {
     const apiUrl = () => {
         return bdgApiUrl(bdg?.rnb_id)
     }
-
-
-  
 
     const statusLabel = () => {
         
@@ -69,6 +63,28 @@ export default function VisuPanel() {
 
         return bdg?.addresses?.filter(a => a.source === "BAN")
     }
+
+    useEffect(() => {
+        
+        if (params.get('id') != null) {
+
+            dispatch(fetchBdg(params.get('id'))).then((res) => {
+                
+                dispatch(setMoveTo({
+                    lat: res.payload.point.coordinates[1],
+                    lng: res.payload.point.coordinates[0],
+                    zoom: 20,
+                    fly: false
+                }))
+
+
+            })
+        }
+
+
+    }, [])
+
+   
 
     if (hasBdg()) {
         return (

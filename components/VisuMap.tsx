@@ -26,6 +26,7 @@ export default function VisuMap() {
   const dispatch = useDispatch()
   const stateMoveTo = useSelector((state) => state.moveTo)
   const stateMarker = useSelector((state) => state.marker)
+  const panelBdg = useSelector((state) => state.panelBdg)
 
   // Marker
   const marker = useRef(null)
@@ -38,7 +39,7 @@ export default function VisuMap() {
   const map = useRef(null);
   
   // Clicked identifier
-  const clickedIdentifier = useRef(null)
+  const highlightedBdg = useRef(null)
   
   const STYLES = {
 
@@ -88,24 +89,29 @@ export default function VisuMap() {
 
   const initMapEvents = () => {
 
-    
-
     map.current.on('click', 'bdgs', function (e) {
 
       if (e.features.length > 0) {
-        setBdgInPanel(e.features[0].properties.rnb_id)
+
+        const rnb_id = e.features[0].properties.rnb_id
+
+        // Highlight it on the map
+        highlightBdg(rnb_id)
+
+        // Dispatch to store
+        dispatch(fetchBdg(rnb_id))
       }
 
     });
 
   }
 
-  const setBdgInPanel = (rnb_id) => {
+  const highlightBdg = (rnb_id) => {
 
     // ## Change map point state
-    if (clickedIdentifier.current !== null) {
+    if (highlightedBdg.current !== null) {
       map.current.setFeatureState(
-        { source: 'bdgtiles', id: clickedIdentifier.current, sourceLayer: "default" },
+        { source: 'bdgtiles', id: highlightedBdg.current, sourceLayer: "default" },
         { in_panel: false }
       );
     }
@@ -118,21 +124,28 @@ export default function VisuMap() {
     );
 
     // Register this identifier as clicked
-    clickedIdentifier.current = rnb_id
+    highlightedBdg.current = rnb_id
     
-    // Dispatch to store
-    dispatch(fetchBdg(rnb_id))
-
+  
 
   }
 
-  const jumpToPosition = (position) => {
+
+  const flyToPosition = (position) => {
 
     map.current.flyTo({
       center: [position.lng, position.lat],
       zoom: position.zoom
     })
 
+  }
+
+  const jumpToPosition = (position) => {
+
+    map.current.jumpTo({
+      center: [position.lng, position.lat],
+      zoom: position.zoom
+    })
 
   }
 
@@ -229,7 +242,11 @@ export default function VisuMap() {
       stateMoveTo.lng != null && 
       stateMoveTo.zoom != null) {
 
-      jumpToPosition(stateMoveTo)
+      if (stateMoveTo.fly) {
+        flyToPosition(stateMoveTo)
+      } else {
+        jumpToPosition(stateMoveTo)
+      }
 
     }
 
@@ -244,6 +261,13 @@ export default function VisuMap() {
     buildMarker(stateMarker)
 
   }, [stateMarker])
+
+  useEffect(() => {
+      
+      if (panelBdg != null) {
+        highlightBdg(panelBdg.rnb_id)
+      }
+  }, [panelBdg])
   
 
   return (
