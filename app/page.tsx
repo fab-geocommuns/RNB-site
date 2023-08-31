@@ -1,32 +1,96 @@
-import Highlight, { Card } from "@codegouvfr/react-dsfr/Card"
+
+// Styles
+import styles from './blocks.module.css'
+
+// Components
+import { Card } from "@codegouvfr/react-dsfr/Card"
+import { Button } from "@codegouvfr/react-dsfr/Button"
+import Image from 'next/image'
+
+// Assets
+import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
+import rapprochementIllu from '@/public/images/rapprochement.png'
 
 export default function Home() {
 
+    console.log('home illu')
+
+    console.log(rapprochementIllu.src)
     
     return (
         <>
             <div className="fr-container fr-py-12v">
 
                 <div className="fr-grid-row fr-grid-row--gutters">
-                    <div className="fr-col-12 fr-col-md-4 ">
-<Card
-    desc="Consultez les données du référentiel sur la carte. Accédez aux identifiants RNB de chaque bâtiment."
-    linkProps={{ href: "/carte" }}
-    title="Carte des bâtiments"
-
-/>
+                    <div className="fr-col-12 ">
+                        <div className={styles.banner}>
+                            <div className={styles.banner__content}>
+                                <h1 className={styles.banner__title}>Le Référentiel National des Bâtiments</h1>
+                                <p className={styles.banner__subtitle}>Référencer l'intégralité des bâtiments du territoire français au sein de données et d'outils libres</p>
+                                <a href="/carte" className='fr-btn'>Voir la carte des bâtiments</a>
+                            </div> 
+                        
+                        <Image alt="" src={bannerPic} />
+                        </div>
+                    </div>
+                    
+                    <div className="fr-col-12 ">
+                        <div className={`${styles.block} ${styles["block--yellow"]}`}>
+                        <h3 className={styles.block__title}>48 millions de bâtiments localisés</h3>
+                        <p className={styles.block__subtitle}>Cherchez une adresse ou un identifiant RNB</p>
+                        <form action="/carte" method="get">
+                            <div className="fr-input-group">
+                                <input 
+                                className='fr-input' 
+                                type="text" 
+                                name="q"
+                                placeholder="un bâtiment : SBW3-HVPC-LHD8 ou une adresse : 1 rue des architectes, Nantes"
+                                 />
+                                </div>
+                        </form>
+                        </div>
                     </div>
 
-                    <div className="fr-col-12 fr-col-md-4 ">
-<Card
-    desc="Consultez la définition retenue d'un bâtiment."
-    linkProps={{ href: "/definition" }}
-    title="Définition du bâtiment"
-
-/>
-                    </div>
+                    
 
                 </div>
+
+                <div className={`${styles.homeTools} fr-grid-row fr-grid-row--gutters`}>
+                    <div className="fr-col-12 ">
+                    
+                <h2 className={styles.homeTools__title}>Nos outils et services</h2>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12 fr-col-md-4 ">
+                    <Card
+                    imageUrl={rapprochementIllu.src}
+    desc="Obtenez les identifiants RNB d'un bâtiment à partir de son adresse ou de sa localisation."
+    linkProps={{ href: "/doc" }}
+    title="Rapprochement de bases bâtimentaires"
+                    />
+                    </div>
+                    <div className="fr-col-12 fr-col-md-4 ">
+
+                    <Card
+                    desc="Intégrez les données du RNB dans vos applications"
+                    linkProps={{ href: "/doc" }}
+                    title="API"
+                    />
+                    </div>
+
+                    <div className="fr-col-12 fr-col-md-4 ">
+                    <Card
+                    desc="Utilisez vos outils d'instruction d'ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire"
+                    linkProps={{ href: "/doc" }}
+                    title="Autorisation du droit des sols"
+                    />
+
+                    </div>
+                </div>
+                
+                    </div>
+                </div>
+                
+             
 
 
                 

@@ -1,19 +1,15 @@
 'use client'
 
-
-import { MapContext } from '@/components/MapContext';
+// Styles
 import styles from './RNBMap.module.css'
 
-
 // Hooks
-import { useSearchParams } from 'next/navigation'
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 // Components
 import VisuMap from '@/components/VisuMap'
 import VisuPanel from '@/components/VisuPanel'
 import AddressSearch from '@/components/AddressSearch'
-import BuildingsMap from '@/logic/map';
 
 // Analytics
 import va from "@vercel/analytics"
@@ -28,19 +24,6 @@ import { Providers } from '@/stores/map/provider';
 
 
 export default function RNBMap() {
-
-    
-
-    // Map ctx
-    let bdgmap = new BuildingsMap({
-        position: {
-            center: null,
-            zoom: null
-        }
-    })
-    const [mapCtx, setMapCtx] = useState(bdgmap)
-    
-    
     
 
     // Tracking address search
@@ -65,12 +48,8 @@ export default function RNBMap() {
 
     }, []);
 
-
-
-
     return (
         <>
-            <MapContext.Provider value={[mapCtx, setMapCtx]}>
                 <Providers>
             <div className={styles.geodisplay}>    
                 <div className={styles.geodisplay__panel}>
@@ -88,7 +67,7 @@ export default function RNBMap() {
                 <div className={styles.geodisplay__map}><VisuMap /></div>
             </div>
             </Providers>
-            </MapContext.Provider>
+            
         </>
     )
 }

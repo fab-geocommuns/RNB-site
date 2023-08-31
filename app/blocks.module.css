@@ -1,0 +1,56 @@
+.banner {
+    position: relative;
+
+}
+
+.banner__content {
+    
+    top:0px;
+    bottom: 0;
+    left:0px;
+    background: linear-gradient(90deg, 
+    rgba(255,255,255,0.60) 0%, 
+    rgba(255,255,255,0.55) 70%,
+     rgba(255,255,255,0) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    max-width: 580px;
+    padding-left:40px;
+    padding-right:40px;
+    
+}
+.banner__title {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.1em;
+
+}
+.banner__subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;   
+}
+.block {
+    padding:40px;
+    
+    
+}
+.block__title {
+    color:#21402c;
+    margin-bottom: 0;
+}
+.block__subtitle {
+    color:#21402c;
+    font-weight: 600;
+}
+.block--yellow {
+    background: #6fe49d;
+}
+
+.homeTools {
+    margin-top: 3rem;
+}
+.homeTools__title {
+    text-align: center;
+}
