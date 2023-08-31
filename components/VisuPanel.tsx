@@ -12,7 +12,7 @@ import { addDash } from '@/utils/identifier';
 
 // Store
 import { useSelector, useDispatch } from "react-redux";
-import { bdgApiUrl, fetchBdg, setMoveTo } from '@/stores/map/slice';
+import { bdgApiUrl, setMoveTo } from '@/stores/map/slice';
 
 // Analytics
 import va from "@vercel/analytics"
@@ -64,25 +64,7 @@ export default function VisuPanel() {
         return bdg?.addresses?.filter(a => a.source === "BAN")
     }
 
-    useEffect(() => {
-        
-        if (params.get('id') != null) {
-
-            dispatch(fetchBdg(params.get('id'))).then((res) => {
-                
-                dispatch(setMoveTo({
-                    lat: res.payload.point.coordinates[1],
-                    lng: res.payload.point.coordinates[0],
-                    zoom: 20,
-                    fly: false
-                }))
-
-
-            })
-        }
-
-
-    }, [])
+  
 
    
 

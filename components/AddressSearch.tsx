@@ -1,3 +1,5 @@
+'use client'
+
 // Hooks
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
@@ -7,7 +9,13 @@ import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
-import { setMoveTo, setAddressSearchQuery, setAddressSearchResults, setMarker } from '@/stores/map/slice';
+import { 
+    setMoveTo, 
+    setAddressSearchQuery, 
+    setAddressSearchResults, 
+    setMarker,
+    fetchBdg 
+} from '@/stores/map/slice';
 
 export default function AddressSearch() {
 
@@ -25,18 +33,66 @@ export default function AddressSearch() {
     const handleKeyDown = async (e) => { 
 
         if (e.key === 'Enter') {
-
             e.preventDefault();
-            search()
-            
+            search()            
         }
 
     }
 
+    const queryIsRnbId = () => {
+        return query.match(/^[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}$/)
+    }
+
     const search = async () => {
 
+        if (queryIsRnbId()) {
+            handleBdgQuery()
+        } else {
+            handleAddressQuery()
+        }
+
+    }
+    
+    const handleBdgQuery = async () => {
+
+        dispatch(fetchBdg(query)).then((res) => {
+                
+            console.log('result of fetchBdg', res)
+        
+            dispatch(setMoveTo({
+                lat: res.payload.point.coordinates[1],
+                lng: res.payload.point.coordinates[0],
+                zoom: 20,
+                fly: false
+            }))
+
+
+        })
+
+    }
+
+    const featureToPosition = (feature: any) => {
+
+        const mapPosition = {
+            lat: feature.geometry.coordinates[1],
+            lng: feature.geometry.coordinates[0],
+            zoom: 17
+        }
+
+        if (feature.properties.type == "municipality") {
+            mapPosition.zoom = 13
+          }
+          if (feature.properties.type == "housenumber") {
+            mapPosition.zoom = 18
+          }
+          return mapPosition
+
+    }
+
+    const handleAddressQuery = async () => {
+
         // Add the query to the store
-        const geocode_result = await geocode(addressInput.current.value);
+        const geocode_result = await fetchBanAPI(addressInput.current.value);
 
         dispatch(setAddressSearchQuery(addressInput.current.value))
         dispatch(setAddressSearchResults(geocode_result.features))
@@ -59,31 +115,6 @@ export default function AddressSearch() {
                 search: geocode_result
             })
         }
-
-    }
-    
-
-    const featureToPosition = (feature: any) => {
-
-        const mapPosition = {
-            lat: feature.geometry.coordinates[1],
-            lng: feature.geometry.coordinates[0],
-            zoom: 17
-        }
-
-        if (feature.properties.type == "municipality") {
-            mapPosition.zoom = 13
-          }
-          if (feature.properties.type == "housenumber") {
-            mapPosition.zoom = 18
-          }
-          return mapPosition
-
-    }
-
-    const geocode = async (query: string) => {
-
-        return await fetchBanAPI(query);
 
     }
     const fetchBanAPI = async (query) => {

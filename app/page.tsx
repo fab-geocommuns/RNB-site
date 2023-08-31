@@ -10,6 +10,8 @@ import Image from 'next/image'
 // Assets
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
 import rapprochementIllu from '@/public/images/rapprochement.png'
+import apiIllu from '@/public/images/api.png'
+import adsIllu from '@/public/images/ads.png'
 
 export default function Home() {
 
@@ -44,7 +46,7 @@ export default function Home() {
                                 className='fr-input' 
                                 type="text" 
                                 name="q"
-                                placeholder="un bâtiment : SBW3-HVPC-LHD8 ou une adresse : 1 rue des architectes, Nantes"
+                                placeholder="un bâtiment : SBW3-HVPC-LHD8 ou une adresse : 42, rue des architectes, Nantes"
                                  />
                                 </div>
                         </form>
@@ -71,17 +73,19 @@ export default function Home() {
                     <div className="fr-col-12 fr-col-md-4 ">
 
                     <Card
-                    desc="Intégrez les données du RNB dans vos applications"
+                    imageUrl={apiIllu.src}
+                    desc="Intégrez les données du RNB à vos applications métier et SIG."
                     linkProps={{ href: "/doc" }}
-                    title="API"
+                    title="API et documentation"
                     />
                     </div>
 
                     <div className="fr-col-12 fr-col-md-4 ">
                     <Card
+                    imageUrl={adsIllu.src}
                     desc="Utilisez vos outils d'instruction d'ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire"
-                    linkProps={{ href: "/doc" }}
-                    title="Autorisation du droit des sols"
+                    linkProps={{ href: "/ads" }}
+                    title="Autorisations du droit des sols"
                     />
 
                     </div>
