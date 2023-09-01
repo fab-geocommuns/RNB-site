@@ -6,7 +6,6 @@ import { Header } from "@codegouvfr/react-dsfr/Header";
 // Auth
 import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
-import { text } from "stream/consumers";
 
 export default function RNBHeader() {
 
@@ -28,13 +27,19 @@ export default function RNBHeader() {
         {
           text:"Outils & services",
           linkProps: {
-            href: '/outis-services',
+            href: '/outils-services',
           }
         },
         {
-          text:"Définition",
+          text:"Définition & standards",
           linkProps: {
             href: '/definition',
+          }
+        },
+        {
+          text:"Cas d'usage",
+          linkProps: {
+            href: '/cas',
           }
         },
         {
