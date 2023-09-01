@@ -34,7 +34,7 @@ export default function Home() {
                         <div className={styles.banner}>
                             <div className={styles.banner__content}>
                                 <h1 className={styles.banner__title}>Le Référentiel National des Bâtiments</h1>
-                                <p className={styles.banner__subtitle}>Référencer l'intégralité des bâtiments du territoire français au sein de données et d'outils libres</p>
+                                <p className={styles.banner__subtitle}>Référencer l&apos;intégralité des bâtiments du territoire français au sein de données et d&apos;outils libres</p>
                                 <a href="/carte" className='fr-btn'>Voir la carte des bâtiments</a>
                             </div> 
                         
@@ -117,8 +117,8 @@ export default function Home() {
                     
                 <div className="fr-col-12 ">
                 <div className={styles.homeCardsSection__titleblock}>
-                    <h2 className={styles.homeCardsSection__title}>Cas d'usage</h2>
-                    <p className={styles.homeCardsSection__subtitle}>Exemples d'utilisation du RNB</p>
+                    <h2 className={styles.homeCardsSection__title}>Cas d&apos;usage</h2>
+                    <p className={styles.homeCardsSection__subtitle}>Exemples d&apos;utilisation du RNB</p>
 
                     </div>
                     <div className="fr-grid-row fr-grid-row--gutters">
@@ -162,7 +162,7 @@ export default function Home() {
                         <div className={`${styles.block} ${styles["block--paleGreen"]}`}>
                         <h3 className={styles.block__title}>Définition du bâtiment</h3>
                         <p className={styles.bdgDefinition}>
-                        Construction souterraine et/ou au-dessus du sol, ayant pour objectif d'être permanente, pour abriter des humains ou des activités humaines. Un bâtiment possède a minima un accès depuis l’extérieur. Dans la mesure du possible, un bâtiment est distinct d’un autre dès lors qu’il est impossible de circuler entre eux.
+                        Construction souterraine et/ou au-dessus du sol, ayant pour objectif d&apos;être permanente, pour abriter des humains ou des activités humaines. Un bâtiment possède a minima un accès depuis l’extérieur. Dans la mesure du possible, un bâtiment est distinct d’un autre dès lors qu’il est impossible de circuler entre eux.
                         </p>
                         <p className={styles.bdgDefinitionContext}>
                         La construction du RNB est réalisée en collaboration avec les experts de la donnée géomatique du Conseil National de l’Information Géolocalisée (CNIG). La définition du bâtiment ci-dessus est le standard validé par la Commission des Standards du CNIG.

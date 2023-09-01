@@ -10,7 +10,7 @@ export default function Page() {
 
                 <div className="fr-grid-row">
                     <div className="fr-col-12 fr-col-md-8 fr-py-12v">
-                    <h1>Cas d'usages</h1>
+                    <h1>Cas d&apos;usages</h1>
                     <p>Todo</p>
                     </div>
                 </div>
