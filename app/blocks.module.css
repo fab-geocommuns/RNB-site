@@ -9,8 +9,8 @@
     bottom: 0;
     left:0px;
     background: linear-gradient(90deg, 
-    rgba(255,255,255,0.60) 0%, 
-    rgba(255,255,255,0.55) 70%,
+    rgba(255,255,255,0.70) 0%, 
+    rgba(255,255,255,0.65) 70%,
      rgba(255,255,255,0) 100%);
     display: flex;
     flex-direction: column;
@@ -31,6 +31,37 @@
     font-size: 1.1rem;
     font-weight: 600;   
 }
+
+.banner__arrow {
+    position: absolute;
+    z-index: 10;
+    width: 180px;
+    top:220px;
+    right: 380px;
+    filter: brightness(0) invert(100%) sepia(0%) saturate(7477%) hue-rotate(277deg) brightness(97%) contrast(107%);
+    transform: scale(-1, 1) rotate(-25deg);
+}
+.banner__rnb_id {
+    position: absolute;
+    color:white;
+    top:243px;
+    right:152px;
+    z-index: 10;
+    font-size: 1.75em;
+    transform: rotate(-1.5deg);
+    text-decoration: none;
+    font-weight: 900;
+    background:none;
+    
+    font-family: 'Itim', cursive;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+}
+.banner__rnb_id:hover {
+    color:#88fdaa;
+}
+
+
 .block {
     padding:40px;
     
@@ -41,16 +72,69 @@
     margin-bottom: 0;
 }
 .block__subtitle {
-    color:#21402c;
+    opacity:.8;
     font-weight: 600;
 }
-.block--yellow {
-    background: #6fe49d;
+
+
+.block--paleBlue {
+    background: #e3e3fd;
+}
+.block--paleBlue .block__title {
+    color:#000091;
+}
+.block--paleBlue .block__subtitle {
+    color:#000091;    
 }
 
-.homeTools {
-    margin-top: 3rem;
+
+.block--paleGreen {
+    background: #dffee6;
 }
-.homeTools__title {
+.block--paleGreen .block__title {
+    color:#18753c;
+}
+.block--paleGreen .block__subtitle {
+    color:#204129;    
+}
+
+
+.homeCardsSection__titleblock {
+    margin-bottom: 2rem;
+}
+.homeCardsSection__title {
     text-align: center;
+    margin-bottom: 0.2em;
+}
+.homeCardsSection__subtitle {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.sponsorBlock {
+    display: flex;
+    align-items: center;
+    
+}
+
+.sponsorBlock__logo {
+    margin-right:40px;
+}
+.sponsorBlock__logo--dgaln {
+    
+}
+.sponsorBlock__logo:last-child {
+    margin-right: 0px;
+}
+
+.bdgDefinition {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.2em;
+    padding-left: 25px;
+    border-left: 6px solid rgb(31,141,73,.7);
+}
+.bdgDefinitionContext {
+    opacity: .8;
 }

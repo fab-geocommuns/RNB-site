@@ -11,11 +11,17 @@ import RNBSessionProvider from '@/components/SessionProvider'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
+// Logos
+import logoAdeme from '@/public/images/logos/ademe.svg'
+import logoCstb from '@/public/images/logos/cstb.png'
+import logoIgn from '@/public/images/logos/ign.png'
+import logoDgaln from '@/public/images/logos/dgaln.png'
+
 // Components
 import RNBHeader from "@/components/RNBHeader";
 import { Analytics } from '@vercel/analytics/react';
 import FlashMessage from "@/components/FlashMessage";
-
+import { Footer } from "@codegouvfr/react-dsfr/Footer";
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -30,21 +36,6 @@ export default async function RootLayout({
 }) {
 
 
-  const session = await getServerSession(authOptions)
-
-  const loginQuickAccessItem = session ? {
-    iconId: 'fr-icon-lock-line',
-    linkProps: {
-      href: '/api/auth/signout'
-    },
-    text: 'Se déconnecter'
-  } : {
-    iconId: 'fr-icon-lock-line',
-    linkProps: {
-      href: '/login'
-    },
-    text: 'Se connecter'
-  }
 
   return (    
     
@@ -61,7 +52,18 @@ export default async function RootLayout({
           {children}
           
           
-        
+          <Footer
+          brandTop={<>République<br/>Française</>}
+          accessibility="partially compliant"
+          homeLinkProps={{
+            href: '/',
+            title: 'Accueil RNB',
+          }}
+      
+          
+         
+          
+          ></Footer>
 
         </DsfrProvider>
         </RNBSessionProvider>

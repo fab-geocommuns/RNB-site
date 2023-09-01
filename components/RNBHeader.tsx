@@ -26,21 +26,21 @@ export default function RNBHeader() {
           }
         },
         {
-          text:"Définition du bâtiment",
+          text:"Outils & services",
+          linkProps: {
+            href: '/outis-services',
+          }
+        },
+        {
+          text:"Définition",
           linkProps: {
             href: '/definition',
           }
         },
         {
-          text:"Gestion des ADS",
+          text:"Contact",
           linkProps: {
-            href: '/ads',
-          }
-        },
-        {
-          text:"API et documentation",
-          linkProps: {
-            href: '/doc',
+            href: '/contact',
           }
         },
       ]
