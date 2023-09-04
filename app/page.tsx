@@ -5,10 +5,11 @@ import styles from '@/styles/home.module.scss'
 // Components
 import { Card } from "@codegouvfr/react-dsfr/Card"
 import { SearchBar} from "@codegouvfr/react-dsfr/SearchBar"
-import Image from 'next/image'
+import ImageNext from 'next/image'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
+import bannerPicSm from '@/public/images/homeBanner/bordeaux-sm.jpg'
 import arrowPic from '@/public/images/homeBanner/arrow.svg'
 
 // Logos
@@ -37,10 +38,14 @@ export default function Home() {
                                 <p className={styles.banner__subtitle}>Référencer l&apos;intégralité des bâtiments du territoire français au sein de données et d&apos;outils libres</p>
                                 <a href="/carte" className='fr-btn'>Voir la carte des bâtiments</a>
                             </div> 
-                        
-                        <Image alt="" src={bannerPic} />
-                        <Image src={arrowPic} alt="" className={styles.banner__arrow} />
-                        <a href="/carte?q=7NF2-9LDK-T3H7" className={styles.banner__rnb_id}>7NF2-9LDK-T3H7</a>
+                            
+                            <ImageNext src={arrowPic} alt="" className={styles.banner__arrow} />
+                            <a href="/carte?q=7NF2-9LDK-T3H7" className={styles.banner__rnb_id}>7NF2-9LDK-T3H7</a>
+
+                            <ImageNext className='none md-block'  alt="" src={bannerPic} />
+                            <ImageNext className='md-none resp-image' alt="" src={bannerPicSm} />
+
+                            
                         </div>
                     </div>  
                 </div>
@@ -82,9 +87,9 @@ export default function Home() {
                     <div className="fr-col-12 fr-col-md-4 ">
                     <Card
                     imageUrl={rapprochementIllu.src}
-    desc="Obtenez les identifiants RNB d'un bâtiment à partir de son adresse ou de sa localisation."
-    linkProps={{ href: "/doc" }}
-    title="Rapprochement de bases bâtimentaires"
+                    desc="Obtenez les identifiants RNB d'un bâtiment à partir de son adresse ou de sa localisation."
+                    linkProps={{ href: "/doc" }}
+                    title="Rapprochement de bases bâtimentaires"
                     />
                     </div>
                     <div className="fr-col-12 fr-col-md-4 ">
@@ -175,12 +180,24 @@ export default function Home() {
             <div className="section">
                 <div className={`${styles.homeCardsSection} fr-grid-row fr-grid-row--gutters`}>
                     <div className="fr-col-12 ">
-                        <h6>Les financeurs et soutiens du RNB</h6>
-                        <div className={styles.sponsorBlock}>
-                            <Image className={styles.sponsorBlock__logo} src={logoIgn} alt="Institut national de l’information géographique et forestière" />
-                            <Image className={styles.sponsorBlock__logo} src={logoCstb} alt="Centre scientifique et technique du bâtiment" />
-                            <Image className={styles.sponsorBlock__logo} src={logoAdeme} alt="Agence de la transition écologique" />
-                            <Image className={`${styles.sponsorBlock__logo} ${styles["sponsorBlock__logo--dgaln"]}`} src={logoDgaln} alt="Direction générale de l’aménagement, du logement et de la nature" />
+                        <h6 className='text-center md-text-left'>Les financeurs et soutiens du RNB</h6>
+                        <div className={`fr-grid-row fr-grid-row--gutters ${styles.sponsorGrid}`}>
+                        
+                            <div className="fr-col-md-3 fr-col-6 text-center">
+                                <ImageNext className={styles.sponsorBlock__logo} src={logoIgn} alt="Institut national de l’information géographique et forestière" />
+                            </div>
+                            <div className="fr-col-md-3 fr-col-6 text-center">
+                                <ImageNext className={styles.sponsorBlock__logo} src={logoCstb} alt="Centre scientifique et technique du bâtiment" />
+                            </div>
+                            <div className="fr-col-md-3 fr-col-6 text-center">
+                                <ImageNext className={styles.sponsorBlock__logo} src={logoAdeme} alt="Agence de la transition écologique" />
+                            </div>
+                            <div className="fr-col-md-3 fr-col-6 text-center">
+                                <ImageNext className={`resp-image ${styles.sponsorBlock__logo} ${styles["sponsorBlock__logo--dgaln"]}`} src={logoDgaln} alt="Direction générale de l’aménagement, du logement et de la nature" />
+                            </div>
+                            
+                            
+                            
                         </div>
                     </div>
                 </div>

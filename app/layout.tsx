@@ -4,7 +4,7 @@ import { DsfrProvider } from "@codegouvfr/react-dsfr/next-appdir/DsfrProvider";
 import { getColorSchemeHtmlAttributes } from "@codegouvfr/react-dsfr/next-appdir/getColorSchemeHtmlAttributes";
 import StartDsfr from "./StartDsfr";
 import { defaultColorScheme } from "./defaultColorScheme";
-import  "./global.css";
+import  "@/styles/global.scss";
 
 // Auth
 import RNBSessionProvider from '@/components/SessionProvider'

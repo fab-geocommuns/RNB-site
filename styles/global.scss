@@ -1,3 +1,5 @@
+@import "vars.scss";
+
 @font-face {
     font-family:"Itim";
     src: url("/fonts/Itim-Regular.ttf");
@@ -16,7 +18,12 @@ html, body {
 }
 
 .section {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
+
+    @media (min-width: $bp-md) {
+        margin-bottom: 4rem;
+    }
+
 }
 .section:last-child {
     margin-bottom: 0;
@@ -48,4 +55,36 @@ html, body {
 
 .maplibregl-ctrl-styles-label {
     font-weight: 500;
+}
+
+
+/* Display utils */
+
+.none {
+    display: none;
+}
+
+@media (min-width: $bp-md) {
+    .md-none {
+        display: none;
+    }
+    .md-block {
+        display: block;
+    }
+}
+
+.resp-image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Text utils */
+.text-center {
+    text-align: center;
+}
+
+.md-text-left {
+    @media (min-width: $bp-md) {
+        text-align: left;
+    }
 }
