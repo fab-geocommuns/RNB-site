@@ -15,7 +15,7 @@ export default function Page() {
 
                     <h2>L&apos;intérêt du RNB</h2>
                     <p>La saisine d’un ID bâtiment lors du processus de référencement des ERP doit permettre de préciser leur géolocalisation, de faciliter et fiabiliser le processus de recensement et, de manière globale, d’aider les SDIS à assurer leur mission de suivi des ERP.</p>
-                    <p>Par ailleurs, en 2023, chaque SDIS tient à jour sa propre base de données des bâtiments "sensibles" qui est utile à leurs interventions, sans agrégation ou règles de normalisation à l’échelle nationale. Cela rend les échanges d’information entre SDIS (ou avec d’autres acteurs) complexes car la seule donnée pivot est le champ texte de l’adresse. L’usage du RNB et de l'identifiant unique des bâtiments permet donc une approche normalisée pour faciliter l’échange d’informations.</p>
+                    <p>Par ailleurs, en 2023, chaque SDIS tient à jour sa propre base de données des bâtiments &quot;sensibles&quot; qui est utile à leurs interventions, sans agrégation ou règles de normalisation à l&apos;échelle nationale. Cela rend les échanges d&apos;information entre SDIS (ou avec d&apos;autres acteurs) complexes car la seule donnée pivot est le champ texte de l&apos;adresse. L&apos;usage du RNB et de l&apos;identifiant unique des bâtiments permet donc une approche normalisée pour faciliter l&apos;échange d&apos;informations.</p>
 
                     <h2>L&apos;impact</h2>
                     <p>Au delà de l&apos;impact sur les missions des SDIS, le RNB permettra notamment de faciliter les échanges avec la Direction Départementale des Territoires (DDT) en charge d’établir le Plan de prévention des risques (inondation, incendies, accès à l’eau).</p>

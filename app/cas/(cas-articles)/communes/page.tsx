@@ -10,7 +10,7 @@ export default function Page() {
                     <h1 className="text-blue">Faciliter les échanges d&apos;informations bâtimentaires au sein des communes</h1>
                     <h2>Le problème</h2>
                     <p>Il existe aujourd’hui une grande disparité d’information sur le parc bâti selon la taille et les moyens des communes françaises. Même pour les plus grosses métropoles disposant de compétences SIG et numérique, <span className="stab stab--blue">il est difficile d’avoir une vision suffisamment précise et à jour de leur parc de bâtiments.</span></p>
-<p>Cela génère d’importants manques à gagner pour les communes dont les ressources sont pourtant déjà limitées :</p>
+<p>Cela génère d&apos;importants manques à gagner pour les communes dont les ressources sont pourtant déjà limitées :</p>
 <ul>
 <li>La mauvaise connaissance de nouvelles constructions peut complexifier le recensement de la population. Or il s’agit d’une variable clé pour définir la dotation versée par l’Etat.</li>
 <li>Les communes ont une mauvaise connaissance de leur propre patrimoine bâti (public) et ont du mal à l’entretenir, ou encore payent des abonnements d’électricité sur des bâtiments qui ne leur appartiennent plus.</li>
@@ -20,7 +20,7 @@ export default function Page() {
 <h2>L&apos;intérêt du RNB</h2>
 
 <Highlight>
-"Les gains en efficacité des procédures et les facilités qui en découlent laissent entrevoir un ROI global qui peut être estimé à plusieurs ETP au travers de toutes les directions” <br /><b>Toulouse Métropole - Direction du Numérique</b>
+&quot;Les gains en efficacité des procédures et les facilités qui en découlent laissent entrevoir un ROI global qui peut être estimé à plusieurs ETP au travers de toutes les directions&quot; <br /><b>Toulouse Métropole - Direction du Numérique</b>
 </Highlight>
 
 <p>La <a href="/definition">définition commune de l’objet “bâti”</a> ainsi que l’existence d’un référentiel national des bâtiments partagé par tous doit permettre à toutes les communes d’assurer la cohérence du système d’information et la transversalité des données de la collectivité entre les différents services (finance, urbanisme, habitat, patrimoine, environnement, etc.).</p>
@@ -29,8 +29,8 @@ export default function Page() {
 
 <h2>L&apos;impact</h2>
 <ul>
-    <li>Pour les services de l’urbanisme, il est essentiel de dialoguer avec le SIG afin de partager un référentiel commun et faire circuler les informations liées au Plan Local d'Urbanisme Intercommunal ou l’instruction des demandes d’autorisation et suivi des permis.</li>
-<li>Pour la direction de l’environnement, la maille bâtiment permet de mieux évaluer les contraintes liées aux projets de rénovation énergétique des bâtiments, cadastre solaire, îlots de chaleur, raccordement aux eaux usées, ce que ne permet pas toujours la maille adresse ou cadastrale utilisée aujourd’hui.</li>
+    <li>Pour les services de l&apos;urbanisme, il est essentiel de dialoguer avec le SIG afin de partager un référentiel commun et faire circuler les informations liées au Plan Local d&apos;Urbanisme Intercommunal ou l&apos;instruction des demandes d&apos;autorisation et suivi des permis.</li>
+<li>Pour la direction de l&apos;environnement, la maille bâtiment permet de mieux évaluer les contraintes liées aux projets de rénovation énergétique des bâtiments, cadastre solaire, îlots de chaleur, raccordement aux eaux usées, ce que ne permet pas toujours la maille adresse ou cadastrale utilisée aujourd’hui.</li>
 <li>Pour les services de maintenance, le RNB permet d’affecter correctement les agents et de préciser les lieux d’intervention et ce quelque soit le domaine d’intervention (maintenance informatique, entretien des chaudières, système électrique, etc….)</li>
 </ul>
 
