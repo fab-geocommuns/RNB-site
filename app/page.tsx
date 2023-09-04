@@ -1,6 +1,6 @@
 
 // Styles
-import styles from './blocks.module.css'
+import styles from '@/styles/home.module.scss'
 
 // Components
 import { Card } from "@codegouvfr/react-dsfr/Card"
