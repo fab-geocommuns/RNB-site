@@ -1,4 +1,5 @@
-import Link from "next/link"
+// Comps
+import CasListe from '@/components/CasListe'
 
 
 export default function Page() {
@@ -9,9 +10,10 @@ export default function Page() {
             <div className="fr-container">
 
                 <div className="fr-grid-row">
-                    <div className="fr-col-12 fr-col-md-8 fr-py-12v">
+                    <div className="fr-col-12 fr-py-12v">
                     <h1>Cas d&apos;usages</h1>
-                    <p>Todo</p>
+                    <CasListe />
+
                     </div>
                 </div>
             </div>
