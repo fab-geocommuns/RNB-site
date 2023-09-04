@@ -44,8 +44,8 @@ export default function Outils() {
                         <div className="fr-col-12 fr-col-md-6">
                             <div className={`${styles.tool} ${styles["tool--yellow"]}`}>
                                 <h2 className={styles.toolTitle}>Croisement de bases bâtimentaires</h2>
-                                <p className={styles.toolSubtitle}>Vous souhaitez croiser deux bases de données bâtimentaires mais n'avez pas les ressources pour le faire ?<br />
-                                <b>Nous offrons ce service jusqu'en décembre 2023.</b></p>
+                                <p className={styles.toolSubtitle}>Vous souhaitez croiser deux bases de données bâtimentaires mais n&apos;avez pas les ressources pour le faire ?<br />
+                                <b>Nous offrons ce service jusqu&apos;en décembre 2023.</b></p>
                                 <div className={styles.toolLinkShell}><a href="#" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@ export default function Outils() {
                                 <h2 className={styles.toolTitle}>Autorisation du droit des sols</h2>
                                 <p className={styles.toolSubtitle}>
                                     <b>Résérvé aux instructeurs d&apos;ADS</b><br />
-                                    Utilisez vos outils d&apos;instruction d'ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire.</p>
+                                    Utilisez vos outils d&apos;instruction d&apos;ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire.</p>
                                     <div className={styles.toolLinkShell}>
                                     <a className="fr-btn fr-btn--secondary" href="/carte">En savoir plus
                                     </a>
