@@ -79,8 +79,8 @@ export default function RNBHeader() {
         <>
         <Header 
           brandTop={<>République<br/>Française</>}
-          serviceTitle="RNB"
-          serviceTagline="Le Référentiel National des Bâtiments"
+          serviceTitle="Référentiel National des Bâtiments"
+          
           navigation={nav}
           homeLinkProps={{
             href: '/',

@@ -1,7 +1,7 @@
 'use client'
 
 // Styles
-import styles from './RNBMap.module.css'
+import styles from '@/styles/map.module.scss'
 
 // Hooks
 import { useEffect } from 'react';
@@ -56,7 +56,7 @@ export default function RNBMap() {
 
                     <div className={'fr-mt-2v'}>
                         <div>
-                            <label className="fr-label">Rechercher une adresse</label>
+                            <label className={styles.searchLabel}>Rechercher un bâtiment, une adresse</label>
                             </div>
                         <AddressSearch />
                     </div>

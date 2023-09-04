@@ -105,7 +105,7 @@ export default function Home() {
                     <div className="fr-col-12 fr-col-md-4 ">
                     <Card
                     imageUrl={adsIllu.src}
-                    desc="Utilisez vos outils d'instruction d'ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire"
+                    desc="Utilisez vos outils d'instruction d'ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire."
                     linkProps={{ href: "/ads" }}
                     title="Autorisations du droit des sols"
                     />

@@ -153,7 +153,7 @@ export default function AddressSearch() {
         <>
         <input 
         className="fr-input" 
-        placeholder='ex : 1 rue de la paix, Paris'
+        placeholder='ex : 7NF2-9LDK-T3H7'
         type="text" 
         autoComplete='off'
         name="address" 

@@ -4,8 +4,8 @@
 }
 
 .geodisplay__panel {
-    min-width: 300px;
-    padding:10px;
+    min-width: 350px;
+    padding:20px 10px;
     height: 100%;
     overflow-y: auto;
 }
@@ -14,4 +14,12 @@
     height: 100%;
     flex:1;
     
+}
+
+.searchLabel {
+    font-size: .9em;
+  line-height: 1.3em;
+  opacity: 1;
+  font-weight: 600;
+  margin-bottom: .2rem;
 }
