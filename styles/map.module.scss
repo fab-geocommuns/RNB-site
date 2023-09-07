@@ -1,5 +1,48 @@
+@import "vars.scss";
+
+.map {
+    height: calc(100% - 140.5px);
+    position:relative;
+
+    @media (min-width: $bp-md) {
+        height: calc(100% - 172.5px);
+    }
+}
+
+
+.map__InputShell {
+    padding:6px;
+    background:white;
+    position:absolute;
+    z-index:100;
+
+    top:12px;
+    right:12px;
+    left:12px;
+
+    box-shadow:0 0 0 2px rgba(0,0,0,.1);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+
+    @media (min-width: $bp-md) {
+        max-width: 400px;
+        width: 400px;
+        right: auto;
+    }
+
+}
+
+
+
+.map__mapShell {
+    height: 100%;
+}
+
+
+
+
 .geodisplay {
-    height: calc(100% - 172.5px);
+    
     display: flex;
 }
 
@@ -13,13 +56,12 @@
 .geodisplay__map {
     height: 100%;
     flex:1;
-    
 }
 
 .searchLabel {
     font-size: .9em;
-  line-height: 1.3em;
-  opacity: 1;
-  font-weight: 600;
-  margin-bottom: .2rem;
+    line-height: 1.3em;
+    opacity: 1;
+    font-weight: 600;
+    margin-bottom: .2rem;
 }

@@ -3,6 +3,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    panelIsOpen: false,
     addressSearch: {
         q: null,
         results: null
@@ -24,6 +25,12 @@ export const mapSlice = createSlice({
     name: 'map',
     initialState,
     reducers: {
+        openPanel(state) {
+            state.panelIsOpen = true
+        },
+        closePanel(state) {
+            state.panelIsOpen = false
+        },
         setMarker(state, action) {
             state.marker = action.payload
         },
@@ -66,5 +73,12 @@ export function bdgApiUrl(bdgId: string) {
 }
 
 
-export const { setMarker, setMoveTo, setAddressSearchQuery, setAddressSearchResults } = mapSlice.actions
+export const { 
+    setMarker, 
+    setMoveTo, 
+    setAddressSearchQuery, 
+    setAddressSearchResults,
+    openPanel,
+    closePanel
+} = mapSlice.actions
 export default mapSlice.reducer

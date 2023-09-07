@@ -17,7 +17,7 @@ import React, { useRef, useEffect } from 'react';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBdg } from "@/stores/map/slice";
+import { fetchBdg, openPanel } from "@/stores/map/slice";
 
 export default function VisuMap() {
 
@@ -57,12 +57,28 @@ export default function VisuMap() {
 
   const initMapControls = () => {
 
+    // Attribution
+    const attributionControl = new maplibregl.AttributionControl({
+      compact: false
+    })
+    map.current.addControl(attributionControl, 'bottom-right')
+
+
+    // Style switcher
+    const styleSwitcher = new MapStyleSwitcherControl({
+      styles: STYLES,
+      chosenStyle: 'vector',
+      icon: fr.cx("fr-icon-road-map-line")
+    })
+    map.current.addControl(styleSwitcher, 'bottom-right')
+
     // Zoom
     const navControl = new maplibregl.NavigationControl({
       showCompass: false,
       showZoom: true
     })
-    map.current.addControl(navControl, 'top-right')
+
+    map.current.addControl(navControl, 'bottom-right')
     // Geoloc
     const geolocControl = new maplibregl.GeolocateControl({
       positionOptions: {
@@ -75,21 +91,15 @@ export default function VisuMap() {
         maxZoom: 18
       }
     })
-    map.current.addControl(geolocControl, 'top-right')
+    map.current.addControl(geolocControl, 'bottom-right')
 
-    // Style switcher
-    const styleSwitcher = new MapStyleSwitcherControl({
-      styles: STYLES,
-      chosenStyle: 'vector',
-      icon: fr.cx("fr-icon-road-map-line")
-    })
-    map.current.addControl(styleSwitcher, 'top-left')
+    
 
   }
 
-  const initMapEvents = () => {
+  const initMapEvents = async () => {
 
-    map.current.on('click', 'bdgs', function (e) {
+    map.current.on('click', 'bdgs', async function (e) {
 
       if (e.features.length > 0) {
 
@@ -99,7 +109,8 @@ export default function VisuMap() {
         highlightBdg(rnb_id)
 
         // Dispatch to store
-        dispatch(fetchBdg(rnb_id))
+        await dispatch(fetchBdg(rnb_id))
+        dispatch(openPanel())
       }
 
     });
@@ -153,8 +164,6 @@ export default function VisuMap() {
 
     map.current.on('style.load', () => {
 
-
-      console.log('add source and layer')
       map.current.addSource('bdgtiles', {
         type: "vector",
         tiles: [
@@ -223,7 +232,8 @@ export default function VisuMap() {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         center: [2.852577494863663, 46.820936580547134],
-        zoom: 5
+        zoom: 5,
+        attributionControl: false
       });
 
 

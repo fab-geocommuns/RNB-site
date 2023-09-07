@@ -1,18 +1,20 @@
+
+
 // Hooks
-import React, { use, useContext, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation'
 
 // Styles
 import { fr } from "@codegouvfr/react-dsfr";
-import styles from './VisuPanel.module.css'
+import styles from '@/styles/mapPanel.module.scss'
 
 // UI Tools
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { addDash } from '@/utils/identifier';
 
 // Store
-import { useSelector, useDispatch } from "react-redux";
-import { bdgApiUrl, setMoveTo } from '@/stores/map/slice';
+import { useDispatch, useSelector } from "react-redux";
+import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 
 // Analytics
 import va from "@vercel/analytics"
@@ -21,8 +23,10 @@ import va from "@vercel/analytics"
 export default function VisuPanel() {
 
     // Store
-    const dispatch = useDispatch()
     const bdg = useSelector((state) => state.panelBdg)
+    const isOpen = useSelector((state) => state.panelIsOpen)
+    const dispatch = useDispatch()
+
 
     // URL params
     const params = useSearchParams()
@@ -60,20 +64,25 @@ export default function VisuPanel() {
     }
 
     const banAddresses = () => {
-
         return bdg?.addresses?.filter(a => a.source === "BAN")
     }
 
-  
+    const open = () => {
+        dispatch(openPanel())
+        
+    }
+    const close = () => {
+        dispatch(closePanel())
+    }
 
-   
 
-    if (hasBdg()) {
+    if (isOpen) {
         return (
             <>
-            <div>
-                <hr />
+            <div className={styles.shell}>
                 <div className={styles.section}>
+
+                <a href="#" onClick={close} className={styles.closeLink}><i className='fr-icon-close-line' /></a>
                     
                 <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
 

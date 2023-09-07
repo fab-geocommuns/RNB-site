@@ -153,7 +153,7 @@ export default function AddressSearch() {
         <>
         <input 
         className="fr-input" 
-        placeholder='ex : 7NF2-9LDK-T3H7'
+        placeholder='Chercher une adresse, un identifiant RNB'
         type="text" 
         autoComplete='off'
         name="address" 

@@ -51,21 +51,26 @@ export default function RNBMap() {
     return (
         <>
                 <Providers>
-            <div className={styles.geodisplay}>    
-                <div className={styles.geodisplay__panel}>
 
-                    <div className={'fr-mt-2v'}>
-                        <div>
-                            <label className={styles.searchLabel}>Rechercher un bâtiment, une adresse</label>
-                            </div>
+
+                <div className={styles.map}>
+
+                    <div className={styles.map__InputShell}>
+                        
                         <AddressSearch />
                     </div>
-                    <div className={'fr-mt-8v'}>
-                        <VisuPanel />
+
+                    
+                    <VisuPanel />
+                    
+                    
+                    <div className={styles.map__mapShell}>
+                        <VisuMap />
                     </div>
-                    </div>    
-                <div className={styles.geodisplay__map}><VisuMap /></div>
-            </div>
+                    
+                </div>
+
+           
             </Providers>
             
         </>
