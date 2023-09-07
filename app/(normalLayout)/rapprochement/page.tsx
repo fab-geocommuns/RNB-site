@@ -49,7 +49,7 @@ export default function Page() {
                                             </div>
                                             <h3 className={styles.benef__title}>Améliorez vos analyses</h3>
                                             <div className={styles.benef__desc}>
-                                            Créez de nouvelles analyses en croisant vos bases bâtimentaires jusqu'à présent isolées.
+                                            Créez de nouvelles analyses en croisant vos bases bâtimentaires jusqu&apos;à présent isolées.
                                             </div>
                                             
                                         </div>
@@ -150,7 +150,7 @@ export default function Page() {
                                 <p className="blockSubtitle">
                                     Vous préférez croiser vos bases en utilisant directement nos outils ?
                                 </p>
-                                <p>Nos APIs vous permettent d'obtenir l&apos;identifiant RNB de vos bâtiments à partir d&apos;une adresse, d&apos;un point ou d&apos;un polygone.</p>
+                                <p>Nos APIs vous permettent d&apos;obtenir l&apos;identifiant RNB de vos bâtiments à partir d&apos;une adresse, d&apos;un point ou d&apos;un polygone.</p>
                                 <div className="blockLinkShell blockLinkShell--noGrow">
                                             <a className="fr-btn fr-btn--secondary" href="/doc">Consulter la documentation</a>
                                     </div>
