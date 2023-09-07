@@ -14,7 +14,7 @@ import {
     setAddressSearchQuery, 
     setAddressSearchResults, 
     setMarker,
-    fetchBdg 
+    fetchBdg
 } from '@/stores/map/slice';
 
 export default function AddressSearch() {

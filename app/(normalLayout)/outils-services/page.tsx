@@ -1,7 +1,7 @@
 
 // Styles
 import styles from '@/styles/tools.module.scss'
-import { fr } from "@codegouvfr/react-dsfr";
+
 
 export default function Outils() {
 
@@ -42,15 +42,15 @@ export default function Outils() {
                             </div>
                         </div>
                         <div className="fr-col-12 fr-col-md-6">
-                            <div className={`${styles.tool} ${styles["tool--yellow"]}`}>
+                            <div className={`${styles.tool} ${styles["tool--yellow"]} ${styles["tool--fill"]}`}>
                                 <h2 className={styles.toolTitle}>Croisement de bases bâtimentaires</h2>
                                 <p className={styles.toolSubtitle}>Vous souhaitez croiser deux bases de données bâtimentaires mais n&apos;avez pas les ressources pour le faire ?<br />
                                 <b>Nous offrons ce service jusqu&apos;en décembre 2023.</b></p>
-                                <div className={styles.toolLinkShell}><a href="#" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
+                                <div className={styles.toolLinkShell}><a href="/rapprochement" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
                             </div>
                         </div>
                         <div className="fr-col-12 fr-col-md-6">
-                            <div className={`${styles.tool} ${styles["tool--green"]}`}>
+                            <div className={`${styles.tool} ${styles["tool--green"]} ${styles["tool--fill"]}`}>
                                 <h2 className={styles.toolTitle}>API et documentation</h2>
                                 <p className={styles.toolSubtitle}>Intégrez le référentiel à vos systèmes. Obtenez les identifiants RNB de vos bâtiments. Utilisez nos API et tuiles vectorielles en accès libre.</p>
                                 <div className={styles.toolLinkShell}><a href="/doc" className='fr-btn fr-btn--secondary'>Consulter la documentation</a></div>
