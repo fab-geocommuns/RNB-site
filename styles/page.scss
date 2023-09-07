@@ -1,0 +1,125 @@
+
+// Sections
+
+.pageContainer {
+    padding-top:3rem;
+    padding-bottom:3rem;
+    max-width: 1000px;
+}
+
+.section {
+    margin-bottom: 2rem;
+
+    @media (min-width: $bp-md) {
+        margin-bottom: 4rem;
+    }
+
+}
+.section:last-child {
+    margin-bottom: 0;
+}
+
+
+// Color blocks
+
+.block {
+    padding: 40px;
+    
+    display: flex;
+    flex-direction: column;
+
+    form {
+        margin-bottom: 2rem;
+    }
+
+
+}
+
+.block--fill {
+    height: 100%;
+}
+
+.blockList {
+    li {
+        margin-bottom: .8rem;
+    }
+}
+
+.blockLinkShell {
+    margin-top: .6rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+
+    &.blockLinkShell--noGrow {
+        flex-grow: 0;
+    }
+    
+}
+
+
+.block--blue {
+    background-color: #dde5ff;
+
+    .blockTitle, .blockSubtitle {
+        color:#1d2437;
+    }   
+    
+}
+
+.block--white {
+    background-color: #fff;
+
+    .blockTitle, .blockSubtitle {
+        color:inherit;
+    }   
+    
+}
+
+.block--yellow {
+    background-color: #fef7da;
+
+    .blockTitle, .blockSubtitle {
+        color:#3f3a20;
+    }   
+    
+}
+
+.block--red {
+    background-color: #ffbeb4;
+    .blockTitle, .blockSubtitle {
+        color:#5d2c20;
+    }   
+}
+.block--archipel {
+    background-color: #e5fbfd;
+    .blockTitle, .blockSubtitle {
+        color:#233e41;
+    }
+}
+
+.block--pink {
+    background-color: #fef3fd;
+    .blockTitle, .blockSubtitle {
+        color:#502e4d;
+    }
+}
+
+.block--green {
+    background-color: #e6feda;
+
+    .blockTitle, .blockSubtitle {
+        color:#2a401a;
+    }   
+    
+}
+
+.blockTitle {
+    font-size: 1.6em;
+    margin-bottom: .3rem;
+}
+.blockSubtitle {
+    font-size: 1.05em;
+    //font-weight: 600;
+    opacity: .90;
+}

@@ -1,0 +1,41 @@
+.serviceIllu {
+    width: 100%;
+    height: auto;
+}
+
+.benefShell {
+    display: flex;
+    justify-content: space-between;
+    padding:90px 0 120px 0;
+}
+
+.benef {
+    width: 400px;
+    max-width: 400px;
+    margin-right: 50px;
+}
+.benef:nth-child(2) {
+    margin-top: 0px;
+}
+.benef:nth-child(1),
+.benef:nth-child(3) {
+    margin-top: 0px;
+}
+.benef:last-child {
+    margin-right: 0;
+}
+.benef__illu {
+    width: 100px;
+    height: auto;    
+    margin-bottom: .8rem;
+    filter: grayscale(100%);
+}
+.benef__title {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: .4rem;
+    color:#0063cb;
+}
+.benef__desc {
+    font-size: 1.1em;
+}

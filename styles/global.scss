@@ -5,29 +5,15 @@
     src: url("/fonts/Itim-Regular.ttf");
 }
 
+@import "page.scss";
+
 html, body {
     min-height: 100%;
     height: 100%;
 }
 
 /* Pages */
-.pageContainer {
-    padding-top:3rem;
-    padding-bottom:3rem;
-    max-width: 1000px;
-}
 
-.section {
-    margin-bottom: 2rem;
-
-    @media (min-width: $bp-md) {
-        margin-bottom: 4rem;
-    }
-
-}
-.section:last-child {
-    margin-bottom: 0;
-}
 
 
 /* Map controls */

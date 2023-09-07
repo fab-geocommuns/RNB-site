@@ -1,13 +1,15 @@
 // Styles
-import styles from '@/styles/tools.module.scss'
-import stylesHome from '@/styles/home.module.scss'
+import styles from '@/styles/toolDetail.module.scss'
 
 // Comps
 import ImageNext from 'next/image'
 import CasList from '@/components/CasListe'
 
-// Logos
+// Images
 import rapprochementIllu from '@/public/images/rapprochement-service.svg'
+import dashboardIllu from '@/public/images/dashboard.svg'
+import shareIllu from '@/public/images/share-doc.svg'
+import teamIllu from '@/public/images/teamwork.svg'
 
 export default function Page() {
     return (
@@ -15,55 +17,84 @@ export default function Page() {
         
         <div className="fr-container">
                 <div className="fr-grid-row ">
-                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-py-12v">
+
+
+                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pt-12v">
                         <h1>Service de rapprochements</h1>
 
 
-                        <div className={`fr-grid-row fr-grid-row--gutters section`}>
-                            <div className="fr-col-12">
-                                <div className={`${styles.tool} ${styles["tool--yellow"]}`}>
-                                    <h2 className={styles.toolTitle}>Nous croisons vos bases de données de bâtiments</h2>
-                                    <p>Vous avez des bases de données de bâtiments que vous aimeriez croiser produire de nouvelles analyses, avoir une connaissance plus fine de votre parc ? Obtenez rapidement des correspondances de qualité entre différentes bases de données bâtimentaires, grâce au Référentiel National des Bâtiments.</p>
+                        
+                            
+                                <div className="block block--yellow">
+                                    <h2 className="blockTitle">Nous croisons vos bases de données de bâtiments</h2>
+                                    <p>Vous avez des bases de données de bâtiments que vous aimeriez croiser pour produire de nouvelles analyses, avoir une connaissance plus fine de votre parc ? Obtenez rapidement des correspondances de qualité entre différentes bases de données bâtimentaires, grâce au Référentiel National des Bâtiments.</p>
                                     <p><b>Nous proposons ce service gratuit et sur-mesure jusqu&apos;en décembre 2023, sous réserve de créneaux disponbles.<br />
                                     Vous souhaitez profiter de ce service ?</b></p>
-                                    <div className={` ${styles.toolLinkShell} ${styles["toolLinkShell--noGrow"]} `}>
+                                    <div className="blockLinkShell blockLinkShell--noGrow">
                                             <a className="fr-btn" href="/contact">Contactez nous</a>
                                     </div>
                                 </div>
-                            </div>
-                            <div className='fr-col-12 fr-col-md-5'>
-                                <div className={`${styles.tool} ${styles["tool--green"]} ${styles["tool--fill"]}`}>
-                                <h2 className={styles.toolTitle}>Pourquoi gratuit ?</h2>
-                                <p className={styles.toolSubtitle}>
-                                    Nous avons créé des outils de rapprochement de base et souhaitons maintenant les confronter à une variété cas pour renforcer leur efficacité.
-                                </p>
-                                <p>
-                                    Appliquer ces outils à vos cas d&apos;usage est le meilleur moyen de les faire évoluer.
-                                </p>
-                                </div>
-                            </div>
-                            <div className='fr-col-12 fr-col-md-7'>
+                    </div>
+                    <div className="fr-col-12">
+                            
 
-                                <div className={`${styles.tool} ${styles["tool--pink"]} ${styles["tool--fill"]}`}>
-                                <h2 className={styles.toolTitle}>Self-service</h2>
-                                <p className={styles.toolSubtitle}>
-                                    Vous préférez croiser vos bases en utilisant directement nos outils ?
-                                </p>
-                                <p>Nos APIs vous permettent d'obtenir l&apos;identifiant RNB de vos bâtiments à partir d&apos;une adresse, d&apos;un point ou d&apos;un polygone.</p>
-                                <div className={` ${styles.toolLinkShell} ${styles["toolLinkShell--noGrow"]} `}>
-                                            <a className="fr-btn fr-btn--secondary" href="/doc">Consulter la documentation</a>
+                            
+                                
+                                    
+                                    
+                                    <div className={styles.benefShell}>
+                                        <div className={styles.benef}>
+                                            <div>
+                                                <ImageNext className={styles.benef__illu} src={dashboardIllu} alt="Croisez des bases isolées pour produire de nouvelles analyses" />
+                                            </div>
+                                            <h3 className={styles.benef__title}>Améliorez vos analyses</h3>
+                                            <div className={styles.benef__desc}>
+                                            Créez de nouvelles analyses en croisant vos bases bâtimentaires jusqu'à présent isolées.
+                                            </div>
+                                            
+                                        </div>
+
+
+                                        <div className={styles.benef}>
+                                            <div>
+                                                <ImageNext className={styles.benef__illu} src={shareIllu} alt="Faites circuler l'information bâtimentaire" />
+                                            </div>
+                                            <h3 className={styles.benef__title}>Faites circuler l&apos;information</h3>
+                                            <div className={styles.benef__desc}>
+                                            Partager des informations bâtimentaires qualitatives entre différentes organisations et services.
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div className={styles.benef}>
+                                            <div>
+                                                <ImageNext className={styles.benef__illu} src={teamIllu} alt="Evitez le travail en double" />
+                                            </div>
+                                            <h3 className={styles.benef__title}>Travaillez en équipe</h3>
+                                            <div className={styles.benef__desc}>
+                                            Réduisez le temps passé à la collecte manuelle, l&apos;actualisation et au croisement de données.
+                                            </div>
+                                            
+                                        </div>
+
+                                        
+                                        
                                     </div>
-                                </div>
 
-                            </div>
+
+                                
+                    </div>
+                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pb-12v"> 
+                    <div className="section">
+                    <div className="fr-grid-row fr-grid-row--gutters">
                             <div className="fr-col-12">
-                                <div className={`${styles.tool} ${styles["tool--blue"]}`}>
-                                    <h2 className={`{styles.toolTitle}`}>Comment ça marche ?</h2>
+                                <div className="block block--blue">
+                                    <h2 className="blockTitle">Comment ça marche ?</h2>
 
                                     <div className="fr-grid-row fr-grid-row--gutters">
                                         <div className="fr-col-12 fr-col-md-7">
 
-                                        <ol className={styles.toolList}>
+                                        <ol className="blockList">
                                             <li>
                                                 <b>Décrivez-nous votre besoin</b><br />
                                                 <a href="/contact">Envoyez-nous votre demande</a> et précisez votre situation et vos attentes.
@@ -86,7 +117,7 @@ export default function Page() {
                                             </li>
                                         </ol>
 
-                                        <div className={` ${styles.toolLinkShell} ${styles["toolLinkShell--noGrow"]} `}>
+                                        <div className="blockLinkShell blockLinkShell--noGrow">
                                             <a className="fr-btn" href="/contact">Contactez nous</a>
                                         </div>
 
@@ -100,15 +131,38 @@ export default function Page() {
                                   
 
                                 </div>
+
+                                <div className='fr-col-12 fr-col-md-5'>
+                                <div className="block block--green block--fill">
+                                <h2 className="blockTitle">Pourquoi gratuit ?</h2>
+                                <p className="blockSubtitle">
+                                    Nous avons créé des outils de rapprochement de base et souhaitons maintenant les confronter à une variété cas pour renforcer leur efficacité.
+                                </p>
+                                <p>
+                                    Appliquer ces outils à vos cas d&apos;usage est le meilleur moyen de les faire évoluer.
+                                </p>
+                                </div>
                             </div>
+                            <div className='fr-col-12 fr-col-md-7'>
 
-                            
+                                <div className="block block--pink block--fill">
+                                <h2 className="blockTitle">Self-service</h2>
+                                <p className="blockSubtitle">
+                                    Vous préférez croiser vos bases en utilisant directement nos outils ?
+                                </p>
+                                <p>Nos APIs vous permettent d'obtenir l&apos;identifiant RNB de vos bâtiments à partir d&apos;une adresse, d&apos;un point ou d&apos;un polygone.</p>
+                                <div className="blockLinkShell blockLinkShell--noGrow">
+                                            <a className="fr-btn fr-btn--secondary" href="/doc">Consulter la documentation</a>
+                                    </div>
+                                </div>
 
+                            </div>
+                          
+                            </div>    
+
+                            </div>
                             <div className="section">
-                <div className={`${stylesHome.homeCardsSection} fr-grid-row fr-grid-row--gutters`}>
-                    
-                <div className="fr-col-12 ">
-                <div className={stylesHome.homeCardsSection__titleblock}>
+                            <div className={styles.homeCardsSection__titleblock}>
                     <h2 >Cas d&apos;usage</h2>
                     <p>
                         Vous êtes une commune, une métropole, un Service départemental d’incendie et de secours (SDIS), un fournisseur de gaz ou d’électricité ou une administration publique, ce service est fait pour vous.<br />
@@ -118,12 +172,14 @@ export default function Page() {
                 </div>
 
                 <CasList />
-                </div>
-                </div>
+                            </div>
+                            </div>
 
-            </div>
+                            
 
-                        </div>
+                            
+
+                            
 
                         
 

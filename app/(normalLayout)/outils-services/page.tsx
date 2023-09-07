@@ -18,9 +18,9 @@ export default function Outils() {
 
                     <div className="fr-grid-row fr-grid-row--gutters">
                         <div className="fr-col-12">
-                            <div className={`${styles.tool} ${styles["tool--blue"]}`}>
-                                <h2 className={styles.toolTitle}>Carte des bâtiments</h2>
-                                <p className={styles.toolSubtitle}>Consultez les 48 millions de bâtiments du référentiel. Retrouvez un bâtiment grâce à son identifiant ou son adresse.</p>
+                            <div className="block block--blue">
+                                <h2 className="blockTitle">Carte des bâtiments</h2>
+                                <p className="blockSubtitle">Consultez les 48 millions de bâtiments du référentiel. Retrouvez un bâtiment grâce à son identifiant ou son adresse.</p>
                                 <form action="/carte" method="get">
 
                                     <div className="fr-search-bar">
@@ -35,34 +35,34 @@ export default function Outils() {
                                     </div>
 
                                 </form>
-                                <div className={styles.toolLinkShell}>
+                                <div className="blockLinkShell">
                                     <a className="fr-btn fr-btn--secondary" href="/carte">Consulter la carte 
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div className="fr-col-12 fr-col-md-6">
-                            <div className={`${styles.tool} ${styles["tool--yellow"]} ${styles["tool--fill"]}`}>
-                                <h2 className={styles.toolTitle}>Croisement de bases bâtimentaires</h2>
-                                <p className={styles.toolSubtitle}>Vous souhaitez croiser deux bases de données bâtimentaires mais n&apos;avez pas les ressources pour le faire ?<br />
+                            <div className="block block--yellow block--fill">
+                                <h2 className="blockTitle">Croisement de bases bâtimentaires</h2>
+                                <p className="blockSubtitle">Vous souhaitez croiser deux bases de données bâtimentaires mais n&apos;avez pas les ressources pour le faire ?<br />
                                 <b>Nous offrons ce service jusqu&apos;en décembre 2023.</b></p>
-                                <div className={styles.toolLinkShell}><a href="/rapprochement" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
+                                <div className="blockLinkShell"><a href="/rapprochement" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
                             </div>
                         </div>
                         <div className="fr-col-12 fr-col-md-6">
-                            <div className={`${styles.tool} ${styles["tool--green"]} ${styles["tool--fill"]}`}>
-                                <h2 className={styles.toolTitle}>API et documentation</h2>
-                                <p className={styles.toolSubtitle}>Intégrez le référentiel à vos systèmes. Obtenez les identifiants RNB de vos bâtiments. Utilisez nos API et tuiles vectorielles en accès libre.</p>
-                                <div className={styles.toolLinkShell}><a href="/doc" className='fr-btn fr-btn--secondary'>Consulter la documentation</a></div>
+                            <div className="block block--green block--fill">
+                                <h2 className="blockTitle">API et documentation</h2>
+                                <p className="blockSubtitle">Intégrez le référentiel à vos systèmes. Obtenez les identifiants RNB de vos bâtiments. Utilisez nos API et tuiles vectorielles en accès libre.</p>
+                                <div className="blockLinkShell"><a href="/doc" className='fr-btn fr-btn--secondary'>Consulter la documentation</a></div>
                             </div>
                         </div>
                         <div className="fr-col-12">
-                            <div className={`${styles.tool} ${styles["tool--archipel"]}`}>
-                                <h2 className={styles.toolTitle}>Autorisation du droit des sols</h2>
-                                <p className={styles.toolSubtitle}>
+                            <div className="block block--archipel">
+                                <h2 className="blockTitle">Autorisation du droit des sols</h2>
+                                <p className="blockSubtitle">
                                     <b>Résérvé aux instructeurs d&apos;ADS</b><br />
                                     Utilisez vos outils d&apos;instruction d&apos;ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire.</p>
-                                    <div className={styles.toolLinkShell}>
+                                    <div className="blockLinkShell">
                                     <a className="fr-btn fr-btn--secondary" href="/carte">En savoir plus
                                     </a>
                                 </div>
