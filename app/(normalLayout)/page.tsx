@@ -55,9 +55,9 @@ export default function Home() {
             <div className="section">
                 <div className='fr-grid-row fr-grid-row--gutters'>
                 <div className="fr-col-12 ">
-                        <div className={`${styles.block} ${styles["block--paleBlue"]}`}>
-                        <h3 className={styles.block__title}>Carte des bâtiments</h3>
-                        <p className={styles.block__subtitle}>Cherchez une adresse ou un identifiant RNB et consultez les 48 millions de bâtiments référencés.</p>
+                        <div className="block block--paleBlue">
+                        <h3 className="block__title">Carte des bâtiments</h3>
+                        <p className="block__subtitle">Cherchez une adresse ou un identifiant RNB et consultez les 48 millions de bâtiments référencés.</p>
                         <form action="/carte" method="get">
 
                             <div className="fr-search-bar">
