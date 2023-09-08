@@ -21,15 +21,12 @@ export default function Page() {
 
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pt-12v">
                         <h1>Service de rapprochements</h1>
-
-
-                        
                             
                                 <div className="block block--yellow">
                                     <h2 className="blockTitle">Nous croisons vos bases de données de bâtiments</h2>
                                     <p>Vous avez des bases de données de bâtiments que vous aimeriez croiser pour produire de nouvelles analyses, avoir une connaissance plus fine de votre parc ? Obtenez rapidement des correspondances de qualité entre différentes bases de données bâtimentaires, grâce au Référentiel National des Bâtiments.</p>
-                                    <p><b>Nous proposons ce service gratuit et sur-mesure jusqu&apos;en décembre 2023, sous réserve de créneaux disponbles.<br />
-                                    Vous souhaitez profiter de ce service ?</b></p>
+                                    <p><b><span className='stab stab--yellowStrong'>Nous proposons ce service gratuit et sur-mesure jusqu&apos;en décembre 2023.</span></b></p>
+                                    <p><b>Vous souhaitez profiter de ce service ?</b></p>
                                     <div className="blockLinkShell blockLinkShell--noGrow">
                                             <a className="fr-btn" href="/contact">Contactez nous</a>
                                     </div>
@@ -92,7 +89,7 @@ export default function Page() {
                                     <h2 className="blockTitle">Comment ça marche ?</h2>
 
                                     <div className="fr-grid-row fr-grid-row--gutters">
-                                        <div className="fr-col-12 fr-col-md-7">
+                                        <div className={`fr-col-12 fr-col-md-7 ${styles.howTo__descCol}`}>
 
                                         <ol className="blockList">
                                             <li>
@@ -122,7 +119,7 @@ export default function Page() {
                                         </div>
 
                                         </div>
-                                        <div className="fr-col-12 fr-col-md-5">
+                                        <div className={`fr-col-12 fr-col-md-5 ${styles.howTo__illuCol}`}>
                                             <ImageNext className={styles.serviceIllu} src={rapprochementIllu} alt="Attacher l'identifiant RNB à vos données bâtimentaires" />
                                         </div>
                                     </div>

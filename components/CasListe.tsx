@@ -14,8 +14,8 @@ export default function CasList() {
                     <div className="fr-grid-row fr-grid-row--gutters">
                         <div className="fr-col-12 fr-col-md-4 ">
                         <Card
-                        
-                            desc="Plus de 2.7 millions de DPE ont été réalisés en France en 2022. Hors, le local dont le DPE fait l’objet est uniquement relié à une adresse et non à un bâtiment géolocalisé."
+                        endDetail="Lire la suite"
+                            desc="La possibilité d’indiquer dans chaque DPE l’identifiant unique du bâtiment dans lequel le local se situe permettra ainsi d’améliorer la fiabilité des bases de données de l’observatoire des DPE ..."
                             linkProps={{ href: "/cas/dpe" }}
                             title="Fiabiliser les Diagnostics de Performance Énergétique (DPE)"
                         />
@@ -23,8 +23,8 @@ export default function CasList() {
                         <div className="fr-col-12 fr-col-md-4 ">
     
                         <Card
-                        
-                        desc="Les gains en efficacité des procédures et les facilités qui en découlent laissent entrevoir un ROI global qui peut être estimé à plusieurs ETP au travers de toutes les directions” Toulouse Métropole - Direction du Numérique "
+                        endDetail="Lire la suite"
+                        desc="L’existence du RNB doit permettre à toutes les communes d’assurer la cohérence du système d’information et la transversalité des données de la collectivité entre les différents services ..."
                         linkProps={{ href: "/cas/communes" }}
                         title="Faciliter les échanges d’informations bâtimentaires au sein des communes"
                         />
@@ -32,7 +32,7 @@ export default function CasList() {
     
                         <div className="fr-col-12 fr-col-md-4 ">
                         <Card
-                        
+                        endDetail="Lire la suite"
                         desc="La saisine d’un ID bâtiment lors du processus de référencement des ERP doit permettre de préciser leur géolocalisation, de faciliter et fiabiliser le processus de recensement et, d’aider le suivi des ERP."
                         linkProps={{ href: "/cas/erp" }}
                         title="Améliorer l’identification des Etablissements Recevant du Public (ERP)"

@@ -23,13 +23,14 @@
 // Color blocks
 
 .block {
-    padding: 40px;
     
+    padding:30px;
     display: flex;
     flex-direction: column;
 
     form {
         margin-bottom: 2rem;
+        
     }
 
 
@@ -111,8 +112,24 @@
     .blockTitle, .blockSubtitle {
         color:#2a401a;
     }   
-    
 }
+
+.block--paleGreen {
+    background-color: #e6feda;
+
+    .blockTitle, .blockSubtitle {
+        color:#18753c;
+    }   
+}
+
+.block--paleBlue {
+    background-color: #e3e3fd;
+
+    .blockTitle, .blockSubtitle {
+        color:#000091;
+    }   
+}
+
 
 .blockTitle {
     font-size: 1.6em;

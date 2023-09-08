@@ -88,8 +88,8 @@ export default function Home() {
                     <div className="fr-col-12 fr-col-md-4 ">
                     <Card
                     imageUrl={rapprochementIllu.src}
-                    desc="Obtenez les identifiants RNB d'un bâtiment à partir de son adresse ou de sa localisation."
-                    linkProps={{ href: "/doc" }}
+                    desc="Obtenez les identifiants RNB d'un bâtiment et croisez des bases jusqu&apos;à présent isolées."
+                    linkProps={{ href: "/outils-services/rapprochement" }}
                     title="Rapprochement de bases bâtimentaires"
                     />
                     </div>
@@ -136,21 +136,7 @@ export default function Home() {
             
             
 
-            <div className="section">
-                <div className={`${styles.homeCardsSection} fr-grid-row fr-grid-row--gutters`}>
-                    <div className="fr-col-12 ">
-                        <div className={`${styles.block} ${styles["block--paleGreen"]}`}>
-                        <h3 className={styles.block__title}>Définition du bâtiment</h3>
-                        <p className={styles.bdgDefinition}>
-                        Construction souterraine et/ou au-dessus du sol, ayant pour objectif d&apos;être permanente, pour abriter des humains ou des activités humaines. Un bâtiment possède a minima un accès depuis l’extérieur. Dans la mesure du possible, un bâtiment est distinct d’un autre dès lors qu’il est impossible de circuler entre eux.
-                        </p>
-                        <p className={styles.bdgDefinitionContext}>
-                        La construction du RNB est réalisée en collaboration avec les experts de la donnée géomatique du Conseil National de l’Information Géolocalisée (CNIG). La définition du bâtiment ci-dessus est le standard validé par la Commission des Standards du CNIG.
-                        </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
 
             <div className="section">
                 <div className={`${styles.homeCardsSection} fr-grid-row fr-grid-row--gutters`}>
