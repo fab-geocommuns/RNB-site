@@ -1,0 +1,167 @@
+@import "vars.scss";
+
+
+.banner {
+    position: relative;
+}
+.banner__content {
+    position: absolute;
+    padding: 25px;
+    
+    z-index: 10;
+    top: 0;
+    bottom:0;
+
+    background: linear-gradient(0deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0.45) 70%,
+        rgba(255,255,255,0.7) 100%);
+    
+}
+
+.banner__title {
+    font-size: 1.6em;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.1em;
+
+}
+
+.banner__arrow {
+    position: absolute;
+    z-index: 10;
+    filter: brightness(0) invert(100%) sepia(0%) saturate(7477%) hue-rotate(277deg) brightness(97%) contrast(107%);
+
+    top:250px;
+    right: 20px;
+    width: 140px;
+    transform: rotate(-60deg);
+}
+
+.banner__rnb_id {
+    position: absolute;
+    z-index: 10;
+
+    font-weight: 900;
+    background:none;
+    
+    top:325px;
+    right:80px;
+    text-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+
+
+    font-family: 'Itim', cursive;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    color:white;
+    font-size: 1.7em;
+}
+
+
+@media (min-width: $bp-md) {
+
+
+    .banner__content {    
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
+        background: linear-gradient(90deg, 
+        rgba(255,255,255,0.70) 0%, 
+        rgba(255,255,255,0.65) 70%,
+        rgba(255,255,255,0) 100%);
+        
+        top:0px;
+        bottom: 0;
+        left:0px;    
+        max-width: 580px;
+        padding-left:40px;
+        padding-right:40px;
+    }
+
+    .banner__title {
+        font-size: 2.7em;
+    }
+
+    .banner__arrow {
+        
+        width: 180px;
+        top:220px;
+        right: 380px;
+        
+        transform: scale(-1, 1) rotate(-25deg);
+    }
+    .banner__rnb_id {
+        
+        color:white;
+        top:243px;
+        right:152px;
+        
+        font-size: 1.75em;
+        transform: rotate(-1.5deg);
+        
+    }
+    .banner__rnb_id:hover {
+        color:#88fdaa;
+    }
+
+}
+
+
+
+
+
+
+.banner__subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;   
+}
+
+
+
+
+
+
+
+
+
+.homeCardsSection__titleblock {
+    margin-bottom: 2rem;
+}
+.homeCardsSection__title {
+    text-align: center;
+    margin-bottom: 0.2em;
+}
+.homeCardsSection__subtitle {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+
+.sponsorGrid {
+    align-items: center;
+}
+
+.bdgDefinition {
+
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.04em;
+
+    padding-left: 10px;
+    border-left: 4px solid rgb(31,141,73,.7);
+
+    @media (min-width: $bp-md) {
+        font-size: 1.2em;
+        padding-left: 25px;
+        border-left: 6px solid rgb(31,141,73,.7);
+    }
+    
+    
+    
+}
+.bdgDefinitionContext {
+    opacity: .75;
+}

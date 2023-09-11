@@ -1,0 +1,100 @@
+@import "vars.scss";
+
+@font-face {
+    font-family:"Itim";
+    src: url("/fonts/Itim-Regular.ttf");
+}
+
+@import "page.scss";
+
+html, body {
+    min-height: 100%;
+    height: 100%;
+}
+
+/* Pages */
+
+
+
+/* Map controls */
+.maplibregl-ctrl-styles {
+    padding:4px 8px;
+    font-size:1.3em;
+    cursor: pointer;
+}
+
+.maplibregl-ctrl-styles:hover {
+    background-color: rgb(246, 246, 246);
+
+}
+
+.fr-icon-road-map-fill i {
+    display: inline-block;
+    
+}
+
+.maplibregl-ctrl-styles i::before {
+    max-width: 16px;
+    margin-right:5px;
+    
+}
+
+.maplibregl-ctrl-styles-label {
+    font-weight: 500;
+}
+
+
+/* Display utils */
+
+.none {
+    display: none;
+}
+
+@media (min-width: $bp-md) {
+    .md-none {
+        display: none;
+    }
+    .md-block {
+        display: block;
+    }
+}
+
+.resp-image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Text utils */
+.text-center {
+    text-align: center;
+}
+
+.md-text-left {
+    @media (min-width: $bp-md) {
+        text-align: left;
+    }
+}
+.text-blue {
+    color:#000091;
+}
+
+/* Surligneur */
+
+.stab {
+    background-color: #f4f6ff;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.2rem;
+}
+
+.stab--blue {
+    background-color: #e8edff;
+}
+.stab--green {
+    background-color: #dffee6;
+}
+.stab--yellowStrong {
+    background-color: #fbe769;
+}
+.stab--yellow {
+    background-color: #fceeac;
+}

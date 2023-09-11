@@ -1,0 +1,76 @@
+@import "vars.scss";
+
+.serviceIllu {
+    width: 100%;
+    height: auto;
+}
+
+.benefShell {
+    
+    padding:60px 30px;
+    
+    @media (min-width: $bp-md) {
+        padding:90px 0 120px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.benef {
+    
+    margin-bottom: 30px;
+
+    @media (min-width: $bp-md) {
+        width: 400px;
+        max-width: 400px;
+        margin-right: 50px;
+        margin-bottom: 0px;
+    }
+}
+
+.benef:nth-child(2) {
+    margin-top: 0px;
+}
+.benef:nth-child(1),
+.benef:nth-child(3) {
+    margin-top: 0px;
+}
+.benef:last-child {
+    margin-right: 0;
+}
+.benef__illu {
+
+    width: 80px;
+    height: auto;    
+    filter: grayscale(100%);
+
+    @media (min-width: $bp-md) {
+        width: 100px;
+        margin-bottom: .8rem;
+    }
+}
+.benef__title {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: .4rem;
+    color:#000091;
+    line-height: 1.2em;
+}
+.benef__desc {
+    font-size: 1.1em;
+}
+
+.howTo__descCol {
+    
+    order:2;
+    @media (min-width: $bp-md) {
+        order:1;
+    }
+}
+.howTo__illuCol {
+    order:1;
+    @media (min-width: $bp-md) {
+        order:2;
+    }
+}

@@ -6,7 +6,6 @@ import { Header } from "@codegouvfr/react-dsfr/Header";
 // Auth
 import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
-import { text } from "stream/consumers";
 
 export default function RNBHeader() {
 
@@ -26,21 +25,27 @@ export default function RNBHeader() {
           }
         },
         {
-          text:"Définition du bâtiment",
+          text:"Outils & services",
+          linkProps: {
+            href: '/outils-services',
+          }
+        },
+        {
+          text:"Définition & standards",
           linkProps: {
             href: '/definition',
           }
         },
         {
-          text:"Gestion des ADS",
+          text:"Cas d'usage",
           linkProps: {
-            href: '/ads',
+            href: '/cas',
           }
         },
         {
-          text:"API et documentation",
+          text:"Contact",
           linkProps: {
-            href: '/doc',
+            href: '/contact',
           }
         },
       ]
@@ -74,8 +79,8 @@ export default function RNBHeader() {
         <>
         <Header 
           brandTop={<>République<br/>Française</>}
-          serviceTitle="RNB"
-          serviceTagline="Le Référentiel National des Bâtiments"
+          serviceTitle="Référentiel National des Bâtiments"
+          
           navigation={nav}
           homeLinkProps={{
             href: '/',

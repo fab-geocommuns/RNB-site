@@ -1,34 +1,45 @@
 'use client'
 
-import React, { useRef, useEffect, useContext } from 'react';
-import maplibregl from 'maplibre-gl';
+// Style
+import { fr } from "@codegouvfr/react-dsfr";
 import 'maplibre-gl/dist/maplibre-gl.css';
+
+// Map style
 import vector from '@/components/mapstyles/vector.json'
 import satellitle from '@/components/mapstyles/satellite.json'
-import { MapContext } from '@/components/MapContext'
-import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
-import { fr } from "@codegouvfr/react-dsfr";
 
-// Bus
-import Bus from '@/utils/Bus';
-import { log } from 'console';
+// Comps
+import maplibregl from 'maplibre-gl';
+import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
+
+// Hooks
+import React, { useRef, useEffect } from 'react';
+
+// Store
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBdg, openPanel } from "@/stores/map/slice";
 
 export default function VisuMap() {
 
+
+  // Store
+  const dispatch = useDispatch()
+  const stateMoveTo = useSelector((state) => state.moveTo)
+  const stateMarker = useSelector((state) => state.marker)
+  const panelBdg = useSelector((state) => state.panelBdg)
+
+  // Marker
+  const marker = useRef(null)
   
+  // Buildings tiles
   const tilesUrl = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf'
   
+  // Map container and object
   const mapContainer = useRef(null);
   const map = useRef(null);
   
-  const clickedIdentifier = useRef(null)
-  
-  const addressMarker = useRef(null)
-
-  // Map context
-  const [mapCtx, setMapCtx] = useContext(MapContext)
-  const mapCtxCopy = useRef(mapCtx)
-
+  // Clicked identifier
+  const highlightedBdg = useRef(null)
   
   const STYLES = {
 
@@ -46,12 +57,28 @@ export default function VisuMap() {
 
   const initMapControls = () => {
 
+    // Attribution
+    const attributionControl = new maplibregl.AttributionControl({
+      compact: false
+    })
+    map.current.addControl(attributionControl, 'bottom-right')
+
+
+    // Style switcher
+    const styleSwitcher = new MapStyleSwitcherControl({
+      styles: STYLES,
+      chosenStyle: 'vector',
+      icon: fr.cx("fr-icon-road-map-line")
+    })
+    map.current.addControl(styleSwitcher, 'bottom-right')
+
     // Zoom
     const navControl = new maplibregl.NavigationControl({
       showCompass: false,
       showZoom: true
     })
-    map.current.addControl(navControl, 'top-right')
+
+    map.current.addControl(navControl, 'bottom-right')
     // Geoloc
     const geolocControl = new maplibregl.GeolocateControl({
       positionOptions: {
@@ -64,39 +91,38 @@ export default function VisuMap() {
         maxZoom: 18
       }
     })
-    map.current.addControl(geolocControl, 'top-right')
-
-    // Style switcher
-    const styleSwitcher = new MapStyleSwitcherControl({
-      styles: STYLES,
-      chosenStyle: 'vector',
-      icon: fr.cx("fr-icon-road-map-line")
-    })
-    map.current.addControl(styleSwitcher, 'top-left')
-
-  }
-
-  const initMapEvents = () => {
+    map.current.addControl(geolocControl, 'bottom-right')
 
     
 
-    map.current.on('click', 'bdgs', function (e) {
+  }
 
-      
+  const initMapEvents = async () => {
+
+    map.current.on('click', 'bdgs', async function (e) {
+
       if (e.features.length > 0) {
-        setBdgInPanel(e.features[0].properties.rnb_id)
+
+        const rnb_id = e.features[0].properties.rnb_id
+
+        // Highlight it on the map
+        highlightBdg(rnb_id)
+
+        // Dispatch to store
+        await dispatch(fetchBdg(rnb_id))
+        dispatch(openPanel())
       }
 
     });
 
   }
 
-  const setBdgInPanel = (rnb_id) => {
+  const highlightBdg = (rnb_id) => {
 
     // ## Change map point state
-    if (clickedIdentifier.current !== null) {
+    if (highlightedBdg.current !== null) {
       map.current.setFeatureState(
-        { source: 'bdgtiles', id: clickedIdentifier.current, sourceLayer: "default" },
+        { source: 'bdgtiles', id: highlightedBdg.current, sourceLayer: "default" },
         { in_panel: false }
       );
     }
@@ -109,32 +135,35 @@ export default function VisuMap() {
     );
 
     // Register this identifier as clicked
-    clickedIdentifier.current = rnb_id
+    highlightedBdg.current = rnb_id
+    
+  
 
-    // Emit the info
-    Bus.emit('map:bdgclick', rnb_id)
+  }
 
+
+  const flyToPosition = (position) => {
+
+    map.current.flyTo({
+      center: [position.lng, position.lat],
+      zoom: position.zoom
+    })
 
   }
 
   const jumpToPosition = (position) => {
 
-    map.current.flyTo({
-      center: position.center,
+    map.current.jumpTo({
+      center: [position.lng, position.lat],
       zoom: position.zoom
     })
-
 
   }
 
   const initDataLayer = () => {
 
-
-
     map.current.on('style.load', () => {
 
-
-      console.log('add source and layer')
       map.current.addSource('bdgtiles', {
         type: "vector",
         tiles: [
@@ -166,35 +195,45 @@ export default function VisuMap() {
 
       
 
-      //initFeaturesState()
-
     });
 
   }
 
-  // const initFeaturesState = () => {
-
-  //   bdgs.current.forEach(bdg => {
-
-  //     const in_panel = (mapCtx.data.panel_bdg && mapCtx.data.panel_bdg.rnb_id == bdg.rnb_id) ? true : false
+  const buildMarker = (stateMarker) => {
 
 
-  //     map.current.setFeatureState(
-  //       { source: 'bdgs', id: bdg.rnb_id },
-  //       { in_panel: in_panel }
-  //     );
-  //   })
+    if (marker.current) {
+      if (marker.current instanceof maplibregl.Marker) {
+        marker.current.remove();
+      }
+    }
 
+    if (stateMarker.lat != null && stateMarker.lng != null) {
+      
+      marker.current = new maplibregl.Marker({
+        color: "#1452e3",
+        draggable: false
+      }).setLngLat([stateMarker.lng, stateMarker.lat])
+  
+      marker.current.addTo(map.current);
 
-  // }
+    }
+  
 
+  }
+
+  
+  // //////////////////
+  // Init the map once
+  // //////////////////
   useEffect(() => {
 
     if (!map.current) {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         center: [2.852577494863663, 46.820936580547134],
-        zoom: 5
+        zoom: 5,
+        attributionControl: false
       });
 
 
@@ -205,48 +244,40 @@ export default function VisuMap() {
     }
   });
 
-  const buildAddresseMarker = (position) => {
-
-    if (addressMarker.current) {
-      if (addressMarker.current instanceof maplibregl.Marker) {
-        addressMarker.current.remove();
-      }
-    }
-    
-
-    addressMarker.current = new maplibregl.Marker({
-      color: "#1452e3",
-      draggable: false
-    }).setLngLat(position.center)
-
-    addressMarker.current.addTo(map.current);
-
-  }
-
-  // Manage copy of mapCtx
+  // //////////////////
+  // Move the map on demand
+  // //////////////////
   useEffect(() => {
-    mapCtxCopy.current = mapCtx 
-  }, [mapCtx]);
+    if (stateMoveTo.lat != null && 
+      stateMoveTo.lng != null && 
+      stateMoveTo.zoom != null) {
 
-
-  useEffect(() => {
-
-    if (mapCtxCopy.current.data.position) {
-
-      if (mapCtx.data.position.center) {
-        buildAddresseMarker(mapCtxCopy.current.data.position)
+      if (stateMoveTo.fly) {
+        flyToPosition(stateMoveTo)
+      } else {
+        jumpToPosition(stateMoveTo)
       }
-      if (mapCtx.data.position.center && mapCtx.data.position.zoom) {
-        jumpToPosition(mapCtxCopy.current.data.position)
-      }
-
-
-//      prevMapPosition.current = mapCtx.data.position
 
     }
 
-  }, [mapCtxCopy.current.data.position.center, mapCtxCopy.current.data.position.zoom]);
+  }, [stateMoveTo])
 
+
+  // //////////////////
+  // Add/remove/change the marker on demand
+  // //////////////////
+  useEffect(() => {
+
+    buildMarker(stateMarker)
+
+  }, [stateMarker])
+
+  useEffect(() => {
+      
+      if (panelBdg != null) {
+        highlightBdg(panelBdg.rnb_id)
+      }
+  }, [panelBdg])
   
 
   return (

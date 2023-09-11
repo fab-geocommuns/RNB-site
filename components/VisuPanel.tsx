@@ -1,30 +1,36 @@
 
-// React
-import React, { use, useContext, useState, useEffect } from 'react';
+
+// Hooks
+import React, { useState } from 'react';
+import { useSearchParams } from 'next/navigation'
 
 // Styles
 import { fr } from "@codegouvfr/react-dsfr";
-import styles from './VisuPanel.module.css'
+import styles from '@/styles/mapPanel.module.scss'
 
 // UI Tools
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { addDash } from '@/utils/identifier';
 
-// Bus
-import Bus from '@/utils/Bus';
+// Store
+import { useDispatch, useSelector } from "react-redux";
+import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 
 // Analytics
 import va from "@vercel/analytics"
-import { log } from 'console';
+
 
 export default function VisuPanel() {
 
-    
+    // Store
+    const bdg = useSelector((state) => state.panelBdg)
+    const isOpen = useSelector((state) => state.panelIsOpen)
+    const dispatch = useDispatch()
 
-    const [rnbId, setRnbId] = useState(null)
-    const [bdg, setBdg] = useState(null)
 
-    
+    // URL params
+    const params = useSearchParams()
+
     const [copied, setCopied] = useState(false);
 
     const hasBdg = () => {
@@ -38,40 +44,9 @@ export default function VisuPanel() {
             setCopied(false)
         }, 2000)
     }
-    
-
-    useEffect(() => {
-        Bus.on("map:bdgclick", setRnbId)
-
-        return () => {
-            Bus.off("map:bdgclick", setRnbId)
-        }
-
-    }, [])
-
-    useEffect(() => {
-
-        if (rnbId === null) return
-
-        
-
-        fetch(apiUrl())
-            .then(res => res.json())
-            .then(data => {
-                setBdg(data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-    }, [rnbId])
 
     const apiUrl = () => {
-
-        if (rnbId === null) return null
-
-        return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + rnbId
-
+        return bdgApiUrl(bdg?.rnb_id)
     }
 
     const statusLabel = () => {
@@ -85,20 +60,30 @@ export default function VisuPanel() {
     }
 
     const easyRnbId = () => {
-        return addDash(rnbId)
+        return addDash(bdg?.rnb_id)
     }
 
     const banAddresses = () => {
-
         return bdg?.addresses?.filter(a => a.source === "BAN")
     }
 
-    if (hasBdg()) {
+    const open = () => {
+        dispatch(openPanel())
+        
+    }
+    const close = () => {
+        dispatch(closePanel())
+    }
+
+
+    if (isOpen) {
         return (
             <>
-            <div>
-                <hr />
+            <div className={styles.shell}>
                 <div className={styles.section}>
+
+                <a href="#" onClick={close} className={styles.closeLink}><i className='fr-icon-close-line' /></a>
+                    
                 <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
 
                 <div className={styles.rnbidShell}>
@@ -175,7 +160,9 @@ export default function VisuPanel() {
             </>
         )
     } else {
-        return (<></>)
+        return (<>
+        
+        </>)
     }
 
     
