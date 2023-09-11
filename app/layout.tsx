@@ -13,7 +13,7 @@ import RNBSessionProvider from '@/components/SessionProvider'
 import RNBHeader from "@/components/RNBHeader";
 import { Analytics } from '@vercel/analytics/react';
 import FlashMessage from "@/components/FlashMessage";
-import Hotjar from '@hotjar/browser';
+import Script from "next/script";
 
 // Settings
 import settings from '@/logic/settings'
@@ -30,9 +30,10 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
+  console.log(settings.hotjarId, settings.hotjarVersion)
 
   
-  Hotjar.init(settings.hotjarId, settings.hotjarVersion)
+  
 
 
   return (    
@@ -41,7 +42,18 @@ export default async function RootLayout({
       <head>
         <StartDsfr />
         <DsfrHead defaultColorScheme={defaultColorScheme} />
-        
+        <Script>
+          {`
+(function(h,o,t,j,a,r){
+  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+  h._hjSettings={hjid:3649335,hjsv:6};
+  a=o.getElementsByTagName('head')[0];
+  r=o.createElement('script');r.async=1;
+  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+  a.appendChild(r);
+})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+          `}
+        </Script>
       </head>
       <body>
         <RNBSessionProvider>
