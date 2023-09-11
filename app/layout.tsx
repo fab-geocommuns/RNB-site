@@ -15,6 +15,8 @@ import { Analytics } from '@vercel/analytics/react';
 import FlashMessage from "@/components/FlashMessage";
 import Hotjar from '@hotjar/browser';
 
+// Settings
+import settings from '@/logic/settings'
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -30,7 +32,7 @@ export default async function RootLayout({
 
 
   
-
+  Hotjar.init(settings.hotjarId, settings.hotjarVersion)
 
 
   return (    
