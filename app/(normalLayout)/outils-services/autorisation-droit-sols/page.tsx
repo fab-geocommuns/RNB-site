@@ -31,7 +31,7 @@ export default function Page() {
                                 <div className="block block--yellow">
                                     <h2 className="blockTitle">Soyez informés des fins de travaux sur votre territoire</h2>
                                     <p>Intégrez vos ADS au sein du RNB et recevez en retour les dates de fin de travaux issues des données de la DGFiP. Vous n&apos;avez pas reçu l&apos;ensemble des Déclarations attestant l&apos;achèvement et la conformité des travaux (DAACT) ? Ce service est fait pour vous.</p>
-                                    <p><b><span className='stab stab--yellowStrong'>Ce service est gratuit et résérvé aux collectivités.</span></b></p>
+                                    <p><b><span className='stab stab--yellowStrong'>Ce service est gratuit et réservé aux collectivités.</span></b></p>
                                     
                                     <div className="blockLinkShell blockLinkShell--noGrow">
                                             <a className="fr-btn" target='_blank' href={formUrl}>Demander un accès</a>
