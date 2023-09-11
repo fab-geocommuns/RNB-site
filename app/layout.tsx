@@ -42,7 +42,7 @@ export default async function RootLayout({
       <head>
         <StartDsfr />
         <DsfrHead defaultColorScheme={defaultColorScheme} />
-        <Script>
+        <Script id="hotjar">
           {`
 (function(h,o,t,j,a,r){
   h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
