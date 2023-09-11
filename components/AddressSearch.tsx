@@ -14,7 +14,8 @@ import {
     setAddressSearchQuery, 
     setAddressSearchResults, 
     setMarker,
-    fetchBdg
+    fetchBdg,
+    openPanel
 } from '@/stores/map/slice';
 
 export default function AddressSearch() {
@@ -56,9 +57,8 @@ export default function AddressSearch() {
     const handleBdgQuery = async () => {
 
         dispatch(fetchBdg(query)).then((res) => {
-                
-            console.log('result of fetchBdg', res)
         
+            dispatch(openPanel())
             dispatch(setMoveTo({
                 lat: res.payload.point.coordinates[1],
                 lng: res.payload.point.coordinates[0],
