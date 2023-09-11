@@ -35,9 +35,6 @@ export default function ADSMap() {
   const map = useRef(null);
 
   const bdgs = useRef([])
-
-  
-
   
 
   const [mapCtx, setMapCtx] = useContext(MapContext)

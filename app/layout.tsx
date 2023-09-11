@@ -13,6 +13,7 @@ import RNBSessionProvider from '@/components/SessionProvider'
 import RNBHeader from "@/components/RNBHeader";
 import { Analytics } from '@vercel/analytics/react';
 import FlashMessage from "@/components/FlashMessage";
+import Hotjar from '@hotjar/browser';
 
 
 export const metadata = {
@@ -28,6 +29,9 @@ export default async function RootLayout({
 }) {
 
 
+  
+
+
 
   return (    
     
@@ -35,6 +39,7 @@ export default async function RootLayout({
       <head>
         <StartDsfr />
         <DsfrHead defaultColorScheme={defaultColorScheme} />
+        
       </head>
       <body>
         <RNBSessionProvider>
