@@ -8,7 +8,7 @@ import CasList from '@/components/CasListe'
 // Images
 import adsSchemeIllu from '@/public/images/ads-scheme.svg'
 import updateIllu from '@/public/images/update.svg'
-import exploreIllu from '@/public/images/explore.svg'
+import cityIllu from '@/public/images/city.svg'
 import sameSoftIllu from '@/public/images/same-software.svg'
 
 // Settings
@@ -52,7 +52,7 @@ export default function Page() {
                                             </div>
                                             <h3 className={styles.benef__title}>Soyez tous à jour</h3>
                                             <div className={styles.benef__desc}>
-                                            Vous et les autres services intéressés sont tenus au courant des fins de travaux sur votre territoire, grâce aux données établies par la DGFIP.
+                                            Vous et les autres services intéressés êtes tenus au courant des fins de travaux sur votre territoire, grâce aux données établies par la DGFIP.
                                             </div>
                                             
                                         </div>
@@ -60,11 +60,11 @@ export default function Page() {
 
                                         <div className={styles.benef}>
                                             <div>
-                                                <ImageNext className={styles.benef__illu} src={exploreIllu} alt="Des visites de terrain plus efficace." />
+                                                <ImageNext className={styles.benef__illu} src={cityIllu} alt="Des visites de terrain plus efficace." />
                                             </div>
-                                            <h3 className={styles.benef__title}>Ciblez vos visites</h3>
+                                            <h3 className={styles.benef__title}>Affinez votre connaissance du terrain</h3>
                                             <div className={styles.benef__desc}>
-                                            Dédiez vos visites de terrain à autre chose que la découverte des fins de chantier.
+                                            Obtenez une vision précise et à jour du parc bâtimentaire. Élaborez des politiques d&apos;aménagement du territoire plus ciblées.
                                             </div>
                                             
                                         </div>
