@@ -52,7 +52,7 @@ export default function Page() {
                                             </div>
                                             <h3 className={styles.benef__title}>Soyez tous à jour</h3>
                                             <div className={styles.benef__desc}>
-                                            Vous et les autres services intéressés sont tenus au courant des fins de travaux sur votre territoire.
+                                            Vous et les autres services intéressés sont tenus au courant des fins de travaux sur votre territoire, grâce aux données établies par la DGFIP.
                                             </div>
                                             
                                         </div>
@@ -142,7 +142,7 @@ export default function Page() {
                             <div className={styles.homeCardsSection__titleblock}>
                     <h2 >Cas d&apos;usage</h2>
                     <p>
-                        Vous êtes une commune, une métropole, un Service départemental d’incendie et de secours (SDIS), un fournisseur de gaz ou d’électricité ou une administration publique, ce service est fait pour vous.<br />
+                        Vous êtes une commune, une métropole, ce service est fait pour vous.<br />
                         Retrouvez les exemples d’utilisation du RNB par d’autres acteurs ci-dessous.
                     </p>
 
