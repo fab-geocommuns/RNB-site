@@ -238,7 +238,7 @@ export default function VisuMap() {
 
       });
 
-      map.current.once('render', () => {
+      map.current.once('load', () => {
         console.log('Map rendered');
         map.current.resize();
       });
