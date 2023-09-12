@@ -236,6 +236,10 @@ export default function VisuMap() {
         attributionControl: false
       });
 
+      map.current.on('load', () => {
+        map.current.resize();
+      })
+
 
       initMapControls();
       initMapEvents();
