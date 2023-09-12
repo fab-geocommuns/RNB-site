@@ -1,6 +1,6 @@
 @import "vars.scss";
 
-.map {
+.map, .map__mapShell {
     height: calc(100vh - 140.5px);
     position:relative;
 
@@ -31,14 +31,6 @@
     }
 
 }
-
-
-
-.map__mapShell {
-    height: 100%;
-}
-
-
 
 
 .geodisplay {
