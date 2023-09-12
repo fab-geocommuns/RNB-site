@@ -229,7 +229,12 @@ export default function VisuMap() {
   // //////////////////
   useEffect(() => {
 
+
+
     if (!map.current) {
+
+      mapContainer.current.style.opacity = '0';
+
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         center: [2.852577494863663, 46.820936580547134],
@@ -238,9 +243,10 @@ export default function VisuMap() {
 
       });
 
-      map.current.once('render', () => {
+      map.current.once('load', () => {
         console.log('Map rendered');
         map.current.resize();
+        mapContainer.current.style.opacity = '1';
       });
 
       
