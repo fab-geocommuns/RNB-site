@@ -14,7 +14,10 @@ html, body {
 
 /* Pages */
 
-
+/* Map size */
+.maplibregl-canvas-container {
+    height: 100%;
+}
 
 /* Map controls */
 .maplibregl-ctrl-styles {
