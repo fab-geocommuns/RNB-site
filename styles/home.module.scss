@@ -27,15 +27,88 @@
 
 }
 
+.banner--default {
+    .banner__arrow {
+
+        filter: brightness(0) invert(100%) sepia(0%) saturate(7477%) hue-rotate(277deg) brightness(97%) contrast(107%);
+        top:250px;
+        right: 20px;
+        width: 140px;
+        transform: rotate(-60deg);
+
+        @media (min-width: $bp-md) {
+            width: 180px;
+            top:220px;
+            right: 380px;
+            transform: scale(-1, 1) rotate(-25deg);
+        }
+
+    }
+    .banner__rnb_id {
+        top:325px;
+        right:80px;
+        text-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+
+        @media (min-width: $bp-md) {
+            color:white;
+            top:243px;
+            right:152px;
+        }
+
+    }
+}
+
+.banner--reims {
+
+    .banner__content {    
+
+        @media (min-width: $bp-md) {
+            background: linear-gradient(90deg, 
+            rgba(255,255,255,0.85) 0%, 
+            rgba(255,255,255,0.75) 70%,
+            rgba(255,255,255,0) 100%);
+        }
+        
+        
+        
+        
+    }
+
+    .banner__arrow {
+
+        filter: brightness(0) invert(100%) sepia(0%) saturate(7477%) hue-rotate(277deg) brightness(97%) contrast(107%) drop-shadow(2px 1px 2px rgba(0,0,0,0.6));
+        top:250px;
+        right: 20px;
+        width: 140px;
+        transform: rotate(-60deg);
+
+        @media (min-width: $bp-md) {
+            width: 180px;
+            top:220px;
+            right: 380px;
+            transform: scale(-1, 1) rotate(-25deg);
+        }
+
+    }
+    .banner__rnb_id {
+        color:white;
+        top:325px;
+        right:80px;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+
+        @media (min-width: $bp-md) {
+            
+            top:243px;
+            right:152px;
+        }
+
+    }
+}
+
 .banner__arrow {
     position: absolute;
     z-index: 10;
-    filter: brightness(0) invert(100%) sepia(0%) saturate(7477%) hue-rotate(277deg) brightness(97%) contrast(107%);
-
-    top:250px;
-    right: 20px;
-    width: 140px;
-    transform: rotate(-60deg);
+    
 }
 
 .banner__rnb_id {
@@ -45,11 +118,6 @@
     font-weight: 900;
     background:none;
     
-    top:325px;
-    right:80px;
-    text-shadow: 0px 0px 4px rgba(0,0,0,0.4);
-
-
     font-family: 'Itim', cursive;
     text-decoration: underline;
     text-decoration-thickness: 3px;
@@ -84,19 +152,10 @@
         font-size: 2.7em;
     }
 
-    .banner__arrow {
-        
-        width: 180px;
-        top:220px;
-        right: 380px;
-        
-        transform: scale(-1, 1) rotate(-25deg);
-    }
+    
     .banner__rnb_id {
         
-        color:white;
-        top:243px;
-        right:152px;
+        
         
         font-size: 1.75em;
         transform: rotate(-1.5deg);
