@@ -234,7 +234,12 @@ export default function VisuMap() {
         center: [2.852577494863663, 46.820936580547134],
         zoom: 5,
         attributionControl: false
-        
+
+      });
+
+      map.current.once('render', () => {
+        console.log('map is rendered');
+        map.current.resize();
       });
 
       
