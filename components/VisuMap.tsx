@@ -3,7 +3,7 @@
 // Style
 import { fr } from "@codegouvfr/react-dsfr";
 import 'maplibre-gl/dist/maplibre-gl.css';
-import styles from '@/styles/mapPage.module.scss'
+import styles from '@/styles/mapComp.module.scss'
 
 // Map style
 import vector from '@/components/mapstyles/vector.json'
