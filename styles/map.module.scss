@@ -1,11 +1,11 @@
 @import "vars.scss";
 
 .map {
-    height: calc(100% - 140.5px);
+    height: calc(100vh - 140.5px);
     position:relative;
 
     @media (min-width: $bp-md) {
-        height: calc(100% - 172.5px);
+        height: calc(100vh - 172.5px);
     }
 }
 
