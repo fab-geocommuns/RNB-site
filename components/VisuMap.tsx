@@ -3,6 +3,7 @@
 // Style
 import { fr } from "@codegouvfr/react-dsfr";
 import 'maplibre-gl/dist/maplibre-gl.css';
+import styles from '@/styles/mapPage.module.scss'
 
 // Map style
 import vector from '@/components/mapstyles/vector.json'
@@ -237,9 +238,10 @@ export default function VisuMap() {
 
       });
 
-      map.current.once('render', () => {
-        map.current.resize();
-      });
+      // map.current.once('render', () => {
+      //   console.log('Map rendered');
+      //   map.current.resize();
+      // });
 
       
 
@@ -289,7 +291,7 @@ export default function VisuMap() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%' }} ref={mapContainer} />
+      <div className={styles.map} ref={mapContainer} />
     </>
 
   );

@@ -1,7 +1,7 @@
 'use client'
 
 // Styles
-import styles from '@/styles/map.module.scss'
+import styles from '@/styles/mapPage.module.scss'
 
 // Hooks
 import { useEffect } from 'react';
