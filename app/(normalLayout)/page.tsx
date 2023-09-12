@@ -9,8 +9,8 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 
 // Banner
-import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
-import bannerPicSm from '@/public/images/homeBanner/bordeaux-sm.jpg'
+import bannerPic from '@/public/images/homeBanner/reims.jpg'
+import bannerPicSm from '@/public/images/homeBanner/reims-sm.png'
 import arrowPic from '@/public/images/homeBanner/arrow.svg'
 
 // Logos
@@ -25,6 +25,9 @@ import apiIllu from '@/public/images/api.png'
 import adsIllu from '@/public/images/ads.png'
 
 export default function Home() {
+
+    const bannerId = "5FSK-A8Z4-X4BR";
+    
     
     return (
         <>
@@ -33,7 +36,7 @@ export default function Home() {
             <div className="section">
                 <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 ">
-                        <div className={styles.banner}>
+                        <div className={`${styles.banner} ${styles["banner--reims"]}`}>
                             <div className={styles.banner__content}>
                                 <h1 className={styles.banner__title}>Le Référentiel National des Bâtiments</h1>
                                 <p className={styles.banner__subtitle}>Référencer l&apos;intégralité des bâtiments du territoire français au sein de données et d&apos;outils libres</p>
@@ -41,7 +44,7 @@ export default function Home() {
                             </div> 
                             
                             <ImageNext src={arrowPic} alt="" className={styles.banner__arrow} />
-                            <a href="/carte?q=7NF2-9LDK-T3H7" className={styles.banner__rnb_id}>7NF2-9LDK-T3H7</a>
+                            <a href={`carte?q=${bannerId}`} className={styles.banner__rnb_id}>{bannerId}</a>
 
                             <ImageNext className='none md-block'  alt="" src={bannerPic} />
                             <ImageNext className='md-none resp-image' alt="" src={bannerPicSm} />
