@@ -9,8 +9,8 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 
 // Banner
-import bannerPic from '@/public/images/homeBanner/reims.jpg'
-import bannerPicSm from '@/public/images/homeBanner/reims-sm.png'
+import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
+import bannerPicSm from '@/public/images/homeBanner/bordeaux-sm.jpg'
 import arrowPic from '@/public/images/homeBanner/arrow.svg'
 
 // Logos
@@ -26,7 +26,7 @@ import adsIllu from '@/public/images/ads.png'
 
 export default function Home() {
 
-    const bannerId = "5FSK-A8Z4-X4BR";
+    const bannerId = "7NF2-9LDK-T3H7";
     
     
     return (
@@ -36,7 +36,7 @@ export default function Home() {
             <div className="section">
                 <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 ">
-                        <div className={`${styles.banner} ${styles["banner--reims"]}`}>
+                        <div className={`${styles.banner} ${styles["banner--default"]}`}>
                             <div className={styles.banner__content}>
                                 <h1 className={styles.banner__title}>Le Référentiel National des Bâtiments</h1>
                                 <p className={styles.banner__subtitle}>Référencer l&apos;intégralité des bâtiments du territoire français au sein de données et d&apos;outils libres</p>
