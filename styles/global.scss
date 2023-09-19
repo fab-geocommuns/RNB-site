@@ -53,11 +53,31 @@ html, body {
     display: none;
 }
 
+
+
+@media (min-width: $bp-sm) {
+    .sm-none {
+        display: none;
+    }
+    .sm-block {
+        display: block;
+    }
+}
+
 @media (min-width: $bp-md) {
     .md-none {
         display: none;
     }
     .md-block {
+        display: block;
+    }
+}
+
+@media (min-width: $bp-lg) {
+    .lg-none {
+        display: none;
+    }
+    .lg-block {
         display: block;
     }
 }

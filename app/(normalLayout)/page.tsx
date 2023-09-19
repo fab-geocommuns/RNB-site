@@ -10,6 +10,7 @@ import CasListe from '@/components/CasListe'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
+import bannerPicMid from '@/public/images/homeBanner/bordeaux-mid.jpeg'
 import bannerPicSm from '@/public/images/homeBanner/bordeaux-sm.jpg'
 import arrowPic from '@/public/images/homeBanner/arrow.svg'
 
@@ -43,11 +44,17 @@ export default function Home() {
                                 <a href="/carte" className='fr-btn'>Voir la carte des bâtiments</a>
                             </div> 
                             
-                            <ImageNext src={arrowPic} alt="" className={styles.banner__arrow} />
-                            <a href={`carte?q=${bannerId}`} className={styles.banner__rnb_id}>{bannerId}</a>
+                            <div className={styles.banner__arrowtarget}>
+                                <ImageNext src={arrowPic} alt="" className={styles.banner__arrow} />
+                                <a href={`carte?q=${bannerId}`} className={styles.banner__rnb_id}>{bannerId}</a>
+                            </div>
 
-                            <ImageNext className='none md-block'  alt="" src={bannerPic} />
-                            <ImageNext className='md-none resp-image' alt="" src={bannerPicSm} />
+                            
+                            <ImageNext className={`sm-none resp-image ${styles.banner__image}`} alt="" src={bannerPicSm} />
+                            <ImageNext className={`none sm-block lg-none resp-image ${styles.banner__image}`}  alt="" src={bannerPicMid} />
+                            <ImageNext className={`none lg-block ${styles.banner__image}`}  alt="" src={bannerPic} />
+                            
+                            
 
                             
                         </div>
