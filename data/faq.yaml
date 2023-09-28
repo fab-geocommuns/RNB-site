@@ -1,12 +1,55 @@
 
-- name: Connaître le RNB
-  key: connaitre
+- name: Le RNB c'est quoi ?
+  desc: Tout ce qu’il faut savoir sur le Référentiel National des Bâtiments
+  key: rnb-a-propos
   entries:
-  - question: What is the meaning of life?
-    key: meaning_of_life
+  - question: Qu’est-ce que le Référentiel National des Bâtiments (RNB) ?
+    key: quoi
     answer: >
-      <p>the meaninbg ?</p>
-      <p>the meaning of life is to live</p>
-  - question: What is the meaning of death?
-    key: meaning_of_death
-    answer: <b>the meaning of death is to die</b>
+      <p>Le Référentiel National des Bâtiments (RNB) a pour vocation de créer <b>un système commun de repérage des bâtiments, à l’échelle nationale.</b></p>
+      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire</b> et leur <b>associe un identifiant unique</b>. En 2023, seule la France métropolitaine est initialisée, les DROM COM seront inclus en 2024.</p>
+      <p>Cet identifiant unique, associé à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de faire meilleur usage de leurs données bâtimentaires. Il permet notamment le croisement entre des jeux de données différents, permettant une meilleure circulation de la donnée.</p>
+  - question: À quelle problématique répond le RNB ?
+    key: problematique
+    answer: >
+      <p>Jusqu’à présent, les données liées aux bâtiments étaient détenues par une multitude d’acteurs publics et privés, travaillant en silos. Les informations liées à l’historique du bâtiment (travaux, extensions, destruction, usage) sont difficiles d’accès. Ainsi, chaque acteur œuvre individuellement pour obtenir l’information sans que celle-ci soit mise en commun.</p>
+      <p>Un référé de la Cour des Comptes concernant “<a href="https://www.ccomptes.fr/fr/publications/la-production-et-lutilisation-des-donnees-utiles-la-politique-du-logement" target="_blank">La production et l’utilisation des données utiles à la politique du logement</a>” (en date du 22 mai 2022) relève les difficultés actuelles des administrations à collaborer autour d’une donnée bâtimentaire commune (ex : absence d’une architecture partagée des bases de données; actualisation trop peu fréquente de ces données; utilisation de données agrégées à une maille territoriale trop large; manque de partage des données par les administrations qui les détiennent, etc.).</p>
+      <p>Le <b>Référentiel National des Bâtiments</b> (sous le nom de projet Bat-ID) <b>est cité par le Ministère de la Transition Écologique</b> et le Ministère délégué chargé de la Ville et du Logement dans sa réponse à la <a href="https://www.ccomptes.fr/fr/documents/60913" target="_blank">Cour des Comptes en date du 15 juillet 2022</a>, comme <b>solution pour combler le manque actuel d'un système d'identification des logements et des bâtiments</b>.</p>
+  - question: Qui produit le Référentiel National des Bâtiments (RNB) ? A-t-il vocation à devenir l’unique standard de lecture des données bâtimentaires ?
+    key: production
+    answer: >
+      <p>Le financement du RNB est assuré conjointement par l’Agence de la Transition Écologique (l’<b>ADEME</b>), le Centre Scientifique et Technique du Bâtiment (<b>CSTB</b>), la Direction générale de l'Aménagement, du Logement et de la Nature (<b>DGALN</b>) et l’Institut national de l'information géographique et forestière (<b>IGN</b>).</p>
+      <p>Le service est réalisé chez <a href="https://beta.gouv.fr/" target="_blank">beta.gouv</a>, l’incubateur des services publics numériques de la Direction Interministérielle du Numérique (DINUM).</p>
+      <p>Le RNB vise à établir un standard unique. Sa forme est issue des délibérations du Conseil National de l’Information Géolocalisée (<a href="https://cnig.gouv.fr/" target="_blank">CNIG</a>, voir plus bas).</p>
+
+  - question: À qui s’adresse le Référentiel National des Bâtiments ?
+    key: public
+    answer: >
+      <p>Le RNB est une solution destinée aux :</p>
+      <ul>
+      <li>Utilisateurs de données bâtimentaires : les <b>communes</b>, les <b>métropoles</b>, les <b>fournisseurs d’énergie</b>, les services départementaux d'incendie et de secours (<b>SDIS</b>), les acteurs de l’économie numérique produisant des analyses, etc.</li>
+      <li>Producteurs de données bâtimentaires : l’ensemble des <b>administrations publiques</b> produisant des données bâtimentaires à la maille du cadastre, des parcelles ou des locaux, ainsi que celles agrégeant des données métier (historique de construction, performance énergétique, etc.)</li>
+      </ul>
+- name: Comment est conçu le RNB ?
+  desc: Tout savoir sur la conception du RNB, les caractéristiques techniques des bâtiments et de l’ID unique.
+  key: conception
+  entries:
+  - question: D’où proviennent les données du RNB ?
+    key: provenance
+    answer: >
+      <p>Les bâtiments présentés dans le RNB sont essentiellement issus d’une fusion de la BD Topo, éditée par l’Institut national de l'information géographique et forestière (IGN) et de la BDNB, éditée par le Centre Scientifique et Technique du Bâtiment (CSTB).</p>
+      <p>La mise à jour du RNB est réalisé par :</p>
+      <ul>
+      <li>les importations, lors de parution de nouveaux millésimes de la BD Topo et de la BDNB</li>
+      <li>les flux d’autorisation du droit des sols (ADS) provenant des collectivités</li>
+      </ul>
+  - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
+    key: erreur
+    answer: Si vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc), vous pouvez nous le signaler en envoyant un email à <a href="mailto:rnb@beta.gouv.fr" target="_blank">rnb@beta.gouv.fr</a>.
+  - question: Qu’est ce qu’un bâtiment au sens du Référentiel National des Bâtiments (RNB) ?
+    key: definition
+    answer: >
+      <p>La construction du Référentiel National des Bâtiments est réalisée en collaboration avec les experts de la donnée géomatique du Conseil National de l’Information Géolocalisée (<a href="https://cnig.gouv.fr/" target="_blank">CNIG</a>). </p>
+      <p>La définition du bâtiment est validée par la Commission des Standards du CNIG, comme suit :</p>
+      <p>“Construction souterraine et/ou au-dessus du sol, ayant pour objectif d'être permanente, pour abriter des humains ou des activités humaines. Un bâtiment possède a minima un accès depuis l’extérieur. Dans la mesure du possible, un bâtiment est distinct d’un autre dès lors qu’il est impossible de circuler entre eux.”</p>
+      <p>Cette définition est complétée par une <a href="https://github.com/fab-geocommuns/BatID/blob/eea3555c0de8fb178a85379306fbe85c358ea9ce/docs/CNIG/Annexe-Definition-Batiment.md" target="_blank">annexe</a>, qui vise à l’étayer et apporter un éclairage aux cas particuliers rencontrés.</p>
