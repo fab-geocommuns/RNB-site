@@ -14,6 +14,48 @@ export default function WithFooterLayout({
         <Footer
           brandTop={<>République<br/>Française</>}
           accessibility="partially compliant"
+          linkList={[
+            {
+              categoryName: "A propos",
+              links: [
+                {
+                  linkProps: {
+                    href:"/faq",
+                  },
+                  text: "Foire aux questions",
+                },
+                {
+                  linkProps: {
+                    href:"/contact",
+                  },
+                  text: "Contact",
+                }
+              ]
+            },
+            {
+              categoryName: "Outils pour développeurs",
+              links: [
+                {
+                  linkProps: {
+                    href:"/doc",
+                  },
+                  text: "Documentation",
+                },
+                {
+                  linkProps: {
+                    href:"https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb"
+                  },
+                  text: "Nos API"
+                },
+                {
+                  linkProps: {
+                    href:"https://github.com/fab-geocommuns/RNB-coeur"
+                  },
+                  text: "Github"
+                }
+              ]
+            }
+          ]}
           homeLinkProps={{
             href: '/',
             title: 'Accueil RNB',
