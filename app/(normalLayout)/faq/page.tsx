@@ -1,8 +1,3 @@
-import Link from "next/link"
-
-// Style
-import styles from '@/styles/faq.module.scss'
-
 import path from 'path';
 import { promises as fs } from 'fs';
 
@@ -11,6 +6,7 @@ import { parse } from 'yaml'
 // Components
 import SectionList from '@/components/faq/SectionsList'
 import Summary from '@/components/faq/Summary'
+import BackToTop from '@/components/BackToTop';
 
 async function fetchFaqSections() {
 
@@ -33,15 +29,19 @@ export default async function Page() {
     
     return (
         <>
+
+            <BackToTop />
             <div className="fr-container">
 
-                <div className="fr-grid-row">
-                        <div className="fr-col-12 fr-py-12v">
+            <div className="fr-grid-row fr-grid-row--gutters fr-py-12v">
+                        <div className="fr-col-12 fr-col-md-8">
 
                             <h1>Foire aux Questions</h1>
 
+
                             <Summary sections={sections} />
-                           <SectionList sections={sections} />
+                            <hr className='fr-my-16v' />
+                            <SectionList sections={sections} />
 
                 </div>                            
             </div>

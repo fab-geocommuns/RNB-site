@@ -1,3 +1,5 @@
+import styles from '@/styles/faq.module.scss'
+
 import Entry from "@/components/faq/Entry"
 
 export default function FaqSections(sections: any) {
@@ -7,7 +9,8 @@ export default function FaqSections(sections: any) {
             {sections.sections.map((s: any) => {
                 return (
                     <>
-                    <h2 key={s.key} id={s.key}>{s.name}</h2>
+                    <div className={styles.faq__section}>
+                    <h2 className={styles.faq__sectionTitle} key={s.key} id={s.key}>{s.name}</h2>
                 
                     {s.entries.map((e: any) => {
 
@@ -17,7 +20,7 @@ export default function FaqSections(sections: any) {
                             <Entry entry={e} />
                         )
                     })}
-
+                    </div>
                     </>
                 )
             })}
