@@ -1,9 +1,12 @@
 
-- question: What is the meaning of life?
-  key: meaning_of_life
-  answer: >
-    <p>the meaninbg ?</p>
-    <p>the meaning of life is to live</p>
-- question: What is the meaning of death?
-  key: meaning_of_death
-  answer: <b>the meaning of death is to die</b>
+- name: Connaître le RNB
+  key: connaitre
+  entries:
+  - question: What is the meaning of life?
+    key: meaning_of_life
+    answer: >
+      <p>the meaninbg ?</p>
+      <p>the meaning of life is to live</p>
+  - question: What is the meaning of death?
+    key: meaning_of_death
+    answer: <b>the meaning of death is to die</b>

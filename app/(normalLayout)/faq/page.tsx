@@ -8,8 +8,11 @@ import { promises as fs } from 'fs';
 
 import { parse } from 'yaml'
 
+// Components
+import SectionList from '@/components/faq/SectionsList'
 
-async function fetchQuestions() {
+
+async function fetchFaqSections() {
 
     // Read json file in the data folder
     const jsonDirectory = path.join(process.cwd(), 'data');
@@ -28,9 +31,8 @@ async function fetchQuestions() {
 export default async function Page() {
 
 
-    const questions = await fetchQuestions();
-    console.log('questions')
-    console.log(questions)
+    const sections = await fetchFaqSections();
+    
     
     return (
         <>
@@ -41,14 +43,10 @@ export default async function Page() {
 
                             <h1>Foire aux Questions</h1>
 
-                            {questions.map((q: any) => (
-                                    
-                                    <div key={q.key}>
-                                        <h2>{q.question}</h2>
-                                        <p dangerouslySetInnerHTML={{ __html: q.answer }}></p>
-                                    </div>
-                                    
-                            ))}
+                           <SectionList sections={sections} />
+
+
+                            
 
                             
 
