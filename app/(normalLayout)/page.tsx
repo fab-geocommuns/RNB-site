@@ -64,7 +64,7 @@ export default function Home() {
 
             <div className="section">
                 <div className='fr-grid-row fr-grid-row--gutters'>
-                <div className="fr-col-7 ">
+                <div className="fr-col-12 ">
                         <div className="block block--blue">
                         <h3 className="block__title">Carte des bâtiments</h3>
                         <p className="block__subtitle">Cherchez une adresse ou un identifiant RNB et consultez les 48 millions de bâtiments référencés.</p>
@@ -83,27 +83,11 @@ export default function Home() {
                         </form>
                         </div>
                     </div>
-                    <div className="fr-col-5 ">
 
-                    <div className="block block--paleBlue">
-                        <h3 className="block__title">Infolettre RNB</h3>
-                        <p className="block__subtitle">Suivez l&apos;actualité du RNB, son évolution et ses nouvelles fonctionnalités.</p>
-                        <form action="/carte" method="get">
-
-                            <div className={styles.newsletterGroup}h>
-                                <input 
-                                className='fr-input' 
-                                type="text" 
-                                name="q"
-                                placeholder="m.dupont@courrier.gouv.fr"
-                                 />
-                                 <button className="fr-btn" type="submit">Inscription</button>
-                            </div>
-
-                        </form>
-                        </div>
-
-                    </div>
+                    
+                    
+                    
+                    
                 </div>
             </div>
 
