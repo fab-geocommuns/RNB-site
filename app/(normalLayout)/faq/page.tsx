@@ -10,7 +10,7 @@ import { parse } from 'yaml'
 
 // Components
 import SectionList from '@/components/faq/SectionsList'
-
+import Summary from '@/components/faq/Summary'
 
 async function fetchFaqSections() {
 
@@ -21,10 +21,7 @@ async function fetchFaqSections() {
     //Return the content of the data file in json format
     const data = parse(fileContents);
 
-    
-
     return data
-
 
 }
 
@@ -43,17 +40,11 @@ export default async function Page() {
 
                             <h1>Foire aux Questions</h1>
 
+                            <Summary sections={sections} />
                            <SectionList sections={sections} />
 
-
-                            
-
-                            
-
-                            
-
-</div>                            
-</div>
+                </div>                            
+            </div>
                 
             </div>
         </>
