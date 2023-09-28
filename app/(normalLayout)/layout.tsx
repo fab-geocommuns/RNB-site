@@ -20,6 +20,12 @@ export default function WithFooterLayout({
               links: [
                 {
                   linkProps: {
+                    href:"/a-propos",
+                  },
+                  text: "Présentation",
+                },
+                {
+                  linkProps: {
                     href:"/faq",
                   },
                   text: "Foire aux questions",
