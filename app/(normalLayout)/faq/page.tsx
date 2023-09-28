@@ -7,6 +7,7 @@ import { parse } from 'yaml'
 import SectionList from '@/components/faq/SectionsList'
 import Summary from '@/components/faq/Summary'
 import BackToTop from '@/components/BackToTop';
+import AboutCol from "@/components/AboutCol"
 
 async function fetchFaqSections() {
 
@@ -43,7 +44,17 @@ export default async function Page() {
                             <hr className='fr-my-16v' />
                             <SectionList sections={sections} />
 
-                </div>                            
+                </div>  
+                <div className="fr-col-12 fr-col-md-3 fr-col-offset-md-1">
+                <div>
+
+<AboutCol />
+
+ 
+
+</div>
+                </div>
+
             </div>
                 
             </div>

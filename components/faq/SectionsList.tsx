@@ -17,7 +17,7 @@ export default function FaqSections(sections: any) {
                         
 
                         return (
-                            <Entry entry={e} />
+                            <Entry key={e.key} entry={e} />
                         )
                     })}
                     </div>
