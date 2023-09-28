@@ -10,7 +10,7 @@ import CasListe from '@/components/CasListe'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
-import bannerPicMid from '@/public/images/homeBanner/bordeaux-mid.jpeg'
+import bannerPicMid from '@/public/images/homeBanner/bordeaux-mid.jpg'
 import bannerPicSm from '@/public/images/homeBanner/bordeaux-sm.jpg'
 import arrowPic from '@/public/images/homeBanner/arrow.svg'
 

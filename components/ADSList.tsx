@@ -79,6 +79,9 @@ export default function ADSList() {
           </thead>
 
           <tbody>
+
+        
+
           {adsList.map((ads: any) => (
             
               <tr key={ads.file_number}>
