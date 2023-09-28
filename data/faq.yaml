@@ -100,8 +100,8 @@
     - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
       key: evolution
       answer: >
-      <p>Non, vous n’avez pas l’obligation de faire évoluer vos jeux de données. Le RNB est justement pensé comme une passerelle permettant d’établir des correspondances entre différentes bases.</p>
-      <p>Exemple : une commune souhaite croiser les données bâtimentaires du service d'information géographique (SIG) avec un jeu de données du service urbanisme. Les services n’ayant pas les mêmes besoins métiers, les bâtiments sont découpés différemment d’une base l’autre. Le RNB servira ici de pivot grâce à l’utilisation de nos outils de rapprochement.</p>
+        <p>Non, vous n’avez pas l’obligation de faire évoluer vos jeux de données. Le RNB est justement pensé comme une passerelle permettant d’établir des correspondances entre différentes bases.</p>
+        <p>Exemple : une commune souhaite croiser les données bâtimentaires du service d'information géographique (SIG) avec un jeu de données du service urbanisme. Les services n’ayant pas les mêmes besoins métiers, les bâtiments sont découpés différemment d’une base l’autre. Le RNB servira ici de pivot grâce à l’utilisation de nos outils de rapprochement.</p>
     - question: Puis-je partager les informations contenues dans le RNB ?
       key: license
       answer: >
