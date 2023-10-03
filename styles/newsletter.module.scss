@@ -1,0 +1,14 @@
+.nl__inputs {
+    display: flex;
+    flex-direction: row;
+}
+
+.nl__form {
+    position: relative;
+}
+
+.nl__feedback {
+    position: absolute;
+    bottom:-30px;
+    z-index: 20;
+}
