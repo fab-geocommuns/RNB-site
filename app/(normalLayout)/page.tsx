@@ -85,7 +85,7 @@ export default function Home() {
                     <div className="fr-col-8 fr-col-md-5">
                     <div className="block block--paleBlue">
                         <h3 className="block__title">Inscription infolettre</h3>
-                        <p>Restez informé des actualités et des nouvelles fonctionnées du RNB.</p>
+                        <p>Restez informé des actualités et des nouvelles fonctionnalités du RNB.</p>
                         
 
 
