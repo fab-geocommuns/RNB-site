@@ -43,6 +43,12 @@ export default function RNBHeader() {
           }
         },
         {
+          text:"A propos",
+          linkProps: {
+            href: '/a-propos',
+          }
+        },
+        {
           text:"Contact",
           linkProps: {
             href: '/contact',

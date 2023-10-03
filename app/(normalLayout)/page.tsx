@@ -1,12 +1,11 @@
-
 // Styles
 import styles from '@/styles/home.module.scss'
 
 // Components
 import { Card } from "@codegouvfr/react-dsfr/Card"
-import { SearchBar} from "@codegouvfr/react-dsfr/SearchBar"
 import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
+import NewsletterForm from '@/components/NewsletterForm'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
@@ -28,7 +27,6 @@ import adsIllu from '@/public/images/ads.png'
 export default function Home() {
 
     const bannerId = "7NF2-9LDK-T3H7";
-    
     
     return (
         <>
@@ -64,7 +62,7 @@ export default function Home() {
 
             <div className="section">
                 <div className='fr-grid-row fr-grid-row--gutters'>
-                <div className="fr-col-12 ">
+                <div className="fr-col-12 fr-col-md-7">
                         <div className="block block--blue">
                         <h3 className="block__title">Carte des bâtiments</h3>
                         <p className="block__subtitle">Cherchez une adresse ou un identifiant RNB et consultez les 48 millions de bâtiments référencés.</p>
@@ -81,6 +79,21 @@ export default function Home() {
                             </div>
 
                         </form>
+                        </div>
+                    </div>
+
+                    <div className="fr-col-8 fr-col-md-5">
+                    <div className="block block--paleBlue">
+                        <h3 className="block__title">Inscription infolettre</h3>
+                        <p>Restez informé des actualités et des nouvelles fonctionnalités du RNB.</p>
+                        
+
+
+<NewsletterForm />
+
+
+
+
                         </div>
                     </div>
 
