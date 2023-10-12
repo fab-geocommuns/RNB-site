@@ -17,7 +17,7 @@ import { useSession } from 'next-auth/react'
 async function fetchADSList(query: string | null, token: string | null ) {
   
 
-    let url = process.env.NEXT_PUBLIC_API_BASE + '/ads'
+    let url = process.env.NEXT_PUBLIC_API_BASE + '/ads?from=site'
     if (query != null) {
       url = url + '?q=' + query
     }

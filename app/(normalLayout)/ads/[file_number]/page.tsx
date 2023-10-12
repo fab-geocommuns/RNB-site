@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation'
 
 async function fetchADSDetail(file_number: string) {
 
-    const url = process.env.NEXT_PUBLIC_API_BASE + '/ads/' + file_number
+    const url = process.env.NEXT_PUBLIC_API_BASE + '/ads/' + file_number + "?from=site"
     const res = await fetch(url, {cache: 'no-cache'})
     const data = await res.json()
     return data
