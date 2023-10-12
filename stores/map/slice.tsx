@@ -62,7 +62,7 @@ export const mapSlice = createSlice({
 })
 
 export const fetchBdg = createAsyncThunk('map/fetchBdg', async (bdgId: string) => {
-    const url = bdgApiUrl(bdgId)
+    const url = bdgApiUrl(bdgId + "?from=site")
     const response = await fetch(url)
     const data = await response.json()
     return data

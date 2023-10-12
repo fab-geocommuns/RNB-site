@@ -28,7 +28,7 @@ export default function ADSMap() {
   const adsCopy = useRef(ads) // dirty copy of ads state so we can use it in listeners
 
 
-  const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/'
+  const bdgSearchUrl = process.env.NEXT_PUBLIC_API_BASE + '/buildings/?from=site'
 
   const minZoom = 16
   const mapContainer = useRef(null);

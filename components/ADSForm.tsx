@@ -74,9 +74,9 @@ export default function ADSForm({ data }) {
 
     const getActionURL = () => {
         if (isNewAds()) {
-            return process.env.NEXT_PUBLIC_API_BASE + '/ads/'
+            return process.env.NEXT_PUBLIC_API_BASE + '/ads/?from=site'
         } else {
-            return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_file_number.current + "/"
+            return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + init_file_number.current + "/?from=site"
         }
     }
 
