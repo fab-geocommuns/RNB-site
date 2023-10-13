@@ -1,6 +1,15 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# Référentiel National des Bâtiments (RNB)
+
+Bienvenue sur le répertoire de code du site du Référentiel National des Bâtiments (RNB)
+
+Si vous souhaitez accéder au répertoire contenant les ressources concernant la construction du standard du référentiel dans le cadre du groupe de travail CNIG sur le thème du bâiment, c'est par [ici](https://github.com/fab-geocommuns/BatID)
+
+Si vous souhaitez accéder au répertoire de code contenant le coeur technique du projet (imports, API, logique métier), [rdv ici](https://github.com/fab-geocommuns/RNB-coeur) 
 
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, run the development server:
 
