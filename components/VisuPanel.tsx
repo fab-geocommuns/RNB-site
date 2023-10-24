@@ -19,6 +19,11 @@ import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 // Analytics
 import va from "@vercel/analytics"
 
+// Comps
+import Alert from '@codegouvfr/react-dsfr/Alert'
+import Highlight from '@codegouvfr/react-dsfr/Highlight';
+import Notice from '@codegouvfr/react-dsfr/Notice';
+
 
 export default function VisuPanel() {
 
@@ -83,8 +88,14 @@ export default function VisuPanel() {
                 <div className={styles.section}>
 
                 <a href="#" onClick={close} className={styles.closeLink}><i className='fr-icon-close-line' /></a>
+                <div className='fr-mb-8v'>
+                
+                <Notice title="Les identifiants de bâtiments seront stabilisés au mois de décembre 2023." />
+                </div>
                     
                 <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
+
+                
 
                 <div className={styles.rnbidShell}>
                     <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
