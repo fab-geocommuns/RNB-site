@@ -35,6 +35,12 @@ export default function WithFooterLayout({
                     href:"/contact",
                   },
                   text: "Contact",
+                },
+                {
+                  linkProps: {
+                    href:"https://app.gitbook.com/o/FKYfQ3pcb5QgCG7YK7lt/s/b6x7CHiWqekC3EKI6HOF/budget"
+                  },
+                  text: "Budget",
                 }
               ]
             },
