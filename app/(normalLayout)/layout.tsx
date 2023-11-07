@@ -38,7 +38,7 @@ export default function WithFooterLayout({
                 },
                 {
                   linkProps: {
-                    href:"https://app.gitbook.com/o/FKYfQ3pcb5QgCG7YK7lt/s/b6x7CHiWqekC3EKI6HOF/budget"
+                    href:"https://rnb-fr.gitbook.io/documentation/~/changes/tMus9NsISSa2F78Yh9HM/budget"
                   },
                   text: "Budget",
                 }
@@ -55,7 +55,7 @@ export default function WithFooterLayout({
                 },
                 {
                   linkProps: {
-                    href:"https://rnb-fr.gitbook.io/documentation/~/changes/tMus9NsISSa2F78Yh9HM/budget"
+                    href:"https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb"
                   },
                   text: "Nos API"
                 },
