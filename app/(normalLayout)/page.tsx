@@ -29,7 +29,7 @@ import adsIllu from '@/public/images/ads.png'
 
 export default function Home() {
 
-    const bannerId = "7NF2-9LDK-T3H7";
+    const bannerId = "7NF2-9MDK-T3H7";
     
     return (
         <>
