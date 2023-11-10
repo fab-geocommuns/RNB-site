@@ -38,7 +38,7 @@ export default function WithFooterLayout({
                 },
                 {
                   linkProps: {
-                    href:"https://rnb-fr.gitbook.io/documentation/budget"
+                    href:"https://rnb-fr.gitbook.io/documentation/a-propos/budget"
                   },
                   text: "Budget",
                 }
