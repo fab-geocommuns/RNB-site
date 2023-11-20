@@ -17,7 +17,7 @@ import arrowPic from '@/public/images/homeBanner/arrow.svg'
 
 // Logos
 import logoAdeme from '@/public/images/logos/ademe.svg'
-import logoCstb from '@/public/images/logos/cstb.png'
+import logoCstb from '@/public/images/logos/cstb-bdnb.png'
 import logoIgn from '@/public/images/logos/ign.png'
 import logoDgaln from '@/public/images/logos/dgaln.png'
 
@@ -171,6 +171,20 @@ export default function Home() {
                 </div>
                 </div>
 
+            </div>
+
+            <div className="section">
+                <div className='fr-grid-row fr-grid-row--gutters'>
+                    <div className='fr-col-12'>
+                        
+                        <div className='block block--yellow block--fill'>
+                            <h2 className='blockTitle'>D&apos;où proviennent les données du RNB ?</h2>
+                            <p>Les bâtiments présentés dans le RNB sont essentiellement issus d&apos;une fusion de la BDNB, éditée par le Centre Scientifique et Technique du Bâtiment (CSTB) et de la BD Topo, éditée par l&apos;Institut national de l&apos;information géographique et forestière (IGN).</p>
+                            <div className="blockLinkShell"><a href="/faq" className='fr-btn fr-btn--secondary'>Consulter la Foire aux Questions</a></div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
             
             
