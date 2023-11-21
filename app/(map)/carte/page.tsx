@@ -36,6 +36,7 @@ export default function RNBMap() {
             result_insee_code: insee_code
         })
 
+        
         window.hj('event', 'address-search-public-map')
 
     }
