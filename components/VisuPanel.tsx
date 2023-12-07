@@ -20,9 +20,9 @@ import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 import va from "@vercel/analytics"
 
 // Comps
-import Alert from '@codegouvfr/react-dsfr/Alert'
-import Highlight from '@codegouvfr/react-dsfr/Highlight';
+
 import Notice from '@codegouvfr/react-dsfr/Notice';
+import ContributionForm from '@/components/ContributionForm';
 
 
 export default function VisuPanel() {
@@ -162,6 +162,11 @@ export default function VisuPanel() {
                     <div className={styles.sectionBody}>
                         <a href={apiUrl()} target="_blank">Format JSON</a>
                     </div>
+                </div>
+
+                <div className={styles.section}>
+                    <h2 className={styles.sectionTitle}>Proposer une modification</h2>
+                    <ContributionForm />
                 </div>
 
 
