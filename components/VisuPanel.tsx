@@ -20,7 +20,6 @@ import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 import va from "@vercel/analytics"
 
 // Comps
-
 import Notice from '@codegouvfr/react-dsfr/Notice';
 import ContributionForm from '@/components/ContributionForm';
 
@@ -149,12 +148,24 @@ export default function VisuPanel() {
                         
                         </div>
                 </div>
+                
+                <div className="none">
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle}>Identifiant BD Topo</h2>
                     <div className={styles.sectionBody}>
                         {bdg?.ext_bdtopo_id?.length === 0 ? (<em>Aucun identifiant lié</em>) : bdg?.ext_bdtopo_id}
                     
                     </div>
+                </div>
+                </div>
+                
+
+                
+
+                <div className={styles.section}>
+                    <h2 className={styles.sectionTitle}>Proposer une modification</h2>
+                    
+                    <ContributionForm />
                 </div>
 
                 <div className={styles.section}>
@@ -163,12 +174,6 @@ export default function VisuPanel() {
                         <a href={apiUrl()} target="_blank">Format JSON</a>
                     </div>
                 </div>
-
-                <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Proposer une modification</h2>
-                    <ContributionForm />
-                </div>
-
 
                 
                 
