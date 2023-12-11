@@ -1,7 +1,7 @@
-
+'use client'
 
 // Hooks
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation'
 
 // Styles
@@ -20,9 +20,8 @@ import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 import va from "@vercel/analytics"
 
 // Comps
-import Alert from '@codegouvfr/react-dsfr/Alert'
-import Highlight from '@codegouvfr/react-dsfr/Highlight';
 import Notice from '@codegouvfr/react-dsfr/Notice';
+import ContributionForm from '@/components/ContributionForm';
 
 
 export default function VisuPanel() {
@@ -38,9 +37,7 @@ export default function VisuPanel() {
 
     const [copied, setCopied] = useState(false);
 
-    const hasBdg = () => {
-        return bdg?.rnb_id !== undefined
-    }
+  
 
     const handleCopy = () => {
         va.track("rnbid-copied", {rnb_id: bdg.rnb_id})
@@ -73,12 +70,19 @@ export default function VisuPanel() {
     }
 
     const open = () => {
-        dispatch(openPanel())
-        
+        dispatch(openPanel())   
     }
     const close = () => {
         dispatch(closePanel())
     }
+
+    useEffect(() => {
+
+        if (bdg?.rnb_id !== undefined) {
+            va.track("open-side-panel", {rnb_id: bdg.rnb_id})
+        }
+
+    }, [bdg?.rnb_id])
 
 
     if (isOpen) {
@@ -149,12 +153,24 @@ export default function VisuPanel() {
                         
                         </div>
                 </div>
+                
+                <div className="none">
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle}>Identifiant BD Topo</h2>
                     <div className={styles.sectionBody}>
                         {bdg?.ext_bdtopo_id?.length === 0 ? (<em>Aucun identifiant lié</em>) : bdg?.ext_bdtopo_id}
                     
                     </div>
+                </div>
+                </div>
+                
+
+                
+
+                <div className={styles.section}>
+                    <h2 className={styles.sectionTitle}>Améliorez le RNB</h2>
+                    
+                    <ContributionForm />
                 </div>
 
                 <div className={styles.section}>
@@ -163,7 +179,6 @@ export default function VisuPanel() {
                         <a href={apiUrl()} target="_blank">Format JSON</a>
                     </div>
                 </div>
-
 
                 
                 
