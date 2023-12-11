@@ -1,7 +1,7 @@
-
+'use client'
 
 // Hooks
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation'
 
 // Styles
@@ -37,9 +37,7 @@ export default function VisuPanel() {
 
     const [copied, setCopied] = useState(false);
 
-    const hasBdg = () => {
-        return bdg?.rnb_id !== undefined
-    }
+  
 
     const handleCopy = () => {
         va.track("rnbid-copied", {rnb_id: bdg.rnb_id})
@@ -72,12 +70,19 @@ export default function VisuPanel() {
     }
 
     const open = () => {
-        dispatch(openPanel())
-        
+        dispatch(openPanel())   
     }
     const close = () => {
         dispatch(closePanel())
     }
+
+    useEffect(() => {
+
+        if (bdg?.rnb_id !== undefined) {
+            va.track("open-side-panel", {rnb_id: bdg.rnb_id})
+        }
+
+    }, [bdg?.rnb_id])
 
 
     if (isOpen) {
@@ -163,7 +168,7 @@ export default function VisuPanel() {
                 
 
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Proposer une modification</h2>
+                    <h2 className={styles.sectionTitle}>Améliorez le RNB</h2>
                     
                     <ContributionForm />
                 </div>

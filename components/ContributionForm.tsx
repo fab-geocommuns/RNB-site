@@ -6,6 +6,8 @@ import React, { useState, useRef } from 'react';
 // Store
 import { useDispatch, useSelector } from "react-redux";
 
+// Analytics
+import va from "@vercel/analytics"      
 
 // Styles
 import styles from '@/styles/contributionForm.module.scss'
@@ -29,6 +31,11 @@ export default function ContributionForm() {
     const resize = (e) => {
         e.target.style.height = 'inherit';
         e.target.style.height = `${e.target.scrollHeight}px`
+    }
+
+    const handleFocus = (e) => {
+        console.log('focus contrib')
+        va.track("contribution-textarea-focus")
     }
 
     const [sending, setSending] = useState(false)
@@ -55,11 +62,15 @@ export default function ContributionForm() {
             setSuccess(true);
             emptyMsgInput();
 
+            va.track("contribution-success")
+
             setTimeout(() => {
                 setSuccess(false);
             }, 2000)
             
             
+        }).catch((err) => {
+            va.track("contribution-error", {error: err})
         });
         
 
@@ -68,10 +79,10 @@ export default function ContributionForm() {
     return (
         <form method="post" action={url} onSubmit={handleSubmit}>
             <input name="rnb_id" type="hidden" className="fr-input" value={bdg?.rnb_id} />
-            <textarea onChange={resize} ref={msgInput} required name="text" className={`fr-text--sm fr-input fr-mb-2v ${styles.msgInput}`} placeholder="Une adresse à changer ? Des bâtiments à fusionner ? Tout le monde peut contribuer au RNB."></textarea>
+            <textarea onFocus={handleFocus} onChange={resize} ref={msgInput} required name="text" className={`fr-text--sm fr-input fr-mb-2v ${styles.msgInput}`} placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB."></textarea>
 
-            <Button disabled={sending} size="small" type='submit'>{sending && <span>Envoi en cours ...</span>}{!sending && <span>Envoyer ma contribution</span>}</Button>
-            {success && <div className='fr-mt-2v'><Badge small severity='success'>Contribution envoyée. Merci.</Badge></div>}            
+            <Button disabled={sending} size="small" type='submit'>{sending && <span>Envoi en cours ...</span>}{!sending && <span>Envoyer mon signalement</span>}</Button>
+            {success && <div className='fr-mt-2v'><Badge small severity='success'>Signalement envoyé. Merci.</Badge></div>}            
             
         </form>
     )
