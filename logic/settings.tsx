@@ -3,4 +3,5 @@ export default {
     contactEmail: "rnb@beta.gouv.fr",
     hotjarId: process.env.NEXT_PUBLIC_HOTJAR_ID,
     hotjarVersion: "6",
+    heapId: process.env.NEXT_PUBLIC_HEAP_ID
 }
