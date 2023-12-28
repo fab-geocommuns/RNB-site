@@ -28,7 +28,7 @@ import adsIllu from '@/public/images/ads.png'
 
 export default function Home() {
 
-    const bannerId = "7NF2-9MDK-T3H7";
+    const bannerId = "M11Z-4KK9-Y338";
     
     return (
         <>
@@ -75,7 +75,7 @@ export default function Home() {
                                 className='fr-input' 
                                 type="text" 
                                 name="q"
-                                placeholder="un bâtiment : SBW3-HVPC-LHD8 ou une adresse : 42, rue des architectes, Nantes"
+                                placeholder="un bâtiment : 1GA7-PBYM-1QDY ou une adresse : 42, rue des architectes, Nantes"
                                  />
                                  <button className="fr-btn" type="submit">Rechercher</button>
                             </div>
