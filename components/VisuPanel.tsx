@@ -20,7 +20,6 @@ import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
 import va from "@vercel/analytics"
 
 // Comps
-import Notice from '@codegouvfr/react-dsfr/Notice';
 import ContributionForm from '@/components/ContributionForm';
 
 
@@ -65,13 +64,7 @@ export default function VisuPanel() {
         return addDash(bdg?.rnb_id)
     }
 
-    const banAddresses = () => {
-        return bdg?.addresses?.filter(a => a.source === "BAN")
-    }
-
-    const open = () => {
-        dispatch(openPanel())   
-    }
+    
     const close = () => {
         dispatch(closePanel())
     }
@@ -92,10 +85,7 @@ export default function VisuPanel() {
                 <div className={styles.section}>
 
                 <a href="#" onClick={close} className={styles.closeLink}><i className='fr-icon-close-line' /></a>
-                <div className='fr-mb-8v'>
                 
-                <Notice title="Les identifiants de bâtiments seront stabilisés au mois de décembre 2023." />
-                </div>
                     
                 <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
 
@@ -132,14 +122,14 @@ export default function VisuPanel() {
                         <h2 className={styles.sectionTitle}>Adresses</h2>
                         <div className={styles.sectionBody}>
 
-                            {banAddresses()?.length === 0 ? (
+                            {bdg?.addresses?.length === 0 ? (
                                 
                                 <div><em>Aucune adresse liée</em></div>
                             
 
                             ) : (
-                                banAddresses()?.map(a => (
-                                    <div key={a.id} className={styles.address}>
+                                bdg?.addresses?.map(a => (
+                                    <div key={a.id} className={styles.sectionListItem}>
                                         {a.street_number}{a.street_rep} {a.street_type} {a.street_name}<br />
                                         {a.city_zipcode} {a.city_name}<br />
                                         <small>(Idenfitiant BAN : {a.id})</small>
@@ -154,16 +144,7 @@ export default function VisuPanel() {
                         </div>
                 </div>
                 
-                <div className="none">
-                <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Identifiant BD Topo</h2>
-                    <div className={styles.sectionBody}>
-                        {bdg?.ext_bdtopo_id?.length === 0 ? (<em>Aucun identifiant lié</em>) : bdg?.ext_bdtopo_id}
-                    
-                    </div>
-                </div>
-                </div>
-                
+          
 
                 
 
@@ -171,6 +152,34 @@ export default function VisuPanel() {
                     <h2 className={styles.sectionTitle}>Améliorez le RNB</h2>
                     
                     <ContributionForm />
+                </div>
+
+                <div className={styles.section}>
+                    <h2 className={styles.sectionTitle}>Correspondances</h2>
+                    <div className={styles.sectionBody}>
+
+                            {bdg?.ext_ids?.length === 0 ? (
+                                
+                                <div><em>Aucun lien avec une autre base de donnée.</em></div>
+                            
+
+                            ) : (
+                                bdg?.ext_ids?.map(ext_id => (
+                                    <div key={ext_id.id} className={styles.sectionListItem}>
+                                        <span>Base de données : {ext_id.source}</span><br />
+                                        <span>Identifiant : {ext_id.id}</span>
+
+                                    </div>
+                                    
+                                ))
+                            )}
+
+
+                            
+
+                        
+                        </div>
+
                 </div>
 
                 <div className={styles.section}>

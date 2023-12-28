@@ -7,7 +7,6 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
 import Alert from '@codegouvfr/react-dsfr/Alert'
-import Notice from '@codegouvfr/react-dsfr/Notice'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
@@ -60,15 +59,6 @@ export default function Home() {
                             
                         </div>
                     </div>  
-                </div>
-            </div>
-
-            <div className="section">
-                <div className='fr-grid-row fr-grid-row--gutters'>
-                    <div className='fr-col-12 fr-col-md-10 fr-col-offset-md-1'>
-                        <Alert title="Identifiants sujets à changements" description="Les identifiants des bâtiments seront rendus stables au mois de décembre 2023. D'ici là, ils peuvent être amenés à changer. Si vous souhaitez être avertis lorsque les identifiants seront rendus stables, inscrivez-vous à notre infolettre." severity="info"></Alert>
-                        
-                    </div>
                 </div>
             </div>
 
