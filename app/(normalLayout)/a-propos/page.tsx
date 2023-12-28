@@ -30,7 +30,14 @@ export default function Page() {
             <h2>Notre solution : Un référentiel national des bâtiments</h2>
 
             <p>La création d&apos;un référentiel unique des bâtiments, en lien avec les autres référentiels (adresses, locaux, parcelles) existants est nécessaire pour passer d&apos;un “écosystème atomisé” à un fonctionnement en réseau.</p>
-            <p>C&apos;est dans ce contexte qu&apos;a vu le jour le projet de construction du Référentiel National des Bâtiments (RNB) appelé “Bat-ID”, d&apos;abord au sein du programme EIG puis en tant que Start Up d&apos;État. L&apos;objectif est de co-construire le RNB avec l&apos;ensemble des parties prenantes, à destination des acteurs publics comme privés. Ce référentiel sera alimenté par les processus administratifs existants afin d&apos;aboutir à une mise à jour en continue des bases de données socles.</p>
+
+<p>C&apos;est dans ce contexte qu&apos;a vu le jour le projet de construction du Référentiel National des Bâtiments (RNB) appelé “Bat-ID”, d&apos;abord au sein du programme EIG en 2021, sous l&apos;impulsion de l&apos;ADEME et du CSTB. Ces sponsors historiques ont ensuit été rejoints par l&apos;IGN et la DGALN en 2023, lors de l&apos;évolution du projet en Start-Up d&apos;État désormais incubée à la Fabrique des Géocommuns de l&apos;IGN.</p>
+
+<p>L&apos;objectif est de co-construire le RNB avec l&apos;ensemble des parties prenantes, à destination des acteurs publics comme privés. Ce référentiel sera alimenté par les processus administratifs existants afin d&apos;aboutir à une mise à jour en continue des bases de données socles.</p>
+
+            
+
+            
 
             <h2>Comment co-construire un Référentiel National des Bâtiments ?</h2>
 

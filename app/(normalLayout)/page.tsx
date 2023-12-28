@@ -7,7 +7,6 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
 import Alert from '@codegouvfr/react-dsfr/Alert'
-import Notice from '@codegouvfr/react-dsfr/Notice'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
@@ -17,7 +16,7 @@ import arrowPic from '@/public/images/homeBanner/arrow.svg'
 
 // Logos
 import logoAdeme from '@/public/images/logos/ademe.svg'
-import logoCstb from '@/public/images/logos/cstb.png'
+import logoCstb from '@/public/images/logos/cstb-bdnb.png'
 import logoIgn from '@/public/images/logos/ign.png'
 import logoDgaln from '@/public/images/logos/dgaln.png'
 
@@ -60,15 +59,6 @@ export default function Home() {
                             
                         </div>
                     </div>  
-                </div>
-            </div>
-
-            <div className="section">
-                <div className='fr-grid-row fr-grid-row--gutters'>
-                    <div className='fr-col-12 fr-col-md-10 fr-col-offset-md-1'>
-                        <Alert title="Identifiants sujets à changements" description="Les identifiants des bâtiments seront rendus stables au mois de décembre 2023. D'ici là, ils peuvent être amenés à changer. Si vous souhaitez être avertis lorsque les identifiants seront rendus stables, inscrivez-vous à notre infolettre." severity="info"></Alert>
-                        
-                    </div>
                 </div>
             </div>
 
@@ -171,6 +161,20 @@ export default function Home() {
                 </div>
                 </div>
 
+            </div>
+
+            <div className="section">
+                <div className='fr-grid-row fr-grid-row--gutters'>
+                    <div className='fr-col-12'>
+                        
+                        <div className='block block--yellow block--fill'>
+                            <h2 className='blockTitle'>D&apos;où proviennent les données du RNB ?</h2>
+                            <p>Les bâtiments présentés dans le RNB sont essentiellement issus d&apos;une fusion de la BDNB, éditée par le Centre Scientifique et Technique du Bâtiment (CSTB) et de la BD Topo, éditée par l&apos;Institut national de l&apos;information géographique et forestière (IGN).</p>
+                            <div className="blockLinkShell"><a href="/faq" className='fr-btn fr-btn--secondary'>Consulter la Foire aux Questions</a></div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
             
             

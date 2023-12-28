@@ -66,6 +66,10 @@ export default function AddressSearch() {
                 fly: false
             }))
 
+            Bus.emit('rnbid:search', {
+                rnb_id: query
+            })
+
 
         })
 

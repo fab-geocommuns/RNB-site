@@ -26,6 +26,7 @@ import { Providers } from '@/stores/map/provider';
 export default function RNBMap() {
     
 
+    // //////////////////////
     // Tracking address search
     const trackAddressSearch = (results) => {
 
@@ -36,8 +37,8 @@ export default function RNBMap() {
             result_insee_code: insee_code
         })
 
-        
         window.hj('event', 'address-search-public-map')
+
 
     }
 
@@ -50,6 +51,23 @@ export default function RNBMap() {
         
 
     }, []);
+
+
+    // //////////////////////
+    // Track RNB ID searched in the search bar
+    const trackRNBIDSearch = (infos) => {
+        va.track("rnbid-search-public-map", {
+            rnb_id: infos.rnb_id
+        })
+    }
+
+    useEffect(() => {
+            
+        Bus.on('rnbid:search', trackRNBIDSearch)
+        return () => {
+            Bus.off('rnbid:search', trackRNBIDSearch)
+        }
+    });
 
     return (
         <>
