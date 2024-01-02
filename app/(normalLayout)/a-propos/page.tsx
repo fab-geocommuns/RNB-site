@@ -19,7 +19,7 @@ export default function Page() {
             <h2>Le problème que nous tentons de résoudre</h2>
 
             <Highlight>
-            “Du fait d&apos;un écosystème atomisé, la production de l&apos;information géolocalisée dans la sphère publique se traduit par un usage sous-optimal des deniers publics.” Rapport d&apos;Information, Sénat, Commission des Finances pour l&apos;IGN, 5 Octobre 2022
+            “Du fait d&apos;un écosystème atomisé, la production de l&apos;information géolocalisée dans la sphère publique se traduit par un usage sous-optimal des deniers publics.”<br />- Rapport d&apos;Information, Sénat, Commission des Finances pour l&apos;IGN, 5 Octobre 2022
             </Highlight>
 
             <p>Parmi ces données géolocalisées, l&apos;information relative au bâtiment se démarque par l&apos;absence de référentiel. Le concept de bâtiment ne faisant pas consensus, les acteurs travaillent en silos répondant chacun à leur propre vision du bâtiment…</p>
