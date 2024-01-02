@@ -62,6 +62,8 @@
 }
 .rnbidShell__copy {
     background: var(--background-contrast-blue-france);
+    background-color: #bccdff;
+    color:#273961;
     font-size: .9em;
     padding:.3rem;
     text-align:center;
@@ -70,7 +72,8 @@
     opacity: .8;
 }
 .rnbidShell__copy:hover {
-    background: var(--background-contrast-blue-france-hover);
+    background: #83a9ff;
+    color:#171d2e;
     cursor: pointer;
 }
 .rnbidShell__id {
@@ -87,7 +90,8 @@
 .sectionTitle {
     font-size: .9em;
     line-height: 1.3em;
-    opacity: .6;
+    //opacity: .6;
+    color:#0078f3;
     font-weight: 600;
     margin-bottom: .2rem;
 }
@@ -96,9 +100,9 @@
     line-height: 1.3em;
 }
 
-.address {
+.sectionListItem {
     margin-bottom:.8em
 }
-.address:last-child {
+.sectionListItem:last-child {
     margin-bottom:0;
 }

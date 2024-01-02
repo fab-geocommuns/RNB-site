@@ -45,7 +45,7 @@ export default function Outils() {
                             <div className="block block--yellow block--fill">
                                 <h2 className="blockTitle">Croisement de bases bâtimentaires</h2>
                                 <p className="blockSubtitle">Vous souhaitez croiser deux bases de données bâtimentaires mais n&apos;avez pas les ressources pour le faire ?<br />
-                                <b>Nous offrons ce service jusqu&apos;en décembre 2023.</b></p>
+                                <b>Nous pouvons vous offrir ce service.</b></p>
                                 <div className="blockLinkShell"><a href="/outils-services/rapprochement" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
                             </div>
                         </div>

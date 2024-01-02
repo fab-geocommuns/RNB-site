@@ -7,7 +7,6 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
 import Alert from '@codegouvfr/react-dsfr/Alert'
-import Notice from '@codegouvfr/react-dsfr/Notice'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
@@ -29,7 +28,7 @@ import adsIllu from '@/public/images/ads.png'
 
 export default function Home() {
 
-    const bannerId = "7NF2-9MDK-T3H7";
+    const bannerId = "M11Z-4KK9-Y338";
     
     return (
         <>
@@ -65,15 +64,6 @@ export default function Home() {
 
             <div className="section">
                 <div className='fr-grid-row fr-grid-row--gutters'>
-                    <div className='fr-col-12 fr-col-md-10 fr-col-offset-md-1'>
-                        <Alert title="Identifiants sujets à changements" description="Les identifiants des bâtiments seront rendus stables au mois de décembre 2023. D'ici là, ils peuvent être amenés à changer. Si vous souhaitez être avertis lorsque les identifiants seront rendus stables, inscrivez-vous à notre infolettre." severity="info"></Alert>
-                        
-                    </div>
-                </div>
-            </div>
-
-            <div className="section">
-                <div className='fr-grid-row fr-grid-row--gutters'>
                 <div className="fr-col-12 fr-col-md-7">
                         <div className="block block--blue">
                         <h3 className="block__title">Carte des bâtiments</h3>
@@ -85,7 +75,7 @@ export default function Home() {
                                 className='fr-input' 
                                 type="text" 
                                 name="q"
-                                placeholder="un bâtiment : SBW3-HVPC-LHD8 ou une adresse : 42, rue des architectes, Nantes"
+                                placeholder="un bâtiment : 1GA7-PBYM-1QDY ou une adresse : 42, rue des architectes, Nantes"
                                  />
                                  <button className="fr-btn" type="submit">Rechercher</button>
                             </div>
