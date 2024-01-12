@@ -25,7 +25,7 @@ export default function Page() {
                                 <div className="block block--yellow">
                                     <h2 className="blockTitle">Nous croisons vos bases de données de bâtiments</h2>
                                     <p>Vous avez des bases de données de bâtiments que vous aimeriez croiser pour produire de nouvelles analyses, avoir une connaissance plus fine de votre parc ? Obtenez rapidement des correspondances de qualité entre différentes bases de données bâtimentaires, grâce au Référentiel National des Bâtiments.</p>
-                                    <p><b><span className='stab stab--yellowStrong'>Nousn pouvons vous proposze ce service gratuit et sur-mesure.</span></b></p>
+                                    <p><b><span className='stab stab--yellowStrong'>Nous vous proposons ce service gratuit et sur-mesure.</span></b></p>
                                     <p><b>Vous souhaitez profiter de ce service ?</b></p>
                                     <div className="blockLinkShell blockLinkShell--noGrow">
                                             <a className="fr-btn" href="/contact">Contactez nous</a>

@@ -64,6 +64,12 @@ export default function WithFooterLayout({
                     href:"https://github.com/fab-geocommuns/RNB-site"
                   },
                   text: "Github"
+                },
+                {
+                  linkProps: {
+                    href:"https://stats.uptimerobot.com/n0w4LilK0r"
+                  },
+                  text: "Statut des outils"
                 }
               ]
             }
