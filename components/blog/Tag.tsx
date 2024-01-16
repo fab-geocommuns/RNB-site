@@ -1,10 +1,5 @@
 // Style
-import styles from '@/styles/blogTag.module.scss'
-
 import Badge from '@codegouvfr/react-dsfr/Badge';
-
-
-
 
 
 export default function Tag({ tag }) {
@@ -12,7 +7,8 @@ export default function Tag({ tag }) {
     const severityMap = {
         'energie': 'new',
         'dpe': 'new',
-        'tech': 'info'
+        'tech': 'info',
+        "geocommun": 'success',
     }
     
     const severity = severityMap[tag.slug] || 'info'

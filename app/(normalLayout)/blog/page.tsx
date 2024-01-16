@@ -58,11 +58,11 @@ export default async function Page({params, searchParams} : {params: any, search
                         ))}
                     </div>
 
-                    <div>
-                        
+                    <div className={styles.pagination}>
+                    {prevPageUrl() && <Link className='fr-btn fr-btn--secondary' href={prevPageUrl()}>&larr; Page précédente</Link>}
+                    {nextPageUrl() && <Link className='fr-btn fr-btn--secondary' href={nextPageUrl()}>Page suivante &rarr;</Link>}    
                     </div>
-                    {prevPageUrl() && <Link href={prevPageUrl()}>Page précédente</Link>}
-                    {nextPageUrl() && <Link href={nextPageUrl()}>Page suivante</Link>}
+                    
                     
                     </div>
                 </div>
