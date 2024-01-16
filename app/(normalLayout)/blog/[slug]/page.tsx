@@ -1,14 +1,21 @@
-// Lib
-import { getPosts } from '@/utils/blog';
 
-async function getData() {
-    return await getPosts()
+
+// Lib
+import { getPost } from '@/utils/blog';
+
+async function getData(slug: string) {
+    return await getPost(slug);
+    
 }
 
-export default async function Page() {
+export default async function Page({
+    params
+}: {
+    params: {slug: string}
+}) {
 
 
-    const posts = await getData();
+    const post = await getData(params.slug);
     
     return (
         <>
@@ -16,12 +23,8 @@ export default async function Page() {
 
                 <div className="fr-grid-row">
                     <div className="fr-col-12 fr-py-12v">
-                    <h1>SLUG</h1>
-                    <ul>
-                        {posts?.map((post) => (
-                            <li key={post.id}>{post.title}</li>
-                        ))}
-                    </ul>
+                    <h1>{post.title}</h1>
+                    <div dangerouslySetInnerHTML={{__html: post.html}}></div>
                     </div>
                 </div>
             </div>

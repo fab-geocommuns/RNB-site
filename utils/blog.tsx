@@ -5,7 +5,12 @@ export function getPosts(page = 1) {
     const api = getClient()
     
     return api.posts
-        .browse({limit: 5, include: 'tags,authors'})
+        .browse({
+            filter: 'tag:blog',
+            page: page,
+            limit: 1, 
+            include: 'tags,authors'
+        })
         .then((posts) => {
             return posts;
         })
@@ -13,8 +18,13 @@ export function getPosts(page = 1) {
             console.error(err);
         });
 
-}
+} 
 
+export function getPost(slug: string) {
+    const api = getClient()
+
+    return api.posts.read({slug: slug})
+}
 function getClient() {
     return new GhostContentAPI({
         url: process.env.NEXT_GHOST_API_URL,
