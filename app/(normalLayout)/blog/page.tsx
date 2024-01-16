@@ -1,10 +1,14 @@
 
-
 // Lib
 import { getPosts } from '@/utils/blog';
 
+
 // Comps
 import Link from 'next/link'
+import ArticleCard from '@/components/blog/ArticleCard';
+
+// Style
+import styles from '@/styles/blog.module.scss'
 
 async function getData(page: number) {
     
@@ -19,13 +23,13 @@ export default async function Page({params, searchParams} : {params: any, search
     const posts = await getData(page);
 
     const nextPageUrl = function() {
-        if (posts.meta.pagination.next) {
+        if (posts?.meta.pagination.next) {
             return '/blog?page=' + posts.meta.pagination.next
         }
         return null
     }
     const prevPageUrl = function() {
-        if (posts.meta.pagination.prev) {
+        if (posts?.meta.pagination.prev) {
             return '/blog?page=' + posts.meta.pagination.prev
         }
         return null
@@ -33,16 +37,26 @@ export default async function Page({params, searchParams} : {params: any, search
     
     return (
         <>
+            <div className={styles.blog}>
             <div className="fr-container">
 
                 <div className="fr-grid-row">
-                    <div className="fr-col-12 fr-py-12v">
-                    <h1>Blog</h1>
-                    <ul>
+                    <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2 fr-py-12v">
+                        <div className='fr-mb-12v'>
+                    <h1 className='fr-mb-2v'>Les actualités du RNB</h1>
+                    <p><b>Suivre la construction et la diffusion du Référential National des Bâtiments.</b></p>
+                    </div>
+
+
+                    <div>
                         {posts?.map((post) => (
-                            <li key={post.id}><Link href={"/blog/" + post.slug}>{post.title}</Link></li>
+                            <div className='fr-mb-8v'>
+                            <ArticleCard post={post}></ArticleCard>
+                            </div>
+                            
+                            
                         ))}
-                    </ul>
+                    </div>
 
                     <div>
                         
@@ -52,6 +66,7 @@ export default async function Page({params, searchParams} : {params: any, search
                     
                     </div>
                 </div>
+            </div>
             </div>
         </>
     )

@@ -8,7 +8,7 @@ export function getPosts(page = 1) {
         .browse({
             filter: 'tag:blog',
             page: page,
-            limit: 1, 
+            limit: 10, 
             include: 'tags,authors'
         })
         .then((posts) => {
