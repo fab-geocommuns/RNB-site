@@ -56,7 +56,7 @@ export default async function Page({params, searchParams} : {params: any, search
 
                     <div>
                         {posts?.map((post) => (
-                            <div className='fr-mb-8v'>
+                            <div key={post.id} className='fr-mb-8v'>
                             <ArticleCard post={post}></ArticleCard>
                             </div>
                             

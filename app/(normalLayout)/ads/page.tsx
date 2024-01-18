@@ -4,7 +4,7 @@ import Link from 'next/link'
 import ADSList from '@/components/ADSList'
 import { Notice } from '@codegouvfr/react-dsfr/Notice'
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup'
-
+import Head from 'next/head'
 
 // Auth
 import { getServerSession } from 'next-auth'

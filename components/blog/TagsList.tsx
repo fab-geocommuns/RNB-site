@@ -9,7 +9,7 @@ export default function TagsList({ tags }) {
         <>
             <div>
                 {filteredTags.map((tag) => (
-                    <span className='fr-mr-2v'><Tag tag={tag}></Tag></span>
+                    <span key={tag.id} className='fr-mr-2v'><Tag tag={tag}></Tag></span>
                 ))}
             </div>
         </>
