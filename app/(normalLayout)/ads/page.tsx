@@ -1,5 +1,5 @@
 // Comps
-import Head from 'next/head'
+
 import Link from 'next/link'
 import ADSList from '@/components/ADSList'
 import { Notice } from '@codegouvfr/react-dsfr/Notice'
@@ -10,6 +10,7 @@ import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
+
 
 export default async function Home() {
 

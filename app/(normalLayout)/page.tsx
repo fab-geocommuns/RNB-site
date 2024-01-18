@@ -6,7 +6,6 @@ import { Card } from "@codegouvfr/react-dsfr/Card"
 import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
-import Alert from '@codegouvfr/react-dsfr/Alert'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'

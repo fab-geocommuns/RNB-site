@@ -1,10 +1,14 @@
+// Comps
 import TagsList from '@/components/blog/TagsList';
+
+// Lib
+import { formattedDate } from '@/utils/blog';
 
 export default function ArticleCard({post}) {
 
     
 
-    const dateStr = new Date(post.published_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })
+    const dateStr = formattedDate(post.published_at);
 
     return (
         <>

@@ -7,6 +7,8 @@
     display: flex;
     padding: 1.2em 1.6em;
     border-radius: 3px;
+    margin-top:2rem;
+    margin-bottom:2rem;
 }
 
 .kg-callout-card-grey {

@@ -10,10 +10,16 @@ import ArticleCard from '@/components/blog/ArticleCard';
 // Style
 import styles from '@/styles/blog.module.scss'
 
+// SEO
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: "Actualités du Référentiel National des Bâtiments",
+    description: "Suivez la construction et la diffusion du Référentiel National des Bâtiments."
+  }
+
 async function getData(page: number) {
-    
     const posts = await getPosts(page);
-    
     return posts;
 }
 

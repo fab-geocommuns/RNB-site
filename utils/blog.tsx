@@ -8,7 +8,7 @@ export function getPosts(page = 1) {
         .browse({
             filter: 'tag:blog',
             page: page,
-            limit: 1, 
+            limit: 10, 
             include: 'tags,authors'
         })
         .then((posts) => {
@@ -20,10 +20,15 @@ export function getPosts(page = 1) {
 
 } 
 
+export function formattedDate(isoDateStr: string) {
+    return new Date(isoDateStr).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })
+
+}
+
 export function getPost(slug: string) {
     const api = getClient()
 
-    return api.posts.read({slug: slug})
+    return api.posts.read({slug: slug, include: 'tags'})
 }
 function getClient() {
     return new GhostContentAPI({
