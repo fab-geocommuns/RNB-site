@@ -14,7 +14,7 @@ export default function Page() {
         <div className="fr-grid-row fr-grid-row--gutters fr-py-12v">
           <div className="fr-col-12 fr-col-md-8">
             
-            <h1 className="text-blue">A propos du Référentiel National des Bâtiments</h1>
+            <h1 className="text-blue">À propos du Référentiel National des Bâtiments</h1>
 
             <h2>Le problème que nous tentons de résoudre</h2>
 
@@ -27,7 +27,7 @@ export default function Page() {
             <p>Ainsi, les données géolocalisées actuelles ne permettent pas un pilotage satisfaisant des politiques publiques, en particulier celles qui concernent la rénovation énergétique, qui nécessitent une vision exhaustive, représentative, actualisée et partagée du parc.</p>
 
 
-            <h2>Notre solution : Un référentiel national des bâtiments</h2>
+            <h2>Notre solution : un Référentiel National des Bâtiments</h2>
 
             <p>La création d&apos;un référentiel unique des bâtiments, en lien avec les autres référentiels (adresses, locaux, parcelles) existants est nécessaire pour passer d&apos;un “écosystème atomisé” à un fonctionnement en réseau.</p>
 

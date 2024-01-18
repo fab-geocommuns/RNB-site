@@ -62,7 +62,7 @@ export default function RNBHeader() {
         },
         {
           isActive: pathname === '/a-propos',
-          text:"A propos",
+          text:"À propos",
           linkProps: {
             href: '/a-propos',
           }

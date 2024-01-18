@@ -27,7 +27,7 @@ export default function WithFooterLayout({
           accessibility="partially compliant"
           linkList={[
             {
-              categoryName: "A propos",
+              categoryName: "À propos",
               links: [
                 {
                   linkProps: {

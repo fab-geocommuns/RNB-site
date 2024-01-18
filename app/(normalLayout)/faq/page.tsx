@@ -37,7 +37,7 @@ export default async function Page() {
             <div className="fr-grid-row fr-grid-row--gutters fr-py-12v">
                         <div className="fr-col-12 fr-col-md-8">
 
-                            <h1>Foire aux Questions</h1>
+                            <h1>Foire aux questions</h1>
 
 
                             <Summary sections={sections} />

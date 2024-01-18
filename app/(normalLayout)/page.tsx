@@ -18,6 +18,8 @@ import logoAdeme from '@/public/images/logos/ademe.svg'
 import logoCstb from '@/public/images/logos/cstb-bdnb.png'
 import logoIgn from '@/public/images/logos/ign.png'
 import logoDgaln from '@/public/images/logos/dgaln.png'
+import logoFnv from '@/public/images/logos/france-nation-verte.jpg'
+import logoDinum from '@/public/images/logos/dinum.webp'
 
 // Other illustrations
 import rapprochementIllu from '@/public/images/rapprochement.png'
@@ -198,8 +200,15 @@ export default function Home() {
                             </div>
                             <div className="fr-col-md-3 fr-col-6 text-center">
                                 <ImageNext className={`resp-image ${styles.sponsorBlock__logo} ${styles["sponsorBlock__logo--dgaln"]}`} src={logoDgaln} alt="Direction générale de l’aménagement, du logement et de la nature" />
-                            </div>
                             
+                            </div>
+                            <div className="fr-col-md-2 fr-col-4 text-center">
+                                <ImageNext className={styles.sponsorBlock__logo} src={logoFnv} alt="France Nation Verte" />
+                            </div>
+                            <div className="fr-col-md-2 fr-col-4 text-center">
+                                <ImageNext className={styles.sponsorBlock__logo} src={logoDinum} alt="Direction interministérielle du numérique" />
+                            </div>
+
                             
                             
                         </div>
