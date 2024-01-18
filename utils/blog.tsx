@@ -30,6 +30,13 @@ export function getPost(slug: string) {
 
     return api.posts.read({slug: slug, include: 'tags'})
 }
+
+export function getBreakingNews() {
+    const api = getClient()
+    return api.pages.read({id: '659547553d119000087a7f19'});
+    
+}
+
 function getClient() {
     return new GhostContentAPI({
         url: process.env.NEXT_GHOST_API_URL,

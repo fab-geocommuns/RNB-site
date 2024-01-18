@@ -26,10 +26,18 @@ import rapprochementIllu from '@/public/images/rapprochement.png'
 import apiIllu from '@/public/images/api.png'
 import adsIllu from '@/public/images/ads.png'
 
+// Ghost CMS
+import { getBreakingNews } from '@/utils/blog'
 
-export default function Home() {
+
+async function getData() {
+    return await getBreakingNews();
+}
+
+export default async function Home() {
 
     const bannerId = "M11Z-4KK9-Y338";
+    const breakingNews = await getData();
     
     return (
         <>
@@ -61,9 +69,25 @@ export default function Home() {
                         </div>
                     </div>  
                 </div>
+
+                
+
             </div>
 
+            {breakingNews.featured && <>
+                
+                <div className='fr-grid-row'>
+                    <div className='fr-col-8 fr-col-offset-2'>
+                    <div dangerouslySetInnerHTML={{__html: breakingNews.html}}></div>
+                    </div>
+                </div>
+                </>}
+
             <div className="section">
+
+
+           
+
                 <div className='fr-grid-row fr-grid-row--gutters'>
                 <div className="fr-col-12 fr-col-md-7">
                         <div className="block block--blue">
@@ -88,7 +112,7 @@ export default function Home() {
                     <div className="fr-col-12 fr-col-md-5">
                     <div className="block block--paleBlue">
                         <h3 className="block__title">Inscription infolettre</h3>
-                        <p>Restez informé des actualités et des nouvelles fonctionnalités du RNB.</p>
+                        <p>Restez informé des <a href="/blog">actualités et des nouvelles fonctionnalités</a> du RNB.</p>
                         
 
 
