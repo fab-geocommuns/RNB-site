@@ -50,7 +50,7 @@ export default async function Page({params, searchParams} : {params: any, search
                     <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2 fr-py-12v">
                         <div className='fr-mb-12v'>
                     <h1 className='fr-mb-2v'>Les actualités du RNB</h1>
-                    <p><b>Suivre la construction et la diffusion du Référential National des Bâtiments.</b></p>
+                    <p><b>Consultez les nouveautés et des dernières fonctionnalités du RNB.</b></p>
                     </div>
 
 

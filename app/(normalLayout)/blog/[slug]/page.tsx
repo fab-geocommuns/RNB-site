@@ -3,9 +3,10 @@
 // Lib
 import { getPost, formattedDate } from '@/utils/blog';
 
-// Comps
+// Components
 import TagsList from '@/components/blog/TagsList';
 import BackToTop from '@/components/BackToTop';
+import NewsletterForm from '@/components/NewsletterForm'
 
 // Style
 import styles from '@/styles/blogArticle.module.scss'
@@ -76,6 +77,15 @@ export default async function Page({
                     
 
                     <div className={styles.articleBody} dangerouslySetInnerHTML={{__html: post.html}}></div>
+
+
+
+                    <div className="block block--paleBlue block--smallNewsletterShell fr-mt-24v">
+                        
+                        <p><b>Inscription infolettre</b><br/>Recevez l&apos;actualité du RNB directement dans votre boite email.</p>
+                        <NewsletterForm />
+                    </div>  
+
                     </div>
                     
                 </div>

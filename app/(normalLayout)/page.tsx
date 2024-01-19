@@ -113,21 +113,9 @@ export default async function Home() {
                     <div className="block block--paleBlue">
                         <h3 className="block__title">Inscription infolettre</h3>
                         <p>Restez informé des <a href="/blog">actualités et des nouvelles fonctionnalités</a> du RNB.</p>
-                        
-
-
-<NewsletterForm />
-
-
-
-
+                        <NewsletterForm />
                         </div>
-                    </div>
-
-                    
-                    
-                    
-                    
+                    </div>    
                 </div>
             </div>
 
