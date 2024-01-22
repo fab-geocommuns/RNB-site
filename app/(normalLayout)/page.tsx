@@ -210,7 +210,7 @@ export default async function Home() {
                                 <ImageNext className={styles.sponsorBlock__logo} src={logoCstb} alt="Centre scientifique et technique du bâtiment" />
                             </div>
                             <div className="fr-col-md-3 fr-col-6 text-center">
-                                <ImageNext className={styles.sponsorBlock__logo} src={logoAdeme} alt="Agence de la transition écologique" />
+                                <ImageNext className={`${styles.sponsorBlock__logo} ${styles.sponsorBlock__logoAdeme}`} src={logoAdeme} alt="Agence de la transition écologique" />
                             </div>
                             <div className="fr-col-md-3 fr-col-6 text-center">
                                 <ImageNext className={`resp-image ${styles.sponsorBlock__logo} ${styles["sponsorBlock__logo--dgaln"]}`} src={logoDgaln} alt="Direction générale de l’aménagement, du logement et de la nature" />
