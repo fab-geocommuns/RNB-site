@@ -13,6 +13,8 @@ import styles from '@/styles/blog.module.scss'
 // SEO
 import { Metadata } from 'next'
 
+export const revalidate = 10
+
 export const metadata: Metadata = {
     title: "Actualités du Référentiel National des Bâtiments",
     description: "Suivez la construction et la diffusion du Référentiel National des Bâtiments."

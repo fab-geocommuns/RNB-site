@@ -1,6 +1,8 @@
+import { cache } from 'react'
+
 import GhostContentAPI from '@tryghost/content-api'
 
-export function getPosts(page = 1) {
+export const getPosts = cache(async(page = 1) => {
     
     const api = getClient()
     
@@ -18,24 +20,23 @@ export function getPosts(page = 1) {
             console.error(err);
         });
 
-} 
+})
 
 export function formattedDate(isoDateStr: string) {
     return new Date(isoDateStr).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })
 
 }
 
-export function getPost(slug: string) {
+export const getPost = cache(async(slug: string) => {
     const api = getClient()
 
     return api.posts.read({slug: slug, include: 'tags'})
-}
+})
 
-export function getBreakingNews() {
+export const getBreakingNews = cache(async() => {
     const api = getClient()
     return api.pages.read({id: '659547553d119000087a7f19'});
-    
-}
+}) 
 
 function getClient() {
     return new GhostContentAPI({

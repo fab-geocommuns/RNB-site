@@ -30,6 +30,8 @@ import adsIllu from '@/public/images/ads.png'
 import { getBreakingNews } from '@/utils/blog'
 
 
+export const revalidate = 10
+
 async function getData() {
     return await getBreakingNews();
 }

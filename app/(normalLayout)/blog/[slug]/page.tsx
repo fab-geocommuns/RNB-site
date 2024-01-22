@@ -14,6 +14,9 @@ import styles from '@/styles/blogArticle.module.scss'
 // SEO
 import { Metadata, ResolvingMetadata } from 'next'
 
+// Force cached parts (ghost content) to be refreshed every 10 seconds
+export const revalidate = 10
+
 async function getData(slug: string) {
     return await getPost(slug);
 }
@@ -22,7 +25,7 @@ export async function generateMetadata(
     { params }: { params: { slug: string } },
     parent: ResolvingMetadata
   ): Promise<Metadata> {
-    // The same request is made twice, but it's cached by Next.js
+    // The same request is made twice, but it's cached by Next.js and the React cache function
     const post = await getData(params.slug);
     return {
         title: post.title,
