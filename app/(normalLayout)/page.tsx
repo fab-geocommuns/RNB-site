@@ -19,6 +19,7 @@ import logoAdeme from '@/public/images/logos/ademe.svg'
 import logoCstb from '@/public/images/logos/cstb-bdnb.png'
 import logoIgn from '@/public/images/logos/ign.png'
 import logoDgaln from '@/public/images/logos/dgaln.png'
+import logoDinum from '@/public/images/logos/dinum.png'
 
 // Other illustrations
 import rapprochementIllu from '@/public/images/rapprochement.png'
@@ -200,7 +201,9 @@ export default function Home() {
                             <div className="fr-col-md-3 fr-col-6 text-center">
                                 <ImageNext className={`resp-image ${styles.sponsorBlock__logo} ${styles["sponsorBlock__logo--dgaln"]}`} src={logoDgaln} alt="Direction générale de l’aménagement, du logement et de la nature" />
                             </div>
-                            
+                            <div className="fr-col-md-3 fr-col-6 text-center">
+                                <ImageNext className={styles.sponsorBlock__logo} src={logoDinum} alt="Direction interministérielle du numérique" />
+                            </div>
                             
                             
                         </div>
