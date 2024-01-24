@@ -159,7 +159,7 @@ export default function Page() {
                             <div className='fr-col-12'>
                             <div className="block block--yellow">
                                     <h2 className="blockTitle">La BDNB et la BD Topo sont intégrées</h2>
-                                    <p>Chaque bâtiment du RNB contient les identifiants des bâtiment correspondant au sein de la <a href="https://bdnb.io/" target='_blank'>BDNB</a> et de la <a href="https://geoservices.ign.fr/bdtopo" target='_blank'>BD Topo</a>. Cette table de correspondance nationale vous permet d'accéder à la richesse métier de la BDNB et à la précision géographique de la BD Topo à partir d'un identifiant RNB.</p>
+                                    <p>Chaque bâtiment du RNB contient les identifiants des bâtiments correspondant au sein de la <a href="https://bdnb.io/" target='_blank'>BDNB</a> et de la <a href="https://geoservices.ign.fr/bdtopo" target='_blank'>BD Topo</a>. Cette table de correspondance nationale vous permet d'accéder à la richesse métier de la BDNB et à la précision géographique de la BD Topo à partir d'un identifiant RNB.</p>
                                     <p>Obtenez les identifiants RNB de vos bâtiments en utilisant nos APIs.</p>
 
                                     

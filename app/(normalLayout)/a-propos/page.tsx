@@ -1,10 +1,15 @@
+// Styles
+import styles from '@/styles/about.module.scss'
+
 // Comps
 import AboutCol from "@/components/AboutCol"
+import ImageNext from 'next/image'
 
 // Settings
 import settings from '@/logic/settings'
 
-
+// Logos
+import logoFnv from '@/public/images/logos/france-nation-verte.jpg'
 
 
 
@@ -34,6 +39,26 @@ export default function Page() {
             <p>Le service est réalisé à la fabrique des géocommuns, l&apos;incubateur de l&apos;IGN, appliquant la méthode du programme <a href="https://beta.gouv.fr/" target="_blank">beta.gouv</a> de la Direction Interministérielle du Numérique (<a href="https://www.numerique.gouv.fr/dinum/" target="_blank">DINUM</a>).</p>
             <p>Les standards du RNB sont également réalisés en collaboration avec les experts de la donnée géomatique du Conseil National de l&apos;Information Géolocalisée (<a href="https://cnig.gouv.fr/gt-bati-a25939.html" target="_blank">CNIG</a>).</p>
             <p>Vous souhaitez contribuer ? Toutes les contributions sont les bienvenues pour construire ce géocommun, faciliter et réduire les coûts de maintenance et optimiser la qualité des données. Contactez nous sur <a href={contactEmail}>{contactEmail}</a></p>
+
+            <div className="block block--paleGreen fr-mt-24v">
+
+                    <div className="fr-grid-row fr-grid-row--gutters ">
+                      <div className="fr-col-12 fr-col-md-3">
+                        <ImageNext className={styles.fnvLogo} src={logoFnv} alt="France Nation Verte" />
+                      </div>
+                      <div className="fr-col-12 fr-col-md-9">
+                        <p className="block__title"><strong>Le RNB prioritaire pour la feuille de route Numérique et Données de France Nation Verte</strong></p>
+                        <p>L’année 2024 s’annonce importante pour le RNB sur le plan son déploiement et de sa diffusion au sein des “Systèmes d’information métiers et partenaires-clés (DPE, Autorisations Droits des Sols, SDIS, BD TOPO, etc).” Des jalons essentiels qui permettront, à terme, comme le précise les axes du groupe de travail “Mieux se Loger” de France Nation Verte de “consolider les analyses à la maille du logement et du bâtiment”.</p>
+                        <p><small>Cf. <a href="https://www.gouvernement.fr/upload/media/content/0001/07/569c04abcdd4749aa089e9c23371c2812e705ccc.pdf" target="_blankl">Feuille de route Numérique et Données pour la Planification écologique France Nation Verte</a> du 22 décembre 2023 - page 68</small></p>
+                      </div>
+                    </div>
+
+
+                    
+                    
+                  
+                </div>
+
 
           </div>
           <div className="fr-col-12 fr-col-md-3 fr-col-offset-md-1">
