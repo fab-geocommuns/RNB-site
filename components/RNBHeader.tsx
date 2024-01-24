@@ -7,48 +7,68 @@ import { Header } from "@codegouvfr/react-dsfr/Header";
 import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
 
+// Routes
+import { usePathname } from 'next/navigation'
+
 export default function RNBHeader() {
 
     const { data: session } = useSession()
 
+    const pathname = usePathname()
+
     const nav = [
         {
+          isActive: pathname === '/',
           text: 'Accueil',
           linkProps: {
             href: '/',
-          }
+          },
+          
         },
         {
+          isActive: pathname === '/carte',
           text:"Carte",
           linkProps: {
             href: '/carte',
           }
         },
         {
+          isActive: pathname.startsWith('/outils-services'),
           text:"Outils & services",
           linkProps: {
             href: '/outils-services',
           }
         },
         {
+          isActive: pathname === '/definition',
           text:"Définition & standards",
           linkProps: {
             href: '/definition',
           }
         },
         {
+          isActive: pathname.startsWith('/cas'),
           text:"Cas d'usage",
           linkProps: {
             href: '/cas',
           }
         },
         {
-          text:"A propos",
+          isActive: pathname.startsWith('/blog'),
+          text:"Actualités",
+          linkProps: {
+            href: '/blog',
+          }
+        },
+        {
+          isActive: pathname === '/a-propos',
+          text:"À propos",
           linkProps: {
             href: '/a-propos',
           }
         },
         {
+          isActive: pathname === '/contact',
           text:"Contact",
           linkProps: {
             href: '/contact',

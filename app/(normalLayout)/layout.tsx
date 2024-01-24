@@ -1,5 +1,16 @@
+// SEO
+import { Metadata } from 'next'
+
 // Components
 import { Footer } from "@codegouvfr/react-dsfr/Footer";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Référentiel National des Bâtiments",
+    template: "%s | RNB",
+  },
+  description: "Référencer l'intégralité des bâtiments du territoire français au sein de données et d'outils libres."
+}
 
 export default function WithFooterLayout({
     children, // will be a page or nested layout
@@ -13,16 +24,28 @@ export default function WithFooterLayout({
         {children}
         <Footer
           brandTop={<>République<br/>Française</>}
-          accessibility="partially compliant"
+          accessibility="non compliant"
+          accessibilityLinkProps={
+            {
+              href: "/accessibilite",
+              title: "En savoir plus sur l'accessibilité de ce site"
+            }
+          }
           linkList={[
             {
-              categoryName: "A propos",
+              categoryName: "À propos",
               links: [
                 {
                   linkProps: {
                     href:"/a-propos",
                   },
                   text: "Présentation",
+                },
+                {
+                  linkProps: {
+                    href:"/blog",
+                  },
+                  text: "Actualités",
                 },
                 {
                   linkProps: {
@@ -64,6 +87,14 @@ export default function WithFooterLayout({
                     href:"https://github.com/fab-geocommuns/RNB-site"
                   },
                   text: "Github"
+
+                }, 
+                {
+                  linkProps: {
+                    href: "https://stats.uptimerobot.com/n0w4LilK0r",
+                  },
+                  text: "Statut des services",
+
                 }
               ]
             }

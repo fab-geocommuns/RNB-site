@@ -14,6 +14,7 @@ import sameSoftIllu from '@/public/images/same-software.svg'
 // Settings
 import settings from '@/logic/settings'
 
+
 export default function Page() {
 
     const formUrl = settings.adsFormUrl;
