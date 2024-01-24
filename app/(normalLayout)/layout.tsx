@@ -24,7 +24,13 @@ export default function WithFooterLayout({
         {children}
         <Footer
           brandTop={<>République<br/>Française</>}
-          accessibility="partially compliant"
+          accessibility="non compliant"
+          accessibilityLinkProps={
+            {
+              href: "/accessibilite",
+              title: "En savoir plus sur l'accessibilité de ce site"
+            }
+          }
           linkList={[
             {
               categoryName: "À propos",
