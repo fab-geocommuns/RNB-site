@@ -42,7 +42,7 @@ export default function AboutCol() {
 
             <Tile
             imageUrl={faqIllu.src}
-            title="Foire aux Questions"
+            title="Foire aux questions"
             linkProps={{
               href: '/faq'
             }}

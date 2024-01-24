@@ -7,7 +7,7 @@
     key: quoi
     answer: >
       <p>Le Référentiel National des Bâtiments (RNB) a pour vocation de créer <b>un système commun de repérage des bâtiments, à l’échelle nationale.</b></p>
-      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire</b> et leur <b>associe un identifiant unique</b>. En 2023, seule la France métropolitaine est initialisée, les DROM COM seront inclus en 2024.</p>
+      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire</b> (DROM COM inclus) et leur <b>associe un identifiant unique</b>.</p>
       <p>Cet identifiant unique, associé à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de faire meilleur usage de leurs données bâtimentaires. Il permet notamment le croisement entre des jeux de données différents, permettant une meilleure circulation de la donnée.</p>
   - question: À quelle problématique répond le RNB ?
     key: problematique
@@ -29,6 +29,16 @@
       <ul>
       <li>Utilisateurs de données bâtimentaires : les <b>communes</b>, les <b>métropoles</b>, les <b>fournisseurs d’énergie</b>, les services départementaux d'incendie et de secours (<b>SDIS</b>), les acteurs de l’économie numérique produisant des analyses, etc.</li>
       <li>Producteurs de données bâtimentaires : l’ensemble des <b>administrations publiques</b> produisant des données bâtimentaires à la maille du cadastre, des parcelles ou des locaux, ainsi que celles agrégeant des données métier (historique de construction, performance énergétique, etc.)</li>
+      </ul>
+  - question: Quels sont les principaux cas d’usages du RNB ?
+    key: usages
+    answer: >
+      <ul>
+      <li>Indexer les DPE à leur bâtiment (ils sont aujourd’hui consultables seulement à l’adresse) : cela permet d’améliorer l’analyse de performances énergétiques du parc et de mieux piloter les politiques de rénovation</li>
+      <li>Présenter une vue actualisée du parc (grâce aux nombreuses sources d’alimentation du RNB) : ce besoin est particulièrement présent au sein des collectivités</li>
+      <li>Lier des bâtiments à des zones de risques : les acteurs publics et privés de l’assurance en sont les principaux demandeurs</li>
+      <li>Améliorer le suivi des signalements concernant les logements non décents, insalubres et dangereux</li>
+      <li>Enrichir une base de données bâtiments grâce aux informations contenus dans une autre base bâtiments</li>
       </ul>
 - name: Comment est conçu le RNB ?
   desc: Tout savoir sur la conception du RNB, les caractéristiques techniques des bâtiments et de l’ID unique.
@@ -69,9 +79,11 @@
     answer: >
       <p>Aujourd’hui, chaque bâtiment est représenté par un point cliquable, composé d’une fiche mentionnant :</p>
       <ul>
+      <li>ses coordonnées géographiques</li>
       <li>l’identifiant unique du bâtiment</li>
       <li>le statut du bâtiment</li>
       <li>son adresse ou ses adresses</li>
+      <li>les identifiants BDNB et BD Topo associés</li>
       <ul>
       <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut.</p>
       <p>Il en existe 7 : </p>
@@ -85,10 +97,18 @@
       <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
       </ol>
       <p>Ces statuts évoluent selon les informations remontées dans le RNB.</p>
+  - question: Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
+    key: identifiant-perennes
+    answer: >
+      <p><a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">Les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
 - name: Comment utiliser le RNB ?
   desc: En savoir plus sur l’utilisation concrète du RNB par vos services
   key: utilisation
   entries:
+    - question: Le RNB est-il accessible gratuitement ?
+      key: gratuit
+      answer: >
+        <p>Oui, le RNB est un service public gratuit.</p>
     - question: Comment accéder aux données du RNB ?
       key: acces
       answer: >
@@ -109,7 +129,7 @@
     - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
       key: attributs-metier
       answer: >
-        <p>Non, la RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert plutôt de passerelle permettant d’établir des correspondances entre différentes bases.</p>
+        <p>Non, la RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert plutôt de passerelle permettant d’établir des correspondances entre différentes bases. Il renvoie néanmoins, pour chaque bâtiment, vers les éléments de la BDNB et de la BD Topo correspondants.</p>
 
 
 

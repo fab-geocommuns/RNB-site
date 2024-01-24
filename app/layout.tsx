@@ -30,11 +30,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
-
-  
-  
-
-
   return (    
     
     <html lang="fr" {...getColorSchemeHtmlAttributes({ defaultColorScheme })} >
