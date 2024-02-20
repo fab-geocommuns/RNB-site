@@ -16,6 +16,7 @@ import logoFnv from '@/public/images/logos/france-nation-verte.jpg'
 export default function Page() {
   
     const contactEmail = settings.contactEmail;
+    
 
     return (
       <div className="fr-container">
@@ -49,7 +50,7 @@ export default function Page() {
                       <div className="fr-col-12 fr-col-md-9">
                         <p className="block__title"><strong>Le RNB prioritaire pour la feuille de route Numérique et Données de France Nation Verte</strong></p>
                         <p>L’année 2024 s’annonce importante pour le RNB sur le plan son déploiement et de sa diffusion au sein des “Systèmes d’information métiers et partenaires-clés (DPE, Autorisations Droits des Sols, SDIS, BD TOPO, etc).” Des jalons essentiels qui permettront, à terme, comme le précise les axes du groupe de travail “Mieux se Loger” de France Nation Verte de “consolider les analyses à la maille du logement et du bâtiment”.</p>
-                        <p><small>Cf. <a href="https://www.gouvernement.fr/upload/media/content/0001/07/569c04abcdd4749aa089e9c23371c2812e705ccc.pdf" target="_blankl">Feuille de route Numérique et Données pour la Planification écologique France Nation Verte</a> du 22 décembre 2023 - page 68</small></p>
+                        <p><small>Cf. <a href="https://www.gouvernement.fr/upload/media/content/0001/07/73660b71fb63625d4c6c5bc36666caf0606d4cad.pdf" target="_blankl">Cf. Feuille de route Numérique et Données pour la Planification écologique France Nation Verte</a> du 22 décembre 2023 - page 138</small></p>
                       </div>
                     </div>
 
