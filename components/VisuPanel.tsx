@@ -79,7 +79,7 @@ export default function VisuPanel() {
         // Bdg status is a string, we are on the new format
         if (typeof bdgStatus === "string") return getStatusLabel(bdgStatus)
 
-        // Bdg status is an array, we are on the old format
+        // Bdg status is an array, we are on the old format -> it can be removed once the backend PR https://github.com/fab-geocommuns/RNB-coeur/pull/327 is merged and deployed
         if (Array.isArray(bdgStatus)) {
             const currentStatus = bdg?.status?.find(s => s.is_current)
             return currentStatus.label    
