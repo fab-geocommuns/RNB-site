@@ -36,6 +36,24 @@ export default function VisuPanel() {
 
     const [copied, setCopied] = useState(false);
 
+    const getStatusLabel = (status: string) => {
+
+        const labels = {
+            'constructionProject': 'En projet',
+            'canceledConstructionProject': 'Projet annulé',
+            'ongoingConstruction': 'Construction en cours',
+            'constructed': 'Construit',
+            'ongoingChange': 'En cours de modification',
+            'notUsable': 'Non utilisable',
+            'demolished': 'Démoli',
+        }
+
+        const label = labels[status]
+
+        return label
+
+    }
+
   
 
     const handleCopy = () => {
@@ -52,11 +70,21 @@ export default function VisuPanel() {
 
     const statusLabel = () => {
         
-        const currentStatus = bdg?.status?.find(s => s.is_current)
+        
+        const bdgStatus = bdg?.status
 
-        if (currentStatus === undefined) return "Inconnu"
+        if (bdgStatus === undefined) return "Inconnu"
+        if (bdgStatus === null) return "Inconnu"
 
-        return currentStatus.label
+        // Bdg status is a string, we are on the new format
+        if (typeof bdgStatus === "string") return getStatusLabel(bdgStatus)
+
+        // Bdg status is an array, we are on the old format -> it can be removed once the backend PR https://github.com/fab-geocommuns/RNB-coeur/pull/327 is merged and deployed
+        if (Array.isArray(bdgStatus)) {
+            const currentStatus = bdg?.status?.find(s => s.is_current)
+            return currentStatus.label    
+        }
+
 
     }
 
