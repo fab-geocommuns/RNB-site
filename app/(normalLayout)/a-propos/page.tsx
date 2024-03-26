@@ -25,7 +25,7 @@ export default function Page() {
             
             <h1 className="text-blue">À propos du Référentiel National des Bâtiments</h1>
 
-            <h2>Problématique : le cloisennement de l&apos;information bâtimentaire</h2>
+            <h2>Problématique : le cloisonnement de l&apos;information bâtimentaire</h2>
             <p>Jusqu&apos;à présent, les données liées aux bâtiments sont détenues par une multitude d’acteurs, travaillant en silos. Les administrations, les collectivités et de nombreux acteurs privés (ex : fournisseurs d’énergie), œuvrent individuellement pour produire et obtenir l&apos;information sans que celle-ci soit mise en commun.</p>
             <p>Cette absence de base de données nationale de référence sur le bâtiment engendre des ralentissements et des coûts importants dans la conduite d&apos;actions publiques et territoriales, pour répondre aux enjeux de la transition écologique ou du logement notamment.</p>
 
