@@ -18,6 +18,7 @@ import settings from '@/logic/settings'
 export default function Page() {
 
     const formUrl = settings.adsFormUrl;
+    const contactEmail = settings.contactEmail;
 
     return (
         <>
@@ -35,7 +36,7 @@ export default function Page() {
                                     <p><b><span className='stab stab--yellowStrong'>Ce service est gratuit et réservé aux collectivités.</span></b></p>
                                     
                                     <div className="blockLinkShell blockLinkShell--noGrow">
-                                            <a className="fr-btn" target='_blank' href={formUrl}>Demander un accès</a>
+                                            <a className="fr-btn" target='_blank' href={`mailto:${contactEmail}`}>Demander un accès</a>
                                     </div>
                                 </div>
                     </div>

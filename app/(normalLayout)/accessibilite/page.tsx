@@ -1,3 +1,7 @@
+// Settings
+import settings from '@/logic/settings'
+const contactEmail = settings.contactEmail;
+
 export default function Page() {
   return (
     <>
@@ -19,7 +23,7 @@ export default function Page() {
 <p>Si vous n&apos;arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de <span>Référentiel National des Bâtiments</span> pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.</p>
 <ul>
 	<li>
-	E-mail&nbsp;: <a href="mailto:rnb@beta.gouv.fr">rnb@beta.gouv.fr</a>
+	E-mail&nbsp;: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
 </li>
 
 	<li>
