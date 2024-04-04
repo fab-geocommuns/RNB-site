@@ -73,13 +73,7 @@ export default function RNBMap() {
 
 
                 <div className={styles.map}>
-
-                    <div className={styles.map__InputShell}>
-                        
-                        <AddressSearch />
-                    </div>
-
-                    
+                    <AddressSearch />
                     <VisuPanel />
                     
                     
