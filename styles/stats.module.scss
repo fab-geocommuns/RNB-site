@@ -1,0 +1,17 @@
+.stats {
+    h1 {
+        text-align: center;
+    }
+}
+
+.stat-card {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    max-width: 500px;
+    text-align: center;
+
+    h1 {
+        text-align: center;
+        color: var(--blue-france-sun-113-625);
+    }
+}
