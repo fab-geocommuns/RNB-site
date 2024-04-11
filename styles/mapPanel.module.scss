@@ -104,5 +104,17 @@
     margin-bottom:.8em
 }
 .sectionListItem:last-child {
-    margin-bottom:0;
+    margin-bottom: 0;
+}
+
+.text-light-blue {
+    color: var(--blue-france-main-525);
+}
+
+.text-red {
+    color: var(--red-marianne-425-625-hover);
+}
+
+.small-left-padding {
+    padding-left: 2px;
 }
