@@ -7,8 +7,6 @@ import { useContext } from 'react';
 import { AdsContext } from './AdsContext';
 import { MapContext } from '@/components/MapContext'
 
-// Utils
-import { addDash} from '@/utils/identifier'
 
 
 export default function BdgOp({data=null}) {
@@ -85,7 +83,7 @@ export default function BdgOp({data=null}) {
         }
 
 
-        return addDash(data.building.rnb_id)
+        return data.building.rnb_id
 
     }
 

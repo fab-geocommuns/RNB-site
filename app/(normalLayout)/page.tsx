@@ -38,7 +38,7 @@ async function getData() {
 
 export default async function Home() {
 
-    const bannerId = "M11Z-4KK9-Y338";
+    const bannerId = "M11Z4KK9Y338";
     const breakingNews = await getData();
     
     return (
@@ -102,8 +102,8 @@ export default async function Home() {
                                 className='fr-input' 
                                 type="text" 
                                 name="q"
-                                placeholder="un bâtiment : 1GA7-PBYM-1QDY ou une adresse : 42, rue des architectes, Nantes"
-                                 />
+                                            placeholder="un identifiant RNB : 1GA7PBYM1QDY ou une adresse : 42, rue des architectes, Nantes"
+                                        />
                                  <button className="fr-btn" type="submit">Rechercher</button>
                             </div>
 
