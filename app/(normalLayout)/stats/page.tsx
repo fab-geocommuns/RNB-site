@@ -41,6 +41,7 @@ export default function Page() {
     let api_calls_since_2024_count = stat_card("api_calls_since_2024_count");
     let contributions_count = stat_card("contributions_count");
     let data_gouv_publication_count = stat_card("data_gouv_publication_count");
+    let more_than_one_dataset = stats.data_gouv_publication_count > 1;
 
     return (
         <div class={"fr-container fr-mt-3w fr-mb-6w " + styles.stats}>
@@ -64,7 +65,7 @@ export default function Page() {
             <div class="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
                 <div class={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {data_gouv_publication_count}
-                    JEUX DE DONNÉES REPUBLIÉS SUR DATA.GOUV.FR
+                    JEU{more_than_one_dataset ? "X" : ""} DE DONNÉES REPUBLIÉ{more_than_one_dataset ? "S" : ""} SUR DATA.GOUV.FR
                     <p class='fr-pt-3w'>
                         <a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" class="fr-link">Les parcourir</a>
                     </p>
