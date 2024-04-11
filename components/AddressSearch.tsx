@@ -4,21 +4,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
 
+import styles from '@/styles/mapPage.module.scss'
+
 // Bus
 import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
-import { 
-    setMoveTo, 
-    setAddressSearchQuery, 
-    setAddressSearchResults, 
+import {
+    setMoveTo,
+    setAddressSearchQuery,
+    setAddressSearchResults,
+    setAddressSearchUnknownRNBId,
     setMarker,
     fetchBdg,
     openPanel
 } from '@/stores/map/slice';
 
 export default function AddressSearch() {
+    const unknown_rnb_id = useSelector((state) => state.addressSearch.unknown_rnb_id)
 
     // URL params
     const params = useSearchParams()
@@ -31,8 +35,8 @@ export default function AddressSearch() {
     const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
     const addressInput = useRef(null)
 
-    const handleKeyDown = async (e) => { 
-
+    const handleKeyDown = async (e) => {
+        dispatch(setAddressSearchUnknownRNBId(false))
         if (e.key === 'Enter') {
             e.preventDefault();
             search()            
@@ -57,22 +61,23 @@ export default function AddressSearch() {
     const handleBdgQuery = async () => {
 
         dispatch(fetchBdg(query)).then((res) => {
-        
-            dispatch(openPanel())
-            dispatch(setMoveTo({
-                lat: res.payload.point.coordinates[1],
-                lng: res.payload.point.coordinates[0],
-                zoom: 20,
-                fly: false
-            }))
+            if (res.payload !== null) {
+                dispatch(openPanel())
+                dispatch(setMoveTo({
+                    lat: res.payload.point.coordinates[1],
+                    lng: res.payload.point.coordinates[0],
+                    zoom: 20,
+                    fly: false
+                }))
 
-            Bus.emit('rnbid:search', {
-                rnb_id: query
-            })
-
-
+                Bus.emit('rnbid:search', {
+                    rnb_id: query
+                })
+            }
+            else {
+                dispatch(setAddressSearchUnknownRNBId(true))
+            }
         })
-
     }
 
     const featureToPosition = (feature: any) => {
@@ -155,19 +160,21 @@ export default function AddressSearch() {
 
     return (
         <>
-        <input 
-        className="fr-input" 
-        placeholder='Chercher une adresse, un identifiant RNB'
-        type="text" 
-        autoComplete='off'
-        name="address" 
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        id="address"
-        ref={addressInput}
-        onKeyDown={handleKeyDown}
-         />
-        
+            <div className={`${styles.map__InputShell} ${(unknown_rnb_id ? styles['shake'] : '')}`}>
+                <input
+                    className={"fr-input " + (unknown_rnb_id ? styles['fr-input--error'] : "")}
+                    placeholder='Chercher une adresse, un identifiant RNB'
+                    type="text"
+                    autoComplete='off'
+                    name="address"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    id="address"
+                    ref={addressInput}
+                    onKeyDown={handleKeyDown}
+                />
+            </div>
+
         </>
     )
 

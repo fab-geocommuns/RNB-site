@@ -6,7 +6,8 @@ const initialState = {
     panelIsOpen: false,
     addressSearch: {
         q: null,
-        results: null
+        results: null,
+        unknown_rnb_id: false
     },
     moveTo: {
         lat: null,
@@ -42,6 +43,9 @@ export const mapSlice = createSlice({
         setAddressSearchResults(state, action) {
             state.addressSearch.results = action.payload
         },
+        setAddressSearchUnknownRNBId(state, action) {
+            state.addressSearch.unknown_rnb_id = action.payload
+        },
         setMoveTo(state, action) {
 
             if (action.payload.lat != state.moveTo.lat || 
@@ -64,8 +68,12 @@ export const mapSlice = createSlice({
 export const fetchBdg = createAsyncThunk('map/fetchBdg', async (bdgId: string) => {
     const url = bdgApiUrl(bdgId + "?from=site")
     const response = await fetch(url)
-    const data = await response.json()
-    return data
+    if (!response.ok) {
+        return null
+    } else {
+        const data = await response.json()
+        return data
+    }
 })
 
 export function bdgApiUrl(bdgId: string) {
@@ -78,6 +86,7 @@ export const {
     setMoveTo, 
     setAddressSearchQuery, 
     setAddressSearchResults,
+    setAddressSearchUnknownRNBId,
     openPanel,
     closePanel
 } = mapSlice.actions
