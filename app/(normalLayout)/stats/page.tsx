@@ -55,7 +55,7 @@ export default function Page() {
                 </div>
                 <div class={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {api_calls_since_2024_count}
-                    APPELS À L'API EN 2024
+                    APPELS À L&apos;API EN 2024
                     <p class='fr-pt-3w'>
                         <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" class="fr-link">Voir la doc</a>
                     </p>
