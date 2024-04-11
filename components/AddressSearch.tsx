@@ -18,7 +18,8 @@ import {
     setAddressSearchUnknownRNBId,
     setMarker,
     fetchBdg,
-    openPanel
+    openPanel,
+    closePanel
 } from '@/stores/map/slice';
 
 export default function AddressSearch() {
@@ -51,6 +52,7 @@ export default function AddressSearch() {
     const search = async () => {
 
         if (queryIsRnbId()) {
+            dispatch(closePanel())
             handleBdgQuery()
         } else {
             handleAddressQuery()
