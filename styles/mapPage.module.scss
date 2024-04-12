@@ -84,3 +84,11 @@
 .fr-input--error {
     color: var(--error-425-625-active) !important;
 }
+.suggestion {
+    cursor: pointer;
+    padding: 1px 0 1px 16px;
+}
+
+.selected {
+    background: var(--blue-cumulus-925-125-hover);
+}

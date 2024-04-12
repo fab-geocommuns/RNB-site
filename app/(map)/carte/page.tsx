@@ -28,13 +28,10 @@ export default function RNBMap() {
 
     // //////////////////////
     // Tracking address search
-    const trackAddressSearch = (results) => {
-
-        let insee_code = results.search.features?.[0]?.properties?.citycode
-        
+    const trackAddressSearch = (address) => {
         va.track("address-search-public-map", {
-            query: results.search.query,
-            result_insee_code: insee_code
+            query: address.label,
+            result_insee_code: address.insee_code,
         })
 
 

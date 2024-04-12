@@ -29,6 +29,9 @@ export default function AddressSearch() {
     const params = useSearchParams()
     const [query, setQuery] = useState(params.get('q') || '')
 
+    const [addressSuggestions, setAddressSuggestions] = useState([])
+    const [selectedSuggestion, setSelectedSuggestion] = useState(null)
+
     // State
     const moveTo = useSelector((state) => state.moveTo)
     const dispatch = useDispatch()
@@ -38,9 +41,28 @@ export default function AddressSearch() {
 
     const handleKeyDown = async (e) => {
         dispatch(setAddressSearchUnknownRNBId(false))
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            search()            
+        if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            if (selectedSuggestion < addressSuggestions.length - 1) {
+                setSelectedSuggestion(selectedSuggestion + 1)
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            if (selectedSuggestion > 0) {
+                setSelectedSuggestion(selectedSuggestion - 1)
+            }
+        } else if (e.key === 'Enter') {
+            if (queryIsRnbId()) {
+                dispatch(closePanel())
+                handleBdgQuery()
+            } else if (addressSuggestions.length > 0) {
+                select_suggestion(addressSuggestions[selectedSuggestion])
+            }
+        } else if (query.length > 4) {
+            handleAddressQuery()
+            setSelectedSuggestion(0)
+        } else {
+            setAddressSuggestions([])
         }
 
     }
@@ -55,9 +77,15 @@ export default function AddressSearch() {
             dispatch(closePanel())
             handleBdgQuery()
         } else {
-            handleAddressQuery()
+            // launch address search, await for response
+            handleAddressQuery().then((results) => {
+                console.log('then')
+                console.log(addressSuggestions.length)
+                if (results.length > 0) {
+                    select_suggestion(results[0])
+                }
+            })
         }
-
     }
     
     const handleBdgQuery = async () => {
@@ -101,40 +129,20 @@ export default function AddressSearch() {
     }
 
     const handleAddressQuery = async () => {
-
         // Add the query to the store
         const geocode_result = await fetchBanAPI(addressInput.current.value);
-
         dispatch(setAddressSearchQuery(addressInput.current.value))
         dispatch(setAddressSearchResults(geocode_result.features))
-
-
         if (geocode_result.features.length > 0) {
-
-            const position = featureToPosition(geocode_result.features[0])
-
-            // Add a marker to the map
-            dispatch(setMarker({
-                lat: position.lat,
-                lng: position.lng
-            }))
-
-            // Move the map to the position
-            dispatch(setMoveTo(position))
-
-            Bus.emit('address:search', {
-                search: geocode_result
-            })
+            setAddressSuggestions(geocode_result.features)
         }
+        return geocode_result.features
 
     }
     const fetchBanAPI = async (query) => {
-
         let query_url = new URL(apiUrl);
         query_url.searchParams.set('q', query);
-
         return new Promise((resolve, reject) => {
-
             fetch(query_url)
                 .then(response => response.json())
                 .then(data => {
@@ -144,21 +152,36 @@ export default function AddressSearch() {
                     reject(error)
                 })
         })
-
     }
 
     useEffect(() => {
-
         if (params.get('q') !== null) {
-
             search()
-
         }
-
-
     }, [])
 
-    
+    const select_suggestion = (suggestion) => {
+        setAddressSuggestions([])
+        const position = featureToPosition(suggestion)
+        // Add a marker to the map
+        dispatch(setMarker({
+            lat: position.lat,
+            lng: position.lng
+        }))
+        // Move the map to the position
+        dispatch(setMoveTo(position))
+        setQuery(suggestion.properties.label)
+        Bus.emit('address:search', {
+            search: suggestion.label
+        })
+    }
+
+    const suggestions = addressSuggestions.length > 0 ?
+        addressSuggestions.map((s, i) =>
+            <div onMouseEnter={() => setSelectedSuggestion(i)} onClick={() => select_suggestion(s)} className={styles.suggestion + ' ' + (selectedSuggestion == i ? styles.selected : '')} key={s.properties.id} >
+                {s.properties.label}
+            </div >
+        ) : null
 
     return (
         <>
@@ -175,6 +198,7 @@ export default function AddressSearch() {
                     ref={addressInput}
                     onKeyDown={handleKeyDown}
                 />
+                {suggestions}
             </div>
 
         </>
