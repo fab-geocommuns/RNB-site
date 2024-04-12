@@ -176,12 +176,11 @@ export default function AddressSearch() {
         })
     }
 
-    const suggestions = addressSuggestions.length > 0 ?
-        addressSuggestions.map((s, i) =>
+    const suggestions = addressSuggestions.map((s, i) =>
             <div onMouseEnter={() => setSelectedSuggestion(i)} onClick={() => select_suggestion(s)} className={styles.suggestion + ' ' + (selectedSuggestion == i ? styles.selected : '')} key={s.properties.id} >
                 {s.properties.label}
             </div >
-        ) : null
+    );
 
     return (
         <>
@@ -198,7 +197,7 @@ export default function AddressSearch() {
                     ref={addressInput}
                     onKeyDown={handleKeyDown}
                 />
-                {suggestions}
+                {addressSuggestions.length > 0 && <div className='fr-pt-1v'>{suggestions}</div>}
             </div>
 
         </>
