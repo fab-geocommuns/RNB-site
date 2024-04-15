@@ -142,6 +142,8 @@ export default function AddressSearch() {
     const fetchBanAPI = async (query) => {
         let query_url = new URL(apiUrl);
         query_url.searchParams.set('q', query);
+        query_url.searchParams.set('autocomplete', 1);
+        query_url.searchParams.set('type', 'housenumber');
         return new Promise((resolve, reject) => {
             fetch(query_url)
                 .then(response => response.json())
