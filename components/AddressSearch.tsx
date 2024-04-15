@@ -29,8 +29,12 @@ export default function AddressSearch() {
     const params = useSearchParams()
     const [query, setQuery] = useState(params.get('q') || '')
 
+    // contains the address suggestions given by the BAN API
     const [addressSuggestions, setAddressSuggestions] = useState([])
-    const [selectedSuggestion, setSelectedSuggestion] = useState(null)
+    // used to highlight and choose an address suggestion
+    const [selectedSuggestion, setSelectedSuggestion] = useState(-1)
+    // when a suggestion is chosen, this is set to true to prevent an extra call the the API
+    const [suggestionChosen, setSuggestionChosen] = useState(false)
 
     // State
     const moveTo = useSelector((state) => state.moveTo)
@@ -40,7 +44,9 @@ export default function AddressSearch() {
     const addressInput = useRef(null)
 
     const handleKeyDown = async (e) => {
+        // called every time a key is pressed with search input focused
         dispatch(setAddressSearchUnknownRNBId(false))
+        // pick the suggestion with the arrow keys
         if (e.key === 'ArrowDown') {
             e.preventDefault()
             if (selectedSuggestion < addressSuggestions.length - 1) {
@@ -51,36 +57,31 @@ export default function AddressSearch() {
             if (selectedSuggestion > 0) {
                 setSelectedSuggestion(selectedSuggestion - 1)
             }
+            // select the suggestion with the enter key
         } else if (e.key === 'Enter') {
             if (queryIsRnbId()) {
                 dispatch(closePanel())
                 handleBdgQuery()
-            } else if (addressSuggestions.length > 0) {
+            } else if (addressSuggestions.length > 1 && selectedSuggestion >= 0) {
                 select_suggestion(addressSuggestions[selectedSuggestion])
+                // you don't need to select a suggestion if there is only one
+            } else if (addressSuggestions.length == 1) {
+                select_suggestion(addressSuggestions[0])
             }
-        } else if (query.length > 4) {
-            handleAddressQuery()
-            setSelectedSuggestion(0)
-        } else {
-            setAddressSuggestions([])
         }
-
     }
 
     const queryIsRnbId = () => {
         return query.match(/^[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}$/)
     }
 
+    // used when loading the page with a rnb id in the URL
     const search = async () => {
-
         if (queryIsRnbId()) {
             dispatch(closePanel())
             handleBdgQuery()
         } else {
-            // launch address search, await for response
             handleAddressQuery().then((results) => {
-                console.log('then')
-                console.log(addressSuggestions.length)
                 if (results.length > 0) {
                     select_suggestion(results[0])
                 }
@@ -89,7 +90,6 @@ export default function AddressSearch() {
     }
     
     const handleBdgQuery = async () => {
-
         dispatch(fetchBdg(query)).then((res) => {
             if (res.payload !== null) {
                 dispatch(openPanel())
@@ -111,21 +111,18 @@ export default function AddressSearch() {
     }
 
     const featureToPosition = (feature: any) => {
-
         const mapPosition = {
             lat: feature.geometry.coordinates[1],
             lng: feature.geometry.coordinates[0],
             zoom: 17
         }
-
         if (feature.properties.type == "municipality") {
             mapPosition.zoom = 13
           }
           if (feature.properties.type == "housenumber") {
             mapPosition.zoom = 18
           }
-          return mapPosition
-
+        return mapPosition
     }
 
     const handleAddressQuery = async () => {
@@ -135,6 +132,7 @@ export default function AddressSearch() {
         dispatch(setAddressSearchResults(geocode_result.features))
         if (geocode_result.features.length > 0) {
             setAddressSuggestions(geocode_result.features)
+            setSelectedSuggestion(-1)
         }
         return geocode_result.features
 
@@ -162,6 +160,16 @@ export default function AddressSearch() {
         }
     }, [])
 
+    useEffect(() => {
+        setSelectedSuggestion(-1)
+        if (query.length < 5) {
+            setAddressSuggestions([])
+        } else if (!suggestionChosen) {
+            handleAddressQuery()
+        }
+        setSuggestionChosen(false)
+    }, [query])
+
     const select_suggestion = (suggestion) => {
         setAddressSuggestions([])
         const position = featureToPosition(suggestion)
@@ -172,6 +180,7 @@ export default function AddressSearch() {
         }))
         // Move the map to the position
         dispatch(setMoveTo(position))
+        setSuggestionChosen(true)
         setQuery(suggestion.properties.label)
         Bus.emit('address:search', {
             search: suggestion.label
