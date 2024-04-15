@@ -109,6 +109,9 @@ export default function VisuMap() {
         // Highlight it on the map
         highlightBdg(rnb_id)
 
+        // update the url query with the rnb_id
+        window.history.pushState({}, '', `?q=${rnb_id}`)
+
         // Dispatch to store
         await dispatch(fetchBdg(rnb_id))
         dispatch(openPanel())
