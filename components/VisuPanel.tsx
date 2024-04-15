@@ -98,11 +98,6 @@ export default function VisuPanel() {
             if (i == 4 || i == 8) {
                 classes = styles["small-left-padding"]
             }
-            if (i < 4) {
-                classes += ` ${styles["text-light-blue"]}`
-            } else if (i > 7) {
-                classes += ` ${styles["text-red"]}`
-            }
             return <span key={"rnb-id-char" + i} className={classes}>{char}</span >
         })
     }
