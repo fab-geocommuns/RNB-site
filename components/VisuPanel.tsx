@@ -89,10 +89,10 @@ export default function VisuPanel() {
     }
 
     const easyRnbId = () => {
-        return addColor(bdg?.rnb_id)
+        return addSpace(bdg?.rnb_id)
     }
 
-    function addColor(rnb_id) {
+    function addSpace(rnb_id) {
         return rnb_id.split('').map((char, i) => {
             let classes = ""
             if (i == 4 || i == 8) {
@@ -135,7 +135,7 @@ export default function VisuPanel() {
                     
                     <CopyToClipboard 
                         onCopy={() => handleCopy()}
-                        text={easyRnbId()}>
+                        text={bdg?.rnb_id}>
 
                     <div className={styles.rnbidShell__copy}>
                         {copied ? <span>Copié <i className={fr.cx("fr-icon-success-line")}></i></span> : <span>Copier <i className={fr.cx("fr-icon-clipboard-line")}></i></span>}
