@@ -17,7 +17,6 @@ export default function Page() {
 
     useEffect(() => {
         // make a request to the API to get the stats when the page is loaded
-        console.log("Fetching stats")
         fetch('https://rnb-api.beta.gouv.fr/api/alpha/stats')
         .then(response => response.json())
         .then(stats => {
