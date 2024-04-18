@@ -170,7 +170,7 @@ export default function VisuMap() {
         tiles: [
           tilesUrl
         ],
-        minzoom: 14,
+        minzoom: 16,
         maxzoom: 22,
         promoteId: 'rnb_id'
       })
