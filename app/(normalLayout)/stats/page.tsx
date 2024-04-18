@@ -48,37 +48,37 @@ export default function Page() {
     let more_than_one_dataset = stats.data_gouv_publication_count > 1;
 
     return (
-        <div class={"fr-container fr-mt-3w fr-mb-6w " + styles.stats}>
-            <h1 class="fr-m-2w">Statistiques</h1>
-            <div class="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
-                <div class={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
+        <div className={"fr-container fr-mt-3w fr-mb-6w " + styles.stats}>
+            <h1 className="fr-m-2w">Statistiques</h1>
+            <div className="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
+                <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {building_counts}
                     BÂTIMENTS RÉFÉRENCÉS
-                    <p class='fr-pt-3w'>
-                        <a href="/carte" class="fr-link">Voir la carte</a>
+                    <p className='fr-pt-3w'>
+                        <a href="/carte" className="fr-link">Voir la carte</a>
                     </p>
                 </div>
-                <div class={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
+                <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {api_calls_since_2024_count}
                     APPELS À L&apos;API EN 2024
-                    <p class='fr-pt-3w'>
-                        <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" class="fr-link">Voir la doc</a>
+                    <p className='fr-pt-3w'>
+                        <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" className="fr-link">Voir la doc</a>
                     </p>
                 </div>
             </div>
-            <div class="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
-                <div class={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
+            <div className="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
+                <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {data_gouv_publication_count}
                     JEU{more_than_one_dataset ? "X" : ""} DE DONNÉES REPUBLIÉ{more_than_one_dataset ? "S" : ""} SUR DATA.GOUV.FR
-                    <p class='fr-pt-3w'>
-                        <a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" class="fr-link">Les parcourir</a>
+                    <p className='fr-pt-3w'>
+                        <a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" className="fr-link">Les parcourir</a>
                     </p>
                 </div>
-                <div class={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
+                <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {contributions_count}
                     SIGNALEMENTS REÇUS
-                    <p class='fr-pt-3w'>
-                        <a href="/carte" class="fr-link">Faire un signalement</a>
+                    <p className='fr-pt-3w'>
+                        <a href="/carte" className="fr-link">Faire un signalement</a>
                     </p>
                 </div>
             </div>
