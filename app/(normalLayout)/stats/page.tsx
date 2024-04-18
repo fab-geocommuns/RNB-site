@@ -6,6 +6,7 @@ import styles from '@/styles/stats.module.scss'
 // Settings
 import settings from '@/logic/settings'
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Page() {
     // initialize the stats
@@ -13,14 +14,17 @@ export default function Page() {
     const [loading, setLoading] = useState(true);
 
     const contactEmail = settings.contactEmail;
-    // make a request to the API to get the stats
-    fetch('https://rnb-api.beta.gouv.fr/api/alpha/stats')
+
+    useEffect(() => {
+        // make a request to the API to get the stats when the page is loaded
+        console.log("Fetching stats")
+        fetch('https://rnb-api.beta.gouv.fr/api/alpha/stats')
         .then(response => response.json())
         .then(stats => {
             setStats(stats);
             setLoading(false);
-        });
-
+        })
+    }, []);
 
 
     function stat_card(key) {
