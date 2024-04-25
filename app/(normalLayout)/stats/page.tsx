@@ -92,7 +92,7 @@ export default function Page() {
 
                             <div className={styles['stat-card'] + " fr-p-6v"}>
                                 <h2>{stat_display("contributions_count")}</h2>
-                                <div>Signalements d'erreur reçus</div>
+                                <div>Signalements d&apos;erreur reçus</div>
                                 <div className='fr-pt-3w'>
                                 <a href="/carte" className="fr-link">Faire un signalement</a>
                                 </div>
