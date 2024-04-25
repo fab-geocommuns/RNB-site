@@ -4,7 +4,6 @@
 import styles from '@/styles/stats.module.scss'
 
 // Settings
-import settings from '@/logic/settings'
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -12,8 +11,6 @@ export default function Page() {
     // initialize the stats
     const [stats, setStats] = useState({ "building_counts": null, "api_calls_since_2024_count": null, "contributions_count": null, "data_gouv_publication_count": null });
     const [loading, setLoading] = useState(true);
-
-    const contactEmail = settings.contactEmail;
 
     const endpointUrl = process.env.NEXT_PUBLIC_API_BASE + '/stats'
 
