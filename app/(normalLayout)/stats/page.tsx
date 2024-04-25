@@ -15,7 +15,9 @@ export default function Page() {
 
     const contactEmail = settings.contactEmail;
 
-    const endpointUrl = process.env.NEXT_PUBLIC_API_BASE + '/stats/';
+    const endpointUrl = process.env.NEXT_PUBLIC_API_BASE + '/stats'
+
+    
 
     useEffect(() => {
         // make a request to the API to get the stats when the page is loaded
@@ -54,14 +56,14 @@ export default function Page() {
             <div className="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
                 <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {building_counts}
-                    BÂTIMENTS RÉFÉRENCÉS
+                    Bâtiments référencés
                     <p className='fr-pt-3w'>
                         <a href="/carte" className="fr-link">Voir la carte</a>
                     </p>
                 </div>
                 <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {api_calls_since_2024_count}
-                    APPELS À L&apos;API EN 2024
+                    Appels à l&apos;API en 2024
                     <p className='fr-pt-3w'>
                         <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" className="fr-link">Voir la doc</a>
                     </p>
@@ -70,14 +72,16 @@ export default function Page() {
             <div className="fr-grid-row fr-grid-row--center fr-grid-row--middle ">
                 <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {data_gouv_publication_count}
-                    JEU{more_than_one_dataset ? "X" : ""} DE DONNÉES REPUBLIÉ{more_than_one_dataset ? "S" : ""} SUR DATA.GOUV.FR
+
+
+                    Jeu{more_than_one_dataset ? "x" : ""} de données utilisant les identfifiants RNB publié{more_than_one_dataset ? "s" : ""} sur data.gouv.fr
                     <p className='fr-pt-3w'>
                         <a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" className="fr-link">Les parcourir</a>
                     </p>
                 </div>
                 <div className={styles['stat-card'] + " fr-col fr-m-5w fr-p-4v"}>
                     {contributions_count}
-                    SIGNALEMENTS REÇUS
+                    Signalements d'erreur reçus
                     <p className='fr-pt-3w'>
                         <a href="/carte" className="fr-link">Faire un signalement</a>
                     </p>
