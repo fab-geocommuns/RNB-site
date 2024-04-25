@@ -15,9 +15,11 @@ export default function Page() {
 
     const contactEmail = settings.contactEmail;
 
+    const endpointUrl = process.env.NEXT_PUBLIC_API_BASE + '/stats/';
+
     useEffect(() => {
         // make a request to the API to get the stats when the page is loaded
-        fetch('https://rnb-api.beta.gouv.fr/api/alpha/stats')
+        fetch(endpointUrl)
         .then(response => response.json())
         .then(stats => {
             setStats(stats);
