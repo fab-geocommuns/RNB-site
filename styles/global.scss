@@ -13,6 +13,18 @@ html, body {
     height: 100%;
 }
 
+p code, 
+li code {
+    background-color: #eee;
+    color: #e40f0f;
+    
+    display: inline-block;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.3rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
 /* Pages */
 
 /* Map size */
