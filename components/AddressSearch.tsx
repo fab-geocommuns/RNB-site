@@ -161,7 +161,7 @@ export default function AddressSearch() {
 
     useEffect(() => {
         setSelectedSuggestion(-1)
-        if (query.length < 5) {
+        if (query.length < 3) {
             setAddressSuggestions([])
         } else if (!suggestionChosen) {
             handleAddressQuery()
