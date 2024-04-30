@@ -1,7 +1,14 @@
 
 
-// Lib
+// Libs
 import { getPost, formattedDate } from '@/utils/blog';
+
+// Code highlighting
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import python from 'highlight.js/lib/languages/python';
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('python', python);
 
 // Components
 import TagsList from '@/components/blog/TagsList';
@@ -11,11 +18,19 @@ import NewsletterForm from '@/components/NewsletterForm'
 // Style
 import styles from '@/styles/blogArticle.module.scss'
 
+// Import highlight.js styles and theme
+import 'highlight.js/styles/atom-one-dark.css';
+
+//import 'highlight.js/styles/github.css';
+
+
 // SEO
 import { Metadata, ResolvingMetadata } from 'next'
 
 // Force cached parts (ghost content) to be refreshed every 10 seconds
 export const revalidate = 10
+
+
 
 async function getData(slug: string) {
     return await getPost(slug);
@@ -53,10 +68,21 @@ export default async function Page({
 
     const post = await getData(params.slug);
     const dateStr = formattedDate(post.published_at)
+
+    // find all code pre blocks in the html and replace them with highlighted code
+    const postBody = post.html.replace(/<pre><code class="language-(.*?)">([\s\S]*?)<\/code><\/pre>/g, (match, lang, code) => {
+        const highlightedCode = hljs.highlight(lang, code).value;
+        return `<pre><code class="hljs language-${lang}">${highlightedCode}</code></pre>`;
+    });
+
+    
     
     return (
         <>
             <BackToTop></BackToTop>
+
+        
+            
 
             <div className="fr-container">
 
@@ -79,7 +105,7 @@ export default async function Page({
                     </div>
                     
 
-                    <div className={styles.articleBody} dangerouslySetInnerHTML={{__html: post.html}}></div>
+                    <div className={styles.articleBody} dangerouslySetInnerHTML={{__html: postBody}}></div>
 
 
 

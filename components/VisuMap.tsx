@@ -20,6 +20,7 @@ import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBdg, openPanel } from "@/stores/map/slice";
 
+
 export default function VisuMap() {
 
 
@@ -109,6 +110,10 @@ export default function VisuMap() {
         // Highlight it on the map
         highlightBdg(rnb_id)
 
+        // update the url query with the rnb_id
+        window.history.replaceState({}, '', `?q=${rnb_id}`)
+        
+
         // Dispatch to store
         await dispatch(fetchBdg(rnb_id))
         dispatch(openPanel())
@@ -170,7 +175,7 @@ export default function VisuMap() {
         tiles: [
           tilesUrl
         ],
-        minzoom: 14,
+        minzoom: 16,
         maxzoom: 22,
         promoteId: 'rnb_id'
       })
