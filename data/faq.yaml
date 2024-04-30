@@ -34,7 +34,7 @@
     key: geocommun
     answer: >
       <p>Le Référentiel National des Bâtiments est un géocommun.</p>
-      <p>Un commun, c’est une ressource produite collectivement par une communauté d’acteurs hétérogènes et gouvernée par des règles qui assurent sa survie et garantissent son caractère ouvert et partagé.(Définition de l’IGN)</p>
+      <p>Un commun, c’est une ressource produite collectivement par une communauté d’acteurs hétérogènes et gouvernée par des règles qui assurent sa survie et garantissent son caractère ouvert et partagé. (<a href="https://www.ign.fr/institut/la-demarche-geocommuns" target="_blank">Définition de l’IGN</a>)</p>
       <p>C’est pourquoi, toutes les contributions sont les bienvenues pour construire ce géocommun, afin de faciliter et réduire les coûts de maintenance, ainsi qu’optimiser la qualité des données des administrations publiques, des collectivités et des acteurs privés.</p>
   - question: Quels sont les principaux cas d’usages du RNB ?
     key: usages
