@@ -21,13 +21,14 @@ import {
 } from '@/stores/map/slice';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete'
+// import { set } from 'yaml/dist/schema/yaml-1.1/set';
 
 export default function AddressSearch() {
     const unknown_rnb_id = useSelector((state) => state.addressSearch.unknown_rnb_id)
 
     // URL params
     const params = useSearchParams()
-    const [query, setQuery] = useState(params.get('q') || '')
+    const [query, setQuery] = useState('')
     const [keyDown, setKeyDown] = useState(null)
 
     // // contains the address suggestions given by the BAN API
@@ -41,7 +42,7 @@ export default function AddressSearch() {
     const moveTo = useSelector((state) => state.moveTo)
     const dispatch = useDispatch()
 
-    const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
+    // const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
     const addressInput = useRef(null)
 
     const handleKeyDown = (e) => {
@@ -55,23 +56,36 @@ export default function AddressSearch() {
         }
     }
 
-    const queryIsRnbId = () => {
-        return query.match(/^[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}$/)
+    const queryIsRnbId = (q) => {
+        return q.match(/^[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}$/)
+    }
+
+    const queryIsCoordinates = (q) => {
+        return q.match(/^[0-9]{1,2}\.[0-9]{1,10},[0-9]{1,2}\.[0-9]{1,10}$/)
     }
 
     // used when loading the page with a rnb id in the URL
-    const search = async () => {
-        if (queryIsRnbId()) {
+    const search = async (q) => {
+        console.log('search', q)
+        if (queryIsRnbId(q)) {
             dispatch(closePanel())
             handleBdgQuery()
+            setQuery(q)
         } 
-        // else {
-        //     handleAddressQuery().then((results) => {
-        //         if (results.length > 0) {
-        //             select_suggestion(results[0])
-        //         }
-        //     })
-        // }
+        else if (queryIsCoordinates(q)) {
+            const coordinates = q.split(',')
+            dispatch(setMarker({
+                lat: parseFloat(coordinates[0]),
+                lng: parseFloat(coordinates[1])
+            }))
+            dispatch(setMoveTo({
+                lat: parseFloat(coordinates[0]),
+                lng: parseFloat(coordinates[1]),
+                zoom: 20
+            }))
+        } else {
+            setQuery(q)
+        }
     }
     
     const handleBdgQuery = async () => {
@@ -111,8 +125,9 @@ export default function AddressSearch() {
     }
 
     useEffect(() => {
-        if (params.get('q') !== null) {
-            search()
+        const q = params.get('q')
+        if (q !== null) {
+            search(q)
         }
     }, [])
 

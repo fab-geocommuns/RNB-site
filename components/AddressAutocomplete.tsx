@@ -36,6 +36,7 @@ export default function AddressAutocomplete({ query, keyDown, onSuggestionSelect
                 }
                 // select the suggestion with the enter key
             } else if (e.key === 'Enter') {
+                e.preventDefault()
                 let suggestion = null;
                 if (addressSuggestions.length > 1 && selectedSuggestion >= 0) {
                     suggestion = addressSuggestions[selectedSuggestion]
@@ -49,18 +50,21 @@ export default function AddressAutocomplete({ query, keyDown, onSuggestionSelect
                     setSelectedSuggestion(-1)
                 }
                 onSuggestionSelected({ suggestion: suggestion })
+            } else {
+                setSuggestionChosen(false)
             }
         }
     }, [keyDown])
 
     useEffect(() => {
-        setSelectedSuggestion(-1)
-        if (query.length < 3) {
-            setAddressSuggestions([])
-        } else if (!suggestionChosen) {
-            handleAddressQuery()
+        if (!suggestionChosen) {
+            setSelectedSuggestion(-1)
+            if (query.length < 3) {
+                setAddressSuggestions([])
+            } else {
+                handleAddressQuery()
+            }
         }
-        setSuggestionChosen(false)
     }, [query])
 
 
