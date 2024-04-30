@@ -51,7 +51,7 @@
       <p>La mise à jour du RNB est réalisé par :</p>
       <ul>
       <li>les importations, lors de parution de nouveaux millésimes de la BD Topo et de la BDNB</li>
-      <li>les flux d’autorisation du droit des sols (ADS) provenant des collectivités</li>
+      <li>les flux d’autorisation du droit des sols (ADS) provenant des collectivités, - ainsi que tout autre flux de processus administratifs pertinents.</li>
       </ul>
   - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
     key: erreur
@@ -67,8 +67,7 @@
     key: identifiant
     answer: >
       <p>Le RNB associe à chaque bâtiment du territoire français un identifiant unique.</p>
-      <p>Véritable donnée pivot, chaque identifiant est générésous la forme d’un NanoID.</p>
-      <p>Chaque identifiant est composé d’une suite de 12 caractères (chiffres et lettres) répartis en 3 séries de 4 caractères.</p>
+      <p>Véritable donnée pivot, chaque identifiant est composé d’une suite de 12 caractères (chiffres et lettres) répartis en 3 séries de 4 caractères.</p>
       <p>L’identifiant remplit certains critères afin d’être facilement reproduisible par un humain dans un formulaire, tout en évitant les risques de collision (c’est à dire la double attribution d’un même identifiant pour deux bâtiments distincts) : </p>
       <ul>
       <li>Il n’est pas signifiant, ce qui implique qu’il ne contient aucun concept clé (comme par exemple le code INSEE de la commune sur laquelle se situe le bâtiment) : cela permet d’éviter de remettre en cause le caractère définitif de l’identifiant une fois attribué (si la commune venait à fusionner avec une autre par exemple)</li>
@@ -82,11 +81,10 @@
       <li>ses coordonnées géographiques</li>
       <li>l’identifiant unique du bâtiment</li>
       <li>le statut du bâtiment</li>
-      <li>son adresse ou ses adresses</li>
+      <li>sa adresse ou ses adresses</li>
       <li>les identifiants BDNB et BD Topo associés</li>
       <ul>
-      <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut.</p>
-      <p>Il en existe 7 : </p>
+      <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 7 : </p>
       <ol>
       <li>En projet</li>
       <li>Projet annulé</li>
@@ -97,10 +95,10 @@
       <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
       </ol>
       <p>Ces statuts évoluent selon les informations remontées dans le RNB.</p>
-  - question: Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
+  - question: Est ce que les identifiants du RNB sont pérennes ? Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
     key: identifiant-perennes
     answer: >
-      <p><a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">Les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
+      <p><a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">Les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification et ne sont jamais supprimés. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
 - name: Comment utiliser le RNB ?
   desc: En savoir plus sur l’utilisation concrète du RNB par vos services
   key: utilisation
