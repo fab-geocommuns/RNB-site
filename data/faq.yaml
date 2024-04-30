@@ -51,7 +51,7 @@
       <p>La mise à jour du RNB est réalisé par :</p>
       <ul>
       <li>les importations, lors de parution de nouveaux millésimes de la BD Topo et de la BDNB</li>
-      <li>les flux d’autorisation du droit des sols (ADS) provenant des collectivités, - ainsi que tout autre flux de processus administratifs pertinents.</li>
+      <li>les flux d’autorisations du droit des sols (ADS) provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
       </ul>
   - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
     key: erreur
