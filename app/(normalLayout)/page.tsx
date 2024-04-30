@@ -6,6 +6,7 @@ import { Card } from "@codegouvfr/react-dsfr/Card"
 import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
+import AdressSearchHome from '@/components/AdressSearchHome'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
@@ -95,19 +96,7 @@ export default async function Home() {
                         <div className="block block--blue">
                         <h3 className="block__title">Carte des bâtiments</h3>
                         <p className="block__subtitle">Cherchez une adresse ou un identifiant RNB et consultez les 48 millions de bâtiments référencés.</p>
-                        <form action="/carte" method="get">
-
-                            <div className="fr-search-bar">
-                                <input 
-                                className='fr-input' 
-                                type="text" 
-                                name="q"
-                                            placeholder="un identifiant RNB : 1GA7PBYM1QDY ou une adresse : 42, rue des architectes, Nantes"
-                                        />
-                                 <button className="fr-btn" type="submit">Rechercher</button>
-                            </div>
-
-                        </form>
+                                <AdressSearchHome />
                         </div>
                     </div>
 

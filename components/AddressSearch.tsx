@@ -13,8 +13,6 @@ import Bus from '@/utils/Bus';
 import { useDispatch, useSelector } from "react-redux";
 import {
     setMoveTo,
-    setAddressSearchQuery,
-    setAddressSearchResults,
     setAddressSearchUnknownRNBId,
     setMarker,
     fetchBdg,
@@ -32,12 +30,12 @@ export default function AddressSearch() {
     const [query, setQuery] = useState(params.get('q') || '')
     const [keyDown, setKeyDown] = useState(null)
 
-    // contains the address suggestions given by the BAN API
-    const [addressSuggestions, setAddressSuggestions] = useState([])
-    // used to highlight and choose an address suggestion
-    const [selectedSuggestion, setSelectedSuggestion] = useState(-1)
-    // when a suggestion is chosen, this is set to true to prevent an extra call the the API
-    const [suggestionChosen, setSuggestionChosen] = useState(false)
+    // // contains the address suggestions given by the BAN API
+    // const [addressSuggestions, setAddressSuggestions] = useState([])
+    // // used to highlight and choose an address suggestion
+    // const [selectedSuggestion, setSelectedSuggestion] = useState(-1)
+    // // when a suggestion is chosen, this is set to true to prevent an extra call the the API
+    // const [suggestionChosen, setSuggestionChosen] = useState(false)
 
     // State
     const moveTo = useSelector((state) => state.moveTo)
@@ -112,34 +110,6 @@ export default function AddressSearch() {
         return mapPosition
     }
 
-    // const handleAddressQuery = async () => {
-    //     // Add the query to the store
-    //     const geocode_result = await fetchBanAPI(addressInput.current.value);
-    //     dispatch(setAddressSearchQuery(addressInput.current.value))
-    //     dispatch(setAddressSearchResults(geocode_result.features))
-    //     if (geocode_result.features.length > 0) {
-    //         setAddressSuggestions(geocode_result.features)
-    //         setSelectedSuggestion(-1)
-    //     }
-    //     return geocode_result.features
-
-    // }
-    // const fetchBanAPI = async (query) => {
-    //     let query_url = new URL(apiUrl);
-    //     query_url.searchParams.set('q', query);
-    //     query_url.searchParams.set('autocomplete', 1);
-    //     return new Promise((resolve, reject) => {
-    //         fetch(query_url)
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 resolve(data)
-    //             })
-    //             .catch(error => {
-    //                 reject(error)
-    //             })
-    //     })
-    // }
-
     useEffect(() => {
         if (params.get('q') !== null) {
             search()
@@ -147,7 +117,7 @@ export default function AddressSearch() {
     }, [])
 
     const select_suggestion = (suggestion) => {
-        setAddressSuggestions([])
+        // setAddressSuggestions([])
         const position = featureToPosition(suggestion)
         // Add a marker to the map
         dispatch(setMarker({
@@ -156,7 +126,7 @@ export default function AddressSearch() {
         }))
         // Move the map to the position
         dispatch(setMoveTo(position))
-        setSuggestionChosen(true)
+        // setSuggestionChosen(true)
         setQuery(suggestion.properties.label)
         Bus.emit('address:search', {
             search: suggestion.label
