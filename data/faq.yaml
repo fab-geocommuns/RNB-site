@@ -59,9 +59,6 @@
       <li>les importations, lors de parution de nouveaux millésimes de la BD Topo et de la BDNB</li>
       <li>les flux d’autorisation du droit des sols (ADS) provenant des collectivités</li>
       </ul>
-  - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
-    key: erreur
-    answer: Si vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc), vous pouvez nous le signaler en envoyant un email à <a href="mailto:rnb@beta.gouv.fr" target="_blank">rnb@beta.gouv.fr</a>.
   - question: Qu’est ce qu’un bâtiment au sens du Référentiel National des Bâtiments (RNB) ?
     key: definition
     answer: >
@@ -114,15 +111,20 @@
     - question: Le RNB est-il accessible gratuitement ?
       key: gratuit
       answer: >
-        <p>Oui, le RNB est un service public gratuit.</p>
-    - question: Comment accéder aux données du RNB ?
+        <p>Oui, le RNB est un service public gratuit et disponible en open data.</p>
+    - question: Comment consulter, télécharger, alimenter et/ou intégrer les données du RNB  à vos systèmes métiers ?
       key: acces
       answer: >
-        <p>Deux méthodes s'offrent à vous pour consulter le RNB :</p>
+        <p>Vous pouvez :</p>
         <ul>
-        <li>Consultation cartographique, sur votre navigateur :  rendez-vous sur le site rnb.beta.gouv.fr, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un identifiant de bâtiment.</li>
-        <li>Consultation via vos services informatiques : rendez-vous sur la documentation dédiée concernant l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API bâtiment</a> et les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li>
+        <li><b>Consulter l'outil cartographique<b>, sur votre navigateur :  rendez-vous sur le site rnb.beta.gouv.fr, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un identifiant de bâtiment.</li>
+        <li><b>Intégrer le RNB au sein de vos logiciels métiers<b> : rendez-vous sur la documentation dédiée concernant l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API bâtiment</a> et les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li>
+        <li><b>Télécharger les données du RNB<b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
+        <li><b>Alimenter ce géocommun<b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la fiche dédiée du bâtiment et/ou également ouvrir un ticket sur le Github du RNB.
         </ul>
+    - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
+    key: erreur
+    answer: Si vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc), vous pouvez faire un signalement directement sur la carte du RNB au sein de la fiche dédiée du bâtiment à signaler, et/ou également ouvrir un ticket sur le Github du RNB.
     - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
       key: evolution
       answer: >
@@ -135,7 +137,7 @@
     - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
       key: attributs-metier
       answer: >
-        <p>Non, la RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert plutôt de passerelle permettant d’établir des correspondances entre différentes bases. Il renvoie néanmoins, pour chaque bâtiment, vers les éléments de la BDNB et de la BD Topo correspondants.</p>
+        <p>Non, le RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert en revanche de passerelle permettant d’établir des correspondances entre différentes bases. Il renvoie néanmoins, pour chaque bâtiment, vers les éléments de la BDNB et de la BD Topo correspondants.</p>
 
 
 
