@@ -81,7 +81,7 @@
       <li>ses coordonnées géographiques</li>
       <li>l’identifiant unique du bâtiment</li>
       <li>le statut du bâtiment</li>
-      <li>sa adresse ou ses adresses</li>
+      <li>son ou ses adresses</li>
       <li>les identifiants BDNB et BD Topo associés</li>
       <ul>
       <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 7 : </p>
