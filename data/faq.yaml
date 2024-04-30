@@ -35,11 +35,11 @@
     key: usages
     answer: >
       <ul>
-      <li><b>Indexer les DPE à leur bâtiment<b> (ils sont aujourd’hui consultables seulement à l’adresse) : cela permet d’améliorer l’analyse de performances énergétiques du parc et de mieux piloter les politiques de rénovation</li>
-      <li><b>Présenter une vue actualisée du parc<b> (grâce aux nombreuses sources d’alimentation du RNB) : ce besoin est particulièrement présent au sein des collectivités</li>
-      <li><b>Lier des bâtiments à des zones de risques<b> : les acteurs publics et privés de l’assurance en sont les principaux demandeurs</li>
-      <li><b>Améliorer le suivi des signalements des logements<b> non décents, insalubres et dangereux</li>
-      <li><b>Enrichir une base de données bâtiments<b> grâce aux informations contenus dans une autre base bâtiments</li>
+      <li><b>Indexer les DPE à leur bâtiment</b> (ils sont aujourd’hui consultables seulement à l’adresse) : cela permet d’améliorer l’analyse de performances énergétiques du parc et de mieux piloter les politiques de rénovation</li>
+      <li><b>Présenter une vue actualisée du parc</b> (grâce aux nombreuses sources d’alimentation du RNB) : ce besoin est particulièrement présent au sein des collectivités</li>
+      <li><b>Lier des bâtiments à des zones de risques</b> : les acteurs publics et privés de l’assurance en sont les principaux demandeurs</li>
+      <li><b>Améliorer le suivi des signalements des logements</b> non décents, insalubres et dangereux</li>
+      <li><b>Enrichir une base de données bâtiments</b> grâce aux informations contenus dans une autre base bâtiments</li>
       </ul>
 - name: Comment est conçu le RNB ?
   desc: Tout savoir sur la conception du RNB, les caractéristiques techniques des bâtiments et de l’ID unique.
