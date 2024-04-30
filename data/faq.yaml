@@ -8,19 +8,20 @@
     answer: >
       <p>Le Référentiel National des Bâtiments (RNB) a pour vocation de créer <b>un système commun de repérage des bâtiments, à l’échelle nationale.</b></p>
       <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire français</b> (DROM COM inclus) et leur <b>associe un identifiant unique</b>.</p>
-      <p>Cet identifiant unique, attribué à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de réduire les coûts de maintenance, d’optimiser la qualité des données et de rendre les bases  interopérables entre elles.</p>
+      <p>Cet identifiant unique, attribué à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de réduire les coûts de maintenance, d’optimiser la qualité des données et de rendre les bases interopérables entre elles.</p>
   - question: À quelle problématique répond le RNB ?
     key: problematique
     answer: >
-      <p>Jusqu’à présent, les données liées aux bâtiments étaient détenues par une multitude d’acteurs publics et privés, travaillant en silos. Les informations liées à l’historique du bâtiment (travaux, extensions, destruction, usage) sont difficiles d’accès. Ainsi, chaque acteur œuvre individuellement pour obtenir l’information sans que celle-ci soit mise en commun.</p>
-      <p>Un référé de la Cour des Comptes concernant “<a href="https://www.ccomptes.fr/fr/publications/la-production-et-lutilisation-des-donnees-utiles-la-politique-du-logement" target="_blank">La production et l’utilisation des données utiles à la politique du logement</a>” (en date du 22 mai 2022) relève les difficultés actuelles des administrations à collaborer autour d’une donnée bâtimentaire commune (ex : absence d’une architecture partagée des bases de données; actualisation trop peu fréquente de ces données; utilisation de données agrégées à une maille territoriale trop large; manque de partage des données par les administrations qui les détiennent, etc.).</p>
-      <p>Le <b>Référentiel National des Bâtiments</b> (sous le nom de projet Bat-ID) <b>est cité par le Ministère de la Transition Écologique</b> et le Ministère délégué chargé de la Ville et du Logement dans sa réponse à la <a href="https://www.ccomptes.fr/fr/documents/60913" target="_blank">Cour des Comptes en date du 15 juillet 2022</a>, comme <b>solution pour combler le manque actuel d'un système d'identification des logements et des bâtiments</b>.</p>
+      <p>Jusqu'à présent, les données liées aux bâtiments sont détenues par une multitude d’acteurs, travaillant en silos. Les administrations, les collectivités et de nombreux acteurs privés, œuvrent individuellement pour produire et obtenir l'information sans que celle-ci soit mise en commun</p>
+      <p>Cette <b>absence de base de données nationale de référence sur le bâtiment<b> engendre des ralentissements et des coûts importants dans la conduite d'actions publiques et territoriales, pour répondre aux enjeux de la transition écologique ou du logement notamment.</p>
+      <p>Un référé de la Cour des Comptes concernant “<a href="https://www.ccomptes.fr/fr/publications/la-production-et-lutilisation-des-donnees-utiles-la-politique-du-logement" target="_blank">La production et l’utilisation des données utiles à la politique du logement</a>” (en date du 22 mai 2022) relèvait les difficultés actuelles des administrations à collaborer autour d’une donnée bâtimentaire commune (ex : absence d’une architecture partagée des bases de données; actualisation trop peu fréquente de ces données; utilisation de données agrégées à une maille territoriale trop large; manque de partage des données par les administrations qui les détiennent, etc.).</p>
+      <p>Le <b>Référentiel National des Bâtiments</b> (sous son ancien, projet Bat-ID) <b>est cité par le Ministère de la Transition Écologique</b> et le Ministère délégué chargé de la Ville et du Logement dans sa réponse à la <a href="https://www.ccomptes.fr/fr/documents/60913" target="_blank">Cour des Comptes en date du 15 juillet 2022</a>, comme <b>solution pour combler le manque actuel d'un système d'identification des logements et des bâtiments</b>.</p>
   - question: Qui produit le Référentiel National des Bâtiments (RNB) ? A-t-il vocation à devenir l’unique standard de lecture des données bâtimentaires ?
     key: production
     answer: >
       <p>Le financement du RNB est assuré conjointement par l’Agence de la Transition Écologique (l’<b>ADEME</b>), le Centre Scientifique et Technique du Bâtiment (<b>CSTB</b>), la Direction générale de l'Aménagement, du Logement et de la Nature (<b>DGALN</b>) et l’Institut national de l'information géographique et forestière (<b>IGN</b>).</p>
       <p>Le service est réalisé chez <a href="https://beta.gouv.fr/" target="_blank">beta.gouv</a>, l’incubateur des services publics numériques de la Direction Interministérielle du Numérique (DINUM).</p>
-      <p>Le RNB vise à établir un standard unique. Sa forme est issue des délibérations du Conseil National de l’Information Géolocalisée (<a href="https://cnig.gouv.fr/" target="_blank">CNIG</a>, voir plus bas).</p>
+      <p>Le RNB vise à établir un standard unique. Sa forme est issue des délibérations du Conseil National de l’Information Géolocalisée (<a href="https://cnig.gouv.fr/gt-bati-a25939.html" target="_blank">CNIG</a>, voir plus bas).</p>
 
   - question: À qui s’adresse le Référentiel National des Bâtiments ?
     key: public
@@ -34,11 +35,11 @@
     key: usages
     answer: >
       <ul>
-      <li>Indexer les DPE à leur bâtiment (ils sont aujourd’hui consultables seulement à l’adresse) : cela permet d’améliorer l’analyse de performances énergétiques du parc et de mieux piloter les politiques de rénovation</li>
-      <li>Présenter une vue actualisée du parc (grâce aux nombreuses sources d’alimentation du RNB) : ce besoin est particulièrement présent au sein des collectivités</li>
-      <li>Lier des bâtiments à des zones de risques : les acteurs publics et privés de l’assurance en sont les principaux demandeurs</li>
-      <li>Améliorer le suivi des signalements concernant les logements non décents, insalubres et dangereux</li>
-      <li>Enrichir une base de données bâtiments grâce aux informations contenus dans une autre base bâtiments</li>
+      <li><b>Indexer les DPE à leur bâtiment<b> (ils sont aujourd’hui consultables seulement à l’adresse) : cela permet d’améliorer l’analyse de performances énergétiques du parc et de mieux piloter les politiques de rénovation</li>
+      <li><b>Présenter une vue actualisée du parc<b> (grâce aux nombreuses sources d’alimentation du RNB) : ce besoin est particulièrement présent au sein des collectivités</li>
+      <li><b>Lier des bâtiments à des zones de risques<b> : les acteurs publics et privés de l’assurance en sont les principaux demandeurs</li>
+      <li><b>Améliorer le suivi des signalements des logements<b> non décents, insalubres et dangereux</li>
+      <li><b>Enrichir une base de données bâtiments<b> grâce aux informations contenus dans une autre base bâtiments</li>
       </ul>
 - name: Comment est conçu le RNB ?
   desc: Tout savoir sur la conception du RNB, les caractéristiques techniques des bâtiments et de l’ID unique.
