@@ -31,7 +31,7 @@
       <li>Utilisateurs de données bâtimentaires : les <b>communes</b>, les <b>métropoles</b>, les <b>fournisseurs d’énergie</b>, les services départementaux d'incendie et de secours (<b>SDIS</b>), les acteurs de l’économie numérique produisant des analyses, etc.</li>
       <li>Producteurs de données bâtimentaires : l’ensemble des <b>administrations publiques</b> produisant des données bâtimentaires à la maille du cadastre, des parcelles ou des locaux, ainsi que celles agrégeant des données métier (historique de construction, performance énergétique, etc.)</li>
       </ul>
- - question: Qu’est ce qu’un Géocommun ?
+  - question: Qu’est ce qu’un Géocommun ?
     key: geocommun
     answer: >
       <p>Le Référentiel National des Bâtiments est un géocommun.</p>
