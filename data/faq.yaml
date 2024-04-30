@@ -113,8 +113,8 @@
         <ul>
         <li><b>Consulter l'outil cartographique<b>, sur votre navigateur :  rendez-vous sur le site rnb.beta.gouv.fr, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un identifiant de bâtiment.</li>
         <li><b>Intégrer le RNB au sein de vos logiciels métiers<b> : rendez-vous sur la documentation dédiée concernant l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API bâtiment</a> et les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li>
-        <li><b>Télécharger les données du RNB<b> : le jeu de données du RNB est accessible et téléchargeable sur data.gouv.fr , la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
-        <li><b>Alimenter ce géocommun<b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la fiche dédiée du bâtiment à signaler, et/ou également ouvrir un ticket sur le Github du RNB.
+        <li><b>Télécharger les données du RNB<b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
+        <li><b>Alimenter ce géocommun<b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la fiche dédiée du bâtiment et/ou également ouvrir un ticket sur le Github du RNB.
         </ul>
     - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
     key: erreur
