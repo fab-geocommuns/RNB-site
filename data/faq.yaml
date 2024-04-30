@@ -7,8 +7,8 @@
     key: quoi
     answer: >
       <p>Le Référentiel National des Bâtiments (RNB) a pour vocation de créer <b>un système commun de repérage des bâtiments, à l’échelle nationale.</b></p>
-      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire</b> (DROM COM inclus) et leur <b>associe un identifiant unique</b>.</p>
-      <p>Cet identifiant unique, associé à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de faire meilleur usage de leurs données bâtimentaires. Il permet notamment le croisement entre des jeux de données différents, permettant une meilleure circulation de la donnée.</p>
+      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire français</b> (DROM COM inclus) et leur <b>associe un identifiant unique</b>.</p>
+      <p>Cet identifiant unique, attribué à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de réduire les coûts de maintenance, d’optimiser la qualité des données et de rendre les bases  interopérables entre elles.</p>
   - question: À quelle problématique répond le RNB ?
     key: problematique
     answer: >
