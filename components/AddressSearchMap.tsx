@@ -22,7 +22,7 @@ import {
 
 import AddressAutocomplete from '@/components/AddressAutocomplete'
 
-export default function AddressSearch() {
+export default function AddressSearchMap() {
     const unknown_rnb_id = useSelector((state) => state.addressSearch.unknown_rnb_id)
 
     // URL params
@@ -72,7 +72,7 @@ export default function AddressSearch() {
             }
         }
     }
-    
+
     const handleBdgQuery = async (q) => {
         dispatch(fetchBdg(q)).then((res) => {
             if (res.payload !== null) {
@@ -102,10 +102,10 @@ export default function AddressSearch() {
         }
         if (feature.properties.type == "municipality") {
             mapPosition.zoom = 13
-          }
-          if (feature.properties.type == "housenumber") {
+        }
+        if (feature.properties.type == "housenumber") {
             mapPosition.zoom = 18
-          }
+        }
         return mapPosition
     }
 
