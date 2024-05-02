@@ -8,9 +8,9 @@ import {
     setAddressSearchResults,
 } from '@/stores/map/slice';
 
-import styles from '@/styles/mapPage.module.scss'
+import styles from '@/styles/addressAutocomplete.module.scss'
 
-export default function AddressAutocomplete({ query, keyDown, onSuggestionSelected }) {
+export default function AddressAutocomplete({ autocompleteActive, query, keyDown, onSuggestionSelected, override_class = '' }) {
     // contains the address suggestions given by the BAN API
     const [addressSuggestions, setAddressSuggestions] = useState([])
     // used to highlight and choose an address suggestion
@@ -21,43 +21,45 @@ export default function AddressAutocomplete({ query, keyDown, onSuggestionSelect
     const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
 
     useEffect(() => {
-        const e = keyDown
-        if (e !== null) {
-            // pick the suggestion with the arrow keys
-            if (e.key === 'ArrowDown') {
-                e.preventDefault()
-                if (selectedSuggestion < addressSuggestions.length - 1) {
-                    setSelectedSuggestion(selectedSuggestion + 1)
+        if (autocompleteActive) {
+            const e = keyDown
+            if (e !== null) {
+                // pick the suggestion with the arrow keys
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault()
+                    if (selectedSuggestion < addressSuggestions.length - 1) {
+                        setSelectedSuggestion(selectedSuggestion + 1)
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault()
+                    if (selectedSuggestion > 0) {
+                        setSelectedSuggestion(selectedSuggestion - 1)
+                    }
+                    // select the suggestion with the enter key
+                } else if (e.key === 'Enter') {
+                    e.preventDefault()
+                    let suggestion = null;
+                    if (addressSuggestions.length > 1 && selectedSuggestion >= 0) {
+                        suggestion = addressSuggestions[selectedSuggestion]
+                        // you don't need to select a suggestion if there is only one
+                    } else if (addressSuggestions.length == 1) {
+                        suggestion = addressSuggestions[0]
+                    }
+                    if (suggestion) {
+                        setSuggestionChosen(true)
+                        setAddressSuggestions([])
+                        setSelectedSuggestion(-1)
+                    }
+                    onSuggestionSelected({ suggestion: suggestion })
+                } else {
+                    setSuggestionChosen(false)
                 }
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault()
-                if (selectedSuggestion > 0) {
-                    setSelectedSuggestion(selectedSuggestion - 1)
-                }
-                // select the suggestion with the enter key
-            } else if (e.key === 'Enter') {
-                e.preventDefault()
-                let suggestion = null;
-                if (addressSuggestions.length > 1 && selectedSuggestion >= 0) {
-                    suggestion = addressSuggestions[selectedSuggestion]
-                    // you don't need to select a suggestion if there is only one
-                } else if (addressSuggestions.length == 1) {
-                    suggestion = addressSuggestions[0]
-                }
-                if (suggestion) {
-                    setSuggestionChosen(true)
-                    setAddressSuggestions([])
-                    setSelectedSuggestion(-1)
-                }
-                onSuggestionSelected({ suggestion: suggestion })
-            } else {
-                setSuggestionChosen(false)
             }
         }
     }, [keyDown])
 
     useEffect(() => {
-        if (!suggestionChosen) {
+        if (!suggestionChosen && autocompleteActive) {
             setSelectedSuggestion(-1)
             if (query.length < 3) {
                 setAddressSuggestions([])
@@ -66,8 +68,6 @@ export default function AddressAutocomplete({ query, keyDown, onSuggestionSelect
             }
         }
     }, [query])
-
-
 
     const handleAddressQuery = async () => {
         // Add the query to the store
@@ -107,5 +107,5 @@ export default function AddressAutocomplete({ query, keyDown, onSuggestionSelect
         </div >
     );
 
-    return <div className='fr-pt-1v'>{suggestions}</div>;
+    return suggestions.length > 0 ? <div className={styles.autocomplete_suggestions + ' ' + override_class}>{suggestions}</div> : null;
 }

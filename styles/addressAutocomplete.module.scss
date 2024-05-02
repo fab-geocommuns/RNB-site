@@ -1,0 +1,16 @@
+.suggestion {
+    padding: 3px 0px 3px 16px;
+}
+
+.selected {
+    background: var(--blue-cumulus-925-125-hover);
+}
+
+.autocomplete_suggestions {
+    background: white;
+    cursor: pointer;
+    padding: 6px 0 1px 0px;
+    z-index: 101;
+    border-top: none;
+    flex-basis: 100%;
+}

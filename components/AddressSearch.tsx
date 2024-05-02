@@ -21,7 +21,6 @@ import {
 } from '@/stores/map/slice';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete'
-// import { set } from 'yaml/dist/schema/yaml-1.1/set';
 
 export default function AddressSearch() {
     const unknown_rnb_id = useSelector((state) => state.addressSearch.unknown_rnb_id)
@@ -30,66 +29,52 @@ export default function AddressSearch() {
     const params = useSearchParams()
     const [query, setQuery] = useState('')
     const [keyDown, setKeyDown] = useState(null)
-
-    // // contains the address suggestions given by the BAN API
-    // const [addressSuggestions, setAddressSuggestions] = useState([])
-    // // used to highlight and choose an address suggestion
-    // const [selectedSuggestion, setSelectedSuggestion] = useState(-1)
-    // // when a suggestion is chosen, this is set to true to prevent an extra call the the API
-    // const [suggestionChosen, setSuggestionChosen] = useState(false)
+    const [autocompleteActive, setAutocompleteActive] = useState(true)
 
     // State
     const moveTo = useSelector((state) => state.moveTo)
     const dispatch = useDispatch()
 
-    // const apiUrl = 'https://api-adresse.data.gouv.fr/search/'
     const addressInput = useRef(null)
 
     const handleKeyDown = (e) => {
+        setAutocompleteActive(true)
         dispatch(setAddressSearchUnknownRNBId(false))
-        if (e.key === 'Enter' && queryIsRnbId()) {
+        if (e.key === 'Enter' && queryIsRnbId(query)) {
             // special case, if the query is a RNB ID we bypass the address search
             dispatch(closePanel())
-            handleBdgQuery()
+            handleBdgQuery(query)
         } else {
             setKeyDown(e)
         }
     }
 
-    const queryIsRnbId = (q) => {
+    const queryIsRnbId = (q: string) => {
         return q.match(/^[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}$/)
     }
 
-    const queryIsCoordinates = (q) => {
-        return q.match(/^[0-9]{1,2}\.[0-9]{1,10},[0-9]{1,2}\.[0-9]{1,10}$/)
+    const queryIsCoordinates = (q: string) => {
+        return q.match(/^[0-9]{1,2}\.[0-9]{1,10},(-)?[0-9]{1,2}\.[0-9]{1,10}$/)
     }
 
     // used when loading the page with a rnb id in the URL
-    const search = async (q) => {
-        console.log('search', q)
+    const search = async (q: string) => {
         if (queryIsRnbId(q)) {
-            dispatch(closePanel())
-            handleBdgQuery()
+            setAutocompleteActive(false)
             setQuery(q)
-        } 
-        else if (queryIsCoordinates(q)) {
-            const coordinates = q.split(',')
-            dispatch(setMarker({
-                lat: parseFloat(coordinates[0]),
-                lng: parseFloat(coordinates[1])
-            }))
-            dispatch(setMoveTo({
-                lat: parseFloat(coordinates[0]),
-                lng: parseFloat(coordinates[1]),
-                zoom: 20
-            }))
+            dispatch(closePanel())
+            handleBdgQuery(q)
         } else {
             setQuery(q)
+            // focus the input
+            if (addressInput.current !== null) {
+                addressInput.current.focus()
+            }
         }
     }
     
-    const handleBdgQuery = async () => {
-        dispatch(fetchBdg(query)).then((res) => {
+    const handleBdgQuery = async (q) => {
+        dispatch(fetchBdg(q)).then((res) => {
             if (res.payload !== null) {
                 dispatch(openPanel())
                 dispatch(setMoveTo({
@@ -124,15 +109,37 @@ export default function AddressSearch() {
         return mapPosition
     }
 
+    const handleCoordinates = (q: string, coords: string) => {
+        if (queryIsCoordinates(coords)) {
+            // fill the input with the address
+            setAutocompleteActive(false)
+            setQuery(q)
+
+            // set the map to the coordinates
+            const coordinates = coords.split(',')
+            dispatch(setMarker({
+                lat: parseFloat(coordinates[0]),
+                lng: parseFloat(coordinates[1])
+            }))
+            dispatch(setMoveTo({
+                lat: parseFloat(coordinates[0]),
+                lng: parseFloat(coordinates[1]),
+                zoom: 20
+            }))
+        }
+    }
+
     useEffect(() => {
         const q = params.get('q')
-        if (q !== null) {
+        const coords = params.get('coords')
+        if (coords !== null && q !== null) {
+            handleCoordinates(q, coords)
+        } else if (q !== null) {
             search(q)
         }
     }, [])
 
     const select_suggestion = (suggestion) => {
-        // setAddressSuggestions([])
         const position = featureToPosition(suggestion)
         // Add a marker to the map
         dispatch(setMarker({
@@ -141,7 +148,6 @@ export default function AddressSearch() {
         }))
         // Move the map to the position
         dispatch(setMoveTo(position))
-        // setSuggestionChosen(true)
         setQuery(suggestion.properties.label)
         Bus.emit('address:search', {
             search: suggestion.label
@@ -169,10 +175,8 @@ export default function AddressSearch() {
                     ref={addressInput}
                     onKeyDown={handleKeyDown}
                 />
-
-                <AddressAutocomplete query={query} keyDown={keyDown} onSuggestionSelected={handleSuggestionSelected} ></AddressAutocomplete>
+                <AddressAutocomplete autocompleteActive={autocompleteActive} query={query} keyDown={keyDown} onSuggestionSelected={handleSuggestionSelected} ></AddressAutocomplete>
             </div>
         </>
     )
-
 }

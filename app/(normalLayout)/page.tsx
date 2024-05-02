@@ -6,7 +6,7 @@ import { Card } from "@codegouvfr/react-dsfr/Card"
 import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
-import AdressSearchHome from '@/components/AdressSearchHome'
+import AddressSearchHome from '@/components/AddressSearchHome'
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
@@ -96,7 +96,7 @@ export default async function Home() {
                         <div className="block block--blue">
                         <h3 className="block__title">Carte des bâtiments</h3>
                         <p className="block__subtitle">Cherchez une adresse ou un identifiant RNB et consultez les 48 millions de bâtiments référencés.</p>
-                                <AdressSearchHome />
+                                <AddressSearchHome />
                         </div>
                     </div>
 
