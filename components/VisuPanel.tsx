@@ -8,9 +8,8 @@ import { useSearchParams } from 'next/navigation'
 import { fr } from "@codegouvfr/react-dsfr";
 import styles from '@/styles/mapPanel.module.scss'
 
-// UI Tools
+// Comps
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { addDash } from '@/utils/identifier';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";

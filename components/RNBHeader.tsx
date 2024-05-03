@@ -94,7 +94,7 @@ export default function RNBHeader() {
     linkProps: {
       href: '/faq'
     },
-    text: 'Foire aux Questions'
+    text: 'Foire aux questions'
   }
 
 
