@@ -90,23 +90,32 @@ export default function RNBHeader() {
 
 
   let logQA = {
-    iconId: 'fr-icon-lock-line',
+    iconId: 'fr-icon-question-fill',
     linkProps: {
-      href: '/login'
+      href: '/faq'
     },
-    text: 'Se connecter'
+    text: 'Foire aux Questions'
   }
 
-  if (session) {
-    logQA = {
-      iconId: 'fr-icon-logout-box-r-line',
-      linkProps: {
-        href: '#',
-        onClick: (e) => { handleSignout(e) }
-      },
-      text: 'Se déconnecter'
-    }
-  }
+
+//  let logQA = {
+//    iconId: 'fr-icon-lock-line',
+//    linkProps: {
+//      href: '/login'
+//    },
+//    text: 'Se connecter'
+//  }
+//
+//  if (session) {
+//    logQA = {
+//      iconId: 'fr-icon-logout-box-r-line',
+//      linkProps: {
+//        href: '#',
+//        onClick: (e) => { handleSignout(e) }
+//      },
+//      text: 'Se déconnecter'
+//    }
+//  }
 
   return (
     <>
