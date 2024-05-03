@@ -168,6 +168,7 @@ export default function AddressSearchMap() {
                     placeholder='Chercher une adresse, un identifiant RNB'
                     type="text"
                     autoComplete='off'
+                    data-1p-ignore
                     name="address"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

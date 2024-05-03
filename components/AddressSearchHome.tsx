@@ -54,6 +54,7 @@ export default function AddressSearchHome() {
                     className='fr-input'
                     type="text"
                     autoComplete='off'
+                    data-1p-ignore
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
                     value={query}

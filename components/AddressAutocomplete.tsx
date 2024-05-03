@@ -15,6 +15,10 @@ export default function AddressAutocomplete({ autocompleteActive, query, keyDown
     const [addressSuggestions, setAddressSuggestions] = useState([])
     // used to highlight and choose an address suggestion
     const [selectedSuggestion, setSelectedSuggestion] = useState(-1)
+
+    const [typeTimeout, setTypeTimeout] = useState(null)
+
+
     // when a suggestion is chosen, this is set to true to prevent an extra call the the API
     const [suggestionChosen, setSuggestionChosen] = useState(false)
     const dispatch = useDispatch()
@@ -64,14 +68,25 @@ export default function AddressAutocomplete({ autocompleteActive, query, keyDown
             if (query.length < 3) {
                 setAddressSuggestions([])
             } else {
-                handleAddressQuery()
+
+                if (typeTimeout) {
+                    clearTimeout(typeTimeout)
+                }
+
+                setTypeTimeout(setTimeout(() => {
+                    handleAddressQuery()
+                }, 300))
+
+                
             }
         }
     }, [query])
 
     const handleAddressQuery = async () => {
         // Add the query to the store
+        
         const geocode_result = await fetchBanAPI(query);
+
         dispatch(setAddressSearchQuery(query))
         dispatch(setAddressSearchResults(geocode_result.features))
         if (geocode_result.features.length > 0) {
