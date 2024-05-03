@@ -9,8 +9,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 import styles from '@/styles/mapPanel.module.scss'
 
 // UI Tools
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { addDash } from '@/utils/identifier';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";
@@ -93,13 +92,17 @@ export default function VisuPanel() {
     }
 
     function addSpace(rnb_id) {
-        return rnb_id.split('').map((char, i) => {
-            let classes = ""
-            if (i == 4 || i == 8) {
-                classes = styles["small-left-padding"]
-            }
-            return <span key={"rnb-id-char" + i} className={classes}>{char}</span >
-        })
+        if (rnb_id) {
+            return rnb_id.split('').map((char, i) => {
+                let classes = ""
+                if (i == 4 || i == 8) {
+                    classes = styles["small-left-padding"]
+                }
+                return <span key={"rnb-id-char" + i} className={classes}>{char}</span >
+            })
+        } else {
+            return null
+        }
     }
 
     
