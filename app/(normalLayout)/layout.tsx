@@ -43,21 +43,22 @@ export default function WithFooterLayout({
                 },
                 {
                   linkProps: {
-                    href:"/blog",
-                  },
-                  text: "Actualités",
-                },
-                {
-                  linkProps: {
                     href:"/faq",
                   },
                   text: "Foire aux questions",
                 },
                 {
                   linkProps: {
-                    href:"/contact",
+                    href:"/blog",
                   },
-                  text: "Contact",
+                  text: "Actualités",
+                },
+                
+                {
+                  linkProps: {
+                    href:"/stats",
+                  },
+                  text: "Statistiques",
                 },
                 {
                   linkProps: {
@@ -65,6 +66,31 @@ export default function WithFooterLayout({
                   },
                   text: "Budget",
                 }
+              ]
+            },
+            {
+              categoryName: "Contact",
+              links: [
+                {
+                  linkProps: {
+                    href:"/contact",
+                  },
+                  text: "Nous écrire",
+                },
+                
+                {
+                  linkProps: {
+                    href:"https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/?originalSubdomain=fr",
+                  },
+                  text: "LinkedIn",
+                },
+                {
+                  linkProps: {
+                    href:"https://matrix.to/#/#rnb:matrix.org",
+                  },
+                  text: "Salons de discussion",
+                },
+               
               ]
             },
             {

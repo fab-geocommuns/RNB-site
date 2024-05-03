@@ -82,7 +82,7 @@ export default function Contact() {
                                 imageUrl={mailIllu.src}
                                 title={emailCopied ? <span className={styles.copySuccess}>Adresse copiée <i className={fr.cx("fr-icon-success-fill")}></i></span> : <span>Nous écrire</span>}
                                 horizontal
-                                desc={`Envoyez nous un message à ${contactEmail}`}
+                                desc={`Envoyez-nous un message à ${contactEmail}`}
                                 linkProps={{
                                     
                                     href: '/contact'
