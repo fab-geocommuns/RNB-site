@@ -33,13 +33,13 @@ export default function WithFooterLayout({
           }
           linkList={[
             {
-              categoryName: "À propos",
+              categoryName: "RNB",
               links: [
                 {
                   linkProps: {
                     href:"/a-propos",
                   },
-                  text: "Présentation",
+                  text: "A propos",
                 },
                 {
                   linkProps: {
