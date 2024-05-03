@@ -113,8 +113,8 @@ export default async function Home() {
 
                     <div className="fr-col-12 fr-col-md-5">
                     <div className="block block--paleBlue">
-                        <h3 className="block__title">Inscription infolettre</h3>
-                        <p>Restez informé des <a href="/blog">actualités et des nouvelles fonctionnalités</a> du RNB.</p>
+                        <h3 className="block__title">Actualités</h3>
+                        <p>Restez informé des <a href="/blog">actualités</a> du RNB en vous inscrivant à l'infolettre ou en nous suivant sur <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">LinkedIn</a>.</p>
                         <NewsletterForm />
                         </div>
                     </div>    

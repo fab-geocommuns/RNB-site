@@ -16,6 +16,7 @@ import faqIllu from '@/public/images/faq-illu.svg'
 import mailIllu from '@/public/images/mail-illu.svg'
 import coopIllu from '@/public/images/coop-illu.svg'
 import appIllu from '@/public/images/app-illu.svg'
+import internetIllu from '@/public/images/internet-illu.svg'
 
 
 // Styles
@@ -72,7 +73,7 @@ export default function Contact() {
                             />
                         </div>
 
-                        <div className='fr-col-12 fr-col-md-6'>
+                        <div className='fr-col-12 fr-col-md-4'>
 
                             
                             
@@ -93,7 +94,7 @@ export default function Contact() {
 
                         </div>
 
-                        <div className='fr-col-12 fr-col-md-6'>
+                        <div className='fr-col-12 fr-col-md-4'>
                             <Tile
                                 imageUrl={appIllu.src}
                                 title="Salon de discussion"
@@ -101,6 +102,18 @@ export default function Contact() {
                                 desc="Rejoignez les salons de discussions du RNB."
                                 linkProps={{
                                 href: 'https://matrix.to/#/#rnb:matrix.org'
+                                }}
+                            />
+                        </div>
+
+                        <div className='fr-col-12 fr-col-md-4'>
+                            <Tile
+                                imageUrl={internetIllu.src}
+                                title="LinkedIn"
+                                horizontal
+                                desc="Suivez les actualités du RNB sur LinkedIn."
+                                linkProps={{
+                                href: 'https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/?originalSubdomain=fr'
                                 }}
                             />
                         </div>
