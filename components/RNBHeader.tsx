@@ -10,6 +10,9 @@ import { useSession } from 'next-auth/react';
 // Routes
 import { usePathname } from 'next/navigation'
 
+// Logo
+import logo from '@/public/images/logo.png'
+
 export default function RNBHeader() {
 
   const { data: session } = useSession()
@@ -41,7 +44,7 @@ export default function RNBHeader() {
     },
     {
       isActive: pathname === '/definition',
-      text: "Définition & standards",
+      text: "Définition & Standard",
       linkProps: {
         href: '/definition',
       }
@@ -73,14 +76,7 @@ export default function RNBHeader() {
       linkProps: {
         href: '/contact',
       }
-    },
-    {
-      isActive: pathname === '/stats',
-      text: "Statistiques",
-      linkProps: {
-        href: '/stats',
-      }
-    },
+    }
   ]
 
   const handleSignout = (e) => {
@@ -127,6 +123,11 @@ export default function RNBHeader() {
         homeLinkProps={{
           href: '/',
           title: 'Accueil RNB',
+        }}
+        operatorLogo={{
+          alt: 'Référentiel national des bâtiments',
+          imgUrl: logo.src,
+          orientation: 'vertical'
         }}
         quickAccessItems={[
           logQA
