@@ -175,6 +175,8 @@ export default function AddressSearchMap() {
                     id="address"
                     ref={addressInput}
                     onKeyDown={handleKeyDown}
+                    onBlur={() => setTimeout(() => setAutocompleteActive(false), 100)}
+                    onFocus={() => setAutocompleteActive(true)}
                 />
                 <AddressAutocomplete autocompleteActive={autocompleteActive} query={query} keyDown={keyDown} onSuggestionSelected={handleSuggestionSelected} ></AddressAutocomplete>
             </div>

@@ -14,6 +14,7 @@ export default function AddressSearchHome() {
     const [coords, setCoords] = useState(null)
     const [keyDown, setKeyDown] = useState(null)
     const [navigateToMap, setnavigateToMap] = useState(false)
+    const [autocompleteActive, setAutocompleteActive] = useState(true)
     const formRef = useRef(null);
     const router = useRouter()
 
@@ -60,10 +61,12 @@ export default function AddressSearchHome() {
                     value={query}
                     name="q"
                     placeholder="un identifiant RNB : 1GA7PBYM1QDY ou une adresse : 42, rue des architectes, Nantes"
+                        onBlur={() => setTimeout(() => setAutocompleteActive(false), 100)}
+                        onFocus={() => setAutocompleteActive(true)}
                     />
                     <button className="fr-btn" type="submit">Rechercher</button>
                 </div>
-                <AddressAutocomplete autocompleteActive={true} query={query} keyDown={keyDown} onSuggestionSelected={handleSuggestionSelected} override_class={styles.autocomplete_suggestions}></AddressAutocomplete>
+                <AddressAutocomplete autocompleteActive={autocompleteActive} query={query} keyDown={keyDown} onSuggestionSelected={handleSuggestionSelected} override_class={styles.autocomplete_suggestions}></AddressAutocomplete>
             </div>
         </form>
     </Providers >
