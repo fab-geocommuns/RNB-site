@@ -125,7 +125,7 @@ export default function RNBHeader() {
           title: 'Accueil RNB',
         }}
         operatorLogo={{
-          alt: 'Référentiel national des bâtiments',
+          alt: 'Référentiel National des Bâtiments',
           imgUrl: logo.src,
           orientation: 'vertical'
         }}
