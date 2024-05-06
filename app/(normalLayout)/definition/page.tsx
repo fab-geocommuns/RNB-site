@@ -9,7 +9,7 @@ export default function Page() {
       <div className="fr-container">
         <div className="fr-grid-row">
           <div className="fr-col-12 fr-py-12v">
-            <h1>Définition et standard</h1>
+            <h1>Définition et Standard</h1>
 
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className="fr-col-12 fr-col-md-8">
@@ -39,8 +39,8 @@ export default function Page() {
                     <p><strong>Contruction de la définition</strong></p>
                   <p>
                     La construction du RNB est réalisée en collaboration avec
-                    les experts de la donnée géomatique du Conseil National de
-                    l’Information Géolocalisée (CNIG). Cette définition du bâtiment est le standard validé par la Commission des
+                    les experts de la donnée géographique du Conseil National de
+                    l’Information Géolocalisée (<a href="https://cnig.gouv.fr/" target="_blank">CNIG</a>). Cette définition du bâtiment est le standard validé par la Commission des
                     Standards du CNIG.
                   </p>
                 </div>
@@ -66,6 +66,13 @@ export default function Page() {
                     </strong>
                     , aujourd’hui comme à l’avenir.
                   </p>
+                  <div><b>Pour en savoir plus : </b></div>
+                  <ul>
+                    <li><a href="/a-propos">A propos du RNB</a></li>
+                    <li><a href="/faq">Questions fréquement posées</a></li>
+                    <li><a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment">Les propriétés d'un bâtiment RNB</a></li>
+                  </ul>
+
                 </div>
               </div>
             

@@ -110,6 +110,12 @@ export default function WithFooterLayout({
                 },
                 {
                   linkProps: {
+                    href:"https://www.data.gouv.fr/fr/organizations/referentiel-national-des-batiments/#/datasets"
+                  },
+                  text: "Sur data.gouv.fr"
+                },
+                {
+                  linkProps: {
                     href:"https://github.com/fab-geocommuns/RNB-site"
                   },
                   text: "Github"

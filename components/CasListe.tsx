@@ -33,7 +33,7 @@ export default function CasList() {
                         <div className="fr-col-12 fr-col-md-4 ">
                         <Card
                         endDetail="Lire la suite"
-                        desc="La saisine d’un ID bâtiment lors du processus de référencement des ERP doit permettre de préciser leur géolocalisation, de faciliter et fiabiliser le processus de recensement et, d’aider le suivi des ERP."
+                        desc="La saisie d’un ID bâtiment lors du processus de référencement des ERP doit permettre de préciser leur géolocalisation, de faciliter et fiabiliser le processus de recensement et, d’aider le suivi des ERP."
                         linkProps={{ href: "/cas/erp" }}
                         title="Améliorer l’identification des Etablissements Recevant du Public (ERP)"
                         />
