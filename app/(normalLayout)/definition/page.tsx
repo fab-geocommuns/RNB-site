@@ -69,7 +69,7 @@ export default function Page() {
                   <div><b>Pour en savoir plus : </b></div>
                   <ul>
                     <li><a href="/a-propos">A propos du RNB</a></li>
-                    <li><a href="/faq">Questions fréquement posées</a></li>
+                    <li><a href="/faq">Foire aux questions</a></li>
                     <li><a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment">Les propriétés d'un bâtiment RNB</a></li>
                   </ul>
 
