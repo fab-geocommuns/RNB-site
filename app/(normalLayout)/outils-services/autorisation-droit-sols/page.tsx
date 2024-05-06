@@ -77,7 +77,7 @@ export default function Page() {
                                             </div>
                                             <h3 className={styles.benef__title}>Gardez vos outils d&apos;instruction</h3>
                                             <div className={styles.benef__desc}>
-                                            Les outils ADS du RNB sont compatibles avec les principaux logiciels du marché. Vous disposez également de <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads">l'API RNB dédiée aux autorisations du droit des sols</a>.
+                                            Les outils ADS du RNB sont compatibles avec les principaux logiciels du marché. Vous disposez également de <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads">l&apos;API RNB dédiée aux autorisations du droit des sols</a>.
                                             </div>
                                             
                                         </div>

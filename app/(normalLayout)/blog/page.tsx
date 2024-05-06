@@ -126,7 +126,7 @@ export default async function Page({params, searchParams} : {params: any, search
                         
                                         <div className="fr-mb-2v">
                                             
-                                        <p>Restez informé des actualités du RNB en vous inscrivant à l'infolettre ou en nous suivant sur <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">LinkedIn</a>.</p>
+                                        <p>Restez informé des actualités du RNB en vous inscrivant à l&apos;infolettre ou en nous suivant sur <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">LinkedIn</a>.</p>
                                         <NewsletterForm />
 
                                         </div>
