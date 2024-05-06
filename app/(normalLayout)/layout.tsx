@@ -39,7 +39,7 @@ export default function WithFooterLayout({
                   linkProps: {
                     href:"/a-propos",
                   },
-                  text: "A propos",
+                  text: "À propos",
                 },
                 {
                   linkProps: {
