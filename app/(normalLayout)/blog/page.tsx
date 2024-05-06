@@ -58,7 +58,7 @@ export default async function Page({params, searchParams} : {params: any, search
                 <div className="fr-col-12 fr-pt-12v">
                         <div className='fr-mb-8v'>
                             <h1 className='fr-mb-2v'>Les actualités du RNB</h1>
-                            <p><b>Consultez les nouveautés et des dernières fonctionnalités du RNB.</b></p>
+                            <p><b>Consultez les nouveautés et les dernières fonctionnalités du RNB.</b></p>
                         </div>
                     </div>
 
