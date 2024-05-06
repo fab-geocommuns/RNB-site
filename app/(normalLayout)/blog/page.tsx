@@ -107,7 +107,7 @@ export default async function Page({params, searchParams} : {params: any, search
                                             <a href="https://acteurspublics.fr/articles/gestion-des-batiments-un-nouvel-outil-a-destination-des-services-publics">Acteurs publics</a>
                                             </li>
                                             <li>
-                                                A chaque bâtiment son identifiant unique<br />
+                                                À chaque bâtiment son identifiant unique<br />
                                                 <a href="https://www.lemoniteur.fr/article/a-chaque-batiment-son-identifiant-unique.2326464">Le Moniteur</a>
                                             </li>
                                         </ul>
