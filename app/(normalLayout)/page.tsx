@@ -20,7 +20,7 @@ import logoCstb from '@/public/images/logos/cstb-bdnb.png'
 import logoIgn from '@/public/images/logos/ign.png'
 import logoDgaln from '@/public/images/logos/dgaln.png'
 import logoFnv from '@/public/images/logos/france-nation-verte.jpg'
-import logoDinum from '@/public/images/logos/dinum.webp'
+import logoDinum from '@/public/images/logos/dinum.png'
 
 // Other illustrations
 import rapprochementIllu from '@/public/images/rapprochement.png'
@@ -102,8 +102,8 @@ export default async function Home() {
 
                     <div className="fr-col-12 fr-col-md-5">
                     <div className="block block--paleBlue">
-                        <h3 className="block__title">Inscription infolettre</h3>
-                        <p>Restez informé des <a href="/blog">actualités et des nouvelles fonctionnalités</a> du RNB.</p>
+                        <h3 className="block__title">Actualités</h3>
+                        <p>Restez informé des <a href="/blog">actualités</a> du RNB en vous inscrivant à l&apos;infolettre ou en nous suivant sur <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">LinkedIn</a>.</p>
                         <NewsletterForm />
                         </div>
                     </div>    
@@ -116,13 +116,13 @@ export default async function Home() {
 
                 <div className={styles.homeCardsSection__titleblock}>
                 <h2 className={styles.homeCardsSection__title}>Outils et services</h2>
-                <p className={styles.homeCardsSection__subtitle}>Consulter, intégrer et alimenter le référentiel</p>
+                <p className={styles.homeCardsSection__subtitle}>Consultez, intégrez et alimentez le référentiel</p>
                 </div>    
                 <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 fr-col-md-4 ">
                     <Card
                     imageUrl={rapprochementIllu.src}
-                    desc="Obtenez les identifiants RNB d'un bâtiment et croisez des bases jusqu&apos;à présent isolées."
+                    desc="Obtenez les identifiants RNB d'un bâtiment et croisez des données jusqu&apos;à présent isolées."
                     linkProps={{ href: "/outils-services/rapprochement" }}
                     title="Rapprochement de bases bâtimentaires"
                     />
@@ -205,10 +205,10 @@ export default async function Home() {
                                 <ImageNext className={`resp-image ${styles.sponsorBlock__logo} ${styles["sponsorBlock__logo--dgaln"]}`} src={logoDgaln} alt="Direction générale de l’aménagement, du logement et de la nature" />
                             
                             </div>
-                            <div className="fr-col-md-2 fr-col-4 text-center">
+                            <div className="fr-col-md-3 fr-col-6 text-center">
                                 <ImageNext className={styles.sponsorBlock__logo} src={logoFnv} alt="France Nation Verte" />
                             </div>
-                            <div className="fr-col-md-2 fr-col-4 text-center">
+                            <div className="fr-col-md-3 fr-col-6 text-center">
                                 <ImageNext className={styles.sponsorBlock__logo} src={logoDinum} alt="Direction interministérielle du numérique" />
                             </div>
 

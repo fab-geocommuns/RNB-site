@@ -8,6 +8,11 @@ import SectionList from '@/components/faq/SectionsList'
 import Summary from '@/components/faq/Summary'
 import BackToTop from '@/components/BackToTop';
 import AboutCol from "@/components/AboutCol"
+import { Highlight } from "@codegouvfr/react-dsfr/Highlight";
+
+// Settings
+import settings from '@/logic/settings'
+const contactEmail = settings.contactEmail;
 
 async function fetchFaqSections() {
 
@@ -41,7 +46,13 @@ export default async function Page() {
 
 
                             <Summary sections={sections} />
-                            <hr className='fr-my-16v' />
+
+
+                            <div className='fr-my-16v'>
+                            <Highlight>Vous vous posez une autre question ? Ecrivez-nous à <a href={`mailto:${contactEmail}`}>{contactEmail}</a></Highlight>
+                            </div>
+
+                            
                             <SectionList sections={sections} />
 
                 </div>  

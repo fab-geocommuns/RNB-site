@@ -24,7 +24,7 @@ export default function ArticleCard({post}) {
                         
                             <div className="fr-mb-2v">{dateStr}</div>
                             <div>{post.excerpt}</div>
-                            </div>
+                        </div>
                             
                         
                         <div className="fr-card__start fr-mb-2v"><TagsList tags={post.tags}></TagsList></div>

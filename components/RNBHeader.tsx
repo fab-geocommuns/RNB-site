@@ -10,6 +10,9 @@ import { useSession } from 'next-auth/react';
 // Routes
 import { usePathname } from 'next/navigation'
 
+// Logo
+import logo from '@/public/images/logo.png'
+
 export default function RNBHeader() {
 
   const { data: session } = useSession()
@@ -41,7 +44,7 @@ export default function RNBHeader() {
     },
     {
       isActive: pathname === '/definition',
-      text: "Définition & standards",
+      text: "Définition & Standard",
       linkProps: {
         href: '/definition',
       }
@@ -73,14 +76,7 @@ export default function RNBHeader() {
       linkProps: {
         href: '/contact',
       }
-    },
-    {
-      isActive: pathname === '/stats',
-      text: "Statistiques",
-      linkProps: {
-        href: '/stats',
-      }
-    },
+    }
   ]
 
   const handleSignout = (e) => {
@@ -90,23 +86,32 @@ export default function RNBHeader() {
 
 
   let logQA = {
-    iconId: 'fr-icon-lock-line',
+    iconId: 'fr-icon-question-fill',
     linkProps: {
-      href: '/login'
+      href: '/faq'
     },
-    text: 'Se connecter'
+    text: 'Foire aux questions'
   }
 
-  if (session) {
-    logQA = {
-      iconId: 'fr-icon-logout-box-r-line',
-      linkProps: {
-        href: '#',
-        onClick: (e) => { handleSignout(e) }
-      },
-      text: 'Se déconnecter'
-    }
-  }
+
+//  let logQA = {
+//    iconId: 'fr-icon-lock-line',
+//    linkProps: {
+//      href: '/login'
+//    },
+//    text: 'Se connecter'
+//  }
+//
+//  if (session) {
+//    logQA = {
+//      iconId: 'fr-icon-logout-box-r-line',
+//      linkProps: {
+//        href: '#',
+//        onClick: (e) => { handleSignout(e) }
+//      },
+//      text: 'Se déconnecter'
+//    }
+//  }
 
   return (
     <>
@@ -118,6 +123,11 @@ export default function RNBHeader() {
         homeLinkProps={{
           href: '/',
           title: 'Accueil RNB',
+        }}
+        operatorLogo={{
+          alt: 'Référentiel National des Bâtiments',
+          imgUrl: logo.src,
+          orientation: 'vertical'
         }}
         quickAccessItems={[
           logQA

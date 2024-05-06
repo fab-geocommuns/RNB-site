@@ -8,8 +8,8 @@ import { useSearchParams } from 'next/navigation'
 import { fr } from "@codegouvfr/react-dsfr";
 import styles from '@/styles/mapPanel.module.scss'
 
-// UI Tools
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+// Comps
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 // Store
 import { useDispatch, useSelector } from "react-redux";

@@ -110,8 +110,8 @@ export default async function Page({
 
 
                     <div className="block block--paleBlue block--smallNewsletterShell fr-mt-24v">
-                        
-                        <p><b>Inscription infolettre</b><br/>Recevez l&apos;actualité du RNB directement dans votre boite email.</p>
+                
+                        <p><b>Infolettre et réseaux</b><br/>Restez informé des <a href="/blog">actualités</a> du RNB en vous inscrivant à l&apos;infolettre ou en nous suivant sur <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">LinkedIn</a>.</p>
                         <NewsletterForm />
                     </div>  
 
