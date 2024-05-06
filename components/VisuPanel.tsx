@@ -92,13 +92,17 @@ export default function VisuPanel() {
     }
 
     function addSpace(rnb_id) {
-        return rnb_id.split('').map((char, i) => {
-            let classes = ""
-            if (i == 4 || i == 8) {
-                classes = styles["small-left-padding"]
-            }
-            return <span key={"rnb-id-char" + i} className={classes}>{char}</span >
-        })
+        if (rnb_id) {
+            return rnb_id.split('').map((char, i) => {
+                let classes = ""
+                if (i == 4 || i == 8) {
+                    classes = styles["small-left-padding"]
+                }
+                return <span key={"rnb-id-char" + i} className={classes}>{char}</span >
+            })
+        } else {
+            return null
+        }
     }
 
     

@@ -308,3 +308,22 @@
     opacity: .75;
 }
 
+.home-search-bar-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+
+    [class~="fr-search-bar"] {
+        flex-basis: 100%;
+    }
+
+    // override addressAutocomplete styles
+    .autocomplete_suggestions {
+        border: 1px solid var(--blue-cumulus-925-125-hover);
+        position: absolute;
+        top: 39px;
+        left: -2px;
+        right: 0;
+    }
+}
+        

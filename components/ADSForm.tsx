@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 // Comps
 import BdgOperations from '@/components/BdgOperations';
 import ADSMap from '@/components/ADSMap';
-import AddressSearch from '@/components/AddressSearch'
+import AddressSearchMap from '@/components/AddressSearchMap'
 
 import InputErrors from '@/components/InputErrors';
 
@@ -239,7 +239,7 @@ export default function ADSForm({ data }) {
                             
                             <div className="fr-input-group">
                                 <label className="fr-label">Centrer carte</label>
-                                <AddressSearch />
+                                <AddressSearchMap />
                             </div>
 
                             <div>
