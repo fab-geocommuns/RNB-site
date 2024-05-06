@@ -40,6 +40,10 @@ export default function AddressAutocomplete({ autocompleteActive, query, keyDown
                         setSelectedSuggestion(selectedSuggestion - 1)
                     }
                     // select the suggestion with the enter key
+                } else if (e.key === 'Escape') {
+                    e.preventDefault()
+                    setAddressSuggestions([])
+                    setSelectedSuggestion(-1)
                 } else if (e.key === 'Enter') {
                     e.preventDefault()
                     let suggestion = null;
@@ -49,18 +53,22 @@ export default function AddressAutocomplete({ autocompleteActive, query, keyDown
                     } else if (addressSuggestions.length == 1) {
                         suggestion = addressSuggestions[0]
                     }
-                    if (suggestion) {
-                        setSuggestionChosen(true)
-                        setAddressSuggestions([])
-                        setSelectedSuggestion(-1)
-                    }
-                    onSuggestionSelected({ suggestion: suggestion })
+                    selectSuggestion(suggestion)
                 } else {
                     setSuggestionChosen(false)
                 }
             }
         }
     }, [keyDown])
+
+    const selectSuggestion = (suggestion) => {
+        if (suggestion) {
+            setSuggestionChosen(true)
+            setAddressSuggestions([])
+            setSelectedSuggestion(-1)
+        }
+        onSuggestionSelected({ suggestion: suggestion })
+    }
 
     useEffect(() => {
         if (!suggestionChosen && autocompleteActive) {
@@ -75,9 +83,7 @@ export default function AddressAutocomplete({ autocompleteActive, query, keyDown
 
                 setTypeTimeout(setTimeout(() => {
                     handleAddressQuery()
-                }, 300))
-
-                
+                }, 300))   
             }
         }
     }, [query])
@@ -112,15 +118,11 @@ export default function AddressAutocomplete({ autocompleteActive, query, keyDown
         })
     }
 
-    const select_suggestion = (suggestion) => {
-        onSuggestionSelected({ suggestion: suggestion })
-    }
-
     const suggestions = addressSuggestions.map((s, i) =>
-        <div onMouseEnter={() => setSelectedSuggestion(i)} onClick={() => select_suggestion(s)} className={styles.suggestion + ' ' + (selectedSuggestion == i ? styles.selected : '')} key={s.properties.id} >
+        <div onMouseEnter={() => setSelectedSuggestion(i)} onClick={() => selectSuggestion(s)} className={styles.suggestion + ' ' + (selectedSuggestion == i ? styles.selected : '')} key={s.properties.id} >
             {s.properties.label}
         </div >
     );
 
-    return suggestions.length > 0 ? <div className={styles.autocomplete_suggestions + ' ' + override_class}>{suggestions}</div> : null;
+    return suggestions.length > 0 && autocompleteActive ? <div className={styles.autocomplete_suggestions + ' ' + override_class}>{suggestions}</div> : null;
 }
