@@ -102,7 +102,7 @@
   - question: Est ce que les identifiants du RNB sont pérennes ? Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
     key: identifiant-perennes
     answer: >
-      <p><a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">Les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification et ne sont jamais supprimés.<p>
+      <p><a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">Les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification et ne sont jamais supprimés.</p>
       <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
 - name: Comment utiliser le RNB ?
   desc: En savoir plus sur l’utilisation concrète du RNB par vos services
@@ -117,10 +117,10 @@
       answer: >
         <p>Vous pouvez :</p>
         <ul>
-        <li><b>Consulter l'outil cartographique<b>, sur votre navigateur<b> :  rendez-vous sur le site rnb.beta.gouv.fr, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un identifiant de bâtiment.</li>
+        <li><b>Consulter l'outil cartographique<b>, sur votre navigateur</b> :  rendez-vous sur le site rnb.beta.gouv.fr, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un identifiant de bâtiment.</li>
         <li><b>Intégrer le RNB au sein de vos logiciels métiers<b> : rendez-vous sur la documentation dédiée concernant l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API bâtiment</a> et les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li>
         <li><b>Télécharger les données du RNB<b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
-        <li><b>Alimenter ce géocommun<b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la <a href="https://rnb.beta.gouv.fr/carte">fiche dédiée du bâtiment</a> , et/ou également ouvrir un <a href="https://github.com/fab-geocommuns/RNB-coeur/issues">ticket sur le Github</a> du RNB.</li>
+        <li><b>Alimenter ce géocommun</b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la <a href="https://rnb.beta.gouv.fr/carte">fiche dédiée du bâtiment</a> , et/ou également ouvrir un <a href="https://github.com/fab-geocommuns/RNB-coeur/issues">ticket sur le Github</a> du RNB.</li>
         </ul>
     - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ?
       key: erreur
