@@ -80,7 +80,7 @@ export default function Page() {
 
                             <div className={styles['stat-card'] + " fr-p-6v"}>
                                 <h2>{stat_display("data_gouv_publication_count")}</h2>
-                                <div>Jeu{more_than_one_dataset ? "x" : ""} de données utilisant les identfifiants RNB</div>
+                                <div>Jeu{more_than_one_dataset ? "x" : ""} de données utilisant les identifiants RNB</div>
                                 <div className='fr-pt-3w'>
                                 <a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" className="fr-link">Les parcourir</a>
                                 </div>
