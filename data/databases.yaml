@@ -1,0 +1,29 @@
+- key: bdnb
+  name: Base de données nationale des bâtiments (BDNB)
+  url: https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments/
+  published_by: le CSTB
+  licence: Données ouvertes
+  tags: [Pérformance énergétique, DPE, DVF]
+  description: >
+    Une description valorisante et concrète de la base de données. 
+    Donne quelques exemples d’attributs disponibles. 
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    Quisque a augue  quis nulla molestie malesuada. Aenean malesuada, 
+    felis in volutpat  tristique, ante diam volutpat arcu, nec cursus
+  image: bdnb.png
+- key: bdtopo
+  name: BD Topo
+  url: https://geoservices.ign.fr/bdtopo
+  published_by: l'IGN
+  licence: open
+  tags: [Géographie, Cartographie, IGN]
+  description: >
+    Une description valorisante et concrète de la base de données. 
+    Donne quelques exemples d’attributs disponibles. 
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    Quisque a augue  quis nulla molestie malesuada. Aenean malesuada, 
+    felis in volutpat  tristique, ante diam volutpat arcu, nec cursus
+  image: bdtopo.png
+
+
+  

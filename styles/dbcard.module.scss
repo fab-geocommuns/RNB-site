@@ -1,0 +1,56 @@
+.card {
+    display: flex;
+    align-items: start;
+    background:#f4f6ff;
+    margin-bottom: 2rem;
+    padding:33px 27px;
+    border-radius: 5px;
+}
+
+.logoShell {
+    margin-right: 1.1rem;
+    margin-top:9px;
+}
+
+.logo {
+    
+    background: white;
+    border:1px solid #ddd;
+    padding: 8px;
+    
+    width: 52px;
+    height: auto;
+    border-radius: 7px;
+    
+}
+
+.titleBlock {
+    margin-bottom: 1rem;
+}
+
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    letter-spacing: -0.03em;
+}
+
+.meta {
+    font-weight: 500;
+    letter-spacing: -0.03em;
+
+    span {
+        display: inline-block;
+        margin-right: 15px;
+    }
+}
+
+.tagShell {
+    display: inline-block;
+    margin-right: .4rem;
+}
+
+.description {
+    
+}

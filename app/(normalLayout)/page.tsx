@@ -111,12 +111,12 @@ export default async function Home() {
             </div>
 
             <div className="section">
-                <div className={`${styles.homeCardsSection} fr-grid-row fr-grid-row--gutters`}>
+                <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 ">
 
-                <div className={styles.homeCardsSection__titleblock}>
-                <h2 className={styles.homeCardsSection__title}>Outils et services</h2>
-                <p className={styles.homeCardsSection__subtitle}>Consultez, intégrez et alimentez le référentiel</p>
+                <div className="section__titleblock">
+                <h2 className="section__title">Outils et services</h2>
+                <p className="section__subtitle">Consultez, intégrez et alimentez le référentiel</p>
                 </div>    
                 <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 fr-col-md-4 ">
@@ -152,12 +152,12 @@ export default async function Home() {
                 </div>
             </div>
             <div className="section">
-                <div className={`${styles.homeCardsSection} fr-grid-row fr-grid-row--gutters`}>
+                <div className="fr-grid-row fr-grid-row--gutters">
                     
                 <div className="fr-col-12 ">
-                <div className={styles.homeCardsSection__titleblock}>
-                    <h2 className={styles.homeCardsSection__title}>Cas d&apos;usage</h2>
-                    <p className={styles.homeCardsSection__subtitle}>Exemples d&apos;utilisation du RNB</p>
+                <div className="section__titleblock">
+                    <h2 className="section__title">Cas d&apos;usage</h2>
+                    <p className="section__subtitle">Exemples d&apos;utilisation du RNB</p>
 
                 </div>
 

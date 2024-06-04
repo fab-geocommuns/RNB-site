@@ -1,9 +1,15 @@
+// Utils
+import path from 'path';
+import { parse } from 'yaml'
+import { promises as fs } from 'fs';
+
 // Styles
 import styles from '@/styles/toolDetail.module.scss'
 
 // Comps
 import ImageNext from 'next/image'
 import CasList from '@/components/CasListe'
+import DBCard from '@/components/DBCard'
 
 // Images
 import rapprochementIllu from '@/public/images/rapprochement-service.svg'
@@ -11,7 +17,22 @@ import dashboardIllu from '@/public/images/dashboard.svg'
 import shareIllu from '@/public/images/share-doc.svg'
 import teamIllu from '@/public/images/teamwork.svg'
 
-export default function Page() {
+
+async function fetchDBs() {
+    // Read json file in the data folder
+    const jsonDirectory = path.join(process.cwd(), 'data');
+    //Read the json data file data.json
+    const fileContents = await fs.readFile(jsonDirectory + '/databases.yaml', 'utf8');
+    //Return the content of the data file in json format
+    const data = parse(fileContents);
+
+    return data
+}
+
+export default async function Page() {
+
+    const dbs = await fetchDBs();
+
     return (
         <>
         
@@ -19,21 +40,50 @@ export default function Page() {
                 <div className="fr-grid-row ">
 
 
-                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pt-12v">
-                        <h1>Service de rapprochements</h1>
+                    <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2 fr-pt-12v">
+                        <h1>Enrichissez vos bases de données bâtimentaires</h1>
+                        <p className='fr-text--lead'>Un petit texte d’intro de motivation qui aborde rapidement le quoi et le comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui.</p>
                             
-                                <div className="block block--yellow">
-                                    <h2 className="blockTitle">Nous croisons vos bases de données de bâtiments</h2>
-                                    <p>Vous avez des bases de données de bâtiments que vous aimeriez croiser pour produire de nouvelles analyses, avoir une connaissance plus fine de votre parc ? Obtenez rapidement des correspondances de qualité entre différentes bases de données bâtimentaires, grâce au Référentiel National des Bâtiments.</p>
-
-                                    <p><b><span className='stab stab--yellowStrong'>Nous vous proposons ce service gratuit et sur-mesure.</span></b></p>
-
-                                    <p><b>Vous souhaitez profiter de ce service ?</b></p>
-                                    <div className="blockLinkShell blockLinkShell--noGrow">
-                                            <a className="fr-btn" href="/contact">Contactez nous</a>
+                                <div className='section'>
+                                    <div className="block block--yellow">
+                                        <h2 className="blockTitle">Comment faire ?</h2>
+                                        
+                                        <ol>
+                                            <li><a href="#liste">Identifiez les bases</a> contenant les informations qui vous intéressent.</li>
+                                            <li>Obtenez les identifiants RNB de vos bâtiments grâce à nos <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments">outils en self-service</a> ou notre service de rapprochement</li>
+                                            <li>Croisez les bases en utilisant les identifiants RNB comme pivot</li>
+                                        </ol>
                                     </div>
                                 </div>
+                                
+
+                                <div className='section section__big'>
+
+                            
+                                <div className="section__titleblock">
+                                    <h2 className='section__title'>Les bases contenant des identifiants RNB</h2>
+                                    
+                                    
+                                </div>
+                            
+                                {dbs.map((db: any) => {
+                                // include db componenet
+                                return (
+                                    <DBCard key={db.key} db={db} />
+                                )
+                            })}
+                            
+
+                                </div>
+
+                                
                     </div>
+
+
+                    <div className='fr-col-md-8 fr-col-offset-md-2'>
+                        
+                    </div>
+
                     <div className="fr-col-12">
                             
 
