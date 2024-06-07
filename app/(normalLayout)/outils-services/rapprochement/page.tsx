@@ -6,6 +6,7 @@ import { promises as fs } from 'fs';
 // Comps
 import DBCard from '@/components/DBCard'
 import ImageNext from 'next/image'
+import { Card } from "@codegouvfr/react-dsfr/Card"
 
 // Settings
 import settings from '@/logic/settings'
@@ -15,6 +16,9 @@ import styles from '@/styles/richerDatabases.module.scss'
 
 // Images
 import pivotIllu from '@/public/images/pivot-sentence.png'
+import mountainPhoto from '@/public/images/bdgs-mountains.jpg'
+import metalBdgPhoto from '@/public/images/metal-bdg.jpg'
+import bdgRiverPhoto from '@/public/images/bdg-river.jpg'
 
 
 async function fetchDBs() {
@@ -62,6 +66,7 @@ export default async function Page() {
 
                         <div className="section__titleblock">
                             <h2 id='liste' className='section__title'>Les bases contenant des identifiants RNB</h2>
+                            <p className="section__subtitle">Performance énergétique, insalubrité, équipements sportifs, copropriétés, ...</p>
                         </div>
                             
                         {dbs.map((db: any) => {
@@ -79,7 +84,7 @@ export default async function Page() {
                 </div>
             </div>
 
-            <div className='section'>
+            <div className='section section__big'>
 
                 <div className="fr-grid-row ">
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
@@ -91,6 +96,47 @@ export default async function Page() {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div className='section'>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
+
+                        <div className="section__titleblock">
+                            <h2 id='liste' className='section__title'>Comment obtenir les identifiants RNB de vos bâtiments ?</h2>
+                            <p className="section__subtitle">Utilisez directement nos outils ou demandez nous de l'aide</p>
+                        </div>
+                        
+
+                    </div>
+                    <div className='fr-col-12 fr-col-md-4'>
+                        <Card
+                        imageUrl={metalBdgPhoto.src}
+                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
+                        linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/identification-de-batiment" }}
+                        title="Utilisez notre API d'identification de bâtiments"
+                        />
+                    </div>
+                    <div className='fr-col-12 fr-col-md-4'>
+                        <Card
+                        imageUrl={mountainPhoto.src}
+                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
+                        linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" }}
+
+                        title="Intégrez un sélecteur de bâtiments à vos outils"
+                        />
+                    </div>
+                    <div className='fr-col-12 fr-col-md-4'>
+                        <Card
+                        imageUrl={bdgRiverPhoto.src}
+                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
+                        linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" }}
+
+                        title="Faites appel à nos services"
+                        />
+                    </div>
+                    
                 </div>
             </div>
 
