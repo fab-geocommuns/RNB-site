@@ -99,7 +99,7 @@ export default async function Page() {
                 </div>
             </div>
 
-            <div className='section'>
+            <div className='section section__big'>
                 <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
 
@@ -131,7 +131,7 @@ export default async function Page() {
                         <Card
                         imageUrl={bdgRiverPhoto.src}
                         desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
-                        linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" }}
+                        linkProps={{ href: "/contact" }}
 
                         title="Faites appel à nos services"
                         />
@@ -140,8 +140,20 @@ export default async function Page() {
                 </div>
             </div>
 
-           
-
+            <div className='section section__big fr-pb-16v'>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
+                    <div className="block block--blue">
+                            <h2 className="blockTitle">Pour aller plus loin</h2>            
+                            <ul>
+                                <li><a href="#liste">Identifiez les bases</a> contenant les informations qui vous intéressent.</li>
+                                <li>Obtenez les identifiants RNB de vos bâtiments grâce à nos <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments">outils en self-service</a> ou notre service de rapprochement</li>
+                                <li>Croisez les bases en utilisant les identifiants RNB comme pivot</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         
         </div>
