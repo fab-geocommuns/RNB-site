@@ -116,7 +116,7 @@ export default async function Home() {
                 <div className={styles.dbsShell}>
                 <div className="section__titleblock">
                     <h2 className="section__title">Enrichissez vos bases de données bâtimentaires</h2>
-                    <p className="section__subtitle">Les identifiants de bâtiments RNB servent de pivot entre des données jusqu'à présent isolées</p>
+                    <p className="section__subtitle">Les identifiants de bâtiments RNB servent de pivot entre des données jusqu&apos;à présent isolées</p>
                 </div>
                     <HomeDBList dbs={dbs} dbsCount={dbsCount} />
                 </div>

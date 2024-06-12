@@ -34,7 +34,7 @@ export default async function Page() {
                 <div className="fr-grid-row ">
                     <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2 fr-pt-12v">
                         <h1>Enrichissez vos bases de données bâtimentaires</h1>
-                        <p className='fr-text--lead'>Un petit texte d’intro de motivation qui aborde rapidement le quoi et le comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui.</p>
+                        <p className='fr-text--lead'>Un petit texte d&apos;intro de motivation qui aborde rapidement le quoi et le comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui.</p>
                     </div>
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pt-12v">
                         <div className="block block--yellow">
@@ -79,7 +79,7 @@ export default async function Page() {
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
 
                         <div className={styles.pivotBlock}>          
-                            <h3 className={styles.pivotBlockTitle}>Les identifiants de bâtiments RNB servent de pivot entre des données jusqu'à présent isolées.</h3>
+                            <h3 className={styles.pivotBlockTitle}>Les identifiants de bâtiments RNB servent de pivot entre des données jusqu&apos;à présent isolées.</h3>
                             <div className={styles.pivotBlockSentence}>
                                 <ImageNext src={pivotIllu} alt='Illustration d’un pivot' />
                             </div>
