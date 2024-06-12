@@ -39,9 +39,6 @@ import HomeDBList from '@/components/homeDBList'
 export const revalidate = 10
 
 
-
-
-
 export default async function Home() {
 
     const bannerId = "M11Z4KK9Y338";

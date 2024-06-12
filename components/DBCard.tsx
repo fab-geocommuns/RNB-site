@@ -1,3 +1,5 @@
+'use client'
+
 // Styles
 import styles from '@/styles/dbcard.module.scss'
 
@@ -5,10 +7,24 @@ import styles from '@/styles/dbcard.module.scss'
 import ImageNext from 'next/image'
 import Badge from '@codegouvfr/react-dsfr/Badge';
 
+// Analytics
+import va from "@vercel/analytics"
+
 export default function Entry({db, }) {
 
     const imagePath = function(filaname: string) {
         return `/images/databases/${filaname}`
+    }
+
+    const trackDbClick = (db) => {
+        
+        return () => {
+            va.track("db-click-home", {
+                db_key: db.key,
+                db_name: db.name
+            })
+        }
+
     }
 
     return (
@@ -25,7 +41,7 @@ export default function Entry({db, }) {
 
 
                         <div className={styles.titleBlock}>
-                            <h3 className={styles.title}><a href={db.url}>{db.name}</a></h3>
+                            <h3 className={styles.title}><a onClick={trackDbClick(db)} href={db.url}>{db.name}</a></h3>
                             <div className={styles.meta}>
                                 <span>Editée par {db.published_by}</span>
                                 <span>{db.licence}</span>

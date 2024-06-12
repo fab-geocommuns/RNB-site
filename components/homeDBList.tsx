@@ -1,14 +1,29 @@
+'use client'
+
 // Styles
 import styles from '@/styles/homedblist.module.scss'
 
 // Components
 import ImageNext from 'next/image'
 
+// Analytics
+import va from "@vercel/analytics"
 
 export default function HomeDBList({dbs, dbsCount}) {
 
     const imagePath = function(filaname: string) {
         return `/images/databases/${filaname}`
+    }
+
+    const trackDbClick = (db) => {
+        
+        return () => {
+            va.track("db-click-home", {
+                db_key: db.key,
+                db_name: db.name
+            })
+        }
+
     }
 
     return (
@@ -17,7 +32,7 @@ export default function HomeDBList({dbs, dbsCount}) {
                 <div className={styles.list}>
 
                     {dbs.map((db) => {
-                        return <a href={'/outils-services/rapprochement#' + db.key} className={styles.db}>
+                        return <a onClick={trackDbClick(db)} href={'/outils-services/rapprochement#' + db.key} className={styles.db} key={db.key}>
                                     
 
                                         <div className={styles.imgShell}>

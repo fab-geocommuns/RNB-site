@@ -10,9 +10,7 @@
 
     flex-direction: column;
     @media (min-width: $bp-md) {
-        
         flex-direction: row;
-        
     }
 
 }
@@ -20,6 +18,19 @@
 .logoShell {
     
     margin-bottom: .3rem;
+
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+
+    background: white;
+    border:1px solid #ddd;
+    padding: 8px;
+    border-radius: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @media (min-width: $bp-md) {
         
@@ -32,13 +43,12 @@
 
 .logo {
     
-    background: white;
-    border:1px solid #ddd;
-    padding: 8px;
     
-    width: 52px;
+    
+    width: 100%;
     height: auto;
-    border-radius: 7px;
+    
+    
     
 }
 
