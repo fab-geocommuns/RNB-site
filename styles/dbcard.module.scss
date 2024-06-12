@@ -1,3 +1,5 @@
+@import "vars.scss";
+
 .card {
     display: flex;
     align-items: start;
@@ -5,11 +7,27 @@
     margin-bottom: 2rem;
     padding:33px 27px;
     border-radius: 5px;
+
+    flex-direction: column;
+    @media (min-width: $bp-md) {
+        
+        flex-direction: row;
+        
+    }
+
 }
 
 .logoShell {
-    margin-right: 1.1rem;
-    margin-top:9px;
+    
+    margin-bottom: .3rem;
+
+    @media (min-width: $bp-md) {
+        
+        margin-right: 1.1rem;
+        margin-top:9px;
+        margin-bottom: 0;
+        
+    }
 }
 
 .logo {

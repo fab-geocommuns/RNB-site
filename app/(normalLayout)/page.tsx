@@ -8,6 +8,7 @@ import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
 import AddressSearchHome from '@/components/AddressSearchHome'
 
+
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg'
 import bannerPicMid from '@/public/images/homeBanner/bordeaux-mid.jpg'
@@ -30,21 +31,27 @@ import adsIllu from '@/public/images/ads.png'
 // Ghost CMS
 import { getBreakingNews } from '@/utils/blog'
 
+// Utils
+import { getDatabasesCount, getFeaturedDatabases } from '@/utils/databases'
+import HomeDBList from '@/components/homeDBList'
+
 
 export const revalidate = 10
 
-async function getData() {
-    return await getBreakingNews();
-}
+
+
+
 
 export default async function Home() {
 
     const bannerId = "M11Z4KK9Y338";
-    const breakingNews = await getData();
+    const breakingNews = await getBreakingNews();
+    const dbs = await getFeaturedDatabases();
+    const dbsCount = await getDatabasesCount();
     
     return (
         <>
-            <div className="fr-container fr-py-12v">
+            <div className="fr-container fr-pt-12v">
 
             <div className="section">
                 <div className="fr-grid-row fr-grid-row--gutters">
@@ -80,17 +87,13 @@ export default async function Home() {
             {breakingNews.featured && <>
                 
                 <div className='fr-grid-row'>
-                    <div className='fr-col-8 fr-col-offset-2'>
+                    <div className='fr-col-12 fr-col-md-8 fr-col-offset-md-2'>
                     <div dangerouslySetInnerHTML={{__html: breakingNews.html}}></div>
                     </div>
                 </div>
                 </>}
 
             <div className="section">
-
-
-           
-
                 <div className='fr-grid-row fr-grid-row--gutters'>
                 <div className="fr-col-12 fr-col-md-7">
                         <div className="block block--blue">
@@ -109,6 +112,19 @@ export default async function Home() {
                     </div>    
                 </div>
             </div>
+        
+
+            
+            <div className="section section__big ">
+                <div className={styles.dbsShell}>
+                <div className="section__titleblock">
+                    <h2 className="section__title">Enrichissez vos bases de données bâtimentaires</h2>
+                    <p className="section__subtitle">Les identifiants de bâtiments RNB servent de pivot entre des données jusqu'à présent isolées</p>
+                </div>
+                    <HomeDBList dbs={dbs} dbsCount={dbsCount} />
+                </div>
+                </div>
+
 
             <div className="section">
                 <div className="fr-grid-row fr-grid-row--gutters">
@@ -216,9 +232,9 @@ export default async function Home() {
                             
                         </div>
                     </div>
-                </div>
+                
             </div>
-
+</div>
                 
              
             </div>

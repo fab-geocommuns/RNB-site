@@ -1,5 +1,5 @@
 - key: bdnb
-  name: Base de données nationale des bâtiments (BDNB)
+  name: BDNB
   url: https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments/
   published_by: le CSTB
   licence: Données ouvertes
@@ -11,6 +11,8 @@
     Quisque a augue  quis nulla molestie malesuada. Aenean malesuada, 
     felis in volutpat  tristique, ante diam volutpat arcu, nec cursus
   image: bdnb.png
+  featured: true
+  featured_summary: Une des bases de données bâtimentaire les plus riches. De nombreux attributs disponibles et 48 millions de bâtiments référencés.
 - key: bdtopo
   name: BD Topo
   url: https://geoservices.ign.fr/bdtopo
@@ -21,9 +23,23 @@
     Une description valorisante et concrète de la base de données. 
     Donne quelques exemples d’attributs disponibles. 
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-    Quisque a augue  quis nulla molestie malesuada. Aenean malesuada, 
-    felis in volutpat  tristique, ante diam volutpat arcu, nec cursus
+    Quisque a augue  quis nulla mos.
   image: ign.png
-
+  featured: true
+  featured_summary: Une résumé très court dédié à la page d'accueil. On ne veut pas plus long que ça.
+- key: dataes
+  name: DataES
+  url: https://geoservices.ign.fr/bdtopo
+  published_by: Ministère des sports
+  licence: open
+  tags: [Sport, Equipements sportifs]
+  description: >
+    Une description valorisante et concrète de la base de données. 
+    Donne quelques exemples d’attributs disponibles. 
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    Quisque a augue  quis nulla mos.
+  image: stadium.png
+  featured: true
+  featured_summary: Une résumé très court dédié à la page d'accueil. On ne veut pas plus long que ça. Ou alors un tout petit mais pas bcp plus.
 
   

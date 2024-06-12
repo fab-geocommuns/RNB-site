@@ -1,7 +1,5 @@
 // Utils
-import path from 'path';
-import { parse } from 'yaml'
-import { promises as fs } from 'fs';
+import { getDatabases } from '@/utils/databases';
 
 // Comps
 import DBCard from '@/components/DBCard'
@@ -21,20 +19,11 @@ import metalBdgPhoto from '@/public/images/metal-bdg.jpg'
 import bdgRiverPhoto from '@/public/images/bdg-river.jpg'
 
 
-async function fetchDBs() {
-    // Read json file in the data folder
-    const jsonDirectory = path.join(process.cwd(), 'data');
-    //Read the json data file data.json
-    const fileContents = await fs.readFile(jsonDirectory + '/databases.yaml', 'utf8');
-    //Return the content of the data file in json format
-    const data = parse(fileContents);
 
-    return data
-}
 
 export default async function Page() {
 
-    const dbs = await fetchDBs();
+    const dbs = await getDatabases();
 
     return (
         <>
@@ -51,8 +40,8 @@ export default async function Page() {
                         <div className="block block--yellow">
                             <h2 className="blockTitle">Comment faire ?</h2>            
                             <ol>
-                                <li><a href="#liste">Identifiez les bases</a> contenant les informations qui vous intéressent.</li>
-                                <li>Obtenez les identifiants RNB de vos bâtiments grâce à nos <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments">outils en self-service</a> ou notre service de rapprochement</li>
+                                <li><a href="#liste">Identifiez les bases</a> contenant les informations qui vous intéressent</li>
+                                <li><a href="#identifiants">Obtenez les identifiants RNB</a> de vos bâtiments grâce à nos outils et services</li>
                                 <li>Croisez les bases en utilisant les identifiants RNB comme pivot</li>
                             </ol>
                         </div>
@@ -99,13 +88,13 @@ export default async function Page() {
                 </div>
             </div>
 
-            <div className='section section__big'>
+            <div className='section section__big' id="identifiants">
                 <div className="fr-grid-row fr-grid-row--gutters">
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
 
                         <div className="section__titleblock">
                             <h2 id='liste' className='section__title'>Comment obtenir les identifiants RNB de vos bâtiments ?</h2>
-                            <p className="section__subtitle">Utilisez directement nos outils ou demandez nous de l'aide</p>
+                            <p className="section__subtitle">Utilisez directement nos outils ou faites appel à nos services</p>
                         </div>
                         
 
@@ -146,9 +135,9 @@ export default async function Page() {
                     <div className="block block--blue">
                             <h2 className="blockTitle">Pour aller plus loin</h2>            
                             <ul>
-                                <li><a href="#liste">Identifiez les bases</a> contenant les informations qui vous intéressent.</li>
-                                <li>Obtenez les identifiants RNB de vos bâtiments grâce à nos <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments">outils en self-service</a> ou notre service de rapprochement</li>
-                                <li>Croisez les bases en utilisant les identifiants RNB comme pivot</li>
+                                <li>TODO 1</li>
+                                <li>TODO 2</li>
+                                <li>TODO 3</li>
                             </ul>
                         </div>
                     </div>
