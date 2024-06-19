@@ -43,10 +43,9 @@ export default function Outils() {
                         </div>
                         <div className="fr-col-12 fr-col-md-6">
                             <div className="block block--yellow block--fill">
-                                <h2 className="blockTitle">Croisement de bases bâtimentaires</h2>
-                                <p className="blockSubtitle">Vous souhaitez croiser deux bases de données bâtimentaires mais n&apos;avez pas les ressources pour le faire ?<br />
-                                <b>Nous pouvons vous offrir ce service.</b></p>
-                                <div className="blockLinkShell"><a href="/outils-services/rapprochement" className='fr-btn fr-btn--secondary'>En savoir plus</a></div>
+                                <h2 className="blockTitle">Enrichissez vos bases bâtimentaires</h2>
+                                <p className="blockSubtitle">Trouvez les données qui vous intéressent et obtenez les grâces aux identifiants de bâtiments RNB.</p>
+                                <div className="blockLinkShell"><a href="/outils-services/rapprochement" className='fr-btn fr-btn--secondary'>Comment faire ?</a></div>
                             </div>
                         </div>
                         <div className="fr-col-12 fr-col-md-6">

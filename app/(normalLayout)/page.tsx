@@ -56,7 +56,7 @@ export default async function Home() {
                         <div className={`${styles.banner} ${styles["banner--default"]}`}>
                             <div className={styles.banner__content}>
                                 <h1 className={styles.banner__title}>Le Référentiel National des Bâtiments</h1>
-                                <p className={styles.banner__subtitle}>Référencer l&apos;intégralité des bâtiments du territoire français au sein de données et d&apos;outils libres</p>
+                                <p className={styles.banner__subtitle}>Rendre efficace et commune l&apos;identification des bâtiments et l&apos;échange d&apos;informations les concernant</p>
                                 <a href="/carte" className='fr-btn'>Voir la carte des bâtiments</a>
                             </div> 
                             

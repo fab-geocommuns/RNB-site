@@ -34,7 +34,10 @@ export default async function Page() {
                 <div className="fr-grid-row ">
                     <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2 fr-pt-12v">
                         <h1>Enrichissez vos bases de données bâtimentaires</h1>
-                        <p className='fr-text--lead'>Un petit texte d&apos;intro de motivation qui aborde rapidement le quoi et le comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui.</p>
+                        <p className='fr-text--lead'>
+                            Les identifiants de bâtiments RNB servent de pivot entre des données jusqu&apos;à présent isolées.
+                            Obtenez et diffusez les identifiants RNB de vos bâtiments pour enrichir vos bases de données.
+                        </p>
                     </div>
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pt-12v">
                         <div className="block block--yellow">
@@ -102,7 +105,7 @@ export default async function Page() {
                     <div className='fr-col-12 fr-col-md-4'>
                         <Card
                         imageUrl={metalBdgPhoto.src}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
+                        desc="Interrogez notre API bâtiment et intégrez directement les identifiants RNB de vos bâtiments à vos jeux de données."
                         linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/identification-de-batiment" }}
                         title="Utilisez notre API d'identification de bâtiments"
                         />
@@ -110,7 +113,7 @@ export default async function Page() {
                     <div className='fr-col-12 fr-col-md-4'>
                         <Card
                         imageUrl={mountainPhoto.src}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
+                        desc="Intégrez une carte présentant les bâtiments RNB au sein de vos sites et logiciels. Permettez à vos utilisateurs d'identifier et sélectionner le ou les bons bâtiments."
                         linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" }}
 
                         title="Intégrez un sélecteur de bâtiments à vos outils"
@@ -119,10 +122,10 @@ export default async function Page() {
                     <div className='fr-col-12 fr-col-md-4'>
                         <Card
                         imageUrl={bdgRiverPhoto.src}
-                        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam diam  eros, imperdiet sed eleifend a, tempus eu dui."
+                        desc="Vous souhaitez intégrer les identifiants RNB à votre base bâtimentaire mais n'avez pas les ressources techniques pour le faire ? Contactez-nous."
                         linkProps={{ href: "/contact" }}
 
-                        title="Faites appel à nos services"
+                        title="Faites appel à notre bureau des rapprochements"
                         />
                     </div>
                     
@@ -135,9 +138,9 @@ export default async function Page() {
                     <div className="block block--blue">
                             <h2 className="blockTitle">Pour aller plus loin</h2>            
                             <ul>
-                                <li>TODO 1</li>
-                                <li>TODO 2</li>
-                                <li>TODO 3</li>
+                                <li>Article : <a href="/blog/identifiant-batiment-perenne">Qu&apos;est-ce qu&apos;est un ID de bâtiment pérenne ?</a></li>
+                                <li>Standard : <a href="/definition">la définition retenue d&apos;un bâtiment</a></li>
+                                <li>La <a href="/faq">Foire aux Questions</a> du RNB</li>
                             </ul>
                         </div>
                     </div>
