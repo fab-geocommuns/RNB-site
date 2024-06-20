@@ -14,6 +14,7 @@ import styles from '@/styles/richerDatabases.module.scss'
 
 // Images
 import pivotIllu from '@/public/images/pivot-sentence.png'
+import pivotIlluMobile from '@/public/images/pivot-sentence-mobile.png'
 import mountainPhoto from '@/public/images/bdgs-mountains.jpg'
 import metalBdgPhoto from '@/public/images/metal-bdg.jpg'
 import bdgRiverPhoto from '@/public/images/bdg-river.jpg'
@@ -84,7 +85,14 @@ export default async function Page() {
                         <div className={styles.pivotBlock}>          
                             <h3 className={styles.pivotBlockTitle}>Les identifiants de bâtiments RNB servent de pivot entre des données jusqu&apos;à présent isolées.</h3>
                             <div className={styles.pivotBlockSentence}>
-                                <ImageNext src={pivotIllu} alt='Illustration d’un pivot' />
+                                <div className='none md-block'>
+                                    <ImageNext className='resp-image' src={pivotIllu} alt='Illustration d’un pivot' />
+                                </div>
+                                <div className='md-none'>
+                                    <ImageNext className='resp-image' src={pivotIlluMobile} alt='Illustration d’un pivot' />
+                                </div>
+                                
+                                
                             </div>
                         </div>
                     </div>

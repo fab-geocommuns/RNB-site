@@ -1,6 +1,12 @@
+@import "vars.scss";
+
 .pivotBlock {
     background: #FFF8F0;
-    padding:40px;
+    padding:40px 20px;
+
+    @media (min-width: $bp-md) {
+        padding:40px;
+    }
 }
 
 .pivotBlockTitle {
