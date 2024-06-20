@@ -34,7 +34,7 @@ export default function VisuMap() {
   const marker = useRef(null)
   
   // Buildings tiles
-  const tilesUrl = process.env.NEXT_PUBLIC_API_BASE + '/tiles/shapes/{x}/{y}/{z}.pbf'
+  const tilesUrl = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf'
   
   // Map container and object
   const mapContainer = useRef(null);
@@ -181,14 +181,14 @@ export default function VisuMap() {
       })
       map.current.addLayer({
         id: "bdgs",
-        type: "fill",
+        type: "circle",
         source: "bdgtiles",
         "source-layer": "default",
         paint: {
-          'fill-opacity': .3,
-          'fill-outline-color': '#000000',
-          
-          "fill-color": [
+          'circle-radius': 5,
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 3,
+          "circle-color": [
             "case",
             ["boolean", ["feature-state", "in_panel"], false],
             '#31e060',
