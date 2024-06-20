@@ -3,7 +3,7 @@
   url: https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments/
   published_by: le CSTB
   licence: Partiellement ouverte
-  tags: [Pérformance énergétique, DPE, DVF]
+  tags: [Performance énergétique, DPE, DVF]
   description: >
     La BDNB est une cartographie du parc de bâtiments existants. Structurée à la maille « bâtiment », elle contient une carte d’identité pour chacun des 32 millions de bâtiments, résidentiels ou tertiaires. Elle est construite par croisement d’une vingtaine de base de données issues d’organismes publics.
   image: bdnb.png
