@@ -21,7 +21,6 @@ import styles from '@/styles/blogArticle.module.scss'
 // Import highlight.js styles and theme
 import 'highlight.js/styles/atom-one-dark.css';
 
-//import 'highlight.js/styles/github.css';
 
 
 // SEO
@@ -81,16 +80,11 @@ export default async function Page({
         <>
             <BackToTop></BackToTop>
 
-        
-            
-
             <div className="fr-container">
 
                 <div className="fr-grid-row fr-grid-row--gutters fr-py-12v">
 
-
                     <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
-
                     
                     <div className='fr-mb-8v'>
                         <div><TagsList tags={post.tags}></TagsList></div>

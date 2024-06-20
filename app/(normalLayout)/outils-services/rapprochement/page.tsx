@@ -1,203 +1,162 @@
-// Styles
-import styles from '@/styles/toolDetail.module.scss'
+// Utils
+import { getDatabases } from '@/utils/databases';
 
 // Comps
+import DBCard from '@/components/DBCard'
 import ImageNext from 'next/image'
-import CasList from '@/components/CasListe'
+import { Card } from "@codegouvfr/react-dsfr/Card"
+
+// Settings
+import settings from '@/logic/settings'
+
+// Styles
+import styles from '@/styles/richerDatabases.module.scss'
 
 // Images
-import rapprochementIllu from '@/public/images/rapprochement-service.svg'
-import dashboardIllu from '@/public/images/dashboard.svg'
-import shareIllu from '@/public/images/share-doc.svg'
-import teamIllu from '@/public/images/teamwork.svg'
+import pivotIllu from '@/public/images/pivot-sentence.png'
+import pivotIlluMobile from '@/public/images/pivot-sentence-mobile.png'
+import mountainPhoto from '@/public/images/bdgs-mountains.jpg'
+import metalBdgPhoto from '@/public/images/metal-bdg.jpg'
+import bdgRiverPhoto from '@/public/images/bdg-river.jpg'
 
-export default function Page() {
+
+
+
+export default async function Page() {
+
+    const dbs = await getDatabases();
+
     return (
         <>
         
         <div className="fr-container">
+
+            <div className='section section__big'>
                 <div className="fr-grid-row ">
-
-
+                    <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2 fr-pt-12v">
+                        <h1>Enrichissez vos bases de données bâtimentaires</h1>
+                        <p className='fr-text--lead'>
+                            Les identifiants de bâtiments RNB servent de pivot entre des données jusqu&apos;à présent isolées.
+                            Obtenez et diffusez les identifiants RNB de vos bâtiments pour enrichir vos bases de données.
+                        </p>
+                    </div>
                     <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pt-12v">
-                        <h1>Service de rapprochements</h1>
-                            
-                                <div className="block block--yellow">
-                                    <h2 className="blockTitle">Nous croisons vos bases de données de bâtiments</h2>
-                                    <p>Vous avez des bases de données de bâtiments que vous aimeriez croiser pour produire de nouvelles analyses, avoir une connaissance plus fine de votre parc ? Obtenez rapidement des correspondances de qualité entre différentes bases de données bâtimentaires, grâce au Référentiel National des Bâtiments.</p>
-
-                                    <p><b><span className='stab stab--yellowStrong'>Nous vous proposons ce service gratuit et sur-mesure.</span></b></p>
-
-                                    <p><b>Vous souhaitez profiter de ce service ?</b></p>
-                                    <div className="blockLinkShell blockLinkShell--noGrow">
-                                            <a className="fr-btn" href="/contact">Contactez nous</a>
-                                    </div>
-                                </div>
+                        <div className="block block--yellow">
+                            <h2 className="blockTitle">Comment faire ?</h2>            
+                            <ol>
+                                <li><a href="#liste">Identifiez les bases</a> contenant les informations qui vous intéressent</li>
+                                <li><a href="#identifiants">Obtenez les identifiants RNB</a> de vos bâtiments grâce à nos outils et services</li>
+                                <li>Croisez les bases en utilisant les identifiants RNB comme pivot</li>
+                            </ol>
+                        </div>
                     </div>
-                    <div className="fr-col-12">
-                            
-
-                            
-                                
-                                    
-                                    
-                                    <div className={styles.benefShell}>
-                                        <div className={styles.benef}>
-                                            <div>
-                                                <ImageNext className={styles.benef__illu} src={dashboardIllu} alt="Croisez des bases isolées pour produire de nouvelles analyses" />
-                                            </div>
-                                            <h3 className={styles.benef__title}>Améliorez vos analyses</h3>
-                                            <div className={styles.benef__desc}>
-                                            Créez de nouvelles analyses en croisant vos bases bâtimentaires jusqu&apos;à présent isolées.
-                                            </div>
-                                            
-                                        </div>
-
-
-                                        <div className={styles.benef}>
-                                            <div>
-                                                <ImageNext className={styles.benef__illu} src={shareIllu} alt="Faites circuler l'information bâtimentaire" />
-                                            </div>
-                                            <h3 className={styles.benef__title}>Faites circuler l&apos;information</h3>
-                                            <div className={styles.benef__desc}>
-                                            Partager des informations bâtimentaires qualitatives entre différentes organisations et services.
-                                            </div>
-                                            
-                                        </div>
-
-                                        <div className={styles.benef}>
-                                            <div>
-                                                <ImageNext className={styles.benef__illu} src={teamIllu} alt="Evitez le travail en double" />
-                                            </div>
-                                            <h3 className={styles.benef__title}>Travaillez en équipe</h3>
-                                            <div className={styles.benef__desc}>
-                                            Réduisez le temps passé à la collecte manuelle, l&apos;actualisation et au croisement de données.
-                                            </div>
-                                            
-                                        </div>
-
-                                        
-                                        
-                                    </div>
-
-
-                                
-                    </div>
-                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1 fr-pb-12v"> 
-                    <div className="section">
-                    <div className="fr-grid-row fr-grid-row--gutters">
-                            <div className="fr-col-12">
-                                <div className="block block--blue">
-                                    <h2 className="blockTitle">Comment ça marche ?</h2>
-
-                                    <div className="fr-grid-row fr-grid-row--gutters">
-                                        <div className={`fr-col-12 fr-col-md-7 ${styles.howTo__descCol}`}>
-
-                                        <ol className="blockList">
-                                            <li>
-                                                <b>Décrivez-nous votre besoin</b><br />
-                                                <a href="/contact">Envoyez-nous votre demande</a> et précisez votre situation et vos attentes.
-                                            </li>
-                                            <li>
-                                                <b>Echangez par visioconférence avec notre équipe</b><br />
-                                                Après réception de votre demande, nous vous proposerons un rendez-vous pour faire le point sur votre situation et répondre à vos questions.
-                                            </li>
-                                            <li>
-                                                <b>Envoyez-nous vos données bâtimentaires</b><br />
-                                                Nous pouvons traiter tous types de format (Excel, Shapefile, GeoJSON, etc.). Chacun de vos bâtiments doit contenir une adresse et/ou un point géolocalisé et/ou un polygone géolocalisé.
-                                            </li>
-                                            <li>
-                                                <b>Nous réalisons le croisement de vos données</b><br />
-                                                Vos données seront croisées par notre équipe en interne, grâce à l’ID Bâtiment, l’identifiant pivot pour agréger l’ensemble des informations entre elles à la maille du bâtiment
-                                            </li>
-                                            <li>
-                                                <b>Recevez les résultats de correspondances entre vos jeux de données</b><br />
-                                                Après analyse, l’équipe RNB vous adressera les correspondances bâtimentaires de l’ensemble de vos jeux de données.
-                                            </li>
-                                        </ol>
-
-                                        <div className="blockLinkShell blockLinkShell--noGrow">
-                                            <a className="fr-btn" href="/contact">Contactez nous</a>
-                                        </div>
-
-                                        </div>
-                                        <div className={`fr-col-12 fr-col-md-5 ${styles.howTo__illuCol}`}>
-                                            <ImageNext className={styles.serviceIllu} src={rapprochementIllu} alt="Attacher l'identifiant RNB à vos données bâtimentaires" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                  
-
-                                </div>
-
-                                <div className='fr-col-12 fr-col-md-5'>
-                                <div className="block block--green block--fill">
-                                <h2 className="blockTitle">Pourquoi gratuit ?</h2>
-                                <p className="blockSubtitle">
-                                    Nous avons créé des outils de rapprochement de base et souhaitons maintenant les confronter à une variété cas pour renforcer leur efficacité.
-                                </p>
-                                <p>
-                                    Appliquer ces outils à vos cas d&apos;usage est le meilleur moyen de les faire évoluer.
-                                </p>
-                                </div>
-                            </div>
-                            <div className='fr-col-12 fr-col-md-7'>
-
-                                <div className="block block--pink block--fill">
-                                <h2 className="blockTitle">Self-service</h2>
-                                <p className="blockSubtitle">
-                                    Vous préférez croiser vos bases en utilisant directement nos outils ?
-                                </p>
-                                <p>Nos APIs vous permettent d&apos;obtenir l&apos;identifiant RNB de vos bâtiments à partir d&apos;une adresse, d&apos;un point ou d&apos;un polygone.</p>
-                                <div className="blockLinkShell blockLinkShell--noGrow">
-                                            <a className="fr-btn fr-btn--secondary" href="/doc">Consulter la documentation</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className='fr-col-12'>
-                            <div className="block block--yellow">
-                                    <h2 className="blockTitle">La BDNB et la BD Topo sont intégrées</h2>
-                                    <p>Chaque bâtiment du RNB contient les identifiants des bâtiments correspondant au sein de la <a href="https://bdnb.io/" target='_blank'>BDNB</a> et de la <a href="https://geoservices.ign.fr/bdtopo" target='_blank'>BD Topo</a>. Cette table de correspondance nationale vous permet d&apos;accéder à la richesse métier de la BDNB et à la précision géographique de la BD Topo à partir d&apos;un identifiant RNB.</p>
-                                    <p>Obtenez les identifiants RNB de vos bâtiments en utilisant nos APIs.</p>
-
-                                    
-                                    <div className="blockLinkShell blockLinkShell--noGrow">
-                                            <a className="fr-btn fr-btn--secondary" target='_blank' href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments">Documentation de l&apos;API Bâtiments</a>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                          
-                            </div>    
-
-                            </div>
-                            <div className="section">
-                            <div className={styles.homeCardsSection__titleblock}>
-                    <h2 >Cas d&apos;usage</h2>
-                    <p>
-                        Vous êtes une commune, une métropole, un Service départemental d’incendie et de secours (SDIS), un fournisseur de gaz ou d’électricité ou une administration publique, ce service est fait pour vous.<br />
-                        Retrouvez les exemples d’utilisation du RNB par d’autres acteurs ci-dessous.
-                    </p>
-                    
-
                 </div>
+            </div>
 
-                <CasList />
+            <div className='section'>
+                <div className="fr-grid-row ">
+                    <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
+
+                        <div className="section__titleblock">
+                            <h2 id='liste' className='section__title'>Les bases contenant des identifiants RNB</h2>
+                            <p className="section__subtitle">Performance énergétique, insalubrité, équipements sportifs, copropriétés, ...</p>
+                        </div>
+                            
+                        {dbs.map((db: any) => {
+                            return (
+                                <DBCard key={db.key} db={db} />
+                            )
+                        })}
+
+                        <p>
+                            Votre base contient des identifiants RNB et vous souhaitez en faire la promotion sur cette page ?<br />
+                            Ecrivez-nous à <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a> ou <a href="https://github.com/fab-geocommuns/RNB-site/blob/main/data/databases.yaml" target='_blank'>proposez une modification</a> du site.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div className='section section__big'>
+
+                <div className="fr-grid-row ">
+                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
+
+                        <div className={styles.pivotBlock}>          
+                            <h3 className={styles.pivotBlockTitle}>Les identifiants de bâtiments RNB servent de pivot entre des données jusqu&apos;à présent isolées.</h3>
+                            <div className={styles.pivotBlockSentence}>
+                                <div className='none md-block'>
+                                    <ImageNext className='resp-image' src={pivotIllu} alt='Illustration d’un pivot' />
+                                </div>
+                                <div className='md-none'>
+                                    <ImageNext className='resp-image' src={pivotIlluMobile} alt='Illustration d’un pivot' />
+                                </div>
+                                
+                                
                             </div>
-                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            
+            <div className='section section__big' id="identifiants">
+                <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
 
-                            
-
-                            
-
+                        <div className="section__titleblock">
+                            <h2 id='liste' className='section__title'>Comment obtenir les identifiants RNB de vos bâtiments ?</h2>
+                            <p className="section__subtitle">Utilisez directement nos outils ou faites appel à nos services</p>
+                        </div>
                         
 
                     </div>
+                    <div className='fr-col-12 fr-col-md-4'>
+                        <Card
+                        imageUrl={metalBdgPhoto.src}
+                        desc="Interrogez notre API bâtiment et intégrez directement les identifiants RNB de vos bâtiments à vos jeux de données."
+                        linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/identification-de-batiment" }}
+                        title="Utilisez notre API d'identification de bâtiments"
+                        />
+                    </div>
+                    <div className='fr-col-12 fr-col-md-4'>
+                        <Card
+                        imageUrl={mountainPhoto.src}
+                        desc="Intégrez une carte présentant les bâtiments RNB au sein de vos sites et logiciels. Permettez à vos utilisateurs d'identifier et sélectionner le ou les bons bâtiments."
+                        linkProps={{ href: "https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" }}
+
+                        title="Intégrez un sélecteur de bâtiments à vos outils"
+                        />
+                    </div>
+                    <div className='fr-col-12 fr-col-md-4'>
+                        <Card
+                        imageUrl={bdgRiverPhoto.src}
+                        desc="Vous souhaitez intégrer les identifiants RNB à votre base bâtimentaire mais n'avez pas les ressources techniques pour le faire ? Contactez-nous."
+                        linkProps={{ href: "/contact" }}
+
+                        title="Faites appel à notre bureau des rapprochements"
+                        />
+                    </div>
+                    
                 </div>
+            </div>
+
+            <div className='section section__big fr-pb-16v'>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
+                    <div className="block block--blue">
+                            <h2 className="blockTitle">Pour aller plus loin</h2>            
+                            <ul>
+                                <li>Article : <a href="/blog/identifiant-batiment-perenne">Qu&apos;est-ce qu&apos;est un ID de bâtiment pérenne ?</a></li>
+                                <li>Standard : <a href="/definition">la définition retenue d&apos;un bâtiment</a></li>
+                                <li>La <a href="/faq">Foire aux Questions</a> du RNB</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        
+        </div>
         
         </>
     )
