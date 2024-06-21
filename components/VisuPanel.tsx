@@ -190,7 +190,7 @@ export default function VisuPanel() {
                 
 
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Améliorez le RNB</h2>
+                    <h2 className={styles.sectionTitle + " fr-mb-2v"}>Améliorez le RNB</h2>
                     
                     <ContributionForm />
                 </div>
@@ -214,10 +214,6 @@ export default function VisuPanel() {
                                     
                                 ))
                             )}
-
-
-                            
-
                         
                         </div>
 
