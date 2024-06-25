@@ -26,6 +26,15 @@ export default function HomeDBList({dbs, dbsCount}) {
 
     }
 
+    const trackShowAllDbClick = () => {
+        return () => {
+            va.track("db-click-home", {
+                db_key: "show-all",
+                db_name: "show-all"   
+            })
+        }
+    }
+
     return (
         <>
             
@@ -49,7 +58,7 @@ export default function HomeDBList({dbs, dbsCount}) {
                                 
 
                     })}
-                    <a href="/outils-services/rapprochement" className={styles.cta + " " + styles.db}>
+                    <a onClick={trackShowAllDbClick()} href="/outils-services/rapprochement" className={styles.cta + " " + styles.db}>
                         <span>Voir les {dbsCount} bases contenant des identifiants RNB</span>
                     <i className='fr-icon-arrow-right-line' />
                     </a>
