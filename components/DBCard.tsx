@@ -19,7 +19,7 @@ export default function Entry({db, }) {
     const trackDbClick = (db) => {
         
         return () => {
-            va.track("db-click-home", {
+            va.track("db-click-on-page", {
                 db_key: db.key,
                 db_name: db.name
             })
