@@ -41,8 +41,8 @@ body a.db {
     border:var(--border-size) solid var(--border-color);
     
 
-    justify-content: start;
-    align-items: start;
+    justify-content: flex-start;
+    align-items: flex-start;
     background-color: white;
     margin-bottom: 4px;
 

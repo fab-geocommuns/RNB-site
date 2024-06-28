@@ -1,14 +1,25 @@
 
 
+
 // Styles
 import styles from '@/styles/summerGames.module.scss'
 import RankTable from './rankTable'
 
+// Utils
+import { getSummerGamesData } from '@/utils/summergames';
+
+export const revalidate = 10
 
 
+export default async function SummerGame() {
 
 
-export default function SummerGame() {
+    const ranks = await getSummerGamesData();    
+
+    console.log('homeblock')
+    console.log(ranks)
+
+
     return (
         <>
         <div className={`section section_big ${styles.seriousShell}`}>
@@ -31,12 +42,14 @@ export default function SummerGame() {
                 <div className={styles.progressShell}>
 
 
+
+
                 <div className={styles.barShell}>
                         
-                            <div className={styles.legend}>Objectif partagé : 1000 signalements</div>
+                            <div className={styles.legend}>Objectif partagé : {ranks.shared.goal} signalements</div>
 
                             <div className={styles.bar}>
-                                <div className={styles.progress} style={{width: '25%'}}><span className={styles.progressTotal}>257</span></div>
+                                <div className={styles.progress} style={{width: ranks.shared.percent + '%'}}><span className={styles.progressTotal}>{ranks.shared.absolute}</span></div>
                             </div>
                         
                 </div>
@@ -46,26 +59,14 @@ export default function SummerGame() {
                     <div className={styles.ranksTable}>
 
 
-                        <RankTable title="Classement des départements" ranks={[
-                            {name: "Dordogne", count: 23},
-                            {name: "Eure-et-Loir", count: 8},
-                            {name: "Bouches-du-Rhône", count: 7},
-                            {name: "Rhône", count: 6},
-                            {name: "Gironde", count: 2}
-                        ]} />
+                        <RankTable title="Classement des départements" ranks={ranks.department} limit={5} />
 
                     </div>
 
 
                     <div className={styles.ranksTable}>
 
-                    <RankTable title="Classement des villes" ranks={[
-                            {name: "Dreux", count: 23},
-                            {name: "Cénac", count: 8},
-                            {name: "Lyon", count: 7},
-                            {name: "Paris", count: 6},
-                            {name: "La Londes les Maures", count: 2}
-                        ]} />
+                    <RankTable title="Classement des villes" ranks={ranks.city} limit={5} />
     
 
 
@@ -73,13 +74,7 @@ export default function SummerGame() {
 
                     <div className={styles.ranksTable}>
 
-                    <RankTable title="Classement des contributeurs" ranks={[
-                            {name: "#1", count: 23},
-                            {name: "#2", count: 8},
-                            {name: "#3", count: 7},
-                            {name: "#4", count: 6},
-                            {name: "#5", count: 2}
-                        ]} />
+                    <RankTable title="Classement des contributeurs" ranks={ranks.individual} limit={5} />
                         
 
 

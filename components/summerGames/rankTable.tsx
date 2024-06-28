@@ -10,7 +10,7 @@ import medalSilverPic from '@/public/images/summerGames/medal_silver.svg'
 import medalBronzePic from '@/public/images/summerGames/medal_bronze.svg'
 
 
-export default function RankTable( {title, ranks}) {
+export default function RankTable( {title, ranks, limit = 100}) {
 
     function getMedalPic(index) {
         switch (index) {
@@ -24,6 +24,9 @@ export default function RankTable( {title, ranks}) {
                 return null
         }
     }
+
+    ranks = ranks.slice(0, limit)
+
 
     return (
         <>
