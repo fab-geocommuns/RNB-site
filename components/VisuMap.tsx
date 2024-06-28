@@ -186,12 +186,21 @@ export default function VisuMap() {
         "source-layer": "default",
         paint: {
           'circle-radius': 5,
-          'circle-stroke-color': '#ffffff',
+          'circle-stroke-color': [
+            "case",
+            ["boolean", ["feature-state", "in_panel"], false],
+            '#ffffff',
+            ['>', ['get', 'contributions'], 0],
+            "#fef4f4",
+            "#ffffff"
+          ],
           'circle-stroke-width': 3,
           "circle-color": [
             "case",
             ["boolean", ["feature-state", "in_panel"], false],
             '#31e060',
+            ['>', ['get', 'contributions'], 0],
+            '#FF732C',
             '#1452e3'
           ]
         }
