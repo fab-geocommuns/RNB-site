@@ -191,7 +191,7 @@ export default function VisuPanel() {
 
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle + " fr-mb-2v"}>Améliorez le RNB</h2>
-                    
+                    <div className={styles.summerGamesExplain}><div className={styles.summerGamesTitle}>☀️ <b>Jeux d'été</b> ☀️</div><div className={styles.summerGamesBody}>Cet été, participez aux jeux du RNB. Faites avancer l'objectif commun, mettez votre ville et votre département sur le podium.</div><div className={styles.summerGamesBody}>Optionnel : renseignez votre adresse email pour participer au classement individuel.</div></div>
                     <ContributionForm />
                 </div>
 

@@ -163,6 +163,9 @@ export default function AddressSearchMap() {
     return (
         <>
             <div className={`${styles.map__InputShell} ${(unknown_rnb_id ? styles['shake'] : '')}`}>
+
+                <div className={styles.summerGamesShell}>☀️ Jeux d'été : signalez les erreurs du RNB</div>
+
                 <input
                     className={"fr-input " + (unknown_rnb_id ? styles['fr-input--error'] : "")}
                     placeholder='Chercher une adresse, un identifiant RNB'

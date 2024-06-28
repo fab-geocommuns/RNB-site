@@ -70,6 +70,7 @@ export default function RNBMap() {
 
 
                 <div className={styles.map}>
+                    
                     <AddressSearchMap />
                     <VisuPanel />
                     

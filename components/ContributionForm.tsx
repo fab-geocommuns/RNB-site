@@ -104,7 +104,7 @@ export default function ContributionForm() {
     return (
         <form method="post" action={url} onSubmit={handleSubmit}>
             <input name="rnb_id" type="hidden" className="fr-input" value={bdg?.rnb_id} />
-            <textarea onFocus={handleFocus} onChange={resize} ref={msgInput} required name="text" className={`fr-text--sm fr-input fr-mb-4v ${styles.msgInput}`} placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB."></textarea>
+            <textarea onFocus={handleFocus} onChange={resize} ref={msgInput} required name="text" className={`fr-text--sm fr-input fr-mb-4v ${styles.msgInput}`} placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB. "></textarea>
 
             <div className='fr-mb-1v'><label className='fr-text--sm '>Suivez le traitement de votre signalement</label></div>
             <input onChange={changeEmail} value={email} name="email" type="email" className="fr-input fr-text--sm fr-mb-2v" placeholder="Votre adresse email (optionnelle)"  />
