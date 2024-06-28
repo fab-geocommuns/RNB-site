@@ -18,6 +18,8 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 
 // Utils
 import Cookies from 'js-cookie';
+import Bus from '@/utils/Bus';
+
 
 export default function ContributionForm() {
 
@@ -61,9 +63,10 @@ export default function ContributionForm() {
             body: data,
         }).then(async (res) => {
 
-            console.log('response form server')
-            const data = await res.json();
 
+            
+            // Temporary block for the summer games
+            const data = await res.json();
             if (Object.hasOwn(data, 'contributor_rank')) {
 
                 let rankExtension = "er"
@@ -80,8 +83,11 @@ export default function ContributionForm() {
                 setSummerGamesMessage(null)
             }
 
-            console.log(data)
-            console.log(data.contributor_rank)
+            // Warn the map and the contribution counter there is a new one
+            Bus.emit('contribution:new', {
+                rnb_id: bdg.rnb_id
+            });
+
 
             /* Empty textarea */
 
@@ -134,7 +140,6 @@ export default function ContributionForm() {
             {success && <div className='fr-mt-2v'><Badge small severity='success'>Signalement envoyé. Merci.</Badge>
             {summerGamesMessage && <div className={styles.summerGameMessage} dangerouslySetInnerHTML={{__html: summerGamesMessage}}></div>}
             </div>}            
-            
         </form>
     )
 

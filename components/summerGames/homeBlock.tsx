@@ -32,7 +32,7 @@ export default async function SummerGame() {
                     <h2 className="section__title">Les jeux d'été du RNB</h2>
                     
                     <p className={`section__subtitle ${styles.instruction}`}>
-                        Cet été, <a href="/carte">contribuez au RNB</a> et mettez votre département en haut du podium
+                        Cet été, signalez les erreurs du RNB. Faites monter l'objectif partagé, installez votre ville et votre département en haut du podium.
                     </p>
 
 
@@ -83,7 +83,7 @@ export default async function SummerGame() {
 
                 </div>
 
-                <div className={styles.ranksExplain}>Le classement se fait par nombre de signalements d'erreurs récoltés.</div>
+                <div className={styles.ranksExplain}>Le classement se fait par nombre de signalements récoltés.</div>
 
                 <div className={styles.buttonsShell}>
                     <a href="/carte" className={styles.btn + ' ' + styles.btn_primary}>Participer aux jeux</a>
