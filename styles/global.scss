@@ -5,6 +5,20 @@
     src: url("/fonts/Itim-Regular.ttf");
 }
 
+@font-face {
+    font-family: 'RocherColor';
+    src: url('/fonts/RocherColorGX-3f0e7056.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    
+}
+
+@font-face {
+    font-family: 'Playwrite';
+    src: url('/fonts/PlaywriteNO-VariableFont_wght.ttf') format('truetype');
+    
+}
+
 @import "page.scss";
 @import "ghost.scss";
 

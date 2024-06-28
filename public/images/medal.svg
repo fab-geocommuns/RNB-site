@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg height="30px" width="30px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 490 490" xml:space="preserve">
+	 <defs>
+    <linearGradient id="header-shape-gradient" x2="0.35" y2="1">
+        <stop offset="0%" stop-color="var(--color-stop)" />
+        <stop offset="30%" stop-color="var(--color-stop)" />
+        <stop offset="100%" stop-color="var(--color-bot)" />
+      </linearGradient>
+  </defs>
+<g>
+	<path d="M466.032,367.5v-245L245,0L23.968,122.5v245L245,490L466.032,367.5z M118.865,175.094L245,105.188l126.136,69.906v139.813
+		L245,384.813l-126.135-69.906V175.094z"/>
+	<polygon points="331.299,292.828 331.299,197.172 245,149.343 158.701,197.172 158.701,292.828 245,340.657 	"/>
+</g>
+</svg>

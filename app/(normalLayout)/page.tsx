@@ -7,6 +7,7 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
 import AddressSearchHome from '@/components/AddressSearchHome'
+import SummerGame from '@/components/summerGames/homeBlock'
 
 
 // Banner
@@ -112,6 +113,12 @@ export default async function Home() {
         
 
             
+
+                    <SummerGame />
+
+              
+
+            
             <div className="section section__big ">
                 <div className={styles.dbsShell}>
                 <div className="section__titleblock">
@@ -120,7 +127,9 @@ export default async function Home() {
                 </div>
                     <HomeDBList dbs={dbs} dbsCount={dbsCount} />
                 </div>
-                </div>
+            </div>
+
+
 
 
             <div className="section">
