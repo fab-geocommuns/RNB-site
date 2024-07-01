@@ -164,7 +164,7 @@ export default function AddressSearchMap() {
         <>
             <div className={`${styles.map__InputShell} ${(unknown_rnb_id ? styles['shake'] : '')}`}>
 
-                <div className={styles.summerGamesShell}>☀️ Jeux d'été : signalez les erreurs du RNB</div>
+                <div className={styles.summerGamesShell}>☀️ Jeu d&apos;été : signalez les erreurs du RNB</div>
 
                 <input
                     className={"fr-input " + (unknown_rnb_id ? styles['fr-input--error'] : "")}

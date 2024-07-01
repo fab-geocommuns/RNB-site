@@ -16,9 +16,6 @@ export default async function SummerGame() {
 
     const ranks = await getSummerGamesData();    
 
-    console.log('homeblock')
-    console.log(ranks)
-
 
     return (
         <>
@@ -29,10 +26,10 @@ export default async function SummerGame() {
 
             
                 <div className={`section__titleblock ${styles.titleShell}`}>
-                    <h2 className="section__title">Le jeu d'été du RNB</h2>
+                    <h2 className="section__title">Le jeu d&apos;été du RNB</h2>
                     
                     <p className={`section__subtitle ${styles.instruction}`}>
-                        Signalez les erreurs du RNB. Faites monter l'objectif partagé, installez votre ville et votre département en haut du podium.
+                        Signalez les erreurs du RNB. Faites monter l&apos;objectif partagé, installez votre ville et votre département en haut du podium.
                     </p>
 
 
