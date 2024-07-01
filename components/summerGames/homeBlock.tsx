@@ -6,7 +6,7 @@ import styles from '@/styles/summerGames.module.scss'
 import RankTable from './rankTable'
 
 // Utils
-import { getSummerGamesData } from '@/utils/summergames';
+import { getSummerGamesData } from '@/utils/summerGames';
 
 export const revalidate = 10
 
