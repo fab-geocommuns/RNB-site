@@ -1,5 +1,4 @@
-
-
+'use client'
 
 // Styles
 import styles from '@/styles/summerGames.module.scss'
