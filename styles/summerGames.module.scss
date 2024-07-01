@@ -9,7 +9,7 @@ $title-color-hover: #25589f;
 .shell {
     // Retro gaming style
     background-image: linear-gradient(
-  335deg,
+  140deg,
   hsl(175deg 86% 94%) 0%,
   hsl(177deg 86% 92%) 13%,
   hsl(178deg 86% 89%) 28%,
@@ -22,8 +22,9 @@ $title-color-hover: #25589f;
   hsl(184deg 99% 61%) 100%
 );
 
-border:2px solid $title-color;
-border-radius: 12px;
+
+
+border-radius: 9px;
 
 //background-color: rgba(240, 165, 15, 0.13);
 //background-color: #c7f6fc;
@@ -45,8 +46,8 @@ border-radius: 12px;
 // );
 
 //background-color: $shell-color;
-    padding-top:65px;
-    padding-bottom:65px;
+    padding-top:85px;
+    padding-bottom:85px;
 
 }
 
@@ -81,6 +82,7 @@ border-radius: 12px;
     width: 800px;
     margin:0 auto 40px auto;
     margin-bottom: 3.5rem;
+    text-align: right;
 }
 
 .bar {
@@ -88,7 +90,7 @@ border-radius: 12px;
     height: 30px;
     background:rgba(255,255,255,0.3);
     //background-color: #cffcfb;
-    box-shadow: 3px 3px 0px rgba(206, 44, 111, 0.1);
+    //box-shadow: 3px 3px 0px rgba(206, 44, 111, 0.1);
 }
 
 .progress {
@@ -132,19 +134,29 @@ border-radius: 12px;
 .progressTotal {
     line-height: 100%;
     font-weight: 600;
-    font-style: italic;
+
     color:white;
     padding-right:5px
 }
 
 .legend {
-    font-weight: 500;
+    font-weight: 600;
     //color:#163060;
     color:$title-color;
     opacity: .9;
-    font-style: italic;
-    margin-bottom: .4rem;
+    //font-style: italic;
+    margin-bottom: .6rem;
+    line-height: 1.1em;
+
+
+    .legend_subtitle {
+        font-weight: 400;
+        font-size: .7em;
+        text-transform: uppercase;
+    }
 }
+
+
 
 
 
@@ -153,15 +165,22 @@ border-radius: 12px;
     display: flex;
     justify-content: space-around;
     margin: 0 4rem 1rem 4rem;
+    
+}
+
+.rankShell {
+    padding: 26px;
+    background:rgba(255,255,255,0.5);
+    width: 315px;
 }
 
 .rankTable {
-    width: 300px;
+    
     font-size: 1em;
-    background:rgba(255,255,255,0.3);
-    padding:4px 10px;
+    
+    
     //box-shadow: 3px 3px 1px rgba(26, 59, 104, .15);
-    box-shadow: 3px 3px 1px rgba(206, 44, 111, 0.15);
+    
 
     .rankRow {
         display: flex;
@@ -216,7 +235,8 @@ border-radius: 12px;
 
         &.btn_primary {
             background-color: $title-color;
-            color:white;
+            
+            color:#fff;
             text-decoration: none;
             
             font-weight: bold;

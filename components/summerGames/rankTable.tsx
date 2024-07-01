@@ -30,7 +30,7 @@ export default function RankTable( {title, ranks, limit = 100}) {
 
     return (
         <>
-        <div>
+        <div className={styles.rankShell}>
 
             <div className={styles.legend}>{title}</div>
 

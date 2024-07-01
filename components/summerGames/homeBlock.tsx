@@ -29,10 +29,10 @@ export default async function SummerGame() {
 
             
                 <div className={`section__titleblock ${styles.titleShell}`}>
-                    <h2 className="section__title">Les jeux d'été du RNB</h2>
+                    <h2 className="section__title">Le jeu d'été du RNB</h2>
                     
                     <p className={`section__subtitle ${styles.instruction}`}>
-                        Cet été, signalez les erreurs du RNB. Faites monter l'objectif partagé, installez votre ville et votre département en haut du podium.
+                        Signalez les erreurs du RNB. Faites monter l'objectif partagé, installez votre ville et votre département en haut du podium.
                     </p>
 
 
@@ -46,7 +46,9 @@ export default async function SummerGame() {
 
                 <div className={styles.barShell}>
                         
-                            <div className={styles.legend}>Objectif partagé : {ranks.shared.goal} signalements</div>
+                            <div className={styles.legend}>
+                                <span className={styles.legend_subtitle}>Objectif partagé</span><br />
+                                {ranks.shared.goal} signalements</div>
 
                             <div className={styles.bar}>
                                 <div className={styles.progress} style={{width: ranks.shared.percent + '%'}}><span className={styles.progressTotal}>{ranks.shared.absolute}</span></div>
