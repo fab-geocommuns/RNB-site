@@ -24,8 +24,9 @@ export default function SummerGame() {
                         <h2 className="section__title">Le jeu d&apos;été du RNB</h2>
 
                         <p className={`section__subtitle ${styles.instruction}`}>
-                            Signalez les erreurs du RNB. Faites monter l&apos;objectif partagé, installez votre ville et
-                            votre département en haut du podium.
+                            Cet été, participez à une expérience collaborative sur le géocommun RNB ! <br/>
+                            Améliorez la qualité de la donnée en atteignant l’objectif collectif de signalements. <br/>
+                            Et faites gagner votre département, votre ville, ou montez sur le podium à la rentrée !
                         </p>
 
 
@@ -37,7 +38,7 @@ export default function SummerGame() {
                         <div className={styles.barShell}>
 
                             <div className={styles.legend}>
-                                <span className={styles.legend_subtitle}>Objectif partagé</span><br/>
+                                <span className={styles.legend_subtitle}>Objectif collectif</span><br/>
                                 {summerGamesData.shared.goal} signalements
                             </div>
 
@@ -54,7 +55,7 @@ export default function SummerGame() {
                             <div className={styles.ranksTable}>
 
 
-                                <RankTable title="Classement des départements" ranks={summerGamesData.department}
+                                <RankTable title="Classement des départements *" ranks={summerGamesData.department}
                                            limit={5}/>
 
                             </div>
@@ -62,14 +63,14 @@ export default function SummerGame() {
 
                             <div className={styles.ranksTable}>
 
-                                <RankTable title="Classement des villes" ranks={summerGamesData.city} limit={5}/>
+                                <RankTable title="Classement des villes *" ranks={summerGamesData.city} limit={5}/>
 
 
                             </div>
 
                             <div className={styles.ranksTable}>
 
-                                <RankTable title="Classement des contributeurs" ranks={summerGamesData.individual}
+                                <RankTable title="Classement des participants *" ranks={summerGamesData.individual}
                                            limit={5}/>
 
 
@@ -78,12 +79,12 @@ export default function SummerGame() {
 
                         </div>
 
-                        <div className={styles.ranksExplain}>Le classement se fait par nombre de signalements
-                            récoltés.
+                        <div className={styles.ranksExplain}>
+                            * Classement par nombre de signalements effectués dans un département donné, une ville donnée ou par participant
                         </div>
 
                         <div className={styles.buttonsShell}>
-                            <a href="/carte" className={styles.btn + ' ' + styles.btn_primary}>Participer aux jeux</a>
+                            <a href="/carte" className={styles.btn + ' ' + styles.btn_primary}>Participer au jeu</a>
 
                         </div>
 
