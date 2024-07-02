@@ -80,7 +80,7 @@ export default function SummerGame() {
                         </div>
 
                         <div className={styles.ranksExplain}>
-                            * Classement par nombre de signalement effectué dans un département donné, une ville donnée ou par participant
+                            * Classement par nombre de signalements effectués dans un département donné, une ville donnée ou par participant
                         </div>
 
                         <div className={styles.buttonsShell}>
