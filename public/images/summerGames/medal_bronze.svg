@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg enable-background="new 0 0 1024 1024" height="1024px" id="Tinder_2_" version="1.1" viewBox="0 0 1024 1024" width="1024px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Background">
+<linearGradient gradientTransform="matrix(1 0 0 1 428.6797 329.3955)" gradientUnits="userSpaceOnUse" id="bg_1_" x1="249.6655" x2="-83.0228" y1="639.6387" y2="-274.4142">
+<stop offset="0" style="stop-color:#541100"/>
+<stop offset="0.1393" style="stop-color:#a23901"/>
+<stop offset="0.3666" style="stop-color:#ad5f1f"/>
+<stop offset="0.6534" style="stop-color:#cf8d6e"/>
+<stop offset="0.9858" style="stop-color:#deaf8b"/>
+<stop offset="1" style="stop-color:#deaf8b"/>
+</linearGradient>
+</g>
+<path d="M64.014,293.264c0-24.062,16.985-53.702,37.746-65.866L474.255,9.139   c20.76-12.164,54.731-12.164,75.493,0l372.496,218.259c20.76,12.164,37.744,41.804,37.744,65.866v437.488   c0,24.062-16.984,53.702-37.744,65.866l-372.496,218.259c-20.762,12.164-54.733,12.164-75.493,0L101.759,796.618   c-20.761-12.164-37.746-41.806-37.746-65.866V293.264z" fill="url(#bg_1_)" id="bg"/>
+</svg>

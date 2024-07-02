@@ -7,6 +7,7 @@ import ImageNext from 'next/image'
 import CasListe from '@/components/CasListe'
 import NewsletterForm from '@/components/NewsletterForm'
 import AddressSearchHome from '@/components/AddressSearchHome'
+import SummerGame from '@/components/summerGames/homeBlock'
 
 
 // Banner
@@ -40,7 +41,6 @@ export const revalidate = 10
 
 
 export default async function Home() {
-
     const bannerId = "M11Z4KK9Y338";
     const breakingNews = await getBreakingNews();
     const dbs = await getFeaturedDatabases();
@@ -81,7 +81,7 @@ export default async function Home() {
 
             </div>
 
-            {breakingNews.featured && <>
+            {breakingNews?.featured && <>
                 
                 <div className='fr-grid-row'>
                     <div className='fr-col-12 fr-col-md-8 fr-col-offset-md-2'>
@@ -112,6 +112,12 @@ export default async function Home() {
         
 
             
+
+            <SummerGame />
+
+              
+
+            
             <div className="section section__big ">
                 <div className={styles.dbsShell}>
                 <div className="section__titleblock">
@@ -120,7 +126,9 @@ export default async function Home() {
                 </div>
                     <HomeDBList dbs={dbs} dbsCount={dbsCount} />
                 </div>
-                </div>
+            </div>
+
+
 
 
             <div className="section">

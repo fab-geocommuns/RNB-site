@@ -4,7 +4,12 @@
     
         position:absolute;
         
-        top:100px;
+        // During summer games
+        top: 130px;
+
+
+        // Before summer games, top value was 100
+        //top:100px;
         right:0;
         bottom: 0;
         left:0;
@@ -23,7 +28,12 @@
             width: 400px;
             right: auto;
             left:12px;
+
+            // Before summer games, top value was 75
             top:75px;
+            // During summer games
+            top: 105px;
+
             bottom: 10px;
 
             border-top-left-radius: 0px;
@@ -34,6 +44,18 @@
         }
     
     
+}
+
+.summerGamesExplain {
+    margin-bottom: 1.5rem;
+}
+.summerGamesTitle {
+    font-size: .85em;
+}
+.summerGamesBody {
+    font-size: .8em;
+    line-height: 1.25em;
+    margin-bottom: .4rem;
 }
 
 .closeLink {

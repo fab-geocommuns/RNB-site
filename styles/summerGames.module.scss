@@ -1,0 +1,253 @@
+$title-color: #1a3b68;
+$title-color-hover: #25589f;
+
+.seriousShell {
+    
+    padding: 25px 30px;
+}
+
+.shell {
+    // Retro gaming style
+    background-image: linear-gradient(
+  140deg,
+  hsl(175deg 86% 94%) 0%,
+  hsl(177deg 86% 92%) 13%,
+  hsl(178deg 86% 89%) 28%,
+  hsl(179deg 86% 86%) 44%,
+  hsl(180deg 86% 83%) 58%,
+  hsl(181deg 89% 79%) 71%,
+  hsl(182deg 91% 76%) 82%,
+  hsl(183deg 94% 72%) 90%,
+  hsl(184deg 97% 67%) 96%,
+  hsl(184deg 99% 61%) 100%
+);
+
+
+
+border-radius: 9px;
+
+//background-color: rgba(240, 165, 15, 0.13);
+//background-color: #c7f6fc;
+
+// Peach style
+// background-image: linear-gradient(
+//   160deg,
+//   hsl(354deg 83% 88%) 0%,
+//   hsl(360deg 89% 89%) 6%,
+//   hsl(5deg 94% 89%) 14%,
+//   hsl(10deg 96% 88%) 24%,
+//   hsl(14deg 96% 87%) 36%,
+//   hsl(18deg 94% 86%) 49%,
+//   hsl(22deg 98% 86%) 64%,
+//   hsl(25deg 99% 85%) 78%,
+//   hsl(28deg 98% 84%) 89%,
+//   hsl(32deg 95% 84%) 96%,
+//   hsl(36deg 91% 83%) 100%
+// );
+
+//background-color: $shell-color;
+    padding-top:85px;
+    padding-bottom:85px;
+
+}
+
+.titleShell {
+    
+   
+    
+    h2 {
+        font-family: RocherColor;
+        font-size: 3em;
+        margin-bottom: 3rem;
+        color:$title-color;     
+        font-weight: bold;
+        
+
+     
+    }
+
+    .instruction {
+        color:$title-color;
+        margin-bottom: 3.5rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.3em;
+    }
+    
+}
+
+.barShell {
+    max-width: 800px;
+    width: 800px;
+    margin:0 auto 40px auto;
+    margin-bottom: 3.5rem;
+    text-align: right;
+}
+
+.bar {
+    border:2px solid white;
+    height: 30px;
+    background:rgba(255,255,255,0.3);
+    //background-color: #cffcfb;
+    //box-shadow: 3px 3px 0px rgba(206, 44, 111, 0.1);
+}
+
+.progress {
+    // Retro gaming style
+    background-image: linear-gradient(
+  90deg,
+  hsl(43deg 100% 65%) 0%,
+  hsl(42deg 100% 63%) 9%,
+  hsl(40deg 100% 62%) 18%,
+  hsl(39deg 100% 61%) 27%,
+  hsl(38deg 100% 59%) 36%,
+  hsl(37deg 100% 58%) 45%,
+  hsl(36deg 100% 57%) 55%,
+  hsl(34deg 100% 55%) 64%,
+  hsl(33deg 100% 54%) 73%,
+  hsl(32deg 100% 52%) 82%,
+  hsl(31deg 100% 51%) 91%,
+  hsl(30deg 100% 50%) 100%
+);
+
+// Peach style
+// background-image: linear-gradient(
+//   270deg,
+//   hsl(354deg 73% 35%) 0%,
+//   hsl(357deg 58% 41%) 7%,
+//   hsl(357deg 49% 47%) 16%,
+//   hsl(357deg 46% 52%) 29%,
+//   hsl(357deg 49% 57%) 44%,
+//   hsl(357deg 54% 63%) 62%,
+//   hsl(356deg 59% 68%) 78%,
+//   hsl(356deg 66% 73%) 90%,
+//   hsl(355deg 76% 78%) 97%,
+//   hsl(354deg 91% 83%) 100%
+// );
+    height:100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.progressTotal {
+    line-height: 100%;
+    font-weight: 600;
+
+    color:white;
+    padding-right:5px
+}
+
+.legend {
+    font-weight: 600;
+    //color:#163060;
+    color:$title-color;
+    opacity: .9;
+    //font-style: italic;
+    margin-bottom: .6rem;
+    line-height: 1.1em;
+
+
+    .legend_subtitle {
+        font-weight: 400;
+        font-size: .7em;
+        text-transform: uppercase;
+    }
+}
+
+
+
+
+
+
+.ranks {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 4rem 1rem 4rem;
+    
+}
+
+.rankShell {
+    padding: 26px;
+    background:rgba(255,255,255,0.5);
+    width: 315px;
+}
+
+.rankTable {
+    
+    font-size: 1em;
+    
+    
+    //box-shadow: 3px 3px 1px rgba(26, 59, 104, .15);
+    
+
+    .rankRow {
+        display: flex;
+        align-items: center;
+        padding:3px;
+    }
+
+    .rankMedalShell {
+        width: 27px;
+        max-width: 27px;
+        flex-grow: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .medal {
+        width:16px;
+        height: auto;
+        // -webkit-filter: drop-shadow( 1px 1px 1px rgba(31, 74, 11, .3));
+        filter: drop-shadow( 1px 1px 0px rgba(31, 74, 11, .5));
+    }
+
+    .rankNameShell {
+        flex-grow:1;
+    }
+
+    .rankCountShell {
+        width: 40px;
+        max-width: 40px;
+        flex-grow: 0;
+        text-align: right;
+    }
+
+}
+
+.ranksExplain {
+    font-size: small;
+    color:$title-color;
+    text-align: center;
+    opacity: .8;
+    margin-bottom: 3rem;
+}
+
+.buttonsShell {
+    text-align: center;
+
+    .btn {
+        padding:10px 20px;
+        text-align: center;
+        background-image: none;
+
+        &.btn_primary {
+            background-color: $title-color;
+            
+            color:#fff;
+            text-decoration: none;
+            
+            font-weight: bold;
+            font-size: 1.1em;
+
+            &:hover {
+                background-color: $title-color-hover;
+            }
+            
+        }
+
+    } 
+
+}

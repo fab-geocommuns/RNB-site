@@ -18,12 +18,14 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 
 // Utils
 import Cookies from 'js-cookie';
+import Bus from '@/utils/Bus';
+
 
 export default function ContributionForm() {
 
     
 
-    const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/';
+    const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
 
     const bdg = useSelector((state) => state.panelBdg)
 
@@ -39,14 +41,13 @@ export default function ContributionForm() {
     }
 
     const handleFocus = (e) => {
-        console.log('focus contrib')
         va.track("contribution-textarea-focus")
     }
 
     const [sending, setSending] = useState(false)
     const [success, setSuccess] = useState(false)
     const [email, setEmail] = useState('');
-
+    const [summerGamesMessage, setSummerGamesMessage] = useState(null)
 
     const handleSubmit = async (e: any) => {
 
@@ -60,7 +61,33 @@ export default function ContributionForm() {
         const res = await fetch(url, {
             method: 'POST',
             body: data,
-        }).then((res) => {
+        }).then(async (res) => {
+
+
+            
+            // Temporary block for the summer games
+            const data = await res.json();
+            if (Object.hasOwn(data, 'contributor_rank')) {
+
+                let rankExtension = "er"
+                if (data.contributor_rank > 1) {
+                    rankExtension = "ème"
+                }
+                let pluralS = ""
+                if (data.contributor_count > 1) {
+                    pluralS = "s"
+                }
+
+                setSummerGamesMessage("☀️ <b>Vous avez envoyé " + data.contributor_count + " signalement" + pluralS +  "</b>.<br />Vous êtes " + data.contributor_rank + rankExtension + " au classement individuel des jeux d'été.")
+            } else {
+                setSummerGamesMessage(null)
+            }
+
+            // Warn the map and the contribution counter there is a new one
+            Bus.emit('contribution:new', {
+                rnb_id: bdg.rnb_id
+            });
+
 
             /* Empty textarea */
 
@@ -75,7 +102,7 @@ export default function ContributionForm() {
 
             setTimeout(() => {
                 setSuccess(false);
-            }, 2000)
+            }, 10000)
             
             
         }).catch((err) => {
@@ -104,14 +131,15 @@ export default function ContributionForm() {
     return (
         <form method="post" action={url} onSubmit={handleSubmit}>
             <input name="rnb_id" type="hidden" className="fr-input" value={bdg?.rnb_id} />
-            <textarea onFocus={handleFocus} onChange={resize} ref={msgInput} required name="text" className={`fr-text--sm fr-input fr-mb-4v ${styles.msgInput}`} placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB."></textarea>
+            <textarea onFocus={handleFocus} onChange={resize} ref={msgInput} required name="text" className={`fr-text--sm fr-input fr-mb-4v ${styles.msgInput}`} placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB. "></textarea>
 
             <div className='fr-mb-1v'><label className='fr-text--sm '>Suivez le traitement de votre signalement</label></div>
             <input onChange={changeEmail} value={email} name="email" type="email" className="fr-input fr-text--sm fr-mb-2v" placeholder="Votre adresse email (optionnelle)"  />
 
             <Button disabled={sending} size="small" type='submit'>{sending && <span>Envoi en cours ...</span>}{!sending && <span>Envoyer mon signalement</span>}</Button>
-            {success && <div className='fr-mt-2v'><Badge small severity='success'>Signalement envoyé. Merci.</Badge></div>}            
-            
+            {success && <div className='fr-mt-2v'><Badge small severity='success'>Signalement envoyé. Merci.</Badge>
+            {summerGamesMessage && <div className={styles.summerGameMessage} dangerouslySetInnerHTML={{__html: summerGamesMessage}}></div>}
+            </div>}            
         </form>
     )
 
