@@ -78,7 +78,7 @@ export default function ContributionForm() {
                     pluralS = "s"
                 }
 
-                setSummerGamesMessage("☀️ <b>Vous avez envoyé " + data.contributor_count + " signalement" + pluralS +  "</b>.<br />Vous êtes " + data.contributor_rank + rankExtension + " au classement individuel des jeux d'été.")
+                setSummerGamesMessage("☀️ <b>Vous avez envoyé " + data.contributor_count + " signalement" + pluralS + "</b>.<br />Vous êtes " + data.contributor_rank + rankExtension + " au classement individuel du jeu d'été.")
             } else {
                 setSummerGamesMessage(null)
             }
