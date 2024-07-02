@@ -41,7 +41,6 @@ export const revalidate = 10
 
 
 export default async function Home() {
-
     const bannerId = "M11Z4KK9Y338";
     const breakingNews = await getBreakingNews();
     const dbs = await getFeaturedDatabases();
@@ -82,7 +81,7 @@ export default async function Home() {
 
             </div>
 
-            {breakingNews.featured && <>
+            {breakingNews?.featured && <>
                 
                 <div className='fr-grid-row'>
                     <div className='fr-col-12 fr-col-md-8 fr-col-offset-md-2'>
@@ -114,7 +113,7 @@ export default async function Home() {
 
             
 
-                    <SummerGame />
+            <SummerGame />
 
               
 

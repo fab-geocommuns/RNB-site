@@ -8,25 +8,27 @@ import ImageNext from 'next/image'
 import medalGoldPic from '@/public/images/summerGames/medal_gold.svg'
 import medalSilverPic from '@/public/images/summerGames/medal_silver.svg'
 import medalBronzePic from '@/public/images/summerGames/medal_bronze.svg'
+import {useEffect, useState} from "react";
 
+type RankTableProps = {
+    title: string,
+    ranks: any[],
+    limit: number,
+}
 
-export default function RankTable( {title, ranks, limit = 100}) {
+const mapRankToMedal: Record<number, string> = {
+    0: medalGoldPic,
+    1: medalSilverPic,
+    2: medalBronzePic,
+}
 
-    function getMedalPic(index) {
-        switch (index) {
-            case 0:
-                return medalGoldPic
-            case 1:
-                return medalSilverPic
-            case 2:
-                return medalBronzePic
-            default:
-                return null
-        }
-    }
+export default function RankTable( {title, ranks, limit = 100}: RankTableProps) {
 
-    ranks = ranks.slice(0, limit)
+    const [displayedRanks, setDisplayedRanks] = useState<any[]>([])
 
+    useEffect(() => {
+        setDisplayedRanks(ranks.slice(0, limit))
+    }, [limit, ranks]);
 
     return (
         <>
@@ -36,15 +38,15 @@ export default function RankTable( {title, ranks, limit = 100}) {
 
             <div className={styles.rankTable}>
 
-            {ranks.map((rank, index) => (
+            {displayedRanks.map((rank, index) => (
 
                 
                     <div key={index} className={styles.rankRow}>
 
                         <div className={styles.rankMedalShell}>
-                            {index <= 2 ? (
-                                <ImageNext className={styles.medal} src={getMedalPic(index)}></ImageNext>
-                            ):null}
+                            {mapRankToMedal[index] && (
+                                <ImageNext className={styles.medal} src={mapRankToMedal[index]} alt="Médaille"></ImageNext>
+                            )}
                         </div>
                         <div className={styles.rankNameShell}>{rank.name}</div>
                         <div className={styles.rankCountShell}>{rank.count}</div>
