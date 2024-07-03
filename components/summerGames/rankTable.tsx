@@ -31,7 +31,6 @@ export default function RankTable( {title, ranks, limit = 100}: RankTableProps) 
     }, [limit, ranks]);
 
     return (
-        <>
         <div className={styles.rankShell}>
 
             <div className={styles.legend}>{title}</div>
@@ -67,7 +66,6 @@ export default function RankTable( {title, ranks, limit = 100}: RankTableProps) 
 
 
         </div>
-        </>
     )
 
 }
