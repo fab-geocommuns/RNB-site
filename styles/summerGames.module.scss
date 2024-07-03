@@ -7,6 +7,7 @@ $title-color-hover: #25589f;
 }
 
 .shell {
+    padding: 1rem;
     // Retro gaming style
     background-image: linear-gradient(
   140deg,
@@ -78,7 +79,7 @@ border-radius: 9px;
 }
 
 .barShell {
-    max-width: 800px;
+    max-width: min(90%, 800px);
     width: 800px;
     margin:0 auto 40px auto;
     margin-bottom: 3.5rem;
@@ -147,7 +148,7 @@ border-radius: 9px;
     //font-style: italic;
     margin-bottom: .6rem;
     line-height: 1.1em;
-
+    text-align: center;
 
     .legend_subtitle {
         font-weight: 400;
@@ -156,31 +157,33 @@ border-radius: 9px;
     }
 }
 
-
-
-
-
-
 .ranks {
     display: flex;
-    justify-content: space-around;
-    margin: 0 4rem 1rem 4rem;
-    
+    width: 90%;
+    margin: auto;
+    background:rgba(255,255,255,0.5);
+
+    & > * {
+        flex: 1 0 0;
+    }
+
+    @media screen and (max-width:750px) {
+        flex-direction: column;
+    }
 }
 
 .rankShell {
     padding: 26px;
-    background:rgba(255,255,255,0.5);
-    width: 315px;
+
+    @media screen and (max-width:640px) {
+        flex-direction: column;
+        padding: 1rem;
+    }
 }
 
 .rankTable {
     
     font-size: 1em;
-    
-    
-    //box-shadow: 3px 3px 1px rgba(26, 59, 104, .15);
-    
 
     .rankRow {
         display: flex;
