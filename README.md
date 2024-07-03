@@ -1,11 +1,10 @@
-
 # Référentiel National des Bâtiments (RNB)
 
 Bienvenue sur le répertoire de code du site du Référentiel National des Bâtiments (RNB)
 
 Si vous souhaitez accéder au répertoire contenant les ressources concernant la construction du standard du référentiel dans le cadre du groupe de travail CNIG sur le thème du bâiment, c'est par [ici](https://github.com/fab-geocommuns/BatID)
 
-Si vous souhaitez accéder au répertoire de code contenant le coeur technique du projet (imports, API, logique métier), [rdv ici](https://github.com/fab-geocommuns/RNB-coeur) 
+Si vous souhaitez accéder au répertoire de code contenant le coeur technique du projet (imports, API, logique métier), [rdv ici](https://github.com/fab-geocommuns/RNB-coeur)
 
 ## Getting Started
 
@@ -31,22 +30,22 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-
 ## Configuration
 
 In order to run the project, you will need to specifiy some information, which can be done using a `.env` file.
 This file will have to hold the following information:
+
 - `NEXT_PUBLIC_API_BASE`: the url of the bat-id api
 
 So your `.env` file should look like something similar to:
+
 ```
 NEXT_PUBLIC_API_BASE=my-url
 ```
 
 The file should be placed at the root folder of your local copy of the project.
 
-
-## Deployement 
+## Deployement
 
 This Next.js app is deployed using the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 

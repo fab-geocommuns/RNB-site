@@ -1,8 +1,8 @@
 .flashShell {
-    position: fixed;
-    top:20px;
-    left:calc(50% - 200px);
-    width: 400px;
-    background:white;
-    z-index: 501;
+  position: fixed;
+  top: 20px;
+  left: calc(50% - 200px);
+  width: 400px;
+  background: white;
+  z-index: 501;
 }
