@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "predev": "only-include-used-icons",
-    "prebuild": "only-include-used-icons"
+    "prepare": "husky"
   },
   "dependencies": {
     "@codegouvfr/react-dsfr": "^0.51.0",
@@ -35,6 +35,14 @@
     "yaml": "^2.3.2"
   },
   "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
     "sass": "^1.66.1"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,json,css,md}": [
+      "prettier --write"
+    ]
   }
 }
