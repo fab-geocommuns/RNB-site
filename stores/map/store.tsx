@@ -1,9 +1,8 @@
-"use client"
+'use client';
 
-import { combineReducers, configureStore } from "@reduxjs/toolkit"
-import mapReducer from "./slice"
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import mapReducer from './slice';
 
 export const store = configureStore({
-    reducer: mapReducer
-})
-
+  reducer: mapReducer,
+});

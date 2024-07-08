@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const path = require('path')
+const path = require('path');
 
 const nextConfig = {
   redirects: async () => {
@@ -8,20 +8,19 @@ const nextConfig = {
       {
         source: '/doc',
         destination: 'https://rnb-fr.gitbook.io/documentation',
-        permanent: false
+        permanent: false,
       },
-    ]
+    ];
   },
-  
+
   reactStrictMode: true,
   swcMinify: false,
   productionBrowserSourceMaps: true,
   experimental: { appDir: true },
-  webpack: config => {
-
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.woff2$/,
-      type: "asset/resource"
+      type: 'asset/resource',
     });
 
     return config;
@@ -33,14 +32,6 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+};
 
-
-}
-
-module.exports = nextConfig
-
-
-
-
-
-
+module.exports = nextConfig;
