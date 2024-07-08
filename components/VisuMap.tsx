@@ -76,9 +76,19 @@ export default function VisuMap() {
     map.current.addControl(navControl, 'bottom-right');
     // Geoloc
     const handleOrientation = (event: DeviceOrientationEvent) => {
-      const alpha = event.alpha; // Angle en degrés autour de l'axe Z (boussole)
+      let alpha = event.alpha; // Angle en degrés autour de l'axe Z (boussole)
       if (alpha !== null) {
-        map.current.setBearing(-alpha, {
+        // Pour obtenir une orientation précise par rapport au Nord, nous devons
+        // prendre en compte la boussole et les corrections nécessaires.
+        if (event.webkitCompassHeading) {
+          // Pour les appareils iOS
+          alpha = event.webkitCompassHeading;
+        } else {
+          // Pour les autres appareils, inverser alpha
+          alpha = 360 - alpha;
+        }
+
+        map.current.setBearing(alpha, {
           geolocateSource: true, // Empêche certains événements internes au composant qui désactivent le tracking de l'utilisateur
         });
       }
