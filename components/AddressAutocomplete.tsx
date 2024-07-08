@@ -127,7 +127,7 @@ export default function AddressAutocomplete({
   const suggestions = addressSuggestions.map((s, i) => (
     <div
       onMouseEnter={() => setSelectedSuggestion(i)}
-      onClick={() => selectSuggestion(s)}
+      onMouseDown={() => selectSuggestion(s)}
       className={
         styles.suggestion +
         ' ' +
