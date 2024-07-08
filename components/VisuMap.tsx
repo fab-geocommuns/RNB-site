@@ -92,6 +92,8 @@ export default function VisuMap() {
       showAccuracyCircle: true,
       fitBoundsOptions: {
         maxZoom: 18,
+        animate: false,
+        duration: 0,
       },
     });
     geolocControl.on('trackuserlocationstart', () => {
