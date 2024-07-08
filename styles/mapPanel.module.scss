@@ -14,8 +14,7 @@
         bottom: 0;
         left:0;
         padding:40px 18px 12px 18px;
-        overflow-y: auto;
-    
+
         z-index: 100;
         background:white;
     
@@ -56,6 +55,11 @@
     font-size: .8em;
     line-height: 1.25em;
     margin-bottom: .4rem;
+}
+
+.scrollable {
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .closeLink {

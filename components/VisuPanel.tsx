@@ -112,104 +112,106 @@ export default function VisuPanel() {
     return (
       <>
         <div className={styles.shell}>
-          <div className={styles.section}>
-            <a href="#" onClick={close} className={styles.closeLink}>
-              <i className="fr-icon-close-line" />
-            </a>
+          <a href="#" onClick={close} className={styles.closeLink}>
+            <i className="fr-icon-close-line" />
+          </a>
+          <div className={styles.scrollable}>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
 
-            <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
+              <div className={styles.rnbidShell}>
+                <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
-            <div className={styles.rnbidShell}>
-              <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
-
-              <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
-                <div className={styles.rnbidShell__copy}>
-                  {copied ? (
-                    <span>
-                      Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                    </span>
-                  ) : (
-                    <span>
-                      Copier <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                    </span>
-                  )}
-                </div>
-              </CopyToClipboard>
-            </div>
-          </div>
-
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Statut du bâtiment</h2>
-            <div className={styles.sectionBody}>{statusLabel()}</div>
-          </div>
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Adresses</h2>
-            <div className={styles.sectionBody}>
-              {bdg?.addresses?.length === 0 ? (
-                <div>
-                  <em>Aucune adresse liée</em>
-                </div>
-              ) : (
-                bdg?.addresses?.map((a) => (
-                  <div key={a.id} className={styles.sectionListItem}>
-                    {a.street_number}
-                    {a.street_rep} {a.street_type} {a.street_name}
-                    <br />
-                    {a.city_zipcode} {a.city_name}
-                    <br />
-                    <small>(Idenfitiant BAN : {a.id})</small>
+                <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
+                  <div className={styles.rnbidShell__copy}>
+                    {copied ? (
+                      <span>
+                        Copié <i className={fr.cx('fr-icon-success-line')}></i>
+                      </span>
+                    ) : (
+                      <span>
+                        Copier{' '}
+                        <i className={fr.cx('fr-icon-clipboard-line')}></i>
+                      </span>
+                    )}
                   </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle + ' fr-mb-2v'}>
-              Améliorez le RNB
-            </h2>
-            <div className={styles.summerGamesExplain}>
-              <div className={styles.summerGamesTitle}>
-                ☀️ <b>Jeu d&apos;été</b> ☀️
-              </div>
-              <div className={styles.summerGamesBody}>
-                Cet été, participez au jeu du RNB. Faites avancer
-                l&apos;objectif commun, mettez votre ville et votre département
-                sur le podium.
-              </div>
-              <div className={styles.summerGamesBody}>
-                Optionnel : renseignez votre adresse email pour participer au
-                classement individuel.
+                </CopyToClipboard>
               </div>
             </div>
-            <ContributionForm />
-          </div>
 
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Correspondances</h2>
-            <div className={styles.sectionBody}>
-              {bdg?.ext_ids?.length === 0 ? (
-                <div>
-                  <em>Aucun lien avec une autre base de donnée.</em>
-                </div>
-              ) : (
-                bdg?.ext_ids?.map((ext_id) => (
-                  <div key={ext_id.id} className={styles.sectionListItem}>
-                    <span>Base de données : {ext_id.source}</span>
-                    <br />
-                    <span>Identifiant : {ext_id.id}</span>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Statut du bâtiment</h2>
+              <div className={styles.sectionBody}>{statusLabel()}</div>
+            </div>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Adresses</h2>
+              <div className={styles.sectionBody}>
+                {bdg?.addresses?.length === 0 ? (
+                  <div>
+                    <em>Aucune adresse liée</em>
                   </div>
-                ))
-              )}
+                ) : (
+                  bdg?.addresses?.map((a) => (
+                    <div key={a.id} className={styles.sectionListItem}>
+                      {a.street_number}
+                      {a.street_rep} {a.street_type} {a.street_name}
+                      <br />
+                      {a.city_zipcode} {a.city_name}
+                      <br />
+                      <small>(Idenfitiant BAN : {a.id})</small>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Lien API</h2>
-            <div className={styles.sectionBody}>
-              <a href={apiUrl()} target="_blank">
-                Format JSON
-              </a>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle + ' fr-mb-2v'}>
+                Améliorez le RNB
+              </h2>
+              <div className={styles.summerGamesExplain}>
+                <div className={styles.summerGamesTitle}>
+                  ☀️ <b>Jeu d&apos;été</b> ☀️
+                </div>
+                <div className={styles.summerGamesBody}>
+                  Cet été, participez au jeu du RNB. Faites avancer
+                  l&apos;objectif commun, mettez votre ville et votre
+                  département sur le podium.
+                </div>
+                <div className={styles.summerGamesBody}>
+                  Optionnel : renseignez votre adresse email pour participer au
+                  classement individuel.
+                </div>
+              </div>
+              <ContributionForm />
+            </div>
+
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Correspondances</h2>
+              <div className={styles.sectionBody}>
+                {bdg?.ext_ids?.length === 0 ? (
+                  <div>
+                    <em>Aucun lien avec une autre base de donnée.</em>
+                  </div>
+                ) : (
+                  bdg?.ext_ids?.map((ext_id) => (
+                    <div key={ext_id.id} className={styles.sectionListItem}>
+                      <span>Base de données : {ext_id.source}</span>
+                      <br />
+                      <span>Identifiant : {ext_id.id}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Lien API</h2>
+              <div className={styles.sectionBody}>
+                <a href={apiUrl()} target="_blank">
+                  Format JSON
+                </a>
+              </div>
             </div>
           </div>
         </div>
