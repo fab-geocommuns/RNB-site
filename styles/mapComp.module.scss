@@ -4,17 +4,4 @@ body .map {
     bottom:0;
     left:0;
     right:0;
-
-    button.active {
-        border: 2px solid #000092;
-        border-radius: 3px;
-    }
-
-    .boussole {
-        display: none;
-
-        @media only screen and (hover: none) and (pointer: coarse){
-            display: inline;
-        }
-    }
 }
