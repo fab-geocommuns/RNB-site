@@ -35,7 +35,7 @@ export default function VisuMap() {
 
   // Map container and object
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const map = useRef<maplibregl.Map>(null);
 
   // Clicked identifier
   const highlightedBdg = useRef(null);
@@ -75,6 +75,14 @@ export default function VisuMap() {
 
     map.current.addControl(navControl, 'bottom-right');
     // Geoloc
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      const alpha = event.alpha; // Angle en degrés autour de l'axe Z (boussole)
+      if (alpha !== null) {
+        map.current.setBearing(-alpha, {
+          geolocateSource: true, // Empêche certains événements internes au composant qui désactivent le tracking de l'utilisateur
+        });
+      }
+    };
     const geolocControl = new maplibregl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
@@ -85,6 +93,27 @@ export default function VisuMap() {
       fitBoundsOptions: {
         maxZoom: 18,
       },
+    });
+    geolocControl.on('trackuserlocationstart', () => {
+      // iOS 13+: demande de droits
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+          .then((state: string) => {
+            if (state === 'granted') {
+              window.addEventListener(
+                'deviceorientation',
+                handleOrientation,
+                true,
+              );
+            }
+          })
+          .catch(console.error);
+      } else {
+        window.addEventListener('deviceorientation', handleOrientation, true);
+      }
+    });
+    geolocControl.on('trackuserlocationend', () => {
+      window.removeEventListener('deviceorientation', handleOrientation, true);
     });
     map.current.addControl(geolocControl, 'bottom-right');
   };
@@ -204,7 +233,7 @@ export default function VisuMap() {
   // //////////////////
   useEffect(() => {
     if (!map.current) {
-      mapContainer.current.style.opacity = '0';
+      mapContainer.current.style.jopacity = '0';
 
       map.current = new maplibregl.Map({
         container: mapContainer.current,
@@ -222,12 +251,6 @@ export default function VisuMap() {
       initMapControls();
       initMapEvents();
       initDataLayer();
-
-      // Ajoute la boussole
-      map.current.addControl(
-        new ToggleButtonControl(map.current),
-        'bottom-right',
-      );
     }
   });
 
@@ -266,84 +289,4 @@ export default function VisuMap() {
       <div className={styles.map} ref={mapContainer} />
     </>
   );
-}
-
-class ToggleButtonControl {
-  map: maplibregl.Map;
-  container: HTMLDivElement;
-  button: HTMLButtonElement;
-  icon: HTMLSpanElement;
-  compassActive = false;
-
-  constructor(map: maplibregl.Map) {
-    this.map = map;
-    this.container = document.createElement('div');
-    this.container.className =
-      styles.boussole +
-      ' maplibregl-ctrl maplibregl-ctrl-group mapboxgl-ctrl mapboxgl-ctrl-group';
-    this.button = document.createElement('button');
-    this.button.className = 'maplibregl-ctrl-compass mapboxgl-ctrl-compass';
-    this.button.id = 'compass';
-    this.button.onclick = this.toggleCompass.bind(this);
-    this.icon = document.createElement('span');
-    this.icon.className = 'maplibregl-ctrl-icon mapboxgl-ctrl-icon';
-    this.icon.setAttribute('style', 'transform: rotate(0deg);');
-    this.button.appendChild(this.icon);
-    this.container.appendChild(this.button);
-  }
-
-  onAdd() {
-    return this.container;
-  }
-
-  onRemove() {
-    this.container.parentNode!.removeChild(this.container);
-  }
-
-  toggleCompass() {
-    this.compassActive = !this.compassActive;
-    this.button.classList.toggle(styles.active);
-    if (this.compassActive) {
-      // iOS 13+: demande de droits
-      if (typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission()
-          .then((state: string) => {
-            if (state === 'granted') {
-              window.addEventListener(
-                'deviceorientation',
-                this.handleOrientation.bind(this),
-                true,
-              );
-            } else {
-              this.compassActive = !this.compassActive;
-              this.button.classList.toggle(styles.active);
-            }
-          })
-          .catch(console.error);
-      } else {
-        window.addEventListener(
-          'deviceorientation',
-          this.handleOrientation.bind(this),
-          true,
-        );
-      }
-    } else {
-      window.removeEventListener(
-        'deviceorientation',
-        this.handleOrientation.bind(this),
-        true,
-      );
-      this.map.setBearing(0);
-    }
-  }
-
-  handleOrientation(event: DeviceOrientationEvent) {
-    if (this.compassActive) {
-      const alpha = event.alpha; // Angle en degrés autour de l'axe Z (boussole)
-      if (alpha !== null) {
-        this.map.setBearing(alpha);
-        this.icon.setAttribute('style', 'transform: rotate(' + alpha + 'deg);');
-      }
-    }
-  }
 }
