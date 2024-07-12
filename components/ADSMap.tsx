@@ -16,7 +16,7 @@ import { fr } from '@codegouvfr/react-dsfr';
 // Map Tools
 import vector from '@/components/mapstyles/vector.json';
 import satellitle from '@/components/mapstyles/satellite.json';
-import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
+import MapStyleSwitcherControl from '@/components/map/MapStyleSwitcher';
 
 // Auth
 import { useSession } from 'next-auth/react';

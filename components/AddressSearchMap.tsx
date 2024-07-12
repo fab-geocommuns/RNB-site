@@ -11,20 +11,14 @@ import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setMoveTo,
-  setAddressSearchUnknownRNBId,
-  setMarker,
-  fetchBdg,
-  openPanel,
-  closePanel,
-} from '@/stores/map/slice';
+import { selectBuilding } from '@/stores/map/slice';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete';
+import { Actions, AppDispatch, RootState } from '@/stores/map/store';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(
-    (state) => state.addressSearch.unknown_rnb_id,
+    (state: RootState) => state.addressSearch.unknown_rnb_id,
   );
 
   // URL params
@@ -34,18 +28,17 @@ export default function AddressSearchMap() {
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State
-  const moveTo = useSelector((state) => state.moveTo);
-  const dispatch = useDispatch();
+  const moveTo = useSelector((state: RootState) => state.moveTo);
+  const dispatch: AppDispatch = useDispatch();
 
-  const addressInput = useRef(null);
+  const addressInput = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (e) => {
     setAutocompleteActive(true);
-    dispatch(setAddressSearchUnknownRNBId(false));
+    dispatch(Actions.map.setAddressSearchUnknownRNBId(false));
     if (e.key === 'Enter' && queryIsRnbId(query)) {
       // special case, if the query is a RNB ID we bypass the address search
-      dispatch(closePanel());
-      handleBdgQuery(query);
+      dispatch(Actions.map.selectBuilding(query));
     } else {
       setKeyDown(e);
     }
@@ -66,8 +59,14 @@ export default function AddressSearchMap() {
     if (queryIsRnbId(q)) {
       setAutocompleteActive(false);
       setQuery(q);
-      dispatch(closePanel());
-      handleBdgQuery(q);
+      const building = (await dispatch(Actions.map.selectBuilding(q))) as any;
+      dispatch(
+        Actions.map.setMoveTo({
+          lat: parseFloat(building.payload.point.coordinates[1]),
+          lng: parseFloat(building.payload.point.coordinates[0]),
+          zoom: 20,
+        }),
+      );
     } else {
       setQuery(q);
       // focus the input
@@ -75,28 +74,6 @@ export default function AddressSearchMap() {
         addressInput.current.focus();
       }
     }
-  };
-
-  const handleBdgQuery = async (q) => {
-    dispatch(fetchBdg(q)).then((res) => {
-      if (res.payload !== null) {
-        dispatch(openPanel());
-        dispatch(
-          setMoveTo({
-            lat: res.payload.point.coordinates[1],
-            lng: res.payload.point.coordinates[0],
-            zoom: 20,
-            fly: false,
-          }),
-        );
-
-        Bus.emit('rnbid:search', {
-          rnb_id: query,
-        });
-      } else {
-        dispatch(setAddressSearchUnknownRNBId(true));
-      }
-    });
   };
 
   const featureToPosition = (feature: any) => {
@@ -119,17 +96,15 @@ export default function AddressSearchMap() {
       // fill the input with the address
       setAutocompleteActive(false);
       setQuery(q);
-
-      // set the map to the coordinates
       const coordinates = coords.split(',');
       dispatch(
-        setMarker({
+        Actions.map.setMarker({
           lat: parseFloat(coordinates[0]),
           lng: parseFloat(coordinates[1]),
         }),
       );
       dispatch(
-        setMoveTo({
+        Actions.map.setMoveTo({
           lat: parseFloat(coordinates[0]),
           lng: parseFloat(coordinates[1]),
           zoom: 20,
@@ -152,13 +127,13 @@ export default function AddressSearchMap() {
     const position = featureToPosition(suggestion);
     // Add a marker to the map
     dispatch(
-      setMarker({
+      Actions.map.setMarker({
         lat: position.lat,
         lng: position.lng,
       }),
     );
     // Move the map to the position
-    dispatch(setMoveTo(position));
+    dispatch(Actions.map.setMoveTo(position));
     setQuery(suggestion.properties.label);
     Bus.emit('address:search', {
       search: suggestion.label,
