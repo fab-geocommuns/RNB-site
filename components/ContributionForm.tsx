@@ -19,6 +19,7 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 // Utils
 import Cookies from 'js-cookie';
 import Bus from '@/utils/Bus';
+import { reloadBuildings } from '@/stores/map/slice';
 
 export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
@@ -43,7 +44,8 @@ export default function ContributionForm() {
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState('');
-  const [summerGamesMessage, setSummerGamesMessage] = useState(null);
+  const [summerGamesMessage, setSummerGamesMessage] = useState<string>();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: any) => {
     setSending(true);
@@ -53,7 +55,7 @@ export default function ContributionForm() {
 
     // submit the form to the url
     let data = new FormData(e.target);
-    const res = await fetch(url, {
+    fetch(url, {
       method: 'POST',
       body: data,
     })
@@ -71,17 +73,10 @@ export default function ContributionForm() {
           }
 
           setSummerGamesMessage(
-            '☀️ <b>Vous avez envoyé ' +
-              data.contributor_count +
-              ' signalement' +
-              pluralS +
-              '</b>.<br />Vous êtes ' +
-              data.contributor_rank +
-              rankExtension +
-              " au classement individuel du jeu d'été.",
+            `☀️ <b>Vous avez envoyé ${data.contributor_count} signalement${pluralS}</b>.<br />Vous êtes ${data.contributor_rank}${rankExtension} au classement individuel du jeu d'été.`,
           );
         } else {
-          setSummerGamesMessage(null);
+          setSummerGamesMessage(undefined);
         }
 
         // Warn the map and the contribution counter there is a new one
@@ -97,6 +92,9 @@ export default function ContributionForm() {
 
         /* Store email in cookie */
         Cookies.set('email', email, { expires: 365 });
+
+        // Reload map buildings
+        dispatch(reloadBuildings(undefined));
 
         va.track('contribution-success');
 

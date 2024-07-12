@@ -14,7 +14,7 @@ import maplibregl from 'maplibre-gl';
 import MapStyleSwitcherControl from '@/components/MapStyleSwitcher';
 
 // Hooks
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +26,7 @@ export default function VisuMap() {
   const stateMoveTo = useSelector((state) => state.moveTo);
   const stateMarker = useSelector((state) => state.marker);
   const panelBdg = useSelector((state) => state.panelBdg);
+  const reloadBuildings = useSelector((state) => state.reloadBuildings);
 
   // Marker
   const marker = useRef(null);
@@ -185,43 +186,48 @@ export default function VisuMap() {
     });
   };
 
-  const initDataLayer = () => {
-    map.current.on('style.load', () => {
-      map.current.addSource('bdgtiles', {
-        type: 'vector',
-        tiles: [tilesUrl],
-        minzoom: 16,
-        maxzoom: 22,
-        promoteId: 'rnb_id',
-      });
-      map.current.addLayer({
-        id: 'bdgs',
-        type: 'circle',
-        source: 'bdgtiles',
-        'source-layer': 'default',
-        paint: {
-          'circle-radius': 5,
-          'circle-stroke-color': [
-            'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
-            '#ffffff',
-            ['>', ['get', 'contributions'], 0],
-            '#fef4f4',
-            '#ffffff',
-          ],
-          'circle-stroke-width': 3,
-          'circle-color': [
-            'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
-            '#31e060',
-            ['>', ['get', 'contributions'], 0],
-            '#FF732C',
-            '#1452e3',
-          ],
-        },
-      });
+  const initDataLayer = useCallback(() => {
+    if (map.current.getLayer('bdgs')) map.current.removeLayer('bdgs');
+    if (map.current.getSource('bdgtiles')) map.current.removeSource('bdgtiles');
+
+    map.current.addSource('bdgtiles', {
+      type: 'vector',
+      tiles: [tilesUrl + '#' + Math.random()],
+      minzoom: 16,
+      maxzoom: 22,
+      promoteId: 'rnb_id',
     });
-  };
+    map.current.addLayer({
+      id: 'bdgs',
+      type: 'circle',
+      source: 'bdgtiles',
+      'source-layer': 'default',
+      paint: {
+        'circle-radius': 5,
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#ffffff',
+          ['>', ['get', 'contributions'], 0],
+          '#fef4f4',
+          '#ffffff',
+        ],
+        'circle-stroke-width': 3,
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          '#FF732C',
+          '#1452e3',
+        ],
+      },
+    });
+  }, [tilesUrl]);
+
+  useEffect(() => {
+    if (map.current && map.current.isStyleLoaded()) initDataLayer();
+  }, [reloadBuildings, initDataLayer]);
 
   const buildMarker = (stateMarker) => {
     if (marker.current) {
@@ -245,7 +251,7 @@ export default function VisuMap() {
   // //////////////////
   useEffect(() => {
     if (!map.current) {
-      mapContainer.current.style.jopacity = '0';
+      mapContainer.current.style.opacity = '0';
 
       map.current = new maplibregl.Map({
         container: mapContainer.current,
@@ -262,7 +268,10 @@ export default function VisuMap() {
 
       initMapControls();
       initMapEvents();
-      initDataLayer();
+
+      map.current.on('style.load', () => {
+        initDataLayer();
+      });
     }
   });
 
