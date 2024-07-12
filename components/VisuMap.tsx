@@ -132,19 +132,51 @@ export default function VisuMap() {
   };
 
   const initMapEvents = async () => {
-    map.current.on('click', 'bdgs', async function (e) {
-      if (e.features.length > 0) {
-        const rnb_id = e.features[0].properties.rnb_id;
+    map.current.on('click', async function (e) {
+      const buffer = 15;
+      const bbox = [
+        [e.point.x - buffer, e.point.y - buffer],
+        [e.point.x + buffer, e.point.y + buffer],
+      ];
 
-        // Highlight it on the map
-        highlightBdg(rnb_id);
+      // Rechercher les features de la couche 'bdgs' dans la zone de recherche
+      const features = map.current.queryRenderedFeatures(bbox, {
+        layers: ['bdgs'],
+      });
+      if (features.length > 0) {
+        // Calculer la distance entre le point de clic et chaque feature
+        let closestFeature = null;
+        let minDistance = Infinity;
 
-        // update the url query with the rnb_id
-        window.history.replaceState({}, '', `?q=${rnb_id}`);
+        features.forEach((feature) => {
+          const featurePoint = map.current.project([
+            feature.geometry.coordinates[0],
+            feature.geometry.coordinates[1],
+          ]);
+          const distance = Math.sqrt(
+            Math.pow(e.point.x - featurePoint.x, 2) +
+              Math.pow(e.point.y - featurePoint.y, 2),
+          );
 
-        // Dispatch to store
-        await dispatch(fetchBdg(rnb_id));
-        dispatch(openPanel());
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestFeature = feature;
+          }
+        });
+
+        if (closestFeature) {
+          const rnb_id = closestFeature.properties.rnb_id;
+
+          // Mettre en surbrillance sur la carte
+          highlightBdg(rnb_id);
+
+          // Mettre à jour l'URL avec la query rnb_id
+          window.history.replaceState({}, '', `?q=${rnb_id}`);
+
+          // Dispatcher vers le store
+          await dispatch(fetchBdg(rnb_id));
+          dispatch(openPanel());
+        }
       }
     });
   };
