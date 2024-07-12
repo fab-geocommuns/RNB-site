@@ -14,6 +14,7 @@ const initialState = {
     lng: null,
     zoom: null,
   },
+  reloadBuildings: 0,
   marker: {
     lat: null,
     lng: null,
@@ -54,6 +55,9 @@ export const mapSlice = createSlice({
         state.moveTo = action.payload;
       }
     },
+    reloadBuildings(state, action) {
+      state.reloadBuildings = Math.random(); // Force le trigger de useEffect
+    },
   },
 
   extraReducers(builder) {
@@ -89,5 +93,6 @@ export const {
   setAddressSearchUnknownRNBId,
   openPanel,
   closePanel,
+  reloadBuildings,
 } = mapSlice.actions;
 export default mapSlice.reducer;
