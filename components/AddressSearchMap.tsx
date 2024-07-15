@@ -177,7 +177,12 @@ export default function AddressSearchMap() {
         className={`${styles.map__InputShell} ${unknown_rnb_id ? styles['shake'] : ''}`}
       >
         <div className={styles.summerGamesShell}>
-          ☀️ Jeu de l’été du RNB : objectif 1000 signalements
+          <a
+            href="https://rnb.beta.gouv.fr/blog/jeu-concours-de-lete"
+            target="_blank"
+          >
+            ☀️ Jeu de l’été du RNB : objectif 1000 signalements
+          </a>
         </div>
 
         <input
