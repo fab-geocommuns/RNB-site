@@ -44,7 +44,10 @@ export default function SummerGame() {
                 <div className={styles.bar}>
                   <div
                     className={styles.progress}
-                    style={{ width: summerGamesData.shared.percent + '%' }}
+                    style={{
+                      width:
+                        Math.min(100, summerGamesData.shared.percent) + '%',
+                    }}
                   >
                     <span className={styles.progressTotal}>
                       {summerGamesData.shared.absolute}
