@@ -21,7 +21,7 @@ export const useSummerGamesData = () => {
           department: [],
           city: [],
           shared: {
-            goal: 1000,
+            goal: 10000,
             absolute: 0,
             percent: 0,
           },
