@@ -181,7 +181,7 @@ export default function AddressSearchMap() {
             href="https://rnb.beta.gouv.fr/blog/jeu-concours-de-lete"
             target="_blank"
           >
-            ☀️ Jeu de l’été du RNB : objectif 1000 signalements
+            ☀️ Jeu de l’été du RNB : objectif 10000 signalements
           </a>
         </div>
 
