@@ -158,7 +158,7 @@ export default function VisuPanel() {
                       <br />
                       {a.city_zipcode} {a.city_name}
                       <br />
-                      <small>(Idenfitiant BAN : {a.id})</small>
+                      <small>(Identifiant BAN : {a.id})</small>
                     </div>
                   ))
                 )}
