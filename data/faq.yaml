@@ -124,15 +124,17 @@
     - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ? Comment réaliser un signalement sur un bâtiment ?
       key: erreur
       answer: >
-      <p>Vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc) ?<p>
+      <p>Vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc) ?</p>
       <ol>
-      <li>Consultez <a href="https://rnb.beta.gouv.fr/definition" target="_blank">la Définition du Bâtiment et son annexe</a> validées par le CNIG pour vérifier si votre structure ou construction entre dans cette catégorisation.<li>
-      <li>Si votre proposition de signalement entre bien dans la catégorisation du standard du CNIG, vous pouvez envoyer celui-ci directement sur la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a>. Pour ce faire :<li>
+      <li>Consultez <a href="https://rnb.beta.gouv.fr/definition" target="_blank">la Définition du Bâtiment et son annexe</a> validées par le CNIG pour vérifier si votre structure ou construction entre dans cette catégorisation.</li>
+      <li>Si votre proposition de signalement entre bien dans la catégorisation du standard du CNIG, vous pouvez envoyer celui-ci directement sur la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a>. Pour ce faire :</li>
       <ol>
-      <li>Saisissez l’adresse du bâtiment pour lequel vous souhaitez faire un signalement ou utilisez la géolocalisation.<li>
-      <li>Sélectionnez le bâtiment concerné (un des points bleus)<li>
-      <li>Scrollez le panneau d’information du bâtiment qui s’ouvre à gauche de l’écran jusqu’au champ “Améliorez le RNB”<li>
-      <li>et Indiquez votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer<li>
+      <li>Saisissez l’adresse du bâtiment pour lequel vous souhaitez faire un signalement ou utilisez la géolocalisation.</li>
+      <li>Sélectionnez le bâtiment concerné (un des points bleus)</li>
+      <li>Scrollez le panneau d’information du bâtiment qui s’ouvre à gauche de l’écran jusqu’au champ “Améliorez le RNB”</li>
+      <li>et Indiquez votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
+      </ol>
+      </ol>
     - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
       key: evolution
       answer: >
