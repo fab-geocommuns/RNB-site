@@ -164,7 +164,7 @@ export default function VisuPanel() {
                       {a.city_zipcode} {a.city_name}
                       <br />
                       <small>
-                        (Clé nationale d'interopérabilité BAN : {a.id})
+                        (Clé nationale d&apos;interopérabilité BAN : {a.id})
                       </small>
                     </div>
                   ))
