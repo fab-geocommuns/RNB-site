@@ -7,7 +7,7 @@ import styles from '@/styles/mapPage.module.scss';
 import { useEffect } from 'react';
 
 // Components
-import VisuMap from '@/components/VisuMap';
+import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/AddressSearchMap';
 

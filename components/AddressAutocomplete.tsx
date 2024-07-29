@@ -3,12 +3,9 @@
 // Hooks
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  setAddressSearchQuery,
-  setAddressSearchResults,
-} from '@/stores/map/slice';
 
 import styles from '@/styles/addressAutocomplete.module.scss';
+import { Actions } from '@/stores/map/store';
 
 export default function AddressAutocomplete({
   autocompleteActive,
@@ -99,8 +96,8 @@ export default function AddressAutocomplete({
 
     const geocode_result = await fetchBanAPI(query);
 
-    dispatch(setAddressSearchQuery(query));
-    dispatch(setAddressSearchResults(geocode_result.features));
+    dispatch(Actions.map.setAddressSearchQuery(query));
+    dispatch(Actions.map.setAddressSearchResults(geocode_result.features));
     if (geocode_result.features.length > 0) {
       setAddressSuggestions(geocode_result.features);
       setSelectedSuggestion(-1);

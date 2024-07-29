@@ -2,39 +2,43 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+export type MapStore = {
+  panelIsOpen: boolean;
+  addressSearch: {
+    q?: string;
+    results: any[];
+    unknown_rnb_id: boolean;
+  };
+  moveTo?: {
+    lat: number;
+    lng: number;
+    zoom: number;
+    fly?: boolean;
+  };
+  marker?: [number, number];
+  reloadBuildings?: number;
+  selectedBuilding?: {
+    rnb_id: string;
+    status: any[];
+    point: [number, number];
+    addresses: any[];
+    ext_ids: any[];
+    is_active: boolean;
+  };
+};
+
+const initialState: MapStore = {
   panelIsOpen: false,
   addressSearch: {
-    q: null,
-    results: null,
+    results: [],
     unknown_rnb_id: false,
   },
-  moveTo: {
-    lat: null,
-    lng: null,
-    zoom: null,
-  },
-  reloadBuildings: 0,
-  marker: {
-    lat: null,
-    lng: null,
-  },
-  panelBdg: null,
 };
 
 export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    openPanel(state) {
-      state.panelIsOpen = true;
-    },
-    closePanel(state) {
-      state.panelIsOpen = false;
-    },
-    setMarker(state, action) {
-      state.marker = action.payload;
-    },
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {
         state.addressSearch.q = action.payload;
@@ -46,37 +50,42 @@ export const mapSlice = createSlice({
     setAddressSearchUnknownRNBId(state, action) {
       state.addressSearch.unknown_rnb_id = action.payload;
     },
-    setMoveTo(state, action) {
-      if (
-        action.payload.lat != state.moveTo.lat ||
-        action.payload.lng != state.moveTo.lng ||
-        action.payload.zoom != state.moveTo.zoom
-      ) {
-        state.moveTo = action.payload;
-      }
+    setMarker(state, action) {
+      state.marker = action.payload;
     },
-    reloadBuildings(state, action) {
+    setMoveTo(state, action) {
+      state.moveTo = action.payload;
+    },
+    reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
   },
 
   extraReducers(builder) {
-    builder.addCase(fetchBdg.fulfilled, (state, action) => {
-      state.panelBdg = action.payload;
+    builder.addCase(selectBuilding.fulfilled, (state, action) => {
+      state.selectedBuilding = action.payload;
+
+      if (action.payload) {
+        window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
+      } else {
+        let url = new URL(window.location.href);
+        url.searchParams.delete('q');
+        window.history.replaceState({}, '', url);
+      }
     });
   },
 });
 
-export const fetchBdg = createAsyncThunk(
-  'map/fetchBdg',
-  async (bdgId: string) => {
-    const url = bdgApiUrl(bdgId + '?from=site');
+export const selectBuilding = createAsyncThunk(
+  'map/selectBuilding',
+  async (rnbId: string | null, { dispatch }) => {
+    if (!rnbId) return;
+    const url = bdgApiUrl(rnbId + '?from=site');
     const response = await fetch(url);
-    if (!response.ok) {
-      return null;
+    if (response.ok) {
+      return (await response.json()) as MapStore['selectedBuilding'];
     } else {
-      const data = await response.json();
-      return data;
+      dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }
   },
 );
@@ -85,14 +94,9 @@ export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
 }
 
-export const {
-  setMarker,
-  setMoveTo,
-  setAddressSearchQuery,
-  setAddressSearchResults,
-  setAddressSearchUnknownRNBId,
-  openPanel,
-  closePanel,
-  reloadBuildings,
-} = mapSlice.actions;
-export default mapSlice.reducer;
+export const mapActions = {
+  ...mapSlice.actions,
+  selectBuilding,
+};
+
+export const mapReducer = mapSlice.reducer;

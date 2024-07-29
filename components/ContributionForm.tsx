@@ -19,14 +19,16 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 // Utils
 import Cookies from 'js-cookie';
 import Bus from '@/utils/Bus';
-import { reloadBuildings } from '@/stores/map/slice';
+import { Actions, RootState } from '@/stores/map/store';
 
 export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
 
-  const bdg = useSelector((state) => state.panelBdg);
+  const selectedBuilding = useSelector(
+    (state: RootState) => state.selectedBuilding,
+  );
 
-  const msgInput = useRef(null);
+  const msgInput = useRef<HTMLInputElement>(null);
 
   const emptyMsgInput = () => {
     msgInput.current.value = '';
@@ -81,7 +83,7 @@ export default function ContributionForm() {
 
         // Warn the map and the contribution counter there is a new one
         Bus.emit('contribution:new', {
-          rnb_id: bdg.rnb_id,
+          rnb_id: selectedBuilding!.rnb_id,
         });
 
         /* Empty textarea */
@@ -94,7 +96,7 @@ export default function ContributionForm() {
         Cookies.set('email', email, { expires: 365 });
 
         // Reload map buildings
-        dispatch(reloadBuildings(undefined));
+        dispatch(Actions.map.reloadBuildings());
 
         va.track('contribution-success');
 
@@ -124,7 +126,7 @@ export default function ContributionForm() {
         name="rnb_id"
         type="hidden"
         className="fr-input"
-        value={bdg?.rnb_id}
+        value={selectedBuilding?.rnb_id}
       />
       <textarea
         onFocus={handleFocus}

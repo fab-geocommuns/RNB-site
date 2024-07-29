@@ -13,19 +13,21 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { bdgApiUrl, closePanel, openPanel } from '@/stores/map/slice';
+import { bdgApiUrl } from '@/stores/map/slice';
 
 // Analytics
 import va from '@vercel/analytics';
 
 // Comps
 import ContributionForm from '@/components/ContributionForm';
+import { Actions, AppDispatch, RootState } from '@/stores/map/store';
 
 export default function VisuPanel() {
   // Store
-  const bdg = useSelector((state) => state.panelBdg);
-  const isOpen = useSelector((state) => state.panelIsOpen);
-  const dispatch = useDispatch();
+  const selectedBuilding = useSelector(
+    (state: RootState) => state.selectedBuilding,
+  );
+  const dispatch: AppDispatch = useDispatch();
 
   // URL params
   const params = useSearchParams();
@@ -49,7 +51,7 @@ export default function VisuPanel() {
   };
 
   const handleCopy = () => {
-    va.track('rnbid-copied', { rnb_id: bdg.rnb_id });
+    va.track('rnbid-copied', { rnb_id: selectedBuilding!.rnb_id });
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -57,11 +59,11 @@ export default function VisuPanel() {
   };
 
   const apiUrl = () => {
-    return bdgApiUrl(bdg?.rnb_id);
+    return bdgApiUrl(selectedBuilding!.rnb_id);
   };
 
   const statusLabel = () => {
-    const bdgStatus = bdg?.status;
+    const bdgStatus = selectedBuilding?.status;
 
     if (bdgStatus === undefined) return 'Inconnu';
     if (bdgStatus === null) return 'Inconnu';
@@ -71,16 +73,16 @@ export default function VisuPanel() {
 
     // Bdg status is an array, we are on the old format -> it can be removed once the backend PR https://github.com/fab-geocommuns/RNB-coeur/pull/327 is merged and deployed
     if (Array.isArray(bdgStatus)) {
-      const currentStatus = bdg?.status?.find((s) => s.is_current);
+      const currentStatus = selectedBuilding?.status?.find((s) => s.is_current);
       return currentStatus.label;
     }
   };
 
   const easyRnbId = () => {
-    return addSpace(bdg?.rnb_id);
+    return addSpace(selectedBuilding!.rnb_id);
   };
 
-  function addSpace(rnb_id) {
+  function addSpace(rnb_id: string) {
     if (rnb_id) {
       return rnb_id.split('').map((char, i) => {
         let classes = '';
@@ -99,16 +101,16 @@ export default function VisuPanel() {
   }
 
   const close = () => {
-    dispatch(closePanel());
+    dispatch(Actions.map.selectBuilding(null));
   };
 
   useEffect(() => {
-    if (bdg?.rnb_id !== undefined) {
-      va.track('open-side-panel', { rnb_id: bdg.rnb_id });
+    if (selectedBuilding?.rnb_id !== undefined) {
+      va.track('open-side-panel', { rnb_id: selectedBuilding.rnb_id });
     }
-  }, [bdg?.rnb_id]);
+  }, [selectedBuilding?.rnb_id]);
 
-  if (isOpen) {
+  if (selectedBuilding) {
     return (
       <>
         <div className={styles.shell}>
@@ -122,7 +124,10 @@ export default function VisuPanel() {
               <div className={styles.rnbidShell}>
                 <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
-                <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
+                <CopyToClipboard
+                  onCopy={() => handleCopy()}
+                  text={selectedBuilding?.rnb_id}
+                >
                   <div className={styles.rnbidShell__copy}>
                     {copied ? (
                       <span>
@@ -146,12 +151,12 @@ export default function VisuPanel() {
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Adresses</h2>
               <div className={styles.sectionBody}>
-                {bdg?.addresses?.length === 0 ? (
+                {selectedBuilding?.addresses?.length === 0 ? (
                   <div>
                     <em>Aucune adresse liée</em>
                   </div>
                 ) : (
-                  bdg?.addresses?.map((a) => (
+                  selectedBuilding?.addresses?.map((a) => (
                     <div key={a.id} className={styles.sectionListItem}>
                       {a.street_number}
                       {a.street_rep} {a.street_type} {a.street_name}
@@ -191,12 +196,12 @@ export default function VisuPanel() {
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Correspondances</h2>
               <div className={styles.sectionBody}>
-                {bdg?.ext_ids?.length === 0 ? (
+                {selectedBuilding?.ext_ids?.length === 0 ? (
                   <div>
                     <em>Aucun lien avec une autre base de donnée.</em>
                   </div>
                 ) : (
-                  bdg?.ext_ids?.map((ext_id) => (
+                  selectedBuilding?.ext_ids?.map((ext_id) => (
                     <div key={ext_id.id} className={styles.sectionListItem}>
                       <span>Base de données : {ext_id.source}</span>
                       <br />
