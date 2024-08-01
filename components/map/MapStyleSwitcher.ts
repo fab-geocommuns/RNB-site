@@ -56,8 +56,8 @@ export default class MapStyleSwitcherControl {
 
     // On garde la source et la couche des bâtiments
     const currentStyle = this._map.getStyle();
-    const sourceBatiments = currentStyle.sources[BUILDINGS_SOURCE];
-    const coucheBatiments = currentStyle.layers.find(
+    const buildingSource = currentStyle.sources[BUILDINGS_SOURCE];
+    const buildingLayers = currentStyle.layers.find(
       (l) => l.id === BUILDINGS_LAYER,
     );
 
@@ -66,9 +66,9 @@ export default class MapStyleSwitcherControl {
       JSON.stringify(this._options.styles[styleKey].style),
     );
 
-    if (sourceBatiments && coucheBatiments) {
-      newStyle.sources[BUILDINGS_SOURCE] = sourceBatiments;
-      newStyle.layers.push(coucheBatiments);
+    if (buildingSource && buildingLayers) {
+      newStyle.sources[BUILDINGS_SOURCE] = buildingSource;
+      newStyle.layers.push(buildingLayers);
     }
 
     this._map.setStyle(newStyle);
