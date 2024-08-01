@@ -1,3 +1,8 @@
+import {
+  BUILDINGS_LAYER,
+  BUILDINGS_SOURCE,
+} from '@/components/map/useMapLayers';
+
 export default class MapStyleSwitcherControl {
   constructor(options) {
     this._options = { ...options };
@@ -48,7 +53,25 @@ export default class MapStyleSwitcherControl {
 
   setStyle(styleKey) {
     this._options.chosenStyle = styleKey;
-    this._map.setStyle(this._options.styles[styleKey].style);
+
+    // On garde la source et la couche des bâtiments
+    const currentStyle = this._map.getStyle();
+    const sourceBatiments = currentStyle.sources[BUILDINGS_SOURCE];
+    const coucheBatiments = currentStyle.layers.find(
+      (l) => l.id === BUILDINGS_LAYER,
+    );
+
+    // On duplique notre style pour ne pas modifier le style initial
+    const newStyle = JSON.parse(
+      JSON.stringify(this._options.styles[styleKey].style),
+    );
+
+    if (sourceBatiments && coucheBatiments) {
+      newStyle.sources[BUILDINGS_SOURCE] = sourceBatiments;
+      newStyle.layers.push(coucheBatiments);
+    }
+
+    this._map.setStyle(newStyle);
 
     const otherStyleKey = this.theOtherStyleKey(styleKey);
 
