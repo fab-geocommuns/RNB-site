@@ -33,12 +33,23 @@ export default function AddressSearchMap() {
 
   const addressInput = useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     setAutocompleteActive(true);
     dispatch(Actions.map.setAddressSearchUnknownRNBId(false));
     if (e.key === 'Enter' && queryIsRnbId(query)) {
       // special case, if the query is a RNB ID we bypass the address search
-      dispatch(Actions.map.selectBuilding(query));
+      const building = (await dispatch(
+        Actions.map.selectBuilding(query),
+      )) as any;
+      if (building.payload) {
+        dispatch(
+          Actions.map.setMoveTo({
+            lat: parseFloat(building.payload.point.coordinates[1]),
+            lng: parseFloat(building.payload.point.coordinates[0]),
+            zoom: 20,
+          }),
+        );
+      }
     } else {
       setKeyDown(e);
     }
