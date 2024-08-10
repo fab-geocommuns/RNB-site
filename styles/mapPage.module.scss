@@ -2,12 +2,9 @@
 
 .map,
 .map__mapShell {
-    height: calc(100vh - 140.5px);
+    display: flex;
+    flex: 1 1 0;
     position: relative;
-
-    @media (min-width: $bp-md) {
-        height: calc(100vh - 172.5px);
-    }
 }
 
 
