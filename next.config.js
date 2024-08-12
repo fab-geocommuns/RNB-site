@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-const path = require('path');
-
 const nextConfig = {
   redirects: async () => {
     return [
@@ -14,9 +12,7 @@ const nextConfig = {
   },
 
   reactStrictMode: true,
-  swcMinify: false,
   productionBrowserSourceMaps: true,
-  experimental: { appDir: true },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.woff2$/,
