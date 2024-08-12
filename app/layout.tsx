@@ -17,6 +17,7 @@ import Script from 'next/script';
 
 // Settings
 import settings from '@/logic/settings';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -41,14 +42,16 @@ heap.load("${settings.heapId}");
         </Script>
       </head>
       <body>
-        <RNBSessionProvider>
-          <DsfrProvider>
-            <RNBHeader />
-            <FlashMessage />
-            {children}
-          </DsfrProvider>
-        </RNBSessionProvider>
-        <Analytics />
+        <Suspense>
+          <RNBSessionProvider>
+            <DsfrProvider>
+              <RNBHeader />
+              <FlashMessage />
+              {children}
+            </DsfrProvider>
+          </RNBSessionProvider>
+          <Analytics />
+        </Suspense>
       </body>
     </html>
   );
