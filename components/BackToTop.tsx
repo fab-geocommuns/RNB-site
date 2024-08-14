@@ -4,7 +4,9 @@ import styles from '@/styles/backToTop.module.scss';
 import { useEffect, useState } from 'react';
 
 export default function BackToTop() {
-  const [isVisible, setIsVisible] = useState(window.pageYOffset > 0);
+  const [isVisible, setIsVisible] = useState(
+    typeof window !== 'undefined' ? window.pageYOffset > 0 : false,
+  );
 
   useEffect(() => {
     // clean up code
