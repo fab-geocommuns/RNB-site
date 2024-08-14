@@ -45,7 +45,8 @@ export default function Contact() {
                 <Tile
                   imageUrl={faqIllu.src}
                   title="Foire aux questions"
-                  horizontal
+                  imageSvg={false}
+                  orientation="horizontal"
                   desc="Votre demande est peut être déjà dans notre foire aux questions."
                   linkProps={{
                     href: '/faq',
@@ -57,7 +58,8 @@ export default function Contact() {
                 <Tile
                   imageUrl={coopIllu.src}
                   title="Une erreur ?!"
-                  horizontal
+                  imageSvg={false}
+                  orientation="horizontal"
                   desc="Signalez les erreurs du RNB sur les bâtiments de notre carte."
                   linkProps={{
                     href: '/carte',
@@ -82,7 +84,8 @@ export default function Contact() {
                         <span>Nous écrire</span>
                       )
                     }
-                    horizontal
+                    imageSvg={false}
+                    orientation="horizontal"
                     desc={`Envoyez-nous un message à ${contactEmail}`}
                     linkProps={{
                       href: '/contact',
@@ -95,7 +98,8 @@ export default function Contact() {
                 <Tile
                   imageUrl={appIllu.src}
                   title="Salon de discussion"
-                  horizontal
+                  imageSvg={false}
+                  orientation="horizontal"
                   desc="Rejoignez les salons de discussions du RNB."
                   linkProps={{
                     href: 'https://matrix.to/#/#rnb:matrix.org',
@@ -107,7 +111,8 @@ export default function Contact() {
                 <Tile
                   imageUrl={internetIllu.src}
                   title="LinkedIn"
-                  horizontal
+                  imageSvg={false}
+                  orientation="horizontal"
                   desc="Suivez les actualités du RNB sur LinkedIn."
                   linkProps={{
                     href: 'https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/?originalSubdomain=fr',

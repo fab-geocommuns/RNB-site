@@ -13,6 +13,7 @@ export default function AboutCol() {
       <Tile
         desc="Nous mettons à disposition des outils gratuits pour consulter le référentiel et l'intégrer à vos outils et systèmes."
         imageUrl={toolsIllu.src}
+        imageSvg={false}
         title="Utiliser le RNB"
         linkProps={{
           href: '/outils-services',
@@ -22,6 +23,7 @@ export default function AboutCol() {
 
       <Tile
         imageUrl={casIllu.src}
+        imageSvg={false}
         title="Voir tous les cas"
         linkProps={{
           href: '/cas',
@@ -31,6 +33,7 @@ export default function AboutCol() {
 
       <Tile
         imageUrl={defIllu.src}
+        imageSvg={false}
         title="Définition du bâtiment"
         linkProps={{
           href: '/definition',
@@ -40,6 +43,7 @@ export default function AboutCol() {
 
       <Tile
         imageUrl={faqIllu.src}
+        imageSvg={false}
         title="Foire aux questions"
         linkProps={{
           href: '/faq',
