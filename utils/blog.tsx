@@ -50,7 +50,7 @@ function getClient() {
       const apiUrl = new URL(url);
 
       Object.keys(params).map((key) =>
-        apiUrl.searchParams.set(key, encodeURIComponent(params[key])),
+        apiUrl.searchParams.set(key, params[key]),
       );
 
       try {
