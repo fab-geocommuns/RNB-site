@@ -41,7 +41,16 @@ export default defineConfig({
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        launchOptions: {
+          firefoxUserPrefs: {
+            // Enable WebGL2
+            'webgl.disabled': false,
+            'webgl.enable-webgl2': true,
+          },
+        },
+      },
     },
     //
     // {
