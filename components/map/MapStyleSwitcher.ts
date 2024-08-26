@@ -2,6 +2,7 @@ import {
   BUILDINGS_LAYER,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
+import { current } from 'immer';
 
 export default class MapStyleSwitcherControl {
   constructor(options) {
@@ -56,8 +57,9 @@ export default class MapStyleSwitcherControl {
 
     // On garde la source et la couche des bâtiments
     const currentStyle = this._map.getStyle();
-    const buildingSource = currentStyle.sources[BUILDINGS_SOURCE];
-    const buildingLayers = currentStyle.layers.find(
+
+    const buildingSource = currentStyle?.sources[BUILDINGS_SOURCE];
+    const buildingLayers = currentStyle?.layers.find(
       (l) => l.id === BUILDINGS_LAYER,
     );
 

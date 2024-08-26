@@ -44,5 +44,23 @@ function getClient() {
     url: process.env.NEXT_GHOST_API_URL,
     key: process.env.NEXT_GHOST_API_KEY,
     version: process.env.NEXT_GHOST_API_VERSION,
+    makeRequest: async ({ url, method, params, headers }: any) => {
+      // The Ghost client tries to use Axios to fetch pages, which throws an error in a Next.js 14 app
+      // See: https://forum.ghost.org/t/tryghost-content-api-is-not-working-on-next-v14/47470
+      const apiUrl = new URL(url);
+
+      Object.keys(params).map((key) =>
+        apiUrl.searchParams.set(key, params[key]),
+      );
+
+      try {
+        const response = await fetch(apiUrl.toString(), { method, headers });
+        const data = await response.json();
+        return { data };
+      } catch (error) {
+        console.error(error);
+        return { data: {} };
+      }
+    },
   });
 }
