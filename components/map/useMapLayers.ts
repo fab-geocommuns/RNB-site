@@ -1,4 +1,4 @@
-import vector from '@/components/map/mapstyles/vector.json';
+import vector from '@/components/map/mapstyles/osm.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
 import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
