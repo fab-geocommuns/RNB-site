@@ -1,7 +1,6 @@
 import maplibregl from 'maplibre-gl';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '@/styles/mapComp.module.scss';
-import { DEFAULT_STYLE } from '@/components/map/useMapLayers';
 
 /**
  * Création de la carte MapLibre
@@ -29,7 +28,6 @@ export const useMap = () => {
         center: [2.852577494863663, 46.820936580547134],
         zoom: 5,
         attributionControl: false,
-        style: DEFAULT_STYLE,
       });
 
       newMap.once('load', () => {

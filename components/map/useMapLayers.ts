@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/map/store';
 
 const TILES_URL = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
-export const BUILDINGS_SOURCE = 'bdgtiles';
-export const BUILDINGS_LAYER = 'bdgs';
+export const BUILDINGS_SOURCE = 'bdgs_tiles';
+export const BUILDINGS_LAYER = 'bdgs_layer';
 
 export const STYLES = {
   vector: {
@@ -37,9 +37,37 @@ export const useMapLayers = (map: maplibregl.Map) => {
   );
 
   // function to change the background style on map
-  const setMapBackground = useCallback((styleName: string) => {
-    map.setStyle(STYLES[styleName].style);
-  }, []);
+  const setMapBackground = useCallback(
+    (map: maplibregl.Map, styleName: string) => {
+      // The background is the foundation of the style. It means we have to switch it and then
+      // rebuild data layers and building layer
+
+      // get current style and extract buildings source and layer
+      const currentStyle = map.getStyle();
+      const buildingsSource = getBuildingsSource(currentStyle);
+      const buildingsLayer = getBuildingsLayer(currentStyle);
+
+      // Init a new style with the new background
+      const newStyle = STYLES[styleName].style;
+      if (buildingsSource && buildingsLayer) {
+        newStyle.sources[BUILDINGS_SOURCE] = buildingsSource;
+        newStyle.layers.push(buildingsLayer);
+      }
+
+      // Finally set the new style
+      map.setStyle(newStyle);
+
+      map.setStyle(STYLES[styleName].style);
+    },
+    [],
+  );
+
+  const getBuildingsSource = (style) => {
+    return style.sources[BUILDINGS_SOURCE];
+  };
+  const getBuildingsLayer = (style) => {
+    return style.layers.find((l) => l.id === BUILDINGS_LAYER);
+  };
 
   // Ajout de la couche vectorielle des bâtiments
   const initBuildingLayer = useCallback((map: maplibregl.Map) => {
@@ -104,8 +132,8 @@ export const useMapLayers = (map: maplibregl.Map) => {
 
   // Change style when mapBackground change
   useEffect(() => {
-    if (mapBackground) {
-      setMapBackground(mapBackground);
+    if (map && mapBackground) {
+      setMapBackground(map, mapBackground);
     }
-  }, [mapBackground, setMapBackground]);
+  }, [mapBackground]);
 };
