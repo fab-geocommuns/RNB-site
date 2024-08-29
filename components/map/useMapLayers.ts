@@ -1,11 +1,10 @@
 import vector from '@/components/map/mapstyles/vector.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
-import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
+import maplibregl, { StyleSpecification } from 'maplibre-gl';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/map/store';
-import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 
 const TILES_URL = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
 export const BUILDINGS_SOURCE = 'bdgtiles';
@@ -29,10 +28,18 @@ export const DEFAULT_STYLE = STYLES.vector.style;
  * Ajout et gestion des couches de la carte
  * @param map
  */
-export const useMapLayers = (map?: maplibregl.Map) => {
+export const useMapLayers = (map: maplibregl.Map) => {
+  // check if mapBackground change in the store
+  const mapBackground = useSelector((state: RootState) => state.mapBackground);
+
   const reloadBuildings = useSelector(
     (state: RootState) => state.reloadBuildings,
   );
+
+  // function to change the background style on map
+  const setMapBackground = useCallback((styleName: string) => {
+    map.setStyle(STYLES[styleName].style);
+  }, []);
 
   // Ajout de la couche vectorielle des bâtiments
   const initBuildingLayer = useCallback((map: maplibregl.Map) => {
@@ -94,4 +101,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       initBuildingLayer(map);
     }
   }, [reloadBuildings, map, initBuildingLayer]);
+
+  // Change style when mapBackground change
+  useEffect(() => {
+    if (mapBackground) {
+      setMapBackground(mapBackground);
+    }
+  }, [mapBackground, setMapBackground]);
 };

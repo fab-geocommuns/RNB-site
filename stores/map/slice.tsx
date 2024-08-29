@@ -25,6 +25,7 @@ export type MapStore = {
     ext_ids: any[];
     is_active: boolean;
   };
+  mapBackground?: string;
 };
 
 const initialState: MapStore = {
@@ -33,6 +34,7 @@ const initialState: MapStore = {
     results: [],
     unknown_rnb_id: false,
   },
+  mapBackground: 'osm',
 };
 
 export const mapSlice = createSlice({
@@ -52,6 +54,9 @@ export const mapSlice = createSlice({
     },
     setMarker(state, action) {
       state.marker = action.payload;
+    },
+    setMapBackground(state, action) {
+      state.mapBackground = action.payload;
     },
     setMoveTo(state, action) {
       state.moveTo = action.payload;

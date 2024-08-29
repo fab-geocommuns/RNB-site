@@ -1,0 +1,40 @@
+// Styles
+import { RootState, Actions, AppDispatch } from '@/stores/map/store';
+import styles from '@/styles/mapLayerModal.module.scss';
+import { useSelector, useDispatch } from 'react-redux';
+
+export default function MapLayerModal() {
+  const setMapBackground = (background: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    dispatch(Actions.map.setMapBackground(background));
+  };
+
+  const dispatch: AppDispatch = useDispatch();
+  const mapBackground = useSelector((state: RootState) => state.mapBackground);
+
+  return (
+    <>
+      <div className={styles.modal}>
+        <h3>Fonds de carte</h3>
+        <p>Selected : {mapBackground}</p>
+        <ul>
+          <li>
+            <a href="#" onClick={setMapBackground('satellite')}>
+              Satellite
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={setMapBackground('cadastre')}>
+              Cadastre
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={setMapBackground('osm')}>
+              OSM
+            </a>
+          </li>
+        </ul>
+      </div>
+    </>
+  );
+}

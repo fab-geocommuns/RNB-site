@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/AddressSearchMap';
+import MapLayersModal from '@/components/map/MapLayersModal';
 
 // Analytics
 import va from '@vercel/analytics';
@@ -58,6 +59,7 @@ export default function RNBMap() {
         <div className={styles.map}>
           <AddressSearchMap />
           <VisuPanel />
+          <MapLayersModal />
 
           <div className={styles.map__mapShell}>
             <VisuMap />
