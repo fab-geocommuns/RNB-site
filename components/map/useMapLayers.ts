@@ -1,4 +1,6 @@
-import vector from '@/components/map/mapstyles/vector.json';
+import cadastre from '@/components/map/mapstyles/cadastre.json';
+import osm from '@/components/map/mapstyles/osm.json';
+import ign from '@/components/map/mapstyles/ign.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
 import maplibregl, { StyleSpecification } from 'maplibre-gl';
@@ -7,22 +9,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/map/store';
 
 const TILES_URL = process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
-export const BUILDINGS_SOURCE = 'bdgs_tiles';
-export const BUILDINGS_LAYER = 'bdgs_layer';
+export const BUILDINGS_SOURCE = 'rnb_bdgs_tiles';
+export const BUILDINGS_LAYER = 'rnb_bdgs_layer';
 
 export const STYLES = {
-  vector: {
-    name: 'Plan',
-    style: vector as StyleSpecification,
-  },
-
-  satellite: {
-    name: 'Satellite',
-    style: satellite as StyleSpecification,
-  },
+  cadastre: cadastre as StyleSpecification,
+  osm: osm as StyleSpecification,
+  satellite: satellite as StyleSpecification,
+  ign: ign as StyleSpecification,
 };
-
-export const DEFAULT_STYLE = STYLES.vector.style;
 
 /**
  * Ajout et gestion des couches de la carte
@@ -48,7 +43,10 @@ export const useMapLayers = (map: maplibregl.Map) => {
       const buildingsLayer = getBuildingsLayer(currentStyle);
 
       // Init a new style with the new background
-      const newStyle = STYLES[styleName].style;
+      const newStyle = JSON.parse(JSON.stringify(STYLES[styleName]));
+
+      console.log('newStyle', newStyle);
+
       if (buildingsSource && buildingsLayer) {
         newStyle.sources[BUILDINGS_SOURCE] = buildingsSource;
         newStyle.layers.push(buildingsLayer);
@@ -56,8 +54,6 @@ export const useMapLayers = (map: maplibregl.Map) => {
 
       // Finally set the new style
       map.setStyle(newStyle);
-
-      map.setStyle(STYLES[styleName].style);
     },
     [],
   );

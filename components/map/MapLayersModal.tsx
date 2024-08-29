@@ -24,8 +24,8 @@ export default function MapLayerModal() {
             </a>
           </li>
           <li>
-            <a href="#" onClick={setMapBackground('cadastre')}>
-              Cadastre
+            <a href="#" onClick={setMapBackground('ign')}>
+              Plan IGN
             </a>
           </li>
           <li>

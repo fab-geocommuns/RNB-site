@@ -21,14 +21,14 @@ export const useMapControls = (map?: maplibregl.Map) => {
       );
 
       // Style switcher
-      map.addControl(
-        new MapStyleSwitcherControl({
-          styles: STYLES,
-          chosenStyle: 'vector',
-          icon: fr.cx('fr-icon-road-map-line'),
-        }),
-        'bottom-right',
-      );
+      // map.addControl(
+      //   new MapStyleSwitcherControl({
+      //     styles: STYLES,
+      //     chosenStyle: 'vector',
+      //     icon: fr.cx('fr-icon-road-map-line'),
+      //   }),
+      //   'bottom-right',
+      // );
 
       // Zoom
       map.addControl(
