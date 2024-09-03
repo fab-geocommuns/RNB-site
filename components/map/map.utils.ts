@@ -1,5 +1,5 @@
 import maplibregl, { MapGeoJSONFeature, PointLike } from 'maplibre-gl';
-import { BUILDINGS_LAYER } from '@/components/map/useMapLayers';
+import { BUILDINGS_LAYER } from '@/components/map/mapstyles/buildingsDisplay';
 
 /**
  * Récupère la feature la plus proche du curseur dans un rayon maximum spécifié en pixels.

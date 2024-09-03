@@ -1,6 +1,8 @@
 {
   "version": 8,
   "name": "Bright",
+  "sprite": "https://openmaptiles.github.io/osm-bright-gl-style/sprite",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=k5TGaasSmJpsWugdpmtP",
   "metadata": {
     "mapbox:autocomposite": false,
     "mapbox:groups": {
@@ -48,8 +50,7 @@
       "url": "https://api.maptiler.com/tiles/v3-openmaptiles/tiles.json?key=k5TGaasSmJpsWugdpmtP"
     }
   },
-  "sprite": "https://openmaptiles.github.io/osm-bright-gl-style/sprite",
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=k5TGaasSmJpsWugdpmtP",
+
   "layers": [
     {
       "id": "background",

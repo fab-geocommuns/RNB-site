@@ -25,12 +25,15 @@ export const useMap = () => {
     ) {
       mapContainerRef.current.style.opacity = '0';
 
+      // We need to clone the default style because we will modify it later
+      const defaultStyle = JSON.parse(JSON.stringify(STYLES['osm']));
+
       const newMap: maplibregl.Map = new maplibregl.Map({
         container: mapContainerRef.current,
         center: [2.852577494863663, 46.820936580547134],
         zoom: 5,
         attributionControl: false,
-        style: STYLES['osm'],
+        style: defaultStyle,
       });
 
       newMap.once('load', () => {

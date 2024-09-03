@@ -13,15 +13,10 @@ import maplibregl, { StyleSpecification } from 'maplibre-gl';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/map/store';
-import { sourceMapsEnabled } from 'process';
-
-const RNB_POINTS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
-const RNB_SHAPES_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/tiles/shapes/{x}/{y}/{z}.pbf';
+import { set } from 'yaml/dist/schema/yaml-1.1/set';
 
 export const STYLES = {
-  cadastre: cadastre as StyleSpecification,
+  //cadastre: cadastre as StyleSpecification,
   osm: osm as StyleSpecification,
   satellite: satellite as StyleSpecification,
   ign: ign as StyleSpecification,
@@ -34,10 +29,26 @@ export const STYLES = {
 export const useMapLayers = (map: maplibregl.Map) => {
   // check if mapBackground change in the store
   const mapBackground = useSelector((state: RootState) => state.mapBackground);
+  const buildingsShape = useSelector(
+    (state: RootState) => state.buildingsShape,
+  );
 
   const reloadBuildings = useSelector(
     (state: RootState) => state.reloadBuildings,
   );
+
+  const setBuildingShape = (map: maplibregl.Map, shape: string) => {
+    console.log('setBuildingShape', shape);
+
+    if (map.getLayer(BUILDINGS_LAYER)) map.removeLayer(BUILDINGS_LAYER);
+    if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
+
+    const { bdgsSource, bdgsLayer } = getBuildingsDisplay(shape);
+
+    map.addSource(BUILDINGS_SOURCE, bdgsSource);
+
+    map.addLayer(bdgsLayer);
+  };
 
   // function to change the background style on map
   const setMapBackground = useCallback(
@@ -51,7 +62,7 @@ export const useMapLayers = (map: maplibregl.Map) => {
       const buildingsLayer = getBuildingsLayer(currentStyle);
 
       // Init a new style with the new background
-      const newStyle = JSON.parse(JSON.stringify(STYLES[styleName]));
+      let newStyle = JSON.parse(JSON.stringify(STYLES[styleName]));
 
       if (buildingsSource && buildingsLayer) {
         newStyle.sources[BUILDINGS_SOURCE] = buildingsSource;
@@ -72,22 +83,19 @@ export const useMapLayers = (map: maplibregl.Map) => {
   };
 
   // Ajout de la couche vectorielle des bâtiments
-  const initBuildingLayer = useCallback((map: maplibregl.Map) => {
-    if (map.getLayer(BUILDINGS_LAYER)) map.removeLayer(BUILDINGS_LAYER);
-    if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
-
-    const { bdgsSource, bdgsLayer } = getBuildingsDisplay();
-
-    map.addSource(BUILDINGS_SOURCE, bdgsSource);
-
-    map.addLayer(bdgsLayer);
-  }, []);
+  const initBuildingLayer = useCallback(
+    (map: maplibregl.Map, shape: string) => {
+      setBuildingShape(map, shape);
+    },
+    [],
+  );
 
   // Initialisation de la couche vectorielle
   useEffect(() => {
     if (map) {
-      if (map.loaded()) initBuildingLayer(map);
-      else map.once('load', () => initBuildingLayer(map));
+      const defaultShape = 'point';
+      if (map.loaded()) initBuildingLayer(map, defaultShape);
+      else map.once('load', () => initBuildingLayer(map, defaultShape));
     }
   }, [initBuildingLayer, map]);
 
@@ -104,4 +112,11 @@ export const useMapLayers = (map: maplibregl.Map) => {
       setMapBackground(map, mapBackground);
     }
   }, [mapBackground]);
+
+  // Change building source
+  useEffect(() => {
+    if (map && mapBackground) {
+      setBuildingShape(map, buildingsShape);
+    }
+  }, [buildingsShape]);
 };

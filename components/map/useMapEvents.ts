@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/map/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
-import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
+import { BUILDINGS_SOURCE } from '@/components/map/mapstyles/buildingsDisplay';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -19,11 +19,14 @@ export const useMapEvents = (map?: maplibregl.Map) => {
     if (map) {
       // Click sur la carte
       map.on('click', async function (e) {
+        console.log('click');
+
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map,
           e.point.x,
           e.point.y,
         );
+        console.log('featureCloseToCursor', featureCloseToCursor);
 
         if (featureCloseToCursor) {
           const rnb_id = featureCloseToCursor.properties.rnb_id;
