@@ -1,0 +1,18 @@
+- id: entrepot
+  titre: Entrepôt
+  description: Un bâti permettant le stockage de matériel ou de ressources.
+  estBatiment: true
+  image: entrepot.jpg
+
+- id: route
+  titre: Route
+  description: Les routes ne sont pas des bâtiments.
+  estBatiment: false
+  image: route.jpg
+
+- id: maisons-jumelees
+  titre: Maisons jumelées
+  description: Les maisons jumelées sont des bâtiments, <a href="#maisons-jumelees">voir les explications.</a>
+  estBatiment: true
+  image: maisons-jumelees.jpg
+  texteDistinction: Les maisons jumelées sont définies comme deux bâtiments lorsqu’on ne peut pas circuler de l’une à l’autre depuis l’intérieur.
