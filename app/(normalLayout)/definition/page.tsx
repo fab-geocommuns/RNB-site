@@ -5,15 +5,15 @@ import styles from '@/styles/definition.module.scss';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { parse } from 'yaml';
-import ListeCas from '@/app/(normalLayout)/definition/ListeCas';
+import BuildingList from '@/app/(normalLayout)/definition/BuildingList';
 import { Accordion } from '@codegouvfr/react-dsfr/Accordion';
 import { fr } from '@codegouvfr/react-dsfr';
-import { Cas } from '@/app/(normalLayout)/definition/ListeCas.type';
+import { BuildingExample } from '@/app/(normalLayout)/definition/BuildingList.type';
 
-async function fetchListeCas() {
+async function fetchBuildingList() {
   const jsonDirectory = path.join(process.cwd(), 'data');
   const fileContents = await fs.readFile(
-    jsonDirectory + '/liste-cas.yaml',
+    jsonDirectory + '/building-list.yaml',
     'utf8',
   );
   const data = parse(fileContents);
@@ -21,7 +21,7 @@ async function fetchListeCas() {
 }
 
 export default async function Page() {
-  const listeCas = (await fetchListeCas()) as Cas[];
+  const buildingList = (await fetchBuildingList()) as BuildingExample[];
   return (
     <>
       <div className="fr-container">
@@ -72,52 +72,50 @@ export default async function Page() {
                 </div>
               </div>
               <div className="fr-col-12 fr-col-md-12">
-                <div className="block">
-                  <h3 className="block__title">
-                    🏠 Evaluez si votre construction est un bâtiment
-                  </h3>
+                <h2 className="block__title">
+                  Evaluez si votre construction est un bâtiment
+                </h2>
 
-                  <p>
-                    <strong>
-                      Vous ne savez pas si votre construction ou structure
-                      correspond à la définition du bâtiment ?{' '}
-                    </strong>{' '}
-                    <br />
-                    Parcourez la liste des cas recensés par le RNB, par mots
-                    clés (ex. extension; terrasse; kiosk…) .
-                  </p>
+                <p>
+                  <strong>
+                    Vous ne savez pas si votre construction ou structure
+                    correspond à la définition du bâtiment ?
+                  </strong>
+                  <br />
+                  Parcourez la liste des cas recensés par le RNB, par mots clés
+                  (ex&nbsp;: extension; terrasse; kiosque …) .
+                </p>
 
-                  <ListeCas listeCas={listeCas} />
-                </div>
+                <BuildingList buildingList={buildingList} />
               </div>
               <div className="fr-col-12 fr-col-md-8">
-                <div className="block">
-                  <h3 className="block__title">
-                    Distinction entre un bâtiment unique et plusieurs bâtiments
-                  </h3>
+                <h2 className="block__title">
+                  Distinction entre un bâtiment unique et plusieurs bâtiments
+                </h2>
 
-                  <p>
-                    <strong>
-                      Vous vous demandez si la construction constitue un ou
-                      plusieurs bâtiments ?
-                    </strong>{' '}
-                    <br />
-                    Parcourez les exemples ci-dessous apportant un éclairage sur
-                    les cas particuliers rencontrés.
-                  </p>
+                <p>
+                  <strong>
+                    Vous vous demandez si la construction constitue un ou
+                    plusieurs bâtiments ?
+                  </strong>{' '}
+                  <br />
+                  Parcourez les exemples ci-dessous apportant un éclairage sur
+                  les cas particuliers rencontrés.
+                </p>
 
-                  <div className={fr.cx('fr-accordions-group')}>
-                    {listeCas
-                      .filter((cas) => !!cas.texteDistinction)
-                      .map((cas) => (
-                        <Accordion
-                          key={cas.id}
-                          label={<span id={cas.id}>{cas.titre}</span>}
-                        >
-                          {cas.texteDistinction!}
-                        </Accordion>
-                      ))}
-                  </div>
+                <div className={fr.cx('fr-accordions-group')}>
+                  {buildingList
+                    .filter(
+                      (cas) => !!cas.distinctionBetweenSingleAndMultipleText,
+                    )
+                    .map((cas) => (
+                      <Accordion
+                        key={cas.id}
+                        label={<span id={cas.id}>{cas.title}</span>}
+                      >
+                        {cas.distinctionBetweenSingleAndMultipleText!}
+                      </Accordion>
+                    ))}
                 </div>
               </div>
               <div className="fr-col-12 fr-col-md-8">

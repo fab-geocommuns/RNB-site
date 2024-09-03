@@ -5,7 +5,7 @@ import { Badge } from '@codegouvfr/react-dsfr/Badge';
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { useMemo, useState } from 'react';
 import styles from '@/styles/definition.module.scss';
-import { Cas } from '@/app/(normalLayout)/definition/ListeCas.type';
+import { BuildingExample } from '@/app/(normalLayout)/definition/BuildingList.type';
 
 const normalize = (str: string) =>
   str
@@ -13,32 +13,32 @@ const normalize = (str: string) =>
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-type ListeCasProps = {
-  listeCas: Cas[];
+type BuildingListProps = {
+  buildingList: BuildingExample[];
 };
 
-export default function ListeCas({ listeCas }: ListeCasProps) {
+export default function BuildingList({ buildingList }: BuildingListProps) {
   const [recherche, setRecherche] = useState('');
 
   const listeCasFiltree = useMemo(
     () =>
-      listeCas.filter((cas) => {
+      buildingList.filter((cas) => {
         if (!recherche.trim()) return true;
 
         const r = normalize(recherche);
         return (
-          normalize(cas.titre).indexOf(r) >= 0 ||
+          normalize(cas.title).indexOf(r) >= 0 ||
           (cas.description && normalize(cas.description).indexOf(r) >= 0)
         );
       }),
-    [listeCas, recherche],
+    [buildingList, recherche],
   );
 
   return (
     <>
       <div className="fr-container--fluid fr-mb-4v">
-        <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
-          <div className="fr-col-12 fr-col-lg-6">
+        <div className="fr-grid-row fr-grid-row--gutters">
+          <div className="fr-col-12 fr-col-lg-4">
             <Input
               nativeInputProps={{
                 placeholder: 'Rechercher une construction',
@@ -59,12 +59,12 @@ export default function ListeCas({ listeCas }: ListeCasProps) {
                 border
                 badge={
                   <span>
-                    <Badge severity={cas.estBatiment ? 'success' : 'error'}>
-                      {cas.estBatiment
+                    <Badge severity={cas.isBuilding ? 'success' : 'error'}>
+                      {cas.isBuilding
                         ? 'Est un bâtiment'
                         : "N'est pas un bâtiment"}
                     </Badge>
-                    {cas.texteDistinction && (
+                    {cas.distinctionBetweenSingleAndMultipleText && (
                       <Badge
                         className={styles.badgeWithoutContent}
                         severity="warning"
@@ -82,10 +82,10 @@ export default function ListeCas({ listeCas }: ListeCasProps) {
                   )
                 }
                 horizontal={false}
-                imageAlt={cas.titre}
+                imageAlt={cas.title}
                 imageUrl={`/images/definition/${cas.image}`}
                 size="small"
-                title={cas.titre}
+                title={cas.title}
                 titleAs="h3"
               />
             </div>
