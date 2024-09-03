@@ -24,12 +24,12 @@ export default function SummerGame() {
               </h2>
 
               <p className={`section__subtitle ${styles.instruction}`}>
-                Le jeu de l'été du RNB est désormais terminé. <br />
+                Le jeu de l&apos;été du RNB est désormais terminé. <br />
                 Félicitations aux lauréates et lauréats classés en haut du
-                podium des "Grands Contributeurs du RNB" et un grand merci à
-                vous tous pour votre large participation&nbsp;! <br />
-                Vos signalements permettent au RNB de s'améliorer et profitent à
-                tous les utilisateurs de ce géocommun&nbsp;:
+                podium des &quot;Grands Contributeurs du RNB&quot; et un grand
+                merci à vous tous pour votre large participation&nbsp;! <br />
+                Vos signalements permettent au RNB de s&apos;améliorer et
+                profitent à tous les utilisateurs de ce géocommun&nbsp;:
               </p>
 
               <p className={`section__subtitle ${styles.instruction}`}>
