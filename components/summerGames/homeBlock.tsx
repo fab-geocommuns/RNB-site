@@ -33,7 +33,7 @@ export default function SummerGame() {
               </p>
 
               <p className={`section__subtitle ${styles.instruction}`}>
-                Nombre total de signalement reçus:{' '}
+                Nombre total de signalements reçus:{' '}
                 <strong className={styles.titleResult}>
                   {summerGamesData.shared.absolute}
                 </strong>
