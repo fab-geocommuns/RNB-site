@@ -1,0 +1,61 @@
+name: Playwright E2E Tests
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+    - name: Récupération du code
+      uses: actions/checkout@v4
+
+    - name: Installation de Node.JS 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+
+    - name: Installation des dépendances NPM
+      run: npm ci
+
+    - name: Installation des navigateurs Playwright
+      run: npx playwright install --with-deps
+
+    - name: Obtenir l'URL de preview Vercel
+      uses: zentered/vercel-preview-url@v1.1.9
+      id: vercel_preview_url
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      with:
+        vercel_team_id: 'team_XNy8GPxmIHotpZqqeAyKBm79'
+        vercel_project_id: 'prj_AGcOI1rKi80YLDCPDpwEnNHyJ1wc'
+
+    - name: Attente du déploiement de la preview
+      uses: UnlyEd/github-action-await-vercel@v1
+      id: await-vercel
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      with:
+        deployment-url: ${{ steps.vercel_preview_url.outputs.preview_url }}
+        timeout: 180
+        poll-interval: 1
+
+    - name: Execution des tests Playwright
+      run: npx playwright test
+      env:
+        BASE_URL: https://${{ steps.vercel_preview_url.outputs.preview_url }}
+
+    - name: Ajout du commentaire dans la PR
+      uses: daun/playwright-report-summary@v3
+      if: always()
+      with:
+        report-file: test-results.json
+        comment-title: 'Résultats des tests E2E Playwright'
+
+    - name: Mise à disposition des résultats
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: Résultats
+        path: playwright-report/
+        retention-days: 7
