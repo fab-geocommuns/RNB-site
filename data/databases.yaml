@@ -22,15 +22,15 @@
   featured_summary: La BD Topo est une base de données géographique de précision métrique, exploitable à des échelles allant du 1:2000 au 1:50000.
 - key: dataes
   name: DataES
-  url: https://geoservices.ign.fr/bdtopo
+  url: https://equipements.sports.gouv.fr/pages/accueil/
   published_by: Ministère des sports
   licence: Données ouvertes
   tags: [Sport, Équipements sportifs]
   description: >
     La base de données des équipements sportifs et des lieux de pratiques du Ministère des Sports et des Jeux Olympiques et Paralympique. Celle-ci est mise à jour grâce aux équipes d'enquêteurs et des déclarations des propriétaires en vue de Paris 2024.
-  image: stadium.png
+  image: ministere_sjop.png
   featured: true
-  featured_summary: La base de données de référence des équipement sportifs et des lieux de pratique sportive. 
+  featured_summary: La base de données de référence des équipement sportifs et des lieux de pratique sportive.
 - key: enseignementsup
   name: Patrimoine immobilier des opérateurs de l’Enseignement supérieur
   url: https://www.data.gouv.fr/fr/datasets/patrimoine-immobilier-des-operateurs-de-lenseignement-superieur/
@@ -39,7 +39,7 @@
   tags: [Enseignement supérieur, Patrimoine immobilier]
   description: >
     Cette base contient les liste des bâtiments gérés par le ministère de l’Enseignement supérieur et de la Recherche. Les informations sont renseignées par les établissements d’enseignement supérieur et couvrent tous les aspects relatifs aux bâtiments (identification, localisation, propriété, accessibilité, énergie, etc.).
-  image: university.png
+  image: ministere_ens_sup.svg
   featured: false
 - key: histologe
   name: Histologe
@@ -48,5 +48,5 @@
   licence: Réservée aux ayants droits
   tags: [Logement, Insalubrité, Rénovation, Mal logement]
   description: >
-    Histologe est un service public permettant de faciliter la détection, le signalement, l’évaluation, l’envoi d’alertes et le suivi des logements pour accélérer la prise en charge du “mal logement”. 
+    Histologe est un service public permettant de faciliter la détection, le signalement, l’évaluation, l’envoi d’alertes et le suivi des logements pour accélérer la prise en charge du “mal logement”.
   image: histologe.png
