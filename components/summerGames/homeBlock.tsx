@@ -27,9 +27,16 @@ export default function SummerGame() {
                 Le jeu de l'été du RNB est désormais terminé. <br />
                 Félicitations aux lauréates et lauréats classés en haut du
                 podium des "Grands Contributeurs du RNB" et un grand merci à
-                vous tous pour votre large participation! Vos signalements
-                permettent au RNB de s'améliorer et profitent à tous les
-                utilisateurs de ce géocommun:
+                vous tous pour votre large participation&nbsp;! <br />
+                Vos signalements permettent au RNB de s'améliorer et profitent à
+                tous les utilisateurs de ce géocommun&nbsp;:
+              </p>
+
+              <p className={`section__subtitle ${styles.instruction}`}>
+                Nombre total de signalement reçus:{' '}
+                <strong className={styles.titleResult}>
+                  {summerGamesData.shared.absolute}
+                </strong>
               </p>
             </div>
 
