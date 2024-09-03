@@ -19,43 +19,21 @@ export default function SummerGame() {
         <div className={`section section_big ${styles.seriousShell}`}>
           <div className={styles.shell}>
             <div className={`section__titleblock ${styles.titleShell}`}>
-              <h2 className="section__title">Le jeu d&apos;été du RNB</h2>
+              <h2 className="section__title">
+                Résultats du jeu concours de l’été 🏆
+              </h2>
 
               <p className={`section__subtitle ${styles.instruction}`}>
-                Cet été, participez à une expérience collaborative sur le
-                géocommun RNB ! <br />
-                Améliorez la qualité de la donnée en atteignant l’objectif
-                collectif de signalements. <br />
-                Et faites gagner votre département, votre ville, ou montez sur
-                le podium à la rentrée !
+                Le jeu de l'été du RNB est désormais terminé. <br />
+                Félicitations aux lauréates et lauréats classés en haut du
+                podium des "Grands Contributeurs du RNB" et un grand merci à
+                vous tous pour votre large participation! Vos signalements
+                permettent au RNB de s'améliorer et profitent à tous les
+                utilisateurs de ce géocommun:
               </p>
             </div>
 
             <div className={styles.progressShell}>
-              <div className={styles.barShell}>
-                <div className={styles.legend}>
-                  <span className={styles.legend_subtitle}>
-                    Objectif collectif
-                  </span>
-                  <br />
-                  {summerGamesData.shared.goal} signalements
-                </div>
-
-                <div className={styles.bar}>
-                  <div
-                    className={styles.progress}
-                    style={{
-                      width:
-                        Math.min(100, summerGamesData.shared.percent) + '%',
-                    }}
-                  >
-                    <span className={styles.progressTotal}>
-                      {summerGamesData.shared.absolute}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
               <div className={styles.ranks}>
                 <div className={styles.ranksTable}>
                   <RankTable
@@ -85,15 +63,6 @@ export default function SummerGame() {
               <div className={styles.ranksExplain}>
                 * Classement par nombre de signalements effectués dans un
                 département donné, une ville donnée ou par participant
-              </div>
-
-              <div className={styles.buttonsShell}>
-                <a
-                  href="/carte"
-                  className={styles.btn + ' ' + styles.btn_primary}
-                >
-                  Participer au jeu
-                </a>
               </div>
             </div>
           </div>

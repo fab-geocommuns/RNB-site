@@ -162,15 +162,6 @@ export default function AddressSearchMap() {
       <div
         className={`${styles.map__InputShell} ${unknown_rnb_id ? styles['shake'] : ''}`}
       >
-        <div className={styles.summerGamesShell}>
-          <a
-            href="https://rnb.beta.gouv.fr/blog/jeu-concours-de-lete"
-            target="_blank"
-          >
-            ☀️ Jeu de l’été du RNB : objectif 10000 signalements
-          </a>
-        </div>
-
         <input
           className={
             'fr-input ' + (unknown_rnb_id ? styles['fr-input--error'] : '')
