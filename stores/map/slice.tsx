@@ -25,7 +25,8 @@ export type MapStore = {
     ext_ids: any[];
     is_active: boolean;
   };
-  mapBackground?: string;
+  mapBackground: string;
+  buildingsShape: string;
 };
 
 const initialState: MapStore = {
@@ -35,6 +36,7 @@ const initialState: MapStore = {
     unknown_rnb_id: false,
   },
   mapBackground: 'osm',
+  buildingsShape: 'point',
 };
 
 export const mapSlice = createSlice({
@@ -57,6 +59,9 @@ export const mapSlice = createSlice({
     },
     setMapBackground(state, action) {
       state.mapBackground = action.payload;
+    },
+    setBuildingsShape(state, action) {
+      state.buildingsShape = action.payload;
     },
     setMoveTo(state, action) {
       state.moveTo = action.payload;
