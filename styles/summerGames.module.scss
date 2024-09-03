@@ -48,8 +48,6 @@ border-radius: 9px;
 
 //background-color: $shell-color;
     padding-top:85px;
-    padding-bottom:85px;
-
 }
 
 .titleShell {
@@ -62,9 +60,9 @@ border-radius: 9px;
         margin-bottom: 3rem;
         color:$title-color;     
         font-weight: bold;
-        
 
-     
+
+
     }
 
     .instruction {
@@ -76,6 +74,11 @@ border-radius: 9px;
         line-height: 1.3em;
     }
     
+}
+
+.titleResult {
+    font-family: RocherColor;
+    font-size: 2rem;
 }
 
 .barShell {

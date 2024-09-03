@@ -65,17 +65,13 @@ export default function ContributionForm() {
         // Temporary block for the summer games
         const data = await res.json();
         if (Object.hasOwn(data, 'contributor_rank')) {
-          let rankExtension = 'er';
-          if (data.contributor_rank > 1) {
-            rankExtension = 'ème';
-          }
           let pluralS = '';
           if (data.contributor_count > 1) {
             pluralS = 's';
           }
 
           setSummerGamesMessage(
-            `☀️ <b>Vous avez envoyé ${data.contributor_count} signalement${pluralS}</b>.<br />Vous êtes ${data.contributor_rank}${rankExtension} au classement individuel du jeu d'été.`,
+            `<b>Vous avez envoyé ${data.contributor_count} signalement${pluralS}</b>.`,
           );
         } else {
           setSummerGamesMessage(undefined);
