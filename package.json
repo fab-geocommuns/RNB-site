@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "e2e": "npx playwright test",
+    "e2e-ui": "npx playwright test --ui",
     "predev": "react-dsfr update-icons",
     "prebuild": "react-dsfr update-icons",
     "prepare": "husky"
@@ -36,6 +38,7 @@
     "yaml": "^2.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.46.0",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.8",
     "prettier": "^3.3.3",
