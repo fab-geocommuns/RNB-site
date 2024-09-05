@@ -1,14 +1,140 @@
-- id: entrepot
-  title: Entrepôt
-  description: Un bâti permettant le stockage de matériel ou de ressources.
-  isBuilding: true
-  image: entrepot.jpg
+- id: piscine
+  title: Piscine
+  description: Piscine, y compris les piscines couvertes
+  isBuilding: false
+  image: piscine.png
+
+- id: barriere
+  title: Barrières, clôtures
+  isBuilding: false
+  image: barriere.png
+
+- id: toit
+  title: Simple toit ouvert
+  isBuilding: false
+  image: toit-couvert.png
+
+- id: kiosque
+  title: Kiosque, Arche, Monuments
+  isBuilding: false
+  image: kiosque.png
+
+- id: ruine
+  title: Ruine
+  isBuilding: false
+  image: ruine.png
+
+- id: cabine-plage
+  title: Cabine de plage de petite dimension
+  isBuilding: false
+  image: cabine-plage.png
+
+- id: abri-jardin
+  title: Abri de jardin de petite dimension
+  isBuilding: false
+  image: abri-jardin.png
+
+- id: abri-animalier
+  title: Abri animalier
+  isBuilding: false
+  image: abri-animalier.png
+
+- id: conteneur-chantier
+  title: Conteneur de chantier
+  isBuilding: false
+  image: conteneur-chantier.png
+
+- id: tente
+  title: Tente
+  isBuilding: false
+  image: tente.png
+
+- id: arret-transport
+  title: Arrêt de transport public
+  isBuilding: false
+  image: arret-transport.png
+
+- id: local-abri
+  title: Local/abri d’attente
+  isBuilding: false
+  image: local-abri.png
+
+- id: abri-deux-roues
+  title: Abri pour deux roues
+  isBuilding: false
+  image: abri-deux-roues.png
+
+- id: petit-boitier-electrique
+  title: Petits boîtiers de distribution électrique
+  isBuilding: false
+  image: petit-boitier-electrique.png
+
+- id: parc-photovoltaique
+  title: Parcs photovoltaïques
+  isBuilding: false
+  image: parc-photovoltaique.png
+
+- id: pont
+  title: Ponts
+  description: Les ponts en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment.
+  isBuilding: false
+  image: pont.png
 
 - id: route
-  title: Route
-  description: Les routes ne sont pas des bâtiments.
+  title: Routes
+  description: Les routes en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment.
   isBuilding: false
-  image: route.jpg
+  image: route.png
+
+- id: barrage
+  title: Barrages
+  description: Les barrages en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment. Il est effectivement possible que des bâtiments soient rattachés à un ouvrage d’art (par ex les bâtiments des locaux d’un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
+  isBuilding: false
+  image: barrage.png
+
+- id: tunnel
+  title: Tunnels, galeries
+  description: Les tunnels en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment.
+  isBuilding: false
+  image: tunnel.png
+
+- id: construction-provisoire
+  title: Construction provisoire
+  image: construction-provisoire.png
+  distinctionBetweenSingleAndMultipleText: Au vu des critères donnés par la définition, le caractère permanent pourra être évalué par chaque contributeur. Par exemple, une construction provisoire érigée pour une durée excédant une durée réglementaire (qui peut varier selon les cas) et qui est solidement fixés au sol, est considérée comme un bâtiment.
+
+- id: yourte
+  title: Yourte
+  isBuilding: false
+  image: yourte.png
+
+- id: mobil-home
+  title: Mobilhome
+  isBuilding: false
+  image: mobil-home.png
+
+- id: maison-individuelle
+  title: Maison individuelle
+  isBuilding: yes
+  image: maison-individuelle.png
+
+- id: phare
+  title: Phares
+  isBuilding: true
+  image: phare.png
+
+- id: maison-troglodytique
+  title: Maisons troglodytiques
+  isBuilding: true
+  image: maison-troglodytique.png
+
+- id: cabane-arbre
+  title: Les cabanes dans les arbres habitées
+  isBuilding: true
+  image: cabane_arbre.png
+
+
+
 
 - id: maisons-jumelees
   title: Maisons jumelées
