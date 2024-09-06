@@ -100,7 +100,7 @@
 
 - id: construction-provisoire
   title: Construction provisoire
-  image: construction-provisoire.png
+  image: construction-provisoire.jpeg
   distinctionBetweenSingleAndMultipleText: Au vu des critères donnés par la définition, le caractère permanent pourra être évalué par chaque contributeur. Par exemple, une construction provisoire érigée pour une durée excédant une durée réglementaire (qui peut varier selon les cas) et qui est solidement fixés au sol, est considérée comme un bâtiment.
 
 - id: yourte
@@ -131,14 +131,159 @@
 - id: cabane-arbre
   title: Les cabanes dans les arbres habitées
   isBuilding: true
-  image: cabane_arbre.png
+  image: cabane-arbre.jpeg
 
+- id: batiment-industriel
+  title: Bâtiment administratif, commercial, entrepôt, industriel
+  isBuilding: true
+  image: batiment-industriel.jpeg
 
+- id: commerce
+  title: Les bâtiments industriels accueillant du public (ex. centre commercial, commerces, supermarchés)
+  isBuilding: true
+  image: commerce.png
 
+- id: industriel-stockage
+  title: Les bâtiments industriels de stockage (entrepôt, hangar, parking couvert)
+  isBuilding: true
+  image: industriel-stockage.png
+
+- id: bureaux
+  title: Les bâtiments de bureaux
+  isBuilding: true
+  image: bureaux.png
+
+- id: recreatif-culturel
+  title: Les bâtiments à usage récréatif ou culturel
+  isBuilding: true
+  image: recreatif-culturel.png
+
+- id: musee-bibliotheque
+  title: Les musées ou bibliothèques
+  isBuilding: true
+  image: image40.png
+
+- id: ecole-universite-recherche
+  title: Les écoles, universités ou bâtiments dédiés à la recherche
+  isBuilding: true
+  image: ecole-universite-recherche.png
+
+- id: hopital-etablissement-sante
+  title: Les hôpitaux et établissements de santé
+  isBuilding: true
+  image: hopital-etablissement-sante.png
+
+- id: salle-sport-complexe
+  title: Les salles de sport, gymnases et complexes sportifs
+  isBuilding: true
+  image: image30.png
+
+- id: edifice-culturel-religieux
+  title: Les édifices culturels et religieux (ex. église, cathédrale, synagogue, mosquée, chapelle)
+  isBuilding: true
+  image: edifice-culturel-religieux.png
+
+- id: batiment-camping
+  title: Les bâtiments d’exploitation des terrains de camping
+  isBuilding: true
+  image: batiment-camping.png
+
+- id: batiment-agricole
+  title: Les bâtiments d’exploitation agricole (ex. étable, serre (si objectif d'être permanente), grange, écurie, ferme).
+  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: batiment-agricole.png
+
+- id: grande-eolienne
+  title: Les grandes éoliennes.
+  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: eolienne.png
+
+- id: reservoir-silo-agricole
+  title: Les réservoirs & silos agricoles
+  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: reservoir.png
+
+- id: poste-transformation-electrique
+  title: Les postes de transformation électrique suffisamment grands
+  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: Transformateur_électrique_Guillerval.png
+
+- id: annexe-contigue
+  title: Annexe contiguë d’un bâtiment
+  description: <a href="#annexe-contigue">voir les explications.</a>
+  isBuilding: fasle
+  image: annexe-contigue.jpeg
+  distinctionBetweenSingleAndMultipleText: Une annexe contiguë et son bâtiment principal sont un seul et même bâtiment si l’on peut circuler de l’un à l’autre et n’existe pas de délimitation non franchissable.
+
+- id: extension-sans-entree
+  title: Une extension sans accès depuis l'extérieur. 
+  description: <a href="#extension-sans-entree">voir les explications.</a>
+  isBuilding: fasle
+  image: extension-sans-entree.png
+  distinctionBetweenSingleAndMultipleText: Si la partie A ne possède pas d’accès depuis l'extérieur et est accessible depuis la partie B, cet ensemble forme bien un unique bâtiment. Par exemple, une extension ou aménagement d’un bâtiment existant (ex. véranda), qui n’implique pas la création d’un nouveau bâtiment.
+
+- id: immeuble-logements
+  title: Immeuble ayant plusieurs logements (et parfois plusieurs entrées )
+  description: <a href="#Immeuble ayant plusieurs logements">voir les explications.</a>
+  isBuilding: true
+  image: immeuble-logements.jpeg
+  distinctionBetweenSingleAndMultipleText: Il est à considérer comme un seul bâtiment s'il ne possède qu'une entrée ou si les espaces communs permettent de passer d’une entrée à l’autre (il n’existe ainsi donc pas de séparation non franchissable de l’un à l’autre, c’est bien un unique bâtiment).
+
+- id: tiny-house
+  title: Tiny house
+  description: Les constructions dites légères, sans fondations, mais avec objectif de permanence, sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: Transformateur_électrique_Guillerval.png
+
+- id: cabine-bois
+  title: Cabine bois
+  description: Les constructions dites légères, sans fondations, mais avec objectif de permanence, sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: cabine-bois.png
+
+- id: kiosque-journaux
+  title: Kiosque journaux
+  description: Les constructions dites légères, sans fondations, mais avec objectif de permanence, sont des bâtiments au sens du RNB.
+  isBuilding: true
+  image: kiosque-journaux.png
 
 - id: maisons-jumelees
-  title: Maisons jumelées
+  title: Maisons jumelées ou mitoyenne
   description: Les maisons jumelées sont des bâtiments, <a href="#maisons-jumelees">voir les explications.</a>
   isBuilding: true
   image: maisons-jumelees.jpg
   distinctionBetweenSingleAndMultipleText: Les maisons jumelées sont définies comme deux bâtiments lorsqu’on ne peut pas circuler de l’une à l’autre depuis l’intérieur.
+
+- id: maisons-en-rangee
+  title: Maisons en rangée
+  description: Chaque maison de la rangée est un bâtiment, <a href="#maisons-en-rangee">voir les explications.</a>
+  isBuilding: true
+  image: maisons-en-rangee.jpeg
+  distinctionBetweenSingleAndMultipleText: Les maisons en rangée sont bien à saisir séparément tant qu’on ne peut circuler de l’une à l’autre.
+
+- id: annexe-autonome
+  title: Annexe contigu/autonome
+  description: Les annexes autonomes sont des bâtiments, <a href="#annexe-autonome">voir les explications.</a>
+  isBuilding: true
+  image: annexe-autonome.jpeg
+  distinctionBetweenSingleAndMultipleText: Une annexe est saisie comme un bâtiment autonome s’il possède son propre accès depuis l’extérieur et qu’on ne peut pas circuler entre les deux bâtiments depuis l’intérieur.
+
+- id: batiment-relie-sous-terrain
+  title: Bâtiments reliés par une construction souterraine
+  description: <a href="#batiment-relie-sous-terrain">voir les explications.</a>
+  isBuilding: true
+  image: batiment-relie-sous-terrain.jpeg
+  distinctionBetweenSingleAndMultipleText: Dans le cas de bâtiments reliés par une construction souterraine (par exemple un garage ou une cave communes), concernant les bâtiments extérieurs, il y a autant de bâtiments à considérer que s’il n’y avait pas eu de garage souterrain. (Dans le cas de l’exemple ci dessus, nous avons 3 maisons individuelles reliées par un garage souterrain, et donc 3 bâtiments distincts). Idem, dans le cas d’une barre d’immeuble avec plusieurs cages d’escalier non communicantes en dehors des cages et garages souterrains, on a bien autant de bâtiments que de cages d’escaliers (accès distinct depuis l’extérieur). Cet aspect est notamment primordial pour les interventions des services d’urgences qui doivent pouvoir identifier rapidement le point d’accès à un lieu d’intervention dans l’immeuble.
+
+- id: passerelle
+  title: Bâtiments reliés par une passerelle
+  description: <a href="#passerelle">voir les explications.</a> © Le bon marché, LVMH.
+  isBuilding: true
+  image: passerelle-stephane-muratet-cc-lebonmarche.png
+  distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, a priori, on décompte bien deux bâtiments distincts. Il suffit alors de rattacher la passerelle à un des deux bâtiments.
+
+
