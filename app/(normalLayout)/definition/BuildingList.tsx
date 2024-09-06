@@ -55,6 +55,7 @@ export default function BuildingList({ buildingList }: BuildingListProps) {
           {listeCasFiltree.map((cas) => (
             <div className="fr-col-12 fr-col-lg-3" key={cas.id}>
               <Card
+                className="definition-card"
                 background
                 border
                 badge={
