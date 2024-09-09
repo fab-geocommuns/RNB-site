@@ -21,7 +21,18 @@ export type MapStore = {
     rnb_id: string;
     status: any[];
     point: [number, number];
-    addresses: any[];
+    addresses: {
+      id: string;
+      banId: string;
+      source: string;
+      street_number: string;
+      street_rep: string;
+      street_name: string;
+      street_type: string;
+      city_name: string;
+      city_zipcode: string;
+      city_insee_code: string;
+    }[];
     ext_ids: any[];
     is_active: boolean;
   };
@@ -81,9 +92,23 @@ export const selectBuilding = createAsyncThunk(
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
     const url = bdgApiUrl(rnbId + '?from=site');
-    const response = await fetch(url);
-    if (response.ok) {
-      return (await response.json()) as MapStore['selectedBuilding'];
+    const responseRnb = await fetch(url);
+    if (responseRnb.ok) {
+      const rnbData =
+        (await responseRnb.json()) as MapStore['selectedBuilding'];
+
+      // Add banId to each address
+      if (rnbData?.addresses) {
+        for (const address of rnbData?.addresses) {
+          const responseBan = await fetch(banApiUrl(address.id));
+          if (responseBan.ok) {
+            const banData = await responseBan.json();
+            address.banId = banData.banId;
+          }
+        }
+      }
+
+      return rnbData;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }
@@ -92,6 +117,10 @@ export const selectBuilding = createAsyncThunk(
 
 export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
+}
+
+export function banApiUrl(interopBanId: string) {
+  return process.env.NEXT_PUBLIC_API_BAN_URL + '/lookup/' + interopBanId;
 }
 
 export const mapActions = {
