@@ -53,7 +53,11 @@ export default function BuildingList({ buildingList }: BuildingListProps) {
       <div className="fr-container--fluid">
         <div className="fr-grid-row fr-grid-row--gutters">
           {listeCasFiltree.map((cas) => (
-            <div className="fr-col-12 fr-col-lg-3" key={cas.id}>
+            <div
+              className="fr-col-12 fr-col-lg-3"
+              key={cas.id}
+              data-testid="building"
+            >
               <Card
                 className="definition-card"
                 background
