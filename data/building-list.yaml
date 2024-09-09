@@ -161,7 +161,7 @@
 - id: musee-bibliotheque
   title: Les musées ou bibliothèques
   isBuilding: true
-  image: image40.png
+  image: musee-bibliotheque.png
 
 - id: ecole-universite-recherche
   title: Les écoles, universités ou bâtiments dédiés à la recherche
@@ -176,7 +176,7 @@
 - id: salle-sport-complexe
   title: Les salles de sport, gymnases et complexes sportifs
   isBuilding: true
-  image: image30.png
+  image: salle-sport-complexe.png
 
 - id: edifice-culturel-religieux
   title: Les édifices culturels et religieux (ex. église, cathédrale, synagogue, mosquée, chapelle)
@@ -223,7 +223,7 @@
   title: Une extension sans accès depuis l'extérieur. 
   description: <a href="#extension-sans-entree">voir les explications.</a>
   isBuilding: fasle
-  image: extension-sans-entree.png
+  image: extension-sans-entree.jpeg
   distinctionBetweenSingleAndMultipleText: Si la partie A ne possède pas d’accès depuis l'extérieur et est accessible depuis la partie B, cet ensemble forme bien un unique bâtiment. Par exemple, une extension ou aménagement d’un bâtiment existant (ex. véranda), qui n’implique pas la création d’un nouveau bâtiment.
 
 - id: immeuble-logements
