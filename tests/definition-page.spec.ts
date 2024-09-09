@@ -12,7 +12,20 @@ test.describe('Définition & Standard', () => {
   test("ne doit pas avoir de lien d'image cassé", async ({
     definitionPage,
   }) => {
-    await definitionPage.page.waitForTimeout(2000);
+    // Waiting for images to load
+    await definitionPage.page.evaluate(() => {
+      return Promise.all(
+        Array.from(document.images).map((img) => {
+          if (img.complete) return Promise.resolve();
+
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        }),
+      );
+    });
+
     const brokenImages = await definitionPage.page.evaluate(() => {
       const allImages = document.getElementsByTagName('img');
       return Array.from(allImages)
