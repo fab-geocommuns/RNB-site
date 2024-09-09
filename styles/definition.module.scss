@@ -18,6 +18,11 @@
     
     
 }
+
 .bdgDefinitionContext {
     opacity: .85;
+}
+
+.badgeWithoutContent::before {
+    margin-right: -2px;
 }

@@ -150,3 +150,9 @@ li code {
 .stab--yellow {
     background-color: #fceeac;
 }
+
+.definition-card {
+    .fr-card__end, .fr-card__start {
+        display: none;
+    }
+}
