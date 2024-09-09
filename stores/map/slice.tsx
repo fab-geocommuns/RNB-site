@@ -92,17 +92,17 @@ export const selectBuilding = createAsyncThunk(
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
     const url = bdgApiUrl(rnbId + '?from=site');
-    const responseRnb = await fetch(url);
-    if (responseRnb.ok) {
+    const rnbResponse = await fetch(url);
+    if (rnbResponse.ok) {
       const rnbData =
-        (await responseRnb.json()) as MapStore['selectedBuilding'];
+        (await rnbResponse.json()) as MapStore['selectedBuilding'];
 
-      // Add banId to each address
+      // Add banId to each addresses
       if (rnbData?.addresses) {
         for (const address of rnbData?.addresses) {
-          const responseBan = await fetch(banApiUrl(address.id));
-          if (responseBan.ok) {
-            const banData = await responseBan.json();
+          const banResponse = await fetch(banApiUrl(address.id));
+          if (banResponse.ok) {
+            const banData = await banResponse.json();
             address.banId = banData.banId;
           }
         }
