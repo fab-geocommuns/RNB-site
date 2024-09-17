@@ -179,7 +179,7 @@
   image: salle-sport-complexe.png
 
 - id: edifice-culturel-religieux
-  title: Edifices culturel et religieux (ex. église, cathédrale, synagogue, mosquée, chapelle)
+  title: Edifice culturel et religieux (ex. église, cathédrale, synagogue, mosquée, chapelle)
   isBuilding: true
   image: edifice-culturel-religieux.png
 
