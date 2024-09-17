@@ -70,6 +70,11 @@ export const mapSlice = createSlice({
     reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
+    updateAddresses(state, action) {
+      if (state.selectedBuilding) {
+        state.selectedBuilding.addresses = action.payload;
+      }
+    },
   },
 
   extraReducers(builder) {
@@ -98,20 +103,35 @@ export const selectBuilding = createAsyncThunk(
         (await rnbResponse.json()) as MapStore['selectedBuilding'];
 
       // Add banId to each addresses
-      if (rnbData?.addresses) {
-        for (const address of rnbData?.addresses) {
-          const banResponse = await fetch(banApiUrl(address.id));
-          if (banResponse.ok) {
-            const banData = await banResponse.json();
-            address.banId = banData.banId;
-          }
-        }
+      if (rnbData?.addresses && rnbData.addresses.length > 0) {
+        dispatch(addBanUUID(rnbData));
       }
 
       return rnbData;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }
+  },
+);
+
+export const addBanUUID = createAsyncThunk(
+  'map/addBanUUID',
+  async (rnbData: NonNullable<MapStore['selectedBuilding']>, { dispatch }) => {
+    const updatedAddresses = await Promise.all(
+      rnbData.addresses?.map(async (address) => {
+        const banResponse = await fetch(banApiUrl(address.id));
+        if (banResponse.ok) {
+          const banData = await banResponse.json();
+          return {
+            ...address,
+            banId: banData.banId,
+          };
+        }
+        return address;
+      }),
+    );
+
+    dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
   },
 );
 
