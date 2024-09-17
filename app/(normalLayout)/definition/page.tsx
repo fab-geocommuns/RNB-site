@@ -167,6 +167,51 @@ export default async function Page() {
                   </ul>
                 </div>
               </div>
+              <div className="fr-col-12 fr-col-md-8">
+                <div className="block block--yellow block--fill">
+                  <h3 className="block__title">
+                    Réalisez un signalement sur un bâtiment
+                  </h3>
+
+                  <p>
+                    <strong>
+                      Vous constatez une erreur (bâtiment absent ou mal placé,
+                      erreur d&apos;adresse, etc) ?
+                    </strong>
+                  </p>
+
+                  <span>
+                    Envoyez votre signalement directement sur la{' '}
+                    <a href="https://rnb.beta.gouv.fr/carte">cartographie</a> du
+                    RNB. Pour ce faire :
+                  </span>
+                  <ol>
+                    <li>
+                      Saisissez l’adresse du bâtiment pour lequel vous souhaitez
+                      faire un signalement ou utilisez la géolocalisation, sur
+                      l&apos;outil
+                      [cartographie](https://rnb.beta.gouv.fr/carte) du RNB.
+                    </li>
+                    <li>
+                      Sélectionnez le bâtiment concerné (un des points bleus)
+                    </li>
+                    <li>
+                      Scrollez le panneau d&apos;information du bâtiment qui
+                      s&apos;ouvre à gauche de l&apos;écran jusqu&apos;au champ
+                      “Améliorez le RNB”.
+                    </li>
+                    <li>
+                      et Indiquez votre signalement dans le champ “Améliorez le
+                      RNB”, avant de l&apos;envoyer
+                    </li>
+                  </ol>
+                  <p>
+                    À noter : Une erreur - un signalement : Vous pouvez faire
+                    autant de signalements que vous voyez d&apos;erreur sur un
+                    bâtiment
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
