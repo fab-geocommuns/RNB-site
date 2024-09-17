@@ -237,7 +237,7 @@
   title: Tiny house
   description: Les constructions dites légères, sans fondations, mais avec objectif de permanence, sont des bâtiments au sens du RNB.
   isBuilding: true
-  image: Transformateur_électrique_Guillerval.png
+  image: tiny-house.png
 
 - id: cabine-bois
   title: Cabine bois
