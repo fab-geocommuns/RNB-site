@@ -21,7 +21,18 @@ export type MapStore = {
     rnb_id: string;
     status: any[];
     point: [number, number];
-    addresses: any[];
+    addresses: {
+      id: string;
+      banId: string;
+      source: string;
+      street_number: string;
+      street_rep: string;
+      street_name: string;
+      street_type: string;
+      city_name: string;
+      city_zipcode: string;
+      city_insee_code: string;
+    }[];
     ext_ids: any[];
     is_active: boolean;
   };
@@ -59,6 +70,11 @@ export const mapSlice = createSlice({
     reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
+    updateAddresses(state, action) {
+      if (state.selectedBuilding) {
+        state.selectedBuilding.addresses = action.payload;
+      }
+    },
   },
 
   extraReducers(builder) {
@@ -81,17 +97,50 @@ export const selectBuilding = createAsyncThunk(
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
     const url = bdgApiUrl(rnbId + '?from=site');
-    const response = await fetch(url);
-    if (response.ok) {
-      return (await response.json()) as MapStore['selectedBuilding'];
+    const rnbResponse = await fetch(url);
+    if (rnbResponse.ok) {
+      const rnbData =
+        (await rnbResponse.json()) as MapStore['selectedBuilding'];
+
+      // Add banId to each addresses
+      if (rnbData?.addresses && rnbData.addresses.length > 0) {
+        dispatch(addBanUUID(rnbData));
+      }
+
+      return rnbData;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }
   },
 );
 
+export const addBanUUID = createAsyncThunk(
+  'map/addBanUUID',
+  async (rnbData: NonNullable<MapStore['selectedBuilding']>, { dispatch }) => {
+    const updatedAddresses = await Promise.all(
+      rnbData.addresses?.map(async (address) => {
+        const banResponse = await fetch(banApiUrl(address.id));
+        if (banResponse.ok) {
+          const banData = await banResponse.json();
+          return {
+            ...address,
+            banId: banData.banId,
+          };
+        }
+        return address;
+      }),
+    );
+
+    dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
+  },
+);
+
 export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
+}
+
+export function banApiUrl(interopBanId: string) {
+  return process.env.NEXT_PUBLIC_API_BAN_URL + '/lookup/' + interopBanId;
 }
 
 export const mapActions = {
