@@ -5,7 +5,7 @@
   image: piscine.png
 
 - id: barriere
-  title: Barrières, clôtures
+  title: Barrière, clôture
   isBuilding: false
   image: barriere.png
 
@@ -15,7 +15,7 @@
   image: toit-couvert.png
 
 - id: kiosque
-  title: Kiosque, Arche, Monuments
+  title: Kiosque, Arche, Monument
   isBuilding: false
   image: kiosque.png
 
@@ -65,36 +65,36 @@
   image: abri-deux-roues.png
 
 - id: petit-boitier-electrique
-  title: Petits boîtiers de distribution électrique
+  title: Petit boîtier de distribution électrique
   isBuilding: false
   image: petit-boitier-electrique.png
 
 - id: parc-photovoltaique
-  title: Parcs photovoltaïques
+  title: Parc photovoltaïque
   isBuilding: false
   image: parc-photovoltaique.png
 
 - id: pont
   title: Ponts
-  description: Les ponts en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment.
+  description: Un pont en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment.
   isBuilding: false
   image: pont.png
 
 - id: route
   title: Routes
-  description: Les routes en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment.
+  description: Une route en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment.
   isBuilding: false
   image: route.png
 
 - id: barrage
   title: Barrages
-  description: Les barrages en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment. Il est effectivement possible que des bâtiments soient rattachés à un ouvrage d’art (par ex les bâtiments des locaux d’un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
+  description: Un barrage en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment. Il est effectivement possible que des bâtiments soient rattachés à un ouvrage d’art (par ex les bâtiments des locaux d’un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: barrage.png
 
 - id: tunnel
-  title: Tunnels, galeries
-  description: Les tunnels en tant qu'ouvrage d'art ne sont pas à considérer comme un bâtiment.
+  title: Tunnel, galerie
+  description: Un tunnels en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment.
   isBuilding: false
   image: tunnel.png
 
@@ -119,17 +119,17 @@
   image: maison-individuelle.png
 
 - id: phare
-  title: Phares
+  title: Phare
   isBuilding: true
   image: phare.png
 
 - id: maison-troglodytique
-  title: Maisons troglodytiques
+  title: Maison troglodytique
   isBuilding: true
   image: maison-troglodytique.png
 
 - id: cabane-arbre
-  title: Les cabanes dans les arbres habitées
+  title: Cabane dans les arbres habitée
   isBuilding: true
   image: cabane-arbre.jpeg
 
@@ -139,75 +139,75 @@
   image: batiment-industriel.jpeg
 
 - id: commerce
-  title: Les bâtiments industriels accueillant du public (ex. centre commercial, commerces, supermarchés)
+  title: Bâtiment industriel accueillant du public (ex. centre commercial, commerces, supermarchés)
   isBuilding: true
   image: commerce.png
 
 - id: industriel-stockage
-  title: Les bâtiments industriels de stockage (entrepôt, hangar, parking couvert)
+  title: Bâtiment industriel de stockage (entrepôt, hangar, parking couvert)
   isBuilding: true
   image: industriel-stockage.png
 
 - id: bureaux
-  title: Les bâtiments de bureaux
+  title: Bâtiment de bureaux
   isBuilding: true
   image: bureaux.png
 
 - id: recreatif-culturel
-  title: Les bâtiments à usage récréatif ou culturel
+  title: Bâtiment à usage récréatif ou culturel
   isBuilding: true
   image: recreatif-culturel.png
 
 - id: musee-bibliotheque
-  title: Les musées ou bibliothèques
+  title: Musée ou Bibliothèque
   isBuilding: true
   image: musee-bibliotheque.png
 
 - id: ecole-universite-recherche
-  title: Les écoles, universités ou bâtiments dédiés à la recherche
+  title: Ecole, université ou bâtiment dédié à la recherche
   isBuilding: true
   image: ecole-universite-recherche.png
 
 - id: hopital-etablissement-sante
-  title: Les hôpitaux et établissements de santé
+  title: Hôpital et établissement de santé
   isBuilding: true
   image: hopital-etablissement-sante.png
 
 - id: salle-sport-complexe
-  title: Les salles de sport, gymnases et complexes sportifs
+  title: Salle de sport, gymnase et complexe sportif
   isBuilding: true
   image: salle-sport-complexe.png
 
 - id: edifice-culturel-religieux
-  title: Les édifices culturels et religieux (ex. église, cathédrale, synagogue, mosquée, chapelle)
+  title: Edifices culturel et religieux (ex. église, cathédrale, synagogue, mosquée, chapelle)
   isBuilding: true
   image: edifice-culturel-religieux.png
 
 - id: batiment-camping
-  title: Les bâtiments d’exploitation des terrains de camping
+  title: Bâtiment d’exploitation des terrains de camping
   isBuilding: true
   image: batiment-camping.png
 
 - id: batiment-agricole
-  title: Les bâtiments d’exploitation agricole (ex. étable, serre (si objectif d'être permanente), grange, écurie, ferme).
+  title: Bâtiment d’exploitation agricole (ex. étable, serre (si objectif d'être permanente), grange, écurie, ferme).
   description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: batiment-agricole.png
 
 - id: grande-eolienne
-  title: Les grandes éoliennes.
+  title: Grande éolienne
   description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: eolienne.png
 
 - id: reservoir-silo-agricole
-  title: Les réservoirs & silos agricoles
+  title: Réservoir & silo agricole
   description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: reservoir.png
 
 - id: poste-transformation-electrique
-  title: Les postes de transformation électrique suffisamment grands
+  title: Poste de transformation électrique suffisamment grands
   description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: Transformateur_électrique_Guillerval.png
