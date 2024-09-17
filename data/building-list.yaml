@@ -75,19 +75,19 @@
   image: parc-photovoltaique.png
 
 - id: pont
-  title: Ponts
+  title: Pont
   description: Un pont en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment.
   isBuilding: false
   image: pont.png
 
 - id: route
-  title: Routes
+  title: Route
   description: Une route en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment.
   isBuilding: false
   image: route.png
 
 - id: barrage
-  title: Barrages
+  title: Barrage
   description: Un barrage en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment. Il est effectivement possible que des bâtiments soient rattachés à un ouvrage d’art (par ex les bâtiments des locaux d’un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: barrage.png
