@@ -6,9 +6,8 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import { parse } from 'yaml';
 import BuildingList from '@/app/(normalLayout)/definition/BuildingList';
-import { Accordion } from '@codegouvfr/react-dsfr/Accordion';
-import { fr } from '@codegouvfr/react-dsfr';
 import { BuildingExample } from '@/app/(normalLayout)/definition/BuildingList.type';
+import BuildingDistinctions from '@/app/(normalLayout)/definition/BuildingDistinctions';
 
 async function fetchBuildingList() {
   const jsonDirectory = path.join(process.cwd(), 'data');
@@ -88,36 +87,7 @@ export default async function Page() {
 
                 <BuildingList buildingList={buildingList} />
               </div>
-              <div className="fr-col-12 fr-col-md-8">
-                <h2 className="block__title">
-                  Distinction entre un bâtiment unique et plusieurs bâtiments
-                </h2>
-
-                <p>
-                  <strong>
-                    Vous vous demandez si la construction constitue un ou
-                    plusieurs bâtiments ?
-                  </strong>{' '}
-                  <br />
-                  Parcourez les exemples ci-dessous apportant un éclairage sur
-                  les cas particuliers rencontrés.
-                </p>
-
-                <div className={fr.cx('fr-accordions-group')}>
-                  {buildingList
-                    .filter(
-                      (cas) => !!cas.distinctionBetweenSingleAndMultipleText,
-                    )
-                    .map((cas) => (
-                      <Accordion
-                        key={cas.id}
-                        label={<span id={cas.id}>{cas.title}</span>}
-                      >
-                        {cas.distinctionBetweenSingleAndMultipleText!}
-                      </Accordion>
-                    ))}
-                </div>
-              </div>
+              <BuildingDistinctions buildingList={buildingList} />
               <div className="fr-col-12 fr-col-md-8">
                 <div className="block block--pink block--fill">
                   <h3 className="block__title">
