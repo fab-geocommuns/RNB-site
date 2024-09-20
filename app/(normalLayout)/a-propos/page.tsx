@@ -77,7 +77,7 @@ export default function Page() {
             ), la Direction générale de l&apos;Aménagement, du Logement et de la
             Nature (
             <a
-              href="https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln"
+              href="https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln-0"
               target="_blank"
             >
               DGALN
