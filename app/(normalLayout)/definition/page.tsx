@@ -201,7 +201,7 @@ export default async function Page() {
                       “Améliorez le RNB”.
                     </li>
                     <li>
-                      et Indiquez votre signalement dans le champ “Améliorez le
+                      et indiquez votre signalement dans le champ “Améliorez le
                       RNB”, avant de l&apos;envoyer
                     </li>
                   </ol>
