@@ -182,7 +182,7 @@ export default async function Page() {
 
                   <span>
                     Envoyez votre signalement directement sur la{' '}
-                    <a href="https://rnb.beta.gouv.fr/carte">cartographie</a> du
+                    <a href="https://rnb.beta.gouv.fr/carte">carte</a> du
                     RNB. Pour ce faire :
                   </span>
                   <ol>
