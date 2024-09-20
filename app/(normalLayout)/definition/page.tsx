@@ -170,7 +170,7 @@ export default async function Page() {
               <div className="fr-col-12 fr-col-md-8">
                 <div className="block block--yellow block--fill">
                   <h3 className="block__title">
-                    Réalisez un signalement sur un bâtiment
+                    Signalement un erreur sur un bâtiment
                   </h3>
 
                   <p>
