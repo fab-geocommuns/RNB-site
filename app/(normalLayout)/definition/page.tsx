@@ -206,7 +206,7 @@ export default async function Page() {
                     </li>
                   </ol>
                   <p>
-                    À noter : Une erreur - un signalement : Vous pouvez faire
+                    À noter : une erreur - un signalement : Vous pouvez faire
                     autant de signalements que vous voyez d&apos;erreur sur un
                     bâtiment
                   </p>
