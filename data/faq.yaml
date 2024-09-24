@@ -135,7 +135,7 @@
         <li>Scrollez le panneau d’information du bâtiment qui s’ouvre à gauche de l’écran jusqu’au champ “Améliorez le RNB”</li>
         <li>et Indiquez votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
         </ul>
-        <p>A noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
+        <p>À noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
     - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
       key: evolution
       answer: >
