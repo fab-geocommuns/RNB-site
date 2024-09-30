@@ -1,6 +1,7 @@
 'use client';
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { get } from 'http';
 
 export type MapStore = {
   panelIsOpen: boolean;
@@ -116,7 +117,10 @@ export const selectBuilding = createAsyncThunk(
 
 export const addBanUUID = createAsyncThunk(
   'map/addBanUUID',
-  async (rnbData: NonNullable<MapStore['selectedBuilding']>, { dispatch }) => {
+  async (
+    rnbData: NonNullable<MapStore['selectedBuilding']>,
+    { dispatch, getState },
+  ) => {
     const updatedAddresses = await Promise.all(
       rnbData.addresses?.map(async (address) => {
         const banResponse = await fetch(banApiUrl(address.id));
@@ -131,7 +135,12 @@ export const addBanUUID = createAsyncThunk(
       }),
     );
 
-    dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
+    // We update only if we are still looking at the same building.
+    // Otherwise, we might experience a bug where we update the current building with the addresses of another building.
+    const state = getState();
+    if (rnbData.rnb_id === state.selectedBuilding?.rnb_id) {
+      dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
+    }
   },
 );
 
