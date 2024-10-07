@@ -3,13 +3,9 @@
 .shell {
     
         position:absolute;
-        
-        // During summer games
-        top: 130px;
-
-
+    
         // Before summer games, top value was 100
-        //top:100px;
+        top:100px;
         right:0;
         bottom: 0;
         left:0;
@@ -43,14 +39,7 @@
     
 }
 
-.summerGamesTitle {
-    font-size: .85em;
-}
-.summerGamesBody {
-    font-size: .8em;
-    line-height: 1.25em;
-    margin-bottom: .4rem;
-}
+
 
 .scrollable {
     overflow-y: auto;
@@ -75,34 +64,7 @@
     background: none;
 }
 
-.title {
-    margin-bottom:4px;
-}
-.rnbidShell {
-    background: var(--background-alt-blue-france);
-}
-.rnbidShell__copy {
-    background: var(--background-contrast-blue-france);
-    background-color: #bccdff;
-    color:#273961;
-    font-size: .9em;
-    padding:.3rem;
-    text-align:center;
-}
-.rnbidShell__copy i {
-    opacity: .8;
-}
-.rnbidShell__copy:hover {
-    background: #83a9ff;
-    color:#171d2e;
-    cursor: pointer;
-}
-.rnbidShell__id {
-    padding: 1.3rem 1rem;
-    font-size: 1.2em;
-    text-align:center;
-    font-weight: 500;
-}
+
 .section {
     padding-bottom: 1.7rem;
 }

@@ -3,6 +3,32 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { get } from 'http';
 
+export interface SelectedBuilding {
+  rnb_id: string;
+  status: any[];
+  point: [number, number];
+  addresses: {
+    id: string;
+    banId: string;
+    source: string;
+    street_number: string;
+    street_rep: string;
+    street_name: string;
+    street_type: string;
+    city_name: string;
+    city_zipcode: string;
+    city_insee_code: string;
+  }[];
+  ext_ids: any[];
+  is_active: boolean;
+}
+
+interface SelectedADS {
+  file_number: string;
+}
+
+type SelectedItem = SelectedBuilding | SelectedADS;
+
 export type MapStore = {
   panelIsOpen: boolean;
   addressSearch: {
@@ -18,25 +44,8 @@ export type MapStore = {
   };
   marker?: [number, number];
   reloadBuildings?: number;
-  selectedBuilding?: {
-    rnb_id: string;
-    status: any[];
-    point: [number, number];
-    addresses: {
-      id: string;
-      banId: string;
-      source: string;
-      street_number: string;
-      street_rep: string;
-      street_name: string;
-      street_type: string;
-      city_name: string;
-      city_zipcode: string;
-      city_insee_code: string;
-    }[];
-    ext_ids: any[];
-    is_active: boolean;
-  };
+  selectedItemType?: string;
+  selectedItem?: SelectedItem;
 };
 
 const initialState: MapStore = {
@@ -72,15 +81,16 @@ export const mapSlice = createSlice({
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
     updateAddresses(state, action) {
-      if (state.selectedBuilding) {
-        state.selectedBuilding.addresses = action.payload;
+      if (state.selectedItem && state.selectedItemType === 'building') {
+        state.selectedItem.addresses = action.payload;
       }
     },
   },
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
-      state.selectedBuilding = action.payload;
+      state.selectedItemType = 'building';
+      state.selectedItem = action.payload;
 
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
@@ -97,11 +107,12 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
+
     const url = bdgApiUrl(rnbId + '?from=site');
     const rnbResponse = await fetch(url);
+
     if (rnbResponse.ok) {
-      const rnbData =
-        (await rnbResponse.json()) as MapStore['selectedBuilding'];
+      const rnbData = (await rnbResponse.json()) as SelectedBuilding;
 
       // Add banId to each addresses
       if (rnbData?.addresses && rnbData.addresses.length > 0) {
@@ -117,10 +128,7 @@ export const selectBuilding = createAsyncThunk(
 
 export const addBanUUID = createAsyncThunk(
   'map/addBanUUID',
-  async (
-    rnbData: NonNullable<MapStore['selectedBuilding']>,
-    { dispatch, getState },
-  ) => {
+  async (rnbData: NonNullable<SelectedBuilding>, { dispatch, getState }) => {
     const updatedAddresses = await Promise.all(
       rnbData.addresses?.map(async (address) => {
         const banResponse = await fetch(banApiUrl(address.id));
@@ -138,7 +146,7 @@ export const addBanUUID = createAsyncThunk(
     // We update only if we are still looking at the same building.
     // Otherwise, we might experience a bug where we update the current building with the addresses of another building.
     const state = getState();
-    if (rnbData.rnb_id === state.selectedBuilding?.rnb_id) {
+    if (rnbData.rnb_id === state.selectedItem?.rnb_id) {
       dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
     }
   },

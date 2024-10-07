@@ -25,7 +25,7 @@ export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
 
   const selectedBuilding = useSelector(
-    (state: RootState) => state.selectedBuilding,
+    (state: RootState) => state.selectedItem,
   );
 
   const msgInput = useRef<HTMLInputElement>(null);
@@ -101,7 +101,8 @@ export default function ContributionForm() {
         }, 10000);
       })
       .catch((err) => {
-        va.track('contribution-error', { error: err });
+        console.error(err);
+        va.track('contribution-error', { error: err.message });
       });
   };
 

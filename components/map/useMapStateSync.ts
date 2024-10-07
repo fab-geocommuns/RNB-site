@@ -10,9 +10,12 @@ import maplibregl from 'maplibre-gl';
  */
 export const useMapStateSync = (map?: maplibregl.Map) => {
   const stateMoveTo = useSelector((state: RootState) => state.moveTo);
-  const selectedBuildingId = useSelector(
-    (state: RootState) => state.selectedBuilding?.rnb_id,
-  );
+  const selectedBuildingId = useSelector((state: RootState) => {
+    if (state.selectedItemType === 'building') {
+      return state.selectedItem?.rnb_id;
+    }
+    return null;
+  });
   const marker = useSelector((state: RootState) => state.marker);
   const [currentMarker, setCurrentMarker] = useState<maplibregl.Marker>();
   const [previousHighlightedBuildingID, setPreviousHighlightedBuildingID] =
