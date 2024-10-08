@@ -21,13 +21,14 @@
   featured: true
   featured_summary: La BD Topo est une base de données géographique de précision métrique, exploitable à des échelles allant du 1:2000 au 1:50000.
 - key: priorenoLS
-  name: Prio Réno Logement Social
+  name: PrioRéno Logement Social
   url: https://www.banquedesterritoires.fr/produits-services/services-digitaux/service-prioreno-renovation-logements-sociaux
   published_by: la Banque des Territoires
   licence: Réservée aux ayant droits
   tags: [Logement social, Bailleurs, Rénovation énergétique]
   description: >
     PrioRéno Logement social est un dispositif digital 100% gratuit, permettant aux bailleurs d'accélérer la rénovation énergétique, la décarbonation et l'adaptation au changement climatique de leur parc. La plateforme est issue d'un partenariat entre l'Etat, la Banque des Territoires, l'Union Social pour l'Habitat, Enedis et GRDF.
+    La base PrioRéno Logement Social contient notamment : les DPE, la consommation énergétique globale au m2, le potentiel photovoltaïque du bâtiment, l'état du bâtiment, etc.
   featured: true
   featured_summary: PrioRéno Logement social est un dispositif gratuit, permettant aux bailleurs d'accélérer la rénovation énergétique de leur parc, issu d'un partenariat entre l'Etat, la Banque des Territoires, l'Union Social pour l'Habitat, Enedis et GRDF.
   image: banque_territoires.png
