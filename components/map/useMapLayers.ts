@@ -70,11 +70,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           'match',
           ['get', 'operation'],
           'build',
-          '#22c55e',
+          '#15803d',
           'demolish',
-          '#dc2626',
+          '#be123c',
           'modify',
-          '#a855f7',
+          '#4338ca',
           '#000000',
         ],
       },
@@ -88,6 +88,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       layout: {
         'text-field': 'ADS',
         'text-size': 10,
+        'icon-allow-overlap': false,
 
         // 'icon-image': 'cat',
         // 'icon-size': 0.19,
