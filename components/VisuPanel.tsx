@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 // Comps
 
 import { Actions, AppDispatch, RootState } from '@/stores/map/store';
-import BuildingPanel from './panel/BuildingPanel';
+import BuildingPanel from '@/components/panel/BuildingPanel';
+import ADSPanel from '@/components/panel/ADSPanel';
 
 export default function VisuPanel() {
   // Store
@@ -23,27 +24,47 @@ export default function VisuPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
 
+  const title = () => {
+    if (selectedItemType === 'building') {
+      return 'Bâtiment';
+    }
+
+    if (selectedItemType === 'ads') {
+      return 'Autorisation du droit des sols';
+    }
+
+    return null;
+  };
+
   const close = () => {
-    dispatch(Actions.map.selectBuilding(null));
+    dispatch(Actions.map.unselectItem());
   };
 
   if (selectedItem) {
     return (
       <>
         <div className={styles.shell}>
-          <a href="#" onClick={close} className={styles.closeLink}>
-            <i className="fr-icon-close-line" />
-          </a>
-          <div className={styles.scrollable}>
-            {selectedItemType === 'building' && (
-              <BuildingPanel bdg={selectedItem} />
-            )}
+          <div className={styles.content}>
+            <div className={styles.head}>
+              <h1 className={styles.title}>{title()}</h1>
+              <a href="#" onClick={close} className={styles.closeLink}>
+                <i className="fr-icon-close-line" />
+              </a>
+            </div>
 
-            {selectedItemType === 'ads' && (
-              <div>
-                <h1>TODO : display ADS</h1>
-              </div>
-            )}
+            <div className={styles.body}>
+              {selectedItemType === 'building' && (
+                <>
+                  <BuildingPanel bdg={selectedItem} />
+                </>
+              )}
+
+              {selectedItemType === 'ads' && (
+                <>
+                  <ADSPanel ads={selectedItem} />
+                </>
+              )}
+            </div>
           </div>
         </div>
       </>

@@ -5,7 +5,6 @@ import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/map/store';
-import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 
 const BDGS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
@@ -46,8 +45,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     if (map.getLayer('ads')) map.removeLayer('ads');
     if (map.getSource('ads')) map.removeSource('ads');
 
-    console.log(adsIcon.src);
-
     const img = await map.loadImage(adsIcon.src);
 
     map.addImage('cat', img.data);
@@ -61,10 +58,9 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
 
     map.addLayer({
-      id: 'ads-circle',
+      id: 'adscircle',
       source: 'ads',
       'source-layer': 'default',
-
       type: 'circle',
       paint: {
         'circle-radius': 12,
@@ -85,15 +81,21 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
 
     map.addLayer({
-      id: 'ads-icon',
+      id: 'adsicon',
       source: 'ads',
       'source-layer': 'default',
       type: 'symbol',
       layout: {
-        'icon-image': 'cat',
-        'icon-size': 0.19,
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true,
+        'text-field': 'ADS',
+        'text-size': 10,
+
+        // 'icon-image': 'cat',
+        // 'icon-size': 0.19,
+        // 'icon-allow-overlap': true,
+        // 'icon-ignore-placement': true,
+      },
+      paint: {
+        'text-color': '#ffffff',
       },
     });
   }, []);

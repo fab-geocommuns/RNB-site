@@ -23,7 +23,7 @@ export interface SelectedBuilding {
   is_active: boolean;
 }
 
-interface SelectedADS {
+export interface SelectedADS {
   file_number: string;
 }
 
@@ -85,6 +85,10 @@ export const mapSlice = createSlice({
         state.selectedItem.addresses = action.payload;
       }
     },
+    unselectItem(state) {
+      state.selectedItemType = undefined;
+      state.selectedItem = undefined;
+    },
   },
 
   extraReducers(builder) {
@@ -100,8 +104,29 @@ export const mapSlice = createSlice({
         window.history.replaceState({}, '', url);
       }
     });
+
+    builder.addCase(selectADS.fulfilled, (state, action) => {
+      state.selectedItemType = 'ads';
+      state.selectedItem = action.payload;
+    });
   },
 });
+
+export const selectADS = createAsyncThunk(
+  'map/selectADS',
+  async (fileNumber: string | null, { dispatch }) => {
+    if (!fileNumber) return;
+
+    const url = adsApiUrl(fileNumber + '?from=site');
+    const adsResponse = await fetch(url);
+
+    if (adsResponse.ok) {
+      const adsData = (await adsResponse.json()) as SelectedADS;
+
+      return adsData;
+    }
+  },
+);
 
 export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
@@ -152,6 +177,10 @@ export const addBanUUID = createAsyncThunk(
   },
 );
 
+export function adsApiUrl(fileNumber: string) {
+  return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + fileNumber;
+}
+
 export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
 }
@@ -163,6 +192,7 @@ export function banApiUrl(interopBanId: string) {
 export const mapActions = {
   ...mapSlice.actions,
   selectBuilding,
+  selectADS,
 };
 
 export const mapReducer = mapSlice.reducer;

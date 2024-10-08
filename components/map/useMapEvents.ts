@@ -3,7 +3,10 @@ import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/map/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
-import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
+import {
+  BUILDINGS_SOURCE,
+  BUILDINGS_LAYER,
+} from '@/components/map/useMapLayers';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -26,10 +29,19 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         );
 
         if (featureCloseToCursor) {
-          const rnb_id = featureCloseToCursor.properties.rnb_id;
+          // What did we click on?
 
-          // Selection du bâtiment
-          dispatch(Actions.map.selectBuilding(rnb_id));
+          if (featureCloseToCursor?.layer.id === BUILDINGS_LAYER) {
+            // It is a building
+            const rnb_id = featureCloseToCursor.properties.rnb_id;
+            dispatch(Actions.map.selectBuilding(rnb_id));
+          }
+
+          if (featureCloseToCursor.layer.id === 'adscircle') {
+            // It is an ADS
+            const file_number = featureCloseToCursor.properties.file_number;
+            dispatch(Actions.map.selectADS(file_number));
+          }
         }
       });
 

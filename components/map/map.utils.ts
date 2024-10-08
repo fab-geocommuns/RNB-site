@@ -15,7 +15,7 @@ export const getNearestFeatureFromCursorWithBuffer = (
   y: number,
   buffer = 15,
 ): MapGeoJSONFeature | undefined => {
-  if (!map.getLayer(BUILDINGS_LAYER)) return;
+  if (!map.getLayer(BUILDINGS_LAYER) || !map.getLayer('adscircle')) return;
 
   const bbox: [PointLike, PointLike] = [
     [x - buffer, y - buffer],
@@ -24,7 +24,7 @@ export const getNearestFeatureFromCursorWithBuffer = (
 
   // Rechercher les features de la couche BUILDINGS_LAYER dans la zone de recherche
   const features = map.queryRenderedFeatures(bbox, {
-    layers: [BUILDINGS_LAYER],
+    layers: [BUILDINGS_LAYER, 'adscircle'],
   });
 
   // Calcul de la feature la plus proche
