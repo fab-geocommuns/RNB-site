@@ -114,7 +114,7 @@ export default function Page() {
             Vous souhaitez contribuer ? Toutes les contributions sont les
             bienvenues pour construire ce géocommun, faciliter et réduire les
             coûts de maintenance et optimiser la qualité des données. Contactez
-            nous sur <a href={contactEmail}>{contactEmail}</a>
+            nous sur <a href=mailto:{contactEmail}>{contactEmail}</a>
           </p>
 
           <div className="block block--paleGreen fr-mt-24v">
