@@ -32,7 +32,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         if (featureCloseToCursor) {
           // What did we click on?
 
-          if (featureCloseToCursor?.layer.id === BUILDINGS_LAYER) {
+          if (featureCloseToCursor.layer.id === BUILDINGS_LAYER) {
             // It is a building
             const rnb_id = featureCloseToCursor.properties.rnb_id;
             dispatch(Actions.map.selectBuilding(rnb_id));
@@ -73,7 +73,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         if (featureCloseToCursor) {
           map.setFeatureState(
             {
-              source: featureCloseToCursor?.layer.source,
+              source: featureCloseToCursor.layer.source,
               id: featureCloseToCursor?.id,
               sourceLayer: 'default',
             },
