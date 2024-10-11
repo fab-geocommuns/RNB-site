@@ -16,7 +16,10 @@ export const BUILDINGS_LAYER = 'bdgs';
 // Icons
 //import adsIcon from '@/public/images/map/triangle.png';
 //import adsIcon from '@/public/images/map/cat.png';
-import adsIcon from '@/public/images/map/hammer.png';
+//import adsIcon from '@/public/images/map/hammer.png';
+import adsDemolishIcon from '@/public/images/map/ads-demolish.png';
+import adsBuildIcon from '@/public/images/map/ads-build.png';
+import adsModifyIcon from '@/public/images/map/ads-modify.png';
 
 export const STYLES = {
   vector: {
@@ -45,9 +48,17 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     if (map.getLayer('ads')) map.removeLayer('ads');
     if (map.getSource('ads')) map.removeSource('ads');
 
-    const img = await map.loadImage(adsIcon.src);
+    // Icons for ADS
+    // build icon
+    const adsBuild = await map.loadImage(adsBuildIcon.src);
+    map.addImage('adsBuild', adsBuild.data, { sdf: true });
+    // modify icon
+    const adsModify = await map.loadImage(adsModifyIcon.src);
+    map.addImage('adsModify', adsModify.data, { sdf: true });
 
-    map.addImage('cat', img.data);
+    // demolish icon
+    const adsDemo = await map.loadImage(adsDemolishIcon.src);
+    map.addImage('adsDemo', adsDemo.data, { sdf: true });
 
     map.addSource('ads', {
       type: 'vector',
@@ -63,20 +74,15 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       'source-layer': 'default',
       type: 'circle',
       paint: {
-        'circle-radius': 12,
+        'circle-radius': [
+          'case',
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
+          14,
+          12,
+        ],
         'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 2,
-        'circle-color': [
-          'match',
-          ['get', 'operation'],
-          'build',
-          '#15803d',
-          'demolish',
-          '#be123c',
-          'modify',
-          '#4338ca',
-          '#000000',
-        ],
+        'circle-color': '#fbbf24',
       },
     });
 
@@ -86,17 +92,23 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       'source-layer': 'default',
       type: 'symbol',
       layout: {
-        'text-field': 'ADS',
-        'text-size': 10,
-        'icon-allow-overlap': false,
-
-        // 'icon-image': 'cat',
-        // 'icon-size': 0.19,
-        // 'icon-allow-overlap': true,
-        // 'icon-ignore-placement': true,
+        'icon-image': [
+          'match',
+          ['get', 'operation'],
+          'build',
+          'adsBuild',
+          'demolish',
+          'adsDemo',
+          'modify',
+          'adsModify',
+          'adsBuild',
+        ],
+        'icon-size': 0.25,
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
       },
       paint: {
-        'text-color': '#ffffff',
+        'icon-color': '#431407',
       },
     });
   }, []);
@@ -124,7 +136,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       paint: {
         'circle-radius': [
           'case',
-          ['boolean', ['feature-state', 'hovered']],
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
           6,
           5,
         ],

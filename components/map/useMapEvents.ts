@@ -15,7 +15,8 @@ import {
 export const useMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   useState<string>();
-  const previousHoveredBuildingID = useRef<string>();
+  const previousHoveredFeatureId = useRef<string>();
+  const previousHoveredFeatureSource = useRef<string>();
 
   // Initialisation des événements
   useEffect(() => {
@@ -55,27 +56,37 @@ export const useMapEvents = (map?: maplibregl.Map) => {
 
         map!.getCanvas().style.cursor = featureCloseToCursor ? 'pointer' : '';
 
-        if (previousHoveredBuildingID.current) {
+        if (
+          previousHoveredFeatureId.current &&
+          previousHoveredFeatureSource.current
+        ) {
+          console.log('set some feature to hovered = false');
+
           map.setFeatureState(
             {
-              source: BUILDINGS_SOURCE,
-              id: previousHoveredBuildingID.current,
+              source: previousHoveredFeatureSource.current,
+              id: previousHoveredFeatureId.current,
               sourceLayer: 'default',
             },
             { hovered: false },
           );
         }
-        previousHoveredBuildingID.current = featureCloseToCursor?.id as string;
 
         if (featureCloseToCursor) {
+          console.log('set one feature to hovered = true');
+
           map.setFeatureState(
             {
-              source: BUILDINGS_SOURCE,
-              id: featureCloseToCursor.id,
+              source: featureCloseToCursor?.layer.source,
+              id: featureCloseToCursor?.id,
               sourceLayer: 'default',
             },
             { hovered: true },
           );
+
+          previousHoveredFeatureId.current = featureCloseToCursor?.id as string;
+          previousHoveredFeatureSource.current = featureCloseToCursor?.layer
+            .source as string;
         }
       });
     }
