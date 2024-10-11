@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { get } from 'http';
 
 export interface SelectedBuilding {
+  _type: 'building';
   rnb_id: string;
   status: any[];
   point: [number, number];
@@ -24,6 +25,7 @@ export interface SelectedBuilding {
 }
 
 export interface SelectedADS {
+  _type: 'ads';
   file_number: string;
   decided_at: string;
   buildings_operations: BuildingADS[];
@@ -34,7 +36,7 @@ interface BuildingADS {
   operation: 'build' | 'modify' | 'demolish';
 }
 
-type SelectedItem = SelectedBuilding | SelectedADS;
+export type SelectedItem = SelectedBuilding | SelectedADS;
 
 export type MapStore = {
   panelIsOpen: boolean;
@@ -51,7 +53,6 @@ export type MapStore = {
   };
   marker?: [number, number];
   reloadBuildings?: number;
-  selectedItemType?: string;
   selectedItem?: SelectedItem;
 };
 
@@ -88,19 +89,18 @@ export const mapSlice = createSlice({
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
     updateAddresses(state, action) {
-      if (state.selectedItem && state.selectedItemType === 'building') {
+      if (state.selectedItem && state.selectedItem._type === 'building') {
         state.selectedItem.addresses = action.payload;
       }
     },
     unselectItem(state) {
-      state.selectedItemType = undefined;
       state.selectedItem = undefined;
     },
   },
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
-      state.selectedItemType = 'building';
+      action.payload._type = 'building';
       state.selectedItem = action.payload;
 
       if (action.payload) {
@@ -113,7 +113,7 @@ export const mapSlice = createSlice({
     });
 
     builder.addCase(selectADS.fulfilled, (state, action) => {
-      state.selectedItemType = 'ads';
+      action.payload._type = 'ads';
       state.selectedItem = action.payload;
     });
   },

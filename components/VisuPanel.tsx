@@ -19,17 +19,14 @@ import ADSPanel from '@/components/panel/ADSPanel';
 export default function VisuPanel() {
   // Store
   const selectedItem = useSelector((state: RootState) => state.selectedItem);
-  const selectedItemType = useSelector(
-    (state: RootState) => state.selectedItemType,
-  );
   const dispatch: AppDispatch = useDispatch();
 
   const title = () => {
-    if (selectedItemType === 'building') {
+    if (selectedItem?._type === 'building') {
       return 'Bâtiment';
     }
 
-    if (selectedItemType === 'ads') {
+    if (selectedItem?._type === 'ads') {
       return 'Autorisation du droit des sols';
     }
 
@@ -53,13 +50,13 @@ export default function VisuPanel() {
             </div>
 
             <div className={styles.body}>
-              {selectedItemType === 'building' && (
+              {selectedItem?._type === 'building' && (
                 <>
                   <BuildingPanel bdg={selectedItem} />
                 </>
               )}
 
-              {selectedItemType === 'ads' && (
+              {selectedItem?._type === 'ads' && (
                 <>
                   <ADSPanel ads={selectedItem} />
                 </>

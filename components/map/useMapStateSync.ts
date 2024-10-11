@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
 import { RootState } from '@/stores/map/store';
 import maplibregl from 'maplibre-gl';
+import { SelectedItem } from '@/stores/map/slice';
 
 /**
  * Gestion de la synchronisation entre la carte et le store Redux
@@ -11,48 +12,32 @@ import maplibregl from 'maplibre-gl';
 export const useMapStateSync = (map?: maplibregl.Map) => {
   const stateMoveTo = useSelector((state: RootState) => state.moveTo);
 
-  const selectedBuildingId = useSelector((state: RootState) => {
-    if (state.selectedItemType === 'building') {
-      return state.selectedItem?.rnb_id;
-    }
-    return null;
-  });
-
   // Address marker
   const marker = useSelector((state: RootState) => state.marker);
   const [currentMarker, setCurrentMarker] = useState<maplibregl.Marker>();
 
   // Selected item
-  const selectedItemType = useSelector(
-    (state: RootState) => state.selectedItemType,
-  );
   const selectedItem = useSelector((state: RootState) => state.selectedItem);
-
-  const [previousSelectedItemType, setPreviousSelectedItemType] =
-    useState<string>();
   const [previousSelectedItem, setPreviousSelectedItem] = useState<any>();
 
-  const [previousHighlightedBuildingID, setPreviousHighlightedBuildingID] =
-    useState<string>();
-
-  const getFeatureTypeSource = (type: string) => {
-    if (type === 'building') {
+  const getFeatureTypeSource = (item: SelectedItem) => {
+    if (item._type === 'building') {
       return BUILDINGS_SOURCE;
     }
 
-    if (type === 'ads') {
+    if (item._type === 'ads') {
       return 'ads';
     }
 
     return null;
   };
 
-  const getFeatureId = (type: string, item: any) => {
-    if (type === 'building') {
+  const getFeatureId = (item: SelectedItem) => {
+    if (item._type === 'building') {
       return item.rnb_id;
     }
 
-    if (type === 'ads') {
+    if (item._type === 'ads') {
       return item.file_number;
     }
   };
@@ -100,9 +85,9 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
   useEffect(() => {
     const toggleHighlight = () => {
       // First, downlight the previous selected item
-      if (previousSelectedItemType && previousSelectedItem && map) {
-        const source = getFeatureTypeSource(previousSelectedItemType);
-        const id = getFeatureId(previousSelectedItemType, previousSelectedItem);
+      if (previousSelectedItem && map) {
+        const source = getFeatureTypeSource(previousSelectedItem);
+        const id = getFeatureId(previousSelectedItem);
 
         if (source && id) {
           map.setFeatureState(
@@ -117,9 +102,9 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
       }
 
       // Then, highlight the current selected item
-      if (selectedItemType && selectedItem && map) {
-        const source = getFeatureTypeSource(selectedItemType);
-        const id = getFeatureId(selectedItemType, selectedItem);
+      if (selectedItem && map) {
+        const source = getFeatureTypeSource(selectedItem);
+        const id = getFeatureId(selectedItem);
 
         if (source && id) {
           map.setFeatureState(
@@ -133,7 +118,6 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
         }
 
         // Finally, set the previous selected item
-        setPreviousSelectedItemType(selectedItemType);
         setPreviousSelectedItem(selectedItem);
       }
     };
