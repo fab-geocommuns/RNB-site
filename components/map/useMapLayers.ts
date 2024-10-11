@@ -118,8 +118,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
   // Ajout de la couche vectorielle des bâtiments
   const initBuildingLayer = useCallback((map: maplibregl.Map) => {
-    console.log('initBuildingLayer');
-
     if (map.getLayer(BUILDINGS_LAYER)) map.removeLayer(BUILDINGS_LAYER);
     if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
 
