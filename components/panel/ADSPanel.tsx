@@ -58,7 +58,7 @@ export default function ADSPanel({ ads }: ADSPanelProps) {
         <div className={panelStyles.sectionBody}>
           N° de dossier : {ads.file_number}
           <br />
-          Date d'acceptation : {formattedDecidedAt()}
+          Date d&apos;acceptation : {formattedDecidedAt()}
         </div>
       </div>
       <div className={panelStyles.section}>
