@@ -37,10 +37,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     if (bdgStatus === null) return 'Inconnu';
 
     // Bdg status is a string, we are on the new format
-    if (typeof bdgStatus === 'string') return getStatusLabel(bdgStatus);
-  };
-
-  const getStatusLabel = (status: string) => {
     const labels = {
       constructionProject: 'En projet',
       canceledConstructionProject: 'Projet annulé',
@@ -51,9 +47,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
       demolished: 'Démoli',
     };
 
-    const label = labels[status];
-
-    return label;
+    return labels[bdgStatus];
   };
 
   function addSpace(rnb_id: string) {
