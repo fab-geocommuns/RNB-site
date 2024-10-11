@@ -164,7 +164,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
   }, []);
 
-  // Initialisation de la couche vectorielle
+  // Initialisation des couches vectorielles
   useEffect(() => {
     if (map) {
       if (map.loaded()) {
