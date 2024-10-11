@@ -78,7 +78,12 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           14,
           12,
         ],
-        'circle-stroke-color': '#ffffff',
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#431407',
+          '#ffffff',
+        ],
         'circle-stroke-width': 2,
         'circle-color': '#fbbf24',
       },
