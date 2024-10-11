@@ -10,6 +10,21 @@ export const getADSOperationIcons = () => {
   };
 };
 
+export const getOperationIcon = (operation: string) => {
+  const icons = getADSOperationIcons();
+
+  switch (operation) {
+    case 'build':
+      return icons.build;
+    case 'modify':
+      return icons.modify;
+    case 'demolish':
+      return icons.demolish;
+    default:
+      return icons.build;
+  }
+};
+
 export default class AdsEditing {
   state: any;
 

@@ -7,7 +7,7 @@ import adsStyles from '@/styles/panelADS.module.scss';
 
 // Icons
 import ImageNext from 'next/image';
-import { getADSOperationIcons } from '@/logic/ads';
+import { getADSOperationIcons, getOperationIcon } from '@/logic/ads';
 
 interface ADSPanelProps {
   ads: SelectedADS;
@@ -15,19 +15,6 @@ interface ADSPanelProps {
 
 export default function ADSPanel({ ads }: ADSPanelProps) {
   const icons = getADSOperationIcons();
-
-  const opIcon = (operation: string) => {
-    switch (operation) {
-      case 'build':
-        return icons.build;
-      case 'modify':
-        return icons.modify;
-      case 'demolish':
-        return icons.demolish;
-      default:
-        return icons.build;
-    }
-  };
 
   const humanizeOperation = (operation: string) => {
     switch (operation) {
@@ -68,7 +55,10 @@ export default function ADSPanel({ ads }: ADSPanelProps) {
             <div key={idx} className={panelStyles.sectionListItem}>
               <div className={adsStyles.operationShell}>
                 <div className={adsStyles.operationIconShell}>
-                  <ImageNext src={opIcon(op.operation)} alt={op.operation} />
+                  <ImageNext
+                    src={getOperationIcon(op.operation)}
+                    alt={op.operation}
+                  />
                 </div>
                 <div>{humanizeOperation(op.operation)}</div>
               </div>

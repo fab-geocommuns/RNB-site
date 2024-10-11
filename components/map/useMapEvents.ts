@@ -60,8 +60,6 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           previousHoveredFeatureId.current &&
           previousHoveredFeatureSource.current
         ) {
-          console.log('set some feature to hovered = false');
-
           map.setFeatureState(
             {
               source: previousHoveredFeatureSource.current,
@@ -73,8 +71,6 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         }
 
         if (featureCloseToCursor) {
-          console.log('set one feature to hovered = true');
-
           map.setFeatureState(
             {
               source: featureCloseToCursor?.layer.source,
