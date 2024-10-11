@@ -1,3 +1,15 @@
+import adsDemolishIcon from '@/public/images/map/ads-demolish.png';
+import adsBuildIcon from '@/public/images/map/ads-build.png';
+import adsModifyIcon from '@/public/images/map/ads-modify.png';
+
+export const getADSOperationIcons = () => {
+  return {
+    build: adsBuildIcon,
+    modify: adsModifyIcon,
+    demolish: adsDemolishIcon,
+  };
+};
+
 export default class AdsEditing {
   state: any;
 

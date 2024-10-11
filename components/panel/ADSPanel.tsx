@@ -3,12 +3,45 @@ import { SelectedADS } from '@/stores/map/slice';
 
 // Styles
 import panelStyles from '@/styles/panel.module.scss';
+import adsStyles from '@/styles/panelADS.module.scss';
+
+// Icons
+import ImageNext from 'next/image';
+import { getADSOperationIcons } from '@/logic/ads';
 
 interface ADSPanelProps {
   ads: SelectedADS;
 }
 
 export default function ADSPanel({ ads }: ADSPanelProps) {
+  const icons = getADSOperationIcons();
+
+  const opIcon = (operation: string) => {
+    switch (operation) {
+      case 'build':
+        return icons.build;
+      case 'modify':
+        return icons.modify;
+      case 'demolish':
+        return icons.demolish;
+      default:
+        return icons.build;
+    }
+  };
+
+  const humanizeOperation = (operation: string) => {
+    switch (operation) {
+      case 'build':
+        return 'Nouveau bâtiment';
+      case 'modify':
+        return "Modification d'un bâtiment existant";
+      case 'demolish':
+        return 'Démolition complète';
+      default:
+        return operation;
+    }
+  };
+
   const formattedDecidedAt = () => {
     const date = new Date(ads.decided_at);
     return date.toLocaleDateString('fr-FR', {
@@ -33,7 +66,12 @@ export default function ADSPanel({ ads }: ADSPanelProps) {
         <div className={panelStyles.sectionBody}>
           {ads.buildings_operations.map((op, idx) => (
             <div key={idx} className={panelStyles.sectionListItem}>
-              {op.operation}
+              <div className={adsStyles.operationShell}>
+                <div className={adsStyles.operationIconShell}>
+                  <ImageNext src={opIcon(op.operation)} alt={op.operation} />
+                </div>
+                <div>{humanizeOperation(op.operation)}</div>
+              </div>
             </div>
           ))}
         </div>

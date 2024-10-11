@@ -14,12 +14,7 @@ export const BUILDINGS_SOURCE = 'bdgtiles';
 export const BUILDINGS_LAYER = 'bdgs';
 
 // Icons
-//import adsIcon from '@/public/images/map/triangle.png';
-//import adsIcon from '@/public/images/map/cat.png';
-//import adsIcon from '@/public/images/map/hammer.png';
-import adsDemolishIcon from '@/public/images/map/ads-demolish.png';
-import adsBuildIcon from '@/public/images/map/ads-build.png';
-import adsModifyIcon from '@/public/images/map/ads-modify.png';
+import { getADSOperationIcons } from '@/logic/ads';
 
 export const STYLES = {
   vector: {
@@ -40,6 +35,8 @@ export const DEFAULT_STYLE = STYLES.vector.style;
  * @param map
  */
 export const useMapLayers = (map?: maplibregl.Map) => {
+  const adsOperationsIcons = getADSOperationIcons();
+
   const reloadBuildings = useSelector(
     (state: RootState) => state.reloadBuildings,
   );
@@ -50,14 +47,15 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
     // Icons for ADS
     // build icon
-    const adsBuild = await map.loadImage(adsBuildIcon.src);
+
+    const adsBuild = await map.loadImage(adsOperationsIcons.build.src);
     map.addImage('adsBuild', adsBuild.data, { sdf: true });
     // modify icon
-    const adsModify = await map.loadImage(adsModifyIcon.src);
+    const adsModify = await map.loadImage(adsOperationsIcons.modify.src);
     map.addImage('adsModify', adsModify.data, { sdf: true });
 
     // demolish icon
-    const adsDemo = await map.loadImage(adsDemolishIcon.src);
+    const adsDemo = await map.loadImage(adsOperationsIcons.demolish.src);
     map.addImage('adsDemo', adsDemo.data, { sdf: true });
 
     map.addSource('ads', {

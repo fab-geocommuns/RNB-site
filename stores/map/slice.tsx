@@ -25,6 +25,13 @@ export interface SelectedBuilding {
 
 export interface SelectedADS {
   file_number: string;
+  decided_at: string;
+  buildings_operations: BuildingADS[];
+}
+
+interface BuildingADS {
+  rnb_id?: string;
+  operation: 'build' | 'modify' | 'demolish';
 }
 
 type SelectedItem = SelectedBuilding | SelectedADS;
