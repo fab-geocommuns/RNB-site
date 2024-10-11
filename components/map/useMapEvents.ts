@@ -77,7 +77,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
 
           map.setFeatureState(
             {
-              source: featureCloseToCursor?.layer.source,
+              source: featureCloseToCursor.layer.source,
               id: featureCloseToCursor?.id,
               sourceLayer: 'default',
             },
