@@ -1,0 +1,28 @@
+.title {
+    margin-bottom:4px;
+}
+.rnbidShell {
+    background: var(--background-alt-blue-france);
+}
+.rnbidShell__copy {
+    background: var(--background-contrast-blue-france);
+    background-color: #bccdff;
+    color:#273961;
+    font-size: .9em;
+    padding:.3rem;
+    text-align:center;
+}
+.rnbidShell__copy i {
+    opacity: .8;
+}
+.rnbidShell__copy:hover {
+    background: #83a9ff;
+    color:#171d2e;
+    cursor: pointer;
+}
+.rnbidShell__id {
+    padding: 1.3rem 1rem;
+    font-size: 1.2em;
+    text-align:center;
+    font-weight: 500;
+}

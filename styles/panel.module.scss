@@ -1,0 +1,131 @@
+@import "vars.scss";
+
+.shell {
+    // The .shell is the invisible container
+    position:absolute;
+
+    top:100px;
+    right:0;
+    bottom: 0;
+    left:0;
+    z-index: 100;
+    
+    @media (min-width: $bp-md) {
+        max-width: 400px;
+        width: 400px;
+        right: auto;
+        left:12px;
+        top:74px;
+        bottom: 10px;
+    }
+    
+}
+
+.content {
+
+    $head-height: 35px;
+    $body-x-padding: 15px;
+
+    // Content is all what we display
+    background:white;
+    box-shadow:0 0 0 2px rgba(0,0,0,.1);
+    
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+
+    position:absolute;
+    bottom: 0;
+    right:0;
+    left: 0;    
+
+    @media (min-width: $bp-md) {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        bottom:auto;
+    }
+
+    .head {
+
+        $title-color: #414e71;
+        height: $head-height;
+        min-height: $head-height;
+        max-height: $head-height;
+    
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f4f6ff;
+    
+        padding-left: $body-x-padding;
+        padding-right: 7px;
+    
+        .title {
+            color: $title-color;
+            font-size: .8rem;
+            line-height: 1em;
+            margin:0;
+            text-transform: uppercase;
+        }
+        
+        .closeLink {
+        
+            color: $title-color;
+            opacity: .8;
+            background: none;
+            text-decoration: none;
+            i::before {
+                width: 25px;
+                height: 25px;
+            }
+        }
+        .closeLink:hover {
+            
+            color:white;
+            background: black;
+        }
+    
+    }
+
+    .body {
+    
+        flex-grow: 1;
+        overflow-y: auto;
+        max-height: calc(100% - #{$head-height});
+        padding:20px $body-x-padding 20px $body-x-padding;
+
+    }
+
+}
+
+
+.section {
+    padding-bottom: 1.7rem;
+}
+
+
+.sectionTitle {
+    font-size: .87em;
+    line-height: 1.3em;
+    color:#0063cb;
+    margin-bottom: .2rem;
+}
+.sectionBody {
+    font-size: .9em;
+    line-height: 1.3em;
+}
+
+.sectionListItem {
+    margin-bottom:.8em
+}
+.sectionListItem:last-child {
+    margin-bottom: 0;
+}
+
+.small-left-padding {
+    padding-left: 2px;
+}

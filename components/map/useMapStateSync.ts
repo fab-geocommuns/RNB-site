@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
 import { RootState } from '@/stores/map/store';
 import maplibregl from 'maplibre-gl';
+import { SelectedItem } from '@/stores/map/slice';
 
 /**
  * Gestion de la synchronisation entre la carte et le store Redux
@@ -10,13 +11,36 @@ import maplibregl from 'maplibre-gl';
  */
 export const useMapStateSync = (map?: maplibregl.Map) => {
   const stateMoveTo = useSelector((state: RootState) => state.moveTo);
-  const selectedBuildingId = useSelector(
-    (state: RootState) => state.selectedBuilding?.rnb_id,
-  );
+
+  // Address marker
   const marker = useSelector((state: RootState) => state.marker);
   const [currentMarker, setCurrentMarker] = useState<maplibregl.Marker>();
-  const [previousHighlightedBuildingID, setPreviousHighlightedBuildingID] =
-    useState<string>();
+
+  // Selected item
+  const selectedItem = useSelector((state: RootState) => state.selectedItem);
+  const [previousSelectedItem, setPreviousSelectedItem] = useState<any>();
+
+  const getFeatureTypeSource = (item: SelectedItem) => {
+    if (item._type === 'building') {
+      return BUILDINGS_SOURCE;
+    }
+
+    if (item._type === 'ads') {
+      return 'ads';
+    }
+
+    return null;
+  };
+
+  const getFeatureId = (item: SelectedItem) => {
+    if (item._type === 'building') {
+      return item.rnb_id;
+    }
+
+    if (item._type === 'ads') {
+      return item.file_number;
+    }
+  };
 
   // Initialisation de la synchronisation: moveTo
   useEffect(() => {
@@ -59,31 +83,42 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
 
   // Initialisation de la synchronisation: selectedBuildingId
   useEffect(() => {
-    const highlightSelectedBuilding = () => {
-      if (map && map.getSource(BUILDINGS_SOURCE)) {
-        if (previousHighlightedBuildingID) {
+    const toggleHighlight = () => {
+      // First, downlight the previous selected item
+      if (previousSelectedItem && map) {
+        const source = getFeatureTypeSource(previousSelectedItem);
+        const id = getFeatureId(previousSelectedItem);
+
+        if (source && id) {
           map.setFeatureState(
             {
-              source: BUILDINGS_SOURCE,
-              id: previousHighlightedBuildingID,
+              source,
+              id,
               sourceLayer: 'default',
             },
             { in_panel: false },
           );
         }
+      }
 
-        if (selectedBuildingId) {
+      // Then, highlight the current selected item
+      if (selectedItem && map) {
+        const source = getFeatureTypeSource(selectedItem);
+        const id = getFeatureId(selectedItem);
+
+        if (source && id) {
           map.setFeatureState(
             {
-              source: BUILDINGS_SOURCE,
-              id: selectedBuildingId,
+              source,
+              id,
               sourceLayer: 'default',
             },
             { in_panel: true },
           );
         }
 
-        setPreviousHighlightedBuildingID(selectedBuildingId);
+        // Finally, set the previous selected item
+        setPreviousSelectedItem(selectedItem);
       }
     };
 
@@ -92,11 +127,11 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
       // On ajoute donc cet événement pour palier à ce cas.
       map.on('sourcedata', (e) => {
         if (e.isSourceLoaded && e.sourceId === BUILDINGS_SOURCE) {
-          highlightSelectedBuilding();
+          toggleHighlight();
         }
       });
 
-      highlightSelectedBuilding();
+      toggleHighlight();
     }
-  }, [selectedBuildingId, map, previousHighlightedBuildingID]);
+  }, [selectedItem, previousSelectedItem, map]);
 };

@@ -3,7 +3,10 @@ import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/map/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
-import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
+import {
+  BUILDINGS_SOURCE,
+  BUILDINGS_LAYER,
+} from '@/components/map/useMapLayers';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -12,7 +15,8 @@ import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
 export const useMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   useState<string>();
-  const previousHoveredBuildingID = useRef<string>();
+  const previousHoveredFeatureId = useRef<string>();
+  const previousHoveredFeatureSource = useRef<string>();
 
   // Initialisation des événements
   useEffect(() => {
@@ -26,10 +30,19 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         );
 
         if (featureCloseToCursor) {
-          const rnb_id = featureCloseToCursor.properties.rnb_id;
+          // What did we click on?
 
-          // Selection du bâtiment
-          dispatch(Actions.map.selectBuilding(rnb_id));
+          if (featureCloseToCursor.layer.id === BUILDINGS_LAYER) {
+            // It is a building
+            const rnb_id = featureCloseToCursor.properties.rnb_id;
+            dispatch(Actions.map.selectBuilding(rnb_id));
+          }
+
+          if (featureCloseToCursor.layer.id === 'adscircle') {
+            // It is an ADS
+            const file_number = featureCloseToCursor.properties.file_number;
+            dispatch(Actions.map.selectADS(file_number));
+          }
         }
       });
 
@@ -43,27 +56,33 @@ export const useMapEvents = (map?: maplibregl.Map) => {
 
         map!.getCanvas().style.cursor = featureCloseToCursor ? 'pointer' : '';
 
-        if (previousHoveredBuildingID.current) {
+        if (
+          previousHoveredFeatureId.current &&
+          previousHoveredFeatureSource.current
+        ) {
           map.setFeatureState(
             {
-              source: BUILDINGS_SOURCE,
-              id: previousHoveredBuildingID.current,
+              source: previousHoveredFeatureSource.current,
+              id: previousHoveredFeatureId.current,
               sourceLayer: 'default',
             },
             { hovered: false },
           );
         }
-        previousHoveredBuildingID.current = featureCloseToCursor?.id as string;
 
         if (featureCloseToCursor) {
           map.setFeatureState(
             {
-              source: BUILDINGS_SOURCE,
-              id: featureCloseToCursor.id,
+              source: featureCloseToCursor.layer.source,
+              id: featureCloseToCursor?.id,
               sourceLayer: 'default',
             },
             { hovered: true },
           );
+
+          previousHoveredFeatureId.current = featureCloseToCursor?.id as string;
+          previousHoveredFeatureSource.current = featureCloseToCursor?.layer
+            .source as string;
         }
       });
     }

@@ -1,3 +1,30 @@
+import adsDemolishIcon from '@/public/images/map/ads-demolish.png';
+import adsBuildIcon from '@/public/images/map/ads-build.png';
+import adsModifyIcon from '@/public/images/map/ads-modify.png';
+
+export const getADSOperationIcons = () => {
+  return {
+    build: adsBuildIcon,
+    modify: adsModifyIcon,
+    demolish: adsDemolishIcon,
+  };
+};
+
+export const getOperationIcon = (operation: string) => {
+  const icons = getADSOperationIcons();
+
+  switch (operation) {
+    case 'build':
+      return icons.build;
+    case 'modify':
+      return icons.modify;
+    case 'demolish':
+      return icons.demolish;
+    default:
+      return icons.build;
+  }
+};
+
 export default class AdsEditing {
   state: any;
 

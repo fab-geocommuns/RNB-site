@@ -5,214 +5,62 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 // Styles
-import { fr } from '@codegouvfr/react-dsfr';
-import styles from '@/styles/mapPanel.module.scss';
-
-// Comps
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import styles from '@/styles/panel.module.scss';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { bdgApiUrl } from '@/stores/map/slice';
-
-// Analytics
-import va from '@vercel/analytics';
 
 // Comps
-import ContributionForm from '@/components/ContributionForm';
+
 import { Actions, AppDispatch, RootState } from '@/stores/map/store';
+import BuildingPanel from '@/components/panel/BuildingPanel';
+import ADSPanel from '@/components/panel/ADSPanel';
 
 export default function VisuPanel() {
   // Store
-  const selectedBuilding = useSelector(
-    (state: RootState) => state.selectedBuilding,
-  );
+  const selectedItem = useSelector((state: RootState) => state.selectedItem);
   const dispatch: AppDispatch = useDispatch();
 
-  // URL params
-  const params = useSearchParams();
-
-  const [copied, setCopied] = useState(false);
-
-  const getStatusLabel = (status: string) => {
-    const labels = {
-      constructionProject: 'En projet',
-      canceledConstructionProject: 'Projet annulé',
-      ongoingConstruction: 'Construction en cours',
-      constructed: 'Construit',
-      ongoingChange: 'En cours de modification',
-      notUsable: 'Non utilisable',
-      demolished: 'Démoli',
-    };
-
-    const label = labels[status];
-
-    return label;
-  };
-
-  const handleCopy = () => {
-    va.track('rnbid-copied', { rnb_id: selectedBuilding!.rnb_id });
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
-
-  const apiUrl = () => {
-    return bdgApiUrl(selectedBuilding!.rnb_id);
-  };
-
-  const statusLabel = () => {
-    const bdgStatus = selectedBuilding?.status;
-
-    if (bdgStatus === undefined) return 'Inconnu';
-    if (bdgStatus === null) return 'Inconnu';
-
-    // Bdg status is a string, we are on the new format
-    if (typeof bdgStatus === 'string') return getStatusLabel(bdgStatus);
-
-    // Bdg status is an array, we are on the old format -> it can be removed once the backend PR https://github.com/fab-geocommuns/RNB-coeur/pull/327 is merged and deployed
-    if (Array.isArray(bdgStatus)) {
-      const currentStatus = selectedBuilding?.status?.find((s) => s.is_current);
-      return currentStatus.label;
+  const title = () => {
+    if (selectedItem?._type === 'building') {
+      return 'Bâtiment';
     }
-  };
 
-  const easyRnbId = () => {
-    return addSpace(selectedBuilding!.rnb_id);
-  };
-
-  function addSpace(rnb_id: string) {
-    if (rnb_id) {
-      return rnb_id.split('').map((char, i) => {
-        let classes = '';
-        if (i == 4 || i == 8) {
-          classes = styles['small-left-padding'];
-        }
-        return (
-          <span key={'rnb-id-char' + i} className={classes}>
-            {char}
-          </span>
-        );
-      });
-    } else {
-      return null;
+    if (selectedItem?._type === 'ads') {
+      return 'Autorisation du droit des sols';
     }
-  }
+
+    return null;
+  };
 
   const close = () => {
-    dispatch(Actions.map.selectBuilding(null));
+    dispatch(Actions.map.unselectItem());
   };
 
-  useEffect(() => {
-    if (selectedBuilding?.rnb_id !== undefined) {
-      va.track('open-side-panel', { rnb_id: selectedBuilding.rnb_id });
-    }
-  }, [selectedBuilding?.rnb_id]);
-
-  if (selectedBuilding) {
+  if (selectedItem) {
     return (
       <>
         <div className={styles.shell}>
-          <a href="#" onClick={close} className={styles.closeLink}>
-            <i className="fr-icon-close-line" />
-          </a>
-          <div className={styles.scrollable}>
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
-
-              <div className={styles.rnbidShell}>
-                <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
-
-                <CopyToClipboard
-                  onCopy={() => handleCopy()}
-                  text={selectedBuilding?.rnb_id}
-                >
-                  <div className={styles.rnbidShell__copy}>
-                    {copied ? (
-                      <span>
-                        Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                      </span>
-                    ) : (
-                      <span>
-                        Copier{' '}
-                        <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                      </span>
-                    )}
-                  </div>
-                </CopyToClipboard>
-              </div>
+          <div className={styles.content}>
+            <div className={styles.head}>
+              <h1 className={styles.title}>{title()}</h1>
+              <a href="#" onClick={close} className={styles.closeLink}>
+                <i className="fr-icon-close-line" />
+              </a>
             </div>
 
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Statut du bâtiment</h2>
-              <div className={styles.sectionBody}>{statusLabel()}</div>
-            </div>
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Adresses</h2>
-              <div className={styles.sectionBody}>
-                {selectedBuilding?.addresses?.length === 0 ? (
-                  <div>
-                    <em>Aucune adresse liée</em>
-                  </div>
-                ) : (
-                  selectedBuilding?.addresses?.map((a) => (
-                    <div key={a.id} className={styles.sectionListItem}>
-                      {a.street_number}
-                      {a.street_rep} {a.street_type} {a.street_name}
-                      <br />
-                      {a.city_zipcode} {a.city_name}
-                      <br />
-                      <small>
-                        Clé BAN : {a.id}
-                        {a.banId ? (
-                          <>
-                            <br />
-                            Identifiant BAN : {a.banId}
-                          </>
-                        ) : (
-                          ''
-                        )}
-                      </small>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
+            <div className={styles.body}>
+              {selectedItem?._type === 'building' && (
+                <>
+                  <BuildingPanel bdg={selectedItem} />
+                </>
+              )}
 
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle + ' fr-mb-2v'}>
-                Améliorez le RNB
-              </h2>
-              <ContributionForm />
-            </div>
-
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Correspondances</h2>
-              <div className={styles.sectionBody}>
-                {selectedBuilding?.ext_ids?.length === 0 ? (
-                  <div>
-                    <em>Aucun lien avec une autre base de donnée.</em>
-                  </div>
-                ) : (
-                  selectedBuilding?.ext_ids?.map((ext_id) => (
-                    <div key={ext_id.id} className={styles.sectionListItem}>
-                      <span>Base de données : {ext_id.source}</span>
-                      <br />
-                      <span>Identifiant : {ext_id.id}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Lien API</h2>
-              <div className={styles.sectionBody}>
-                <a href={apiUrl()} target="_blank">
-                  Format JSON
-                </a>
-              </div>
+              {selectedItem?._type === 'ads' && (
+                <>
+                  <ADSPanel ads={selectedItem} />
+                </>
+              )}
             </div>
           </div>
         </div>

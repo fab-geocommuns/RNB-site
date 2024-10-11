@@ -3,6 +3,41 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { get } from 'http';
 
+export interface SelectedBuilding {
+  _type: 'building';
+  rnb_id: string;
+  status: any[];
+  point: [number, number];
+  addresses: {
+    id: string;
+    banId: string;
+    source: string;
+    street_number: string;
+    street_rep: string;
+    street_name: string;
+    street_type: string;
+    city_name: string;
+    city_zipcode: string;
+    city_insee_code: string;
+  }[];
+  ext_ids: any[];
+  is_active: boolean;
+}
+
+export interface SelectedADS {
+  _type: 'ads';
+  file_number: string;
+  decided_at: string;
+  buildings_operations: BuildingADS[];
+}
+
+interface BuildingADS {
+  rnb_id?: string;
+  operation: 'build' | 'modify' | 'demolish';
+}
+
+export type SelectedItem = SelectedBuilding | SelectedADS;
+
 export type MapStore = {
   panelIsOpen: boolean;
   addressSearch: {
@@ -18,25 +53,7 @@ export type MapStore = {
   };
   marker?: [number, number];
   reloadBuildings?: number;
-  selectedBuilding?: {
-    rnb_id: string;
-    status: any[];
-    point: [number, number];
-    addresses: {
-      id: string;
-      banId: string;
-      source: string;
-      street_number: string;
-      street_rep: string;
-      street_name: string;
-      street_type: string;
-      city_name: string;
-      city_zipcode: string;
-      city_insee_code: string;
-    }[];
-    ext_ids: any[];
-    is_active: boolean;
-  };
+  selectedItem?: SelectedItem;
 };
 
 const initialState: MapStore = {
@@ -72,15 +89,19 @@ export const mapSlice = createSlice({
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
     updateAddresses(state, action) {
-      if (state.selectedBuilding) {
-        state.selectedBuilding.addresses = action.payload;
+      if (state.selectedItem && state.selectedItem._type === 'building') {
+        state.selectedItem.addresses = action.payload;
       }
+    },
+    unselectItem(state) {
+      state.selectedItem = undefined;
     },
   },
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
-      state.selectedBuilding = action.payload;
+      action.payload._type = 'building';
+      state.selectedItem = action.payload;
 
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
@@ -90,18 +111,40 @@ export const mapSlice = createSlice({
         window.history.replaceState({}, '', url);
       }
     });
+
+    builder.addCase(selectADS.fulfilled, (state, action) => {
+      action.payload._type = 'ads';
+      state.selectedItem = action.payload;
+    });
   },
 });
+
+export const selectADS = createAsyncThunk(
+  'map/selectADS',
+  async (fileNumber: string | null, { dispatch }) => {
+    if (!fileNumber) return;
+
+    const url = adsApiUrl(fileNumber + '?from=site');
+    const adsResponse = await fetch(url);
+
+    if (adsResponse.ok) {
+      const adsData = (await adsResponse.json()) as SelectedADS;
+
+      return adsData;
+    }
+  },
+);
 
 export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
+
     const url = bdgApiUrl(rnbId + '?from=site');
     const rnbResponse = await fetch(url);
+
     if (rnbResponse.ok) {
-      const rnbData =
-        (await rnbResponse.json()) as MapStore['selectedBuilding'];
+      const rnbData = (await rnbResponse.json()) as SelectedBuilding;
 
       // Add banId to each addresses
       if (rnbData?.addresses && rnbData.addresses.length > 0) {
@@ -117,10 +160,7 @@ export const selectBuilding = createAsyncThunk(
 
 export const addBanUUID = createAsyncThunk(
   'map/addBanUUID',
-  async (
-    rnbData: NonNullable<MapStore['selectedBuilding']>,
-    { dispatch, getState },
-  ) => {
+  async (rnbData: NonNullable<SelectedBuilding>, { dispatch, getState }) => {
     const updatedAddresses = await Promise.all(
       rnbData.addresses?.map(async (address) => {
         const banResponse = await fetch(banApiUrl(address.id));
@@ -138,11 +178,15 @@ export const addBanUUID = createAsyncThunk(
     // We update only if we are still looking at the same building.
     // Otherwise, we might experience a bug where we update the current building with the addresses of another building.
     const state = getState();
-    if (rnbData.rnb_id === state.selectedBuilding?.rnb_id) {
+    if (rnbData.rnb_id === state.selectedItem?.rnb_id) {
       dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
     }
   },
 );
+
+export function adsApiUrl(fileNumber: string) {
+  return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + fileNumber;
+}
 
 export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
@@ -155,6 +199,7 @@ export function banApiUrl(interopBanId: string) {
 export const mapActions = {
   ...mapSlice.actions,
   selectBuilding,
+  selectADS,
 };
 
 export const mapReducer = mapSlice.reducer;
