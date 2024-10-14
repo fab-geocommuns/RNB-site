@@ -17,6 +17,7 @@ export class BuildingSourceSwitcherControl {
   constructor() {
     this._container = document.createElement('div');
     this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+    this._container.setAttribute('data-testid', 'control-point-emprise');
 
     this._button = document.createElement('button');
     this._button.type = 'button';
