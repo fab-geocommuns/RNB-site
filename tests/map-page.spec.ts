@@ -28,9 +28,7 @@ test.describe('Carte', () => {
       .locator('img')
       .getAttribute('src');
     expect(imageUrl).toContain('/dot.');
-
     await mapPage.buildingStyleButton.click();
-
     imageUrl = await mapPage.buildingStyleButton
       .locator('img')
       .getAttribute('src');
