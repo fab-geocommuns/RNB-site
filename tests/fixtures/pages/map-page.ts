@@ -6,12 +6,7 @@ export class MapPage extends RNBPage {
   readonly map: Locator;
   readonly buildingStyleButton: Locator;
 
-  constructor(page: Page, browserName: string) {
-    test.skip(
-      browserName === 'firefox',
-      'Pas de support de WebGL2 sur Firefox headless',
-    );
-
+  constructor(page: Page) {
     super(page, '/carte');
     this.map = page.getByLabel('Map');
     this.buildingStyleButton = page.getByTestId('control-point-emprise');
