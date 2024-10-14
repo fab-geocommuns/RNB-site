@@ -27,7 +27,6 @@ export const getNearestFeatureFromCursorWithBuffer = (
       isShapeSource = (control as BuildingSourceSwitcherControl)
         ._isShapesSource;
 
-
   if (isShapeSource) {
     // Rechercher les features de la couche BUILDINGS_LAYER_SHAPE dans la zone de recherche
     const features = map.queryRenderedFeatures([x, y], {
@@ -57,9 +56,8 @@ export const getNearestFeatureFromCursorWithBuffer = (
           (feature.geometry as GeoJSON.Point).coordinates[0],
           (feature.geometry as GeoJSON.Point).coordinates[1],
         ]);
-        const distance = Math.sqrt(
-          Math.pow(x - featurePoint.x, 2) + Math.pow(y - featurePoint.y, 2),
-        );
+        const distance =
+          Math.pow(x - featurePoint.x, 2) + Math.pow(y - featurePoint.y, 2);
 
         if (distance < minDistance) {
           minDistance = distance;
