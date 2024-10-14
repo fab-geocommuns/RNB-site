@@ -12,6 +12,8 @@ const ADS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/ads/tiles/{x}/{y}/{z}.pbf';
 export const BUILDINGS_SOURCE = 'bdgtiles';
 export const BUILDINGS_LAYER = 'bdgs';
+export const BUILDINGS_LAYER_SHAPE = 'bdgs_shape';
+export const BUILDINGS_LAYER_SHAPE_FILL = 'bdgs_shape_fill';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
@@ -119,6 +121,10 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   // Ajout de la couche vectorielle des bâtiments
   const initBuildingLayer = useCallback((map: maplibregl.Map) => {
     if (map.getLayer(BUILDINGS_LAYER)) map.removeLayer(BUILDINGS_LAYER);
+    if (map.getLayer(BUILDINGS_LAYER_SHAPE))
+      map.removeLayer(BUILDINGS_LAYER_SHAPE);
+    if (map.getLayer(BUILDINGS_LAYER_SHAPE_FILL))
+      map.removeLayer(BUILDINGS_LAYER_SHAPE_FILL);
     if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
 
     map.addSource(BUILDINGS_SOURCE, {
@@ -127,6 +133,46 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       minzoom: 16,
       maxzoom: 22,
       promoteId: 'rnb_id',
+    });
+
+    map.addLayer({
+      id: BUILDINGS_LAYER_SHAPE,
+      type: 'fill',
+      source: BUILDINGS_SOURCE,
+      'source-layer': 'default',
+      paint: {
+        'fill-color': [
+          'case',
+          ['boolean', ['feature-state', 'hovered'], false],
+          '#132353',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          '#FF732C',
+          '#1452e3',
+        ],
+        'fill-opacity': 0.08,
+      },
+    });
+
+    map.addLayer({
+      id: BUILDINGS_LAYER_SHAPE_FILL,
+      type: 'line',
+      source: BUILDINGS_SOURCE,
+      'source-layer': 'default',
+      paint: {
+        'line-color': [
+          'case',
+          ['boolean', ['feature-state', 'hovered'], false],
+          '#132353',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          '#FF732C',
+          '#1452e3',
+        ],
+        'line-width': 1.5,
+      },
     });
 
     map.addLayer({

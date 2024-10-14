@@ -1,5 +1,6 @@
 import {
   BUILDINGS_LAYER,
+  BUILDINGS_LAYER_SHAPE,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
 import { current } from 'immer';
