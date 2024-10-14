@@ -27,6 +27,7 @@ export const getNearestFeatureFromCursorWithBuffer = (
       isShapeSource = (control as BuildingSourceSwitcherControl)
         ._isShapesSource;
 
+
   if (isShapeSource) {
     // Rechercher les features de la couche BUILDINGS_LAYER_SHAPE dans la zone de recherche
     const features = map.queryRenderedFeatures([x, y], {
