@@ -12,6 +12,7 @@ export class BuildingSourceSwitcherControl {
   private _container: HTMLElement;
   private _button: HTMLButtonElement;
   private _icon: HTMLImageElement;
+  private _text: HTMLSpanElement;
   public _isShapesSource: boolean = false;
 
   constructor() {
@@ -21,6 +22,9 @@ export class BuildingSourceSwitcherControl {
 
     this._button = document.createElement('button');
     this._button.type = 'button';
+    this._button.style.width = '4rem';
+    this._button.style.display = 'flex';
+    this._button.style.alignItems = 'center';
     this._button.className = 'source-switcher-btn';
 
     this._icon = document.createElement('img');
@@ -29,6 +33,10 @@ export class BuildingSourceSwitcherControl {
     this._icon.src = this._isShapesSource ? polygonImg.src : dotImg.src;
     this._icon.className = 'source-icon';
     this._button.appendChild(this._icon);
+
+    this._text = document.createElement('span');
+    this._text.textContent = 'Point';
+    this._button.appendChild(this._text);
 
     this._button.onclick = this._onClick.bind(this);
 
@@ -70,6 +78,8 @@ export class BuildingSourceSwitcherControl {
         this._isShapesSource ? 'none' : 'visible',
       );
       this._icon.src = this._isShapesSource ? dotImg.src : polygonImg.src;
+      this._text.textContent = this._isShapesSource ? 'Point' : 'Emprise';
+      this._button.style.width = this._isShapesSource ? '4rem' : '5.2rem';
 
       this._isShapesSource = !this._isShapesSource;
     }
