@@ -9,7 +9,7 @@ import { RootState } from '@/stores/map/store';
 const BDGS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
 const ADS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/ads/tiles/{x}/{y}/{z}.pbf';
+  process.env.NEXT_PUBLIC_API_BASE + '/permis/tiles/{x}/{y}/{z}.pbf';
 export const BUILDINGS_SOURCE = 'bdgtiles';
 export const BUILDINGS_LAYER = 'bdgs';
 
@@ -75,8 +75,8 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         'circle-radius': [
           'case',
           ['boolean', ['==', ['feature-state', 'hovered'], true]],
-          14,
           12,
+          10,
         ],
         'circle-stroke-color': [
           'case',
@@ -106,7 +106,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           'adsModify',
           'adsBuild',
         ],
-        'icon-size': 0.25,
+        'icon-size': 0.2,
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
       },
