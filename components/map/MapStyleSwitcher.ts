@@ -20,6 +20,8 @@ export default class MapStyleSwitcherControl {
 
     this._switcherLabel = document.createElement('span');
     this._switcherLabel.classList.add('maplibregl-ctrl-styles-label');
+    this._switcherLabel.innerText =
+      this._options.styles[this._options.chosenStyle].name;
 
     this._switcher.appendChild(iconEl);
     this._switcher.appendChild(this._switcherLabel);
