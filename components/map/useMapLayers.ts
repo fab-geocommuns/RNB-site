@@ -75,8 +75,8 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         'circle-radius': [
           'case',
           ['boolean', ['==', ['feature-state', 'hovered'], true]],
-          14,
           12,
+          10,
         ],
         'circle-stroke-color': [
           'case',
@@ -106,7 +106,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           'adsModify',
           'adsBuild',
         ],
-        'icon-size': 0.25,
+        'icon-size': 0.2,
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
       },
