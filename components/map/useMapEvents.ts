@@ -23,6 +23,8 @@ export const useMapEvents = (map?: maplibregl.Map) => {
     if (map) {
       // Click sur la carte
       map.on('click', async function (e) {
+        console.log('click on map');
+
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map,
           e.point.x,
