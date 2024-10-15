@@ -57,6 +57,10 @@ export default class MapStyleSwitcherControl {
     // On garde la source et la couche des bâtiments
     const currentStyle = this._map.getStyle();
 
+    if (!currentStyle) {
+      return;
+    }
+
     const sourcesIdsToKeep = [BUILDINGS_SOURCE, 'ads'];
     const layersIdsToKeep = [BUILDINGS_LAYER, 'adscircle', 'adsicon'];
 
