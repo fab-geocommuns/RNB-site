@@ -2,7 +2,6 @@ import {
   BUILDINGS_LAYER,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
-import { current } from 'immer';
 
 export default class MapStyleSwitcherControl {
   constructor(options) {
@@ -58,20 +57,39 @@ export default class MapStyleSwitcherControl {
     // On garde la source et la couche des bâtiments
     const currentStyle = this._map.getStyle();
 
-    const buildingSource = currentStyle?.sources[BUILDINGS_SOURCE];
-    const buildingLayers = currentStyle?.layers.find(
-      (l) => l.id === BUILDINGS_LAYER,
-    );
+    const sourcesIdsToKeep = [BUILDINGS_SOURCE, 'ads'];
+    const layersIdsToKeep = [BUILDINGS_LAYER, 'adscircle', 'adsicon'];
+
+    const sourcesToKeep = {};
+    const layersToKeep = [];
+
+    // Copy sources
+    sourcesIdsToKeep.forEach((sourceId: string) => {
+      if (currentStyle.sources[sourceId]) {
+        sourcesToKeep[sourceId] = currentStyle.sources[sourceId];
+      }
+    });
+
+    // Copy layers
+    currentStyle.layers.forEach((layer) => {
+      if (layersIdsToKeep.includes(layer.id)) {
+        layersToKeep.push(layer);
+      }
+    });
 
     // On duplique notre style pour ne pas modifier le style initial
     const newStyle = JSON.parse(
       JSON.stringify(this._options.styles[styleKey].style),
     );
 
-    if (buildingSource && buildingLayers) {
-      newStyle.sources[BUILDINGS_SOURCE] = buildingSource;
-      newStyle.layers.push(buildingLayers);
-    }
+    // On remplace les sources et les layers
+    Object.keys(sourcesToKeep).forEach((sourceId) => {
+      newStyle.sources[sourceId] = sourcesToKeep[sourceId];
+    });
+
+    layersToKeep.forEach((layer) => {
+      newStyle.layers.push(layer);
+    });
 
     this._map.setStyle(newStyle);
 

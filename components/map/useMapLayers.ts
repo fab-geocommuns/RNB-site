@@ -9,7 +9,7 @@ import { RootState } from '@/stores/map/store';
 const BDGS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
 const ADS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/ads/tiles/{x}/{y}/{z}.pbf';
+  process.env.NEXT_PUBLIC_API_BASE + '/permis/tiles/{x}/{y}/{z}.pbf';
 export const BUILDINGS_SOURCE = 'bdgtiles';
 export const BUILDINGS_LAYER = 'bdgs';
 

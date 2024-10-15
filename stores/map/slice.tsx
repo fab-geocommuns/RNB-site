@@ -185,7 +185,7 @@ export const addBanUUID = createAsyncThunk(
 );
 
 export function adsApiUrl(fileNumber: string) {
-  return process.env.NEXT_PUBLIC_API_BASE + '/ads/' + fileNumber;
+  return process.env.NEXT_PUBLIC_API_BASE + '/permis/' + fileNumber + '/';
 }
 
 export function bdgApiUrl(bdgId: string) {
