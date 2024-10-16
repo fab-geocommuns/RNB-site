@@ -1,9 +1,12 @@
 import {
   BUILDINGS_LAYER,
   BUILDINGS_LAYER_SHAPE,
+  BUILDINGS_LAYER_SHAPE_FILL,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
 import { current } from 'immer';
+import { webpack } from 'next/dist/compiled/webpack/webpack';
+import sources = module;
 
 export default class MapStyleSwitcherControl {
   constructor(options) {
@@ -59,9 +62,17 @@ export default class MapStyleSwitcherControl {
     // On garde la source et la couche des bâtiments
     const currentStyle = this._map.getStyle();
 
-    const buildingSource = currentStyle?.sources[BUILDINGS_SOURCE];
-    const buildingLayers = currentStyle?.layers.find(
-      (l) => l.id === BUILDINGS_LAYER,
+    const sourcesToKeep: Record<string, any> = {
+      [BUILDINGS_SOURCE]: currentStyle?.sources[BUILDINGS_SOURCE],
+      ads: currentStyle?.sources['ads'],
+    };
+    const layersToKeep = currentStyle?.layers.filter((l) =>
+      [
+        BUILDINGS_LAYER,
+        BUILDINGS_LAYER_SHAPE,
+        BUILDINGS_LAYER_SHAPE_FILL,
+        'adscircle',
+      ].includes(l.id),
     );
 
     // On duplique notre style pour ne pas modifier le style initial
@@ -69,9 +80,13 @@ export default class MapStyleSwitcherControl {
       JSON.stringify(this._options.styles[styleKey].style),
     );
 
-    if (buildingSource && buildingLayers) {
-      newStyle.sources[BUILDINGS_SOURCE] = buildingSource;
-      newStyle.layers.push(buildingLayers);
+    if (sourcesToKeep && layersToKeep) {
+      for (const sourceId of Object.keys(sourcesToKeep))
+        if (sourcesToKeep[sourceId])
+          newStyle.sources[sourceId] = sourcesToKeep[sourceId];
+
+      console.log(sourcesToKeep, newStyle.sources);
+      newStyle.layers.push(...layersToKeep);
     }
 
     this._map.setStyle(newStyle);
