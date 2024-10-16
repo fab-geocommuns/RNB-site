@@ -85,7 +85,6 @@ export default class MapStyleSwitcherControl {
         if (sourcesToKeep[sourceId])
           newStyle.sources[sourceId] = sourcesToKeep[sourceId];
 
-      console.log(sourcesToKeep, newStyle.sources);
       newStyle.layers.push(...layersToKeep);
     }
 
