@@ -158,9 +158,9 @@ export default async function Page() {
                   <ol>
                     <li>
                       Saisissez l’adresse du bâtiment pour lequel vous souhaitez
-                      faire un signalement ou utilisez la géolocalisation, sur
-                      l&apos;outil
-                      [cartographie](https://rnb.beta.gouv.fr/carte) du RNB.
+                      faire un signalement ou utilisez la géolocalisation sur
+                      la 
+                      <a href=https://rnb.beta.gouv.fr/carte>carte</a> du RNB.
                     </li>
                     <li>
                       Sélectionnez le bâtiment concerné (un des points bleus)
