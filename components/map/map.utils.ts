@@ -19,7 +19,7 @@ export const getNearestFeatureFromCursorWithBuffer = (
   y: number,
   buffer = 15,
 ): MapGeoJSONFeature | undefined => {
-  if (!map.getLayer(BUILDINGS_LAYER) || !map.getLayer('adscircle')) return;
+  if (!map.getLayer(BUILDINGS_LAYER) && !map.getLayer('adscircle')) return;
 
   let isShapeSource = false;
   for (const control of map._controls)

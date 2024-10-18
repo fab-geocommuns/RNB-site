@@ -6,7 +6,6 @@ import {
 } from '@/components/map/useMapLayers';
 import { current } from 'immer';
 import { webpack } from 'next/dist/compiled/webpack/webpack';
-import sources = module;
 
 export default class MapStyleSwitcherControl {
   constructor(options) {
@@ -25,6 +24,9 @@ export default class MapStyleSwitcherControl {
 
     this._switcherLabel = document.createElement('span');
     this._switcherLabel.classList.add('maplibregl-ctrl-styles-label');
+
+    const otherStyleKey = this.theOtherStyleKey(this._options.chosenStyle);
+    this._switcherLabel.innerText = this._options.styles[otherStyleKey].name;
 
     this._switcher.appendChild(iconEl);
     this._switcher.appendChild(this._switcherLabel);
@@ -62,6 +64,10 @@ export default class MapStyleSwitcherControl {
     // On garde la source et la couche des bâtiments
     const currentStyle = this._map.getStyle();
 
+    if (!currentStyle) {
+      return;
+    }
+
     const sourcesToKeep: Record<string, any> = {
       [BUILDINGS_SOURCE]: currentStyle?.sources[BUILDINGS_SOURCE],
       ads: currentStyle?.sources['ads'],
@@ -72,6 +78,7 @@ export default class MapStyleSwitcherControl {
         BUILDINGS_LAYER_SHAPE,
         BUILDINGS_LAYER_SHAPE_FILL,
         'adscircle',
+        'adsicon',
       ].includes(l.id),
     );
 
