@@ -10,6 +10,7 @@ test.describe('Carte', () => {
       browserName === 'firefox',
       'Pas de support de WebGL2 sur Firefox headless',
     );
+
     await expect(mapPage.map).toBeVisible();
   });
 });

@@ -102,7 +102,7 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
       }
 
       // Then, highlight the current selected item
-      if (selectedItem && map) {
+      if (selectedItem && map && map.getSource(BUILDINGS_SOURCE)) {
         const source = getFeatureTypeSource(selectedItem);
         const id = getFeatureId(selectedItem);
 
