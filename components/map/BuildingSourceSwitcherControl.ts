@@ -22,7 +22,7 @@ export class BuildingSourceSwitcherControl {
 
     this._button = document.createElement('button');
     this._button.type = 'button';
-    this._button.style.width = '5rem';
+    this._button.style.width = '7rem';
     this._button.style.display = 'flex';
     this._button.style.alignItems = 'center';
     this._button.style.justifyContent = 'center';
@@ -32,12 +32,12 @@ export class BuildingSourceSwitcherControl {
     this._icon.style.maxWidth = '70%';
     this._icon.style.maxHeight = '70%';
     this._icon.style.paddingRight = '0.5em';
-    this._icon.src = this._isShapesSource ? polygonImg.src : dotImg.src;
+    this._icon.src = this._isShapesSource ? dotImg.src : polygonImg.src;
     this._icon.className = 'source-icon';
     this._button.appendChild(this._icon);
 
     this._text = document.createElement('span');
-    this._text.textContent = 'Point';
+    this._text.textContent = 'Polygone';
     this._text.style.fontWeight = '500';
     this._text.style.fontSize = '1.3em';
     this._button.appendChild(this._text);
@@ -81,9 +81,9 @@ export class BuildingSourceSwitcherControl {
         'visibility',
         this._isShapesSource ? 'none' : 'visible',
       );
-      this._icon.src = this._isShapesSource ? dotImg.src : polygonImg.src;
-      this._text.textContent = this._isShapesSource ? 'Point' : 'Emprise';
-      this._button.style.width = this._isShapesSource ? '5rem' : '6rem';
+      this._icon.src = this._isShapesSource ? polygonImg.src : dotImg.src;
+      this._text.textContent = this._isShapesSource ? 'Polygone' : 'Point';
+      this._button.style.width = this._isShapesSource ? '7rem' : '5rem';
 
       this._isShapesSource = !this._isShapesSource;
     }
