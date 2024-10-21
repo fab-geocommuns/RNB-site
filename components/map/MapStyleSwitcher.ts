@@ -2,6 +2,7 @@ import {
   BUILDINGS_LAYER_POINT,
   BUILDINGS_LAYER_SHAPE_BORDER,
   BUILDINGS_LAYER_SHAPE_FILL,
+  BUILDINGS_LAYER_SHAPE_POINT,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
 import { current } from 'immer';
@@ -77,6 +78,7 @@ export default class MapStyleSwitcherControl {
         BUILDINGS_LAYER_POINT,
         BUILDINGS_LAYER_SHAPE_BORDER,
         BUILDINGS_LAYER_SHAPE_FILL,
+        BUILDINGS_LAYER_SHAPE_POINT,
         'adscircle',
         'adsicon',
       ].includes(l.id),
