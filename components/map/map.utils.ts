@@ -1,7 +1,8 @@
 import maplibregl, { MapGeoJSONFeature, PointLike } from 'maplibre-gl';
 import {
-  BUILDINGS_LAYER,
-  BUILDINGS_LAYER_SHAPE,
+  BUILDINGS_LAYER_POINT,
+  BUILDINGS_LAYER_SHAPE_BORDER,
+  BUILDINGS_LAYER_SHAPE_POINT,
 } from '@/components/map/useMapLayers';
 import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
@@ -19,53 +20,50 @@ export const getNearestFeatureFromCursorWithBuffer = (
   y: number,
   buffer = 15,
 ): MapGeoJSONFeature | undefined => {
-  if (!map.getLayer(BUILDINGS_LAYER) && !map.getLayer('adscircle')) return;
+  if (!map.getLayer(BUILDINGS_LAYER_POINT) && !map.getLayer('adscircle'))
+    return;
 
-  let isShapeSource = false;
-  for (const control of map._controls)
-    if (control instanceof BuildingSourceSwitcherControl)
-      isShapeSource = (control as BuildingSourceSwitcherControl)
-        ._isShapesSource;
+  let bbox: [PointLike, PointLike] = [
+    [x - buffer, y - buffer],
+    [x + buffer, y + buffer],
+  ];
 
-  if (isShapeSource) {
-    // Rechercher les features de la couche BUILDINGS_LAYER_SHAPE dans la zone de recherche
-    const features = map.queryRenderedFeatures([x, y], {
-      layers: [BUILDINGS_LAYER_SHAPE],
+  // Rechercher les features de type polygons de la couche BUILDINGS_LAYER_SHAPE_BORDER
+  let features = map.queryRenderedFeatures([x, y], {
+    layers: [BUILDINGS_LAYER_SHAPE_BORDER],
+  });
+
+  if (features && features.length > 0) return features[0];
+
+  bbox = [
+    [x - buffer, y - buffer],
+    [x + buffer, y + buffer],
+  ];
+
+  // Rechercher les features de la couche BUILDINGS_LAYER_POINT dans la zone de recherche
+  features = map.queryRenderedFeatures(bbox, {
+    layers: [BUILDINGS_LAYER_POINT, BUILDINGS_LAYER_SHAPE_POINT, 'adscircle'],
+  });
+
+  // Calcul de la feature la plus proche
+  let closestFeature: MapGeoJSONFeature | undefined = undefined;
+  if (features.length > 0) {
+    let minDistance = Infinity;
+
+    features.forEach((feature) => {
+      const featurePoint = map.project([
+        (feature.geometry as GeoJSON.Point).coordinates[0],
+        (feature.geometry as GeoJSON.Point).coordinates[1],
+      ]);
+      const distance =
+        Math.pow(x - featurePoint.x, 2) + Math.pow(y - featurePoint.y, 2);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestFeature = feature;
+      }
     });
-
-    // Parcourir les features et vérifier si une feature contient le point (x, y)
-    return features ? features[0] : undefined;
-  } else {
-    const bbox: [PointLike, PointLike] = [
-      [x - buffer, y - buffer],
-      [x + buffer, y + buffer],
-    ];
-
-    // Rechercher les features de la couche BUILDINGS_LAYER dans la zone de recherche
-    const features = map.queryRenderedFeatures(bbox, {
-      layers: [BUILDINGS_LAYER, 'adscircle'],
-    });
-
-    // Calcul de la feature la plus proche
-    let closestFeature: MapGeoJSONFeature | undefined = undefined;
-    if (features.length > 0) {
-      let minDistance = Infinity;
-
-      features.forEach((feature) => {
-        const featurePoint = map.project([
-          (feature.geometry as GeoJSON.Point).coordinates[0],
-          (feature.geometry as GeoJSON.Point).coordinates[1],
-        ]);
-        const distance =
-          Math.pow(x - featurePoint.x, 2) + Math.pow(y - featurePoint.y, 2);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestFeature = feature;
-        }
-      });
-    }
-
-    return closestFeature;
   }
+
+  return closestFeature;
 };

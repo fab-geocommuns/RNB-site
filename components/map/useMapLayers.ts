@@ -10,10 +10,19 @@ const BDGS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
 const ADS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/permis/tiles/{x}/{y}/{z}.pbf';
+
 export const BUILDINGS_SOURCE = 'bdgtiles';
-export const BUILDINGS_LAYER = 'bdgs';
-export const BUILDINGS_LAYER_SHAPE = 'bdgs_shape';
+
+export const BUILDINGS_LAYER_POINT = 'bdgs';
+
+export const BUILDINGS_LAYER_SHAPE_BORDER = 'bdgs_shape';
 export const BUILDINGS_LAYER_SHAPE_FILL = 'bdgs_shape_fill';
+export const BUILDINGS_LAYER_SHAPE_POINT = 'bdgs_shape_point';
+export const BUILDINGS_LAYERS_SHAPE = [
+  BUILDINGS_LAYER_SHAPE_BORDER,
+  BUILDINGS_LAYER_SHAPE_FILL,
+  BUILDINGS_LAYER_SHAPE_POINT,
+];
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
@@ -120,11 +129,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
   // Ajout de la couche vectorielle des bâtiments
   const initBuildingLayer = useCallback((map: maplibregl.Map) => {
-    if (map.getLayer(BUILDINGS_LAYER)) map.removeLayer(BUILDINGS_LAYER);
-    if (map.getLayer(BUILDINGS_LAYER_SHAPE))
-      map.removeLayer(BUILDINGS_LAYER_SHAPE);
-    if (map.getLayer(BUILDINGS_LAYER_SHAPE_FILL))
-      map.removeLayer(BUILDINGS_LAYER_SHAPE_FILL);
+    if (map.getLayer(BUILDINGS_LAYER_POINT))
+      map.removeLayer(BUILDINGS_LAYER_POINT);
+    BUILDINGS_LAYERS_SHAPE.forEach((l) => {
+      if (map.getLayer(l)) map.removeLayer(l);
+    });
     if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
 
     map.addSource(BUILDINGS_SOURCE, {
@@ -135,8 +144,9 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       promoteId: 'rnb_id',
     });
 
+    // Polygon border
     map.addLayer({
-      id: BUILDINGS_LAYER_SHAPE,
+      id: BUILDINGS_LAYER_SHAPE_BORDER,
       type: 'fill',
       source: BUILDINGS_SOURCE,
       'source-layer': 'default',
@@ -155,6 +165,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       },
     });
 
+    // Polygon fill
     map.addLayer({
       id: BUILDINGS_LAYER_SHAPE_FILL,
       type: 'line',
@@ -175,8 +186,42 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       },
     });
 
+    // Points on the polygon source
     map.addLayer({
-      id: BUILDINGS_LAYER,
+      id: BUILDINGS_LAYER_SHAPE_POINT,
+      type: 'circle',
+      source: BUILDINGS_SOURCE,
+      'source-layer': 'default',
+      filter: ['==', '$type', 'Point'],
+      paint: {
+        'circle-radius': [
+          'case',
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
+          6,
+          5,
+        ],
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#ffffff',
+          ['>', ['get', 'contributions'], 0],
+          '#fef4f4',
+          '#ffffff',
+        ],
+        'circle-stroke-width': 3,
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          '#FF732C',
+          '#1452e3',
+        ],
+      },
+    });
+
+    map.addLayer({
+      id: BUILDINGS_LAYER_POINT,
       type: 'circle',
       source: BUILDINGS_SOURCE,
       'source-layer': 'default',

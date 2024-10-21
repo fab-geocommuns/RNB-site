@@ -5,8 +5,9 @@ import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.util
 import { MapMouseEvent } from 'maplibre-gl';
 import {
   BUILDINGS_SOURCE,
-  BUILDINGS_LAYER,
-  BUILDINGS_LAYER_SHAPE,
+  BUILDINGS_LAYER_POINT,
+  BUILDINGS_LAYER_SHAPE_BORDER,
+  BUILDINGS_LAYER_SHAPE_POINT,
 } from '@/components/map/useMapLayers';
 
 /**
@@ -34,9 +35,11 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           // What did we click on?
 
           if (
-            [BUILDINGS_LAYER, BUILDINGS_LAYER_SHAPE].includes(
-              featureCloseToCursor.layer.id,
-            )
+            [
+              BUILDINGS_LAYER_POINT,
+              BUILDINGS_LAYER_SHAPE_BORDER,
+              BUILDINGS_LAYER_SHAPE_POINT,
+            ].includes(featureCloseToCursor.layer.id)
           ) {
             // It is a building
             const rnb_id = featureCloseToCursor.properties.rnb_id;

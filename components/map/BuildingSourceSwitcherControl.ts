@@ -1,6 +1,6 @@
 import {
-  BUILDINGS_LAYER,
-  BUILDINGS_LAYER_SHAPE,
+  BUILDINGS_LAYER_POINT,
+  BUILDINGS_LAYER_SHAPE_BORDER,
   BUILDINGS_LAYER_SHAPE_FILL,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
@@ -67,12 +67,12 @@ export class BuildingSourceSwitcherControl {
 
       this._map.getSource(BUILDINGS_SOURCE)?.setTiles([newUrl]);
       this._map.setLayoutProperty(
-        BUILDINGS_LAYER,
+        BUILDINGS_LAYER_POINT,
         'visibility',
         !this._isShapesSource ? 'none' : 'visible',
       );
       this._map.setLayoutProperty(
-        BUILDINGS_LAYER_SHAPE,
+        BUILDINGS_LAYER_SHAPE_BORDER,
         'visibility',
         this._isShapesSource ? 'none' : 'visible',
       );

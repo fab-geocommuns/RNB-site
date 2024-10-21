@@ -1,6 +1,6 @@
 import {
-  BUILDINGS_LAYER,
-  BUILDINGS_LAYER_SHAPE,
+  BUILDINGS_LAYER_POINT,
+  BUILDINGS_LAYER_SHAPE_BORDER,
   BUILDINGS_LAYER_SHAPE_FILL,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
@@ -74,8 +74,8 @@ export default class MapStyleSwitcherControl {
     };
     const layersToKeep = currentStyle?.layers.filter((l) =>
       [
-        BUILDINGS_LAYER,
-        BUILDINGS_LAYER_SHAPE,
+        BUILDINGS_LAYER_POINT,
+        BUILDINGS_LAYER_SHAPE_BORDER,
         BUILDINGS_LAYER_SHAPE_FILL,
         'adscircle',
         'adsicon',
