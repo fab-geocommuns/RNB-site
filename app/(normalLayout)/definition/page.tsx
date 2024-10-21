@@ -152,14 +152,13 @@ export default async function Page() {
 
                   <span>
                     Envoyez votre signalement directement sur la{' '}
-                    <a href="https://rnb.beta.gouv.fr/carte">carte</a> du
-                    RNB. Pour ce faire :
+                    <a href="https://rnb.beta.gouv.fr/carte">carte</a> du RNB.
+                    Pour ce faire :
                   </span>
                   <ol>
                     <li>
                       Saisissez l’adresse du bâtiment pour lequel vous souhaitez
-                      faire un signalement ou utilisez la géolocalisation sur
-                      la 
+                      faire un signalement ou utilisez la géolocalisation sur la{' '}
                       <a href="/carte">carte</a> du RNB.
                     </li>
                     <li>
