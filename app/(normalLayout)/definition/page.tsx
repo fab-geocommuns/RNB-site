@@ -140,7 +140,7 @@ export default async function Page() {
               <div className="fr-col-12 fr-col-md-8">
                 <div className="block block--yellow block--fill">
                   <h3 className="block__title">
-                    Signalement un erreur sur un bâtiment
+                    Signaler une erreur sur un bâtiment
                   </h3>
 
                   <p>
@@ -152,15 +152,14 @@ export default async function Page() {
 
                   <span>
                     Envoyez votre signalement directement sur la{' '}
-                    <a href="https://rnb.beta.gouv.fr/carte">carte</a> du
-                    RNB. Pour ce faire :
+                    <a href="https://rnb.beta.gouv.fr/carte">carte</a> du RNB.
+                    Pour ce faire :
                   </span>
                   <ol>
                     <li>
                       Saisissez l’adresse du bâtiment pour lequel vous souhaitez
-                      faire un signalement ou utilisez la géolocalisation, sur
-                      l&apos;outil
-                      [cartographie](https://rnb.beta.gouv.fr/carte) du RNB.
+                      faire un signalement ou utilisez la géolocalisation sur la{' '}
+                      <a href="/carte">carte</a> du RNB.
                     </li>
                     <li>
                       Sélectionnez le bâtiment concerné (un des points bleus)
