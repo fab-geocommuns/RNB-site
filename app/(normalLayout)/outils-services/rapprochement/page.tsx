@@ -18,6 +18,7 @@ import pivotIlluMobile from '@/public/images/pivot-sentence-mobile.png';
 import mountainPhoto from '@/public/images/bdgs-mountains.jpg';
 import metalBdgPhoto from '@/public/images/metal-bdg.jpg';
 import bdgRiverPhoto from '@/public/images/bdg-river.jpg';
+import siloPhoto from '@/public/images/silo-bdg.jpg';
 
 export default async function Page() {
   const dbs = await getDatabases();
@@ -136,9 +137,10 @@ export default async function Page() {
                 </p>
               </div>
             </div>
-            <div className="fr-col-12 fr-col-md-4">
+            <div className="fr-col-12 fr-col-md-6">
               <Card
                 imageUrl={metalBdgPhoto.src}
+                horizontal
                 desc="Interrogez notre API bâtiment et intégrez directement les identifiants RNB de vos bâtiments à vos jeux de données."
                 linkProps={{
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/identification-de-batiment',
@@ -146,9 +148,10 @@ export default async function Page() {
                 title="Utilisez notre API d'identification de bâtiments"
               />
             </div>
-            <div className="fr-col-12 fr-col-md-4">
+            <div className="fr-col-12 fr-col-md-6">
               <Card
                 imageUrl={mountainPhoto.src}
+                horizontal
                 desc="Intégrez une carte présentant les bâtiments RNB au sein de vos sites et logiciels. Permettez à vos utilisateurs d'identifier et sélectionner le ou les bons bâtiments."
                 linkProps={{
                   href: 'https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments',
@@ -156,9 +159,21 @@ export default async function Page() {
                 title="Intégrez un sélecteur de bâtiments à vos outils"
               />
             </div>
-            <div className="fr-col-12 fr-col-md-4">
+            <div className="fr-col-12 fr-col-md-6">
+              <Card
+                imageUrl={siloPhoto.src}
+                horizontal
+                desc="Le RNB est publié sous licence ouverte et régulièrement mis à jour sur data.gouv.fr. "
+                linkProps={{
+                  href: 'https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/',
+                }}
+                title="Téléchargez les données du RNB"
+              />
+            </div>
+            <div className="fr-col-12 fr-col-md-6">
               <Card
                 imageUrl={bdgRiverPhoto.src}
+                horizontal
                 desc="Vous souhaitez intégrer les identifiants RNB à votre base bâtimentaire mais n'avez pas les ressources techniques pour le faire ? Contactez-nous."
                 linkProps={{ href: '/contact' }}
                 title="Faites appel à notre bureau des rapprochements"
