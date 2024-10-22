@@ -22,7 +22,7 @@ import Bus from '@/utils/Bus';
 import { Actions, RootState } from '@/stores/map/store';
 
 export default function ContributionForm() {
-  const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/';
+  const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
 
   const selectedBuilding = useSelector(
     (state: RootState) => state.selectedItem,
@@ -46,7 +46,7 @@ export default function ContributionForm() {
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState('');
-
+  const [summerGamesMessage, setSummerGamesMessage] = useState<string>();
   const dispatch = useDispatch();
 
   const handleSubmit = async (e: any) => {
@@ -62,7 +62,20 @@ export default function ContributionForm() {
       body: data,
     })
       .then(async (res) => {
+        // Temporary block for the summer games
         const data = await res.json();
+        if (Object.hasOwn(data, 'contributor_rank')) {
+          let pluralS = '';
+          if (data.contributor_count > 1) {
+            pluralS = 's';
+          }
+
+          setSummerGamesMessage(
+            `<b>Vous avez envoyé ${data.contributor_count} signalement${pluralS}</b>.`,
+          );
+        } else {
+          setSummerGamesMessage(undefined);
+        }
 
         // Warn the map and the contribution counter there is a new one
         Bus.emit('contribution:new', {
@@ -70,6 +83,7 @@ export default function ContributionForm() {
         });
 
         /* Empty textarea */
+
         setSending(false);
         setSuccess(true);
         emptyMsgInput();
@@ -144,6 +158,12 @@ export default function ContributionForm() {
           <Badge small severity="success">
             Signalement envoyé. Merci.
           </Badge>
+          {summerGamesMessage && (
+            <div
+              className={styles.summerGameMessage}
+              dangerouslySetInnerHTML={{ __html: summerGamesMessage }}
+            ></div>
+          )}
         </div>
       )}
     </form>
