@@ -115,7 +115,7 @@ export default async function Home() {
               <div className="block block--blue">
                 <h3 className="block__title">Carte des bâtiments</h3>
                 <p className="block__subtitle">
-                  Cherchez une adresse ou un identifiant RNB et consultez les 48
+                  Cherchez une adresse ou un identifiant RNB et consultez les 43
                   millions de bâtiments référencés.
                 </p>
                 <AddressSearchHome />
