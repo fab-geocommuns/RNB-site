@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { fr } from '@codegouvfr/react-dsfr';
 import MapStyleSwitcherControl from '@/components/map/MapStyleSwitcher';
 import { STYLES } from '@/components/map/useMapLayers';
+import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 /**
  * Ajout et gestion des controles de la carte
@@ -29,6 +30,9 @@ export const useMapControls = (map?: maplibregl.Map) => {
         }),
         'bottom-right',
       );
+
+      // Style switcher
+      map.addControl(new BuildingSourceSwitcherControl(), 'bottom-right');
 
       // Zoom
       map.addControl(

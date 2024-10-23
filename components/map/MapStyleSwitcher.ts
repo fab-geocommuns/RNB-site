@@ -1,7 +1,12 @@
 import {
-  BUILDINGS_LAYER,
+  BUILDINGS_LAYER_POINT,
+  BUILDINGS_LAYER_SHAPE_BORDER,
+  BUILDINGS_LAYER_SHAPE_FILL,
+  BUILDINGS_LAYER_SHAPE_POINT,
   BUILDINGS_SOURCE,
 } from '@/components/map/useMapLayers';
+import { current } from 'immer';
+import { webpack } from 'next/dist/compiled/webpack/webpack';
 
 export default class MapStyleSwitcherControl {
   constructor(options) {
@@ -64,39 +69,33 @@ export default class MapStyleSwitcherControl {
       return;
     }
 
-    const sourcesIdsToKeep = [BUILDINGS_SOURCE, 'ads'];
-    const layersIdsToKeep = [BUILDINGS_LAYER, 'adscircle', 'adsicon'];
-
-    const sourcesToKeep = {};
-    const layersToKeep = [];
-
-    // Copy sources
-    sourcesIdsToKeep.forEach((sourceId: string) => {
-      if (currentStyle.sources[sourceId]) {
-        sourcesToKeep[sourceId] = currentStyle.sources[sourceId];
-      }
-    });
-
-    // Copy layers
-    currentStyle.layers.forEach((layer) => {
-      if (layersIdsToKeep.includes(layer.id)) {
-        layersToKeep.push(layer);
-      }
-    });
+    const sourcesToKeep: Record<string, any> = {
+      [BUILDINGS_SOURCE]: currentStyle?.sources[BUILDINGS_SOURCE],
+      ads: currentStyle?.sources['ads'],
+    };
+    const layersToKeep = currentStyle?.layers.filter((l) =>
+      [
+        BUILDINGS_LAYER_POINT,
+        BUILDINGS_LAYER_SHAPE_BORDER,
+        BUILDINGS_LAYER_SHAPE_FILL,
+        BUILDINGS_LAYER_SHAPE_POINT,
+        'adscircle',
+        'adsicon',
+      ].includes(l.id),
+    );
 
     // On duplique notre style pour ne pas modifier le style initial
     const newStyle = JSON.parse(
       JSON.stringify(this._options.styles[styleKey].style),
     );
 
-    // On remplace les sources et les layers
-    Object.keys(sourcesToKeep).forEach((sourceId) => {
-      newStyle.sources[sourceId] = sourcesToKeep[sourceId];
-    });
+    if (sourcesToKeep && layersToKeep) {
+      for (const sourceId of Object.keys(sourcesToKeep))
+        if (sourcesToKeep[sourceId])
+          newStyle.sources[sourceId] = sourcesToKeep[sourceId];
 
-    layersToKeep.forEach((layer) => {
-      newStyle.layers.push(layer);
-    });
+      newStyle.layers.push(...layersToKeep);
+    }
 
     this._map.setStyle(newStyle);
 
