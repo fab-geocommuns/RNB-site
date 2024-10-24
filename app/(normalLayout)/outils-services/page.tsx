@@ -14,7 +14,7 @@ export default function Outils() {
                 <div className="block block--blue">
                   <h2 className="blockTitle">Carte des bâtiments</h2>
                   <p className="blockSubtitle">
-                    Consultez les 48 millions de bâtiments du RNB. Retrouvez un
+                    Consultez les 43 millions de bâtiments du RNB. Retrouvez un
                     bâtiment grâce à son identifiant ou son adresse.
                   </p>
                   <form action="/carte" method="get">
