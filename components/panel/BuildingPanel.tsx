@@ -125,7 +125,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             bdg?.addresses?.map((a) => (
               <div key={a.id} className={panelStyles.sectionListItem}>
                 {a.street_number}
-                {a.street_rep} {a.street_type} {a.street_name}
+                {a.street_rep} {a.street}
                 <br />
                 {a.city_zipcode} {a.city_name}
                 <br />
