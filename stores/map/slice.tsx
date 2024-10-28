@@ -14,8 +14,7 @@ export interface SelectedBuilding {
     source: string;
     street_number: string;
     street_rep: string;
-    street_name: string;
-    street_type: string;
+    street: string;
     city_name: string;
     city_zipcode: string;
     city_insee_code: string;
