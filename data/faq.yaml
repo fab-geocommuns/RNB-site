@@ -54,36 +54,45 @@
   desc: Tout savoir sur la conception du RNB, les caractéristiques techniques des bâtiments et de l’ID unique.
   key: conception
   entries:
-  - question: D’où proviennent les données du RNB ?
-    key: provenance
+  - question: D’où proviennent les données du RNB ? Comment le RNB est mis à jour ?
+    key: donnees
     answer: >
-      <p>Les bâtiments présentés dans le RNB sont essentiellement issus d’une fusion de la BD Topo, éditée par l’Institut national de l'information géographique et forestière (IGN) et de la BDNB, éditée par le Centre Scientifique et Technique du Bâtiment (CSTB).</p>
+      <p>Les bâtiments présentés dans le RNB sont essentiellement issus d’une fusion de la <a href="https://geoservices.ign.fr/bdtopo" target="_blank">BDTOPO</a>, éditée par l’Institut national de l'information géographique et forestière (IGN) et de la <a href="https://bdnb.io/" target="_blank">BDNB</a>, éditée par le Centre Scientifique et Technique du Bâtiment (CSTB).</p>
       <p>La mise à jour du RNB est réalisé par :</p>
       <ul>
-      <li>les importations, lors de parution de nouveaux millésimes de la BD Topo et de la BDNB</li>
-      <li>les flux d’autorisations du droit des sols (ADS) provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
+      <li><b>les importations, lors de parution de nouveaux millésimes</b> de la BDTOPO et de la BDNB</li>
+      <li><b>les flux d’autorisations du droit des sols (ADS)</b> provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
+      <li><b>le traitement des signalements par la communauté</b> (voir Comment réaliser un signalement sur un bâtiment)
       </ul>
-  - question: Qu’est ce que l’ID unique du Bâtiment ? Quelles sont ses caractéristiques ?
+       <p>Et sera également bientôt réalisée par :</p>
+       <ul>
+       <li>Les écritures directes dans le RNB, notamment par les collectivités gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a>.</li>
+      </ul>
+  - question: Qu’est ce qu'un RNB ID ? Quelles sont ses caractéristiques ?
     key: identifiant
     answer: >
       <p>Le RNB associe à chaque bâtiment du territoire français un identifiant unique.</p>
-      <p>Véritable donnée pivot, chaque identifiant est composé d’une suite de 12 caractères (chiffres et lettres) répartis en 3 séries de 4 caractères.</p>
+      <p><b>Véritable donnée pivot</b>, chaque identifiant est composé d’une <b>suite de 12 caractères</b> (chiffres et lettres) répartis en 3 séries de 4 caractères.</p>
       <p>L’identifiant remplit certains critères afin d’être facilement reproduisible par un humain dans un formulaire, tout en évitant les risques de collision (c’est à dire la double attribution d’un même identifiant pour deux bâtiments distincts) : </p>
       <ul>
       <li>Il n’est pas signifiant, ce qui implique qu’il ne contient aucun concept clé (comme par exemple le code INSEE de la commune sur laquelle se situe le bâtiment) : cela permet d’éviter de remettre en cause le caractère définitif de l’identifiant une fois attribué (si la commune venait à fusionner avec une autre par exemple)</li>
       <li>L’identifiant n’est pas sensible à la casse et peut être rédigé indifféremment en minuscules ou en majuscules (il n’est diffusé qu’en majuscule afin d’améliorer la lisibilité par les utilisateurs)</li>
       </ul>
+  - question: Est ce que les RNB ID sont pérennes ?
+    key: identifiant-perennes
+    answer: >
+      <p>Oui, <a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification et ne sont jamais supprimés. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
   - question: Quelles informations sont associées aux bâtiments du RNB ?
     key: attributs
     answer: >
       <p>Aujourd’hui, chaque bâtiment est représenté par un point cliquable, composé d’une fiche mentionnant :</p>
       <ul>
+      <li>le RNB ID</li>
       <li>ses coordonnées géographiques</li>
-      <li>l’identifiant unique du bâtiment</li>
       <li>le statut du bâtiment</li>
-      <li>son ou ses adresses</li>
-      <li>les identifiants BDNB et BD Topo associés</li>
-      <ul>
+      <li>son ou ses adresses (référencées dans la Base Adresse Nationale <a href="https://adresse.data.gouv.fr/#4.4/46.9/1.7" target="_blank">BAN</a>)</li>
+      <li>les identifiants <a href="https://bdnb.io/" target="_blank">BDNB</a> et <a href="https://geoservices.ign.fr/bdtopo" target="_blank">BDTOPO</a> associés</li>
+      </ul>
       <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 7 : </p>
       <ol>
       <li>En projet</li>
@@ -95,10 +104,12 @@
       <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
       </ol>
       <p>Ces statuts évoluent selon les informations remontées dans le RNB.</p>
-  - question: Est ce que les identifiants du RNB sont pérennes ? Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
-    key: identifiant-perennes
+  - question: Le RNB comporte-t-il des erreurs ?
+    key: erreurs
     answer: >
-      <p><a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">Les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification et ne sont jamais supprimés. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
+      <p>Oui, le RNB comporte des erreurs, mais pas d’inquiétude, c’est le lot de toute représentation cartographique d’une réalité mouvante. En effet, le parc bâtimentaire français est en constante évolution. En permanence, des bâtiments sont construits, d’autres sont détruits.</p> 
+      <p>C’est pourquoi, le RNB se consolide au fil de l’eau !</p>
+      <p>En effet, le RNB est un commun numérique (voir Qu’est ce qu’un Géocommun ?), il bénéficie de nombreuses contributions d’acteurs variés (administrations, collectivités, citoyens), ce qui permet de consolider la représentation du bâti au fil du temps et de la tenir à jour !</p>
 - name: Comment utiliser le RNB ?
   desc: En savoir plus sur l’utilisation concrète du RNB par vos services
   key: utilisation
@@ -117,6 +128,21 @@
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
         <li><b>Alimenter ce géocommun</b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la fiche dédiée du bâtiment et/ou également ouvrir un ticket sur le Github du RNB.</li>
         </ul>
+    - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ? Comment réaliser un signalement sur un bâtiment ?
+      key: signalement
+      answer: >
+        <p>Vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc) ?</p>
+        <ol>
+        <li>Consultez <a href="https://rnb.beta.gouv.fr/definition" target="_blank">la Définition du Bâtiment et son annexe</a> validées par le CNIG pour vérifier si votre structure ou construction entre dans cette catégorisation.</li>
+        <li>Si votre proposition de signalement entre bien dans la catégorisation du standard du CNIG, vous pouvez envoyer celui-ci directement sur la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a>. Pour ce faire :</li>
+        </ol>
+        <ul>
+        <li>Saisissez l’adresse du bâtiment pour lequel vous souhaitez faire un signalement ou utilisez la géolocalisation.</li>
+        <li>Sélectionnez le bâtiment concerné (un des points bleus)</li>
+        <li>Scrollez le panneau d’information du bâtiment qui s’ouvre à gauche de l’écran jusqu’au champ “Améliorez le RNB”</li>
+        <li>et Indiquez votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
+        </ul>
+        <p>À noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
     - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
       key: evolution
       answer: >
@@ -134,7 +160,7 @@
   desc: En savoir plus sur les contributions au RNB
   key: contribution
   entries:
-    - question: Comment réaliser un signalement sur un bâtiment ? Comment signaler une erreur dans le RNB ? 
+    - question: Comment réaliser un signalement sur un bâtiment ? Comment signaler une erreur dans le RNB ?
       key: signalement
       answer: >
         <p>Vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc) ?</p>
