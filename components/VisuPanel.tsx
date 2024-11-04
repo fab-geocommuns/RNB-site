@@ -15,6 +15,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/map/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
+import { ShouldBeConnected } from '@/components/util/ShouldBeConnected';
+import { fr } from '@codegouvfr/react-dsfr';
+import { DisableBuilding } from '@/components/contribution/DisableBuilding';
+import { EditBuilding } from '@/components/contribution/EditBuilding';
 
 export default function VisuPanel() {
   // Store
@@ -62,6 +66,13 @@ export default function VisuPanel() {
                 </>
               )}
             </div>
+
+            <ShouldBeConnected>
+              <div className={styles.footer}>
+                <DisableBuilding />
+                <EditBuilding />
+              </div>
+            </ShouldBeConnected>
           </div>
         </div>
       </>

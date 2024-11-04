@@ -89,7 +89,7 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
         const source = getFeatureTypeSource(previousSelectedItem);
         const id = getFeatureId(previousSelectedItem);
 
-        if (source && id) {
+        if (source && id && map.getSource(source)) {
           map.setFeatureState(
             {
               source,

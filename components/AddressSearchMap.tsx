@@ -28,7 +28,7 @@ export default function AddressSearchMap() {
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State
-  const moveTo = useSelector((state: RootState) => state.moveTo);
+  const selectedItem = useSelector((state: RootState) => state.selectedItem);
   const dispatch: AppDispatch = useDispatch();
 
   const addressInput = useRef<HTMLInputElement>(null);
@@ -150,6 +150,14 @@ export default function AddressSearchMap() {
       search: suggestion.label,
     });
   };
+
+  useEffect(() => {
+    if (selectedItem && selectedItem._type === 'building') {
+      setQuery(selectedItem.rnb_id);
+    } else if (!selectedItem) {
+      setQuery('');
+    }
+  }, [selectedItem]);
 
   const handleSuggestionSelected = ({ suggestion }) => {
     if (suggestion !== null) {

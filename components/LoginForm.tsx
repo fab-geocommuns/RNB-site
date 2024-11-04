@@ -1,14 +1,14 @@
 'use client';
 
-import { use, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 
 export default function LoginForm({ redirectUrl = '' }) {
-  const username = useRef('');
-  const password = useRef('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   // Credentials errors
   let startWithError = false;
@@ -24,17 +24,11 @@ export default function LoginForm({ redirectUrl = '' }) {
     setLoginError(false);
 
     signIn('credentials', {
-      redirect: redirectUrl.length > 0 ? true : false,
-      callbackUrl: redirectUrl,
-      username: username.current,
-      password: password.current,
+      username,
+      password,
     })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      .then(() => (window.location.href = redirectUrl || '/'))
+      .catch(console.error);
   };
 
   return (
@@ -57,9 +51,8 @@ export default function LoginForm({ redirectUrl = '' }) {
             Identifiant
           </label>
           <input
-            onChange={(e) => {
-              username.current = e.target.value;
-            }}
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
             className="fr-input"
             type="text"
             name="username"
@@ -72,9 +65,8 @@ export default function LoginForm({ redirectUrl = '' }) {
             Mot de passe
           </label>
           <input
-            onChange={(e) => {
-              password.current = e.target.value;
-            }}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
             className="fr-input"
             type="password"
             name="password"
