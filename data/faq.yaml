@@ -117,16 +117,74 @@
     - question: Le RNB est-il accessible gratuitement ?
       key: gratuit
       answer: >
-        <p>Oui, le RNB est un service public gratuit et disponible en open data.</p>
-    - question: Comment consulter, télécharger, alimenter et/ou intégrer les données du RNB  à vos systèmes métiers ?
+        <p>Oui, le RNB est un service public gratuit et disponible en open data. Vous avez accès librement :</p>
+        <ol>
+        <li>à la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a></li>
+        <li>aux <a href="https://rnb-fr.gitbook.io/documentation" target="_blank">API ainsi qu’au sélecteur de bâtiment</a></li>
+        <li>aux <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">jeux de données</a> sur data.gouv</li>
+        </ol>
+    - question: Comment consulter, télécharger, alimenter et intégrer le RNB  à vos systèmes métiers ?
       key: acces
       answer: >
         <p>Vous pouvez :</p>
+        <ol>
+        <li><b>Consulter l'outil cartographique</b>, sur votre navigateur :  rendez-vous sur le site <a href="https://rnb.beta.gouv.fr/" target="_blank">rnb.beta.gouv.fr</a>, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un RNB ID.</li>
+        <li><b>Intégrer le RNB au sein de vos logiciels métiers</b> : parcourez la documentation technique pour l'utiliser</li>
         <ul>
-        <li><b>Consulter l'outil cartographique</b>, sur votre navigateur :  rendez-vous sur le site rnb.beta.gouv.fr, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un identifiant de bâtiment.</li>
-        <li><b>Intégrer le RNB au sein de vos logiciels métiers</b> : rendez-vous sur la documentation dédiée concernant l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API bâtiment</a> et les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li>
+        <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a> : Cette API permet d’obtenir l'identifiant RNB pour chacun de vos bâtiments. Vous trouverez trois points d'accès : consultation, listing et identification.</li>
+        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une cartographie les bâtiments du référentiel et d'afficher leurs identifiants. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID Bâtiment.</li>
+        <li>le <a href="https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" target="_blank">sélecteur de bâtiment</a> : Cet exemple de sélecteur de bâtiment du RNB vous montrera comment se servir des différentes briques techniques pour construire un tel sélecteur. Celui-ci permettra à vos utilisateurs d’identifier et de sélectionner un bâtiment sur une carte, au sein même de vos logiciels.</li>
+        <li>l’ <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads" target="_blank">API ADS</a> : Cette API permet aux instructeurs des Droits du Sol d'ajouter des informations sur un bâtiment existant (ex : Démoli) ou de créer un nouveau bâtiment au sein du RNB.</li>
+        </ul>
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
-        <li><b>Alimenter ce géocommun</b> : vous pouvez faire un signalement directement sur la carte du RNB au sein de la fiche dédiée du bâtiment et/ou également ouvrir un ticket sur le Github du RNB.</li>
+        <li><b>Alimenter ce géocommun</b> : vous pouvez faire un signalement</li> 
+        <ul>
+        <li>directement sur la <a href="https://rnb.beta.gouv.fr/" target="_blank">cartographie</a> du RNB au sein de la fiche dédiée du bâtiment concerné. Vous pourrez indiquer votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
+        <li>ou ouvrir un ticket sur le <a href="https://github.com/fab-geocommuns/RNB-coeur" target="_blank">Github</a> du RNB.</li>
+        </ul>
+        </ol>
+    - question: Ou trouverez les bases métiers possédant les RNB ID pour enrichir ma propre base de données ?
+      key: liste-bases
+      answer: >
+        <p>Retrouvez l'ensemble des jeux de données disposant des RNB ID sur :</p>
+        <ul>
+        <li><a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" target="_blank">Data.Gouv</a> pour les jeux de données en open data</li>
+        <li>Le <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement" target="_blank">site web</a> du RNB pour les bases connues par le RNB ou ayant déclaré au RNB une intégration des RNB ID</li>
+        </ul>
+    - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
+      key: attributs-metier
+      answer: >
+        <p>Non, le RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert en revanche de passerelle permettant d’établir des correspondances entre différentes bases.</p>
+    - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
+      key: evolution
+      answer: >
+        <p>vous n’avez pas l’obligation de faire évoluer vos jeux de données. Véritable plaque d’immatriculation du bâtiment, le RNB est cependant pensé pour faciliter vos usages et être une passerelle permettant de croiser et d’établir des correspondances entre différentes bases.</p>
+        <p>Exemple : une commune souhaite croiser les données bâtimentaires du service d'information géographique (SIG) avec un jeu de données du service urbanisme. Les services n’ayant pas les mêmes besoins métiers, les bâtiments sont découpés différemment d’une base l’autre. Le RNB servira ici de pivot, grâce à l’intégration des RNB ID dans ces jeux de données ; ceci pour faciliter ensuite les croisements de ces 2 bases.</p>
+    - question: Puis-je partager les informations contenues dans le RNB ?
+      key: licence
+      answer: >
+        <p>Le RNB est consultable en <b>licence ouverte</b>. Vous avez ainsi la possibilité d’utiliser et de partager les données pour vos usages propres, au sein de votre organisation publique ou privée.</p>
+    - question: Est-ce que le RNB distribue des polygones ? À quoi correspond une géométrie au sens du RNB ?
+      key: polygones
+      answer: >
+        <p>Le RNB met désormais à disposition la géométrie (”polygone” ou “shape”) des bâtiments présents dans le référentiel.</p>
+        <p>Vous pouvez retrouver cette fonctionnalité dans :</p>
+        <ul>
+        <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a></li>
+        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li> 
+        <li>la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">carte du RNB</a></li>
+        </ul>
+        <p>Les polygones présents dans le RNB sont la <b>meilleure représentation à notre disposition</b> de la réalité physique du bâtiment. La plupart du temps cette géométrie correspond à un polygone, mais elle peut également être un simple point (coordonnées), lorsque cette dernière n’est pas disponible.</p>
+        <p>Objectifs :</p>
+        <ol>
+        <li>Le RNB diffuse ces géométries dans le but de rendre plus explicite à quel bâtiment le RNB ID est associé. En effet, la mission première du RNB reste d’attribuer à chaque bâtiment un identifiant unique (RNB-ID). Le RNB associe ainsi à chaque bâtiment une géométrie pour permettre de mieux identifier à quel bâtiment réel est associé un RNB-ID.</li>
+        <li><b>La géométrie du RNB n'a pas pour objectif d'être la source de vérité quand à la géométrie physique du bâtiment</b>, celle ci variant selon l’objectif métier visé dans l’exploitation du RNB (ex. besoin d’une emprise au sol vs. une emprise au sol projetée vue du ciel). Ceci étant, l’équipe du RNB s’efforce bien sûr à ce qu'elle reflète au mieux la réalité terrain.</li>
+        <li>Le bénéfice reste que grâce à chaque RNB-ID unique et à la géométrie proposée, il est désormais possible de réaliser plus aisément une correspondance avec des géométries proposées par d’autres bases de données (ex. BDTOPO), à nouveau selon les besoins métiers de chacun.</p>
+        </ol>
+        <p>Sources de ces géométries :</p>
+        <ul>
+        <li>Les polygones proposés proviennent principalement, à ce stade, de la BDNB du CSTB et de la BDTOPO de l’IGN. Toutefois, ces géométries ont subi une harmonisation de système de coordonnées au format WGS 84 (coordonnées GPS), lors de l’import pour assurer l’homogénéité d’unité de toutes les géométries proposées dans le RNB.</li> 
+        <li>À terme, le géocommun du RNB intégrant de nouvelles sources de contribution, les polygones pourront également être proposés par les services instructeurs d’une collectivité territoriale, par exemple.</li>
         </ul>
     - question: Que faire si je constate une erreur dans le Référentiel National des Bâtiments ? Comment réaliser un signalement sur un bâtiment ?
       key: signalement
@@ -143,19 +201,8 @@
         <li>et Indiquez votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
         </ul>
         <p>À noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
-    - question: L’organisation dans laquelle je travaille dispose de ses propres bases bâtimentaires. Dois-je les faire évoluer au standard du RNB ?
-      key: evolution
-      answer: >
-        <p>Non, vous n’avez pas l’obligation de faire évoluer vos jeux de données. Le RNB est justement pensé comme une passerelle permettant d’établir des correspondances entre différentes bases.</p>
-        <p>Exemple : une commune souhaite croiser les données bâtimentaires du service d'information géographique (SIG) avec un jeu de données du service urbanisme. Les services n’ayant pas les mêmes besoins métiers, les bâtiments sont découpés différemment d’une base l’autre. Le RNB servira ici de pivot grâce à l’utilisation de nos outils de rapprochement.</p>
-    - question: Puis-je partager les informations contenues dans le RNB ?
-      key: license
-      answer: >
-        <p>Le RNB est consultable en licence ouverte. Vous avez ainsi la possibilité d’utiliser les données pour vos usages propres, au sein de votre organisation publique ou privée.</p>
-    - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
-      key: attributs-metier
-      answer: >
-        <p>Non, le RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert en revanche de passerelle permettant d’établir des correspondances entre différentes bases. Il renvoie néanmoins, pour chaque bâtiment, vers les éléments de la BDNB et de la BD Topo correspondants.</p>
+    
+
 - name: Comment contribuer au RNB ?
   desc: En savoir plus sur les contributions au RNB
   key: contribution
@@ -177,4 +224,5 @@
         <p>À noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
     - question: Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
       key: modification
-      <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
+      -answer: >
+        <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
