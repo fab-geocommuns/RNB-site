@@ -7,6 +7,7 @@ export const authOptions = {
       if (user) {
         token.accessToken = user.token;
         token.username = user.username;
+        token.groups = user.groups;
       }
 
       return token;
@@ -15,6 +16,7 @@ export const authOptions = {
       if (token?.accessToken) {
         session.accessToken = token.accessToken;
         session.username = token.username;
+        session.groups = token.groups;
       }
 
       return session;
