@@ -35,7 +35,7 @@
       <li><b>Utilisateurs de données bâtimentaires</b> : les <b>communes</b>, les <b>métropoles</b>, les <b>fournisseurs d’énergie</b>, les services départementaux d'incendie et de secours (<b>SDIS</b>), les acteurs de l’économie numérique produisant des analyses, etc.</li>
       <li><b>Producteurs de données bâtimentaires</b> : l’ensemble des <b>administrations publiques</b> produisant des données bâtimentaires à la maille du cadastre, des parcelles ou des locaux, ainsi que celles agrégeant des données métier (historique de construction, performance énergétique, etc.)</li>
       </ul>
-       - question: Qu’est ce qu’un bâtiment au sens du Référentiel National des Bâtiments (RNB) ?
+  - question: Qu’est ce qu’un bâtiment au sens du Référentiel National des Bâtiments (RNB) ?
     key: definition
     answer: >
       <p>La construction du Référentiel National des Bâtiments est réalisée en collaboration avec les experts de la donnée géomatique du Conseil National de l’Information Géolocalisée (<a href="https://cnig.gouv.fr/gt-bati-a25939.html" target="_blank">CNIG</a>). </p>
