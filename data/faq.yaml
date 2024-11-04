@@ -145,12 +145,13 @@
         </ol>
     - question: Ou trouverez les bases métiers possédant les RNB ID pour enrichir ma propre base de données ?
       key: liste-bases
-      <p>Retrouvez l'ensemble des jeux de données disposant des RNB ID sur :</p>
-      <ul>
-      <li><a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" target="_blank">Data.Gouv</a> pour les jeux de données en open data</li>
-      <li>Le <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement" target="_blank">site web</a> du RNB pour les bases connues par le RNB ou ayant déclaré au RNB une intégration des RNB ID</li>
-      </ul>
-      - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
+      answer: >
+        <p>Retrouvez l'ensemble des jeux de données disposant des RNB ID sur :</p>
+        <ul>
+        <li><a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" target="_blank">Data.Gouv</a> pour les jeux de données en open data</li>
+        <li>Le <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement" target="_blank">site web</a> du RNB pour les bases connues par le RNB ou ayant déclaré au RNB une intégration des RNB ID</li>
+        </ul>
+    - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
       key: attributs-metier
       answer: >
         <p>Non, le RNB n’a pas pour finalité d’agréger l’ensemble des données métiers des autres bases existantes. Il sert en revanche de passerelle permettant d’établir des correspondances entre différentes bases.</p>
@@ -223,4 +224,5 @@
         <p>À noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
     - question: Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
       key: modification
-      <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
+      -answer: >
+        <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
