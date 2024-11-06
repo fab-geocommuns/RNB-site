@@ -20,12 +20,12 @@
     key: production
     answer: >
       <p>Le financement du RNB est assuré conjointement par l’Agence de la Transition Écologique (l’<b>ADEME</b>), le Centre Scientifique et Technique du Bâtiment (<b>CSTB</b>), la Direction générale de l'Aménagement, du Logement et de la Nature (<b>DGALN</b>) et l’Institut national de l'information géographique et forestière (<b>IGN</b>).</p>
-      <p>Le service est réalisé à la fabrique des géocommuns, l'incubateur de l'IGN, appliquant la méthode du programme <a href="https://beta.gouv.fr/" target="_blank">beta.gouv</a> de la Direction Interministérielle du Numérique (DINUM).</p>
+      <p>Le service est réalisé à la fabrique des géocommuns, l'incubateur de l'IGN, appliquant la méthode du programme <a href="https://beta.gouv.fr/" target="_blank">beta.gouv</a> de la Direction Interministérielle du Numérique (DINUM).</p>
       <p>Le RNB c'est également :</p>
       <ul>
-      <li>une <a href="https://ouverture.data.gouv.fr/donnees_de_forte_valeur?theme=G%C3%A9ospatiales&category=B%C3%A2timents&ref=referentiel-national-du-batiment.ghost.io" target="_blank">Donnée de forte valeur</a> définie par la <a href="https://www.data.gouv.fr/fr/posts/lessentiel-sur-les-donnees-de-forte-valeur/#:~:text=Dans" target="_blank">Directive européenne Open Data</a>. Cette Directive définit les données de forte valeur comme les « documents détenus par un organisme du secteur public, dont la réutilisation est associée à des bénéfices importants pour la société, l’environnement et l’économie ».</li>
-      <li>un <a href="https://code.gouv.fr/fr/communs/" target="_blank">commun numérique</a> que l’Etat encourage à utiliser</li>
-      <li>un chantier prioritaire de la Feuille de route Numérique et Données pour la <a href="https://www.info.gouv.fr/grand-dossier/france-nation-verte/a-proposfeuille-de-route-numerique-donnees" target="_blank">Planification Ecologique</a>, pour consolider les analyses à la maille du logement et du bâtiment</li>
+      <li>une <a href="https://ouverture.data.gouv.fr/donnees_de_forte_valeur?theme=G%C3%A9ospatiales&category=B%C3%A2timents&ref=referentiel-national-du-batiment.ghost.io" target="_blank">Donnée de forte valeur</a> définie par la <a href="https://www.data.gouv.fr/fr/posts/lessentiel-sur-les-donnees-de-forte-valeur/#:~:text=Dans" target="_blank">Directive européenne Open Data</a>. Cette Directive définit les données de forte valeur comme les « documents détenus par un organisme du secteur public, dont la réutilisation est associée à des bénéfices importants pour la société, l’environnement et l’économie ».</li>
+      <li>un <a href="https://code.gouv.fr/fr/communs/" target="_blank">commun numérique</a> que l’Etat encourage à utiliser</li>
+      <li>un chantier prioritaire de la Feuille de route Numérique et Données pour la <a href="https://www.info.gouv.fr/grand-dossier/france-nation-verte/a-proposfeuille-de-route-numerique-donnees" target="_blank">Planification Ecologique</a>, pour consolider les analyses à la maille du logement et du bâtiment</li>
       </ul>
   - question: À qui s’adresse le Référentiel National des Bâtiments ?
     key: public
@@ -47,7 +47,7 @@
   - question: Qu’est ce qu’un Géocommun ? Le RNB est-il est géocommun ?
     key: geocommun
     answer: >
-      <p>Oui, le Référentiel National des Bâtiments est un géocommun.</p>
+      <p>Oui, le Référentiel National des Bâtiments est un géocommun.</p>
       <p>Un commun, c’est une ressource produite collectivement par une communauté d’acteurs hétérogènes et gouvernée par des règles qui assurent sa survie et garantissent son caractère ouvert et partagé. (<a href="https://www.ign.fr/institut/la-demarche-geocommuns" target="_blank">Définition de l’IGN</a>)</p>
       <p>C’est pourquoi, toutes les contributions sont les bienvenues pour construire ce géocommun, afin de faciliter et réduire les coûts de maintenance, ainsi qu’optimiser la qualité des données des administrations publiques, des collectivités et des acteurs privés.</p>
 - name: Comment est conçu le RNB ?
@@ -62,7 +62,7 @@
       <ul>
       <li><b>les importations, lors de parution de nouveaux millésimes</b> de la BDTOPO et de la BDNB</li>
       <li><b>les flux d’autorisations du droit des sols (ADS)</b> provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
-      <li><b>le traitement des signalements par la communauté</b> (voir <a href="https://rnb.beta.gouv.fr/faq#signalement" target="_blank">Comment réaliser un signalement sur un bâtiment</a>)
+      <li><b>le traitement des signalements par la communauté</b> (voir <a href="https://rnb.beta.gouv.fr/faq#signalement" target="_blank">Comment réaliser un signalement sur un bâtiment</a>)</li>
       </ul>
        <p>Et sera également bientôt réalisée par :</p>
        <ul>
@@ -131,9 +131,9 @@
         <li><b>Consulter l'outil cartographique</b>, sur votre navigateur :  rendez-vous sur le site <a href="https://rnb.beta.gouv.fr/" target="_blank">rnb.beta.gouv.fr</a>, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un RNB ID.</li>
         <li><b>Intégrer le RNB au sein de vos logiciels métiers</b> : parcourez la documentation technique pour utiliser :</li>
         <ul>
-        <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a> : Cette API permet d’obtenir l'identifiant RNB pour chacun de vos bâtiments. Vous trouverez trois points d'accès : consultation, listing et identification.</li>
-        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une cartographie les bâtiments du référentiel et d'afficher leurs identifiants. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID Bâtiment.</li>
-        <li>le <a href="https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" target="_blank">sélecteur de bâtiment</a> : Cet exemple de sélecteur de bâtiment du RNB vous montrera comment se servir des différentes briques techniques pour construire un tel sélecteur. Celui-ci permettra à vos utilisateurs d’identifier et de sélectionner un bâtiment sur une carte, au sein même de vos logiciels.</li>
+        <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a> : Cette API permet d’obtenir l'identifiant RNB pour chacun de vos bâtiments. Vous trouverez trois points d'accès : consultation, listing et identification.</li>
+        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une cartographie les bâtiments du référentiel et d'afficher leurs identifiants. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID Bâtiment.</li>
+        <li>le <a href="https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" target="_blank">sélecteur de bâtiment</a> : Cet exemple de sélecteur de bâtiment du RNB vous montrera comment se servir des différentes briques techniques pour construire un tel sélecteur. Celui-ci permettra à vos utilisateurs d’identifier et de sélectionner un bâtiment sur une carte, au sein même de vos logiciels.</li>
         <li>l’ <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads" target="_blank">API ADS</a> : Cette API permet aux instructeurs des Droits du Sol d'ajouter des informations sur un bâtiment existant (ex : Démoli) ou de créer un nouveau bâtiment au sein du RNB.</li>
         </ul>
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
@@ -179,7 +179,7 @@
         <ol>
         <li>Le RNB diffuse ces géométries dans le but de rendre plus explicite à quel bâtiment le RNB ID est associé. En effet, la mission première du RNB reste d’attribuer à chaque bâtiment un identifiant unique (RNB-ID). Le RNB associe ainsi à chaque bâtiment une géométrie pour permettre de mieux identifier à quel bâtiment réel est associé un RNB-ID.</li>
         <li><b>La géométrie du RNB n'a pas pour objectif d'être la source de vérité quand à la géométrie physique du bâtiment</b>, celle ci variant selon l’objectif métier visé dans l’exploitation du RNB (ex. besoin d’une emprise au sol vs. une emprise au sol projetée vue du ciel). Ceci étant, l’équipe du RNB s’efforce bien sûr à ce qu'elle reflète au mieux la réalité terrain.</li>
-        <li>Le bénéfice reste que grâce à chaque RNB-ID unique et à la géométrie proposée, il est désormais possible de réaliser plus aisément une correspondance avec des géométries proposées par d’autres bases de données (ex. BDTOPO), à nouveau selon les besoins métiers de chacun.</p>
+        <li>Le bénéfice reste que grâce à chaque RNB-ID unique et à la géométrie proposée, il est désormais possible de réaliser plus aisément une correspondance avec des géométries proposées par d’autres bases de données (ex. BDTOPO), à nouveau selon les besoins métiers de chacun.</p></li>
         </ol>
         <p>Sources de ces géométries :</p>
         <ul>
@@ -201,13 +201,13 @@
         <li>Si votre proposition de signalement entre bien dans la catégorisation du standard du CNIG, vous pouvez envoyer celui-ci directement sur la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a>. Pour ce faire :</li>
         </ol>
         <ul>
-        <li>Saisissez l’adresse du bâtiment pour lequel vous souhaitez faire un signalement ou utilisez la géolocalisation.</li>
-        <li>Sélectionnez le bâtiment concerné (un des points bleus)</li>
-        <li>Scrollez le panneau d’information du bâtiment qui s’ouvre à gauche de l’écran jusqu’au champ “Améliorez le RNB”</li>
+        <li>Saisissez l’adresse du bâtiment pour lequel vous souhaitez faire un signalement ou utilisez la géolocalisation.</li>
+        <li>Sélectionnez le bâtiment concerné (un des points bleus)</li>
+        <li>Scrollez le panneau d’information du bâtiment qui s’ouvre à gauche de l’écran jusqu’au champ “Améliorez le RNB”</li>
         <li>et Indiquez votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
         </ul>
         <p>À noter : <b>Une erreur = un signalement</b> : Vous pouvez faire autant de signalements que vous voyez d’erreur sur un bâtiment.</p>
     - question: Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
       key: modification
-      -answer: >
+      answer: >
         <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
