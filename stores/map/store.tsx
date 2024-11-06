@@ -1,7 +1,7 @@
 'use client';
 
 import { configureStore } from '@reduxjs/toolkit';
-import { mapActions, mapReducer } from '@/stores/map/slice';
+import { mapActions, mapReducer } from '@/stores/map/map-slice';
 
 export const store = configureStore({
   reducer: mapReducer,
