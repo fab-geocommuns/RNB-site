@@ -11,14 +11,14 @@ import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBuilding } from '@/stores/map/slice';
+import { selectBuilding } from '@/stores/map/map-slice';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete';
 import { Actions, AppDispatch, RootState } from '@/stores/map/store';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(
-    (state: RootState) => state.addressSearch.unknown_rnb_id,
+    (state: RootState) => state.map.addressSearch.unknown_rnb_id,
   );
 
   // URL params
@@ -28,7 +28,9 @@ export default function AddressSearchMap() {
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State
-  const selectedItem = useSelector((state: RootState) => state.selectedItem);
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   const addressInput = useRef<HTMLInputElement>(null);

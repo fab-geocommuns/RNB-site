@@ -2,9 +2,13 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { mapActions, mapReducer } from '@/stores/map/map-slice';
+import { appActions, appReducer } from '@/stores/map/app-slice';
 
 export const store = configureStore({
-  reducer: mapReducer,
+  reducer: {
+    map: mapReducer,
+    app: appReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -12,4 +16,5 @@ export type AppDispatch = typeof store.dispatch;
 
 export const Actions = {
   map: mapActions,
+  app: appActions,
 };

@@ -1,5 +1,5 @@
 // Types
-import { SelectedBuilding } from '@/stores/map/slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -17,7 +17,7 @@ import va from '@vercel/analytics';
 import React, { useState, useEffect } from 'react';
 
 // Store
-import { bdgApiUrl } from '@/stores/map/slice';
+import { bdgApiUrl } from '@/stores/map/map-slice';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;

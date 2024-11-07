@@ -17,9 +17,6 @@ import va from '@vercel/analytics';
 // Bus
 import Bus from '@/utils/Bus';
 
-// Store
-import { Providers } from '@/stores/map/provider';
-
 export default function RNBMap() {
   // //////////////////////
   // Tracking address search
@@ -54,16 +51,14 @@ export default function RNBMap() {
 
   return (
     <>
-      <Providers>
-        <div className={styles.map}>
-          <AddressSearchMap />
-          <VisuPanel />
+      <div className={styles.map}>
+        <AddressSearchMap />
+        <VisuPanel />
 
-          <div className={styles.map__mapShell}>
-            <VisuMap />
-          </div>
+        <div className={styles.map__mapShell}>
+          <VisuMap />
         </div>
-      </Providers>
+      </div>
     </>
   );
 }

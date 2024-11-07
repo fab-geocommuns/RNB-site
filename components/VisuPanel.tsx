@@ -22,7 +22,9 @@ import { EditBuilding } from '@/components/contribution/EditBuilding';
 
 export default function VisuPanel() {
   // Store
-  const selectedItem = useSelector((state: RootState) => state.selectedItem);
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   const title = () => {

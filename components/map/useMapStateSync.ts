@@ -3,21 +3,23 @@ import { useSelector } from 'react-redux';
 import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
 import { RootState } from '@/stores/map/store';
 import maplibregl from 'maplibre-gl';
-import { SelectedItem } from '@/stores/map/slice';
+import { SelectedItem } from '@/stores/map/map-slice';
 
 /**
  * Gestion de la synchronisation entre la carte et le store Redux
  * @param map
  */
 export const useMapStateSync = (map?: maplibregl.Map) => {
-  const stateMoveTo = useSelector((state: RootState) => state.moveTo);
+  const stateMoveTo = useSelector((state: RootState) => state.map.moveTo);
 
   // Address marker
-  const marker = useSelector((state: RootState) => state.marker);
+  const marker = useSelector((state: RootState) => state.map.marker);
   const [currentMarker, setCurrentMarker] = useState<maplibregl.Marker>();
 
   // Selected item
-  const selectedItem = useSelector((state: RootState) => state.selectedItem);
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const [previousSelectedItem, setPreviousSelectedItem] = useState<any>();
 
   const getFeatureTypeSource = (item: SelectedItem) => {

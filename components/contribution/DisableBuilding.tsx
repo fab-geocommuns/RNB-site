@@ -4,7 +4,7 @@ import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import { Actions, AppDispatch, RootState } from '@/stores/map/store';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from '@codegouvfr/react-dsfr/Alert';
-import { SelectedBuilding } from '@/stores/map/slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 
 const modal = createModal({
@@ -13,7 +13,9 @@ const modal = createModal({
 });
 
 export function DisableBuilding() {
-  const selectedItem = useSelector((state: RootState) => state.selectedItem)!;
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  )!;
   const { fetch } = useRNBFetch();
   const dispatch: AppDispatch = useDispatch();
 
@@ -21,19 +23,45 @@ export function DisableBuilding() {
     const building = selectedItem as SelectedBuilding;
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${building.rnb_id}/`;
 
-    await fetch(url, {
-      body: JSON.stringify({
-        comment: 'Désactivation via le site',
-        is_active: false,
-      }),
-      method: 'PATCH',
-    });
+    try {
+      await fetch(url, {
+        body: JSON.stringify({
+          comment: 'Désactivation via le site',
+          is_active: false,
+        }),
+        method: 'PATCH',
+      });
 
-    // Reload map buildings
-    dispatch(Actions.map.reloadBuildings());
+      // Reload map buildings
+      dispatch(Actions.map.reloadBuildings());
 
-    // Unselect the building
-    dispatch(Actions.map.unselectItem());
+      // Unselect the building
+      dispatch(Actions.map.unselectItem());
+
+      // Show alert
+      dispatch(
+        Actions.app.showAlert({
+          alert: {
+            id: `disable-building-${building.rnb_id}`,
+            severity: 'success',
+            description: 'Le bâtiment a bien été désactivé',
+            small: true,
+          },
+        }),
+      );
+    } catch (e) {
+      // Show error
+      dispatch(
+        Actions.app.showAlert({
+          alert: {
+            id: `disable-building-${building.rnb_id}`,
+            severity: 'error',
+            description: 'Une erreur est survenue, veuillez essayer plus tard',
+            small: true,
+          },
+        }),
+      );
+    }
   };
 
   return (
