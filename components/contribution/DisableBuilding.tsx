@@ -96,7 +96,7 @@ export function DisableBuilding() {
           </p>
 
           <Alert
-            description={`L'action que vous vous apprêtez à effectuer ne supprime pas définitivement le bâtiment. Il est seulement désactivé et son accès restera possible afin de garder un RNB ID pérenne.`}
+            description={`L'action que vous vous apprêtez à effectuer ne supprime pas le RNB ID du référentiel. Il va être désactivé et sa consultation restera possible.`}
             severity="info"
             small
           />
