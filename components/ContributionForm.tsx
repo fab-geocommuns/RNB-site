@@ -25,7 +25,7 @@ export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
 
   const selectedBuilding = useSelector(
-    (state: RootState) => state.selectedItem,
+    (state: RootState) => state.map.selectedItem,
   );
 
   const msgInput = useRef<HTMLInputElement>(null);

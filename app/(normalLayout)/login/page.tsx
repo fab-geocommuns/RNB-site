@@ -5,7 +5,9 @@ import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
   const params = useSearchParams();
-  const redirectUrl = params.has('redirect') ? params.get('redirect') : '/';
+  const redirectUrl = params.has('redirect')
+    ? params.get('redirect')!
+    : '/carte';
 
   return (
     <>
