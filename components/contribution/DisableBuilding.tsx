@@ -72,7 +72,7 @@ export function DisableBuilding() {
         </button>
 
         <modal.Component
-          title={`Désactiver le bâtiment ${selectedItem.rnb_id}`}
+          title={`Désactiver le RNB ID ${selectedItem.rnb_id}`}
           concealingBackdrop={false}
           size="large"
           buttons={[
@@ -91,8 +91,8 @@ export function DisableBuilding() {
             Ce bâtiment ne correspond pas à la{' '}
             <a href="/definition" target="_blank">
               définition du RNB
-            </a>{' '}
-            ou il existe en double.
+            </a>
+            .
           </p>
 
           <Alert
