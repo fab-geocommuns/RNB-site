@@ -1,12 +1,12 @@
 'use client';
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { get } from 'http';
+import { BuildingStatus } from '@/stores/contribution/contribution-types';
 
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
-  status: any[];
+  status: BuildingStatus;
   point: [number, number];
   addresses: {
     id: string;

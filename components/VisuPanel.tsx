@@ -1,8 +1,7 @@
 'use client';
 
 // Hooks
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
 
 // Styles
 import styles from '@/styles/panel.module.scss';
@@ -12,13 +11,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Comps
 
-import { Actions, AppDispatch, RootState } from '@/stores/map/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
 import { Group, ShouldBeConnected } from '@/components/util/ShouldBeConnected';
-import { fr } from '@codegouvfr/react-dsfr';
 import { DisableBuilding } from '@/components/contribution/DisableBuilding';
 import { EditBuilding } from '@/components/contribution/EditBuilding';
+import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 
 export default function VisuPanel() {
   // Store
@@ -26,6 +26,9 @@ export default function VisuPanel() {
     (state: RootState) => state.map.selectedItem,
   );
   const dispatch: AppDispatch = useDispatch();
+  const [comment, setComment] = useState('');
+  const { fetch } = useRNBFetch();
+  const contribution = useSelector((state: RootState) => state.contribution);
 
   const title = () => {
     if (selectedItem?._type === 'building') {
@@ -43,6 +46,57 @@ export default function VisuPanel() {
     dispatch(Actions.map.unselectItem());
   };
 
+  const saveAndStopEditing = async () => {
+    const building = selectedItem as SelectedBuilding;
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${building.rnb_id}/`;
+
+    try {
+      const res = await fetch(url, {
+        body: JSON.stringify({
+          status: contribution.status,
+          addresses_cle_interop: contribution.addresses?.map((a) => a.id),
+          comment,
+        }),
+        method: 'PATCH',
+      });
+
+      if (res.ok) {
+        // Stop editing
+        dispatch(Actions.contribution.stopEdit());
+
+        // Update building in selectedItem
+        await dispatch(Actions.map.selectBuilding(building.rnb_id));
+
+        // Show alert
+        dispatch(
+          Actions.app.showAlert({
+            alert: {
+              id: `edit-building-${building.rnb_id}`,
+              severity: 'success',
+              description: 'Le bâtiment a été modifié',
+              small: true,
+            },
+          }),
+        );
+      } else {
+        // Show error
+        dispatch(
+          Actions.app.showAlert({
+            alert: {
+              id: `edit-building-${building.rnb_id}`,
+              severity: 'error',
+              description:
+                'Une erreur est survenue, veuillez essayer plus tard',
+              small: true,
+            },
+          }),
+        );
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   if (selectedItem) {
     return (
       <>
@@ -57,24 +111,50 @@ export default function VisuPanel() {
 
             <div className={styles.body}>
               {selectedItem?._type === 'building' && (
-                <>
-                  <BuildingPanel bdg={selectedItem} />
-                </>
+                <BuildingPanel bdg={selectedItem} />
               )}
-
-              {selectedItem?._type === 'ads' && (
-                <>
-                  <ADSPanel ads={selectedItem} />
-                </>
-              )}
+              {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
             </div>
 
-            <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
-              <div className={styles.footer}>
-                <DisableBuilding />
-                <EditBuilding />
-              </div>
-            </ShouldBeConnected>
+            {selectedItem?._type === 'building' && !contribution.editing && (
+              <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
+                <div className={styles.footer}>
+                  <div className={styles.footerActions}>
+                    <DisableBuilding />
+                    <EditBuilding />
+                  </div>
+                </div>
+              </ShouldBeConnected>
+            )}
+
+            {selectedItem?._type === 'building' && contribution.editing && (
+              <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
+                <div className={styles.footer}>
+                  <textarea
+                    rows={3}
+                    placeholder="Commentaire de la contribution"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+
+                  <div className={styles.footerActions}>
+                    <button
+                      className="action"
+                      onClick={() => {
+                        dispatch(Actions.contribution.stopEdit());
+                        setComment('');
+                      }}
+                    >
+                      Annuler
+                    </button>
+
+                    <button className="action" onClick={saveAndStopEditing}>
+                      Sauvegarder
+                    </button>
+                  </div>
+                </div>
+              </ShouldBeConnected>
+            )}
           </div>
         </div>
       </>

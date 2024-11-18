@@ -19,7 +19,7 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 // Utils
 import Cookies from 'js-cookie';
 import Bus from '@/utils/Bus';
-import { Actions, RootState } from '@/stores/map/store';
+import { Actions, RootState } from '@/stores/store';
 
 export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';

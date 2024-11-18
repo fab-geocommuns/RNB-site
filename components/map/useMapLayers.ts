@@ -4,7 +4,7 @@ import satellite from '@/components/map/mapstyles/satellite.json';
 import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/map/store';
+import { RootState } from '@/stores/store';
 
 const BDGS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';

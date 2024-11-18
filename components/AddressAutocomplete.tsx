@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import styles from '@/styles/addressAutocomplete.module.scss';
-import { Actions } from '@/stores/map/store';
+import { Actions } from '@/stores/store';
 
 export default function AddressAutocomplete({
   autocompleteActive,

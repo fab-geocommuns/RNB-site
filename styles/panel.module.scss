@@ -102,24 +102,32 @@
 
     .footer {
         display: flex;
+        flex-direction: column;
         border-top: 2px solid rgba(0, 0, 0, 0.6);
 
-        & > * {
-            flex: 1 1 0;
-            padding: 0.25rem 0;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s ease-in-out;
-
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.1);
-            }
-
-            border-right: 1px solid rgba(0, 0, 0, 0.4);
+        textarea {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.6);
         }
 
-        & > *:last-child {
-            border-right-color: transparent;
+        .footerActions {
+            display: flex;
+            & > * {
+                flex: 1 1 0;
+                padding: 0.25rem 0;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.25s ease-in-out;
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+
+                border-right: 1px solid rgba(0, 0, 0, 0.4);
+            }
+
+            & > *:last-child {
+                border-right-color: transparent;
+            }
         }
     }
 }
@@ -142,6 +150,7 @@
 }
 
 .sectionListItem {
+    flex: 1 0 0;
     margin-bottom:.8em
 }
 .sectionListItem:last-child {
@@ -150,4 +159,25 @@
 
 .small-left-padding {
     padding-left: 2px;
+}
+
+.editAdresse {
+    display: flex;
+
+    & > *:first-child {
+        flex: 1 0 0;
+    }
+
+    .editAction {
+        display: flex;
+        align-items: start;
+
+        button {
+            margin-left: 0.25rem;
+        }
+
+        button:before {
+            margin-right: 0!important;
+        }
+    }
 }

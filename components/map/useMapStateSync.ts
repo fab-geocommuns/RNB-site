@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
-import { RootState } from '@/stores/map/store';
+import { RootState } from '@/stores/store';
 import maplibregl from 'maplibre-gl';
 import { SelectedItem } from '@/stores/map/map-slice';
 
