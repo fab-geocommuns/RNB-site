@@ -105,10 +105,6 @@
         flex-direction: column;
         border-top: 2px solid rgba(0, 0, 0, 0.6);
 
-        textarea {
-            border-bottom: 2px solid rgba(0, 0, 0, 0.6);
-        }
-
         .footerActions {
             display: flex;
             & > * {

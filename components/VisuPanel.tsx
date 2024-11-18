@@ -19,6 +19,7 @@ import { DisableBuilding } from '@/components/contribution/DisableBuilding';
 import { EditBuilding } from '@/components/contribution/EditBuilding';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { SelectedBuilding } from '@/stores/map/map-slice';
+import { Input } from '@codegouvfr/react-dsfr/Input';
 
 export default function VisuPanel() {
   // Store
@@ -130,11 +131,17 @@ export default function VisuPanel() {
             {selectedItem?._type === 'building' && contribution.editing && (
               <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
                 <div className={styles.footer}>
-                  <textarea
-                    rows={3}
-                    placeholder="Commentaire de la contribution"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                  <Input
+                    label="Commentaire de la contribution (*)"
+                    style={{
+                      marginBottom: '0',
+                    }}
+                    nativeTextAreaProps={{
+                      rows: 3,
+                      value: comment,
+                      onChange: (e: any) => setComment(e.target.value),
+                    }}
+                    textArea={true}
                   />
 
                   <div className={styles.footerActions}>
@@ -147,8 +154,11 @@ export default function VisuPanel() {
                     >
                       Annuler
                     </button>
-
-                    <button className="action" onClick={saveAndStopEditing}>
+                    <button
+                      className="action"
+                      onClick={saveAndStopEditing}
+                      disabled={!comment}
+                    >
                       Sauvegarder
                     </button>
                   </div>
