@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { BuildingAdresse } from '@/components/panel/adresse/BuildingAdresse';
@@ -16,15 +16,15 @@ export function EditBuildingAdresse({ index }: EditBuildingAdresseProps) {
   const contributionAdresses = useSelector(
     (state: RootState) => state.contribution.addresses,
   );
-  const { modalComponent, open } = useBanAddressModalPicker(
-    (address?: ContributionAddress) =>
+  const { modalComponent, open } = useBanAddressModalPicker({
+    onAddressSelected: (address?: ContributionAddress) =>
       dispatch(
         Actions.contribution.setAddress({
           address,
           index,
         }),
       ),
-  );
+  });
 
   return (
     <div className={styles.editAdresse}>

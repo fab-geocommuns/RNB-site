@@ -3,12 +3,21 @@ import { useMemo, useState } from 'react';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
 import styles from '@/styles/home.module.scss';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
+import * as turf from '@turf/turf';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
 
-type UseBanAddressModalPickerProps = (address: ContributionAddress) => void;
+type UseBanAddressModalPickerProps = {
+  onAddressSelected: (address: ContributionAddress) => void;
+  warning?: {
+    distanceInKilometers: number;
+    point: [number, number];
+  };
+};
 
-export function useBanAddressModalPicker(
-  onAddressSelected: UseBanAddressModalPickerProps,
-) {
+export function useBanAddressModalPicker({
+  onAddressSelected,
+  warning,
+}: UseBanAddressModalPickerProps) {
   const [internalAddress, setInternalAddress] = useState<ContributionAddress>();
   const [autocompleteActive, setAutocompleteActive] = useState(true);
   const [query, setQuery] = useState('');
@@ -37,11 +46,36 @@ export function useBanAddressModalPicker(
       city_zipcode: suggestion.properties.postcode,
       city_name: suggestion.properties.city,
       banId: suggestion.properties.banId,
+      point: suggestion.geometry.coordinates,
     };
 
     setInternalAddress(address);
     setQuery(suggestion.properties.label);
   };
+
+  // Warning message
+  const warningComponent = useMemo(() => {
+    if (!warning || !internalAddress) return;
+
+    console.log(warning.point);
+    const from = turf.point(warning.point);
+    const to = turf.point(internalAddress.point);
+    const distance = turf.distance(from, to, {
+      units: 'kilometers',
+    });
+
+    if (distance >= warning.distanceInKilometers) {
+      return (
+        <div style={{ marginTop: '1rem' }}>
+          <Alert
+            small={true}
+            description={`Cette adresse semble éloignée de la position du RNB ID (environ ${Math.round(distance)}km), veuillez vérifier votre saisie.`}
+            severity="warning"
+          />
+        </div>
+      );
+    }
+  }, [internalAddress, warning]);
 
   const modalComponent = useMemo(
     () => (
@@ -92,6 +126,7 @@ export function useBanAddressModalPicker(
             override_class={styles.autocomplete_suggestions}
           ></AddressAutocomplete>
         </div>
+        <div>{warningComponent}</div>
       </modal.Component>
     ),
     [autocompleteActive, internalAddress, keyDown, query],

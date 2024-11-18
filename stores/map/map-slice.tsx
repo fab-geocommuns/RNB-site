@@ -7,7 +7,10 @@ export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
   status: BuildingStatus;
-  point: [number, number];
+  point: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
   addresses: {
     id: string;
     banId: string;

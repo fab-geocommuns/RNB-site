@@ -11,6 +11,7 @@ export type ContributionAddress = {
   city_zipcode?: string;
   city_name?: string;
   banId?: string; // New UUID Ban ID
+  point: [number, number];
 };
 
 export type ContributionStore = {
