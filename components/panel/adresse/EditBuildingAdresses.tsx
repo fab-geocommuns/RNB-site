@@ -19,7 +19,7 @@ export function EditBuildingAdresses() {
     onAddressSelected: (address?: ContributionAddress) =>
       dispatch(Actions.contribution.newAddress(address)),
     warning: {
-      distanceInKilometers: 1,
+      distanceInKilometers: 0.5,
       point: (selectedItem as SelectedBuilding).point.coordinates,
     },
   });

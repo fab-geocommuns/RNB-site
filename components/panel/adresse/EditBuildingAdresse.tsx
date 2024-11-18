@@ -6,6 +6,7 @@ import styles from '@/styles/panel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useBanAddressModalPicker } from '@/components/panel/adresse/useBanAddressModalPicker';
 import { ContributionAddress } from '@/stores/contribution/contribution-slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 
 type EditBuildingAdresseProps = {
   index: number;
@@ -16,6 +17,9 @@ export function EditBuildingAdresse({ index }: EditBuildingAdresseProps) {
   const contributionAdresses = useSelector(
     (state: RootState) => state.contribution.addresses,
   );
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const { modalComponent, open } = useBanAddressModalPicker({
     onAddressSelected: (address?: ContributionAddress) =>
       dispatch(
@@ -24,6 +28,10 @@ export function EditBuildingAdresse({ index }: EditBuildingAdresseProps) {
           index,
         }),
       ),
+    warning: {
+      distanceInKilometers: 0.5,
+      point: (selectedItem as SelectedBuilding).point.coordinates,
+    },
   });
 
   return (
