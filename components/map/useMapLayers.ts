@@ -26,6 +26,7 @@ export const BUILDINGS_LAYERS_SHAPE = [
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
+import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 export const STYLES = {
   vector: {
@@ -251,6 +252,13 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         ],
       },
     });
+
+    const buildingSourceControl = map._controls.find(
+      (c) => c instanceof BuildingSourceSwitcherControl,
+    );
+    if (buildingSourceControl) {
+      buildingSourceControl.updateStyles();
+    }
   }, []);
 
   // Initialisation des couches vectorielles
