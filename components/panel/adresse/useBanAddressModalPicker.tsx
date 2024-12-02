@@ -136,7 +136,13 @@ export function useBanAddressModalPicker({
 
   return {
     modalComponent,
-    open: () => modal.open(),
+    open: (initialValue?: string) => {
+      modal.open();
+
+      if (initialValue) {
+        setQuery(initialValue);
+      }
+    },
     close: () => modal.close(),
   };
 }

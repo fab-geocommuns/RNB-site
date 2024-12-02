@@ -2,6 +2,7 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import { contributionActions } from '@/stores/contribution/contribution-slice';
 
 export interface SelectedBuilding {
   _type: 'building';
@@ -143,6 +144,8 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
+
+    dispatch(contributionActions.stopEdit());
 
     const url = bdgApiUrl(rnbId + '?from=site');
     const rnbResponse = await fetch(url);

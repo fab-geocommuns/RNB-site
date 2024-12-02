@@ -42,7 +42,11 @@ export function EditBuildingAdresse({ index }: EditBuildingAdresseProps) {
       <div className={styles.editAction}>
         <Button
           size="small"
-          onClick={() => open()}
+          onClick={() =>
+            open(
+              `${contributionAdresses![index].street_number! + contributionAdresses![index].street_rep} ${contributionAdresses![index].street}, ${contributionAdresses![index].city_zipcode} ${contributionAdresses![index].city_name}`,
+            )
+          }
           iconId={'fr-icon-edit-line'}
         >
           <span></span>
