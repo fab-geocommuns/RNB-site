@@ -33,6 +33,8 @@ export function useBanAddressModalPicker({
   );
 
   const handleSuggestionSelected = ({ suggestion }: any) => {
+    if (!suggestion) return;
+
     const numberMatch = suggestion.properties.housenumber.match(/[0-9]*/);
     const street_rep =
       (numberMatch

@@ -132,7 +132,7 @@ export default function VisuPanel() {
               <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
                 <div className={styles.footer}>
                   <Input
-                    label="Commentaire de la contribution (*)"
+                    label="Justification de la contribution (*)"
                     style={{
                       marginBottom: '0',
                     }}
