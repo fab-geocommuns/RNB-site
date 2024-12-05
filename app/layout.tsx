@@ -18,6 +18,8 @@ import Script from 'next/script';
 // Settings
 import settings from '@/logic/settings';
 import { Suspense } from 'react';
+import { Providers } from '@/stores/provider';
+import { Alerts } from '@/components/Alerts';
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -43,13 +45,16 @@ heap.load("${settings.heapId}");
       </head>
       <body>
         <Suspense>
-          <RNBSessionProvider>
-            <DsfrProvider>
-              <RNBHeader />
-              <FlashMessage />
-              {children}
-            </DsfrProvider>
-          </RNBSessionProvider>
+          <Providers>
+            <RNBSessionProvider>
+              <DsfrProvider>
+                <RNBHeader />
+                <FlashMessage />
+                <Alerts />
+                {children}
+              </DsfrProvider>
+            </RNBSessionProvider>
+          </Providers>
           <Analytics />
         </Suspense>
       </body>

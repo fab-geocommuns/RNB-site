@@ -1,13 +1,17 @@
 'use client';
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { get } from 'http';
+import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import { contributionActions } from '@/stores/contribution/contribution-slice';
 
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
-  status: any[];
-  point: [number, number];
+  status: BuildingStatus;
+  point: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
   addresses: {
     id: string;
     banId: string;
@@ -92,15 +96,17 @@ export const mapSlice = createSlice({
         state.selectedItem.addresses = action.payload;
       }
     },
-    unselectItem(state) {
-      state.selectedItem = undefined;
-    },
   },
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
-      action.payload._type = 'building';
-      state.selectedItem = action.payload;
+      // No building selected
+      if (!action.payload) {
+        state.selectedItem = undefined;
+      } else {
+        action.payload._type = 'building';
+        state.selectedItem = action.payload;
+      }
 
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
@@ -138,6 +144,8 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
+
+    dispatch(contributionActions.stopEdit());
 
     const url = bdgApiUrl(rnbId + '?from=site');
     const rnbResponse = await fetch(url);
@@ -197,6 +205,7 @@ export function banApiUrl(interopBanId: string) {
 
 export const mapActions = {
   ...mapSlice.actions,
+  unselectItem: () => selectBuilding(null),
   selectBuilding,
   selectADS,
 };

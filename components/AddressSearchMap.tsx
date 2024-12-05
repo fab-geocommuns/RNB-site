@@ -11,14 +11,13 @@ import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBuilding } from '@/stores/map/slice';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete';
-import { Actions, AppDispatch, RootState } from '@/stores/map/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(
-    (state: RootState) => state.addressSearch.unknown_rnb_id,
+    (state: RootState) => state.map.addressSearch.unknown_rnb_id,
   );
 
   // URL params
@@ -28,7 +27,9 @@ export default function AddressSearchMap() {
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State
-  const moveTo = useSelector((state: RootState) => state.moveTo);
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   const addressInput = useRef<HTMLInputElement>(null);
@@ -150,6 +151,14 @@ export default function AddressSearchMap() {
       search: suggestion.label,
     });
   };
+
+  useEffect(() => {
+    if (selectedItem && selectedItem._type === 'building') {
+      setQuery(selectedItem.rnb_id);
+    } else if (!selectedItem) {
+      setQuery('');
+    }
+  }, [selectedItem]);
 
   const handleSuggestionSelected = ({ suggestion }) => {
     if (suggestion !== null) {

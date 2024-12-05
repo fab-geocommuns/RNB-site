@@ -4,7 +4,7 @@ import satellite from '@/components/map/mapstyles/satellite.json';
 import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/map/store';
+import { RootState } from '@/stores/store';
 
 const BDGS_TILES_URL =
   process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
@@ -26,6 +26,7 @@ export const BUILDINGS_LAYERS_SHAPE = [
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
+import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 export const STYLES = {
   vector: {
@@ -49,7 +50,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   const adsOperationsIcons = getADSOperationIcons();
 
   const reloadBuildings = useSelector(
-    (state: RootState) => state.reloadBuildings,
+    (state: RootState) => state.map.reloadBuildings,
   );
 
   const initADSLayer = useCallback(async (map: maplibregl.Map) => {
@@ -251,6 +252,13 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         ],
       },
     });
+
+    const buildingSourceControl = map._controls.find(
+      (c) => c instanceof BuildingSourceSwitcherControl,
+    );
+    if (buildingSourceControl) {
+      buildingSourceControl.updateStyles();
+    }
   }, []);
 
   // Initialisation des couches vectorielles

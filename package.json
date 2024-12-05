@@ -17,6 +17,7 @@
     "@codegouvfr/react-dsfr": "^1.11.2",
     "@reduxjs/toolkit": "^2.2.7",
     "@tryghost/content-api": "^1.11.21",
+    "@turf/turf": "^7.1.0",
     "@types/node": "22.2.0",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
