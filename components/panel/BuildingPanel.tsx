@@ -22,6 +22,8 @@ import { ContributionStatusPicker } from '@/components/panel/ContributionStatusP
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import { useSession } from 'next-auth/react';
+import { Group } from '@/components/util/ShouldBeConnected';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -30,6 +32,7 @@ interface BuildingPanelProps {
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
   const editing = useSelector((state: RootState) => state.contribution.editing);
+  const { status, data } = useSession();
 
   const apiUrl = () => {
     return bdgApiUrl(bdg!.rnb_id);
@@ -108,7 +111,8 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </div>
       </div>
 
-      {!editing && (
+      {(status !== 'authenticated' ||
+        !((data as any).groups as Group[]).includes(Group.CONTRIBUTORS)) && (
         <div className={panelStyles.section}>
           <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
             Améliorez le RNB
