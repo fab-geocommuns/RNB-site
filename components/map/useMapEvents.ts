@@ -4,7 +4,6 @@ import { Actions, AppDispatch } from '@/stores/map/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
 import {
-  BUILDINGS_SOURCE,
   BUILDINGS_LAYER_POINT,
   BUILDINGS_LAYER_SHAPE_BORDER,
   BUILDINGS_LAYER_SHAPE_POINT,

@@ -15,10 +15,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/map/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
+import { Group, ShouldBeConnected } from '@/components/util/ShouldBeConnected';
+import { fr } from '@codegouvfr/react-dsfr';
+import { DisableBuilding } from '@/components/contribution/DisableBuilding';
+import { EditBuilding } from '@/components/contribution/EditBuilding';
 
 export default function VisuPanel() {
   // Store
-  const selectedItem = useSelector((state: RootState) => state.selectedItem);
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   const title = () => {
@@ -62,6 +68,13 @@ export default function VisuPanel() {
                 </>
               )}
             </div>
+
+            <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
+              <div className={styles.footer}>
+                <DisableBuilding />
+                <EditBuilding />
+              </div>
+            </ShouldBeConnected>
           </div>
         </div>
       </>

@@ -1,5 +1,5 @@
 // Types
-import { SelectedADS } from '@/stores/map/slice';
+import { SelectedADS } from '@/stores/map/map-slice';
 
 // Styles
 import panelStyles from '@/styles/panel.module.scss';

@@ -100,6 +100,28 @@
 
     }
 
+    .footer {
+        display: flex;
+        border-top: 2px solid rgba(0, 0, 0, 0.6);
+
+        & > * {
+            flex: 1 1 0;
+            padding: 0.25rem 0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease-in-out;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            border-right: 1px solid rgba(0, 0, 0, 0.4);
+        }
+
+        & > *:last-child {
+            border-right-color: transparent;
+        }
+    }
 }
 
 

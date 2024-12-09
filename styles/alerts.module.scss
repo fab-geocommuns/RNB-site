@@ -1,0 +1,14 @@
+.alerts {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column-reverse;
+  z-index: 100;
+
+  .alert {
+    background-color: white;
+    margin-top: 1rem;
+  }
+}
+
