@@ -1,5 +1,6 @@
 // Types
-import { SelectedBuilding } from '@/stores/map/map-slice';
+// Store
+import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -14,16 +15,14 @@ import panelStyles from '@/styles/panel.module.scss';
 import va from '@vercel/analytics';
 
 // Hooks
-import React, { useState, useEffect } from 'react';
-
-// Store
-import { bdgApiUrl } from '@/stores/map/map-slice';
+import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/store';
-import { useSession } from 'next-auth/react';
-import { Group } from '@/components/util/ShouldBeConnected';
+import {
+  RNBAuthenticationStatus,
+  RNBGroup,
+  useRNBAuthentication,
+} from '@/utils/use-rnb-authentication';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -31,8 +30,7 @@ interface BuildingPanelProps {
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
-  const editing = useSelector((state: RootState) => state.contribution.editing);
-  const { status, data } = useSession();
+  const { is } = useRNBAuthentication();
 
   const apiUrl = () => {
     return bdgApiUrl(bdg!.rnb_id);
@@ -111,8 +109,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </div>
       </div>
 
-      {(status !== 'authenticated' ||
-        !((data as any).groups as Group[]).includes(Group.CONTRIBUTORS)) && (
+      {!is(RNBGroup.CONTRIBUTORS) && (
         <div className={panelStyles.section}>
           <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
             Améliorez le RNB

@@ -14,12 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
-import { Group, ShouldBeConnected } from '@/components/util/ShouldBeConnected';
+import { ShouldBeConnected } from '@/components/util/ShouldBeConnected';
 import { DisableBuilding } from '@/components/contribution/DisableBuilding';
 import { EditBuilding } from '@/components/contribution/EditBuilding';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { Input } from '@codegouvfr/react-dsfr/Input';
+import { RNBGroup } from '@/utils/use-rnb-authentication';
 
 export default function VisuPanel() {
   // Store
@@ -118,7 +119,7 @@ export default function VisuPanel() {
             </div>
 
             {selectedItem?._type === 'building' && !contribution.editing && (
-              <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
+              <ShouldBeConnected withGroup={RNBGroup.CONTRIBUTORS}>
                 <div className={styles.footer}>
                   <div className={styles.footerActions}>
                     <DisableBuilding />
@@ -129,7 +130,7 @@ export default function VisuPanel() {
             )}
 
             {selectedItem?._type === 'building' && contribution.editing && (
-              <ShouldBeConnected withGroup={Group.CONTRIBUTORS}>
+              <ShouldBeConnected withGroup={RNBGroup.CONTRIBUTORS}>
                 <div className={styles.footer}>
                   <Input
                     label="Justification de la contribution (*)"
