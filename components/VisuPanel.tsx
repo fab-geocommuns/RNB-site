@@ -10,13 +10,10 @@ import styles from '@/styles/panel.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Comps
-
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
 import { ShouldBeConnected } from '@/components/util/ShouldBeConnected';
-import { DisableBuilding } from '@/components/contribution/DisableBuilding';
-import { EditBuilding } from '@/components/contribution/EditBuilding';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { Input } from '@codegouvfr/react-dsfr/Input';
@@ -63,9 +60,6 @@ export default function VisuPanel() {
       });
 
       if (res.ok) {
-        // Stop editing
-        dispatch(Actions.contribution.stopEdit());
-
         // Update building in selectedItem
         await dispatch(Actions.map.selectBuilding(building.rnb_id));
 
@@ -118,18 +112,7 @@ export default function VisuPanel() {
               {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
             </div>
 
-            {selectedItem?._type === 'building' && !contribution.editing && (
-              <ShouldBeConnected withGroup={RNBGroup.CONTRIBUTORS}>
-                <div className={styles.footer}>
-                  <div className={styles.footerActions}>
-                    <DisableBuilding />
-                    <EditBuilding />
-                  </div>
-                </div>
-              </ShouldBeConnected>
-            )}
-
-            {selectedItem?._type === 'building' && contribution.editing && (
+            {selectedItem?._type === 'building' && (
               <ShouldBeConnected withGroup={RNBGroup.CONTRIBUTORS}>
                 <div className={styles.footer}>
                   <Input
@@ -149,7 +132,11 @@ export default function VisuPanel() {
                     <button
                       className="action"
                       onClick={() => {
-                        dispatch(Actions.contribution.stopEdit());
+                        dispatch(
+                          Actions.contribution.reloadContributionData(
+                            selectedItem,
+                          ),
+                        );
                         setComment('');
                       }}
                     >

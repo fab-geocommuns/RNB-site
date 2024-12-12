@@ -18,11 +18,7 @@ import va from '@vercel/analytics';
 import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
-import {
-  RNBAuthenticationStatus,
-  RNBGroup,
-  useRNBAuthentication,
-} from '@/utils/use-rnb-authentication';
+import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;

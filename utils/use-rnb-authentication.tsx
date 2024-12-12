@@ -30,7 +30,7 @@ export const useRNBAuthentication = (): UseRNBAuthentication => {
         ? RNBAuthenticationStatus.AUTHENTICATED
         : RNBAuthenticationStatus.DISCONNECTED,
     user: {
-      username: (data as any).username,
+      username: (data as any)?.username,
       groups,
     },
     is: (group: RNBGroup) =>

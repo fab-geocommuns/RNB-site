@@ -1,18 +1,17 @@
-import { RootState } from '@/stores/store';
-import { useSelector } from 'react-redux';
 import React from 'react';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { EditBuildingAdresses } from '@/components/panel/adresse/EditBuildingAdresses';
 import { BuildingAdresse } from '@/components/panel/adresse/BuildingAdresse';
+import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 type BuildingAdressesProps = {
   adresses: SelectedBuilding['addresses'];
 };
 
 export function BuildingAdresses({ adresses }: BuildingAdressesProps) {
-  const editing = useSelector((state: RootState) => state.contribution.editing);
+  const { is } = useRNBAuthentication();
 
-  if (editing) return <EditBuildingAdresses />;
+  if (is(RNBGroup.CONTRIBUTORS)) return <EditBuildingAdresses />;
 
   return adresses?.length === 0 ? (
     <div>

@@ -15,26 +15,21 @@ export type ContributionAddress = {
 };
 
 export type ContributionStore = {
-  editing: boolean;
   addresses?: ContributionAddress[];
   status?: BuildingStatus;
 };
 
-const initialState: ContributionStore = {
-  editing: false,
-};
+const initialState: ContributionStore = {};
 
 export const contributionSlice = createSlice({
   name: 'contribution',
   initialState,
   reducers: {
-    startEdit(state, action) {
-      state.editing = true;
+    reloadContributionData(state, action) {
       state.status = action.payload.status;
       state.addresses = action.payload.addresses;
     },
     stopEdit(state) {
-      state.editing = false;
       state.addresses = undefined;
     },
     setStatus(state, action) {

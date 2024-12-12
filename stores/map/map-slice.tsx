@@ -104,7 +104,6 @@ export const mapSlice = createSlice({
       if (!action.payload) {
         state.selectedItem = undefined;
       } else {
-        action.payload._type = 'building';
         state.selectedItem = action.payload;
       }
 
@@ -118,7 +117,6 @@ export const mapSlice = createSlice({
     });
 
     builder.addCase(selectADS.fulfilled, (state, action) => {
-      action.payload._type = 'ads';
       state.selectedItem = action.payload;
     });
   },
@@ -135,7 +133,10 @@ export const selectADS = createAsyncThunk(
     if (adsResponse.ok) {
       const adsData = (await adsResponse.json()) as SelectedADS;
 
-      return adsData;
+      return {
+        ...adsData,
+        _type: 'ads',
+      } satisfies SelectedADS;
     }
   },
 );
@@ -144,8 +145,6 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
-
-    dispatch(contributionActions.stopEdit());
 
     const url = bdgApiUrl(rnbId + '?from=site');
     const rnbResponse = await fetch(url);
@@ -158,7 +157,14 @@ export const selectBuilding = createAsyncThunk(
         dispatch(addBanUUID(rnbData));
       }
 
-      return rnbData;
+      const selectedBuilding = {
+        ...rnbData,
+        _type: 'building',
+      } satisfies SelectedBuilding;
+
+      dispatch(contributionActions.reloadContributionData(selectedBuilding));
+
+      return selectedBuilding;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }

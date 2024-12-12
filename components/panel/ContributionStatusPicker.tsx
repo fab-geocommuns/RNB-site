@@ -6,6 +6,7 @@ import {
 } from '@/stores/contribution/contribution-types';
 import React from 'react';
 import Select from '@codegouvfr/react-dsfr/Select';
+import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 type ContributionStatusPickerProps = {
   currentStatus: BuildingStatus;
@@ -16,11 +17,11 @@ export function ContributionStatusPicker({
 }: ContributionStatusPickerProps) {
   const dispatch: AppDispatch = useDispatch();
   const status = useSelector((state: RootState) => state.contribution.status);
-  const editing = useSelector((state: RootState) => state.contribution.editing);
+  const { is } = useRNBAuthentication();
   const setStatus = (status: BuildingStatus) =>
     dispatch(Actions.contribution.setStatus(status));
 
-  return editing ? (
+  return is(RNBGroup.CONTRIBUTORS) ? (
     <Select
       label=""
       nativeSelectProps={{
