@@ -1,13 +1,17 @@
 'use client';
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { get } from 'http';
+import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import { contributionActions } from '@/stores/contribution/contribution-slice';
 
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
-  status: any[];
-  point: [number, number];
+  status: BuildingStatus;
+  point: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
   addresses: {
     id: string;
     banId: string;
@@ -100,7 +104,6 @@ export const mapSlice = createSlice({
       if (!action.payload) {
         state.selectedItem = undefined;
       } else {
-        action.payload._type = 'building';
         state.selectedItem = action.payload;
       }
 
@@ -114,7 +117,6 @@ export const mapSlice = createSlice({
     });
 
     builder.addCase(selectADS.fulfilled, (state, action) => {
-      action.payload._type = 'ads';
       state.selectedItem = action.payload;
     });
   },
@@ -131,7 +133,10 @@ export const selectADS = createAsyncThunk(
     if (adsResponse.ok) {
       const adsData = (await adsResponse.json()) as SelectedADS;
 
-      return adsData;
+      return {
+        ...adsData,
+        _type: 'ads',
+      } satisfies SelectedADS;
     }
   },
 );
@@ -152,7 +157,14 @@ export const selectBuilding = createAsyncThunk(
         dispatch(addBanUUID(rnbData));
       }
 
-      return rnbData;
+      const selectedBuilding = {
+        ...rnbData,
+        _type: 'building',
+      } satisfies SelectedBuilding;
+
+      dispatch(contributionActions.reloadContributionData(selectedBuilding));
+
+      return selectedBuilding;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }

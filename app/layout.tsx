@@ -18,7 +18,7 @@ import Script from 'next/script';
 // Settings
 import settings from '@/logic/settings';
 import { Suspense } from 'react';
-import { Providers } from '@/stores/map/provider';
+import { Providers } from '@/stores/provider';
 import { Alerts } from '@/components/Alerts';
 
 export const metadata = {

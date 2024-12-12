@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Actions, AppDispatch } from '@/stores/map/store';
+import { Actions, AppDispatch } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
 import {
