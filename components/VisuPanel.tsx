@@ -74,6 +74,9 @@ export default function VisuPanel() {
             },
           }),
         );
+
+        // Reset comment
+        setComment('');
       } else {
         // Show error
         dispatch(
