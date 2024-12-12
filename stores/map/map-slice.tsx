@@ -92,15 +92,17 @@ export const mapSlice = createSlice({
         state.selectedItem.addresses = action.payload;
       }
     },
-    unselectItem(state) {
-      state.selectedItem = undefined;
-    },
   },
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
-      action.payload._type = 'building';
-      state.selectedItem = action.payload;
+      // No building selected
+      if (!action.payload) {
+        state.selectedItem = undefined;
+      } else {
+        action.payload._type = 'building';
+        state.selectedItem = action.payload;
+      }
 
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
@@ -197,6 +199,7 @@ export function banApiUrl(interopBanId: string) {
 
 export const mapActions = {
   ...mapSlice.actions,
+  unselectItem: () => selectBuilding(null),
   selectBuilding,
   selectADS,
 };

@@ -49,7 +49,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   const adsOperationsIcons = getADSOperationIcons();
 
   const reloadBuildings = useSelector(
-    (state: RootState) => state.reloadBuildings,
+    (state: RootState) => state.map.reloadBuildings,
   );
 
   const initADSLayer = useCallback(async (map: maplibregl.Map) => {
