@@ -119,7 +119,7 @@
       answer: >
         <p>Oui, le RNB est un service public gratuit et disponible en open data. Vous avez accès librement :</p>
         <ol>
-        <li>à la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a></li>
+        <li>à la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">carte du RNB</a></li>
         <li>aux <a href="https://rnb-fr.gitbook.io/documentation" target="_blank">API ainsi qu’au sélecteur de bâtiment</a></li>
         <li>aux <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">jeux de données</a> sur data.gouv</li>
         </ol>
@@ -132,14 +132,14 @@
         <li><b>Intégrer le RNB au sein de vos logiciels métiers</b> : parcourez la documentation technique pour utiliser :</li>
         <ul>
         <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a> : Cette API permet d’obtenir l'identifiant RNB pour chacun de vos bâtiments. Vous trouverez trois points d'accès : consultation, listing et identification.</li>
-        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une cartographie les bâtiments du référentiel et d'afficher leurs identifiants. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID Bâtiment.</li>
+        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une carte les bâtiments du référentiel et d'afficher leurs identifiants. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID Bâtiment.</li>
         <li>le <a href="https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" target="_blank">sélecteur de bâtiment</a> : Cet exemple de sélecteur de bâtiment du RNB vous montrera comment se servir des différentes briques techniques pour construire un tel sélecteur. Celui-ci permettra à vos utilisateurs d’identifier et de sélectionner un bâtiment sur une carte, au sein même de vos logiciels.</li>
         <li>l’ <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads" target="_blank">API ADS</a> : Cette API permet aux instructeurs des Droits du Sol d'ajouter des informations sur un bâtiment existant (ex : Démoli) ou de créer un nouveau bâtiment au sein du RNB.</li>
         </ul>
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
         <li><b>Alimenter ce géocommun</b> : vous pouvez faire un signalement</li> 
         <ul>
-        <li>directement sur la <a href="https://rnb.beta.gouv.fr/" target="_blank">cartographie</a> du RNB au sein de la fiche dédiée du bâtiment concerné. Vous pourrez indiquer votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
+        <li>directement sur la <a href="https://rnb.beta.gouv.fr/" target="_blank">carte</a> du RNB au sein de la fiche dédiée du bâtiment concerné. Vous pourrez indiquer votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
         <li>ou ouvrir un ticket sur le <a href="https://github.com/fab-geocommuns/RNB-coeur" target="_blank">Github</a> du RNB.</li>
         </ul>
         </ol>
@@ -198,7 +198,7 @@
         <p>Vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc) ?</p>
         <ol>
         <li>Consultez <a href="https://rnb.beta.gouv.fr/definition" target="_blank">la Définition du Bâtiment et son annexe</a> validées par le CNIG pour vérifier si votre structure ou construction entre dans cette catégorisation.</li>
-        <li>Si votre proposition de signalement entre bien dans la catégorisation du standard du CNIG, vous pouvez envoyer celui-ci directement sur la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">cartographie du RNB</a>. Pour ce faire :</li>
+        <li>Si votre proposition de signalement entre bien dans la catégorisation du standard du CNIG, vous pouvez envoyer celui-ci directement via la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">carte du RNB</a>. Pour ce faire :</li>
         </ol>
         <ul>
         <li>Saisissez l’adresse du bâtiment pour lequel vous souhaitez faire un signalement ou utilisez la géolocalisation.</li>
