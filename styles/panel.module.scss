@@ -70,10 +70,11 @@
             line-height: 1em;
             margin:0;
             text-transform: uppercase;
+            flex: 1 0 0;
         }
         
         .closeLink {
-        
+            margin-left: 1rem;
             color: $title-color;
             opacity: .8;
             background: none;

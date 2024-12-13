@@ -18,6 +18,7 @@ import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { RNBGroup } from '@/utils/use-rnb-authentication';
+import { DisableBuilding } from '@/components/contribution/DisableBuilding';
 
 export default function VisuPanel() {
   // Store
@@ -103,6 +104,7 @@ export default function VisuPanel() {
           <div className={styles.content}>
             <div className={styles.head}>
               <h1 className={styles.title}>{title()}</h1>
+              <DisableBuilding />
               <a href="#" onClick={close} className={styles.closeLink}>
                 <i className="fr-icon-close-line" />
               </a>
