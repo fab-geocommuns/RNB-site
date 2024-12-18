@@ -61,7 +61,17 @@ export class BuildingSourceSwitcherControl {
     const buildingSource = currentStyle.sources[BUILDINGS_SOURCE];
 
     if (buildingSource && buildingSource.type === 'vector') {
-      const newUrl = this._isShapesSource
+      this._isShapesSource = !this._isShapesSource;
+      this.updateStyles();
+    }
+  }
+
+  public updateStyles() {
+    const currentStyle = this._map.getStyle();
+    const buildingSource = currentStyle.sources[BUILDINGS_SOURCE];
+
+    if (buildingSource && buildingSource.type === 'vector') {
+      const newUrl = !this._isShapesSource
         ? `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf`
         : `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf`;
 
@@ -69,23 +79,21 @@ export class BuildingSourceSwitcherControl {
       this._map.setLayoutProperty(
         BUILDINGS_LAYER_POINT,
         'visibility',
-        !this._isShapesSource ? 'none' : 'visible',
+        this._isShapesSource ? 'none' : 'visible',
       );
       this._map.setLayoutProperty(
         BUILDINGS_LAYER_SHAPE_BORDER,
         'visibility',
-        this._isShapesSource ? 'none' : 'visible',
+        !this._isShapesSource ? 'none' : 'visible',
       );
       this._map.setLayoutProperty(
         BUILDINGS_LAYER_SHAPE_FILL,
         'visibility',
-        this._isShapesSource ? 'none' : 'visible',
+        !this._isShapesSource ? 'none' : 'visible',
       );
-      this._icon.src = this._isShapesSource ? polygonImg.src : dotImg.src;
-      this._text.textContent = this._isShapesSource ? 'Polygone' : 'Point';
-      this._button.style.width = this._isShapesSource ? '7rem' : '5rem';
-
-      this._isShapesSource = !this._isShapesSource;
+      this._icon.src = !this._isShapesSource ? polygonImg.src : dotImg.src;
+      this._text.textContent = !this._isShapesSource ? 'Polygone' : 'Point';
+      this._button.style.width = !this._isShapesSource ? '7rem' : '5rem';
     }
   }
 }

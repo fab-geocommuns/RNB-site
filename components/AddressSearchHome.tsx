@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, use, useEffect } from 'react';
-import { Providers } from '@/stores/map/provider';
+import { Providers } from '@/stores/provider';
 import { useRouter } from 'next/navigation';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete';

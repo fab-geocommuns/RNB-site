@@ -1,32 +1,31 @@
-import { useSession } from 'next-auth/react';
 import { PropsWithChildren } from 'react';
+import {
+  RNBAuthenticationStatus,
+  RNBGroup,
+  useRNBAuthentication,
+} from '@/utils/use-rnb-authentication';
 
 type ShouldBeConnectedProps = {
-  withGroup?: Group;
-  withGroups?: Group[];
+  withGroup?: RNBGroup;
+  withGroups?: RNBGroup[];
 } & PropsWithChildren;
-
-export enum Group {
-  CONTRIBUTORS = 'Contributors',
-}
 
 export function ShouldBeConnected({
   withGroups,
   withGroup,
   children,
 }: ShouldBeConnectedProps) {
-  const { status, data } = useSession();
-  if (status !== 'authenticated') return null;
+  const {
+    status,
+    user: { groups },
+  } = useRNBAuthentication();
+  if (status !== RNBAuthenticationStatus.AUTHENTICATED) return null;
 
-  const userGroups = (data as any).groups as Group[] | undefined;
-  if (
-    withGroups &&
-    (!userGroups || !withGroups.every((group) => userGroups.includes(group)))
-  ) {
+  if (withGroups && withGroups.every((group) => groups.includes(group))) {
     return null;
   }
 
-  if (withGroup && (!userGroups || !userGroups.includes(withGroup))) {
+  if (withGroup && !groups.includes(withGroup)) {
     return null;
   }
 

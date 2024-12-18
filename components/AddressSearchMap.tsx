@@ -11,10 +11,9 @@ import Bus from '@/utils/Bus';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBuilding } from '@/stores/map/map-slice';
 
 import AddressAutocomplete from '@/components/AddressAutocomplete';
-import { Actions, AppDispatch, RootState } from '@/stores/map/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(
