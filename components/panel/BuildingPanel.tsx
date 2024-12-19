@@ -1,5 +1,6 @@
 // Types
-import { SelectedBuilding } from '@/stores/map/slice';
+// Store
+import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -14,10 +15,10 @@ import panelStyles from '@/styles/panel.module.scss';
 import va from '@vercel/analytics';
 
 // Hooks
-import React, { useState, useEffect } from 'react';
-
-// Store
-import { bdgApiUrl } from '@/stores/map/slice';
+import React, { useEffect, useState } from 'react';
+import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
+import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
+import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -25,29 +26,10 @@ interface BuildingPanelProps {
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
+  const { is } = useRNBAuthentication();
 
   const apiUrl = () => {
     return bdgApiUrl(bdg!.rnb_id);
-  };
-
-  const statusLabel = () => {
-    const bdgStatus = bdg?.status;
-
-    if (bdgStatus === undefined) return 'Inconnu';
-    if (bdgStatus === null) return 'Inconnu';
-
-    // Bdg status is a string, we are on the new format
-    const labels = {
-      constructionProject: 'En projet',
-      canceledConstructionProject: 'Projet annulé',
-      ongoingConstruction: 'Construction en cours',
-      constructed: 'Construit',
-      ongoingChange: 'En cours de modification',
-      notUsable: 'Non utilisable',
-      demolished: 'Démoli',
-    };
-
-    return labels[bdgStatus];
   };
 
   function addSpace(rnb_id: string) {
@@ -112,46 +94,25 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
-        <div className={panelStyles.sectionBody}>{statusLabel()}</div>
+        <div className={panelStyles.sectionBody}>
+          <ContributionStatusPicker currentStatus={bdg.status} />
+        </div>
       </div>
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Adresses</h2>
         <div className={panelStyles.sectionBody}>
-          {bdg?.addresses?.length === 0 ? (
-            <div>
-              <em>Aucune adresse liée</em>
-            </div>
-          ) : (
-            bdg?.addresses?.map((a) => (
-              <div key={a.id} className={panelStyles.sectionListItem}>
-                {a.street_number}
-                {a.street_rep} {a.street}
-                <br />
-                {a.city_zipcode} {a.city_name}
-                <br />
-                <small>
-                  Clé BAN : {a.id}
-                  {a.banId ? (
-                    <>
-                      <br />
-                      Identifiant BAN : {a.banId}
-                    </>
-                  ) : (
-                    ''
-                  )}
-                </small>
-              </div>
-            ))
-          )}
+          <BuildingAdresses adresses={bdg.addresses} />
         </div>
       </div>
 
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
-          Améliorez le RNB
-        </h2>
-        <ContributionForm />
-      </div>
+      {!is(RNBGroup.CONTRIBUTORS) && (
+        <div className={panelStyles.section}>
+          <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
+            Améliorez le RNB
+          </h2>
+          <ContributionForm />
+        </div>
+      )}
 
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Correspondances</h2>
