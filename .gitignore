@@ -40,3 +40,5 @@ env.local
 /blob-report/
 /playwright/.cache/
 test-results.json
+# Sentry Config File
+.env.sentry-build-plugin
