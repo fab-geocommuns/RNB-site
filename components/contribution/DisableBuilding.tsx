@@ -8,6 +8,8 @@ import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { createPortal } from 'react-dom';
+import { ShouldBeConnected } from '@/components/util/ShouldBeConnected';
+import { RNBGroup } from '@/utils/use-rnb-authentication';
 
 const modal = createModal({
   id: 'disable-building-modal',
@@ -74,18 +76,20 @@ export function DisableBuilding() {
   return (
     selectedItem._type === 'building' && (
       <>
-        <Button
-          className="action"
-          onClick={() => modal.open()}
-          size="small"
-          style={{
-            lineHeight: '1rem',
-            minHeight: 0,
-            backgroundColor: '#b34000',
-          }}
-        >
-          Désactiver
-        </Button>
+        <ShouldBeConnected withGroup={RNBGroup.CONTRIBUTORS}>
+          <Button
+            className="action"
+            onClick={() => modal.open()}
+            size="small"
+            style={{
+              lineHeight: '1rem',
+              minHeight: 0,
+              backgroundColor: '#b34000',
+            }}
+          >
+            Désactiver
+          </Button>
+        </ShouldBeConnected>
 
         {createPortal(
           <modal.Component
