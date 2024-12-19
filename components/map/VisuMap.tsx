@@ -7,6 +7,7 @@ import { useMapLayers } from '@/components/map/useMapLayers';
 import { useMapControls } from '@/components/map/useMapControls';
 import { useMapEvents } from '@/components/map/useMapEvents';
 import { useMapStateSync } from '@/components/map/useMapStateSync';
+import { useMapDraw } from '@/components/map/useMapDraw';
 
 export default function VisuMap() {
   const { map, mapContainer } = useMap();
@@ -14,6 +15,7 @@ export default function VisuMap() {
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);
+  useMapDraw(map);
 
   return mapContainer;
 }

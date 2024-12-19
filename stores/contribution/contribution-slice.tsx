@@ -2,6 +2,7 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import { MultiPolygon, Point, Polygon } from 'geojson';
 
 export type ContributionAddress = {
   id?: string; // Interoperability key
@@ -15,8 +16,10 @@ export type ContributionAddress = {
 };
 
 export type ContributionStore = {
+  rnb_id?: string;
   addresses?: ContributionAddress[];
   status?: BuildingStatus;
+  shape?: MultiPolygon | Polygon | Point;
 };
 
 const initialState: ContributionStore = {};
@@ -26,8 +29,10 @@ export const contributionSlice = createSlice({
   initialState,
   reducers: {
     reloadContributionData(state, action) {
+      state.rnb_id = action.payload.rnb_id;
       state.status = action.payload.status;
       state.addresses = action.payload.addresses;
+      state.shape = action.payload.shape;
     },
     stopEdit(state) {
       state.addresses = undefined;
@@ -39,8 +44,10 @@ export const contributionSlice = createSlice({
       state.addresses?.push(action.payload);
     },
     setAddress(state, action) {
-      console.log(action.payload);
       state.addresses![action.payload.index] = action.payload.address;
+    },
+    setShape(state, action) {
+      state.shape = action.payload;
     },
     deleteAddress(state, action) {
       state.addresses?.splice(action.payload, 1);

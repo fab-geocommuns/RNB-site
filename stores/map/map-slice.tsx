@@ -3,15 +3,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
 import { contributionActions } from '@/stores/contribution/contribution-slice';
+import { MultiPolygon, Point, Polygon } from 'geojson';
 
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
   status: BuildingStatus;
-  point: {
-    type: 'Point';
-    coordinates: [number, number];
-  };
+  point: Point;
+  shape?: MultiPolygon | Polygon | Point;
   addresses: {
     id: string;
     banId: string;
@@ -144,7 +143,10 @@ export const selectADS = createAsyncThunk(
 export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
-    if (!rnbId) return;
+    if (!rnbId) {
+      dispatch(contributionActions.reloadContributionData({}));
+      return;
+    }
 
     const url = bdgApiUrl(rnbId + '?from=site');
     const rnbResponse = await fetch(url);
@@ -190,8 +192,11 @@ export const addBanUUID = createAsyncThunk(
 
     // We update only if we are still looking at the same building.
     // Otherwise, we might experience a bug where we update the current building with the addresses of another building.
-    const state = getState();
-    if (rnbData.rnb_id === state.selectedItem?.rnb_id) {
+    const state = getState() as MapStore;
+    if (
+      state.selectedItem?._type === 'building' &&
+      rnbData.rnb_id === state.selectedItem?.rnb_id
+    ) {
       dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
     }
   },

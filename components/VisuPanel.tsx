@@ -55,6 +55,7 @@ export default function VisuPanel() {
         body: JSON.stringify({
           status: contribution.status,
           addresses_cle_interop: contribution.addresses?.map((a) => a.id),
+          shape: contribution.shape,
           comment,
         }),
         method: 'PATCH',

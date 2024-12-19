@@ -60,15 +60,22 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     // Icons for ADS
     // build icon
 
-    const adsBuild = await map.loadImage(adsOperationsIcons.build.src);
-    map.addImage('adsBuild', adsBuild.data, { sdf: true });
+    if (!map.hasImage('adsBuild')) {
+      const adsBuild = await map.loadImage(adsOperationsIcons.build.src);
+      map.addImage('adsBuild', adsBuild.data, { sdf: true });
+    }
+
     // modify icon
-    const adsModify = await map.loadImage(adsOperationsIcons.modify.src);
-    map.addImage('adsModify', adsModify.data, { sdf: true });
+    if (!map.hasImage('adsModify')) {
+      const adsModify = await map.loadImage(adsOperationsIcons.modify.src);
+      map.addImage('adsModify', adsModify.data, { sdf: true });
+    }
 
     // demolish icon
-    const adsDemo = await map.loadImage(adsOperationsIcons.demolish.src);
-    map.addImage('adsDemo', adsDemo.data, { sdf: true });
+    if (!map.hasImage('adsDemo')) {
+      const adsDemo = await map.loadImage(adsOperationsIcons.demolish.src);
+      map.addImage('adsDemo', adsDemo.data, { sdf: true });
+    }
 
     map.addSource('ads', {
       type: 'vector',
@@ -252,13 +259,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         ],
       },
     });
-
-    const buildingSourceControl = map._controls.find(
-      (c) => c instanceof BuildingSourceSwitcherControl,
-    );
-    if (buildingSourceControl) {
-      buildingSourceControl.updateStyles();
-    }
   }, []);
 
   // Initialisation des couches vectorielles

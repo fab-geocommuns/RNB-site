@@ -11,7 +11,7 @@ const nextConfig = {
     ];
   },
 
-  reactStrictMode: true,
+  reactStrictMode: false,
   productionBrowserSourceMaps: true,
   webpack: (config) => {
     config.module.rules.push({
