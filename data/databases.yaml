@@ -87,9 +87,9 @@
   name: Stonal
   url: https://stonal.com/
   published_by: Stonal
-  licence: Réservé à leurs clients
+  licence: Réservée à leurs clients
   tags: [Patrimoine, Immobilier, Logement social, Territoire]
   description: >
     Stonal est une plateforme européenne SaaS alimentée par l’IA, qui optimise la gestion des données patrimoniales. Cette entreprise a intégré les RNB-ID, en important le dernier millésime de la BDNB, afin de faciliter les croisements avec d'autres jeux de données.
-  image: stonal.pg
+  image: stonal.png
   featured: false
