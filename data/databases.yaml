@@ -40,7 +40,7 @@
   tags: [Accessibilité, PMR, ERP, Handicap]
   description: >
     Acceslibre met à disposition des informations d’accessibilité aux bâtiments recevant du public, afin de faciliter la mobilité des personnes en situation de handicap. Cette base de données recense les établissements recevant du public et informe sur leur niveau d’accessibilité.
-  image: 
+  image: acceslibre.png
   featured: true
   featured_summary: La base de données recense les établissements recevant du public et informe sur leur niveau d’accessibilité.
 - key: dataes
@@ -71,7 +71,7 @@
   tags: [Habitat indigne, Insalubrité, Collectivités territoriales, Territoire]
   description: >
     Cette base de données recense les arrêtés d'insalubrité et cartographie, à l'échelle bâtimentaire, le territoire pour améliorer la connaissance du phénomène dans le cadre de la lutte contre l'habitat indigne.
-  image: 
+  image: marseille.jpeg
   featured: false
 - key: lannion
   name: Lannion-Trégor Communauté
@@ -81,7 +81,7 @@
   tags: [Patrimoine immobilier, Collectivités territoriales, Territoire]
   description: >
     Cette base de données recense le patrimoine de l'agglomération et des 57 communes de Lannion-Trégor Communauté. Elle a pour objectif d'identifier et géolocaliser les bâtiments communautaires et communaux, afin de faciliter le partage de connaissance entre les services.
-  image: 
+  image: lannion.png
   featured: false
 - key: stonal
   name: Stonal
@@ -91,5 +91,5 @@
   tags: [Patrimoine, Immobilier, Logement social, Territoire]
   description: >
     Stonal est une plateforme européenne SaaS alimentée par l’IA, qui optimise la gestion des données patrimoniales. Cette entreprise a intégré les RNB-ID, en important le dernier millésime de la BDNB, afin de faciliter les croisements avec d'autres jeux de données.
-  image: 
+  image: stonal.pg
   featured: false
