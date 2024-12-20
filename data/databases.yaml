@@ -63,7 +63,7 @@
     Cette base contient les liste des bâtiments gérés par le ministère de l’Enseignement supérieur et de la Recherche. Les informations sont renseignées par les établissements d’enseignement supérieur et couvrent tous les aspects relatifs aux bâtiments (identification, localisation, propriété, accessibilité, énergie, etc.).
   image: ministere_ens_sup.svg
   featured: false
-  - key: Marseille
+- key: Marseille
   name: metropole Aix-Marseille-Provence
   url: https://ampmetropole.fr
   published_by: la métropole Aix-Marseille-Provence
@@ -73,7 +73,7 @@
     Cette base de données recense les arrêtés d'insalubrité et cartographie, à l'échelle bâtimentaire, le territoire pour améliorer la connaissance du phénomène dans le cadre de la lutte contre l'habitat indigne.
   image: 
   featured: false
- - key: lannion
+- key: lannion
   name: Lannion-Trégor Communauté
   url: https://www.lannion-tregor.com
   published_by: la communauté d'agglomération Lannion-Trégor Communauté 
@@ -83,7 +83,7 @@
     Cette base de données recense le patrimoine de l'agglomération et des 57 communes de Lannion-Trégor Communauté. Elle a pour objectif d'identifier et géolocaliser les bâtiments communautaires et communaux, afin de faciliter le partage de connaissance entre les services.
   image: 
   featured: false
-  - key: stonal
+- key: stonal
   name: Stonal
   url: https://stonal.com/
   published_by: Stonal
