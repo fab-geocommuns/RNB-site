@@ -137,11 +137,34 @@
 
 
 .sectionTitle {
-    font-size: .87em;
+    font-size: .9em;
     line-height: 1.3em;
     color:#0063cb;
     margin-bottom: .2rem;
 }
+.sectionToggler {
+    text-decoration:none;
+    background: none;
+    border: none;
+    
+    
+}
+
+.sectionTogglerIcon {
+    margin-right:.4rem;
+    color:black;
+    display: inline-block;
+    transition: transform .3s;
+}
+
+.sectionTogglerOpen {
+    
+    span {
+        transform: rotate(90deg);
+    }
+}
+
+
 .sectionBody {
     font-size: .9em;
     line-height: 1.3em;
@@ -178,4 +201,18 @@
             margin-right: 0!important;
         }
     }
+}
+
+.plotWarning {
+    font-size: .8em;
+    background-color: #fff4f3;
+    line-height: 1.3em;
+    padding: .7rem;
+    color:rgba(0, 0, 0, 0.6);
+    margin-top:1.2rem;
+    margin-bottom: 1.3rem;
+}
+
+body .coverRatioCell {
+    text-align: right;
 }
