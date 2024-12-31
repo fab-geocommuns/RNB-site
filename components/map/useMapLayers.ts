@@ -77,8 +77,9 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       'source-layer': 'default',
       type: 'line',
       paint: {
-        'line-color': '#fbbf24',
-        'line-opacity': 0.5,
+        'line-color': '#ffffff',
+        'line-opacity': 0.9,
+        'line-width': 2,
       },
     });
   }, []);
@@ -307,11 +308,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       if (map.loaded()) {
         initBuildingLayer(map);
         initADSLayer(map);
-        //initPlotsLayer(map)
+        initPlotsLayer(map);
       } else {
         map.once('load', () => initBuildingLayer(map));
         map.once('load', () => initADSLayer(map));
-        //map.once('load', () => initPlotsLayer(map));
+        map.once('load', () => initPlotsLayer(map));
       }
     }
   }, [initBuildingLayer, map]);

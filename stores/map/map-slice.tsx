@@ -42,6 +42,14 @@ interface BuildingADS {
 
 export type SelectedItem = SelectedBuilding | SelectedADS;
 
+export type MapLayers = {
+  background: 'satellite' | 'plan';
+  buildings: 'point' | 'polygon';
+  extraLayers: MapExtraLayer[];
+};
+
+export type MapExtraLayer = 'ads' | 'plots';
+
 export type MapStore = {
   panelIsOpen: boolean;
   addressSearch: {
@@ -58,6 +66,7 @@ export type MapStore = {
   marker?: [number, number];
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
+  layers: MapLayers;
 };
 
 const initialState: MapStore = {
@@ -65,6 +74,11 @@ const initialState: MapStore = {
   addressSearch: {
     results: [],
     unknown_rnb_id: false,
+  },
+  layers: {
+    background: 'plan',
+    buildings: 'point',
+    extraLayers: ['ads'],
   },
 };
 
