@@ -86,6 +86,21 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
+    setLayersBackground(state, action) {
+      state.layers.background = action.payload;
+    },
+    setLayersBuildings(state, action) {
+      state.layers.buildings = action.payload;
+    },
+    toggleExtraLayer(state, action) {
+      const index = state.layers.extraLayers.indexOf(action.payload);
+      if (index === -1) {
+        state.layers.extraLayers.push(action.payload);
+      } else {
+        state.layers.extraLayers.splice(index, 1);
+      }
+    },
+
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {
         state.addressSearch.q = action.payload;
