@@ -1,7 +1,7 @@
 import vector from '@/components/map/mapstyles/vector.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
-import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
+import maplibregl, { StyleSpecification } from 'maplibre-gl';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
@@ -23,6 +23,10 @@ export const BUILDINGS_LAYERS_SHAPE = [
   BUILDINGS_LAYER_SHAPE_FILL,
   BUILDINGS_LAYER_SHAPE_POINT,
 ];
+
+// Plots
+export const PLOTS_LAYER = 'plots';
+export const PLOTS_SOURCE = 'plots';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
@@ -52,6 +56,32 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   const reloadBuildings = useSelector(
     (state: RootState) => state.map.reloadBuildings,
   );
+
+  const initPlotsLayer = useCallback((map: maplibregl.Map) => {
+    if (map.getLayer(PLOTS_LAYER)) map.removeLayer(PLOTS_LAYER);
+    if (map.getSource(PLOTS_SOURCE)) map.removeSource(PLOTS_SOURCE);
+
+    map.addSource(PLOTS_SOURCE, {
+      type: 'vector',
+      tiles: [
+        process.env.NEXT_PUBLIC_API_BASE + '/plots/tiles/{x}/{y}/{z}.pbf',
+      ],
+      minzoom: 16,
+      maxzoom: 22,
+      promoteId: 'id',
+    });
+
+    map.addLayer({
+      id: PLOTS_LAYER,
+      source: PLOTS_SOURCE,
+      'source-layer': 'default',
+      type: 'line',
+      paint: {
+        'line-color': '#fbbf24',
+        'line-opacity': 0.5,
+      },
+    });
+  }, []);
 
   const initADSLayer = useCallback(async (map: maplibregl.Map) => {
     if (map.getLayer('ads')) map.removeLayer('ads');
@@ -130,12 +160,22 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
   // Ajout de la couche vectorielle des bâtiments
   const initBuildingLayer = useCallback((map: maplibregl.Map) => {
-    if (map.getLayer(BUILDINGS_LAYER_POINT))
+    // First, remove all layers
+    // Remove point layer
+    if (map.getLayer(BUILDINGS_LAYER_POINT)) {
       map.removeLayer(BUILDINGS_LAYER_POINT);
+    }
+    // Remove shape layers
     BUILDINGS_LAYERS_SHAPE.forEach((l) => {
-      if (map.getLayer(l)) map.removeLayer(l);
+      if (map.getLayer(l)) {
+        map.removeLayer(l);
+      }
     });
-    if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
+
+    // Finally remove the source
+    if (map.getSource(BUILDINGS_SOURCE)) {
+      map.removeSource(BUILDINGS_SOURCE);
+    }
 
     map.addSource(BUILDINGS_SOURCE, {
       type: 'vector',
@@ -267,9 +307,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       if (map.loaded()) {
         initBuildingLayer(map);
         initADSLayer(map);
+        //initPlotsLayer(map)
       } else {
         map.once('load', () => initBuildingLayer(map));
         map.once('load', () => initADSLayer(map));
+        //map.once('load', () => initPlotsLayer(map));
       }
     }
   }, [initBuildingLayer, map]);
