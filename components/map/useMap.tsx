@@ -2,6 +2,7 @@ import maplibregl from 'maplibre-gl';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '@/styles/mapComp.module.scss';
 import { DEFAULT_STYLE } from '@/components/map/useMapLayers';
+import LayersSwitcher from '@/components/map/LayersSwitcher';
 
 /**
  * Création de la carte MapLibre
@@ -12,7 +13,12 @@ export const useMap = () => {
 
   // Composant conteneur de la carte
   const mapContainer = useMemo(
-    () => <div className={styles.map} ref={mapContainerRef} />,
+    () => (
+      <>
+        <div className={styles.map} ref={mapContainerRef} />
+        <LayersSwitcher />
+      </>
+    ),
     [],
   );
 

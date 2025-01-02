@@ -43,11 +43,13 @@ interface BuildingADS {
 export type SelectedItem = SelectedBuilding | SelectedADS;
 
 export type MapLayers = {
-  background: 'satellite' | 'plan';
-  buildings: 'point' | 'polygon';
+  background: MapBackgroundLayer;
+  buildings: MapBuildingsLayer;
   extraLayers: MapExtraLayer[];
 };
 
+export type MapBackgroundLayer = 'satellite' | 'vector';
+export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 
 export type MapStore = {
@@ -76,7 +78,7 @@ const initialState: MapStore = {
     unknown_rnb_id: false,
   },
   layers: {
-    background: 'plan',
+    background: 'vector',
     buildings: 'point',
     extraLayers: ['ads'],
   },

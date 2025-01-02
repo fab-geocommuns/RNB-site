@@ -8,6 +8,10 @@ import {
 import { current } from 'immer';
 import { webpack } from 'next/dist/compiled/webpack/webpack';
 
+// Store
+import { useDispatch, useSelector } from 'react-redux';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
+
 export default class MapStyleSwitcherControl {
   constructor(options) {
     this._options = { ...options };
@@ -55,6 +59,10 @@ export default class MapStyleSwitcherControl {
   }
 
   toggleStyle() {
+    //this.dispatch(Actions.map.setLayersBackground('satellite'));
+  }
+
+  toggleStyleOLD() {
     const styleToSet = this.theOtherStyleKey(this._options.chosenStyle);
     this.setStyle(styleToSet);
   }
