@@ -248,7 +248,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       'source-layer': 'default',
       paint: {
         'fill-color': '#999999',
-        'fill-opacity': 0.08,
+        'fill-opacity': 0.2,
       },
     });
     // Points mode: polygon fill
