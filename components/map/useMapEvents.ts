@@ -6,6 +6,7 @@ import { MapMouseEvent } from 'maplibre-gl';
 import {
   BUILDINGS_LAYER_POINT,
   BUILDINGS_LAYER_SHAPE_BORDER,
+  BUILDINGS_LAYER_SHAPE_BORDER_READ,
   BUILDINGS_LAYER_SHAPE_POINT,
 } from '@/components/map/useMapLayers';
 
@@ -38,6 +39,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
               BUILDINGS_LAYER_POINT,
               BUILDINGS_LAYER_SHAPE_BORDER,
               BUILDINGS_LAYER_SHAPE_POINT,
+              BUILDINGS_LAYER_SHAPE_BORDER_READ,
             ].includes(featureCloseToCursor.layer.id)
           ) {
             // It is a building

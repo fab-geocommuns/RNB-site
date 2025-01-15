@@ -2,6 +2,7 @@ import maplibregl, { MapGeoJSONFeature, PointLike } from 'maplibre-gl';
 import {
   BUILDINGS_LAYER_POINT,
   BUILDINGS_LAYER_SHAPE_BORDER,
+  BUILDINGS_LAYER_SHAPE_BORDER_READ,
   BUILDINGS_LAYER_SHAPE_POINT,
 } from '@/components/map/useMapLayers';
 import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
@@ -20,7 +21,11 @@ export const getNearestFeatureFromCursorWithBuffer = (
   y: number,
   buffer = 15,
 ): MapGeoJSONFeature | undefined => {
-  if (!map.getLayer(BUILDINGS_LAYER_POINT) || !map.getLayer('adscircle'))
+  if (
+    !map.getLayer(BUILDINGS_LAYER_SHAPE_BORDER_READ) ||
+    !map.getLayer(BUILDINGS_LAYER_SHAPE_BORDER) ||
+    !map.getLayer('adscircle')
+  )
     return;
 
   let bbox: [PointLike, PointLike] = [
@@ -28,9 +33,9 @@ export const getNearestFeatureFromCursorWithBuffer = (
     [x + buffer, y + buffer],
   ];
 
-  // Rechercher les features de type polygons de la couche BUILDINGS_LAYER_SHAPE_BORDER
+  // Rechercher les features de type polygons de la couche BUILDINGS_LAYER_SHAPE_BORDER et BUILDINGS_LAYER_SHAPE_BORDER_READ
   let features = map.queryRenderedFeatures([x, y], {
-    layers: [BUILDINGS_LAYER_SHAPE_BORDER],
+    layers: [BUILDINGS_LAYER_SHAPE_BORDER, BUILDINGS_LAYER_SHAPE_BORDER_READ],
   });
 
   if (features && features.length > 0) return features[0];
