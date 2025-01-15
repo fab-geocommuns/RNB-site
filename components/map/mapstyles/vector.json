@@ -351,32 +351,6 @@
       }
     },
     {
-      "id": "zone batie",
-      "type": "fill",
-      "source": "plan_ign",
-      "source-layer": "bati_zone_surf",
-      "minzoom": 7,
-      "maxzoom": 24,
-      "filter": ["==", "symbo", "ZONE_BATI"],
-      "layout": { "visibility": "visible" },
-      "paint": {
-        "fill-color": "rgba(244, 243, 243, 1)",
-        "fill-opacity": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          7,
-          0,
-          8,
-          1,
-          14,
-          1,
-          15,
-          0
-        ]
-      }
-    },
-    {
       "id": "zone d'activité",
       "type": "fill",
       "source": "plan_ign",
@@ -1806,94 +1780,6 @@
       "paint": { "fill-color": "rgba(204, 223, 201, 1)", "fill-opacity": 1 }
     },
     {
-      "id": "bati sportif surfacique fond",
-      "type": "fill",
-      "source": "plan_ign",
-      "source-layer": "bati_surf",
-      "minzoom": 14,
-      "filter": [
-        "in",
-        "symbo",
-        "TENNIS_SURF",
-        "SPORT_INDIF_SURF",
-        "FOOT_SURF",
-        "MULTI_SPORT_SURF",
-        "PISTE_SPORT_SURF",
-        "NATATION_SURF"
-      ],
-      "layout": { "visibility": "visible" },
-      "paint": {
-        "fill-color": "rgba(234, 237, 222, 1)",
-        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 14, 0, 15, 1]
-      }
-    },
-    {
-      "id": "bati sportif surfacique",
-      "type": "line",
-      "source": "plan_ign",
-      "source-layer": "bati_surf",
-      "minzoom": 14,
-      "filter": [
-        "in",
-        "symbo",
-        "TENNIS_SURF",
-        "SPORT_INDIF_SURF",
-        "FOOT_SURF",
-        "MULTI_SPORT_SURF",
-        "PISTE_SPORT_SURF",
-        "NATATION_SURF"
-      ],
-      "layout": {
-        "visibility": "visible",
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "rgba(204, 208, 192, 1)",
-        "line-width": 1,
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 14, 0, 15, 1]
-      }
-    },
-    {
-      "id": "bati surfacique",
-      "type": "fill",
-      "source": "plan_ign",
-      "source-layer": "bati_surf",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "!in",
-          "symbo",
-          "CIMETIERE_SURF",
-          "POSTE_ELEC_SURF",
-          "POSTE_ELEC_SURF",
-          "TENNIS_SURF",
-          "SPORT_INDIF_SURF",
-          "FOOT_SURF",
-          "MULTI_SPORT_SURF",
-          "PISTE_SPORT_SURF",
-          "NATATION_SURF",
-          "ECLUSE_SURF",
-          "CIMETIERE_MILI_SURF",
-          "PISTE_DUR",
-          "TENNIS_SURF",
-          "PISTE_SPORT_SURF",
-          "PISTE_SPORT_SURF",
-          "PISTE_HERBE",
-          "RESERVOIR_EAU_SURF",
-          "PECHERIE_SURF"
-        ]
-      ],
-      "layout": { "visibility": "visible" },
-      "paint": {
-        "fill-color": "rgba(216, 216, 216, 1)",
-        "fill-outline-color": "rgba(164, 164, 164, 1)",
-        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 14, 0, 15, 1],
-        "fill-antialias": true
-      }
-    },
-    {
       "id": "bati transport surfacique - piste",
       "type": "fill",
       "source": "plan_ign",
@@ -3301,16 +3187,6 @@
         "fill-outline-color": "rgba(187, 187, 187, 1)",
         "fill-opacity": 1
       }
-    },
-    {
-      "id": "bati transport surfacique - bati peage",
-      "type": "fill",
-      "source": "plan_ign",
-      "source-layer": "bati_surf",
-      "minzoom": 13,
-      "filter": ["==", "symbo", "BATI_PEAGE"],
-      "layout": { "visibility": "visible" },
-      "paint": { "fill-color": "#DCDCDC", "fill-outline-color": "#808080" }
     },
     {
       "id": "réseau hydro  - cours d'eau superieur",
