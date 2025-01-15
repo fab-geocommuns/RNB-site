@@ -99,7 +99,6 @@
       <li>Projet annulé</li>
       <li>Bâtiment en construction</li>
       <li>Construit</li>
-      <li>En cours de modification (travaux autres que la construction initiale)</li>
       <li>Détruit</li>
       <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
       </ol>
