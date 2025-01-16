@@ -247,8 +247,8 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       source: BUILDINGS_SOURCE_SHAPES,
       'source-layer': 'default',
       paint: {
-        'fill-color': '#999999',
-        'fill-opacity': 0.2,
+        'fill-color': '#CCCCCC',
+        'fill-opacity': 1,
       },
     });
     // Points mode: polygon fill
@@ -259,7 +259,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       'source-layer': 'default',
       paint: {
         'line-color': '#999999',
-        'line-width': 1.5,
+        'line-width': 1,
       },
     });
     // Points mode: points
