@@ -240,26 +240,37 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       },
     });
 
-    // Points mode: polygon border
+    // Points mode: polygon fill
     map.addLayer({
       id: BUILDINGS_LAYER_SHAPE_BORDER_READ,
       type: 'fill',
       source: BUILDINGS_SOURCE_SHAPES,
       'source-layer': 'default',
       paint: {
-        'fill-color': '#CCCCCC',
-        'fill-opacity': 1,
+        'fill-color': '#DDDDDD',
       },
     });
-    // Points mode: polygon fill
+    // Points mode: polygon border
     map.addLayer({
       id: BUILDINGS_LAYER_SHAPE_FILL_READ,
       type: 'line',
       source: BUILDINGS_SOURCE_SHAPES,
       'source-layer': 'default',
       paint: {
-        'line-color': '#999999',
-        'line-width': 1,
+        'line-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          '#FF732C',
+          '#999999',
+        ],
+        'line-width': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          2,
+          1,
+        ],
       },
     });
     // Points mode: points

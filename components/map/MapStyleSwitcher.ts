@@ -3,10 +3,9 @@ import {
   BUILDINGS_LAYER_SHAPE_BORDER,
   BUILDINGS_LAYER_SHAPE_FILL,
   BUILDINGS_LAYER_SHAPE_POINT,
-  BUILDINGS_SOURCE,
+  BUILDINGS_SOURCE_POINTS,
+  BUILDINGS_SOURCE_SHAPES,
 } from '@/components/map/useMapLayers';
-import { current } from 'immer';
-import { webpack } from 'next/dist/compiled/webpack/webpack';
 
 export default class MapStyleSwitcherControl {
   constructor(options) {
@@ -70,7 +69,8 @@ export default class MapStyleSwitcherControl {
     }
 
     const sourcesToKeep: Record<string, any> = {
-      [BUILDINGS_SOURCE]: currentStyle?.sources[BUILDINGS_SOURCE],
+      [BUILDINGS_SOURCE_POINTS]: currentStyle?.sources[BUILDINGS_SOURCE_POINTS],
+      [BUILDINGS_SOURCE_SHAPES]: currentStyle?.sources[BUILDINGS_SOURCE_SHAPES],
       ads: currentStyle?.sources['ads'],
     };
     const layersToKeep = currentStyle?.layers.filter((l) =>
