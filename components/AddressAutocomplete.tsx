@@ -98,7 +98,7 @@ export default function AddressAutocomplete({
 
     dispatch(Actions.map.setAddressSearchQuery(query));
     dispatch(Actions.map.setAddressSearchResults(geocode_result.features));
-    if (geocode_result.features.length > 0) {
+    if (geocode_result.features && geocode_result.features.length > 0) {
       setAddressSuggestions(geocode_result.features);
       setSelectedSuggestion(-1);
     }

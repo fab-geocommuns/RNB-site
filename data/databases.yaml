@@ -1,3 +1,14 @@
+- key: FichiersFonciers
+  name: Fichiers fonciers
+  url: https://datafoncier.cerema.fr/actualites/nouveau-millesime-fichiers-fonciers-2024-disponible?ref=referentiel-national-du-batiment.ghost.io
+  published_by: le Cerema
+  licence: Réservée aux ayant droits
+  tags: [Foncier, Immobilier, DVF, Territoire, Aménagement, Local]
+  description: >
+    Les Fichiers fonciers décrivent le parc immobilier à travers les notions de locaux et de bâtiments fiscaux. Le nouveau millésime fournit des informations détaillées, géolocalisées et enrichies issues des données fiscales de la taxe foncière au 1er janvier 2024.
+  image: cerema.jpg
+  featured: true
+  featured_summary: Les Fichiers fonciers décrivent le parc immobilier à travers les notions de locaux et de bâtiments fiscaux. 
 - key: bdnb
   name: BDNB
   url: https://www.data.gouv.fr/fr/datasets/base-de-donnees-nationale-des-batiments/
