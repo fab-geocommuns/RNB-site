@@ -24,6 +24,7 @@ export interface SelectedBuilding {
     city_insee_code: string;
   }[];
   ext_ids: any[];
+  plots: any[];
   is_active: boolean;
 }
 
@@ -146,7 +147,7 @@ export const selectBuilding = createAsyncThunk(
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
 
-    const url = bdgApiUrl(rnbId + '?from=site');
+    const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
     const rnbResponse = await fetch(url);
 
     if (rnbResponse.ok) {

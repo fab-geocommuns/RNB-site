@@ -28,6 +28,8 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
   const { is } = useRNBAuthentication();
 
+  const [openSections, setOpenSections] = useState<string[]>([]);
+
   const apiUrl = () => {
     return bdgApiUrl(bdg!.rnb_id);
   };
@@ -50,6 +52,13 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     }
   }
 
+  const coverRatioDisplay = (ratio: number) => {
+    // % with two decimals
+    const percentage = (ratio * 100).toFixed(2);
+
+    return `${percentage}%`;
+  };
+
   const easyRnbId = () => {
     return addSpace(bdg!.rnb_id);
   };
@@ -60,6 +69,32 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     setTimeout(() => {
       setCopied(false);
     }, 2000);
+  };
+
+  const toggleSection = (e, section: string) => {
+    e.preventDefault();
+
+    if (openSections.includes(section)) {
+      setOpenSections(openSections.filter((s) => s !== section));
+    } else {
+      setOpenSections([...openSections, section]);
+    }
+  };
+
+  const relevantPlots = () => {
+    const plots = bdg?.plots.filter((plot) => {
+      // We only show plots that cover more than 5% of the building
+      return plot.bdg_cover_ratio > 0.05;
+    });
+
+    // Sort plots by desc cover ratio
+    plots.sort((a, b) => b.bdg_cover_ratio - a.bdg_cover_ratio);
+
+    return plots;
+  };
+
+  const isSectionOpen = (section: string) => {
+    return openSections.includes(section);
   };
 
   useEffect(() => {
@@ -115,22 +150,99 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
       )}
 
       <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Correspondances</h2>
-        <div className={panelStyles.sectionBody}>
-          {bdg?.ext_ids?.length === 0 ? (
-            <div>
-              <em>Aucun lien avec une autre base de donnée.</em>
-            </div>
-          ) : (
-            bdg?.ext_ids?.map((ext_id) => (
-              <div key={ext_id.id} className={panelStyles.sectionListItem}>
-                <span>Base de données : {ext_id.source}</span>
-                <br />
-                <span>Identifiant : {ext_id.id}</span>
+        <h2
+          className={`${panelStyles.sectionTitle} ${panelStyles.sectionTitle__openable}`}
+        >
+          <a
+            href="#"
+            className={` ${panelStyles.sectionToggler} ${isSectionOpen('correspondances') ? panelStyles.sectionTogglerOpen : ''}`}
+            onClick={(e) => toggleSection(e, 'correspondances')}
+          >
+            <span className={panelStyles.sectionTogglerIcon}>▸</span>
+            Correspondances BD Topo & BDNB
+          </a>
+        </h2>
+        {isSectionOpen('correspondances') && (
+          <div className={panelStyles.sectionBody}>
+            {bdg?.ext_ids?.length === 0 ? (
+              <div>
+                <em>Aucun lien avec une autre base de donnée.</em>
               </div>
-            ))
-          )}
-        </div>
+            ) : (
+              bdg?.ext_ids?.map((ext_id) => (
+                <div key={ext_id.id} className={panelStyles.sectionListItem}>
+                  <span>Base de données : {ext_id.source}</span>
+                  <br />
+                  <span>Identifiant : {ext_id.id}</span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className={panelStyles.section}>
+        <h2
+          className={`${panelStyles.sectionTitle} ${panelStyles.sectionTitle__openable}`}
+        >
+          <a
+            href="#"
+            className={` ${panelStyles.sectionToggler} ${isSectionOpen('parcelles') ? panelStyles.sectionTogglerOpen : ''}`}
+            onClick={(e) => toggleSection(e, 'parcelles')}
+          >
+            <span className={panelStyles.sectionTogglerIcon}>▸</span>
+            Parcelles cadastrales
+          </a>
+        </h2>
+        {isSectionOpen('parcelles') && (
+          <>
+            <div className={panelStyles.plotWarning}>
+              Les parcelles sont associées au bâtiment{' '}
+              <b>via un croisement géométrique</b> et non administratif. <br />
+              <a
+                target="_blank"
+                href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales"
+              >
+                En savoir plus
+              </a>
+            </div>
+
+            {bdg?.plots?.length === 0 ? (
+              <>pas de parcelles</>
+            ) : (
+              <>
+                <div className="fr-table fr-table--sm fr-table--no-scroll fr-table--bordered fr-m-0-5v">
+                  <div className="fr-table__wrapper">
+                    <div className="fr-table__container">
+                      <div className="fr-table__content">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Parcelle</th>
+                              <th>Recouvrement du bâtiment</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {relevantPlots().map((plot) => {
+                              return (
+                                <tr key={plot.id}>
+                                  <td>{plot.id}</td>
+                                  <td className={panelStyles.coverRatioCell}>
+                                    {coverRatioDisplay(plot.bdg_cover_ratio)}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
 
       <div className={panelStyles.section}>
