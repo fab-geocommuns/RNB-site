@@ -75,7 +75,7 @@
   image: ministere_ens_sup.svg
   featured: false
 - key: Marseille
-  name: metropole Aix-Marseille-Provence
+  name: Métropole Aix-Marseille-Provence (13)
   url: https://ampmetropole.fr
   published_by: la métropole Aix-Marseille-Provence
   licence: Usage interne
@@ -85,7 +85,7 @@
   image: marseille.jpeg
   featured: false
 - key: lannion
-  name: Lannion-Trégor Communauté
+  name: Lannion-Trégor Communauté (22)
   url: https://www.lannion-tregor.com
   published_by: la communauté d'agglomération Lannion-Trégor Communauté 
   licence: Usage interne
@@ -93,6 +93,16 @@
   description: >
     Cette base de données recense le patrimoine de l'agglomération et des 57 communes de Lannion-Trégor Communauté. Elle a pour objectif d'identifier et géolocaliser les bâtiments communautaires et communaux, afin de faciliter le partage de connaissance entre les services.
   image: lannion.png
+  featured: false
+- key: departement64
+  name: Département Pyrénées-Atlantiques (64)
+  url: https://le64.fr
+  published_by: le département 64
+  licence: Usage interne
+  tags: [Collectivités territoriales, Territoire]
+  description: >
+  Cette base de données couvre les bâtiments sous gestion du département.
+  image: 64_departement.jpeg
   featured: false
 - key: stonal
   name: Stonal
