@@ -101,7 +101,7 @@
   licence: Usage interne
   tags: [Collectivités territoriales, Territoire]
   description: >
-  Cette base de données couvre les bâtiments sous gestion du département.
+    Cette base de données couvre les bâtiments sous gestion du département.
   image: 64_departement.jpeg
   featured: false
 - key: stonal
