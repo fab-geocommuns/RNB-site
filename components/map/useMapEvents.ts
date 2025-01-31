@@ -31,8 +31,6 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        console.log('featureCloseToCursor', featureCloseToCursor);
-
         if (featureCloseToCursor) {
           // What did we click on?
 

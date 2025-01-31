@@ -52,8 +52,9 @@ export const LAYER_ADS_CIRCLE = 'adscircle';
 export const LAYER_ADS_ICON = 'adsicon';
 
 // Plots
-export const PLOTS_LAYER = 'plots';
-export const PLOTS_SOURCE = 'plots';
+export const LAYER_PLOTS_SHAPE = 'plots_shape';
+export const LAYER_PLOTS_TXT = 'plots_txt';
+export const SRC_PLOTS = 'plotstiles';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
@@ -366,10 +367,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   // Plots
 
   const installPlots = useCallback((map: maplibregl.Map) => {
-    if (map.getLayer(PLOTS_LAYER)) map.removeLayer(PLOTS_LAYER);
-    if (map.getSource(PLOTS_SOURCE)) map.removeSource(PLOTS_SOURCE);
+    if (map.getLayer(LAYER_PLOTS_SHAPE)) map.removeLayer(LAYER_PLOTS_SHAPE);
+    if (map.getLayer(LAYER_PLOTS_TXT)) map.removeLayer(LAYER_PLOTS_TXT);
+    if (map.getSource(SRC_PLOTS)) map.removeSource(SRC_PLOTS);
 
-    map.addSource(PLOTS_SOURCE, {
+    map.addSource(SRC_PLOTS, {
       type: 'vector',
       tiles: [
         process.env.NEXT_PUBLIC_API_BASE + '/plots/tiles/{x}/{y}/{z}.pbf',
@@ -380,14 +382,30 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
 
     map.addLayer({
-      id: PLOTS_LAYER,
-      source: PLOTS_SOURCE,
+      id: LAYER_PLOTS_SHAPE,
+      source: SRC_PLOTS,
       'source-layer': 'default',
       type: 'line',
       paint: {
         'line-color': '#ea580c',
         'line-opacity': 0.9,
         'line-width': 2,
+      },
+    });
+
+    // Display the plot id in the middle of the plot
+    map.addLayer({
+      id: LAYER_PLOTS_TXT,
+      source: SRC_PLOTS,
+      'source-layer': 'default',
+      type: 'symbol',
+      layout: {
+        'text-field': ['get', 'plot_number'],
+        'text-size': 12,
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-offset': [0, 0],
+        'text-anchor': 'center',
+        'text-allow-overlap': false,
       },
     });
   }, []);

@@ -1,12 +1,19 @@
 // Styles
-import styles from '@/styles/layerSwitcher.module.css';
+import styles from '@/styles/layerSwitcher.module.scss';
 
 // React things
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
+
+// Images
+import bckgSat from '@/public/images/map/switch-bckg-sat.jpg';
+import bckgPlan from '@/public/images/map/switch-bckg-plan.jpg';
+
+// Components
+import ImageNext from 'next/image';
 
 // Types
 import {
@@ -21,6 +28,7 @@ export default function LayersSwitcher() {
 
   // Store
   const dispatch: AppDispatch = useDispatch();
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const handleChangeBackgroundClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -46,69 +54,138 @@ export default function LayersSwitcher() {
     dispatch(Actions.map.toggleExtraLayer(layer));
   };
 
+  // Switch background image
+  const [btnImage, setBtnImage] = useState(bckgSat);
+
+  useEffect(() => {
+    if (mapLayers.background === 'vector') {
+      setBtnImage(bckgSat);
+    }
+
+    if (mapLayers.background === 'satellite') {
+      setBtnImage(bckgPlan);
+    }
+  }, [mapLayers]);
+
   return (
     <>
-      <div className={styles.btn} onClick={(e) => setOpen(true)}>
-        Layer switcher
-      </div>
-      {open && (
+      {open ? (
         <div className={styles.modal}>
-          <div>
-            <a href="#" onClick={(e) => setOpen(false)}>
-              X
+          <div className={styles.head}>
+            <div className={styles.title}>Calques</div>
+            <a
+              className={styles.closeLink}
+              href="#"
+              onClick={(e) => setOpen(false)}
+            >
+              <i className="fr-icon-close-line" />
             </a>
           </div>
+          <div className={styles.body}>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Fonds de carte</h2>
+              <div className={styles.sectionBody}>
+                <ul className={styles.choicesList}>
+                  <li>
+                    <a
+                      href="#"
+                      className={
+                        mapLayers.background === 'vector' ? styles.active : ''
+                      }
+                      onClick={(e) => handleChangeBackgroundClick(e, 'vector')}
+                    >
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={bckgPlan}
+                          alt="Plan"
+                          className={styles.choiceImage}
+                        />
+                      </div>
 
-          <div>
-            <p>Fond</p>
-            <ul>
-              <li>
-                <a
-                  href="#"
-                  onClick={(e) => handleChangeBackgroundClick(e, 'vector')}
-                >
-                  Plan
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  onClick={(e) => handleChangeBackgroundClick(e, 'satellite')}
-                >
-                  Satellite
-                </a>
-              </li>
-            </ul>
-            <p>Bâtiments</p>
-            <ul>
-              <li>
-                <a
-                  href="#"
-                  onClick={(e) => handleChangeBuildingLayer(e, 'point')}
-                >
-                  Points
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  onClick={(e) => handleChangeBuildingLayer(e, 'polygon')}
-                >
-                  Polygones
-                </a>
-              </li>
-            </ul>
+                      <span className={styles.choiceLabel}>Plan IGN</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className={
+                        mapLayers.background === 'satellite'
+                          ? styles.active
+                          : ''
+                      }
+                      onClick={(e) =>
+                        handleChangeBackgroundClick(e, 'satellite')
+                      }
+                    >
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={bckgSat}
+                          alt="Satellite"
+                          className={styles.choiceImage}
+                        />
+                      </div>
+                      <span className={styles.choiceLabel}>Satellite</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Bâtiments RNB</h2>
+              <div className={styles.sectionBody}>
+                <ul className={styles.choicesList}>
+                  <li>
+                    <a
+                      href="#"
+                      className={
+                        mapLayers.buildings === 'point' ? styles.active : ''
+                      }
+                      onClick={(e) => handleChangeBuildingLayer(e, 'point')}
+                    >
+                      <span className={styles.choiceLabel}>Points</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className={
+                        mapLayers.buildings === 'polygon' ? styles.active : ''
+                      }
+                      onClick={(e) => handleChangeBuildingLayer(e, 'polygon')}
+                    >
+                      <span className={styles.choiceLabel}>Polygones</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Extras</h2>
+              <div className={styles.sectionBody}>
+                <ul className={styles.choicesList}>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={(e) => handleExtraLayerClick(e, 'plots')}
+                    >
+                      Cadastre
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div>
-            <p>Calques</p>
-            <ul>
-              <li>
-                <a href="#" onClick={(e) => handleExtraLayerClick(e, 'plots')}>
-                  Cadastre
-                </a>
-              </li>
-            </ul>
-          </div>
+        </div>
+      ) : (
+        <div className={styles.btn} onClick={(e) => setOpen(true)}>
+          <span className={styles.btnLabel}>Calques</span>
+          <ImageNext
+            src={btnImage}
+            alt="Switch background"
+            className={styles.btnImg}
+          />
         </div>
       )}
     </>
