@@ -28,6 +28,15 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'rnb-open.s3.fr-par.scw.cloud',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
