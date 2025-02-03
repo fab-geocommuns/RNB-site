@@ -45,7 +45,7 @@ export default async function Page() {
                   </p>
                   <div className={styles.bdgDefinitionContext}>
                     Cette définition est complétée par une{' '}
-                    <Link href="https://github.com/fab-geocommuns/BatID/blob/eea3555c0de8fb178a85379306fbe85c358ea9ce/docs/CNIG/Annexe-Definition-Batiment.md">
+                    <Link href="https://github.com/fab-geocommuns/RNB/blob/main/CNIG/Annexe-Definition-Batiment.md">
                       annexe
                     </Link>
                     , qui vise à l’étayer et apporter un éclairage aux cas
