@@ -47,7 +47,7 @@ export default function DatabaseSearchForm({
     const search = text.trim();
     if (search !== '') {
       router.push(
-        `/outils-services/rapprochement?search=${encodeURIComponent(search)}`,
+        `/outils-services/rapprochement?search=${encodeURIComponent(search)}#search-block`,
       );
     }
   };
@@ -66,7 +66,7 @@ export default function DatabaseSearchForm({
         renderInput={({ className, id, type }) => (
           <input
             className={className}
-            placeholder="Rechercher parmi les attributs répertoriés"
+            placeholder="Par exemple : année de construction, hauteur, accessibilité etc."
             id={id}
             type={type}
             value={query}
