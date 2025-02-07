@@ -58,15 +58,6 @@ export default class MapStyleSwitcherControl {
     return this._container;
   }
 
-  toggleStyle() {
-    //this.dispatch(Actions.map.setLayersBackground('satellite'));
-  }
-
-  toggleStyleOLD() {
-    const styleToSet = this.theOtherStyleKey(this._options.chosenStyle);
-    this.setStyle(styleToSet);
-  }
-
   setStyle(styleKey) {
     this._options.chosenStyle = styleKey;
 

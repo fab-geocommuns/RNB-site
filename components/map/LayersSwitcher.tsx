@@ -11,6 +11,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 // Images
 import bckgSat from '@/public/images/map/switch-bckg-sat.jpg';
 import bckgPlan from '@/public/images/map/switch-bckg-plan.jpg';
+import extraPlots from '@/public/images/map/switch-plots.jpg';
 
 // Components
 import ImageNext from 'next/image';
@@ -168,9 +169,21 @@ export default function LayersSwitcher() {
                   <li>
                     <a
                       href="#"
+                      className={
+                        mapLayers.extraLayers.includes('plots')
+                          ? styles.active
+                          : ''
+                      }
                       onClick={(e) => handleExtraLayerClick(e, 'plots')}
                     >
-                      Cadastre
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={extraPlots}
+                          alt="Cadastre"
+                          className={styles.choiceImage}
+                        />
+                      </div>
+                      <span className={styles.choiceLabel}>Cadastre</span>
                     </a>
                   </li>
                 </ul>
@@ -183,7 +196,7 @@ export default function LayersSwitcher() {
           <span className={styles.btnLabel}>Calques</span>
           <ImageNext
             src={btnImage}
-            alt="Switch background"
+            alt="Voir les calques"
             className={styles.btnImg}
           />
         </div>

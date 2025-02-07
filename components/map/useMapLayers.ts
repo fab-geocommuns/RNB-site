@@ -39,6 +39,8 @@ export const LAYERS_BDGS_SHAPE_ALL = [
   LAYER_BDGS_SHAPE_POINT,
 ];
 
+const CONTRIBUTIONS_COLOR = '#f767ef';
+
 ///////////////////////////////////
 ///////////////////////////////////
 // ADS
@@ -83,6 +85,9 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   const layers = useSelector((state: RootState) => state.map.layers);
 
   const installAll = (map) => {
+    console.log('-- layers');
+    console.log(layers);
+
     installBuildings(map);
     installADS(map);
 
@@ -151,8 +156,8 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
 
     map.addLayer({
-      id: 'adsicon',
-      source: 'ads',
+      id: LAYER_ADS_ICON,
+      source: SRC_ADS,
       'source-layer': 'default',
       type: 'symbol',
       layout: {
@@ -246,7 +251,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
@@ -268,7 +273,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'fill-opacity': 0.08,
@@ -289,7 +294,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'line-width': 1.5,
@@ -324,7 +329,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
@@ -407,11 +412,17 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         'text-anchor': 'center',
         'text-allow-overlap': false,
       },
+      paint: {
+        'text-halo-color': '#ffffff',
+        'text-halo-width': 2,
+      },
     });
   }, []);
 
   // When layers change, we rebuild the style and the layers
   useEffect(() => {
+    console.log('layers changed');
+
     // If no map, we stop here
     if (!map) return;
 
