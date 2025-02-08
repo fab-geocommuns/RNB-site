@@ -12,6 +12,8 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 import bckgSat from '@/public/images/map/switch-bckg-sat.jpg';
 import bckgPlan from '@/public/images/map/switch-bckg-plan.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
+import bdgPoint from '@/public/images/map/switch-bdg-point.png';
+import bdgShape from '@/public/images/map/switch-bdg-shape.png';
 
 // Components
 import ImageNext from 'next/image';
@@ -144,6 +146,13 @@ export default function LayersSwitcher() {
                       }
                       onClick={(e) => handleChangeBuildingLayer(e, 'point')}
                     >
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={bdgPoint}
+                          alt="Bâtiments représentés par des points"
+                          className={styles.choiceImage}
+                        />
+                      </div>
                       <span className={styles.choiceLabel}>Points</span>
                     </a>
                   </li>
@@ -155,6 +164,13 @@ export default function LayersSwitcher() {
                       }
                       onClick={(e) => handleChangeBuildingLayer(e, 'polygon')}
                     >
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={bdgShape}
+                          alt="Bâtiments représentés par des polygones"
+                          className={styles.choiceImage}
+                        />
+                      </div>
                       <span className={styles.choiceLabel}>Polygones</span>
                     </a>
                   </li>
