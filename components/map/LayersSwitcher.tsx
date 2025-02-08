@@ -15,6 +15,8 @@ import extraPlots from '@/public/images/map/switch-plots.jpg';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
 
+import layersIcon from '@/public/images/map/layer-group-solid.svg';
+
 // Components
 import ImageNext from 'next/image';
 
@@ -209,12 +211,21 @@ export default function LayersSwitcher() {
         </div>
       ) : (
         <div className={styles.btn} onClick={(e) => setOpen(true)}>
-          <span className={styles.btnLabel}>Calques</span>
-          <ImageNext
-            src={btnImage}
-            alt="Voir les calques"
-            className={styles.btnImg}
-          />
+          <div className={styles.btnIcon}>
+            <ImageNext
+              src={layersIcon}
+              alt="Voir les calques"
+              className={styles.btnImg}
+            />
+          </div>
+          <div className={styles.btnImage}>
+            <span className={styles.btnLabel}>Calques</span>
+            <ImageNext
+              src={btnImage}
+              alt="Voir les calques"
+              className={styles.btnImg}
+            />
+          </div>
         </div>
       )}
     </>

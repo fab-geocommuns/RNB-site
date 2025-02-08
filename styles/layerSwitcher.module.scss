@@ -1,14 +1,49 @@
+@import "vars.scss";
+
 .btn {
   background: white;
   position: absolute;
-  bottom: 30px;
-  right: 50px;
+
+  @media (min-width: $bp-md) {
+    bottom: 30px;
+    right: 50px;
+  }
+
+  bottom:185px;
+  right:10px;
+
+  
   z-index: 300;
   padding: 4px;
   line-height: 1em;
   border-radius: 4px;
   box-shadow: 0 0 0 2px rgba(0,0,0,.1);
   white-space: nowrap;
+
+  .btnImage {
+    display: none;
+
+    @media (min-width: $bp-md) {
+      display: block;
+    }
+
+  }
+
+  .btnIcon {
+
+    max-width: 22px;
+
+    img {
+      max-width: 100%;
+      height:auto;
+    }
+
+    @media (min-width: $bp-md) {
+      display: none;
+    }
+
+  }
+
 }
 .btn:hover {
   background:#f2f2f2;
@@ -39,13 +74,27 @@
 }
 
 .modal {
+
+  
+
   background: white;
   position: absolute;
-  bottom: 30px;
-  right: 50px;
+
+  @media (min-width: $bp-md) {
+    bottom: 30px;
+    right: 50px;
+    width: 300px;
+    left:auto;
+  }
+
+  bottom:12px;
+  right:12px;
+  left:12px;
+
+  
   z-index: 302;
   
-  width: 300px;
+  
   border-radius: 4px;
   box-shadow: 0 0 0 2px rgba(0,0,0,.1);
 
@@ -103,7 +152,7 @@
   
   .section {
     
-    margin-bottom: 40px;
+    margin-bottom: 25px;
     &:last-child {
       margin-bottom: 0;
     }
@@ -126,7 +175,11 @@
 
 .choicesList {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  
+  @media (min-width: $bp-md) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  grid-template-columns: repeat(auto-fit, minmax(84px, 84px));
   grid-gap: 10px;
 
   list-style: none;
@@ -177,6 +230,8 @@
 
 
 }
+
+
 
 
 

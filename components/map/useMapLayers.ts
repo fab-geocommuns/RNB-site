@@ -6,16 +6,11 @@ import satellite from '@/components/map/mapstyles/satellite.json';
 import maplibregl, { StyleSpecification } from 'maplibre-gl';
 
 // React things
-import { use, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 // Store
 import { useSelector } from 'react-redux';
-import { Actions, AppDispatch, RootState } from '@/stores/store';
-
-const BDGS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
-const ADS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/permis/tiles/{x}/{y}/{z}.pbf';
+import { RootState } from '@/stores/store';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -126,7 +121,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
     map.addSource(SRC_ADS, {
       type: 'vector',
-      tiles: [ADS_TILES_URL + '#' + Math.random()],
+      tiles: [SRC_ADS_URL + '#' + Math.random()],
       minzoom: 16,
       maxzoom: 22,
       promoteId: 'file_number',

@@ -16,7 +16,6 @@ import { fr } from '@codegouvfr/react-dsfr';
 // Map Tools
 import vector from '@/components/map/mapstyles/vector.json';
 import satellitle from '@/components/map/mapstyles/satellite.json';
-import MapStyleSwitcherControl from '@/components/map/MapStyleSwitcher';
 
 // Auth
 import { useSession } from 'next-auth/react';
@@ -275,13 +274,6 @@ export default function ADSMap() {
   };
 
   const initMapControls = () => {
-    const styleSwitcher = new MapStyleSwitcherControl({
-      styles: STYLES,
-      chosenStyle: 'vector',
-      icon: fr.cx('fr-icon-road-map-line'),
-    });
-    map.current.addControl(styleSwitcher, 'bottom-right');
-
     const controls = new maplibregl.NavigationControl({
       showCompass: false,
       showZoom: true,
