@@ -20,6 +20,10 @@ import { ContributionStatusPicker } from '@/components/panel/ContributionStatusP
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
+// Store
+import { useDispatch, useSelector } from 'react-redux';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
+
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
 }
@@ -29,6 +33,10 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const { is } = useRNBAuthentication();
 
   const [openSections, setOpenSections] = useState<string[]>([]);
+
+  // Store
+  const dispatch: AppDispatch = useDispatch();
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const apiUrl = () => {
     return bdgApiUrl(bdg!.rnb_id);
@@ -91,6 +99,11 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     plots.sort((a, b) => b.bdg_cover_ratio - a.bdg_cover_ratio);
 
     return plots;
+  };
+
+  const handlePlotBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    dispatch(Actions.map.toggleExtraLayer('plots'));
   };
 
   const isSectionOpen = (section: string) => {
@@ -208,7 +221,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             </div>
 
             {bdg?.plots?.length === 0 ? (
-              <>pas de parcelles</>
+              <>Pas de parcelles</>
             ) : (
               <>
                 <div className="fr-table fr-table--sm fr-table--no-scroll fr-table--bordered fr-m-0-5v">
@@ -241,6 +254,20 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                 </div>
               </>
             )}
+
+            <div className="fr-mt-6v">
+              <a
+                href="#"
+                className="fr-btn fr-btn--sm fr-btn--tertiary"
+                onClick={(e) => handlePlotBtnClick(e)}
+              >
+                {mapLayers.extraLayers.includes('plots') ? (
+                  <span>Cacher les parcelles</span>
+                ) : (
+                  <span>Afficher les parcelles sur la carte</span>
+                )}
+              </a>
+            </div>
           </>
         )}
       </div>
