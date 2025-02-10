@@ -1,8 +1,8 @@
 import {
-  BUILDINGS_LAYER_POINT,
-  BUILDINGS_LAYER_SHAPE_BORDER,
-  BUILDINGS_LAYER_SHAPE_FILL,
-  BUILDINGS_SOURCE,
+  BUILDINGS_SOURCE_POINTS,
+  BUILDINGS_SOURCE_SHAPES,
+  LIST_BUILDINGS_LAYERS_POINT,
+  LIST_BUILDINGS_LAYERS_SHAPE,
 } from '@/components/map/useMapLayers';
 import dotImg from '@/public/images/map/dot.png';
 import polygonImg from '@/public/images/map/polygon.png';
@@ -58,7 +58,10 @@ export class BuildingSourceSwitcherControl {
 
   private _onClick() {
     const currentStyle = this._map.getStyle();
-    const buildingSource = currentStyle.sources[BUILDINGS_SOURCE];
+    const currentBuildingSource = !this._isShapesSource
+      ? BUILDINGS_SOURCE_POINTS
+      : BUILDINGS_SOURCE_SHAPES;
+    const buildingSource = currentStyle.sources[currentBuildingSource];
 
     if (buildingSource && buildingSource.type === 'vector') {
       this._isShapesSource = !this._isShapesSource;
@@ -68,29 +71,28 @@ export class BuildingSourceSwitcherControl {
 
   public updateStyles() {
     const currentStyle = this._map.getStyle();
-    const buildingSource = currentStyle.sources[BUILDINGS_SOURCE];
+    const currentBuildingSource = !this._isShapesSource
+      ? BUILDINGS_SOURCE_POINTS
+      : BUILDINGS_SOURCE_SHAPES;
+    const buildingSource = currentStyle.sources[currentBuildingSource];
 
     if (buildingSource && buildingSource.type === 'vector') {
-      const newUrl = !this._isShapesSource
-        ? `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf`
-        : `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf`;
+      LIST_BUILDINGS_LAYERS_POINT.forEach((l) => {
+        this._map.setLayoutProperty(
+          l,
+          'visibility',
+          this._isShapesSource ? 'none' : 'visible',
+        );
+      });
 
-      this._map.getSource(BUILDINGS_SOURCE)?.setTiles([newUrl]);
-      this._map.setLayoutProperty(
-        BUILDINGS_LAYER_POINT,
-        'visibility',
-        this._isShapesSource ? 'none' : 'visible',
-      );
-      this._map.setLayoutProperty(
-        BUILDINGS_LAYER_SHAPE_BORDER,
-        'visibility',
-        !this._isShapesSource ? 'none' : 'visible',
-      );
-      this._map.setLayoutProperty(
-        BUILDINGS_LAYER_SHAPE_FILL,
-        'visibility',
-        !this._isShapesSource ? 'none' : 'visible',
-      );
+      LIST_BUILDINGS_LAYERS_SHAPE.forEach((l) => {
+        this._map.setLayoutProperty(
+          l,
+          'visibility',
+          !this._isShapesSource ? 'none' : 'visible',
+        );
+      });
+
       this._icon.src = !this._isShapesSource ? polygonImg.src : dotImg.src;
       this._text.textContent = !this._isShapesSource ? 'Polygone' : 'Point';
       this._button.style.width = !this._isShapesSource ? '7rem' : '5rem';
