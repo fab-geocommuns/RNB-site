@@ -23,7 +23,7 @@ const AttributesSearchBar = ({
 }) => {
   return (
     <SearchBar
-      style={{ width: '35%' }}
+      className={styles.searchBar}
       label="Rechercher parmi les attributs répertoriés"
       renderInput={({ className, id, placeholder, type }) => (
         <input

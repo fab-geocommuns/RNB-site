@@ -26,3 +26,11 @@
     align-items: flex-start;
     justify-content: flex-start;
 }
+
+.searchBar {
+    width: 420px;
+
+    @media (max-width: $bp-md) {
+        width: 100%;
+    }
+}

@@ -54,11 +54,9 @@ export default function DatabaseSearchForm({
 
   return (
     <>
-      <div>
-        <b>
-          Recherchez parmi {attributeCount} attributs accessibles dans{' '}
-          {databaseCount} bases répertoriées
-        </b>
+      <div className={styles.searchContainer__title}>
+        Recherchez parmi {attributeCount} attributs accessibles dans{' '}
+        {databaseCount} bases répertoriées
       </div>
       <SearchBar
         label="Rechercher"
