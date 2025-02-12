@@ -109,7 +109,7 @@ export default async function Page() {
           <div className="fr-grid-row fr-grid-row--gutters">
             <div className="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
               <div className="section__titleblock">
-                <h2 id="liste" className="section__title">
+                <h2 className="section__title">
                   Comment obtenir les identifiants RNB de vos bâtiments ?
                 </h2>
                 <p className="section__subtitle">

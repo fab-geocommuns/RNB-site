@@ -10,15 +10,60 @@ import Table from '@codegouvfr/react-dsfr/Table';
 
 // Analytics
 import va from '@vercel/analytics';
-import { DiffusionDatabase, Attribute } from './diffusionDatabase.type';
+import { DiffusionDatabase } from './diffusionDatabase.type';
+import {
+  HighlightToken,
+  FuzzySearchAttributeResult,
+} from './util/fuzzySearchAttributes';
 
-const AttributesTable = ({ attributes }: { attributes: Attribute[] }) => {
+const HighlightedText = ({
+  text,
+  tokens,
+}: {
+  text: string;
+  tokens: HighlightToken[];
+}) => {
+  if (!tokens) {
+    return <span>{text}</span>;
+  }
+
+  return (
+    <span>
+      {tokens.map((token, i) =>
+        token.isHighlighted ? (
+          <span
+            key={i}
+            style={{ backgroundColor: 'yellow', borderRadius: '4px' }}
+          >
+            {token.token}
+          </span>
+        ) : (
+          token.token
+        ),
+      )}
+    </span>
+  );
+};
+
+const AttributesTable = ({
+  attributes,
+}: {
+  attributes: FuzzySearchAttributeResult[];
+}) => {
   return (
     <Table
       className={styles.attributesTable}
-      data={attributes.map((attribute) => [
-        attribute.name,
-        attribute.description,
+      data={attributes.map((attribute, i) => [
+        <HighlightedText
+          key={i}
+          text={attribute.name}
+          tokens={attribute.nameTokens}
+        />,
+        <HighlightedText
+          key={i}
+          text={attribute.description}
+          tokens={attribute.descriptionTokens}
+        />,
       ])}
       hasHeader={false}
       size={'sm'}
@@ -29,7 +74,7 @@ const AttributesTable = ({ attributes }: { attributes: Attribute[] }) => {
 
 type Props = {
   db: DiffusionDatabase;
-  attributes: Attribute[];
+  attributes: FuzzySearchAttributeResult[];
   displayAttributes: boolean;
 };
 
@@ -56,7 +101,7 @@ export default function Entry({ db, attributes, displayAttributes }: Props) {
           />
         </div>
 
-        <div className={styles.body}>
+        <div className={styles.cardBody}>
           <div className={styles.titleBlock}>
             <h3 className={styles.title}>
               <a onClick={trackDbClick(db)} href={db.documentation_url}>
