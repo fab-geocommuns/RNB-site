@@ -2,9 +2,9 @@
 import { getDatabases } from '@/utils/databases';
 
 // Comps
-import DBCard from '@/components/DBCard';
-import ImageNext from 'next/image';
 import { Card } from '@codegouvfr/react-dsfr/Card';
+import SearchableDatabaseSection from '@/components/SearchableDatabaseSection';
+import PivotIllustration from '@/components/PivotIllustration';
 
 // Settings
 import settings from '@/logic/settings';
@@ -21,7 +21,12 @@ import bdgRiverPhoto from '@/public/images/bdg-river.jpg';
 import siloPhoto from '@/public/images/silo-bdg.jpg';
 
 export default async function Page() {
-  const dbs = await getDatabases();
+  let dbs = null;
+  try {
+    dbs = await getDatabases();
+  } catch (error) {
+    console.error('Error fetching databases:', error);
+  }
 
   return (
     <>
@@ -59,23 +64,11 @@ export default async function Page() {
           </div>
         </div>
 
+        {dbs && <SearchableDatabaseSection databases={dbs} />}
+
         <div className="section">
           <div className="fr-grid-row ">
             <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
-              <div className="section__titleblock">
-                <h2 id="liste" className="section__title">
-                  Les bases contenant des identifiants RNB
-                </h2>
-                <p className="section__subtitle">
-                  Performance énergétique, insalubrité, équipements sportifs,
-                  copropriétés, ...
-                </p>
-              </div>
-
-              {dbs.map((db: any) => {
-                return <DBCard key={db.key} db={db} />;
-              })}
-
               <p>
                 Votre base contient des identifiants RNB et vous souhaitez en
                 faire la promotion sur cette page ?<br />
@@ -105,20 +98,7 @@ export default async function Page() {
                   données jusqu&apos;à présent isolées.
                 </h3>
                 <div className={styles.pivotBlockSentence}>
-                  <div className="none md-block">
-                    <ImageNext
-                      className="resp-image"
-                      src={pivotIllu}
-                      alt="Illustration d’un pivot"
-                    />
-                  </div>
-                  <div className="md-none">
-                    <ImageNext
-                      className="resp-image"
-                      src={pivotIlluMobile}
-                      alt="Illustration d’un pivot"
-                    />
-                  </div>
+                  <PivotIllustration />
                 </div>
               </div>
             </div>

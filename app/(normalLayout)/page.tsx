@@ -7,6 +7,8 @@ import ImageNext from 'next/image';
 import CasListe from '@/components/CasListe';
 import NewsletterForm from '@/components/NewsletterForm';
 import AddressSearchHome from '@/components/AddressSearchHome';
+import DatabaseSearchForm from '@/components/DatabaseSearchForm';
+import PivotIllustration from '@/components/PivotIllustration';
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg';
@@ -31,16 +33,19 @@ import adsIllu from '@/public/images/ads.png';
 import { getBreakingNews } from '@/utils/blog';
 
 // Utils
-import { getDatabasesCount, getFeaturedDatabases } from '@/utils/databases';
-import HomeDBList from '@/components/homeDBList';
+import { getDatabases } from '@/utils/databases';
 
 export const revalidate = 10;
 
 export default async function Home() {
   const bannerId = 'M11Z4KK9Y338';
   const breakingNews = await getBreakingNews();
-  const dbs = await getFeaturedDatabases();
-  const dbsCount = await getDatabasesCount();
+  let availableDatabases = null;
+  try {
+    availableDatabases = await getDatabases();
+  } catch (error) {
+    console.error('Error fetching databases:', error);
+  }
 
   return (
     <>
@@ -139,18 +144,23 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="section section__big ">
+        <div className="section section__big">
           <div className={styles.dbsShell}>
             <div className="section__titleblock">
               <h2 className="section__title">
-                Enrichissez vos bases de données bâtimentaires
+                Croisez et enrichissez vos données bâtimentaires
               </h2>
               <p className="section__subtitle">
                 Les identifiants de bâtiments RNB servent de pivot entre des
                 données jusqu&apos;à présent isolées
               </p>
             </div>
-            <HomeDBList dbs={dbs} dbsCount={dbsCount} />
+            {availableDatabases && (
+              <div className={styles.searchContainer}>
+                <DatabaseSearchForm dbs={availableDatabases} />
+              </div>
+            )}
+            {!availableDatabases && <PivotIllustration />}
           </div>
         </div>
 
