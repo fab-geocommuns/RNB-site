@@ -1,0 +1,36 @@
+@import "vars.scss";
+
+.searchBlock {
+    --border-color:transparent;
+    --border-size:1px;
+
+    --shadow-color: 44deg 36% 61%;
+    box-shadow:
+    0.1px 0.5px 0.5px hsl(var(--shadow-color) / 0.39),
+    0.4px 1.7px 1.9px -0.9px hsl(var(--shadow-color) / 0.37),
+    1.1px 4.3px 4.8px -1.9px hsl(var(--shadow-color) / 0.34),
+    2.7px 10.7px 11.8px -2.8px hsl(var(--shadow-color) / 0.32)
+    ;
+
+    border:var(--border-size) solid var(--border-color);
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 24px;
+   
+    background-color: white;
+    margin-bottom: 32px;
+
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.searchBar {
+    width: 420px;
+
+    @media (max-width: $bp-md) {
+        width: 100%;
+    }
+}
