@@ -55,7 +55,6 @@ export const SRC_PLOTS = 'plotstiles';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
-import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 export const STYLES = {
   vector: {
@@ -80,9 +79,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   const layers = useSelector((state: RootState) => state.map.layers);
 
   const installAll = (map) => {
-    console.log('-- layers');
-    console.log(layers);
-
     installBuildings(map);
     installADS(map);
 
@@ -209,8 +205,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   };
 
   const installBuildingsLayers = (map) => {
-    console.log(layers.buildings);
-
     if (layers.buildings == 'point') {
       installBuildingsPointsLayers(map);
     }
@@ -416,8 +410,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
   // When layers change, we rebuild the style and the layers
   useEffect(() => {
-    console.log('layers changed');
-
     // If no map, we stop here
     if (!map) return;
 

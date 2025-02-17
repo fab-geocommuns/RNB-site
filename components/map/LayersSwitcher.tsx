@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
-import bckgSat from '@/public/images/map/switch-bckg-sat.jpg';
-import bckgPlan from '@/public/images/map/switch-bckg-plan.jpg';
+import backgroundSatellite from '@/public/images/map/switch-bckg-sat.jpg';
+import backgroundPlan from '@/public/images/map/switch-bckg-plan.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
@@ -60,15 +60,15 @@ export default function LayersSwitcher() {
   };
 
   // Switch background image
-  const [btnImage, setBtnImage] = useState(bckgSat);
+  const [btnImage, setBtnImage] = useState(backgroundSatellite);
 
   useEffect(() => {
     if (mapLayers.background === 'vector') {
-      setBtnImage(bckgSat);
+      setBtnImage(backgroundSatellite);
     }
 
     if (mapLayers.background === 'satellite') {
-      setBtnImage(bckgPlan);
+      setBtnImage(backgroundPlan);
     }
   }, [mapLayers]);
 
@@ -101,7 +101,7 @@ export default function LayersSwitcher() {
                     >
                       <div className={styles.choiceImageShell}>
                         <ImageNext
-                          src={bckgPlan}
+                          src={backgroundPlan}
                           alt="Plan"
                           className={styles.choiceImage}
                         />
@@ -124,7 +124,7 @@ export default function LayersSwitcher() {
                     >
                       <div className={styles.choiceImageShell}>
                         <ImageNext
-                          src={bckgSat}
+                          src={backgroundSatellite}
                           alt="Satellite"
                           className={styles.choiceImage}
                         />
