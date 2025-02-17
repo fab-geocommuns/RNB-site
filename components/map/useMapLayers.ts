@@ -1,32 +1,60 @@
+// Background styles
 import vector from '@/components/map/mapstyles/vector.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
-import maplibregl, { MapMouseEvent, StyleSpecification } from 'maplibre-gl';
+// Maplibre styles
+import maplibregl, { StyleSpecification } from 'maplibre-gl';
+
+// React things
 import { useCallback, useEffect } from 'react';
+
+// Store
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 
-const BDGS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/tiles/{x}/{y}/{z}.pbf';
-const ADS_TILES_URL =
-  process.env.NEXT_PUBLIC_API_BASE + '/permis/tiles/{x}/{y}/{z}.pbf';
+///////////////////////////////////
+///////////////////////////////////
+// BUILDINGS
 
-export const BUILDINGS_SOURCE = 'bdgtiles';
+// Buildings source
+export const SRC_BDGS = 'bdgtiles';
+export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf`;
+export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf`;
 
-export const BUILDINGS_LAYER_POINT = 'bdgs';
+// Buildings layers : point:
+export const LAYER_BDGS_POINT = 'bdgs_point';
 
-export const BUILDINGS_LAYER_SHAPE_BORDER = 'bdgs_shape';
-export const BUILDINGS_LAYER_SHAPE_FILL = 'bdgs_shape_fill';
-export const BUILDINGS_LAYER_SHAPE_POINT = 'bdgs_shape_point';
-export const BUILDINGS_LAYERS_SHAPE = [
-  BUILDINGS_LAYER_SHAPE_BORDER,
-  BUILDINGS_LAYER_SHAPE_FILL,
-  BUILDINGS_LAYER_SHAPE_POINT,
+// Buildings layers : shapes
+export const LAYER_BDGS_SHAPE_BORDER = 'bdgs_shape';
+export const LAYER_BDGS_SHAPE_FILL = 'bdgs_shape_fill';
+export const LAYER_BDGS_SHAPE_POINT = 'bdgs_shape_point';
+export const LAYERS_BDGS_SHAPE_ALL = [
+  LAYER_BDGS_SHAPE_BORDER,
+  LAYER_BDGS_SHAPE_FILL,
+  LAYER_BDGS_SHAPE_POINT,
 ];
+
+const CONTRIBUTIONS_COLOR = '#f767ef';
+
+///////////////////////////////////
+///////////////////////////////////
+// ADS
+
+// ADS source
+export const SRC_ADS = 'ads';
+export const SRC_ADS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/permis/tiles/{x}/{y}/{z}.pbf`;
+
+// ADS Layers
+export const LAYER_ADS_CIRCLE = 'adscircle';
+export const LAYER_ADS_ICON = 'adsicon';
+
+// Plots
+export const LAYER_PLOTS_SHAPE = 'plots_shape';
+export const LAYER_PLOTS_TXT = 'plots_txt';
+export const SRC_PLOTS = 'plotstiles';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
-import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 export const STYLES = {
   vector: {
@@ -47,40 +75,57 @@ export const DEFAULT_STYLE = STYLES.vector.style;
  * @param map
  */
 export const useMapLayers = (map?: maplibregl.Map) => {
-  const adsOperationsIcons = getADSOperationIcons();
+  // Get the layers from the store
+  const layers = useSelector((state: RootState) => state.map.layers);
 
-  const reloadBuildings = useSelector(
-    (state: RootState) => state.map.reloadBuildings,
-  );
+  const installAll = (map) => {
+    installBuildings(map);
+    installADS(map);
 
-  const initADSLayer = useCallback(async (map: maplibregl.Map) => {
-    if (map.getLayer('ads')) map.removeLayer('ads');
-    if (map.getSource('ads')) map.removeSource('ads');
+    if (layers.extraLayers.includes('plots')) {
+      installPlots(map);
+    }
+  };
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // ADS
+
+  const installADS = useCallback(async (map: maplibregl.Map) => {
+    if (map.getLayer(LAYER_ADS_CIRCLE)) map.removeLayer(LAYER_ADS_CIRCLE);
+    if (map.getLayer(LAYER_ADS_ICON)) map.removeLayer(LAYER_ADS_ICON);
+    if (map.getSource(SRC_ADS)) map.removeSource(SRC_ADS);
 
     // Icons for ADS
     // build icon
+    if (!map.hasImage('adsBuild')) {
+      const adsBuild = await map.loadImage(adsOperationsIcons.build.src);
+      map.addImage('adsBuild', adsBuild.data, { sdf: true });
+    }
 
-    const adsBuild = await map.loadImage(adsOperationsIcons.build.src);
-    map.addImage('adsBuild', adsBuild.data, { sdf: true });
     // modify icon
-    const adsModify = await map.loadImage(adsOperationsIcons.modify.src);
-    map.addImage('adsModify', adsModify.data, { sdf: true });
+    if (!map.hasImage('adsModify')) {
+      const adsModify = await map.loadImage(adsOperationsIcons.modify.src);
+      map.addImage('adsModify', adsModify.data, { sdf: true });
+    }
 
     // demolish icon
-    const adsDemo = await map.loadImage(adsOperationsIcons.demolish.src);
-    map.addImage('adsDemo', adsDemo.data, { sdf: true });
+    if (!map.hasImage('adsDemo')) {
+      const adsDemo = await map.loadImage(adsOperationsIcons.demolish.src);
+      map.addImage('adsDemo', adsDemo.data, { sdf: true });
+    }
 
-    map.addSource('ads', {
+    map.addSource(SRC_ADS, {
       type: 'vector',
-      tiles: [ADS_TILES_URL + '#' + Math.random()],
+      tiles: [SRC_ADS_URL + '#' + Math.random()],
       minzoom: 16,
       maxzoom: 22,
       promoteId: 'file_number',
     });
 
     map.addLayer({
-      id: 'adscircle',
-      source: 'ads',
+      id: LAYER_ADS_CIRCLE,
+      source: SRC_ADS,
       'source-layer': 'default',
       type: 'circle',
       paint: {
@@ -102,8 +147,8 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
 
     map.addLayer({
-      id: 'adsicon',
-      source: 'ads',
+      id: LAYER_ADS_ICON,
+      source: SRC_ADS,
       'source-layer': 'default',
       type: 'symbol',
       layout: {
@@ -128,28 +173,86 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
   }, []);
 
-  // Ajout de la couche vectorielle des bâtiments
-  const initBuildingLayer = useCallback((map: maplibregl.Map) => {
-    if (map.getLayer(BUILDINGS_LAYER_POINT))
-      map.removeLayer(BUILDINGS_LAYER_POINT);
-    BUILDINGS_LAYERS_SHAPE.forEach((l) => {
-      if (map.getLayer(l)) map.removeLayer(l);
-    });
-    if (map.getSource(BUILDINGS_SOURCE)) map.removeSource(BUILDINGS_SOURCE);
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // Buildings
+  const installBuildings = (map) => {
+    // First, we remove buildings layers and source
+    removeBuildings(map);
 
-    map.addSource(BUILDINGS_SOURCE, {
+    // Then, we install the source
+    installBuildingsSource(map);
+    installBuildingsLayers(map);
+  };
+
+  const installBuildingsSource = (map) => {
+    let tilesUrl = undefined;
+
+    if (layers.buildings == 'point') {
+      tilesUrl = SRC_BDGS_POINTS_URL;
+    }
+    if (layers.buildings == 'polygon') {
+      tilesUrl = SRC_BDGS_SHAPES_URL;
+    }
+
+    map.addSource(SRC_BDGS, {
       type: 'vector',
-      tiles: [BDGS_TILES_URL + '#' + Math.random()], // Ajout d'un fragment aléatoire pour éviter le cache du navigateur lors du rechargement de cette couche
+      tiles: [tilesUrl],
       minzoom: 16,
       maxzoom: 22,
       promoteId: 'rnb_id',
     });
+  };
 
+  const installBuildingsLayers = (map) => {
+    if (layers.buildings == 'point') {
+      installBuildingsPointsLayers(map);
+    }
+    if (layers.buildings == 'polygon') {
+      installBuildingsShapesLayers(map);
+    }
+  };
+
+  const installBuildingsPointsLayers = (map) => {
+    map.addLayer({
+      id: LAYER_BDGS_POINT,
+      type: 'circle',
+      source: SRC_BDGS,
+      'source-layer': 'default',
+      paint: {
+        'circle-radius': [
+          'case',
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
+          6,
+          5,
+        ],
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#ffffff',
+          ['>', ['get', 'contributions'], 0],
+          '#fef4f4',
+          '#ffffff',
+        ],
+        'circle-stroke-width': 3,
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          CONTRIBUTIONS_COLOR,
+          '#1452e3',
+        ],
+      },
+    });
+  };
+
+  const installBuildingsShapesLayers = (map) => {
     // Polygon border
     map.addLayer({
-      id: BUILDINGS_LAYER_SHAPE_BORDER,
+      id: LAYER_BDGS_SHAPE_BORDER,
       type: 'fill',
-      source: BUILDINGS_SOURCE,
+      source: SRC_BDGS,
       'source-layer': 'default',
       paint: {
         'fill-color': [
@@ -159,7 +262,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'fill-opacity': 0.08,
@@ -168,9 +271,9 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
     // Polygon fill
     map.addLayer({
-      id: BUILDINGS_LAYER_SHAPE_FILL,
+      id: LAYER_BDGS_SHAPE_FILL,
       type: 'line',
-      source: BUILDINGS_SOURCE,
+      source: SRC_BDGS,
       'source-layer': 'default',
       paint: {
         'line-color': [
@@ -180,7 +283,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'line-width': 1.5,
@@ -189,9 +292,9 @@ export const useMapLayers = (map?: maplibregl.Map) => {
 
     // Points on the polygon source
     map.addLayer({
-      id: BUILDINGS_LAYER_SHAPE_POINT,
+      id: LAYER_BDGS_SHAPE_POINT,
       type: 'circle',
-      source: BUILDINGS_SOURCE,
+      source: SRC_BDGS,
       'source-layer': 'default',
       filter: ['==', '$type', 'Point'],
       paint: {
@@ -215,69 +318,118 @@ export const useMapLayers = (map?: maplibregl.Map) => {
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
           ['>', ['get', 'contributions'], 0],
-          '#FF732C',
+          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
+    });
+  };
+
+  const removeBuildings = (map) => {
+    if (layers.buildings == 'point') {
+      removeBuildingsPoints(map);
+    }
+    if (layers.buildings == 'polygon') {
+      removeBuildingsShapes(map);
+    }
+  };
+
+  const removeBuildingsPoints = (map) => {
+    if (map.getLayer(LAYER_BDGS_POINT)) {
+      map.removeLayer(LAYER_BDGS_POINT);
+    }
+    removeBuildingsSource(map);
+  };
+
+  const removeBuildingsShapes = (map) => {
+    LAYERS_BDGS_SHAPE_ALL.forEach((l) => {
+      if (map.getLayer(l)) {
+        map.removeLayer(l);
+      }
+    });
+    removeBuildingsSource(map);
+  };
+
+  const removeBuildingsSource = (map) => {
+    if (map.getSource(SRC_BDGS)) {
+      map.removeSource(SRC_BDGS);
+    }
+  };
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // Plots
+
+  const installPlots = useCallback((map: maplibregl.Map) => {
+    if (map.getLayer(LAYER_PLOTS_SHAPE)) map.removeLayer(LAYER_PLOTS_SHAPE);
+    if (map.getLayer(LAYER_PLOTS_TXT)) map.removeLayer(LAYER_PLOTS_TXT);
+    if (map.getSource(SRC_PLOTS)) map.removeSource(SRC_PLOTS);
+
+    map.addSource(SRC_PLOTS, {
+      type: 'vector',
+      tiles: [
+        process.env.NEXT_PUBLIC_API_BASE + '/plots/tiles/{x}/{y}/{z}.pbf',
+      ],
+      minzoom: 16,
+      maxzoom: 22,
+      promoteId: 'id',
     });
 
     map.addLayer({
-      id: BUILDINGS_LAYER_POINT,
-      type: 'circle',
-      source: BUILDINGS_SOURCE,
+      id: LAYER_PLOTS_SHAPE,
+      source: SRC_PLOTS,
       'source-layer': 'default',
+      type: 'line',
       paint: {
-        'circle-radius': [
-          'case',
-          ['boolean', ['==', ['feature-state', 'hovered'], true]],
-          6,
-          5,
-        ],
-        'circle-stroke-color': [
-          'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
-          '#ffffff',
-          ['>', ['get', 'contributions'], 0],
-          '#fef4f4',
-          '#ffffff',
-        ],
-        'circle-stroke-width': 3,
-        'circle-color': [
-          'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
-          '#31e060',
-          ['>', ['get', 'contributions'], 0],
-          '#FF732C',
-          '#1452e3',
-        ],
+        'line-color': '#ea580c',
+        'line-opacity': 0.9,
+        'line-width': 2,
       },
     });
 
-    const buildingSourceControl = map._controls.find(
-      (c) => c instanceof BuildingSourceSwitcherControl,
-    );
-    if (buildingSourceControl) {
-      buildingSourceControl.updateStyles();
-    }
+    // Display the plot id in the middle of the plot
+    map.addLayer({
+      id: LAYER_PLOTS_TXT,
+      source: SRC_PLOTS,
+      'source-layer': 'default',
+      type: 'symbol',
+      layout: {
+        'text-field': ['get', 'plot_number'],
+        'text-size': 12,
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-offset': [0, 0],
+        'text-anchor': 'center',
+        'text-allow-overlap': false,
+      },
+      paint: {
+        'text-halo-color': '#ffffff',
+        'text-halo-width': 2,
+      },
+    });
   }, []);
 
-  // Initialisation des couches vectorielles
+  // When layers change, we rebuild the style and the layers
+  useEffect(() => {
+    // If no map, we stop here
+    if (!map) return;
+
+    // First the background
+    const newBckg = JSON.parse(JSON.stringify(STYLES[layers.background].style));
+    map.setStyle(newBckg);
+
+    // Install other data after the background
+    installAll(map);
+  }, [layers]);
+
   useEffect(() => {
     if (map) {
       if (map.loaded()) {
-        initBuildingLayer(map);
-        initADSLayer(map);
+        installAll(map);
       } else {
-        map.once('load', () => initBuildingLayer(map));
-        map.once('load', () => initADSLayer(map));
+        map.once('load', () => installAll(map));
       }
     }
-  }, [initBuildingLayer, map]);
+  }, [map]);
 
-  // Initialisation de la couche vectorielle et de la synchronisation: reloadBuildings
-  useEffect(() => {
-    if (map && map.isStyleLoaded()) {
-      initBuildingLayer(map);
-    }
-  }, [reloadBuildings, map, initBuildingLayer]);
+  const adsOperationsIcons = getADSOperationIcons();
 };

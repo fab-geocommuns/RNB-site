@@ -20,6 +20,10 @@ import { ContributionStatusPicker } from '@/components/panel/ContributionStatusP
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
+// Store
+import { useDispatch, useSelector } from 'react-redux';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
+
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
 }
@@ -29,6 +33,10 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const { is } = useRNBAuthentication();
 
   const [openSections, setOpenSections] = useState<string[]>([]);
+
+  // Store
+  const dispatch: AppDispatch = useDispatch();
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const apiUrl = () => {
     return bdgApiUrl(bdg!.rnb_id);
@@ -82,19 +90,20 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   };
 
   const relevantPlots = () => {
-    let plots = [];
+    const plots = bdg?.plots.filter((plot) => {
+      // We only show plots that cover more than 5% of the building
+      return plot.bdg_cover_ratio > 0.05;
+    });
 
-    if (bdg?.plots) {
-      plots = bdg?.plots?.filter((plot) => {
-        // We only show plots that cover more than 5% of the building
-        return plot.bdg_cover_ratio > 0.05;
-      });
-
-      // Sort plots by desc cover ratio
-      plots.sort((a, b) => b.bdg_cover_ratio - a.bdg_cover_ratio);
-    }
+    // Sort plots by desc cover ratio
+    plots.sort((a, b) => b.bdg_cover_ratio - a.bdg_cover_ratio);
 
     return plots;
+  };
+
+  const handlePlotBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    dispatch(Actions.map.toggleExtraLayer('plots'));
   };
 
   const isSectionOpen = (section: string) => {
@@ -200,53 +209,64 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </h2>
         {isSectionOpen('parcelles') && (
           <>
-            <div className={panelStyles.sectionBody}>
-              <div className={panelStyles.plotWarning}>
-                Les parcelles sont associées au bâtiment{' '}
-                <b>via un croisement géométrique</b> et non administratif.{' '}
-                <br />
-                <a
-                  target="_blank"
-                  href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales"
-                >
-                  En savoir plus
-                </a>
-              </div>
+            <div className={panelStyles.plotWarning}>
+              Les parcelles sont associées au bâtiment{' '}
+              <b>via un croisement géométrique</b> et non administratif. <br />
+              <a
+                target="_blank"
+                href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales"
+              >
+                En savoir plus
+              </a>
+            </div>
 
-              {relevantPlots().length > 0 ? (
-                <>
-                  <div className="fr-table fr-table--sm fr-table--no-scroll fr-table--bordered fr-m-0-5v">
-                    <div className="fr-table__wrapper">
-                      <div className="fr-table__container">
-                        <div className="fr-table__content">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Parcelle</th>
-                                <th>Recouvrement du bâtiment</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {relevantPlots().map((plot) => {
-                                return (
-                                  <tr key={plot.id}>
-                                    <td>{plot.id}</td>
-                                    <td className={panelStyles.coverRatioCell}>
-                                      {coverRatioDisplay(plot.bdg_cover_ratio)}
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                        </div>
+            {bdg?.plots?.length === 0 ? (
+              <>Pas de parcelles</>
+            ) : (
+              <>
+                <div className="fr-table fr-table--sm fr-table--no-scroll fr-table--bordered fr-m-0-5v">
+                  <div className="fr-table__wrapper">
+                    <div className="fr-table__container">
+                      <div className="fr-table__content">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Parcelle</th>
+                              <th>Recouvrement du bâtiment</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {relevantPlots().map((plot) => {
+                              return (
+                                <tr key={plot.id}>
+                                  <td>{plot.id}</td>
+                                  <td className={panelStyles.coverRatioCell}>
+                                    {coverRatioDisplay(plot.bdg_cover_ratio)}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
-                </>
-              ) : (
-                <>Aucune parcelle trouvée pour ce bâtiment.</>
-              )}
+                </div>
+              </>
+            )}
+
+            <div className="fr-mt-6v">
+              <a
+                href="#"
+                className="fr-btn fr-btn--sm fr-btn--tertiary"
+                onClick={(e) => handlePlotBtnClick(e)}
+              >
+                {mapLayers.extraLayers.includes('plots') ? (
+                  <span>Cacher les parcelles</span>
+                ) : (
+                  <span>Afficher les parcelles sur la carte</span>
+                )}
+              </a>
             </div>
           </>
         )}

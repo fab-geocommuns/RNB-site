@@ -4,9 +4,10 @@ import { Actions, AppDispatch } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
 import {
-  BUILDINGS_LAYER_POINT,
-  BUILDINGS_LAYER_SHAPE_BORDER,
-  BUILDINGS_LAYER_SHAPE_POINT,
+  LAYER_BDGS_POINT,
+  LAYER_BDGS_SHAPE_BORDER,
+  LAYER_BDGS_SHAPE_POINT,
+  LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
 
 /**
@@ -35,9 +36,9 @@ export const useMapEvents = (map?: maplibregl.Map) => {
 
           if (
             [
-              BUILDINGS_LAYER_POINT,
-              BUILDINGS_LAYER_SHAPE_BORDER,
-              BUILDINGS_LAYER_SHAPE_POINT,
+              LAYER_BDGS_POINT,
+              LAYER_BDGS_SHAPE_BORDER,
+              LAYER_BDGS_SHAPE_POINT,
             ].includes(featureCloseToCursor.layer.id)
           ) {
             // It is a building
@@ -45,7 +46,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
             dispatch(Actions.map.selectBuilding(rnb_id));
           }
 
-          if (featureCloseToCursor.layer.id === 'adscircle') {
+          if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
             // It is an ADS
             const file_number = featureCloseToCursor.properties.file_number;
             dispatch(Actions.map.selectADS(file_number));

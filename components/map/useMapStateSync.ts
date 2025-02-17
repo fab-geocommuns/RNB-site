@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BUILDINGS_SOURCE } from '@/components/map/useMapLayers';
+import { SRC_BDGS } from '@/components/map/useMapLayers';
 import { RootState } from '@/stores/store';
 import maplibregl from 'maplibre-gl';
 import { SelectedItem } from '@/stores/map/map-slice';
@@ -24,7 +24,7 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
 
   const getFeatureTypeSource = (item: SelectedItem) => {
     if (item._type === 'building') {
-      return BUILDINGS_SOURCE;
+      return SRC_BDGS;
     }
 
     if (item._type === 'ads') {
@@ -104,7 +104,7 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
       }
 
       // Then, highlight the current selected item
-      if (selectedItem && map && map.getSource(BUILDINGS_SOURCE)) {
+      if (selectedItem && map && map.getSource(SRC_BDGS)) {
         const source = getFeatureTypeSource(selectedItem);
         const id = getFeatureId(selectedItem);
 
@@ -128,7 +128,7 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
       // Si on arrive sur la page avec un bâtiment pré-sélectionné (q=rnbId), il se peut que ce useEffect soit exécuté avant le chargement de la source BUILDINGS_SOURCE.
       // On ajoute donc cet événement pour palier à ce cas.
       map.on('sourcedata', (e) => {
-        if (e.isSourceLoaded && e.sourceId === BUILDINGS_SOURCE) {
+        if (e.isSourceLoaded && e.sourceId === SRC_BDGS) {
           toggleHighlight();
         }
       });
