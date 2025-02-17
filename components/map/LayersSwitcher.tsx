@@ -111,7 +111,7 @@ export default function LayersSwitcher() {
                         />
                       </div>
 
-                      <span className={styles.choiceLabel}>Plan IGN</span>
+                      <span className={styles.choiceLabel}>Plan</span>
                     </a>
                   </li>
                   <li>
