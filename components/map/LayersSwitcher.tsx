@@ -63,12 +63,16 @@ export default function LayersSwitcher() {
   const [btnImage, setBtnImage] = useState(backgroundSatellite);
 
   useEffect(() => {
-    if (mapLayers.background === 'vector') {
-      setBtnImage(backgroundSatellite);
-    }
-
-    if (mapLayers.background === 'satellite') {
-      setBtnImage(backgroundPlan);
+    switch (mapLayers.background) {
+      case 'vector':
+        setBtnImage(backgroundSatellite);
+        break;
+      case 'satellite':
+        setBtnImage(backgroundPlan);
+        break;
+      default:
+        setBtnImage(backgroundSatellite);
+        break;
     }
   }, [mapLayers]);
 
