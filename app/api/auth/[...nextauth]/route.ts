@@ -34,11 +34,15 @@ export const authOptions = {
         try {
           const url = process.env.NEXT_PUBLIC_API_BASE + '/login/';
 
+          console.log('hello', url);
+
           const res = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(credentials),
             headers: { 'Content-Type': 'application/json' },
           });
+
+          console.log(res);
 
           if (!res.ok) {
             return null;

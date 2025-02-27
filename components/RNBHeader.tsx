@@ -82,7 +82,7 @@ export default function RNBHeader() {
     signOut();
   };
 
-  let logQA = {
+  let faqQA = {
     iconId: 'fr-icon-question-fill',
     linkProps: {
       href: '/faq',
@@ -90,24 +90,26 @@ export default function RNBHeader() {
     text: 'Foire aux questions',
   };
 
-  //  let logQA = {
-  //    iconId: 'fr-icon-lock-line',
-  //    linkProps: {
-  //      href: '/login'
-  //    },
-  //    text: 'Se connecter'
-  //  }
-  //
-  //  if (session) {
-  //    logQA = {
-  //      iconId: 'fr-icon-logout-box-r-line',
-  //      linkProps: {
-  //        href: '#',
-  //        onClick: (e) => { handleSignout(e) }
-  //      },
-  //      text: 'Se déconnecter'
-  //    }
-  //  }
+  let logQA = {
+    iconId: 'fr-icon-lock-line',
+    linkProps: {
+      href: '/login',
+    },
+    text: 'Se connecter',
+  };
+
+  if (session) {
+    logQA = {
+      iconId: 'fr-icon-logout-box-r-line',
+      linkProps: {
+        href: '#',
+        onClick: (e) => {
+          handleSignout(e);
+        },
+      },
+      text: 'Se déconnecter',
+    };
+  }
 
   return (
     <>
@@ -130,7 +132,7 @@ export default function RNBHeader() {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
-        quickAccessItems={[logQA]}
+        quickAccessItems={[faqQA, logQA]}
       />
     </>
   );
