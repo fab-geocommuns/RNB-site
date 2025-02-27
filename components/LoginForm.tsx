@@ -3,25 +3,42 @@
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 
+import { useSearchParams, useRouter } from 'next/navigation';
+
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 
 export default function LoginForm() {
   const [credentialsError, setCredentialsError] = useState(false);
 
+  const router = useRouter();
+
+  // Get the redirect query parameter
+  const params = useSearchParams();
+  let redirectUrl = '/';
+  if (params.has('redirect')) {
+    redirectUrl = params.get('redirect');
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Remove errors
+    setCredentialsError(false);
 
     const username = e.target.username.value;
     const password = e.target.password.value;
 
-    const result = await signIn('credentials', {
+    const loginResult = await signIn('credentials', {
       username,
       password,
+      callbackUrl: redirectUrl,
       redirect: false,
     });
 
-    if (result?.error) {
+    if (loginResult?.error) {
       setCredentialsError(true);
+    } else {
+      router.push(redirectUrl);
     }
   };
 

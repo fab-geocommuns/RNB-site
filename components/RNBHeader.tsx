@@ -12,11 +12,13 @@ import { usePathname } from 'next/navigation';
 
 // Logo
 import logo from '@/public/images/logo.png';
+import { use, useEffect, useState } from 'react';
 
 export default function RNBHeader() {
   const { data: session } = useSession();
 
   const pathname = usePathname();
+  const [redirectUrl, setRedirectUrl] = useState(pathname);
 
   const nav = [
     {
@@ -93,7 +95,7 @@ export default function RNBHeader() {
   let logQA = {
     iconId: 'fr-icon-lock-line',
     linkProps: {
-      href: '/login',
+      href: '/login?redirect=' + redirectUrl,
     },
     text: 'Se connecter',
   };
@@ -110,6 +112,10 @@ export default function RNBHeader() {
       text: 'Se déconnecter',
     };
   }
+
+  useEffect(() => {
+    setRedirectUrl(window.location.href);
+  }, [pathname]);
 
   return (
     <>
