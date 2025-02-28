@@ -32,19 +32,19 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
+          // We send the credentials to the login API
           const url = process.env.NEXT_PUBLIC_API_BASE + '/login/';
-
-          const res = await fetch(url, {
+          const distantLoginResponse = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(credentials),
             headers: { 'Content-Type': 'application/json' },
           });
 
-          if (!res.ok) {
+          if (!distantLoginResponse.ok) {
             return null;
           }
 
-          const user = await res.json();
+          const user = await distantLoginResponse.json();
 
           if (user) {
             return {

@@ -12,11 +12,13 @@ import { usePathname } from 'next/navigation';
 
 // Logo
 import logo from '@/public/images/logo.png';
+import { use, useEffect, useState } from 'react';
 
 export default function RNBHeader() {
   const { data: session } = useSession();
 
   const pathname = usePathname();
+  const [redirectUrl, setRedirectUrl] = useState(pathname);
 
   const nav = [
     {
@@ -82,7 +84,7 @@ export default function RNBHeader() {
     signOut();
   };
 
-  let logQA = {
+  let faqQA = {
     iconId: 'fr-icon-question-fill',
     linkProps: {
       href: '/faq',
@@ -90,24 +92,30 @@ export default function RNBHeader() {
     text: 'Foire aux questions',
   };
 
-  //  let logQA = {
-  //    iconId: 'fr-icon-lock-line',
-  //    linkProps: {
-  //      href: '/login'
-  //    },
-  //    text: 'Se connecter'
-  //  }
-  //
-  //  if (session) {
-  //    logQA = {
-  //      iconId: 'fr-icon-logout-box-r-line',
-  //      linkProps: {
-  //        href: '#',
-  //        onClick: (e) => { handleSignout(e) }
-  //      },
-  //      text: 'Se déconnecter'
-  //    }
-  //  }
+  let logQA = {
+    iconId: 'fr-icon-lock-line',
+    linkProps: {
+      href: '/login?redirect=' + redirectUrl,
+    },
+    text: 'Se connecter',
+  };
+
+  if (session) {
+    logQA = {
+      iconId: 'fr-icon-logout-box-r-line',
+      linkProps: {
+        href: '#',
+        onClick: (e) => {
+          handleSignout(e);
+        },
+      },
+      text: 'Se déconnecter',
+    };
+  }
+
+  useEffect(() => {
+    setRedirectUrl(window.location.href);
+  }, [pathname]);
 
   return (
     <>
@@ -130,7 +138,7 @@ export default function RNBHeader() {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
-        quickAccessItems={[logQA]}
+        quickAccessItems={[faqQA, logQA]}
       />
     </>
   );
