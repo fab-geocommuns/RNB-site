@@ -40,12 +40,14 @@ export default async function LoginPage() {
 
               <h6>Participer au RNB</h6>
               <p>
-                Le Référentiel National des Bâtiments s'ouvre aux contributions
-                d'une variété d'acteurs publics, privés et citoyens.
+                Le Référentiel National des Bâtiments s&apos;ouvre aux
+                contributions d&apos;une variété d&apos;acteurs publics, privés
+                et citoyens.
               </p>
               <p>
-                Si vous souhaitez participer à l'enrichissement du RNB, vous
-                pouvez demander un accès en remplissant le formulaire suivant.
+                Si vous souhaitez participer à l&apos;enrichissement du RNB,
+                vous pouvez demander un accès en remplissant le formulaire
+                suivant.
               </p>
               <p>
                 <a
