@@ -55,7 +55,7 @@
     key: idrnb
     answer: >
       <p>C’est identifiant unique et <a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne" target="_blank">pérenne</a>  d’un bâtiment du RNB, correspondant à la <a href="https://rnb.beta.gouv.fr/faq#definition" target="_blank">définition du bâtiment</a> retenue par le CNIG.</p>
-   - question: Quelle est la différence entre la maille locale et la maille batiment du RNB ?
+  - question: Quelle est la différence entre la maille locale et la maille batiment du RNB ?
     key: maille
     answer: >
       <p>L’ID-RNB est un identifiant à la maille bâtiment. C’est le maillon, jusqu’à présent manquant mais désormais disponible avec le RNB, entre le maillon adresse (déterminé par la <a href="https://adresse.data.gouv.fr/#4.4/46.9/1.7" target="_blank">Base Adresse Nationale - BAN</a>) et le maillon local (déterminé par l’invariant fiscal de la DGFiP).</p>
