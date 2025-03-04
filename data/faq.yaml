@@ -7,7 +7,7 @@
     key: quoi
     answer: >
       <p>Le Référentiel National des Bâtiments (RNB) a pour vocation de créer <b>un système commun de repérage des bâtiments, à l’échelle nationale.</b></p>
-      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire français</b> (DROM COM inclus) et leur <b>associe un identifiant unique</b>.</p>
+      <p>Pour ce faire, le RNB <b>répertorie l'ensemble des bâtiments du territoire français</b> (DROM COM inclus) et leur <b>associe un identifiant unique, appelé ID-RNB</b>.</p>
       <p>Cet identifiant unique, attribué à chaque bâtiment, permet aux acteurs publics, territoriaux et privés, de réduire les coûts de maintenance, d’optimiser la qualité des données et de rendre les bases interopérables entre elles.</p>
   - question: À quelle problématique répond le RNB ?
     key: problematique
@@ -27,6 +27,13 @@
       <li>un <a href="https://code.gouv.fr/fr/communs/" target="_blank">commun numérique</a> que l’Etat encourage à utiliser</li>
       <li>un chantier prioritaire de la Feuille de route Numérique et Données pour la <a href="https://www.info.gouv.fr/grand-dossier/france-nation-verte/a-proposfeuille-de-route-numerique-donnees" target="_blank">Planification Ecologique</a>, pour consolider les analyses à la maille du logement et du bâtiment</li>
       </ul>
+  - question: Quelle est la différence entre le RNB et la BDNB ?
+    key: bdnb
+    answer: >
+       <p>La <a href="https://bdnb.io/" target="_blank">BDNB</a> éditée par le Centre Scientifique et Technique du Bâtiment (CSTB) est une base composée d'attributs métiers pouvant enrichir vos jeux de données. Ceci, en croisant votre base de donnée avec la BDNB, grâce à l'identifiant pivot qu'est l'ID-RNB.</p>
+       <p>En effet, le RNB et les ID-RNB permettent de simplifier le suivi et le croisement de différents jeux de données bâtimentaires pour les administrations publiques, les collectivités et les acteurs privés. Plus d’acteurs adoptent le RNB, plus les ID-RNB permettront de croiser des informations variées sur les bâtiments, augmentant exponentiellement sa valeur pour tous.</p>
+       <p>Objectif du RNB: mieux suivre et piloter vos actions au regard d’une politique publique ou territoriale.</p>
+       <p>C'est pourquoi, la <a href="https://rnb.beta.gouv.fr/blog/rnb-id-dans-la-bdnb-du-cstb" target="_blank">BDNB a intégré les ID-RNB</a>. C'est également l'une deux bases qui a permis <a href="https://rnb.beta.gouv.fr/faq#donnees" target="_blank">d'initialiser</a> une première version du RNB en 2023.</p>
   - question: À qui s’adresse le Référentiel National des Bâtiments ?
     key: public
     answer: >
@@ -41,9 +48,18 @@
       <p>La construction du Référentiel National des Bâtiments est réalisée en collaboration avec les experts de la donnée géomatique du Conseil National de l’Information Géolocalisée (<a href="https://cnig.gouv.fr/gt-bati-a25939.html" target="_blank">CNIG</a>). </p>
       <p><b>La définition du bâtiment est validée par la Commission des Standards du CNIG</b>, comme suit :</p>
       <p>“Construction souterraine et/ou au-dessus du sol, ayant pour objectif d'être permanente, pour abriter des humains ou des activités humaines. Un bâtiment possède a minima un accès depuis l’extérieur. Dans la mesure du possible, un bâtiment est distinct d’un autre dès lors qu’il est impossible de circuler entre eux.”</p>
-      <p>Cette définition est complétée par une <a href="https://github.com/fab-geocommuns/RNB/blob/main/CNIG/Annexe-Definition-Batiment.md target="_blank">annexe</a>, qui vise à l’étayer et apporter un éclairage aux cas particuliers rencontrés.</p>
+      <p>Cette définition est complétée par une <a href="https://github.com/fab-geocommuns/RNB/blob/main/CNIG/Annexe-Definition-Batiment.md">annexe</a>, qui vise à l’étayer et apporter un éclairage aux cas particuliers rencontrés.</p>
       <p>Vous ne savez pas si votre construction ou structure correspond à la définition du bâtiment ?</p>
-      <p><b>Evaluez si votre construction est un bâtiment</b> dans le <a href="https://rnb.beta.gouv.fr/definition" target="_blank">moteur de recherche</a> et parcourez la liste des cas recensés par le RNB, par mots clés (ex : extension, terrasse, kiosque…) .
+      <p><b>Evaluez si votre construction est un bâtiment</b> dans le <a href="https://rnb.beta.gouv.fr/definition" target="_blank">moteur de recherche</a> et parcourez la liste des cas recensés par le RNB, par mots clés (ex : extension, terrasse, kiosque…).</p>
+  - question: Qu’est-ce qu’un ID-RNB  ? 
+    key: idrnb
+    answer: >
+      <p>C’est identifiant unique et <a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne" target="_blank">pérenne</a>  d’un bâtiment du RNB, correspondant à la <a href="https://rnb.beta.gouv.fr/faq#definition" target="_blank">définition du bâtiment</a> retenue par le CNIG.</p>
+   - question: Quelle est la différence entre la maille locale et la maille batiment du RNB ?
+    key: maille
+    answer: >
+      <p>L’ID-RNB est un identifiant à la maille bâtiment. C’est le maillon, jusqu’à présent manquant mais désormais disponible avec le RNB, entre le maillon adresse (déterminé par la <a href="https://adresse.data.gouv.fr/#4.4/46.9/1.7" target="_blank">Base Adresse Nationale - BAN</a>) et le maillon local (déterminé par l’invariant fiscal de la DGFiP).</p>
+      <p>A terme, il est effectivement prévu d’assurer une interopérabilité avec le RIAL de la DGFiP (maillon local) et le RNB (maille bâtiment), comme le précise la Feuille de route numérique et données de <a href="https://www.info.gouv.fr/grand-dossier/france-nation-verte/a-proposfeuille-de-route-numerique-donnees" target="_blank">France Nation Verte</a> (décembre 2023).</p>
   - question: Qu’est ce qu’un Géocommun ? Le RNB est-il est géocommun ?
     key: geocommun
     answer: >
@@ -62,36 +78,40 @@
       <ul>
       <li><b>les importations, lors de parution de nouveaux millésimes</b> de la BDTOPO et de la BDNB</li>
       <li><b>les flux d’autorisations du droit des sols (ADS)</b> provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
-      <li><b>le traitement des signalements par la communauté</b> (voir <a href="https://rnb.beta.gouv.fr/faq#signalement" target="_blank">Comment réaliser un signalement sur un bâtiment</a>)</li>
+      <li><b>les contributions de la communauté</b>, à savoir <b>les écritures directes dans le RNB</b> réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a>; ainsi que par les <b>signalements reçus</b> par une personne suggérant une modification du contenu du RNB, sans la réaliser lui-même</b></li>
       </ul>
-       <p>Et sera également bientôt réalisée par :</p>
-       <ul>
-       <li>Les écritures directes dans le RNB, notamment par les collectivités gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a>.</li>
-      </ul>
-  - question: Qu’est ce qu'un RNB ID ? Quelles sont ses caractéristiques ?
+  - question: Qu’est ce qu'un ID-RNB ? Quelles sont ses caractéristiques ?
     key: identifiant
     answer: >
-      <p>Le RNB associe à chaque bâtiment du territoire français un identifiant unique.</p>
+      <p>Le RNB associe à chaque bâtiment du territoire français un identifiant unique, appelé ID-RNB.</p>
       <p><b>Véritable donnée pivot</b>, chaque identifiant est composé d’une <b>suite de 12 caractères</b> (chiffres et lettres) répartis en 3 séries de 4 caractères.</p>
       <p>L’identifiant remplit certains critères afin d’être facilement reproduisible par un humain dans un formulaire, tout en évitant les risques de collision (c’est à dire la double attribution d’un même identifiant pour deux bâtiments distincts) : </p>
       <ul>
       <li>Il n’est pas signifiant, ce qui implique qu’il ne contient aucun concept clé (comme par exemple le code INSEE de la commune sur laquelle se situe le bâtiment) : cela permet d’éviter de remettre en cause le caractère définitif de l’identifiant une fois attribué (si la commune venait à fusionner avec une autre par exemple)</li>
       <li>L’identifiant n’est pas sensible à la casse et peut être rédigé indifféremment en minuscules ou en majuscules (il n’est diffusé qu’en majuscule afin d’améliorer la lisibilité par les utilisateurs)</li>
       </ul>
-  - question: Est ce que les RNB ID sont pérennes ?
+  - question: Est ce que les ID-RNB sont pérennes ?
     key: identifiant-perennes
     answer: >
-      <p>Oui, <a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne">les identifiants contenus dans le RNB sont pérennes</a>. Cela signifie qu’ils ne sont jamais sujets à modification et ne sont jamais supprimés. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
+      <p>Oui, <a href="https://rnb.beta.gouv.fr/blog/historisation-des-id-rnb-comment-a-ete-concu-le-rnb-pour-suivre-tracer-et-remonter-jusqua-la-creation-des-identifiants-batiments">les identifiants contenus dans le RNB sont pérennes</a>.</p> 
+      <p>La conception du Référentiel National des Bâtiments (RNB) est pensée pour garantir 3 caractéristiques : <b>l’unicité, la pérennité et la traçabilité des ID-RNB</b>. Ce qui différencie les ID-RNB de tous les autres identifiants bâtimentaires existants jusqu’à présent, dans d’autres bases.</p> 
+      <p>Tout ID-RNB qui a été créé dispose d’un historique, détaillant :</p>
+      <li>les modifications apportées,</li>
+      <li>la date de ces modifications,</li>
+      <li>et la personne ayant apporté la modification.</li>
+      </ul>
+      <p>Les ID-RNB ne sont jamais supprimés. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’ID-RNB (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
   - question: Quelles informations sont associées aux bâtiments du RNB ?
     key: attributs
     answer: >
       <p>Aujourd’hui, chaque bâtiment est représenté par un point cliquable, composé d’une fiche mentionnant :</p>
       <ul>
-      <li>le RNB ID</li>
+      <li>l'ID-RNB</li>
       <li>ses coordonnées géographiques</li>
       <li>le statut du bâtiment</li>
       <li>son ou ses adresses (référencées dans la Base Adresse Nationale <a href="https://adresse.data.gouv.fr/#4.4/46.9/1.7" target="_blank">BAN</a>)</li>
       <li>les identifiants <a href="https://bdnb.io/" target="_blank">BDNB</a> et <a href="https://geoservices.ign.fr/bdtopo" target="_blank">BDTOPO</a> associés</li>
+      <li>les <a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales" target="_blank">parcelles cadastrales</a></li>
       </ul>
       <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 7 : </p>
       <ol>
@@ -103,6 +123,14 @@
       <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
       </ol>
       <p>Ces statuts évoluent selon les informations remontées dans le RNB.</p>
+  - question: Est-ce qu'il est possible de savoir quels bâtiments sont présents sur une parcelle ? Est-ce que le RNB fait le lien entre les ID-RNB et les parcelles cadastrales ?
+    key: parcelles
+    answer: >
+      <p>Oui. Vous pouvez désormais :</p>
+      <ul>
+      <li>Retrouver les parcelles cadastrales et explorer les nouveaux calques sur la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">carte</a> du RNB.</li>
+      <li>Lister les bâtiments présents sur une parcelle cadastrale, grâce aux <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/identification-de-batiment#api-alpha-buildings-plot-plot_id" target="_blank">API du RNB</a>. Exemple : Vous avez besoin de lister des bâtiments qui se trouvent sur la parcelle cadastrale 33522000AT0427 ? L’API du RNB vous permet maintenant de le faire (exemple : <a href="https://rnb-api.beta.gouv.fr/api/alpha/buildings/plot/33522000AT0427/" target="_blank">résultat de la requête</a>). Ce endpoint vous permet d'obtenir une liste paginée des bâtiments présents sur une parcelle cadastrale, ainsi que le taux de recouvrement de la parcelle avec ces bâtiments.</li>
+      </ul>
   - question: Le RNB comporte-t-il des erreurs ?
     key: erreurs
     answer: >
@@ -127,28 +155,29 @@
       answer: >
         <p>Vous pouvez :</p>
         <ol>
-        <li><b>Consulter l'outil cartographique</b>, sur votre navigateur :  rendez-vous sur le site <a href="https://rnb.beta.gouv.fr/" target="_blank">rnb.beta.gouv.fr</a>, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un RNB ID.</li>
+        <li><b>Consulter l'outil cartographique</b>, sur votre navigateur :  rendez-vous sur le site <a href="https://rnb.beta.gouv.fr/" target="_blank">rnb.beta.gouv.fr</a>, cliquez sur l’onglet “<a href="/carte">carte</a>” et tapez une adresse ou un ID-RNB.</li>
         <li><b>Intégrer le RNB au sein de vos logiciels métiers</b> : parcourez la documentation technique pour utiliser :</li>
         <ul>
-        <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a> : Cette API permet d’obtenir l'identifiant RNB pour chacun de vos bâtiments. Vous trouverez trois points d'accès : consultation, listing et identification.</li>
-        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une carte les bâtiments du référentiel et d'afficher leurs identifiants. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID Bâtiment.</li>
+        <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a> : Cette API permet d’obtenir les ID-RNB pour chacun de vos bâtiments. Vous trouverez trois points d'accès : consultation, listing et identification.</li>
+        <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une carte les bâtiments du référentiel et d'afficher leurs ID-RNB. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID-RNB.</li>
         <li>le <a href="https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" target="_blank">sélecteur de bâtiment</a> : Cet exemple de sélecteur de bâtiment du RNB vous montrera comment se servir des différentes briques techniques pour construire un tel sélecteur. Celui-ci permettra à vos utilisateurs d’identifier et de sélectionner un bâtiment sur une carte, au sein même de vos logiciels.</li>
+        <li>l'<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/differentiel-entre-deux-dates" target="_blank">API différentiel entre deux dates</a> : Celle-ci vous permet de lister l'ensemble des modifications apportées au RNB depuis une date données.</li>
         <li>l’ <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads" target="_blank">API ADS</a> : Cette API permet aux instructeurs des Droits du Sol d'ajouter des informations sur un bâtiment existant (ex : Démoli) ou de créer un nouveau bâtiment au sein du RNB.</li>
         </ul>
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
-        <li><b>Alimenter ce géocommun</b> : vous pouvez faire un signalement</li> 
+        <li><b>Alimenter ce géocommun</b> : vous pouvez contribuer au RNB par</li> 
         <ul>
-        <li>directement sur la <a href="https://rnb.beta.gouv.fr/" target="_blank">carte</a> du RNB au sein de la fiche dédiée du bâtiment concerné. Vous pourrez indiquer votre signalement dans le champ “Améliorez le RNB”, avant de l’envoyer</li>
-        <li>ou ouvrir un ticket sur le <a href="https://github.com/fab-geocommuns/RNB-coeur" target="_blank">Github</a> du RNB.</li>
+        <li>les écritures directes dans le RNB réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a></li>
+        <li>les signalements en tant que personne suggérant une modification du contenu du RNB, sans la réaliser par vous même</b></li>
         </ul>
         </ol>
-    - question: Quelles bases contiennent des RNB ID ?
+    - question: Quelles bases contiennent des ID-RNB ?
       key: liste-bases
       answer: >
-        <p>Retrouvez l'ensemble des jeux de données disposant des RNB ID pour enrichir votre propre base de données sur :</p>
+        <p>Retrouvez l'ensemble des jeux de données disposant des ID-RNB pour enrichir votre propre base de données sur :</p>
         <ul>
         <li><a href="https://www.data.gouv.fr/fr/datasets/?tag=rnb" target="_blank">Data.Gouv</a> pour les jeux de données en open data</li>
-        <li>Le <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement" target="_blank">site web</a> du RNB pour les bases connues par le RNB ou ayant déclaré au RNB une intégration des RNB ID</li>
+        <li>Le <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement" target="_blank">site web</a> du RNB pour les bases connues par le RNB ou ayant déclaré au RNB une intégration des ID-RNB</li>
         </ul>
     - question: Le RNB héberge-t-il des données métiers liées aux bâtiments (risques naturels, accès PMR, etc.) ?
       key: attributs-metier
@@ -158,7 +187,7 @@
       key: evolution
       answer: >
         <p>Vous n’avez pas l’obligation de faire évoluer vos jeux de données. Véritable plaque d’immatriculation du bâtiment, le RNB est cependant pensé pour faciliter vos usages et être une passerelle permettant de croiser et d’établir des correspondances entre différentes bases.</p>
-        <p>Exemple : une commune souhaite croiser les données bâtimentaires du service d'information géographique (SIG) avec un jeu de données du service urbanisme. Les services n’ayant pas les mêmes besoins métiers, les bâtiments sont découpés différemment d’une base l’autre. Le RNB servira ici de pivot, grâce à l’intégration des RNB ID dans ces jeux de données ; ceci pour faciliter ensuite les croisements de ces 2 bases.</p>
+        <p>Exemple : une commune souhaite croiser les données bâtimentaires du service d'information géographique (SIG) avec un jeu de données du service urbanisme. Les services n’ayant pas les mêmes besoins métiers, les bâtiments sont découpés différemment d’une base l’autre. Le RNB servira ici de pivot, grâce à l’intégration des ID-RNB dans ces jeux de données ; ceci pour faciliter ensuite les croisements de ces 2 bases.</p>
     - question: Puis-je partager les informations contenues dans le RNB ?
       key: licence
       answer: >
@@ -176,22 +205,51 @@
         <p>Les polygones présents dans le RNB sont la <b>meilleure représentation à notre disposition</b> de la réalité physique du bâtiment. La plupart du temps cette géométrie correspond à un polygone, mais elle peut également être un simple point (coordonnées), lorsque cette dernière n’est pas disponible.</p>
         <p>Objectifs :</p>
         <ol>
-        <li>Le RNB diffuse ces géométries dans le but de rendre plus explicite à quel bâtiment le RNB ID est associé. En effet, la mission première du RNB reste d’attribuer à chaque bâtiment un identifiant unique (RNB-ID). Le RNB associe ainsi à chaque bâtiment une géométrie pour permettre de mieux identifier à quel bâtiment réel est associé un RNB-ID.</li>
+        <li>Le RNB diffuse ces géométries dans le but de rendre plus explicite à quel bâtiment l'ID-RNB est associé. En effet, la mission première du RNB reste d’attribuer à chaque bâtiment un identifiant unique (ID-RNB). Le RNB associe ainsi à chaque bâtiment une géométrie pour permettre de mieux identifier à quel bâtiment réel est associé un ID-RNB.</li>
         <li><b>La géométrie du RNB n'a pas pour objectif d'être la source de vérité quand à la géométrie physique du bâtiment</b>, celle ci variant selon l’objectif métier visé dans l’exploitation du RNB (ex. besoin d’une emprise au sol vs. une emprise au sol projetée vue du ciel). Ceci étant, l’équipe du RNB s’efforce bien sûr à ce qu'elle reflète au mieux la réalité terrain.</li>
-        <li>Le bénéfice reste que grâce à chaque RNB-ID unique et à la géométrie proposée, il est désormais possible de réaliser plus aisément une correspondance avec des géométries proposées par d’autres bases de données (ex. BDTOPO), à nouveau selon les besoins métiers de chacun.</p></li>
+        <li>Le bénéfice reste que grâce à chaque ID-RNB unique et à la géométrie proposée, il est désormais possible de réaliser plus aisément une correspondance avec des géométries proposées par d’autres bases de données (ex. BDTOPO), à nouveau selon les besoins métiers de chacun.</p></li>
         </ol>
         <p>Sources de ces géométries :</p>
         <ul>
         <li>Les polygones proposés proviennent principalement, à ce stade, de la BDNB du CSTB et de la BDTOPO de l’IGN. Toutefois, ces géométries ont subi une harmonisation de système de coordonnées au format WGS 84 (coordonnées GPS), lors de l’import pour assurer l’homogénéité d’unité de toutes les géométries proposées dans le RNB.</li> 
         <li>À terme, le géocommun du RNB intégrant de nouvelles sources de contribution, les polygones pourront également être proposés par les services instructeurs d’une collectivité territoriale, par exemple.</li>
         </ul>
-    
-
 - name: Comment contribuer au RNB ?
   desc: En savoir plus sur les contributions au RNB
   key: contribution
   entries:
-    - question: Comment réaliser un signalement sur un bâtiment ? Comment signaler une erreur dans le RNB ?
+    - question: Qu'est-ce qu'une contribution au RNB ? Que signifie contribuer au RNB ?
+      key: contribuer
+      answer: >
+        <p>Une contribution au RNB de l'action contribuer au RNB, c'est le fait de <b>participer à faire monter en qualité le RNB</b> par :</p>
+        <ul>
+        <li>des <b>éditions dans le RNB</b> de l'action éditer le RNB (en anglais edition / to edit) : Forme de contribution dans laquelle le ou la contributeur·ice apporte directement une modification au contenu du RNB.</li>
+        <li>des <b>signalements dans le RNB</b> de l'action signaler dans le RNB (en anglais report / to report) : Forme de contribution dans laquelle le ou la contributeur·ice propose une modification du contenu du RNB sans la réaliser lui-même ou elle-même. Le signalement doit ensuite être traité par un·e autre contributeur·ice, ensuite pour être traité.</li>
+        <li>des traitements de signalements : Relire un signalement et choisir si la modification proposée doit être acceptée dans le RNB ou au contraire refusée.</li>
+        </ul>
+    - question: Comment éditer dans le RNB ? Comment devenir éditeur·ice pour le RNB ?
+      key: editer
+      answer: >
+         <p>Préalable sur les écritures dans le RNB :</p>
+         <ul>
+         <li>Editeur·ice pour le RNB : Personne ayant des droits d’écriture dans le RNB et apportant des modifications au contenu de la base.</li>
+         <li>Les écritures directes dans le RNB sont réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a></li>
+         </ul>
+         <p>Les fonctionnalités disponibles à l'édition :</p>
+         <ul>
+         <li><b>Créer un nouveau bâtiment</b> qui vient d’être construit ou qui n’était pas présent dans le RNB</li>
+         <li><b>Désactivation d’un ID-RNB</b> (ex. un bâtiment est présent dans le RNB par erreur)</li>
+         <li><b>Changer le statut d’un bâtiment</b> (ex. passer de “construit” à “démoli”)</li>
+         <li><b>Modifier la ou les adresses associées</b> au bâtiment, avec les clés d’interopérabilité BAN</li>
+         <li><b>Fusionner des bâtiments distincts</b> qui n’en sont qu’un seul en réalité (ex. une véranda ayant son propre ID-RNB alors qu’elle est attenante au bâtiment principal)</li>
+         <li><b>Scinder un ID-RNB en plusieurs bâtiments</b> distincts dans la réalité.</li>
+         </ul>
+         <p>Les outils de contribution :</p>
+         <ul>
+         <li>Les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb" target="_blank">API d’écriture dans le RNB</a> sont disponibles<b> ! Vous pouvez les utiliser directement en production ou les tester en staging, en demandant vos accès.</li>
+         <li>Une interface cartographique devrait également être disponible dans les prochaines semaines.</li>
+         </ul>
+    - question: Comment réaliser un signalement au sein du RNB ? Comment signaler une erreur sur un bâtiment du RNB ?
       key: signalement
       answer: >
         <p>Vous constatez une erreur (bâtiment absent ou mal placé, erreur d’adresse, etc) ?</p>
@@ -209,4 +267,10 @@
     - question: Que se passe-t-il pour les identifiants lorsque qu’une modification est apportée au RNB ?
       key: modification
       answer: >
-        <p>Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’identifiant (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
+        <p>La <a href="https://rnb.beta.gouv.fr/blog/historisation-des-id-rnb-comment-a-ete-concu-le-rnb-pour-suivre-tracer-et-remonter-jusqua-la-creation-des-identifiants-batiments" target="_blank">conception du Référentiel National des Bâtiments</a> (RNB) est pensée pour garantir 3 caractéristiques : <b>l’unicité, la pérennité et la traçabilité des ID-RNB</b>. Ce qui différencie les ID-RNB de tous les autres identifiants bâtimentaires existants jusqu’à présent, dans d’autres bases.</p>
+        <p>Tout ID-RNB qui a été créé dispose d’un historique, détaillant :</p>
+        <li>les modifications apportées,</li>
+        <li>la date de ces modifications,</li>
+        <li>et la personne ayant apporté la modification.</li>
+        </ul>
+        <p>Les ID-RNB ne sont jamais supprimés. Lorsqu’une modification apportée à un bâtiment nécessite une création ou un changement d’ID-RNB (fusion, scission, etc.), l’ancien identifiant n’est pas modifié. Sa trace est conservée dans l’historique de la base, où un lien avec les nouveaux identifiants est établi.</p>
