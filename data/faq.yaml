@@ -54,7 +54,7 @@
   - question: Qu’est-ce qu’un ID-RNB  ? 
     key: idrnb
     answer: >
-      <p>C’est identifiant unique et <a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne" target="_blank">pérenne</a>  d’un bâtiment du RNB, correspondant à la <a href="https://rnb.beta.gouv.fr/faq#definition" target="_blank">définition du bâtiment</a> retenue par le CNIG.</p>
+      <p>C’est l'identifiant unique et <a href="https://rnb.beta.gouv.fr/blog/identifiant-batiment-perenne" target="_blank">pérenne</a>  d’un bâtiment du RNB, correspondant à la <a href="https://rnb.beta.gouv.fr/faq#definition" target="_blank">définition du bâtiment</a> retenue par le CNIG.</p>
   - question: Quelle est la différence entre la maille locale et la maille batiment du RNB ?
     key: maille
     answer: >
@@ -78,7 +78,7 @@
       <ul>
       <li><b>les importations, lors de parution de nouveaux millésimes</b> de la BDTOPO et de la BDNB</li>
       <li><b>les flux d’autorisations du droit des sols (ADS)</b> provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
-      <li><b>les contributions de la communauté</b>, à savoir <b>les écritures directes dans le RNB</b> réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a>; ainsi que par les <b>signalements reçus</b> par une personne suggérant une modification du contenu du RNB, sans la réaliser lui-même</b></li>
+      <li><b>les <a href="https://rnb.beta.gouv.fr/faq#contribuer" target="_blank">contributions</a> de la communauté</b>, à savoir <b>les écritures directes dans le RNB</b> réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a>; ainsi que par les <b>signalements reçus</b> par une personne suggérant une modification du contenu du RNB, sans la réaliser par elle-même</b></li>
       </ul>
   - question: Qu’est ce qu'un ID-RNB ? Quelles sont ses caractéristiques ?
     key: identifiant
@@ -113,7 +113,7 @@
       <li>les identifiants <a href="https://bdnb.io/" target="_blank">BDNB</a> et <a href="https://geoservices.ign.fr/bdtopo" target="_blank">BDTOPO</a> associés</li>
       <li>les <a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales" target="_blank">parcelles cadastrales</a></li>
       </ul>
-      <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 7 : </p>
+      <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 6 : </p>
       <ol>
       <li>En projet</li>
       <li>Projet annulé</li>
@@ -167,7 +167,7 @@
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
         <li><b>Alimenter ce géocommun</b> : vous pouvez contribuer au RNB par</li> 
         <ul>
-        <li>les écritures directes dans le RNB réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a></li>
+        <li>les <a href="https://rnb.beta.gouv.fr/faq#editer" target="_blank">écritures directes dans le RNB</a> réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a></li>
         <li>les signalements en tant que personne suggérant une modification du contenu du RNB, sans la réaliser par vous même</b></li>
         </ul>
         </ol>
@@ -246,7 +246,7 @@
          </ul>
          <p>Les outils de contribution :</p>
          <ul>
-         <li>Les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb" target="_blank">API d’écriture dans le RNB</a> sont disponibles<b> ! Vous pouvez les utiliser directement en production ou les tester en staging, en demandant vos accès.</li>
+         <li>Les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb" target="_blank">API d’écriture dans le RNB</a> sont disponibles ! Vous pouvez les utiliser directement en production ou les tester en staging, en demandant vos accès.</li>
          <li>Une interface cartographique devrait également être disponible dans les prochaines semaines.</li>
          </ul>
     - question: Comment réaliser un signalement au sein du RNB ? Comment signaler une erreur sur un bâtiment du RNB ?
