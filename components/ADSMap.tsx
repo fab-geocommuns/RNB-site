@@ -14,7 +14,7 @@ import styles from './ADSMap.module.css';
 import { fr } from '@codegouvfr/react-dsfr';
 
 // Map Tools
-import vector from '@/components/map/mapstyles/vector.json';
+import vector from '@/components/map/mapstyles/vector-osm.json';
 import satellitle from '@/components/map/mapstyles/satellite.json';
 
 // Auth
@@ -35,7 +35,7 @@ export default function ADSMap() {
 
   const [mapCtx, setMapCtx] = useContext(MapContext);
 
-  const default_style = 'vector';
+  const default_style = 'vectorIgn';
   const STYLES = {
     vector: {
       name: 'Plan',
