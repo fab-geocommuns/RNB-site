@@ -37,8 +37,9 @@ export default function AddressSearchMap() {
   const handleKeyDown = async (e) => {
     setAutocompleteActive(true);
     dispatch(Actions.map.setAddressSearchUnknownRNBId(false));
+
+    // If the query is a RNB ID we bypass the address search
     if (e.key === 'Enter' && queryIsRnbId(query)) {
-      // special case, if the query is a RNB ID we bypass the address search
       const building = (await dispatch(
         Actions.map.selectBuilding(query),
       )) as any;
@@ -51,9 +52,24 @@ export default function AddressSearchMap() {
           }),
         );
       }
-    } else {
-      setKeyDown(e);
+      return;
     }
+
+    // If the query is coordinates we bypass the address search as well and focus the area
+    if (e.key === 'Enter' && queryIsCoordinates(query)) {
+      const coordinates = query.split(',');
+
+      dispatch(
+        Actions.map.setMoveTo({
+          lat: parseFloat(coordinates[0]),
+          lng: parseFloat(coordinates[1]),
+          zoom: 20,
+        }),
+      );
+      return;
+    }
+
+    setKeyDown(e);
   };
 
   const queryIsRnbId = (q: string) => {
