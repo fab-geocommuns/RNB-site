@@ -25,6 +25,11 @@ export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x
 
 // Buildings layers : point:
 export const LAYER_BDGS_POINT = 'bdgs_point';
+export const LAYER_BDGS_POINT_SHAPE_FILL = 'bdgs_bdgs_point_shape_fill';
+export const LAYERS_BDGS_POINT_ALL = [
+  LAYER_BDGS_POINT,
+  LAYER_BDGS_POINT_SHAPE_FILL,
+];
 
 // Buildings layers : shapes
 export const LAYER_BDGS_SHAPE_BORDER = 'bdgs_shape';
@@ -253,7 +258,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     // Shape for IGN background
     if (layers.background === 'vectorIgn') {
       map.addLayer({
-        id: LAYER_BDGS_SHAPE_BORDER,
+        id: LAYER_BDGS_POINT_SHAPE_FILL,
         type: 'fill',
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
@@ -353,9 +358,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   };
 
   const removeBuildingsPoints = (map: maplibregl.Map) => {
-    if (map.getLayer(LAYER_BDGS_POINT)) {
-      map.removeLayer(LAYER_BDGS_POINT);
-    }
+    LAYERS_BDGS_POINT_ALL.forEach((l) => {
+      if (map.getLayer(l)) {
+        map.removeLayer(l);
+      }
+    });
     removeBuildingsSource(map);
   };
 
