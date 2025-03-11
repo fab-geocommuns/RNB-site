@@ -25,9 +25,11 @@ export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x
 
 // Buildings layers : point:
 export const LAYER_BDGS_POINT = 'bdgs_point';
+export const LAYER_BDGS_POINT_SHAPE_BORDER = 'bdgs_bdgs_point_shape_border';
 export const LAYER_BDGS_POINT_SHAPE_FILL = 'bdgs_bdgs_point_shape_fill';
 export const LAYERS_BDGS_POINT_ALL = [
   LAYER_BDGS_POINT,
+  LAYER_BDGS_POINT_SHAPE_BORDER,
   LAYER_BDGS_POINT_SHAPE_FILL,
 ];
 
@@ -265,6 +267,24 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         paint: {
           'fill-color': 'black',
           'fill-opacity': 0.1,
+        },
+      });
+
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_BORDER,
+        type: 'line',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        paint: {
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'in_panel'], false],
+            '#31e060',
+            ['>', ['get', 'contributions'], 0],
+            CONTRIBUTIONS_COLOR,
+            '#00000033',
+          ],
+          'line-width': 1.5,
         },
       });
     }
