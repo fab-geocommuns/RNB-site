@@ -284,7 +284,12 @@ export const useMapLayers = (map?: maplibregl.Map) => {
             CONTRIBUTIONS_COLOR,
             '#00000033',
           ],
-          'line-width': 1.5,
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'in_panel'], false],
+            3,
+            1.5,
+          ],
         },
       });
     }
