@@ -35,7 +35,7 @@ export default function ADSMap() {
 
   const [mapCtx, setMapCtx] = useContext(MapContext);
 
-  const default_style = 'vectorIgn';
+  const default_style = 'vectorIgnStandard';
   const STYLES = {
     vector: {
       name: 'Plan',

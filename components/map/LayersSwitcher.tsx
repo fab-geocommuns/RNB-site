@@ -99,12 +99,12 @@ export default function LayersSwitcher() {
                     <a
                       href="#"
                       className={
-                        mapLayers.background === 'vectorIgn'
+                        mapLayers.background === 'vectorIgnStandard'
                           ? styles.active
                           : ''
                       }
                       onClick={(e) =>
-                        handleChangeBackgroundClick(e, 'vectorIgn')
+                        handleChangeBackgroundClick(e, 'vectorIgnStandard')
                       }
                     >
                       <div className={styles.choiceImageShell}>
@@ -115,7 +115,34 @@ export default function LayersSwitcher() {
                         />
                       </div>
 
-                      <span className={styles.choiceLabel}>Plan (IGN)</span>
+                      <span className={styles.choiceLabel}>
+                        Plan (IGN standard)
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className={
+                        mapLayers.background === 'vectorIgnDesature'
+                          ? styles.active
+                          : ''
+                      }
+                      onClick={(e) =>
+                        handleChangeBackgroundClick(e, 'vectorIgnDesature')
+                      }
+                    >
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={backgroundPlan}
+                          alt="Plan"
+                          className={styles.choiceImage}
+                        />
+                      </div>
+
+                      <span className={styles.choiceLabel}>
+                        Plan (IGN désaturé)
+                      </span>
                     </a>
                   </li>
                   <li>
