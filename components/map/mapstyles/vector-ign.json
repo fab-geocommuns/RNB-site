@@ -19,7 +19,7 @@
   "zoom": 5,
   "sources": {
     "plan_ign": {
-      "type": "vector",
+      "type": "overlay",
       "tiles": ["https://data.geopf.fr/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf"]
     }
   },
