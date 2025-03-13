@@ -99,6 +99,7 @@
   image: tunnel.png
 
 - id: construction-provisoire
+  description: <a href="#construction-provisoire">voir les explications.</a>
   title: Construction provisoire
   image: construction-provisoire.jpeg
   distinctionBetweenSingleAndMultipleText: Au vu des critères donnés par la définition, le caractère permanent pourra être évalué par chaque contributeur. Par exemple, une construction provisoire érigée pour une durée excédant une durée réglementaire (qui peut varier selon les cas) et qui est solidement fixés au sol, est considérée comme un bâtiment.
