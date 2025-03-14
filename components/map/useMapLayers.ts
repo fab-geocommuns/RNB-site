@@ -262,9 +262,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       },
     });
 
-    // Shape for IGN background
+    // Shape for vector background
     if (
-      ['vectorIgnStandard', 'vectorIgnDesature'].includes(layers.background)
+      ['vectorIgnStandard', 'vectorIgnDesature', 'vectorOsm'].includes(
+        layers.background,
+      )
     ) {
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_FILL,
