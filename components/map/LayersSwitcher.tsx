@@ -124,31 +124,6 @@ export default function LayersSwitcher() {
                     <a
                       href="#"
                       className={
-                        mapLayers.background === 'vectorIgnDesature'
-                          ? styles.active
-                          : ''
-                      }
-                      onClick={(e) =>
-                        handleChangeBackgroundClick(e, 'vectorIgnDesature')
-                      }
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={backgroundPlan}
-                          alt="Plan"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-
-                      <span className={styles.choiceLabel}>
-                        Plan (IGN désaturé)
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className={
                         mapLayers.background === 'vectorOsm'
                           ? styles.active
                           : ''
