@@ -10,7 +10,8 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import backgroundSatellite from '@/public/images/map/switch-bckg-sat.jpg';
-import backgroundPlan from '@/public/images/map/switch-bckg-plan.jpg';
+import backgroundPlanIGN from '@/public/images/map/switch-bckg-plan-ign.png';
+import backgroundPlanOSM from '@/public/images/map/switch-bckg-plan-osm.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
@@ -109,7 +110,7 @@ export default function LayersSwitcher() {
                     >
                       <div className={styles.choiceImageShell}>
                         <ImageNext
-                          src={backgroundPlan}
+                          src={backgroundPlanIGN}
                           alt="Plan"
                           className={styles.choiceImage}
                         />
@@ -134,7 +135,7 @@ export default function LayersSwitcher() {
                     >
                       <div className={styles.choiceImageShell}>
                         <ImageNext
-                          src={backgroundPlan}
+                          src={backgroundPlanOSM}
                           alt="Plan"
                           className={styles.choiceImage}
                         />
