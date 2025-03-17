@@ -88,55 +88,7 @@ export default async function Page() {
                 <BuildingList buildingList={buildingList} />
               </div>
               <BuildingDistinctions buildingList={buildingList} />
-              <div className="fr-col-12 fr-col-md-8">
-                <div className="block block--pink block--fill">
-                  <h3 className="block__title">
-                    {' '}
-                    Identifiant RNB, la plaque d’immatriculation à vie du
-                    bâtiment
-                  </h3>
 
-                  <p>
-                    Le parc bâtimentaire français est en constante évolution. En
-                    permanence, des bâtiments sont construits, d’autres sont
-                    détruits. C’est pourquoi, pour disposer d’une vision commune
-                    du parc bâti en France, le Référentiel National des
-                    Bâtiments (RNB) porte une promesse forte : celle de{' '}
-                    <strong>
-                      diffuser des identifiants bâtimentaires pérennes
-                    </strong>
-                    .
-                  </p>
-                  <p>
-                    Grâce aux identifiants pérennes vous pouvez, dès à présent,
-                    identifier des bâtiments et stocker leurs identifiants RNB.
-                    Si le contenu du RNB est en évolution constante, ses
-                    identifiants sont pensés pour être{' '}
-                    <strong>
-                      le moyen le plus simple et le plus fiable de désigner un
-                      bâtiment en France
-                    </strong>
-                    , aujourd’hui comme à l’avenir.
-                  </p>
-                  <div>
-                    <b>Pour en savoir plus : </b>
-                  </div>
-                  <ul>
-                    <li>
-                      <a href="/a-propos">A propos du RNB</a>
-                    </li>
-
-                    <li>
-                      <a href="/faq">Foire aux questions</a>
-                    </li>
-                    <li>
-                      <a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment">
-                        Les propriétés d&apos;un bâtiment RNB
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
               <div className="fr-col-12 fr-col-md-8">
                 <div className="block block--yellow block--fill">
                   <h3 className="block__title">
