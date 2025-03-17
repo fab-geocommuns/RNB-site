@@ -314,10 +314,10 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       paint: {
         'fill-color': [
           'case',
-          ['boolean', ['feature-state', 'hovered'], false],
-          '#132353',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
+          ['boolean', ['feature-state', 'hovered'], false],
+          '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
           '#1452e3',
@@ -335,10 +335,10 @@ export const useMapLayers = (map?: maplibregl.Map) => {
       paint: {
         'line-color': [
           'case',
-          ['boolean', ['feature-state', 'hovered'], false],
-          '#132353',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
+          ['boolean', ['feature-state', 'hovered'], false],
+          '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
           '#1452e3',
