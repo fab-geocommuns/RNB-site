@@ -51,7 +51,6 @@ export type MapLayers = {
 export type MapBackgroundLayer =
   | 'satellite'
   | 'vectorOsm'
-  | 'vectorIgnDesature'
   | 'vectorIgnStandard';
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';

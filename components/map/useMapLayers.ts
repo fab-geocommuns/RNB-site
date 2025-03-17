@@ -1,6 +1,5 @@
 // Background styles
 import vectorOsm from '@/components/map/mapstyles/vector-osm.json';
-import vectorIgnDesature from '@/components/map/mapstyles/vector-ign-desature.json';
 import vectorIgnStandard from '@/components/map/mapstyles/vector-ign-standard.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
@@ -71,10 +70,6 @@ export const STYLES = {
     name: 'OSM',
     style: vectorOsm as StyleSpecification,
   },
-  vectorIgnDesature: {
-    name: 'IGN Désaturé',
-    style: vectorIgnDesature as StyleSpecification,
-  },
   vectorIgnStandard: {
     name: 'IGN standard',
     style: vectorIgnStandard as StyleSpecification,
@@ -85,7 +80,11 @@ export const STYLES = {
   },
 };
 
-export const DEFAULT_STYLE = STYLES.vectorIgnStandard.style;
+export const DEFAULT_STYLE =
+  STYLES[
+    (process.env.FOND_DE_CARTE_PAR_DEFAUT as keyof typeof STYLES) ||
+      'vectorIgnStandard'
+  ].style;
 
 /**
  * Ajout et gestion des couches de la carte
@@ -263,11 +262,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
 
     // Shape for vector background
-    if (
-      ['vectorIgnStandard', 'vectorIgnDesature', 'vectorOsm'].includes(
-        layers.background,
-      )
-    ) {
+    if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_FILL,
         type: 'fill',
