@@ -221,7 +221,7 @@
   distinctionBetweenSingleAndMultipleText: Une annexe contiguë et son bâtiment principal sont un seul et même bâtiment si l’on peut circuler de l’un à l’autre et n’existe pas de délimitation non franchissable.
 
 - id: extension-sans-entree
-  title: Une extension sans accès depuis l'extérieur. 
+  title: Une extension sans accès depuis l'extérieur.
   description: <a href="#extension-sans-entree">voir les explications.</a>
   isBuilding: fasle
   image: extension-sans-entree.jpeg
@@ -229,7 +229,7 @@
 
 - id: immeuble-logements
   title: Immeuble ayant plusieurs logements (et parfois plusieurs entrées )
-  description: <a href="#Immeuble ayant plusieurs logements">voir les explications.</a>
+  description: <a href="#immeuble-logements">voir les explications.</a>
   isBuilding: true
   image: immeuble-logements.jpeg
   distinctionBetweenSingleAndMultipleText: Il est à considérer comme un seul bâtiment s'il ne possède qu'une entrée ou si les espaces communs permettent de passer d’une entrée à l’autre (il n’existe ainsi donc pas de séparation non franchissable de l’un à l’autre, c’est bien un unique bâtiment).
@@ -286,5 +286,3 @@
   isBuilding: true
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, a priori, on décompte bien deux bâtiments distincts. Il suffit alors de rattacher la passerelle à un des deux bâtiments.
-
-
