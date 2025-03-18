@@ -1,5 +1,6 @@
 // Background styles
-import vector from '@/components/map/mapstyles/vector.json';
+import vectorOsm from '@/components/map/mapstyles/vector-osm.json';
+import vectorIgnStandard from '@/components/map/mapstyles/vector-ign-standard.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
 
 // Maplibre styles
@@ -17,12 +18,20 @@ import { RootState } from '@/stores/store';
 // BUILDINGS
 
 // Buildings source
-export const SRC_BDGS = 'bdgtiles';
+export const SRC_BDGS_POINTS = 'bdgtiles_points';
+export const SRC_BDGS_SHAPES = 'bdgtiles_shapes';
 export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf`;
 export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf`;
 
 // Buildings layers : point:
 export const LAYER_BDGS_POINT = 'bdgs_point';
+export const LAYER_BDGS_POINT_SHAPE_BORDER = 'bdgs_bdgs_point_shape_border';
+export const LAYER_BDGS_POINT_SHAPE_FILL = 'bdgs_bdgs_point_shape_fill';
+export const LAYERS_BDGS_POINT_ALL = [
+  LAYER_BDGS_POINT,
+  LAYER_BDGS_POINT_SHAPE_BORDER,
+  LAYER_BDGS_POINT_SHAPE_FILL,
+];
 
 // Buildings layers : shapes
 export const LAYER_BDGS_SHAPE_BORDER = 'bdgs_shape';
@@ -57,18 +66,25 @@ export const SRC_PLOTS = 'plotstiles';
 import { getADSOperationIcons } from '@/logic/ads';
 
 export const STYLES = {
-  vector: {
-    name: 'Plan',
-    style: vector as StyleSpecification,
+  vectorOsm: {
+    name: 'OSM',
+    style: vectorOsm as StyleSpecification,
   },
-
+  vectorIgnStandard: {
+    name: 'IGN standard',
+    style: vectorIgnStandard as StyleSpecification,
+  },
   satellite: {
     name: 'Satellite',
     style: satellite as StyleSpecification,
   },
 };
 
-export const DEFAULT_STYLE = STYLES.vector.style;
+export const DEFAULT_STYLE =
+  STYLES[
+    (process.env.FOND_DE_CARTE_PAR_DEFAUT as keyof typeof STYLES) ||
+      'vectorIgnStandard'
+  ].style;
 
 /**
  * Ajout et gestion des couches de la carte
@@ -78,7 +94,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
 
-  const installAll = (map) => {
+  const installAll = (map: maplibregl.Map) => {
     installBuildings(map);
     installADS(map);
 
@@ -176,7 +192,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   ///////////////////////////////////
   ///////////////////////////////////
   // Buildings
-  const installBuildings = (map) => {
+  const installBuildings = (map: maplibregl.Map) => {
     // First, we remove buildings layers and source
     removeBuildings(map);
 
@@ -185,26 +201,25 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     installBuildingsLayers(map);
   };
 
-  const installBuildingsSource = (map) => {
-    let tilesUrl = undefined;
-
-    if (layers.buildings == 'point') {
-      tilesUrl = SRC_BDGS_POINTS_URL;
-    }
-    if (layers.buildings == 'polygon') {
-      tilesUrl = SRC_BDGS_SHAPES_URL;
-    }
-
-    map.addSource(SRC_BDGS, {
+  const installBuildingsSource = (map: maplibregl.Map) => {
+    map.addSource(SRC_BDGS_POINTS, {
       type: 'vector',
-      tiles: [tilesUrl],
+      tiles: [SRC_BDGS_POINTS_URL],
+      minzoom: 16,
+      maxzoom: 22,
+      promoteId: 'rnb_id',
+    });
+
+    map.addSource(SRC_BDGS_SHAPES, {
+      type: 'vector',
+      tiles: [SRC_BDGS_SHAPES_URL],
       minzoom: 16,
       maxzoom: 22,
       promoteId: 'rnb_id',
     });
   };
 
-  const installBuildingsLayers = (map) => {
+  const installBuildingsLayers = (map: maplibregl.Map) => {
     if (layers.buildings == 'point') {
       installBuildingsPointsLayers(map);
     }
@@ -213,11 +228,11 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     }
   };
 
-  const installBuildingsPointsLayers = (map) => {
+  const installBuildingsPointsLayers = (map: maplibregl.Map) => {
     map.addLayer({
       id: LAYER_BDGS_POINT,
       type: 'circle',
-      source: SRC_BDGS,
+      source: SRC_BDGS_POINTS,
       'source-layer': 'default',
       paint: {
         'circle-radius': [
@@ -245,22 +260,59 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         ],
       },
     });
+
+    // Shape for vector background
+    if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_FILL,
+        type: 'fill',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        paint: {
+          'fill-color': 'black',
+          'fill-opacity': 0.1,
+        },
+      });
+
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_BORDER,
+        type: 'line',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        paint: {
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'in_panel'], false],
+            '#31e060',
+            ['>', ['get', 'contributions'], 0],
+            CONTRIBUTIONS_COLOR,
+            '#00000033',
+          ],
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'in_panel'], false],
+            3,
+            1.5,
+          ],
+        },
+      });
+    }
   };
 
-  const installBuildingsShapesLayers = (map) => {
+  const installBuildingsShapesLayers = (map: maplibregl.Map) => {
     // Polygon border
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
       type: 'fill',
-      source: SRC_BDGS,
+      source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
       paint: {
         'fill-color': [
           'case',
-          ['boolean', ['feature-state', 'hovered'], false],
-          '#132353',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
+          ['boolean', ['feature-state', 'hovered'], false],
+          '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
           '#1452e3',
@@ -273,15 +325,15 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     map.addLayer({
       id: LAYER_BDGS_SHAPE_FILL,
       type: 'line',
-      source: SRC_BDGS,
+      source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
       paint: {
         'line-color': [
           'case',
-          ['boolean', ['feature-state', 'hovered'], false],
-          '#132353',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
+          ['boolean', ['feature-state', 'hovered'], false],
+          '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
           '#1452e3',
@@ -294,7 +346,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     map.addLayer({
       id: LAYER_BDGS_SHAPE_POINT,
       type: 'circle',
-      source: SRC_BDGS,
+      source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
       filter: ['==', '$type', 'Point'],
       paint: {
@@ -325,7 +377,7 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     });
   };
 
-  const removeBuildings = (map) => {
+  const removeBuildings = (map: maplibregl.Map) => {
     if (layers.buildings == 'point') {
       removeBuildingsPoints(map);
     }
@@ -334,14 +386,16 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     }
   };
 
-  const removeBuildingsPoints = (map) => {
-    if (map.getLayer(LAYER_BDGS_POINT)) {
-      map.removeLayer(LAYER_BDGS_POINT);
-    }
+  const removeBuildingsPoints = (map: maplibregl.Map) => {
+    LAYERS_BDGS_POINT_ALL.forEach((l) => {
+      if (map.getLayer(l)) {
+        map.removeLayer(l);
+      }
+    });
     removeBuildingsSource(map);
   };
 
-  const removeBuildingsShapes = (map) => {
+  const removeBuildingsShapes = (map: maplibregl.Map) => {
     LAYERS_BDGS_SHAPE_ALL.forEach((l) => {
       if (map.getLayer(l)) {
         map.removeLayer(l);
@@ -350,9 +404,12 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     removeBuildingsSource(map);
   };
 
-  const removeBuildingsSource = (map) => {
-    if (map.getSource(SRC_BDGS)) {
-      map.removeSource(SRC_BDGS);
+  const removeBuildingsSource = (map: maplibregl.Map) => {
+    if (map.getSource(SRC_BDGS_POINTS)) {
+      map.removeSource(SRC_BDGS_POINTS);
+    }
+    if (map.getSource(SRC_BDGS_SHAPES)) {
+      map.removeSource(SRC_BDGS_SHAPES);
     }
   };
 

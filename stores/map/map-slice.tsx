@@ -48,7 +48,10 @@ export type MapLayers = {
   extraLayers: MapExtraLayer[];
 };
 
-export type MapBackgroundLayer = 'satellite' | 'vector';
+export type MapBackgroundLayer =
+  | 'satellite'
+  | 'vectorOsm'
+  | 'vectorIgnStandard';
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 
@@ -78,7 +81,7 @@ const initialState: MapStore = {
     unknown_rnb_id: false,
   },
   layers: {
-    background: 'vector',
+    background: 'vectorIgnStandard',
     buildings: 'point',
     extraLayers: ['ads'],
   },

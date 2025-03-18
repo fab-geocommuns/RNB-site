@@ -48,10 +48,6 @@
       "type": "vector",
       "url": "https://openmaptiles.geo.data.gouv.fr/data/france-vector.json"
     },
-    "cadastre": {
-      "type": "vector",
-      "url": "https://openmaptiles.geo.data.gouv.fr/data/cadastre.json"
-    },
     "decoupage-administratif": {
       "type": "vector",
       "url": "https://openmaptiles.geo.data.gouv.fr/data/decoupage-administratif.json"
@@ -2700,16 +2696,6 @@
         "text-color": "#765",
         "text-halo-blur": 0.5,
         "text-halo-width": 1
-      }
-    },
-    {
-      "id": "batiments-fill",
-      "type": "fill",
-      "source": "cadastre",
-      "source-layer": "batiments",
-      "minzoom": 16,
-      "paint": {
-        "fill-opacity": 0.1
       }
     },
     {

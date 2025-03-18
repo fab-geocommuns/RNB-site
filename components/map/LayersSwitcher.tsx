@@ -10,7 +10,8 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import backgroundSatellite from '@/public/images/map/switch-bckg-sat.jpg';
-import backgroundPlan from '@/public/images/map/switch-bckg-plan.jpg';
+import backgroundPlanIGN from '@/public/images/map/switch-bckg-plan-ign.png';
+import backgroundPlanOSM from '@/public/images/map/switch-bckg-plan-osm.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
@@ -60,15 +61,16 @@ export default function LayersSwitcher() {
   };
 
   // Switch background image
-  const [btnImage, setBtnImage] = useState(backgroundSatellite);
+  const [btnImage, setBtnImage] = useState(backgroundPlanIGN);
 
   useEffect(() => {
+    console.log(mapLayers.background);
     switch (mapLayers.background) {
-      case 'vector':
-        setBtnImage(backgroundSatellite);
+      case 'vectorIgnStandard':
+        setBtnImage(backgroundPlanIGN);
         break;
-      case 'satellite':
-        setBtnImage(backgroundPlan);
+      case 'vectorOsm':
+        setBtnImage(backgroundPlanOSM);
         break;
       default:
         setBtnImage(backgroundSatellite);
@@ -99,19 +101,46 @@ export default function LayersSwitcher() {
                     <a
                       href="#"
                       className={
-                        mapLayers.background === 'vector' ? styles.active : ''
+                        mapLayers.background === 'vectorIgnStandard'
+                          ? styles.active
+                          : ''
                       }
-                      onClick={(e) => handleChangeBackgroundClick(e, 'vector')}
+                      onClick={(e) =>
+                        handleChangeBackgroundClick(e, 'vectorIgnStandard')
+                      }
                     >
                       <div className={styles.choiceImageShell}>
                         <ImageNext
-                          src={backgroundPlan}
+                          src={backgroundPlanIGN}
                           alt="Plan"
                           className={styles.choiceImage}
                         />
                       </div>
 
-                      <span className={styles.choiceLabel}>Plan</span>
+                      <span className={styles.choiceLabel}>Plan (IGN)</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className={
+                        mapLayers.background === 'vectorOsm'
+                          ? styles.active
+                          : ''
+                      }
+                      onClick={(e) =>
+                        handleChangeBackgroundClick(e, 'vectorOsm')
+                      }
+                    >
+                      <div className={styles.choiceImageShell}>
+                        <ImageNext
+                          src={backgroundPlanOSM}
+                          alt="Plan"
+                          className={styles.choiceImage}
+                        />
+                      </div>
+
+                      <span className={styles.choiceLabel}>Plan (OSM)</span>
                     </a>
                   </li>
                   <li>
