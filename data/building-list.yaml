@@ -166,11 +166,13 @@
 
 - id: ecole-universite-recherche
   title: Ecole, université ou bâtiment dédié à la recherche
+  description: Ce type de bâtiment fait partie des grands ensembles, <a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: ecole-universite-recherche.png
 
 - id: hopital-etablissement-sante
   title: Hôpital et établissement de santé
+  description: Les hôpitaux font partie des grands ensembles,<a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: hopital-etablissement-sante.png
 
@@ -286,3 +288,10 @@
   isBuilding: true
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, a priori, on décompte bien deux bâtiments distincts. Il suffit alors de rattacher la passerelle à un des deux bâtiments.
+
+  - id: grand-ensemble
+  title: Grand ensemble
+  description: <a href="#grand-ensemble">voir les explications.</a>
+  isBuilding: true
+  image: grand-ensemble.png
+  distinctionBetweenSingleAndMultipleText: Si le découpage de ces ensembles correspond à un usage largement ancré et diffère de la définition du RNB sur l’aspect de la circulation, alors c’est l’usage qui prime. Par exemple, le découpage d’une construction hospitalière par ailes ou secteurs peut produire plusieurs bâtiments, même s’il est possible de circuler entre eux.
