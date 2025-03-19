@@ -229,6 +229,43 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   };
 
   const installBuildingsPointsLayers = (map: maplibregl.Map) => {
+    // Shape for vector background
+    if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_FILL,
+        type: 'fill',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        paint: {
+          'fill-color': '#cccccc',
+          'fill-opacity': 1,
+        },
+      });
+
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_BORDER,
+        type: 'line',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        paint: {
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'in_panel'], false],
+            '#31e060',
+            ['>', ['get', 'contributions'], 0],
+            CONTRIBUTIONS_COLOR,
+            '#00000033',
+          ],
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'in_panel'], false],
+            3,
+            1.5,
+          ],
+        },
+      });
+    }
+
     map.addLayer({
       id: LAYER_BDGS_POINT,
       type: 'circle',
@@ -260,43 +297,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         ],
       },
     });
-
-    // Shape for vector background
-    if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
-      map.addLayer({
-        id: LAYER_BDGS_POINT_SHAPE_FILL,
-        type: 'fill',
-        source: SRC_BDGS_SHAPES,
-        'source-layer': 'default',
-        paint: {
-          'fill-color': 'black',
-          'fill-opacity': 0.1,
-        },
-      });
-
-      map.addLayer({
-        id: LAYER_BDGS_POINT_SHAPE_BORDER,
-        type: 'line',
-        source: SRC_BDGS_SHAPES,
-        'source-layer': 'default',
-        paint: {
-          'line-color': [
-            'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
-            '#31e060',
-            ['>', ['get', 'contributions'], 0],
-            CONTRIBUTIONS_COLOR,
-            '#00000033',
-          ],
-          'line-width': [
-            'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
-            3,
-            1.5,
-          ],
-        },
-      });
-    }
   };
 
   const installBuildingsShapesLayers = (map: maplibregl.Map) => {
