@@ -229,6 +229,38 @@ export const useMapLayers = (map?: maplibregl.Map) => {
   };
 
   const installBuildingsPointsLayers = (map: maplibregl.Map) => {
+    map.addLayer({
+      id: LAYER_BDGS_POINT,
+      type: 'circle',
+      source: SRC_BDGS_POINTS,
+      'source-layer': 'default',
+      paint: {
+        'circle-radius': [
+          'case',
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
+          6,
+          5,
+        ],
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#ffffff',
+          ['>', ['get', 'contributions'], 0],
+          '#fef4f4',
+          '#ffffff',
+        ],
+        'circle-stroke-width': 3,
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#31e060',
+          ['>', ['get', 'contributions'], 0],
+          CONTRIBUTIONS_COLOR,
+          '#1452e3',
+        ],
+      },
+    });
+
     // Shape for vector background
     if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
       map.addLayer({
@@ -237,8 +269,8 @@ export const useMapLayers = (map?: maplibregl.Map) => {
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
         paint: {
-          'fill-color': '#cccccc',
-          'fill-opacity': 1,
+          'fill-color': 'black',
+          'fill-opacity': 0.1,
         },
       });
 
@@ -261,38 +293,6 @@ export const useMapLayers = (map?: maplibregl.Map) => {
             ['boolean', ['feature-state', 'in_panel'], false],
             3,
             1.5,
-          ],
-        },
-      });
-
-      map.addLayer({
-        id: LAYER_BDGS_POINT,
-        type: 'circle',
-        source: SRC_BDGS_POINTS,
-        'source-layer': 'default',
-        paint: {
-          'circle-radius': [
-            'case',
-            ['boolean', ['==', ['feature-state', 'hovered'], true]],
-            6,
-            5,
-          ],
-          'circle-stroke-color': [
-            'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
-            '#ffffff',
-            ['>', ['get', 'contributions'], 0],
-            '#fef4f4',
-            '#ffffff',
-          ],
-          'circle-stroke-width': 3,
-          'circle-color': [
-            'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
-            '#31e060',
-            ['>', ['get', 'contributions'], 0],
-            CONTRIBUTIONS_COLOR,
-            '#1452e3',
           ],
         },
       });
