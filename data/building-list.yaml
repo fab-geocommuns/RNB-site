@@ -103,7 +103,7 @@
   description: <a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: grand-ensemble.png
-  distinctionBetweenSingleAndMultipleText: Si le découpage de ces ensembles correspond à un usage largement ancré et diffère de la définition du RNB sur l’aspect de la circulation, alors c’est l’usage qui prime. Par exemple, le découpage d’une construction hospitalière par ailes ou secteurs peut produire plusieurs bâtiments, même s’il est possible de circuler entre eux.
+  distinctionBetweenSingleAndMultipleText: Si le découpage de ces ensembles correspond à un usage largement ancré et diffère de la définition du RNB sur l’aspect de la circulation, alors l’usage prime. Par exemple, le découpage d’une construction hospitalière par ailes ou secteurs peut produire plusieurs bâtiments, même s’il est possible de circuler entre eux.
 
 - id: construction-provisoire
   description: <a href="#construction-provisoire">voir les explications.</a>
