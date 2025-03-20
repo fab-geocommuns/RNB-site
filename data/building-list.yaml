@@ -173,7 +173,7 @@
 
 - id: ecole-universite-recherche
   title: Ecole, université ou bâtiment dédié à la recherche
-  description: Ces types de bâtiment font partie des grands ensembles, <a href="#grand-ensemble">voir les explications.</a>
+  description: Ces types de bâtiments font partie des grands ensembles, <a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: ecole-universite-recherche.png
 
