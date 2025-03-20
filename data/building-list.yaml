@@ -98,6 +98,13 @@
   isBuilding: false
   image: tunnel.png
 
+- id: grand-ensemble
+  title: Grand ensemble
+  description: <a href="#grand-ensemble">voir les explications.</a>
+  isBuilding: true
+  image: grand-ensemble.png
+  distinctionBetweenSingleAndMultipleText: Si le découpage de ces ensembles correspond à un usage largement ancré et diffère de la définition du RNB sur l’aspect de la circulation, alors l’usage prime. Par exemple, le découpage d’une construction hospitalière par ailes ou secteurs peut produire plusieurs bâtiments, même s’il est possible de circuler entre eux.
+
 - id: construction-provisoire
   description: <a href="#construction-provisoire">voir les explications.</a>
   title: Construction provisoire
@@ -166,11 +173,13 @@
 
 - id: ecole-universite-recherche
   title: Ecole, université ou bâtiment dédié à la recherche
+  description: Ces types de bâtiments font partie des grands ensembles, <a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: ecole-universite-recherche.png
 
 - id: hopital-etablissement-sante
   title: Hôpital et établissement de santé
+  description: Les hôpitaux font partie des grands ensembles, <a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: hopital-etablissement-sante.png
 
