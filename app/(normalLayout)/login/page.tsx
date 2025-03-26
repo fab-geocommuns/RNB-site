@@ -7,15 +7,14 @@ import styles from '@/styles/login.module.scss';
 import LoginForm from '@/components/authentication/LoginForm';
 import CreateAccountForm from '@/components/authentication/CreateAccountForm';
 
-// Comps
-import { Badge } from '@codegouvfr/react-dsfr/Badge';
-
 export default async function LoginPage() {
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();
   if (session) {
     redirect('/');
   }
+
+  const enableCreateAccount = process.env.ENABLE_CREATE_ACCOUNT === 'true';
 
   return (
     <>
@@ -32,14 +31,41 @@ export default async function LoginPage() {
                 </div>
               </div>
             </div>
-            <div className="fr-col-12 fr-col-md-6 fr-col-lg-6">
-              <div className="fr-p-3w">
-                <span className="fr-text--bold">
-                  Je n'ai pas encore de compte
-                </span>
-                <h3>Créer un compte</h3>
-                <CreateAccountForm />
-              </div>
+            <div className="fr-col-12 fr-col-md-5 fr-col-offset-md-1">
+              {enableCreateAccount && (
+                <div className="fr-p-3w">
+                  <span className="fr-text--bold">
+                    Je n'ai pas encore de compte
+                  </span>
+                  <h3>Créer un compte</h3>
+                  <CreateAccountForm />
+                </div>
+              )}
+              {!enableCreateAccount && (
+                <>
+                  <h6>Participer au RNB</h6>
+                  <p>
+                    Le Référentiel National des Bâtiments s&apos;ouvre aux
+                    contributions d&apos;une variété d&apos;acteurs publics,
+                    privés et citoyens.
+                  </p>
+                  <p>
+                    Si vous souhaitez participer à l&apos;enrichissement du RNB,
+                    vous pouvez demander un accès en remplissant le formulaire
+                    suivant.
+                  </p>
+                  <p>
+                    <a
+                      href="https://tally.so/r/npJJjP"
+                      target="_blank"
+                      className="fr-btn fr-btn--secondary"
+                    >
+                      Demander un accès
+                    </a>
+                  </p>
+                  <p></p>
+                </>
+              )}
             </div>
           </div>
         </div>
