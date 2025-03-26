@@ -32,7 +32,15 @@ export default async function LoginPage() {
                 </div>
               </div>
             </div>
-            <CreateAccountForm />
+            <div className="fr-col-12 fr-col-md-6 fr-col-lg-6">
+              <div className="fr-p-3w">
+                <span className="fr-text--bold">
+                  Je n'ai pas encore de compte
+                </span>
+                <h3>Créer un compte</h3>
+                <CreateAccountForm />
+              </div>
+            </div>
           </div>
         </div>
       </main>

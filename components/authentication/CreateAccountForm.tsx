@@ -124,75 +124,71 @@ export default function CreateAccountForm() {
   };
 
   return (
-    <div className="fr-p-3w">
-      Je n'ai pas encore de compte
-      <h3>Créer un compte</h3>
-      <form onSubmit={handleSubmit}>
-        <Input
-          label="Email"
-          nativeInputProps={{
-            name: 'email',
-            type: 'email',
-            required: true,
-            onChange: (e) => clearError('email'),
-          }}
-          hintText="Ne sera pas visible publiquement sur le site"
-          state={createAccountErrors.email.length > 0 ? 'error' : 'default'}
-          stateRelatedMessage={createAccountErrors.email}
-        />
-        <Input
-          label="Nom d'utilisateur"
-          nativeInputProps={{
-            name: 'username',
-            required: true,
-            onChange: (e) => clearError('username'),
-          }}
-          state={createAccountErrors.username.length > 0 ? 'error' : 'default'}
-          stateRelatedMessage={createAccountErrors.username}
-        />
-        <Input
-          label="Nom"
-          nativeInputProps={{
-            name: 'lastName',
-            onChange: (e) => clearError('lastName'),
-          }}
-          state={createAccountErrors.lastName.length > 0 ? 'error' : 'default'}
-          stateRelatedMessage={createAccountErrors.lastName}
-        />
-        <Input
-          label="Prénom"
-          nativeInputProps={{
-            name: 'firstName',
-            onChange: (e) => clearError('firstName'),
-          }}
-          state={createAccountErrors.firstName.length > 0 ? 'error' : 'default'}
-          stateRelatedMessage={createAccountErrors.firstName}
-        />
-        <PasswordInput
-          label="Mot de passe"
-          nativeInputProps={{
-            name: 'password',
-            required: true,
-            onChange: (e) => clearError('password'),
-          }}
-        />
-        <PasswordInput
-          label="Confirmation du mot de passe"
-          messagesHint=""
-          messages={createAccountErrors.confirmPassword.map((errorMessage) => ({
-            severity: 'error',
-            message: errorMessage,
-          }))}
-          nativeInputProps={{
-            name: 'confirmPassword',
-            required: true,
-            onChange: (e) => clearError('confirmPassword'),
-          }}
-        />
-        <button className="fr-btn" type="submit">
-          Créer un compte
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <Input
+        label="Email"
+        nativeInputProps={{
+          name: 'email',
+          type: 'email',
+          required: true,
+          onChange: (e) => clearError('email'),
+        }}
+        hintText="Ne sera pas visible publiquement sur le site"
+        state={createAccountErrors.email.length > 0 ? 'error' : 'default'}
+        stateRelatedMessage={createAccountErrors.email}
+      />
+      <Input
+        label="Nom d'utilisateur"
+        nativeInputProps={{
+          name: 'username',
+          required: true,
+          onChange: (e) => clearError('username'),
+        }}
+        state={createAccountErrors.username.length > 0 ? 'error' : 'default'}
+        stateRelatedMessage={createAccountErrors.username}
+      />
+      <Input
+        label="Nom"
+        nativeInputProps={{
+          name: 'lastName',
+          onChange: (e) => clearError('lastName'),
+        }}
+        state={createAccountErrors.lastName.length > 0 ? 'error' : 'default'}
+        stateRelatedMessage={createAccountErrors.lastName}
+      />
+      <Input
+        label="Prénom"
+        nativeInputProps={{
+          name: 'firstName',
+          onChange: (e) => clearError('firstName'),
+        }}
+        state={createAccountErrors.firstName.length > 0 ? 'error' : 'default'}
+        stateRelatedMessage={createAccountErrors.firstName}
+      />
+      <PasswordInput
+        label="Mot de passe"
+        nativeInputProps={{
+          name: 'password',
+          required: true,
+          onChange: (e) => clearError('password'),
+        }}
+      />
+      <PasswordInput
+        label="Confirmation du mot de passe"
+        messagesHint=""
+        messages={createAccountErrors.confirmPassword.map((errorMessage) => ({
+          severity: 'error',
+          message: errorMessage,
+        }))}
+        nativeInputProps={{
+          name: 'confirmPassword',
+          required: true,
+          onChange: (e) => clearError('confirmPassword'),
+        }}
+      />
+      <button className="fr-btn" type="submit">
+        Créer un compte
+      </button>
+    </form>
   );
 }
