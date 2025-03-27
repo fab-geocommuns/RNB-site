@@ -186,7 +186,7 @@ export default function CreateAccountForm() {
           onChange: (e) => clearError('confirmPassword'),
         }}
       />
-      <button className="fr-btn" type="submit">
+      <button className="fr-btn fr-mt-2w" type="submit">
         Créer un compte
       </button>
     </form>
