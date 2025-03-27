@@ -5,6 +5,7 @@ import { PasswordInput } from '@codegouvfr/react-dsfr/blocks/PasswordInput';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Alert from '@codegouvfr/react-dsfr/Alert';
 
 type CreateAccountErrors = {
   email: string[];
@@ -26,6 +27,7 @@ const noErrors: () => CreateAccountErrors = () => ({
 
 export default function CreateAccountForm() {
   const [createAccountErrors, setCreateAccountErrors] = useState(noErrors());
+  const [genericError, setGenericError] = useState(false);
   const router = useRouter();
 
   const clearError = (field: keyof CreateAccountErrors) => {
@@ -68,6 +70,8 @@ export default function CreateAccountForm() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    setGenericError(false);
+
     const { hasErrors, errors, values } = prevalidateForm(e.target);
 
     setCreateAccountErrors(errors);
@@ -75,56 +79,71 @@ export default function CreateAccountForm() {
       return;
     }
 
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_API_BASE + '/auth/user/create/',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          email: values.email,
-          username: values.username,
-          password: values.password,
-          last_name: values.lastName,
-          first_name: values.firstName,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_BASE + '/auth/user/create/',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: values.email,
+            username: values.username,
+            password: values.password,
+            last_name: values.lastName,
+            first_name: values.firstName,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    );
+      );
 
-    if (!response.ok) {
-      const data = await response.json();
+      if (!response.ok) {
+        const data = await response.json();
 
-      setCreateAccountErrors({
-        ...createAccountErrors,
-        email: data.email || [],
-        username: data.username || [],
-        lastName: data.last_name || [],
-        firstName: data.first_name || [],
-        confirmPassword: data.password || [],
+        setCreateAccountErrors({
+          ...createAccountErrors,
+          email: data.email || [],
+          username: data.username || [],
+          lastName: data.last_name || [],
+          firstName: data.first_name || [],
+          confirmPassword: data.password || [],
+        });
+        return;
+      }
+
+      if (response.status !== 201) {
+        throw new Error('Account creation did not return a 201 status code');
+      }
+
+      const loginResult = await signIn('credentials', {
+        username: values.username,
+        password: values.password,
+        redirect: false,
       });
-      return;
+
+      if (loginResult?.error) {
+        throw new Error('Login following account creation did not work');
+      }
+
+      router.push('/votre-compte');
+    } catch (error) {
+      setGenericError(true);
+      throw error;
     }
-
-    if (response.status !== 201) {
-      throw new Error('Account creation did not return a 201 status code');
-    }
-
-    const loginResult = await signIn('credentials', {
-      username: values.username,
-      password: values.password,
-      redirect: false,
-    });
-
-    if (loginResult?.error) {
-      throw new Error('Login following account creation did not work');
-    }
-
-    router.push('/votre-compte');
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {genericError && (
+        <div className="fr-mb-3w">
+          <Alert
+            description="Une erreur est survenue lors de la création de votre compte"
+            severity="error"
+            closable={false}
+            small={true}
+          />
+        </div>
+      )}
       <Input
         label="Email"
         nativeInputProps={{
@@ -186,7 +205,7 @@ export default function CreateAccountForm() {
           onChange: (e) => clearError('confirmPassword'),
         }}
       />
-      <button className="fr-btn" type="submit">
+      <button className="fr-btn fr-mt-2w" type="submit">
         Créer un compte
       </button>
     </form>

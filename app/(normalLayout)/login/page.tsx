@@ -35,7 +35,7 @@ export default async function LoginPage() {
               {enableCreateAccount && (
                 <div className="fr-p-3w">
                   <span className="fr-text--bold">
-                    Je n'ai pas encore de compte
+                    Je n&apos;ai pas encore de compte
                   </span>
                   <h3>Créer un compte</h3>
                   <CreateAccountForm />
