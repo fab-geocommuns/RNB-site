@@ -100,7 +100,7 @@ export default function VisuPanel() {
   if (selectedItem) {
     return (
       <>
-        <div className={styles.shell}>
+        <div className={styles.shell} data-testid="visu-panel">
           <div className={styles.content}>
             <div className={styles.head}>
               <h1 className={styles.title}>{title()}</h1>
