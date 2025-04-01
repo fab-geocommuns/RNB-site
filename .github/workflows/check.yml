@@ -17,4 +17,4 @@ jobs:
         run: npm ci
 
       - name: Run TypeScript
-        run: npx tsc --noEmit
+        run: npx next build && npx tsc --noEmit
