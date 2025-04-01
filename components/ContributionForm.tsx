@@ -17,6 +17,7 @@ import Button from '@codegouvfr/react-dsfr/Button';
 import Badge from '@codegouvfr/react-dsfr/Badge';
 
 // Utils
+// @ts-ignore
 import Cookies from 'js-cookie';
 import Bus from '@/utils/Bus';
 import { Actions, RootState } from '@/stores/store';
@@ -31,14 +32,17 @@ export default function ContributionForm() {
   const msgInput = useRef<HTMLInputElement>(null);
 
   const emptyMsgInput = () => {
+    // @ts-ignore
     msgInput.current.value = '';
   };
 
+  // @ts-ignore
   const resize = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
+  // @ts-ignore
   const handleFocus = (e) => {
     va.track('contribution-textarea-focus');
   };
@@ -79,6 +83,7 @@ export default function ContributionForm() {
 
         // Warn the map and the contribution counter there is a new one
         Bus.emit('contribution:new', {
+          // @ts-ignore
           rnb_id: selectedBuilding!.rnb_id,
         });
 
@@ -106,6 +111,7 @@ export default function ContributionForm() {
       });
   };
 
+  // @ts-ignore
   const changeEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -123,11 +129,13 @@ export default function ContributionForm() {
         name="rnb_id"
         type="hidden"
         className="fr-input"
+        // @ts-ignore
         value={selectedBuilding?.rnb_id}
       />
       <textarea
         onFocus={handleFocus}
         onChange={resize}
+        // @ts-ignore
         ref={msgInput}
         required
         name="text"

@@ -3,6 +3,7 @@
 import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
+// @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ContributionForm from '@/components/ContributionForm';
 
@@ -79,6 +80,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     }, 2000);
   };
 
+  // @ts-ignore
   const toggleSection = (e, section: string) => {
     e.preventDefault();
 

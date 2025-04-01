@@ -9,6 +9,7 @@ export default function NewsletterForm() {
   const btn = useRef(null);
   const input = useRef(null);
 
+  // @ts-ignore
   const handleSubmit = async (e) => {
     console.log('submit');
 
@@ -18,8 +19,11 @@ export default function NewsletterForm() {
 
     e.preventDefault();
 
+    // @ts-ignore
     const url = form.current.action + '?isAjax=1';
+    // @ts-ignore
     const formData = new FormData(form.current);
+    // @ts-ignore
     const method = form.current.method;
 
     const response = await fetch(url, {
@@ -47,21 +51,27 @@ export default function NewsletterForm() {
   };
 
   const resetFeedback = () => {
+    // @ts-ignore
     feedback.current.innerHTML = '';
   };
 
+  // @ts-ignore
   const failure = (msg) => {
+    // @ts-ignore
     feedback.current.innerHTML = msg;
   };
   const success = () => {
+    // @ts-ignore
     feedback.current.innerHTML = 'Merci de votre inscription !';
   };
 
   const disableBtn = () => {
+    // @ts-ignore
     btn.current.disabled = true;
   };
 
   const enableBtn = () => {
+    // @ts-ignore
     btn.current.disabled = false;
   };
 

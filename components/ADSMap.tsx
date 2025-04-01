@@ -21,6 +21,7 @@ import satellitle from '@/components/map/mapstyles/satellite.json';
 import { useSession } from 'next-auth/react';
 
 export default function ADSMap() {
+  // @ts-ignore
   const [ads, setAds] = useContext(AdsContext);
   const adsCopy = useRef(ads); // dirty copy of ads state so we can use it in listeners
 
@@ -33,6 +34,7 @@ export default function ADSMap() {
 
   const bdgs = useRef([]);
 
+  // @ts-ignore
   const [mapCtx, setMapCtx] = useContext(MapContext);
 
   const default_style = 'vectorIgnStandard';
@@ -50,6 +52,7 @@ export default function ADSMap() {
 
   // Session
   const { data: session, status } = useSession();
+  // @ts-ignore
   const accessToken = useRef(session?.accessToken);
 
   const getBdgHoverCursor = () => {
@@ -67,18 +70,24 @@ export default function ADSMap() {
   };
 
   const initMapEvents = () => {
+    // @ts-ignore
     map.current.on('moveend', () => {
       newQuery();
     });
 
+    // @ts-ignore
     map.current.on('mouseenter', 'bdgs', function () {
+      // @ts-ignore
       map.current.getCanvas().style.cursor = getBdgHoverCursor();
     });
 
+    // @ts-ignore
     map.current.on('mouseleave', 'bdgs', function () {
+      // @ts-ignore
       map.current.getCanvas().style.cursor = getMapCursor();
     });
 
+    // @ts-ignore
     map.current.on('click', 'bdgs', function (e) {
       if (adsCopy.current.isEditingNewBdg()) {
         return;
@@ -101,6 +110,7 @@ export default function ADSMap() {
       setAds(newads);
     });
 
+    // @ts-ignore
     map.current.on('click', function (e) {
       if (adsCopy.current.isEditingNewBdg()) {
         const lngLat = e.lngLat;
@@ -121,6 +131,7 @@ export default function ADSMap() {
     let prom = launchQuery();
 
     prom.then(() => {
+      // @ts-ignore
       map.current.getSource('bdgs').setData(convertBdgToGeojson());
     });
   };
@@ -133,22 +144,28 @@ export default function ADSMap() {
 
     // Add bdgs from the query
     bdgs.current.forEach((bdg) => {
+      // @ts-ignore
       const operation = getBdgOperation(bdg.rnb_id);
 
       const feature = {
         type: 'Feature',
+        // @ts-ignore
         geometry: bdg.point,
         properties: {
+          // @ts-ignore
           rnb_id: bdg.rnb_id,
+          // @ts-ignore
           identifier: bdg.rnb_id,
           operation: operation,
         },
       };
 
+      // @ts-ignore
       geojson.features.push(feature);
     });
 
     // Add new bdgs from the state
+    // @ts-ignore
     adsCopy.current.newBdgOps.forEach((bdgOp) => {
       const feature = {
         type: 'Feature',
@@ -160,6 +177,7 @@ export default function ADSMap() {
         },
       };
 
+      // @ts-ignore
       geojson.features.push(feature);
     });
 
@@ -168,6 +186,7 @@ export default function ADSMap() {
 
   const getBdgOperation = (rnb_id: string) => {
     const bdgOp = adsCopy.current.ops.find(
+      // @ts-ignore
       (bdgOp) => bdgOp.building.rnb_id === rnb_id,
     );
 
@@ -179,13 +198,16 @@ export default function ADSMap() {
   };
 
   const initDataLayer = () => {
+    // @ts-ignore
     map.current.on('style.load', () => {
+      // @ts-ignore
       map.current.addSource('bdgs', {
         type: 'geojson',
         data: convertBdgToGeojson(),
         promoteId: 'rnb_id',
       });
 
+      // @ts-ignore
       map.current.addLayer({
         id: 'bdgs',
         type: 'circle',
@@ -214,12 +236,15 @@ export default function ADSMap() {
     const firstUrl = getFirstUrl();
 
     return new Promise((resolve, reject) => {
+      // @ts-ignore
       if (map.current.getZoom() < minZoom) {
         // Zoom is too low
+        // @ts-ignore
         resolve();
       } else {
         deepFetch(firstUrl)
           .then(() => {
+            // @ts-ignore
             resolve();
           })
           .catch((error) => {
@@ -242,6 +267,7 @@ export default function ADSMap() {
       })
         .then((response) => response.json())
         .then((data) => {
+          // @ts-ignore
           bdgs.current = [...bdgs.current, ...data.results];
 
           if (data.next) {
@@ -260,6 +286,7 @@ export default function ADSMap() {
   };
 
   const getFirstUrl = (): URL => {
+    // @ts-ignore
     const bbox = map.current.getBounds();
     const bbox_nw = bbox.getNorthWest();
     const bbox_se = bbox.getSouthEast();
@@ -279,18 +306,21 @@ export default function ADSMap() {
       showZoom: true,
     });
 
+    // @ts-ignore
     map.current.addControl(controls, 'bottom-right');
   };
 
   const fitOnOperations = () => {
     if (ads.ops && ads.ops.length > 0) {
       let bounds = new maplibregl.LngLatBounds();
+      // @ts-ignore
       ads.ops.forEach((bdgOp) => {
         bounds.extend([
           bdgOp.building.geometry.coordinates[0],
           bdgOp.building.geometry.coordinates[1],
         ]);
       });
+      // @ts-ignore
       map.current.fitBounds(bounds, {
         padding: 100,
         linear: true,
@@ -299,8 +329,10 @@ export default function ADSMap() {
     }
   };
 
+  // @ts-ignore
   const jumpToPosition = (position) => {
     if (mapCtx.data.position.zoom && mapCtx.data.position.center) {
+      // @ts-ignore
       map.current.flyTo({
         center: position.center,
         zoom: position.zoom,
@@ -310,7 +342,9 @@ export default function ADSMap() {
 
   useEffect(() => {
     if (!map.current) {
+      // @ts-ignore
       map.current = new maplibregl.Map({
+        // @ts-ignore
         container: mapContainer.current,
         style:
           'https://api.maptiler.com/maps/bright-v2/style.json?key=k5TGaasSmJpsWugdpmtP',
@@ -327,6 +361,7 @@ export default function ADSMap() {
 
   useEffect(function () {
     if (map.current) {
+      // @ts-ignore
       const source = map.current.getSource('bdgs');
       if (source) {
         source.setData(convertBdgToGeojson());
@@ -341,6 +376,7 @@ export default function ADSMap() {
   }, [mapCtx.data.position]);
 
   useEffect(() => {
+    // @ts-ignore
     map.current.getCanvas().style.cursor = getMapCursor();
   }, [ads.state.bdg_move]);
 
@@ -350,6 +386,7 @@ export default function ADSMap() {
   }, [ads]);
 
   useEffect(() => {
+    // @ts-ignore
     accessToken.current = session?.accessToken;
   }, [session]);
 

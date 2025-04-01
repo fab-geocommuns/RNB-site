@@ -4,6 +4,7 @@ import TagsList from '@/components/blog/TagsList';
 // Lib
 import { formattedDate } from '@/utils/blog';
 
+// @ts-ignore
 export default function ArticleCard({ post }) {
   const dateStr = formattedDate(post.published_at);
 

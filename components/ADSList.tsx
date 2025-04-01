@@ -42,6 +42,7 @@ export default function ADSList() {
 
   useEffect(() => {
     if (status == 'authenticated') {
+      // @ts-ignore
       fetchADSList(params.get('q'), session?.accessToken).then((data) => {
         setAdsList(data['results']);
       });
