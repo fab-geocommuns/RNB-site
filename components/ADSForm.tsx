@@ -198,7 +198,7 @@ export default function ADSForm({ data }) {
                   placeholder="Ex: PC12341234A1234"
                   onChange={handleInputChange}
                 />
-                // @ts-ignore
+                {/* @ts-ignore */}
                 <InputErrors errors={errors.file_number} />
               </div>
               <div className="fr-input-group">
@@ -214,7 +214,7 @@ export default function ADSForm({ data }) {
                   value={ctx.decided_at}
                   onChange={handleInputChange}
                 />
-                // @ts-ignore
+                {/* @ts-ignore */}
                 <InputErrors errors={errors.decided_at} />
               </div>
 
@@ -224,7 +224,7 @@ export default function ADSForm({ data }) {
               </div>
 
               <div>
-                // @ts-ignore
+                {/* @ts-ignore */}
                 <BdgOperations errors={errors.buildings_operations} />
               </div>
 

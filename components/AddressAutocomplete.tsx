@@ -145,7 +145,7 @@ export default function AddressAutocomplete({
       // @ts-ignore
       key={s.properties.id}
     >
-      // @ts-ignore
+      {/* @ts-ignore */}
       {s.properties.label}
     </div>
   ));

@@ -41,8 +41,7 @@ export default function BdgOperations({ errors = null }) {
           <InputErrors errors={errors} />
 
           <ul className={styles.opsList}>
-            // @ts-ignore
-            {ads.state.data.buildings_operations?.map((bdgop) => (
+            {ads.state.data.buildings_operations?.map((bdgop: any) => (
               <BdgOp key={bdgop.building.identifier} data={bdgop} />
             ))}
           </ul>
