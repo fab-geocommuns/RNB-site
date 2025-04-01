@@ -5,10 +5,8 @@ export default function InputErrors({ errors }) {
   if (errors && errors.length > 0) {
     return (
       <>
-        // @ts-ignore
-        <p id="text-input-error-desc-error" class="fr-error-text">
-          // @ts-ignore
-          {errors.map((error, index) => {
+        <p id="text-input-error-desc-error" className="fr-error-text">
+          {errors.map((error: any, index: any) => {
             return (
               <span key={index}>
                 {error}

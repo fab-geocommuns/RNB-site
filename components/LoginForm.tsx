@@ -49,10 +49,11 @@ export default function LoginForm() {
       {credentialsError && (
         <>
           <div className="fr-mb-3w">
-            // @ts-ignore
             <Alert
               description="Identifiant ou mot de passe incorrect"
               severity="error"
+              closable={false}
+              small
             />
           </div>
         </>

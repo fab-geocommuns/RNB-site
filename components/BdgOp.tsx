@@ -100,7 +100,7 @@ export default function BdgOp({ data = null }) {
 
   return (
     <>
-      // @ts-ignore
+      {/* @ts-ignore */}
       <li className={styles.op} key={data.building.rnb_id}>
         <div>
           <span className={styles.opIdentifierShell}>

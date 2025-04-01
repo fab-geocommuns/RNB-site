@@ -67,8 +67,7 @@ export default async function Page({
 
             <div className="fr-col-12 fr-col-md-8">
               <div>
-                // @ts-ignore
-                {posts?.map((post) => (
+                {posts?.map((post: any) => (
                   <div key={post.id} className="fr-mb-8v">
                     <ArticleCard post={post}></ArticleCard>
                   </div>
