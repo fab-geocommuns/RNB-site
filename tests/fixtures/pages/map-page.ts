@@ -9,4 +9,12 @@ export class MapPage extends RNBPage {
     super(page, '/carte');
     this.map = page.getByLabel('Map');
   }
+
+  async goToBuilding(buildingId: string) {
+    await this.page.goto(`/carte?q=${buildingId}`);
+  }
+
+  get buildingDetailsPannel() {
+    return this.page.getByTestId('visu-panel');
+  }
 }

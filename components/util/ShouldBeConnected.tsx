@@ -4,7 +4,7 @@ import {
   RNBGroup,
   useRNBAuthentication,
 } from '@/utils/use-rnb-authentication';
-
+import assert from 'assert';
 type ShouldBeConnectedProps = {
   withGroup?: RNBGroup;
   withGroups?: RNBGroup[];
@@ -15,11 +15,11 @@ export function ShouldBeConnected({
   withGroup,
   children,
 }: ShouldBeConnectedProps) {
-  const {
-    status,
-    user: { groups },
-  } = useRNBAuthentication();
+  const { status, user } = useRNBAuthentication();
   if (status !== RNBAuthenticationStatus.AUTHENTICATED) return null;
+
+  assert(user, '`user` should be defined');
+  const groups = user.groups;
 
   if (withGroups && withGroups.every((group) => groups.includes(group))) {
     return null;
