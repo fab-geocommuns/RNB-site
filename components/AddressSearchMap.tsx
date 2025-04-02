@@ -119,11 +119,10 @@ export default function AddressSearchMap() {
     return mapPosition;
   };
 
-  const handleCoordinates = (q: string, coords: string) => {
+  const handleCoordinates = (coords: string) => {
     if (queryIsCoordinates(coords)) {
       // fill the input with the address
       setAutocompleteActive(false);
-      setQuery(q);
       const coordinates = coords.split(',');
       dispatch(
         Actions.map.setMarker({
@@ -144,10 +143,11 @@ export default function AddressSearchMap() {
   useEffect(() => {
     const q = params.get('q');
     const coords = params.get('coords');
-    if (coords !== null && q !== null) {
-      handleCoordinates(q, coords);
-    } else if (q !== null) {
+    if (q !== null) {
       search(q);
+    }
+    if (coords !== null) {
+      handleCoordinates(coords);
     }
   }, []);
 
