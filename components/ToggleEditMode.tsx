@@ -25,7 +25,6 @@ export default function ToogleEditMode() {
       label={<span className="fr-btn">Mode édition</span>}
       labelPosition="left"
       onChange={toggleView}
-      //   showCheckedHint={false}
     />
   );
 }
