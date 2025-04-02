@@ -1,6 +1,4 @@
 import { ToggleSwitch } from '@codegouvfr/react-dsfr/ToggleSwitch';
-import { Button } from '@codegouvfr/react-dsfr/Button';
-import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function ToogleEditMode() {
@@ -8,7 +6,6 @@ export default function ToogleEditMode() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // const [editModeEnabled, setEditModeEnabled] = useState(false);
   const editModeEnabled = pathname === '/edition';
   const toggleView = () => {
     if (editModeEnabled) {
