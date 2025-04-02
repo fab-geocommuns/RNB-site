@@ -14,7 +14,11 @@ import { usePathname } from 'next/navigation';
 import logo from '@/public/images/logo.png';
 import { use, useEffect, useState } from 'react';
 
-export default function RNBHeader() {
+type Props = {
+  withNavigation?: boolean;
+};
+
+export default function RNBHeader({ withNavigation = true }: Props) {
   const { data: session } = useSession();
 
   const pathname = usePathname();
@@ -128,7 +132,7 @@ export default function RNBHeader() {
           </>
         }
         serviceTitle="Référentiel National des Bâtiments"
-        navigation={nav}
+        navigation={withNavigation && nav}
         homeLinkProps={{
           href: '/',
           title: 'Accueil RNB',

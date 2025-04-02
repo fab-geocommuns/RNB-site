@@ -1,7 +1,14 @@
+import RNBHeader from '@/components/RNBHeader';
+
 export default function FullscreenLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <RNBHeader withNavigation={false} />
+      {children}
+    </>
+  );
 }
