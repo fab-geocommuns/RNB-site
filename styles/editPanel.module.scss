@@ -1,12 +1,20 @@
 @import "vars.scss";
 
+$input-height: 52px;
+$spacing: 12px;
+$actions-top: 2*$spacing + $input-height;
+$actions-height: 100px;
+$shell-top: $actions-top + $spacing + $actions-height;
+
 .actions {
     position: absolute;
-    top: 74px;
-    left: 12px;
-    height: 100px;
+    top: $actions-top;
+    left: $spacing;
+    height: $actions-height;
     right: auto;
     z-index: 100;
+    width: 400px;
+
     background-color: red;
 }
 
@@ -14,11 +22,12 @@
     // The .shell is the invisible container containing actions and panel
     position:absolute;
 
-    top:180px;
+    top: $shell-top;
     right: auto;
-    bottom: 10px;
-    left:12px;
+    bottom: $spacing;
+    left: $spacing;
     z-index: 100;
+    width: 400px;
 }
 
 .content {
@@ -32,11 +41,9 @@
     flex-direction: column;
     max-height: 100%;
 
-    @media (min-width: $bp-md) {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-        bottom:auto;
-    }
+    position:absolute;
+    bottom: 0;
+    right:0;
+    left: 0; 
+    top: 0;
 }
