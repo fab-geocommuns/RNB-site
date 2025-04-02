@@ -4,10 +4,8 @@ import { redirect } from 'next/navigation';
 
 // Styles
 import styles from '@/styles/login.module.scss';
-import LoginForm from '@/components/LoginForm';
-
-// Comps
-import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import LoginForm from '@/components/authentication/LoginForm';
+import CreateAccountForm from '@/components/authentication/CreateAccountForm';
 
 export default async function LoginPage() {
   // We don't want to allow users that are already logged in to access this page
@@ -15,6 +13,8 @@ export default async function LoginPage() {
   if (session) {
     redirect('/');
   }
+
+  const enableCreateAccount = process.env.ENABLE_CREATE_ACCOUNT === 'true';
 
   return (
     <>
@@ -31,34 +31,41 @@ export default async function LoginPage() {
                 </div>
               </div>
             </div>
-            <div className="fr-col-12 fr-col-md-4 fr-col-offset-md-1">
-              <div className="fr-mb-2v fr-pt-md-5v">
-                <Badge small severity="info">
-                  Nouveau
-                </Badge>
-              </div>
-
-              <h6>Participer au RNB</h6>
-              <p>
-                Le Référentiel National des Bâtiments s&apos;ouvre aux
-                contributions d&apos;une variété d&apos;acteurs publics, privés
-                et citoyens.
-              </p>
-              <p>
-                Si vous souhaitez participer à l&apos;enrichissement du RNB,
-                vous pouvez demander un accès en remplissant le formulaire
-                suivant.
-              </p>
-              <p>
-                <a
-                  href="https://tally.so/r/npJJjP"
-                  target="_blank"
-                  className="fr-btn fr-btn--secondary"
-                >
-                  Demander un accès
-                </a>
-              </p>
-              <p></p>
+            <div className="fr-col-12 fr-col-md-5 fr-col-offset-md-1">
+              {enableCreateAccount && (
+                <div className="fr-p-3w">
+                  <span className="fr-text--bold">
+                    Je n&apos;ai pas encore de compte
+                  </span>
+                  <h3>Créer un compte</h3>
+                  <CreateAccountForm />
+                </div>
+              )}
+              {!enableCreateAccount && (
+                <>
+                  <h6>Participer au RNB</h6>
+                  <p>
+                    Le Référentiel National des Bâtiments s&apos;ouvre aux
+                    contributions d&apos;une variété d&apos;acteurs publics,
+                    privés et citoyens.
+                  </p>
+                  <p>
+                    Si vous souhaitez participer à l&apos;enrichissement du RNB,
+                    vous pouvez demander un accès en remplissant le formulaire
+                    suivant.
+                  </p>
+                  <p>
+                    <a
+                      href="https://tally.so/r/npJJjP"
+                      target="_blank"
+                      className="fr-btn fr-btn--secondary"
+                    >
+                      Demander un accès
+                    </a>
+                  </p>
+                  <p></p>
+                </>
+              )}
             </div>
           </div>
         </div>
