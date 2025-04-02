@@ -1,3 +1,9 @@
+import VisuMap from '@/components/map/VisuMap';
+
 export default function Page() {
-  return <span>Coucou depuis l'édition</span>;
+  return (
+    <>
+      <VisuMap />
+    </>
+  );
 }
