@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 // Logo
 import logo from '@/public/images/logo.png';
 import { use, useEffect, useState } from 'react';
+import ToggleEditMode from './ToggleEditMode';
 
 type Props = {
   withNavigation?: boolean;
@@ -121,6 +122,8 @@ export default function RNBHeader({ withNavigation = true }: Props) {
     setRedirectUrl(window.location.href);
   }, [pathname]);
 
+  const editModeToggler = <ToggleEditMode />;
+
   return (
     <>
       <Header
@@ -142,7 +145,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
-        quickAccessItems={[faqQA, logQA]}
+        quickAccessItems={[faqQA, editModeToggler, logQA]}
       />
     </>
   );
