@@ -1,23 +1,28 @@
 import { cache } from 'react';
 
+// @ts-ignore
 import GhostContentAPI from '@tryghost/content-api';
 
 export const getPosts = cache(async (page = 1) => {
   const api = getClient();
 
-  return api.posts
-    .browse({
-      filter: 'tag:blog',
-      page: page,
-      limit: 10,
-      include: 'tags,authors',
-    })
-    .then((posts) => {
-      return posts;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  return (
+    api.posts
+      .browse({
+        filter: 'tag:blog',
+        page: page,
+        limit: 10,
+        include: 'tags,authors',
+      })
+      // @ts-ignore
+      .then((posts) => {
+        return posts;
+      })
+      // @ts-ignore
+      .catch((err) => {
+        console.error(err);
+      })
+  );
 });
 
 export function formattedDate(isoDateStr: string) {

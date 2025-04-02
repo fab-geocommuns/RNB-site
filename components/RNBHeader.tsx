@@ -79,6 +79,7 @@ export default function RNBHeader() {
     },
   ];
 
+  // @ts-ignore
   const handleSignout = (e) => {
     e.preventDefault();
     signOut();
@@ -105,6 +106,7 @@ export default function RNBHeader() {
       iconId: 'fr-icon-logout-box-r-line',
       linkProps: {
         href: '#',
+        // @ts-ignore
         onClick: (e) => {
           handleSignout(e);
         },
@@ -138,6 +140,7 @@ export default function RNBHeader() {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
+        // @ts-ignore
         quickAccessItems={[faqQA, logQA]}
       />
     </>

@@ -15,6 +15,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
+    // @ts-ignore
     redirect('/outils-services/autorisation-droit-sols', 'replace');
   }
 

@@ -1,8 +1,10 @@
 import maplibregl from 'maplibre-gl';
 import { useEffect } from 'react';
 import { fr } from '@codegouvfr/react-dsfr';
+// @ts-ignore
 import MapStyleSwitcherControl from '@/components/map/MapStyleSwitcher';
 import { STYLES } from '@/components/map/useMapLayers';
+// @ts-ignore
 import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 /**

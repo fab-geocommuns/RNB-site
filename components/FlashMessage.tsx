@@ -60,6 +60,7 @@ export default function FlashMessage() {
             closable={closable}
             onClose={() => setIsOpen(false)}
             title={msg}
+            // @ts-ignore
             severity={type}
           />
         </div>

@@ -9,6 +9,7 @@ import styles from '@/styles/contact.module.scss';
 
 // Comps
 import { Tile } from '@codegouvfr/react-dsfr/Tile';
+// @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // Logos
@@ -26,6 +27,7 @@ export default function Contact() {
 
   const [emailCopied, setEmailCopied] = useState(false);
 
+  // @ts-ignore
   const handleCopy = (e) => {
     setEmailCopied(true);
     setTimeout(() => {
@@ -69,6 +71,7 @@ export default function Contact() {
 
               <div className="fr-col-12 fr-col-md-4">
                 <CopyToClipboard
+                  // @ts-ignore
                   onCopy={() => handleCopy()}
                   text={contactEmail}
                 >

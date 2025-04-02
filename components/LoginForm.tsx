@@ -16,9 +16,11 @@ export default function LoginForm() {
   const params = useSearchParams();
   let redirectUrl = '/';
   if (params.has('redirect')) {
+    // @ts-ignore
     redirectUrl = params.get('redirect');
   }
 
+  // @ts-ignore
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -50,6 +52,8 @@ export default function LoginForm() {
             <Alert
               description="Identifiant ou mot de passe incorrect"
               severity="error"
+              closable={false}
+              small
             />
           </div>
         </>

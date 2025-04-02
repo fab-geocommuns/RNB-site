@@ -34,6 +34,7 @@ export default function AddressSearchMap() {
 
   const addressInput = useRef<HTMLInputElement>(null);
 
+  // @ts-ignore
   const handleKeyDown = async (e) => {
     setAutocompleteActive(true);
     dispatch(Actions.map.setAddressSearchUnknownRNBId(false));
@@ -151,6 +152,7 @@ export default function AddressSearchMap() {
     }
   }, []);
 
+  // @ts-ignore
   const select_suggestion = (suggestion) => {
     const position = featureToPosition(suggestion);
     // Add a marker to the map
@@ -176,6 +178,7 @@ export default function AddressSearchMap() {
     }
   }, [selectedItem]);
 
+  // @ts-ignore
   const handleSuggestionSelected = ({ suggestion }) => {
     if (suggestion !== null) {
       select_suggestion(suggestion);

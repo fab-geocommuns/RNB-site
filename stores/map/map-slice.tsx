@@ -226,6 +226,7 @@ export const addBanUUID = createAsyncThunk(
     // We update only if we are still looking at the same building.
     // Otherwise, we might experience a bug where we update the current building with the addresses of another building.
     const state = getState();
+    // @ts-ignore
     if (rnbData.rnb_id === state.selectedItem?.rnb_id) {
       dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
     }
