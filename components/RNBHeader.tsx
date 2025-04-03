@@ -124,7 +124,8 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   const editModeToggler = <ToggleEditMode />;
 
-  const enableEditionMode = process.env.ENABLE_EDITION_MODE === 'true';
+  const enableEditionMode =
+    process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
   const quickAccessItems = [
     faqQA,
     enableEditionMode ? editModeToggler : null,
