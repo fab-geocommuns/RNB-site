@@ -124,6 +124,13 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   const editModeToggler = <ToggleEditMode />;
 
+  const enableEditionMode = process.env.ENABLE_EDITION_MODE === 'true';
+  const quickAccessItems = [
+    faqQA,
+    enableEditionMode ? editModeToggler : null,
+    logQA,
+  ];
+
   return (
     <>
       <Header
@@ -145,7 +152,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
-        quickAccessItems={[faqQA, editModeToggler, logQA]}
+        quickAccessItems={quickAccessItems}
       />
     </>
   );
