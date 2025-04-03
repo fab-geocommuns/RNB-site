@@ -1,11 +1,12 @@
-import styles from '@/styles/editPanel.module.scss';
+import styles from '@/styles/contribution/editPanel.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { SelectedBuilding } from '@/stores/map/map-slice';
-import { Select } from '@codegouvfr/react-dsfr/SelectNext';
 import { useState } from 'react';
+import RNBIDHeader from './RNBIDHeader';
+import BuildingStatus from './BuildingStatus';
 
-function EditSelectedBuildingPanel({
+function EditSelectedBuildingPanelContent({
   selectedBuilding,
 }: {
   selectedBuilding: SelectedBuilding;
@@ -14,58 +15,22 @@ function EditSelectedBuildingPanel({
   const anyChanges = newStatus !== selectedBuilding.status;
 
   return (
-    <div className={styles.content}>
-      <RNBIDheader rnb_id={selectedBuilding.rnb_id}></RNBIDheader>
-      <Status status={newStatus} onChange={setNewStatus}></Status>
+    <>
+      <RNBIDHeader rnbId={selectedBuilding.rnb_id}></RNBIDHeader>
+      <BuildingStatus
+        status={newStatus}
+        onChange={setNewStatus}
+      ></BuildingStatus>
       <button disabled={!anyChanges}>Valider les modifications</button>
+    </>
+  );
+}
+
+function PanelWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={styles.shell}>
+      <div className={styles.content}>{children}</div>
     </div>
-  );
-}
-
-function RNBIDheader({ rnb_id }: { rnb_id: string }) {
-  return (
-    <>
-      Identifiant RNB
-      {rnb_id}
-    </>
-  );
-}
-
-function Status({
-  status,
-  onChange,
-}: {
-  status: string;
-  onChange: (status: string) => void;
-}) {
-  const statusList = [
-    {
-      label: 'Construit',
-      value: 'constructed',
-    },
-    {
-      label: 'En ruine',
-      value: 'notUsable',
-    },
-    {
-      label: 'Démoli',
-      value: 'demolished',
-    },
-  ];
-
-  return (
-    <>
-      <Select
-        nativeSelectProps={{
-          value: status,
-          onChange: (event) => {
-            onChange(event.target.value);
-          },
-        }}
-        label="Statut du bâtiment"
-        options={statusList}
-      />
-    </>
   );
 }
 
@@ -80,11 +45,14 @@ export default function EditionPanel() {
   return (
     <>
       <div className={styles.actions}>Actions</div>
-      <div className={styles.shell}>
-        {selectedBuilding && (
-          <EditSelectedBuildingPanel selectedBuilding={selectedBuilding} />
-        )}
-      </div>
+
+      {selectedBuilding && (
+        <PanelWrapper>
+          <EditSelectedBuildingPanelContent
+            selectedBuilding={selectedBuilding}
+          />
+        </PanelWrapper>
+      )}
     </>
   );
 }
