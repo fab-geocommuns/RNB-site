@@ -10,7 +10,6 @@ import '@/styles/global.scss';
 import RNBSessionProvider from '@/components/SessionProvider';
 
 // Components
-import RNBHeader from '@/components/RNBHeader';
 import { Analytics } from '@vercel/analytics/react';
 import FlashMessage from '@/components/FlashMessage';
 import Script from 'next/script';
@@ -48,7 +47,6 @@ heap.load("${settings.heapId}");
           <Providers>
             <RNBSessionProvider>
               <DsfrProvider>
-                <RNBHeader />
                 <FlashMessage />
                 <Alerts />
                 {children}

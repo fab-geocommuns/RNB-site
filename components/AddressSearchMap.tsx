@@ -79,7 +79,10 @@ export default function AddressSearchMap() {
   };
 
   const queryIsCoordinates = (q: string) => {
-    return q.match(/^[0-9]{1,2}\.[0-9]{1,10},(-)?[0-9]{1,2}\.[0-9]{1,10}$/);
+    // Format is `lat,lng,zoom`
+    return q.match(
+      /^[0-9]{1,2}\.[0-9]{1,10},(-)?[0-9]{1,2}\.[0-9]{1,10},[0-9]{1,2}\.?[0-9]{0,10}$/,
+    );
   };
 
   // used when loading the page with a rnb id in the URL
@@ -119,23 +122,17 @@ export default function AddressSearchMap() {
     return mapPosition;
   };
 
-  const handleCoordinates = (q: string, coords: string) => {
+  const handleCoordinates = (coords: string) => {
     if (queryIsCoordinates(coords)) {
       // fill the input with the address
       setAutocompleteActive(false);
-      setQuery(q);
       const coordinates = coords.split(',');
-      dispatch(
-        Actions.map.setMarker({
-          lat: parseFloat(coordinates[0]),
-          lng: parseFloat(coordinates[1]),
-        }),
-      );
+
       dispatch(
         Actions.map.setMoveTo({
           lat: parseFloat(coordinates[0]),
           lng: parseFloat(coordinates[1]),
-          zoom: 20,
+          zoom: parseFloat(coordinates[2]),
         }),
       );
     }
@@ -144,14 +141,15 @@ export default function AddressSearchMap() {
   useEffect(() => {
     const q = params.get('q');
     const coords = params.get('coords');
-    if (coords !== null && q !== null) {
-      handleCoordinates(q, coords);
-    } else if (q !== null) {
+    if (q !== null) {
       search(q);
+    }
+    if (coords !== null) {
+      handleCoordinates(coords);
     }
   }, []);
 
-  const select_suggestion = (suggestion) => {
+  const selectSuggestion = (suggestion) => {
     const position = featureToPosition(suggestion);
     // Add a marker to the map
     dispatch(
@@ -178,7 +176,7 @@ export default function AddressSearchMap() {
 
   const handleSuggestionSelected = ({ suggestion }) => {
     if (suggestion !== null) {
-      select_suggestion(suggestion);
+      selectSuggestion(suggestion);
     }
   };
 

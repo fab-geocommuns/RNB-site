@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
-import { MapMouseEvent } from 'maplibre-gl';
+import { MapMouseEvent, MapLibreEvent } from 'maplibre-gl';
 import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
@@ -52,6 +52,17 @@ export const useMapEvents = (map?: maplibregl.Map) => {
             dispatch(Actions.map.selectADS(file_number));
           }
         }
+      });
+
+      map.on('moveend', (e: MapLibreEvent<any>) => {
+        const zoom = map.getZoom();
+        const center = map.getCenter();
+        const coordsQueryParam = `${center.lat.toFixed(5)},${center.lng.toFixed(5)},${zoom.toFixed(2)}`;
+        const queryParams = new URLSearchParams(window.location.search);
+        queryParams.set('coords', coordsQueryParam);
+        const newUrl = new URL(window.location.href);
+        newUrl.search = queryParams.toString();
+        window.history.replaceState({}, '', newUrl);
       });
 
       // Évenement de déplacement du curseur: changement de pointeur si proche d'un bâtiment

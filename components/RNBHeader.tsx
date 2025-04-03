@@ -13,8 +13,13 @@ import { usePathname } from 'next/navigation';
 // Logo
 import logo from '@/public/images/logo.png';
 import { use, useEffect, useState } from 'react';
+import ToggleEditMode from './ToggleEditMode';
 
-export default function RNBHeader() {
+type Props = {
+  withNavigation?: boolean;
+};
+
+export default function RNBHeader({ withNavigation = true }: Props) {
   const { data: session } = useSession();
 
   const pathname = usePathname();
@@ -117,6 +122,16 @@ export default function RNBHeader() {
     setRedirectUrl(window.location.href);
   }, [pathname]);
 
+  const editModeToggler = <ToggleEditMode />;
+
+  const enableEditionMode =
+    process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
+  const quickAccessItems = [
+    faqQA,
+    enableEditionMode ? editModeToggler : null,
+    logQA,
+  ];
+
   return (
     <>
       <Header
@@ -128,7 +143,7 @@ export default function RNBHeader() {
           </>
         }
         serviceTitle="Référentiel National des Bâtiments"
-        navigation={nav}
+        navigation={withNavigation && nav}
         homeLinkProps={{
           href: '/',
           title: 'Accueil RNB',
@@ -138,7 +153,7 @@ export default function RNBHeader() {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
-        quickAccessItems={[faqQA, logQA]}
+        quickAccessItems={quickAccessItems}
       />
     </>
   );

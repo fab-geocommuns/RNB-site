@@ -1,0 +1,58 @@
+@import "../vars.scss";
+
+$input-height: 52px;
+$spacing: 12px;
+$actions-top: 2*$spacing + $input-height;
+$actions-height: 100px;
+$shell-top: $actions-top + $spacing + $actions-height;
+$panel-padding: 2*$spacing;
+
+.actions {
+    position: absolute;
+    top: $actions-top;
+    left: $spacing;
+    height: $actions-height;
+    right: auto;
+    z-index: 100;
+    width: 400px;
+
+    // TODO: Adapt once we have buttons
+    background-color: transparent;
+    pointer-events: none;
+}
+
+.shell {
+    position:absolute;
+
+    top: $shell-top;
+    right: auto;
+    bottom: $spacing;
+    left: $spacing;
+    z-index: 100;
+    width: 400px;
+}
+
+.content {
+    background:white;
+    box-shadow:0 0 0 2px rgba(0,0,0,.1);
+    
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+
+    position:absolute;
+    bottom: 0;
+    right:0;
+    left: 0; 
+    top: 0;
+}
+
+.header {
+    padding: $panel-padding;
+    background-color: var(--background-contrast-blue-france);
+}
+
+.body {
+    padding: $panel-padding;
+}
