@@ -6,6 +6,10 @@ import { useState } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 
+function PanelBody({ children }: { children: React.ReactNode }) {
+  return <div className={styles.body}>{children}</div>;
+}
+
 function EditSelectedBuildingPanelContent({
   selectedBuilding,
 }: {
@@ -17,11 +21,13 @@ function EditSelectedBuildingPanelContent({
   return (
     <>
       <RNBIDHeader rnbId={selectedBuilding.rnb_id}></RNBIDHeader>
-      <BuildingStatus
-        status={newStatus}
-        onChange={setNewStatus}
-      ></BuildingStatus>
-      <button disabled={!anyChanges}>Valider les modifications</button>
+      <PanelBody>
+        <BuildingStatus
+          status={newStatus}
+          onChange={setNewStatus}
+        ></BuildingStatus>
+        <button disabled={!anyChanges}>Valider les modifications</button>
+      </PanelBody>
     </>
   );
 }
@@ -44,7 +50,7 @@ export default function EditionPanel() {
       : null;
   return (
     <>
-      <div className={styles.actions}>Actions</div>
+      <div className={styles.actions}>&nbsp;{/* Actions placeholder */}</div>
 
       {selectedBuilding && (
         <PanelWrapper>
