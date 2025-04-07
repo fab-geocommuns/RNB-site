@@ -20,24 +20,24 @@ function EditSelectedBuildingPanelContent({
 }) {
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const anyChanges = newStatus !== selectedBuilding.status;
   const { fetch } = useRNBFetch();
 
   useEffect(() => {
     if (error || success) {
+      // show the message for a few seconds
       const timer = setTimeout(() => {
-        setError(false);
+        setError(null);
         setSuccess(false);
-      }, 4000); // 4 secondes
+      }, 4000);
 
       return () => clearTimeout(timer);
     }
   }, [error, success]);
 
   const handleSubmit = async () => {
-    // setLoading(true);
-    // setError(null);
+    setError(null);
     setSuccess(false);
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
 
@@ -55,12 +55,8 @@ function EditSelectedBuildingPanelContent({
 
       setSuccess(true);
     } catch (err: any) {
-      setError(
-        err.message || 'La modification a échoué pour une raison inconnue',
-      );
-    } finally {
-      // setLoading(false);
-      console.log('fin');
+      setError(err.message || 'Erreur lors de la modification');
+      console.log(error);
     }
   };
 
@@ -81,7 +77,12 @@ function EditSelectedBuildingPanelContent({
         <div
           className={`${styles.notice} ${success || error ? styles.noticeVisible : ''}`}
         >
-          <Notice title="Modifications enregistrées" severity="warning" />
+          {success && (
+            <Notice title="Modification enregistrée" severity="info" />
+          )}
+          {error && (
+            <Notice title="Modification impossible" severity="warning" />
+          )}
         </div>
       </div>
     </>
