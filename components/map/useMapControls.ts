@@ -1,9 +1,5 @@
 import maplibregl from 'maplibre-gl';
 import { useEffect } from 'react';
-import { fr } from '@codegouvfr/react-dsfr';
-import MapStyleSwitcherControl from '@/components/map/MapStyleSwitcher';
-import { STYLES } from '@/components/map/useMapLayers';
-import { BuildingSourceSwitcherControl } from '@/components/map/BuildingSourceSwitcherControl';
 
 /**
  * Ajout et gestion des controles de la carte

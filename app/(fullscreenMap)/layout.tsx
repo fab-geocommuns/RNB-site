@@ -1,13 +1,13 @@
 import RNBHeader from '@/components/RNBHeader';
 
-export default function NoFooterLayout({
-  children, // will be a page or nested layout
+export default function FullscreenLayout({
+  children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <>
-      <RNBHeader />
+      <RNBHeader withNavigation={false} />
       {children}
     </>
   );

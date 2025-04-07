@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 
 // Components
 import { Footer } from '@codegouvfr/react-dsfr/Footer';
+import RNBHeader from '@/components/RNBHeader';
 
 export const metadata: Metadata = {
   title: {
@@ -20,6 +21,7 @@ export default function WithFooterLayout({
 }) {
   return (
     <>
+      <RNBHeader />
       {children}
       <Footer
         brandTop={
