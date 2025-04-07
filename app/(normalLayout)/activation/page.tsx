@@ -13,7 +13,7 @@ export default function ActivationPage() {
   useEffect(() => {
     if (status === 'success') {
       const message =
-        'Votre email a été validé. Vous pouvez désormais vous connecter';
+        'Votre email a été validé. Vous pouvez désormais vous connecter.';
       redirect(
         `/login?email=${encodeURIComponent(email || '')}&success=${encodeURIComponent(message)}`,
       );

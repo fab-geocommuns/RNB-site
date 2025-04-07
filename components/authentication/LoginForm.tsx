@@ -14,11 +14,14 @@ export default function LoginForm() {
 
   // Get the redirect query parameter
   const params = useSearchParams();
+
   let redirectUrl = '/';
   const redirect = params.get('redirect');
   if (redirect) {
     redirectUrl = redirect;
   }
+
+  const successMessage = params.get('success');
 
   const prefilledEmail = params.get('email') || '';
 
@@ -62,6 +65,18 @@ export default function LoginForm() {
           </div>
         </>
       )}
+      {successMessage && (
+        <>
+          <div className="fr-mb-3w">
+            <Alert
+              description={successMessage}
+              severity="success"
+              small
+              closable={false}
+            />
+          </div>
+        </>
+      )}
       <form
         onSubmit={(e) => {
           handleSubmit(e);
@@ -92,6 +107,7 @@ export default function LoginForm() {
             type="password"
             name="password"
             id="password"
+            autoFocus={prefilledEmail !== ''}
           />
         </div>
 
