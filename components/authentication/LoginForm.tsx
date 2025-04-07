@@ -15,18 +15,24 @@ export default function LoginForm() {
   // Get the redirect query parameter
   const params = useSearchParams();
   let redirectUrl = '/';
-  if (params.has('redirect')) {
-    redirectUrl = params.get('redirect');
+  const redirect = params.get('redirect');
+  if (redirect) {
+    redirectUrl = redirect;
   }
 
-  const handleSubmit = async (e) => {
+  const prefilledEmail = params.get('email') || '';
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Remove errors
     setCredentialsError(false);
 
-    const username = e.target.username.value;
-    const password = e.target.password.value;
+    const form = e.currentTarget;
+    const username = (form.elements.namedItem('username') as HTMLInputElement)
+      .value;
+    const password = (form.elements.namedItem('password') as HTMLInputElement)
+      .value;
 
     const loginResult = await signIn('credentials', {
       username,
@@ -50,6 +56,8 @@ export default function LoginForm() {
             <Alert
               description="Identifiant ou mot de passe incorrect"
               severity="error"
+              small
+              closable={false}
             />
           </div>
         </>
@@ -71,6 +79,7 @@ export default function LoginForm() {
             type="text"
             name="username"
             id="username"
+            defaultValue={prefilledEmail}
           />
         </div>
 

@@ -1,6 +1,7 @@
 // Session
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 // Styles
 import styles from '@/styles/login.module.scss';
