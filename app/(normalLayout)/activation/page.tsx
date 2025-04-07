@@ -41,7 +41,7 @@ export default function ActivationPage() {
                     <strong>
                       Veuillez réessayer ou contacter le support
                     </strong>{' '}
-                    via l'adresse{' '}
+                    via l&apos;adresse{' '}
                     <a href="mailto:rnb@beta.gouv.fr">rnb@beta.gouv.fr</a> si le
                     problème persiste.
                   </span>

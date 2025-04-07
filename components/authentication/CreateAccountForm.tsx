@@ -134,7 +134,7 @@ export default function CreateAccountForm() {
               envoyé.
               <br />
               <strong>Validez votre adresse email</strong> en cliquant sur le
-              lien dans l'email pour continuer.
+              lien dans l&apos;email pour continuer.
             </div>
           }
           severity="success"
