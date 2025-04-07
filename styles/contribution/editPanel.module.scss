@@ -56,3 +56,36 @@ $panel-padding: 2*$spacing;
 .body {
     padding: $panel-padding;
 }
+.noticeContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    // transform: translateX(-50%);
+    z-index: 100;
+}
+
+.notice {
+    // padding: 1rem 1.5rem;
+    // border-radius: 8px;
+    // font-weight: bold;
+    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.4s ease, transform 0.5s ease;
+}
+
+.noticeVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+// .success {
+//     background-color: #daf5d8;
+//     color: #237a2b;
+// }
+
+// .error {
+//     background-color: #fddede;
+//     color: #a22424;
+// }
