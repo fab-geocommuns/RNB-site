@@ -14,7 +14,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@codegouvfr/react-dsfr": "^1.11.2",
+    "@codegouvfr/react-dsfr": "1.17",
     "@reduxjs/toolkit": "^2.2.7",
     "@sentry/nextjs": "^8.47.0",
     "@tryghost/content-api": "^1.11.21",
