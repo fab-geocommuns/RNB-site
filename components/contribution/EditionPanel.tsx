@@ -56,7 +56,7 @@ function EditSelectedBuildingPanelContent({
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
-      console.log(error);
+      console.error(error);
     }
   };
 
