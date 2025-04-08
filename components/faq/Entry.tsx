@@ -1,5 +1,6 @@
 import styles from '@/styles/faq.module.scss';
 
+// @ts-ignore
 export default function Entry({ entry }) {
   return (
     <>

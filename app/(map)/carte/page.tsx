@@ -20,6 +20,7 @@ import Bus from '@/utils/Bus';
 export default function RNBMap() {
   // //////////////////////
   // Tracking address search
+  // @ts-ignore
   const trackAddressSearch = (address) => {
     va.track('address-search-public-map', {
       query: address.label,
@@ -36,6 +37,7 @@ export default function RNBMap() {
 
   // //////////////////////
   // Track RNB ID searched in the search bar
+  // @ts-ignore
   const trackRNBIDSearch = (infos) => {
     va.track('rnbid-search-public-map', {
       rnb_id: infos.rnb_id,

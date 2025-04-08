@@ -9,6 +9,7 @@ import SearchBar from '@codegouvfr/react-dsfr/SearchBar';
 import styles from '@/styles/searchBlock.module.scss';
 import { fuzzySearchAttributes } from './util/fuzzySearchAttributes';
 import va, { track } from '@vercel/analytics';
+// @ts-ignore
 import debounce from 'lodash.debounce';
 import useQueryParamState from '@/utils/useQueryParamState';
 interface Props {

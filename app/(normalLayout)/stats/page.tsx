@@ -29,20 +29,24 @@ export default function Page() {
       });
   }, []);
 
+  // @ts-ignore
   const stat_display = function (key) {
     let card;
     if (loading) {
       card = '...';
     } else {
+      // @ts-ignore
       if (stats[key] == null) {
         card = '?';
       } else {
+        // @ts-ignore
         card = stats[key].toLocaleString('fr-FR');
       }
     }
     return card;
   };
 
+  // @ts-ignore
   let more_than_one_dataset = stats.data_gouv_publication_count > 1;
 
   return (

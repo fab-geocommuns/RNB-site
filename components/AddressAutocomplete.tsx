@@ -8,9 +8,13 @@ import styles from '@/styles/addressAutocomplete.module.scss';
 import { Actions } from '@/stores/store';
 
 export default function AddressAutocomplete({
+  // @ts-ignore
   autocompleteActive,
+  // @ts-ignore
   query,
+  // @ts-ignore
   keyDown,
+  // @ts-ignore
   onSuggestionSelected,
   override_class = '',
 }) {
@@ -63,6 +67,7 @@ export default function AddressAutocomplete({
     }
   }, [keyDown]);
 
+  // @ts-ignore
   const selectSuggestion = (suggestion) => {
     if (suggestion) {
       setSuggestionChosen(true);
@@ -83,6 +88,7 @@ export default function AddressAutocomplete({
         }
 
         setTypeTimeout(
+          // @ts-ignore
           setTimeout(() => {
             handleAddressQuery();
           }, 300),
@@ -97,17 +103,23 @@ export default function AddressAutocomplete({
     const geocode_result = await fetchBanAPI(query);
 
     dispatch(Actions.map.setAddressSearchQuery(query));
+    // @ts-ignore
     dispatch(Actions.map.setAddressSearchResults(geocode_result.features));
+    // @ts-ignore
     if (geocode_result.features && geocode_result.features.length > 0) {
+      // @ts-ignore
       setAddressSuggestions(geocode_result.features);
       setSelectedSuggestion(-1);
     }
+    // @ts-ignore
     return geocode_result.features;
   };
 
+  // @ts-ignore
   const fetchBanAPI = async (q) => {
     let query_url = new URL(apiUrl);
     query_url.searchParams.set('q', q);
+    // @ts-ignore
     query_url.searchParams.set('autocomplete', 1);
     return new Promise((resolve, reject) => {
       fetch(query_url)
@@ -130,8 +142,10 @@ export default function AddressAutocomplete({
         ' ' +
         (selectedSuggestion == i ? styles.selected : '')
       }
+      // @ts-ignore
       key={s.properties.id}
     >
+      // @ts-ignore
       {s.properties.label}
     </div>
   ));

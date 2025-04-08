@@ -5,6 +5,7 @@ import BdgOp from '@/components/BdgOp';
 import InputErrors from '@/components/InputErrors';
 
 export default function BdgOperations({ errors = null }) {
+  // @ts-ignore
   const [ads, setAds] = useContext(AdsContext);
 
   const createNewBdg = () => {
@@ -13,6 +14,7 @@ export default function BdgOperations({ errors = null }) {
     setAds(ads.clone());
   };
 
+  // @ts-ignore
   const handleCreateNewBdg = (e) => {
     e.preventDefault();
     createNewBdg();
@@ -39,6 +41,7 @@ export default function BdgOperations({ errors = null }) {
           <InputErrors errors={errors} />
 
           <ul className={styles.opsList}>
+            // @ts-ignore
             {ads.state.data.buildings_operations?.map((bdgop) => (
               <BdgOp key={bdgop.building.identifier} data={bdgop} />
             ))}

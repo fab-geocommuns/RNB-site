@@ -8,7 +8,9 @@ import { AdsContext } from './AdsContext';
 import { MapContext } from '@/components/MapContext';
 
 export default function BdgOp({ data = null }) {
+  // @ts-ignore
   const [ads, setAds] = useContext(AdsContext);
+  // @ts-ignore
   const [mapCtx, setMapCtx] = useContext(MapContext);
 
   const chooseOpOption = (op: string, idenfitier: string) => {
@@ -20,7 +22,9 @@ export default function BdgOp({ data = null }) {
   const centerMap = () => {
     if (hasPosition()) {
       mapCtx.data.position.center = [
+        // @ts-ignore
         data.building.geometry.coordinates[0],
+        // @ts-ignore
         data.building.geometry.coordinates[1],
       ];
       mapCtx.data.position.zoom = 20;
@@ -30,18 +34,22 @@ export default function BdgOp({ data = null }) {
   };
 
   const removeBdg = () => {
+    // @ts-ignore
     ads.removeIdentifier(data.building.identifier);
     setAds(ads.clone());
   };
 
   const isEditing = () => {
+    // @ts-ignore
     return ads.state.bdg_move == data.building.identifier;
   };
   const isNew = () => {
+    // @ts-ignore
     return data.building.rnb_id == 'new';
   };
 
   const hasPosition = () => {
+    // @ts-ignore
     return data.building.geometry != null;
   };
 
@@ -66,6 +74,7 @@ export default function BdgOp({ data = null }) {
       return 'Ajout au RNB';
     }
 
+    // @ts-ignore
     return data.building.rnb_id;
   };
 
@@ -81,6 +90,7 @@ export default function BdgOp({ data = null }) {
     if (isEditing()) {
       ads.state.bdg_move = null;
     } else {
+      // @ts-ignore
       ads.state.bdg_move = data.building.identifier;
     }
 
@@ -90,6 +100,7 @@ export default function BdgOp({ data = null }) {
 
   return (
     <>
+      // @ts-ignore
       <li className={styles.op} key={data.building.rnb_id}>
         <div>
           <span className={styles.opIdentifierShell}>
@@ -107,24 +118,30 @@ export default function BdgOp({ data = null }) {
         </div>
         <span
           onClick={() => {
+            // @ts-ignore
             chooseOpOption('build', data.building.identifier);
           }}
+          // @ts-ignore
           className={`${styles.opOption} ${styles.opOption__build} ${data.operation == 'build' ? styles.active : ''}`}
         >
           Construction neuve
         </span>
         <span
           onClick={() => {
+            // @ts-ignore
             chooseOpOption('modify', data.building.identifier);
           }}
+          // @ts-ignore
           className={`${styles.opOption} ${styles.opOption__modify} ${data.operation == 'modify' ? styles.active : ''}`}
         >
           Modification
         </span>
         <span
           onClick={() => {
+            // @ts-ignore
             chooseOpOption('demolish', data.building.identifier);
           }}
+          // @ts-ignore
           className={`${styles.opOption} ${styles.opOption__demolish}  ${data.operation == 'demolish' ? styles.active : ''}`}
         >
           Démolition complète

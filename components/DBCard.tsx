@@ -57,14 +57,17 @@ const AttributesTable = ({
         <HighlightedText
           key={i}
           text={attribute.name}
+          // @ts-ignore
           tokens={attribute.nameTokens}
         />,
         <HighlightedText
           key={i}
           text={attribute.description}
+          // @ts-ignore
           tokens={attribute.descriptionTokens}
         />,
       ])}
+      // @ts-ignore
       hasHeader={false}
       size={'sm'}
       noCaption

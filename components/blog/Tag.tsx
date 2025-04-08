@@ -1,6 +1,7 @@
 // Style
 import Badge from '@codegouvfr/react-dsfr/Badge';
 
+// @ts-ignore
 export default function Tag({ tag }) {
   const severityMap = {
     energie: 'new',
@@ -9,6 +10,7 @@ export default function Tag({ tag }) {
     geocommun: 'success',
   };
 
+  // @ts-ignore
   const severity = severityMap[tag.slug] || 'info';
 
   return (

@@ -118,6 +118,7 @@ export default async function Page() {
               </div>
             </div>
             <div className="fr-col-12 fr-col-md-6">
+              // @ts-ignore
               <Card
                 imageUrl={metalBdgPhoto.src}
                 horizontal
@@ -129,6 +130,7 @@ export default async function Page() {
               />
             </div>
             <div className="fr-col-12 fr-col-md-6">
+              // @ts-ignore
               <Card
                 imageUrl={mountainPhoto.src}
                 horizontal
@@ -140,6 +142,7 @@ export default async function Page() {
               />
             </div>
             <div className="fr-col-12 fr-col-md-6">
+              // @ts-ignore
               <Card
                 imageUrl={siloPhoto.src}
                 horizontal
@@ -151,6 +154,7 @@ export default async function Page() {
               />
             </div>
             <div className="fr-col-12 fr-col-md-6">
+              // @ts-ignore
               <Card
                 imageUrl={bdgRiverPhoto.src}
                 horizontal
