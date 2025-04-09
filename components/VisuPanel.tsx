@@ -104,7 +104,6 @@ export default function VisuPanel() {
           <div className={styles.content}>
             <div className={styles.head}>
               <h1 className={styles.title}>{title()}</h1>
-              <DisableBuilding />
               <a href="#" onClick={close} className={styles.closeLink}>
                 <i className="fr-icon-close-line" />
               </a>
@@ -116,48 +115,6 @@ export default function VisuPanel() {
               )}
               {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
             </div>
-
-            {selectedItem?._type === 'building' && (
-              <ShouldBeConnected withGroup={RNBGroup.CONTRIBUTORS}>
-                <div className={styles.footer}>
-                  <Input
-                    label="Justification de la contribution (*)"
-                    style={{
-                      marginBottom: '0',
-                    }}
-                    nativeTextAreaProps={{
-                      rows: 3,
-                      value: comment,
-                      onChange: (e: any) => setComment(e.target.value),
-                    }}
-                    textArea={true}
-                  />
-
-                  <div className={styles.footerActions}>
-                    <button
-                      className="action"
-                      onClick={() => {
-                        dispatch(
-                          Actions.contribution.reloadContributionData(
-                            selectedItem,
-                          ),
-                        );
-                        setComment('');
-                      }}
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      className="action"
-                      onClick={saveAndStopEditing}
-                      disabled={!comment}
-                    >
-                      Sauvegarder
-                    </button>
-                  </div>
-                </div>
-              </ShouldBeConnected>
-            )}
           </div>
         </div>
       </>
