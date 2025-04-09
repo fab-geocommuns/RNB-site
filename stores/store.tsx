@@ -5,7 +5,6 @@ import { mapActions, mapReducer } from '@/stores/map/map-slice';
 import { appActions, appReducer } from '@/stores/app/app-slice';
 
 export const store = configureStore({
-  devTools: true,
   reducer: {
     map: mapReducer,
     app: appReducer,

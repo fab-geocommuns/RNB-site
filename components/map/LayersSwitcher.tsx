@@ -58,6 +58,7 @@ function LayerButton({
           onClick();
         }}
         title={
+          // TODO: Use a Tooltip for better UX, but we need to update DSFR
           isAvailable
             ? label
             : `Le calque "${label}" n'est pas disponible en mode édition`
@@ -97,10 +98,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
     dispatch(Actions.map.toggleExtraLayer(layer));
   };
 
-  const isAvailable = (layer: MapLayer) => {
-    console.log(disabledLayers, layer);
-    return !disabledLayers.includes(layer);
-  };
+  const isAvailable = (layer: MapLayer) => !disabledLayers.includes(layer);
 
   // Switch background image
   const [btnImage, setBtnImage] = useState(backgroundPlanIGN);

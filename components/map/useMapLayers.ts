@@ -95,6 +95,7 @@ export const DEFAULT_STYLE =
   ].style;
 
 // C.f. discussion here https://github.com/mapbox/mapbox-gl-js/issues/6707#issuecomment-1942879968
+// and https://github.com/mapbox/mapbox-gl-draw/blob/main/src/setup.js#L66
 function onMapReady(map: maplibregl.Map, callback: () => void) {
   if (map.loaded()) {
     callback();
@@ -128,11 +129,11 @@ export const useMapLayers = (
   const installAllRunning = useRef(false);
 
   const installAll = async (map: maplibregl.Map) => {
+    // We don't want concurrent calls running
     if (installAllRunning.current) return;
-    console.log('installAll started');
     installAllRunning.current = true;
+
     try {
-      console.trace('installAll called');
       installBuildings(map);
       await installADS(map);
 
@@ -143,7 +144,6 @@ export const useMapLayers = (
       throw e;
     } finally {
       installAllRunning.current = false;
-      console.log('installAll finished');
     }
   };
 
