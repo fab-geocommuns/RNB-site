@@ -28,7 +28,7 @@ const noErrors: () => CreateAccountErrors = () => ({
 export default function CreateAccountForm() {
   const [createAccountErrors, setCreateAccountErrors] = useState(noErrors());
   const [genericError, setGenericError] = useState(false);
-  const router = useRouter();
+  const [success, setSuccess] = useState(false);
 
   const clearError = (field: keyof CreateAccountErrors) => {
     setCreateAccountErrors({
@@ -71,6 +71,7 @@ export default function CreateAccountForm() {
     e.preventDefault();
 
     setGenericError(false);
+    setSuccess(false);
 
     const { hasErrors, errors, values } = prevalidateForm(e.target);
 
@@ -81,7 +82,7 @@ export default function CreateAccountForm() {
 
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_BASE + '/auth/user/create/',
+        process.env.NEXT_PUBLIC_API_BASE + '/auth/users/',
         {
           method: 'POST',
           body: JSON.stringify({
@@ -115,22 +116,34 @@ export default function CreateAccountForm() {
         throw new Error('Account creation did not return a 201 status code');
       }
 
-      const loginResult = await signIn('credentials', {
-        username: values.username,
-        password: values.password,
-        redirect: false,
-      });
-
-      if (loginResult?.error) {
-        throw new Error('Login following account creation did not work');
-      }
-
-      router.push('/votre-compte');
+      setSuccess(true);
     } catch (error) {
+      setSuccess(false);
       setGenericError(true);
       throw error;
     }
   };
+
+  if (success) {
+    return (
+      <div className="fr-mb-3w">
+        <Alert
+          description={
+            <div>
+              Votre compte a été créé et un e-mail de confirmation vous a été
+              envoyé.
+              <br />
+              <strong>Validez votre adresse email</strong> en cliquant sur le
+              lien dans l&apos;email pour continuer.
+            </div>
+          }
+          severity="success"
+          closable={false}
+          small={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit}>
