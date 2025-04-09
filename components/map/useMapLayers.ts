@@ -7,11 +7,11 @@ import satellite from '@/components/map/mapstyles/satellite.json';
 import maplibregl, { StyleSpecification } from 'maplibre-gl';
 
 // React things
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 // Store
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { Actions, RootState } from '@/stores/store';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -64,8 +64,16 @@ export const SRC_PLOTS = 'plotstiles';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
+import {
+  MapBackgroundLayer,
+  MapLayer,
+  MapBuildingsLayer,
+} from '@/stores/map/map-slice';
 
-export const STYLES = {
+export const STYLES: Record<
+  MapBackgroundLayer,
+  { name: string; style: StyleSpecification }
+> = {
   vectorOsm: {
     name: 'OSM',
     style: vectorOsm as StyleSpecification,
@@ -86,20 +94,56 @@ export const DEFAULT_STYLE =
       'vectorIgnStandard'
   ].style;
 
+// C.f. discussion here https://github.com/mapbox/mapbox-gl-js/issues/6707#issuecomment-1942879968
+function onMapReady(map: maplibregl.Map, callback: () => void) {
+  if (map.loaded()) {
+    callback();
+  } else {
+    const mapLoadedInterval = setInterval(() => {
+      if (map.loaded()) {
+        clearInterval(mapLoadedInterval);
+        callback();
+      }
+    }, 16);
+
+    map.on('load', () => {
+      clearInterval(mapLoadedInterval);
+      callback();
+    });
+  }
+}
+
 /**
  * Ajout et gestion des couches de la carte
  * @param map
  */
-export const useMapLayers = (map?: maplibregl.Map) => {
+export const useMapLayers = (
+  map?: maplibregl.Map,
+  defaultBackgroundLayer?: MapBackgroundLayer,
+  defaultBuildingLayer?: MapBuildingsLayer,
+) => {
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
+  const dispatch = useDispatch();
+  const installAllRunning = useRef(false);
 
-  const installAll = (map: maplibregl.Map) => {
-    installBuildings(map);
-    installADS(map);
+  const installAll = async (map: maplibregl.Map) => {
+    if (installAllRunning.current) return;
+    console.log('installAll started');
+    installAllRunning.current = true;
+    try {
+      console.trace('installAll called');
+      installBuildings(map);
+      await installADS(map);
 
-    if (layers.extraLayers.includes('plots')) {
-      installPlots(map);
+      if (layers.extraLayers.includes('plots')) {
+        installPlots(map);
+      }
+    } catch (e) {
+      throw e;
+    } finally {
+      installAllRunning.current = false;
+      console.log('installAll finished');
     }
   };
 
@@ -475,18 +519,25 @@ export const useMapLayers = (map?: maplibregl.Map) => {
     map.setStyle(newBckg);
 
     // Install other data after the background
-    installAll(map);
-  }, [layers]);
+    onMapReady(map, () => {
+      installAll(map);
+    });
+  }, [layers, map]);
 
   useEffect(() => {
     if (map) {
-      if (map.loaded()) {
+      onMapReady(map, () => {
         installAll(map);
-      } else {
-        map.once('load', () => installAll(map));
-      }
+      });
     }
   }, [map]);
+
+  useEffect(() => {
+    if (defaultBackgroundLayer)
+      dispatch(Actions.map.setLayersBackground(defaultBackgroundLayer));
+    if (defaultBuildingLayer)
+      dispatch(Actions.map.setLayersBuildings(defaultBuildingLayer));
+  }, [defaultBackgroundLayer, defaultBuildingLayer]);
 
   const adsOperationsIcons = getADSOperationIcons();
 };

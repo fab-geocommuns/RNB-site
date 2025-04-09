@@ -3,11 +3,21 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '@/styles/mapComp.module.scss';
 import { DEFAULT_STYLE } from '@/components/map/useMapLayers';
 import LayersSwitcher from '@/components/map/LayersSwitcher';
+import {
+  MapBackgroundLayer,
+  MapBuildingsLayer,
+  MapLayer,
+} from '@/stores/map/map-slice';
+
+type UseMapParams = {
+  disabledLayers?: MapLayer[];
+};
 
 /**
  * Création de la carte MapLibre
  */
-export const useMap = () => {
+export const useMap = (params?: UseMapParams) => {
+  const { disabledLayers = [] } = params || {};
   const [map, setMap] = useState<maplibregl.Map>();
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +26,7 @@ export const useMap = () => {
     () => (
       <>
         <div className={styles.map} ref={mapContainerRef} />
-        <LayersSwitcher />
+        <LayersSwitcher disabledLayers={disabledLayers} />
       </>
     ),
     [],

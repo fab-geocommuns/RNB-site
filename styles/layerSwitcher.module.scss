@@ -187,6 +187,11 @@
             border-color: #3866ef;
           }
         }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       }
 
       .choiceImageShell {
