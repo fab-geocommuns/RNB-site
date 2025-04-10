@@ -11,8 +11,6 @@ type BuildingAdressesProps = {
 export function BuildingAdresses({ adresses }: BuildingAdressesProps) {
   const { is } = useRNBAuthentication();
 
-  if (is(RNBGroup.CONTRIBUTORS)) return <EditBuildingAdresses />;
-
   return adresses?.length === 0 ? (
     <div>
       <em>Aucune adresse liée</em>

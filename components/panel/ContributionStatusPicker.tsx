@@ -21,21 +21,5 @@ export function ContributionStatusPicker({
   const setStatus = (status: BuildingStatus) =>
     dispatch(Actions.contribution.setStatus(status));
 
-  return is(RNBGroup.CONTRIBUTORS) ? (
-    <Select
-      label=""
-      nativeSelectProps={{
-        onChange: (event) => setStatus(event.target.value as BuildingStatus),
-        value: status,
-      }}
-    >
-      {Object.keys(BuildingStatusMap).map((status) => (
-        <option key={status} value={status}>
-          {BuildingStatusMap[status as BuildingStatus]}
-        </option>
-      ))}
-    </Select>
-  ) : (
-    BuildingStatusMap[currentStatus]
-  );
+  return BuildingStatusMap[currentStatus];
 }
