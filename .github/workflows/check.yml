@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run TypeScript
-        run: |
-          npm run build
-          npx tsc --noEmit
+      - shell: bash
+        env:
+          NEXT_GHOST_API_KEY: ${{ secrets.NEXT_GHOST_API_KEY }}
+        run: npm run build && npx tsc --noEmit
