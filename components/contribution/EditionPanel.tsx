@@ -5,6 +5,7 @@ import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
+import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { useEffect } from 'react';
@@ -29,7 +30,6 @@ function EditSelectedBuildingPanelContent({
 
   useEffect(() => {
     if (error || success) {
-      // show the message for a few seconds
       const timer = setTimeout(() => {
         setError(null);
         setSuccess(false);
@@ -74,6 +74,7 @@ function EditSelectedBuildingPanelContent({
           status={newStatus}
           onChange={setNewStatus}
         ></BuildingStatus>
+        <BuildingAddresses />
         <button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </button>
