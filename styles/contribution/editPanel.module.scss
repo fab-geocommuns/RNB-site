@@ -56,3 +56,21 @@ $panel-padding: 2*$spacing;
 .body {
     padding: $panel-padding;
 }
+.noticeContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.notice {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.4s ease, transform 0.5s ease;
+}
+
+.noticeVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
