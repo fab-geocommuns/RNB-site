@@ -1,8 +1,12 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/stores/store';
-import { SelectedBuilding } from '@/stores/map/map-slice';
-import { useState } from 'react';
+import {
+  SelectedBuilding,
+  mapActions,
+  BuildingAddress as BuildingAddressType,
+} from '@/stores/map/map-slice';
+import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
@@ -22,11 +26,29 @@ function EditSelectedBuildingPanelContent({
   selectedBuilding: SelectedBuilding;
 }) {
   const rnbId = selectedBuilding.rnb_id;
+  const dispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
+  const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
+    selectedBuilding.addresses,
+  );
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-  const anyChanges = newStatus !== selectedBuilding.status;
+
+  const anyChanges =
+    newStatus !== selectedBuilding.status ||
+    JSON.stringify(localAddresses) !==
+      JSON.stringify(selectedBuilding.addresses);
+
   const { fetch } = useRNBFetch();
+
+  useEffect(() => {
+    setNewStatus(selectedBuilding.status);
+    setLocalAddresses(selectedBuilding.addresses);
+  }, [selectedBuilding]);
+
+  const handleEditAddress = (addresses: BuildingAddressType[]) => {
+    setLocalAddresses(addresses);
+  };
 
   useEffect(() => {
     if (error || success) {
@@ -50,6 +72,7 @@ function EditSelectedBuildingPanelContent({
       const response = await fetch(url, {
         body: JSON.stringify({
           status: newStatus,
+          addresses: localAddresses,
         }),
         method: 'PATCH',
       });
@@ -74,7 +97,10 @@ function EditSelectedBuildingPanelContent({
           status={newStatus}
           onChange={setNewStatus}
         ></BuildingStatus>
-        <BuildingAddresses />
+        <BuildingAddresses
+          addresses={localAddresses}
+          onChange={handleEditAddress}
+        />
         <button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </button>
