@@ -2,6 +2,8 @@ import BuildingAddress from './BuildingAddress';
 import { BuildingAddress as BuildingAddressType } from '@/stores/map/map-slice';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useState } from 'react';
+import AddressInput from '../AddressInput';
+import { AddressSuggestion } from '../AddressAutocomplete';
 
 function AddressCreator({
   onSubmit,
@@ -9,7 +11,6 @@ function AddressCreator({
   onSubmit: (address: BuildingAddressType) => void;
 }) {
   const [isCreating, setIsCreating] = useState(false);
-  const [banId, setBanId] = useState('');
 
   if (!isCreating) {
     return (
@@ -23,17 +24,17 @@ function AddressCreator({
     );
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (suggestion: AddressSuggestion | null) => {
     const newAddress = {
       id: '',
-      banId: banId,
+      banId: suggestion?.properties.id || '',
       source: '',
-      street_number: '',
-      street_rep: '',
-      street: '',
-      city_zipcode: '',
-      city_name: '',
-      city_insee_code: '',
+      street_number: suggestion?.properties.housenumber || '',
+      street_rep: suggestion?.properties.street_rep || '',
+      street: suggestion?.properties.street || '',
+      city_zipcode: suggestion?.properties.city_zipcode || '',
+      city_name: suggestion?.properties.city_name || '',
+      city_insee_code: suggestion?.properties.city_insee_code || '',
     };
     onSubmit(newAddress);
     setIsCreating(false);
@@ -41,13 +42,22 @@ function AddressCreator({
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="BAN ID"
-        value={banId}
-        onChange={(e) => setBanId(e.target.value)}
+      <AddressInput
+        onSuggestionSelected={(suggestion) => {
+          if (suggestion) {
+            handleSubmit(suggestion);
+          }
+        }}
+        onEnterPress={() => {}}
+        render={(inputProps) => (
+          <input
+            {...inputProps}
+            type="text"
+            placeholder="Nouvelle addresse"
+            autoFocus
+          />
+        )}
       />
-      <button onClick={handleSubmit}>Ajouter</button>
     </div>
   );
 }
