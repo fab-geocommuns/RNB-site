@@ -13,12 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
-import { ShouldBeConnected } from '@/components/util/ShouldBeConnected';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { SelectedBuilding } from '@/stores/map/map-slice';
-import { Input } from '@codegouvfr/react-dsfr/Input';
-import { RNBGroup } from '@/utils/use-rnb-authentication';
-import { DisableBuilding } from '@/components/contribution/DisableBuilding';
 
 export default function VisuPanel() {
   // Store
@@ -28,7 +24,6 @@ export default function VisuPanel() {
   const dispatch: AppDispatch = useDispatch();
   const [comment, setComment] = useState('');
   const { fetch } = useRNBFetch();
-  const contribution = useSelector((state: RootState) => state.contribution);
 
   const title = () => {
     if (selectedItem?._type === 'building') {
@@ -44,57 +39,6 @@ export default function VisuPanel() {
 
   const close = () => {
     dispatch(Actions.map.unselectItem());
-  };
-
-  const saveAndStopEditing = async () => {
-    const building = selectedItem as SelectedBuilding;
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${building.rnb_id}/`;
-
-    try {
-      const res = await fetch(url, {
-        body: JSON.stringify({
-          status: contribution.status,
-          addresses_cle_interop: contribution.addresses?.map((a) => a.id),
-          comment,
-        }),
-        method: 'PATCH',
-      });
-
-      if (res.ok) {
-        // Update building in selectedItem
-        await dispatch(Actions.map.selectBuilding(building.rnb_id));
-
-        // Show alert
-        dispatch(
-          Actions.app.showAlert({
-            alert: {
-              id: `edit-building-${building.rnb_id}`,
-              severity: 'success',
-              description: 'Le bâtiment a été modifié',
-              small: true,
-            },
-          }),
-        );
-
-        // Reset comment
-        setComment('');
-      } else {
-        // Show error
-        dispatch(
-          Actions.app.showAlert({
-            alert: {
-              id: `edit-building-${building.rnb_id}`,
-              severity: 'error',
-              description:
-                'Une erreur est survenue, veuillez essayer plus tard',
-              small: true,
-            },
-          }),
-        );
-      }
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   if (selectedItem) {
