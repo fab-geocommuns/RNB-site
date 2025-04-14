@@ -15,6 +15,7 @@ export default function ADSSearch() {
 
     if (timeout.current) clearTimeout(timeout.current);
 
+    // @ts-ignore
     timeout.current = setTimeout(() => {
       const encodedQuery = encodeURI(e.target.value);
       router.push(`/ads?q=${encodedQuery}`);

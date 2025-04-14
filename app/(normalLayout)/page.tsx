@@ -175,6 +175,7 @@ export default async function Home() {
               </div>
               <div className="fr-grid-row fr-grid-row--gutters">
                 <div className="fr-col-12 fr-col-md-4 ">
+                  {/* @ts-ignore */}
                   <Card
                     imageUrl={rapprochementIllu.src}
                     desc="Obtenez les identifiants RNB d'un bâtiment et croisez des données jusqu'à présent isolées."
@@ -183,6 +184,7 @@ export default async function Home() {
                   />
                 </div>
                 <div className="fr-col-12 fr-col-md-4 ">
+                  {/* @ts-ignore */}
                   <Card
                     imageUrl={apiIllu.src}
                     desc="Intégrez les données du RNB à vos applications métier et SIG."
@@ -192,6 +194,7 @@ export default async function Home() {
                 </div>
 
                 <div className="fr-col-12 fr-col-md-4 ">
+                  {/* @ts-ignore */}
                   <Card
                     imageUrl={adsIllu.src}
                     desc="Utilisez vos outils d'instruction d'ADS pour alimenter le RNB. Soyez prévenus lorsque des bâtiments sont achevés sur votre territoire."

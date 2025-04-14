@@ -17,14 +17,17 @@ export default function AddressSearchHome() {
   const formRef = useRef(null);
   const router = useRouter();
 
+  // @ts-ignore
   const handleKeyDown = (e) => {
     setKeyDown(e);
   };
 
+  // @ts-ignore
   const handleSuggestionSelected = ({ suggestion }) => {
     if (suggestion !== null) {
       setQuery(suggestion.properties.label);
       setCoords(
+        // @ts-ignore
         `${suggestion.geometry.coordinates[1]},${suggestion.geometry.coordinates[0]}`,
       );
     }

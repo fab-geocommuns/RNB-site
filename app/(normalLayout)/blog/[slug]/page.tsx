@@ -58,6 +58,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   // find all code pre blocks in the html and replace them with highlighted code
   const postBody = post.html.replace(
     /<pre><code class="language-(.*?)">([\s\S]*?)<\/code><\/pre>/g,
+    // @ts-ignore
     (match, lang, code) => {
       const highlightedCode = hljs.highlight(lang, code).value;
       return `<pre><code class="hljs language-${lang}">${highlightedCode}</code></pre>`;

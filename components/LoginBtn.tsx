@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 export default function LoginBtn() {
   const { data: session } = useSession();
 
+  // @ts-ignore
   const handleSignout = (e) => {
     e.preventDefault();
     signOut();

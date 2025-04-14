@@ -102,6 +102,7 @@ export default class AdsEditing {
   }
 
   createNewBdg() {
+    // @ts-ignore
     this.data.buildings_operations.unshift({
       building: {
         rnb_id: 'new',
