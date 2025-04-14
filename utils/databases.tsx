@@ -1,7 +1,5 @@
 import { DiffusionDatabase } from '@/components/diffusionDatabase.type';
 
-const notGood: string = 43;
-
 export async function getDatabases(): Promise<DiffusionDatabase[]> {
   let result = [];
 
