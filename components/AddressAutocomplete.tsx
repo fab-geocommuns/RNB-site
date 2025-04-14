@@ -1,11 +1,34 @@
 'use client';
 
 // Hooks
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import styles from '@/styles/addressAutocomplete.module.scss';
 import { Actions } from '@/stores/store';
+
+import { Feature, FeatureCollection, Point } from 'geojson';
+
+type BANAddressAttributes = {
+  id: string;
+  label: string;
+  housenumber: string;
+  street: string;
+  city_name: string;
+  city_zipcode: string;
+};
+
+export type AddressSuggestion = Feature<Point, BANAddressAttributes>;
+
+type BANGeocodingResult = FeatureCollection<Point, BANAddressAttributes>;
+
+type Props = {
+  autocompleteActive: boolean;
+  query: string;
+  keyDown: KeyboardEvent;
+  onSuggestionSelected: (suggestion: AddressSuggestion | null) => void;
+  override_class?: string;
+};
 
 export default function AddressAutocomplete({
   autocompleteActive,
@@ -13,13 +36,15 @@ export default function AddressAutocomplete({
   keyDown,
   onSuggestionSelected,
   override_class = '',
-}) {
+}: Props) {
   // contains the address suggestions given by the BAN API
-  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [addressSuggestions, setAddressSuggestions] = useState<
+    AddressSuggestion[]
+  >([]);
   // used to highlight and choose an address suggestion
   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
 
-  const [typeTimeout, setTypeTimeout] = useState(null);
+  const typeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // when a suggestion is chosen, this is set to true to prevent an extra call the the API
   const [suggestionChosen, setSuggestionChosen] = useState(false);
@@ -63,13 +88,13 @@ export default function AddressAutocomplete({
     }
   }, [keyDown]);
 
-  const selectSuggestion = (suggestion) => {
+  const selectSuggestion = (suggestion: AddressSuggestion | null) => {
     if (suggestion) {
       setSuggestionChosen(true);
       setAddressSuggestions([]);
       setSelectedSuggestion(-1);
     }
-    onSuggestionSelected({ suggestion: suggestion });
+    onSuggestionSelected(suggestion);
   };
 
   useEffect(() => {
@@ -78,15 +103,13 @@ export default function AddressAutocomplete({
       if (query.length < 3) {
         setAddressSuggestions([]);
       } else {
-        if (typeTimeout) {
-          clearTimeout(typeTimeout);
+        if (typeTimeoutRef.current) {
+          clearTimeout(typeTimeoutRef.current);
         }
 
-        setTypeTimeout(
-          setTimeout(() => {
-            handleAddressQuery();
-          }, 300),
-        );
+        typeTimeoutRef.current = setTimeout(() => {
+          handleAddressQuery();
+        }, 300);
       }
     }
   }, [query]);
@@ -94,21 +117,21 @@ export default function AddressAutocomplete({
   const handleAddressQuery = async () => {
     // Add the query to the store
 
-    const geocode_result = await fetchBanAPI(query);
+    const geocodingResult = (await fetchBanAPI(query)) as BANGeocodingResult;
 
     dispatch(Actions.map.setAddressSearchQuery(query));
-    dispatch(Actions.map.setAddressSearchResults(geocode_result.features));
-    if (geocode_result.features && geocode_result.features.length > 0) {
-      setAddressSuggestions(geocode_result.features);
+    dispatch(Actions.map.setAddressSearchResults(geocodingResult.features));
+    if (geocodingResult.features && geocodingResult.features.length > 0) {
+      setAddressSuggestions(geocodingResult.features);
       setSelectedSuggestion(-1);
     }
-    return geocode_result.features;
+    return geocodingResult.features;
   };
 
-  const fetchBanAPI = async (q) => {
+  const fetchBanAPI = async (q: string) => {
     let query_url = new URL(apiUrl);
     query_url.searchParams.set('q', q);
-    query_url.searchParams.set('autocomplete', 1);
+    query_url.searchParams.set('autocomplete', '1');
     return new Promise((resolve, reject) => {
       fetch(query_url)
         .then((response) => response.json())

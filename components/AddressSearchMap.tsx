@@ -34,7 +34,7 @@ export default function AddressSearchMap() {
 
   const addressInput = useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = async (e) => {
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
     setAutocompleteActive(true);
     dispatch(Actions.map.setAddressSearchUnknownRNBId(false));
 
@@ -139,6 +139,7 @@ export default function AddressSearchMap() {
   };
 
   useEffect(() => {
+    debugger;
     const q = params.get('q');
     const coords = params.get('coords');
     if (q !== null) {
