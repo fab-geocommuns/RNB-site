@@ -169,8 +169,6 @@ export default function AddressSearchMap() {
   useEffect(() => {
     if (selectedItem && selectedItem._type === 'building') {
       setQuery(selectedItem.rnb_id);
-    } else if (!selectedItem) {
-      setQuery('');
     }
   }, [selectedItem]);
 

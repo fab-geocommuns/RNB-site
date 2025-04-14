@@ -25,7 +25,7 @@ export default function AddressSearchHome() {
     if (suggestion !== null) {
       setQuery(suggestion.properties.label);
       setCoords(
-        `${suggestion.geometry.coordinates[1]},${suggestion.geometry.coordinates[0]}`,
+        `${suggestion.geometry.coordinates[1]},${suggestion.geometry.coordinates[0]},20`,
       );
     }
     setnavigateToMap(true);
