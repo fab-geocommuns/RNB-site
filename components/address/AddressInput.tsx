@@ -8,7 +8,7 @@ type Props = {
   onSuggestionSelected: (suggestion: AddressSuggestion) => void;
   onEnterPress?: () => void;
   onEscapePress?: () => void;
-  overrideSuggestionsClassname?: string;
+  additionalSuggestionsClassname?: string;
   render: (inputProps: {
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,7 +24,7 @@ export default function AddressInput({
   onSuggestionSelected,
   onEnterPress,
   onEscapePress,
-  overrideSuggestionsClassname,
+  additionalSuggestionsClassname,
   render,
   renderSuggestion,
   geocodeQueryParams,
@@ -78,7 +78,7 @@ export default function AddressInput({
         query={query}
         keyDown={keyDown}
         onSuggestionSelected={handleSuggestionSelected}
-        overrideClassName={overrideSuggestionsClassname}
+        additionalClassName={additionalSuggestionsClassname}
         renderSuggestion={renderSuggestion}
         geocodeQueryParams={geocodeQueryParams}
       ></AddressAutocomplete>
