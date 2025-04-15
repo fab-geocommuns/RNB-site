@@ -12,10 +12,13 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
-import { Actions } from '@/stores/store';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
+}
+
+function anyChangesBetween(a: any, b: any) {
+  return JSON.stringify(a) !== JSON.stringify(b);
 }
 
 function EditSelectedBuildingPanelContent({
@@ -31,10 +34,13 @@ function EditSelectedBuildingPanelContent({
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
-  const anyChanges =
-    newStatus !== selectedBuilding.status ||
-    JSON.stringify(localAddresses) !==
-      JSON.stringify(selectedBuilding.addresses);
+  const anyChanges = anyChangesBetween(
+    { status: newStatus, addresses: localAddresses.map((a) => a.id).sort() },
+    {
+      status: selectedBuilding.status,
+      addresses: selectedBuilding.addresses.map((a) => a.id).sort(),
+    },
+  );
 
   const { fetch } = useRNBFetch();
 
@@ -67,7 +73,7 @@ function EditSelectedBuildingPanelContent({
       const response = await fetch(url, {
         body: JSON.stringify({
           status: newStatus,
-          addresses: localAddresses,
+          addresses_cle_interop: localAddresses.map((a) => a.id),
         }),
         method: 'PATCH',
       });
