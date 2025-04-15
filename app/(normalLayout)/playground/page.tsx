@@ -14,9 +14,6 @@ export default function PlaygroundPage() {
       )}
       {displayInput && (
         <AddressInput
-          onEnterPress={() => {
-            alert('enter pressed');
-          }}
           onSuggestionSelected={(suggestion) => {
             alert('suggestion selected ' + JSON.stringify(suggestion));
           }}
@@ -30,6 +27,15 @@ export default function PlaygroundPage() {
               style={{ width: '240px', border: '1px solid red' }}
             />
           )}
+          renderSuggestion={(suggestion) => (
+            <span style={{ border: '1px dotted green' }}>
+              {suggestion.properties.label} (clé ban: {suggestion.properties.id}
+              )
+            </span>
+          )}
+          geocodeQueryParams={{
+            postcode: '75020',
+          }}
         />
       )}
     </div>
