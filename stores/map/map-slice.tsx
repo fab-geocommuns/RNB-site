@@ -53,6 +53,7 @@ export type MapBackgroundLayer =
   | 'vectorIgnStandard';
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
+export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {
   panelIsOpen: boolean;

@@ -21,7 +21,11 @@ export default function Page() {
         <EditionPanel />
 
         <div className={styles.map__mapShell}>
-          <VisuMap />
+          <VisuMap
+            defaultBackgroundLayer="satellite"
+            defaultBuildingLayer="polygon"
+            disabledLayers={['point']}
+          />
         </div>
       </div>
     </>

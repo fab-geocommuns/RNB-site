@@ -20,15 +20,65 @@ import layersIcon from '@/public/images/map/layer-group-solid.svg';
 
 // Components
 import ImageNext from 'next/image';
+import { StaticImageData } from 'next/image';
 
 // Types
 import {
   MapBackgroundLayer,
   MapBuildingsLayer,
   MapExtraLayer,
+  MapLayer,
 } from '@/stores/map/map-slice';
 
-export default function LayersSwitcher() {
+type LayerButtonProps = {
+  isAvailable: boolean;
+  isActive: boolean;
+  label: string;
+  onClick: () => void;
+  image: StaticImageData;
+};
+
+function LayerButton({
+  isAvailable,
+  isActive,
+  label,
+  onClick,
+  image,
+}: LayerButtonProps) {
+  return (
+    <li>
+      <a
+        href="#"
+        className={
+          isActive ? styles.active : !isAvailable ? styles.disabled : ''
+        }
+        onClick={(e) => {
+          if (!isAvailable) return;
+          e.preventDefault();
+          onClick();
+        }}
+        title={
+          // TODO: Use a Tooltip for better UX, but we need to update DSFR
+          isAvailable
+            ? label
+            : `Le calque "${label}" n'est pas disponible en mode édition`
+        }
+      >
+        <div className={styles.choiceImageShell}>
+          <ImageNext src={image} alt={label} className={styles.choiceImage} />
+        </div>
+
+        <span className={styles.choiceLabel}>{label}</span>
+      </a>
+    </li>
+  );
+}
+
+type Props = {
+  disabledLayers?: MapLayer[];
+};
+
+export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   // Open or not
   const [open, setOpen] = useState(false);
 
@@ -36,35 +86,24 @@ export default function LayersSwitcher() {
   const dispatch: AppDispatch = useDispatch();
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
-  const handleChangeBackgroundClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    background: MapBackgroundLayer,
-  ) => {
-    e.preventDefault();
+  const handleChangeBackgroundClick = (background: MapBackgroundLayer) => {
     dispatch(Actions.map.setLayersBackground(background));
   };
 
-  const handleChangeBuildingLayer = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    layer: MapBuildingsLayer,
-  ) => {
-    e.preventDefault();
+  const handleChangeBuildingLayer = (layer: MapBuildingsLayer) => {
     dispatch(Actions.map.setLayersBuildings(layer));
   };
 
-  const handleExtraLayerClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    layer: MapExtraLayer,
-  ) => {
-    e.preventDefault();
+  const handleExtraLayerClick = (layer: MapExtraLayer) => {
     dispatch(Actions.map.toggleExtraLayer(layer));
   };
+
+  const isAvailable = (layer: MapLayer) => !disabledLayers.includes(layer);
 
   // Switch background image
   const [btnImage, setBtnImage] = useState(backgroundPlanIGN);
 
   useEffect(() => {
-    console.log(mapLayers.background);
     switch (mapLayers.background) {
       case 'vectorIgnStandard':
         setBtnImage(backgroundPlanIGN);
@@ -97,74 +136,29 @@ export default function LayersSwitcher() {
               <h2 className={styles.sectionTitle}>Fonds de carte</h2>
               <div className={styles.sectionBody}>
                 <ul className={styles.choicesList}>
-                  <li>
-                    <a
-                      href="#"
-                      className={
-                        mapLayers.background === 'vectorIgnStandard'
-                          ? styles.active
-                          : ''
-                      }
-                      onClick={(e) =>
-                        handleChangeBackgroundClick(e, 'vectorIgnStandard')
-                      }
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={backgroundPlanIGN}
-                          alt="Plan"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-
-                      <span className={styles.choiceLabel}>Plan (IGN)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className={
-                        mapLayers.background === 'vectorOsm'
-                          ? styles.active
-                          : ''
-                      }
-                      onClick={(e) =>
-                        handleChangeBackgroundClick(e, 'vectorOsm')
-                      }
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={backgroundPlanOSM}
-                          alt="Plan"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-
-                      <span className={styles.choiceLabel}>Plan (OSM)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className={
-                        mapLayers.background === 'satellite'
-                          ? styles.active
-                          : ''
-                      }
-                      onClick={(e) =>
-                        handleChangeBackgroundClick(e, 'satellite')
-                      }
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={backgroundSatellite}
-                          alt="Satellite"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-                      <span className={styles.choiceLabel}>Satellite</span>
-                    </a>
-                  </li>
+                  <LayerButton
+                    isAvailable={isAvailable('vectorIgnStandard')}
+                    isActive={mapLayers.background === 'vectorIgnStandard'}
+                    label="Plan (IGN)"
+                    onClick={() =>
+                      handleChangeBackgroundClick('vectorIgnStandard')
+                    }
+                    image={backgroundPlanIGN}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('vectorOsm')}
+                    isActive={mapLayers.background === 'vectorOsm'}
+                    label="Plan (OSM)"
+                    onClick={() => handleChangeBackgroundClick('vectorOsm')}
+                    image={backgroundPlanOSM}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('satellite')}
+                    isActive={mapLayers.background === 'satellite'}
+                    label="Satellite"
+                    onClick={() => handleChangeBackgroundClick('satellite')}
+                    image={backgroundSatellite}
+                  />
                 </ul>
               </div>
             </div>
@@ -173,42 +167,20 @@ export default function LayersSwitcher() {
               <h2 className={styles.sectionTitle}>Bâtiments RNB</h2>
               <div className={styles.sectionBody}>
                 <ul className={styles.choicesList}>
-                  <li>
-                    <a
-                      href="#"
-                      className={
-                        mapLayers.buildings === 'point' ? styles.active : ''
-                      }
-                      onClick={(e) => handleChangeBuildingLayer(e, 'point')}
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={bdgPoint}
-                          alt="Bâtiments représentés par des points"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-                      <span className={styles.choiceLabel}>Points</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className={
-                        mapLayers.buildings === 'polygon' ? styles.active : ''
-                      }
-                      onClick={(e) => handleChangeBuildingLayer(e, 'polygon')}
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={bdgShape}
-                          alt="Bâtiments représentés par des polygones"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-                      <span className={styles.choiceLabel}>Polygones</span>
-                    </a>
-                  </li>
+                  <LayerButton
+                    isAvailable={isAvailable('point')}
+                    isActive={mapLayers.buildings === 'point'}
+                    label="Points"
+                    onClick={() => handleChangeBuildingLayer('point')}
+                    image={bdgPoint}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('polygon')}
+                    isActive={mapLayers.buildings === 'polygon'}
+                    label="Polygones"
+                    onClick={() => handleChangeBuildingLayer('polygon')}
+                    image={bdgShape}
+                  />
                 </ul>
               </div>
             </div>
@@ -217,26 +189,13 @@ export default function LayersSwitcher() {
               <h2 className={styles.sectionTitle}>Extras</h2>
               <div className={styles.sectionBody}>
                 <ul className={styles.choicesList}>
-                  <li>
-                    <a
-                      href="#"
-                      className={
-                        mapLayers.extraLayers.includes('plots')
-                          ? styles.active
-                          : ''
-                      }
-                      onClick={(e) => handleExtraLayerClick(e, 'plots')}
-                    >
-                      <div className={styles.choiceImageShell}>
-                        <ImageNext
-                          src={extraPlots}
-                          alt="Cadastre"
-                          className={styles.choiceImage}
-                        />
-                      </div>
-                      <span className={styles.choiceLabel}>Cadastre</span>
-                    </a>
-                  </li>
+                  <LayerButton
+                    isAvailable={isAvailable('plots')}
+                    isActive={mapLayers.extraLayers.includes('plots')}
+                    label="Cadastre"
+                    onClick={() => handleExtraLayerClick('plots')}
+                    image={extraPlots}
+                  />
                 </ul>
               </div>
             </div>
