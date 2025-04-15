@@ -2,7 +2,7 @@
 
 import VisuMap from '@/components/map/VisuMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
-import AddressSearchMap from '@/components/AddressSearchMap';
+import AddressSearchMap from '@/components/address/AddressSearchMap';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 import styles from '@/styles/mapPage.module.scss';

@@ -12,7 +12,7 @@ import Bus from '@/utils/Bus';
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 
-import AddressAutocomplete from '@/components/AddressAutocomplete';
+import AddressAutocomplete from './AddressAutocomplete';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 export default function AddressSearchMap() {
