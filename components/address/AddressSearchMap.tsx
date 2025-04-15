@@ -25,7 +25,7 @@ export default function AddressSearchMap() {
   // URL params
   const params = useSearchParams();
   const [query, setQuery] = useState('');
-  const [keyDown, setKeyDown] = useState(null);
+  const [keyDown, setKeyDown] = useState<React.KeyboardEvent | null>(null);
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State

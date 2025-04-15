@@ -34,7 +34,7 @@ type Props = {
   query: string;
   keyDown: React.KeyboardEvent | null;
   onSuggestionSelected: (suggestion: AddressSuggestion) => void;
-  overrideClassName?: string;
+  additionalClassName?: string;
   onQueryResults?: (query: string, results: AddressSuggestion[]) => void;
   renderSuggestion?: (suggestion: AddressSuggestion) => React.ReactNode;
   geocodeQueryParams?: Record<string, string>;
@@ -45,7 +45,7 @@ export default function AddressAutocomplete({
   query,
   keyDown,
   onSuggestionSelected,
-  overrideClassName = '',
+  additionalClassName = '',
   onQueryResults,
   renderSuggestion = (suggestion: AddressSuggestion) =>
     suggestion.properties.label,
@@ -181,7 +181,9 @@ export default function AddressAutocomplete({
   ));
 
   return suggestions.length > 0 && autocompleteActive ? (
-    <div className={styles.autocomplete_suggestions + ' ' + overrideClassName}>
+    <div
+      className={styles.autocomplete_suggestions + ' ' + additionalClassName}
+    >
       {suggestions}
     </div>
   ) : null;
