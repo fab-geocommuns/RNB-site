@@ -1,14 +1,14 @@
 import BuildingAddress from './BuildingAddress';
-import { BuildingAddress as BuildingAddressType } from '@/stores/map/map-slice';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useState } from 'react';
 import AddressInput from '../AddressInput';
 import { AddressSuggestion } from '../AddressAutocomplete';
+import { NewAddress, BuildingAddressType } from './types';
 
 function AddressCreator({
   onSubmit,
 }: {
-  onSubmit: (address: BuildingAddressType) => void;
+  onSubmit: (address: NewAddress) => void;
 }) {
   const [isCreating, setIsCreating] = useState(false);
 
@@ -26,15 +26,8 @@ function AddressCreator({
 
   const handleSubmit = (suggestion: AddressSuggestion | null) => {
     const newAddress = {
-      id: '',
-      banId: suggestion?.properties.id || '',
-      source: '',
-      street_number: suggestion?.properties.housenumber || '',
-      street_rep: suggestion?.properties.street_rep || '',
-      street: suggestion?.properties.street || '',
-      city_zipcode: suggestion?.properties.city_zipcode || '',
-      city_name: suggestion?.properties.city_name || '',
-      city_insee_code: suggestion?.properties.city_insee_code || '',
+      id: suggestion?.properties.id || '',
+      label: suggestion?.properties.label || '',
     };
     onSubmit(newAddress);
     setIsCreating(false);
@@ -72,7 +65,7 @@ export default function BuildingAddresses({
   onChange,
 }: BuildingAddressesProps) {
   const handleAddAddress = (address: BuildingAddressType) => {
-    if (!addresses.some((a) => a.banId === address.banId)) {
+    if (!addresses.some((a) => a.id === address.id)) {
       onChange([...addresses, address]);
     }
   };
@@ -97,15 +90,11 @@ export default function BuildingAddresses({
               address={address}
               onChange={(newAddress) =>
                 onChange(
-                  addresses.map((a) =>
-                    a.banId === address.banId ? newAddress : a,
-                  ),
+                  addresses.map((a) => (a.id === address.id ? newAddress : a)),
                 )
               }
               onRemove={(removedAddress) =>
-                onChange(
-                  addresses.filter((a) => a.banId !== removedAddress.banId),
-                )
+                onChange(addresses.filter((a) => a.id !== removedAddress.id))
               }
             />
           </div>

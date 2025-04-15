@@ -1,32 +1,29 @@
-import { BuildingAddress as BuildingAddressType } from '@/stores/map/map-slice';
+import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 type BuildingAddressProps = {
   address: BuildingAddressType;
   onChange?: (address: BuildingAddressType) => void;
   onRemove?: (address: BuildingAddressType) => void;
-  readOnly?: boolean;
 };
+
+function getAddressDisplayLabel(address: BuildingAddressType) {
+  if (typeof address.label === 'string') {
+    return address.label;
+  } else {
+    return `${address.street_number}${address.street_rep} ${address.street}, ${address.city_zipcode} ${address.city_name}`;
+  }
+}
 
 export default function BuildingAddress({
   address,
   onChange,
   onRemove,
-  readOnly = false,
 }: BuildingAddressProps) {
-  const formattedAddress = `${address.street_number}${address.street_rep} ${address.street}, ${address.city_zipcode} ${address.city_name}`;
+  const label = getAddressDisplayLabel(address);
   return (
     <div>
-      {formattedAddress}
-      {onChange && (
-        <Button
-          size="small"
-          onClick={() => onChange(address)}
-          iconId="fr-icon-edit-line"
-        >
-          <span></span>
-        </Button>
-      )}
+      {label}
       {onRemove && (
         <Button
           size="small"
