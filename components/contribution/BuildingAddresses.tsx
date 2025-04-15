@@ -4,11 +4,14 @@ import { useState } from 'react';
 import AddressInput from '../AddressInput';
 import { AddressSuggestion } from '../AddressAutocomplete';
 import { NewAddress, BuildingAddressType } from './types';
+import { distance } from '@turf/turf';
 
 function AddressCreator({
   onSubmit,
+  buildingPoint,
 }: {
   onSubmit: (address: NewAddress) => void;
+  buildingPoint: [number, number];
 }) {
   const [isCreating, setIsCreating] = useState(false);
 
@@ -24,10 +27,10 @@ function AddressCreator({
     );
   }
 
-  const handleSubmit = (suggestion: AddressSuggestion | null) => {
+  const handleSubmit = (suggestion: AddressSuggestion) => {
     const newAddress = {
-      id: suggestion?.properties.id || '',
-      label: suggestion?.properties.label || '',
+      id: suggestion.properties.id,
+      label: suggestion.properties.label,
     };
     onSubmit(newAddress);
     setIsCreating(false);
@@ -36,13 +39,8 @@ function AddressCreator({
   return (
     <div>
       <AddressInput
-        onSuggestionSelected={(suggestion) => {
-          if (suggestion) {
-            handleSubmit(suggestion);
-          }
-        }}
-        onEnterPress={() => {}}
-        render={(inputProps) => (
+        onSuggestionSelected={handleSubmit}
+        render={(inputProps: any) => (
           <input
             {...inputProps}
             type="text"
@@ -50,6 +48,21 @@ function AddressCreator({
             autoFocus
           />
         )}
+        renderSuggestion={(suggestion: AddressSuggestion) => {
+          const distanceInKm = distance(
+            suggestion.geometry.coordinates,
+            buildingPoint,
+          ).toFixed(2);
+          return (
+            <div>
+              {suggestion.properties.label} ({distanceInKm} km)
+            </div>
+          );
+        }}
+        geocodeQueryParams={{
+          lat: buildingPoint[1].toString(),
+          lon: buildingPoint[0].toString(),
+        }}
       />
     </div>
   );
@@ -58,11 +71,13 @@ function AddressCreator({
 type BuildingAddressesProps = {
   addresses: BuildingAddressType[];
   onChange: (addresses: BuildingAddressType[]) => void;
+  buildingPoint: [number, number];
 };
 
 export default function BuildingAddresses({
   addresses,
   onChange,
+  buildingPoint,
 }: BuildingAddressesProps) {
   const handleAddAddress = (address: BuildingAddressType) => {
     if (!addresses.some((a) => a.id === address.id)) {
@@ -88,11 +103,6 @@ export default function BuildingAddresses({
           >
             <BuildingAddress
               address={address}
-              onChange={(newAddress) =>
-                onChange(
-                  addresses.map((a) => (a.id === address.id ? newAddress : a)),
-                )
-              }
               onRemove={(removedAddress) =>
                 onChange(addresses.filter((a) => a.id !== removedAddress.id))
               }
@@ -100,7 +110,10 @@ export default function BuildingAddresses({
           </div>
         ))
       )}
-      <AddressCreator onSubmit={handleAddAddress} />
+      <AddressCreator
+        onSubmit={handleAddAddress}
+        buildingPoint={buildingPoint}
+      />
     </div>
   );
 }
