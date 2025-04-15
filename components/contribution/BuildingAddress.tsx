@@ -3,7 +3,6 @@ import Button from '@codegouvfr/react-dsfr/Button';
 
 type BuildingAddressProps = {
   address: BuildingAddressType;
-  onChange?: (address: BuildingAddressType) => void;
   onRemove?: (address: BuildingAddressType) => void;
 };
 
@@ -17,7 +16,6 @@ function getAddressDisplayLabel(address: BuildingAddressType) {
 
 export default function BuildingAddress({
   address,
-  onChange,
   onRemove,
 }: BuildingAddressProps) {
   const label = getAddressDisplayLabel(address);

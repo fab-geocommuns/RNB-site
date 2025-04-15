@@ -93,6 +93,7 @@ function EditSelectedBuildingPanelContent({
           onChange={setNewStatus}
         ></BuildingStatus>
         <BuildingAddresses
+          buildingPoint={selectedBuilding.point.coordinates}
           addresses={localAddresses}
           onChange={handleEditAddress}
         />
