@@ -6,7 +6,7 @@ import { Card } from '@codegouvfr/react-dsfr/Card';
 import ImageNext from 'next/image';
 import CasListe from '@/components/CasListe';
 import NewsletterForm from '@/components/NewsletterForm';
-import AddressSearchHome from '@/components/AddressSearchHome';
+import AddressSearchHome from '@/components/address/AddressSearchHome';
 import DatabaseSearchForm from '@/components/DatabaseSearchForm';
 import PivotIllustration from '@/components/PivotIllustration';
 
