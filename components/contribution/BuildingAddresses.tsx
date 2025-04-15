@@ -1,8 +1,8 @@
 import BuildingAddress from './BuildingAddress';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useState } from 'react';
-import AddressInput from '../AddressInput';
-import { AddressSuggestion } from '../AddressAutocomplete';
+import AddressInput from '@/components/address/AddressInput';
+import { AddressSuggestion } from '@/components/address/AddressAutocomplete';
 import { NewAddress, BuildingAddressType } from './types';
 import { distance } from '@turf/turf';
 
