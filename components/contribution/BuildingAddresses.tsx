@@ -59,6 +59,7 @@ function AddressCreator({
             </div>
           );
         }}
+        onEscapePress={() => setIsCreating(false)}
         geocodeQueryParams={{
           lat: buildingPoint[1].toString(),
           lon: buildingPoint[0].toString(),
