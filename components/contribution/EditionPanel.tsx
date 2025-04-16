@@ -1,11 +1,7 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
-import {
-  SelectedBuilding,
-  mapActions,
-  BuildingAddress as BuildingAddressType,
-} from '@/stores/map/map-slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
@@ -15,6 +11,7 @@ import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
+import { BuildingAddressType } from './types';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
