@@ -25,7 +25,7 @@ function EditSelectedBuildingPanelContent({
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
-  const anyChanges = newStatus !== selectedBuilding.status;
+  const anyChanges = newStatus !== selectedBuilding.status || buildingNewShape;
   const { fetch } = useRNBFetch();
   const dispatch = useDispatch();
 
