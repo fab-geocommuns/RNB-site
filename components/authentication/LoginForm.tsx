@@ -21,14 +21,16 @@ export default function LoginForm() {
     redirectUrl = redirect;
   }
 
-  const successMessage = params.get('success');
+  const [successMessage, setSuccessMessage] = useState<string | null>(
+    params.get('success'),
+  );
 
   const prefilledEmail = params.get('email') || '';
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Remove errors
+    setSuccessMessage(null);
     setCredentialsError(false);
 
     const form = e.currentTarget;
@@ -47,6 +49,7 @@ export default function LoginForm() {
     if (loginResult?.error) {
       setCredentialsError(true);
     } else {
+      setSuccessMessage('Connexion réussie');
       router.push(redirectUrl);
     }
   };
