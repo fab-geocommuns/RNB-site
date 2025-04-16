@@ -19,7 +19,7 @@ type BANAddressAttributes = {
   postcode: string;
   score: number;
   name: string;
-  type: string;
+  type: 'housenumber' | 'street' | 'locality' | 'municipality';
   x: number;
   y: number;
   importance: number;
@@ -35,7 +35,10 @@ type Props = {
   keyDown: React.KeyboardEvent | null;
   onSuggestionSelected: (suggestion: AddressSuggestion) => void;
   additionalClassName?: string;
-  onQueryResults?: (query: string, results: AddressSuggestion[]) => void;
+  onQueryResults?: (
+    query: string,
+    results: AddressSuggestion[],
+  ) => void | AddressSuggestion[];
   renderSuggestion?: (suggestion: AddressSuggestion) => React.ReactNode;
   geocodeQueryParams?: Record<string, string>;
 };
@@ -134,14 +137,18 @@ export default function AddressAutocomplete({
   const handleAddressQuery = async () => {
     const geocodingResult = (await fetchBanAPI(query)) as BANGeocodingResult;
 
-    if (onQueryResults) {
-      onQueryResults(query, geocodingResult.features);
+    let results = geocodingResult.features;
+    if (results && onQueryResults) {
+      const newResults = onQueryResults(query, geocodingResult.features);
+      if (newResults) {
+        results = newResults;
+      }
     }
-    if (geocodingResult.features && geocodingResult.features.length > 0) {
-      setAddressSuggestions(geocodingResult.features);
+    if (results && results.length > 0) {
+      setAddressSuggestions(results);
       setHighlightedSuggestionIndex(-1);
     }
-    return geocodingResult.features;
+    return results;
   };
 
   const fetchBanAPI = async (q: string) => {
