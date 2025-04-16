@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
 import { BuildingAddressType } from './types';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -106,9 +107,10 @@ function EditSelectedBuildingPanelContent({
           addresses={localAddresses}
           onChange={handleEditAddress}
         />
-        <button onClick={handleSubmit} disabled={!anyChanges}>
+        <br />
+        <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
-        </button>
+        </Button>
       </PanelBody>
 
       <div className={styles.noticeContainer}>
