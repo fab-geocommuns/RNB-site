@@ -15,6 +15,8 @@
   },
   "dependencies": {
     "@codegouvfr/react-dsfr": "1.17",
+    "@mapgrab/map-interface": "^1.0.0",
+    "@mapgrab/playwright": "^0.0.3",
     "@reduxjs/toolkit": "^2.2.7",
     "@sentry/nextjs": "^8.47.0",
     "@tryghost/content-api": "^1.11.21",

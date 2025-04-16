@@ -1,5 +1,4 @@
-import { expect } from '@playwright/test';
-import { test } from '@/tests/fixtures';
+import { test, expect } from '@/tests/fixtures';
 
 test.describe("Page d'accueil", () => {
   test('doit contenir les éléments nécessaires', async ({ homePage }) => {
@@ -15,6 +14,8 @@ test.describe("Page d'accueil", () => {
   test('doit contenir le champ de recherche rapide pour la carte qui fonctionne avec clavier', async ({
     homePage,
     page,
+    mapController,
+    mapLocator,
   }) => {
     await expect(homePage.searchMapField).toBeVisible();
     await homePage.searchMapField.scrollIntoViewIfNeeded();
@@ -23,11 +24,14 @@ test.describe("Page d'accueil", () => {
     await homePage.searchMapField.press('ArrowDown');
     await homePage.searchMapField.press('Enter');
     await page.waitForURL('**/carte*');
+    const ign = mapLocator('filter["==", ["get", "rnb_id"], "CDVXSAKG94Q5"]');
+    await expect(ign).toBeVisibleOnMap();
   });
 
   test('doit contenir le champ de recherche rapide pour la carte qui fonctionne avec la souris', async ({
     homePage,
     page,
+    mapLocator,
   }) => {
     await expect(homePage.searchMapField).toBeVisible();
     await homePage.searchMapField.scrollIntoViewIfNeeded();
@@ -37,6 +41,8 @@ test.describe("Page d'accueil", () => {
       .first()
       .click();
     await page.waitForURL('**/carte*');
+    const ign = mapLocator('filter["==", ["get", "rnb_id"], "CDVXSAKG94Q5"]');
+    await expect(ign).toBeVisibleOnMap();
   });
 
   test("doit contenir un formulaire d'inscription à l'infolettre fonctionnel", async ({
