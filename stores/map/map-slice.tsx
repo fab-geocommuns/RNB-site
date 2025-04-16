@@ -1,6 +1,6 @@
 'use client';
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
 
 export interface SelectedBuilding {
@@ -10,6 +10,10 @@ export interface SelectedBuilding {
   point: {
     type: 'Point';
     coordinates: [number, number];
+  };
+  shape: {
+    type: string;
+    coordinates: any[];
   };
   addresses: {
     id: string;
@@ -54,6 +58,10 @@ export type MapBackgroundLayer =
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
+export type GeoJSONCoordinates = {
+  type: string;
+  coordinates: any[];
+};
 
 export type MapStore = {
   panelIsOpen: boolean;
@@ -72,6 +80,8 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
+  drawMode: string | null;
+  buildingNewShape: GeoJSONCoordinates | null;
 };
 
 const initialState: MapStore = {
@@ -85,6 +95,8 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: ['ads'],
   },
+  drawMode: null,
+  buildingNewShape: null,
 };
 
 export const mapSlice = createSlice({
@@ -130,6 +142,15 @@ export const mapSlice = createSlice({
       if (state.selectedItem && state.selectedItem._type === 'building') {
         state.selectedItem.addresses = action.payload;
       }
+    },
+    setDrawMode(state, action: PayloadAction<string | null>) {
+      state.drawMode = action.payload;
+    },
+    setPolygonNewShape(
+      state,
+      action: PayloadAction<GeoJSONCoordinates | null>,
+    ) {
+      state.buildingNewShape = action.payload;
     },
   },
 
