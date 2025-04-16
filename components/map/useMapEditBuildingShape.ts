@@ -1,0 +1,112 @@
+// React things
+import { useCallback, useEffect, useRef } from 'react';
+
+// Store
+import { Actions, RootState } from '@/stores/store';
+import { useSelector, useDispatch } from 'react-redux';
+// import { SelectedBuilding } from '@/stores/map/map-slice';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+
+MapboxDraw.constants.classes.CANVAS = 'maplibregl-canvas';
+MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
+MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
+MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
+MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib';
+
+/**
+ * Ajout et gestion des couches de la carte
+ * @param map
+ */
+export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
+  const selectedBuilding = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
+  const drawMode = useSelector((state: RootState) => state.map.drawMode);
+  const drawRef = useRef<any>(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (map && !drawRef.current) {
+      const blue = '#3bb2d0';
+      const orange = '#fbb03b';
+
+      const draw = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+          polygon: true,
+          trash: true,
+        },
+        // styles: [
+        // {
+        //     'id': 'gl-draw-polygon-fill',
+        //     'type': 'fill',
+        //     'filter': [
+        //       'all',
+        //       ['==', '$type', 'Polygon'],
+        //     ],
+        //     'paint': {
+        //       'fill-color': [
+        //         'case',
+        //         ['==', ['get', 'active'], 'true'], orange,
+        //         blue,
+        //       ],
+        //       'fill-opacity': 0.5,
+        //     },
+        //   },
+        //     {
+        //     'id': 'gl-draw-line-active',
+        //     'type': 'line',
+        //     'line-dasharray': [
+        //                 'case',
+        //                 ['==', ['get', 'active'], 'true'],
+        //                 ['literal', [0.2, 2]],
+        //                 ['literal', [2, 0]],
+        //             ],
+        // }
+        // ]
+      });
+      map.addControl(draw);
+      drawRef.current = draw;
+
+      const handleBuildingShapeUpdate = (e: any) => {
+        dispatch(Actions.map.setPolygonNewShape(e.features[0].geometry));
+      };
+      drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
+      // drawRef.current && map.on('draw.selectionchange', (e) => {console.log("changement de selection")});
+
+      // return () => {
+      //     map.off('draw.update', handleBuildingShapeUpdate)
+      // }
+    }
+  }, [map]);
+
+  useEffect(() => {
+    if (drawRef.current && drawMode) {
+      drawRef.current.changeMode(drawMode, {
+        featureId: 'selected-building-shape',
+      });
+    }
+  }, [drawMode]);
+
+  useEffect(() => {
+    if (selectedBuilding && drawRef.current && selectedBuilding.shape) {
+      const featureId = drawRef.current.add({
+        id: 'selected-building-shape',
+        type: 'Feature',
+        properties: {},
+        geometry: selectedBuilding.shape,
+      });
+      const last_layer = map.getStyle().layers.at(-1);
+      if (last_layer) {
+        const draw_layers = map
+          .getStyle()
+          .layers?.filter((layer) => layer.id.includes('gl-draw'));
+        for (const draw_layer of draw_layers) {
+          map.moveLayer(draw_layer.id, last_layer.id);
+        }
+      }
+    }
+    dispatch(Actions.map.setDrawMode(null));
+  }, [selectedBuilding]);
+};
