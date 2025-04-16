@@ -1,17 +1,14 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
-import {
-  SelectedBuilding,
-  mapActions,
-  BuildingAddress as BuildingAddressType,
-} from '@/stores/map/map-slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
+import { BuildingAddressType } from './types';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -26,7 +23,6 @@ function EditSelectedBuildingPanelContent({
 }: {
   selectedBuilding: SelectedBuilding;
 }) {
-  const dispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
@@ -82,7 +78,6 @@ function EditSelectedBuildingPanelContent({
         throw new Error(`Erreur ${response.status}`);
       }
 
-      dispatch(mapActions.updateAddresses(localAddresses));
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
