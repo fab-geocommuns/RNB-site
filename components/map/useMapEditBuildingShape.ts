@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { SelectedBuilding } from '@/stores/map/map-slice';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import drawStyle from '@/components/contribution/drawStyle';
 
 MapboxDraw.constants.classes.CANVAS = 'maplibregl-canvas';
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
@@ -50,34 +51,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           polygon: true,
           trash: true,
         },
-        // styles: [
-        // {
-        //     'id': 'gl-draw-polygon-fill',
-        //     'type': 'fill',
-        //     'filter': [
-        //       'all',
-        //       ['==', '$type', 'Polygon'],
-        //     ],
-        //     'paint': {
-        //       'fill-color': [
-        //         'case',
-        //         ['==', ['get', 'active'], 'true'], orange,
-        //         blue,
-        //       ],
-        //       'fill-opacity': 0.5,
-        //     },
-        //   },
-        //     {
-        //     'id': 'gl-draw-line-active',
-        //     'type': 'line',
-        //     'line-dasharray': [
-        //                 'case',
-        //                 ['==', ['get', 'active'], 'true'],
-        //                 ['literal', [0.2, 2]],
-        //                 ['literal', [2, 0]],
-        //             ],
-        // }
-        // ]
+        styles: drawStyle,
       });
       map.addControl(draw);
       drawRef.current = draw;
