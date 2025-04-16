@@ -125,11 +125,6 @@ export const mapSlice = createSlice({
     reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
-    updateAddresses(state, action) {
-      if (state.selectedItem && state.selectedItem._type === 'building') {
-        state.selectedItem.addresses = action.payload;
-      }
-    },
   },
 
   extraReducers(builder) {
