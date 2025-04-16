@@ -3,6 +3,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
 
+export type BuildingAddress = {
+  id: string; // Also BAN ID
+  source: string;
+  street_number: string;
+  street_rep: string;
+  street: string;
+  city_name: string;
+  city_zipcode: string;
+  city_insee_code: string;
+};
+
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;

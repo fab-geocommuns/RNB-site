@@ -12,7 +12,9 @@ import Bus from '@/utils/Bus';
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 
-import AddressAutocomplete from './AddressAutocomplete';
+import AddressAutocomplete, {
+  AddressSuggestion,
+} from '@/components/address/AddressAutocomplete';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 export default function AddressSearchMap() {
@@ -23,7 +25,7 @@ export default function AddressSearchMap() {
   // URL params
   const params = useSearchParams();
   const [query, setQuery] = useState('');
-  const [keyDown, setKeyDown] = useState(null);
+  const [keyDown, setKeyDown] = useState<React.KeyboardEvent | null>(null);
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State
@@ -34,8 +36,7 @@ export default function AddressSearchMap() {
 
   const addressInput = useRef<HTMLInputElement>(null);
 
-  // @ts-ignore
-  const handleKeyDown = async (e) => {
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
     setAutocompleteActive(true);
     dispatch(Actions.map.setAddressSearchUnknownRNBId(false));
 
@@ -177,10 +178,15 @@ export default function AddressSearchMap() {
   }, [selectedItem]);
 
   // @ts-ignore
-  const handleSuggestionSelected = ({ suggestion }) => {
+  const handleSuggestionSelected = (suggestion: AddressSuggestion | null) => {
     if (suggestion !== null) {
       selectSuggestion(suggestion);
     }
+  };
+
+  const handleQueryResults = (query: string, results: AddressSuggestion[]) => {
+    dispatch(Actions.map.setAddressSearchQuery(query));
+    dispatch(Actions.map.setAddressSearchResults(results));
   };
 
   return (
@@ -210,6 +216,7 @@ export default function AddressSearchMap() {
           query={query}
           keyDown={keyDown}
           onSuggestionSelected={handleSuggestionSelected}
+          onQueryResults={handleQueryResults}
         ></AddressAutocomplete>
       </div>
     </>
