@@ -17,6 +17,11 @@ export default function PlaygroundPage() {
           onSuggestionSelected={(suggestion) => {
             alert('suggestion selected ' + JSON.stringify(suggestion));
           }}
+          onQueryResults={(query, results) => {
+            return results.sort((a, b) =>
+              a.properties.id.localeCompare(b.properties.id),
+            );
+          }}
           onEscapePress={() => {
             setDisplayInput(false);
           }}
