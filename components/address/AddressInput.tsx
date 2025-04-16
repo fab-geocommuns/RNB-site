@@ -18,6 +18,10 @@ type Props = {
   }) => React.ReactNode;
   renderSuggestion?: (suggestion: AddressSuggestion) => React.ReactNode;
   geocodeQueryParams?: Record<string, string>;
+  onQueryResults?: (
+    query: string,
+    suggestions: AddressSuggestion[],
+  ) => void | AddressSuggestion[];
 };
 
 export default function AddressInput({
@@ -27,6 +31,7 @@ export default function AddressInput({
   additionalSuggestionsClassname,
   render,
   renderSuggestion,
+  onQueryResults,
   geocodeQueryParams,
 }: Props) {
   const [autocompleteActive, setAutocompleteActive] = useState(false);
@@ -78,6 +83,7 @@ export default function AddressInput({
         query={query}
         keyDown={keyDown}
         onSuggestionSelected={handleSuggestionSelected}
+        onQueryResults={onQueryResults}
         additionalClassName={additionalSuggestionsClassname}
         renderSuggestion={renderSuggestion}
         geocodeQueryParams={geocodeQueryParams}
