@@ -1,6 +1,6 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { Actions, RootState } from '@/stores/store';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState } from 'react';
 import RNBIDHeader from './RNBIDHeader';
@@ -8,6 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { useEffect } from 'react';
+import { geojsonToWKT } from '@terraformer/wkt';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -21,8 +22,12 @@ function EditSelectedBuildingPanelContent({
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const buildingNewShape = useSelector(
+    (state: RootState) => state.map.buildingNewShape,
+  );
   const anyChanges = newStatus !== selectedBuilding.status;
   const { fetch } = useRNBFetch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (error || success) {
@@ -36,16 +41,24 @@ function EditSelectedBuildingPanelContent({
     }
   }, [error, success]);
 
+  const handleBuildingShapeModification = async () => {
+    dispatch(Actions.map.setDrawMode('direct_select'));
+  };
+
   const handleSubmit = async () => {
     setError(null);
     setSuccess(false);
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const data = {
+      status: newStatus,
+      // send the data in WKT format
+      shape: geojsonToWKT(buildingNewShape),
+    };
+    console.log(data);
 
     try {
       const response = await fetch(url, {
-        body: JSON.stringify({
-          status: newStatus,
-        }),
+        body: JSON.stringify(data),
         method: 'PATCH',
       });
 
@@ -56,7 +69,7 @@ function EditSelectedBuildingPanelContent({
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
-      console.error(error);
+      console.error(err);
     }
   };
 
@@ -68,6 +81,9 @@ function EditSelectedBuildingPanelContent({
           status={newStatus}
           onChange={setNewStatus}
         ></BuildingStatus>
+        <button onClick={handleBuildingShapeModification}>
+          Modifier la géométrie du bâtiment
+        </button>
         <button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </button>
