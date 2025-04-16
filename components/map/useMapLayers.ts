@@ -145,6 +145,13 @@ export const useMapLayers = (
     } finally {
       installAllRunning.current = false;
     }
+
+    if (process.env.NEXT_PUBLIC_ENABLE_MAPGRAB === 'true' && map) {
+      console.log('Installing MapGrab');
+      import('@mapgrab/map-interface').then(({ installMapGrab }) => {
+        installMapGrab(map, 'mainMap');
+      });
+    }
   };
 
   ///////////////////////////////////
