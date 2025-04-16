@@ -38,6 +38,16 @@ export default function AddressInput({
   const [query, setQuery] = useState('');
   const [keyDown, setKeyDown] = useState<React.KeyboardEvent | null>(null);
 
+  const handleEscapePress = () => {
+    if (autocompleteActive) {
+      setAutocompleteActive(false);
+    }
+
+    if (!autocompleteActive || query == '') {
+      onEscapePress?.();
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     setKeyDown(e);
 
@@ -45,16 +55,8 @@ export default function AddressInput({
       onEnterPress();
     }
 
-    if (e.key === 'Escape' && autocompleteActive) {
-      setAutocompleteActive(false);
-    }
-
-    if (
-      e.key === 'Escape' &&
-      (!autocompleteActive || query == '') &&
-      onEscapePress
-    ) {
-      onEscapePress();
+    if (e.key === 'Escape') {
+      handleEscapePress();
     }
   };
 
@@ -63,7 +65,7 @@ export default function AddressInput({
     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
       setQuery(e.target.value),
     onKeyDown: (e: React.KeyboardEvent) => handleKeyDown(e),
-    onBlur: () => setTimeout(() => setAutocompleteActive(false), 100),
+    onBlur: () => setTimeout(() => handleEscapePress(), 100),
     onFocus: () => setAutocompleteActive(true),
     type: 'text',
     autoComplete: 'off',
