@@ -1,4 +1,4 @@
-import { BuildingAddressType } from './types';
+import { isNewAddress, BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 type BuildingAddressProps = {
@@ -7,7 +7,7 @@ type BuildingAddressProps = {
 };
 
 function getAddressDisplayLabel(address: BuildingAddressType) {
-  if (typeof address.label === 'string') {
+  if (isNewAddress(address)) {
     return address.label;
   } else {
     return `${address.street_number}${address.street_rep} ${address.street}, ${address.city_zipcode} ${address.city_name}`;
@@ -20,16 +20,16 @@ export default function BuildingAddress({
 }: BuildingAddressProps) {
   const label = getAddressDisplayLabel(address);
   return (
-    <div>
-      {label}
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <small>{label}</small>
       {onRemove && (
+        // @ts-ignore
         <Button
           size="small"
           onClick={() => onRemove(address)}
           iconId="fr-icon-delete-line"
-        >
-          <span></span>
-        </Button>
+          priority="tertiary no outline"
+        />
       )}
     </div>
   );

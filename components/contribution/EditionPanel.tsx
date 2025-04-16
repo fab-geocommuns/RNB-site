@@ -9,6 +9,7 @@ import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { BuildingAddressType } from './types';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -98,9 +99,10 @@ function EditSelectedBuildingPanelContent({
           addresses={localAddresses}
           onChange={handleEditAddress}
         />
-        <button onClick={handleSubmit} disabled={!anyChanges}>
+        <br />
+        <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
-        </button>
+        </Button>
       </PanelBody>
 
       <div className={styles.noticeContainer}>

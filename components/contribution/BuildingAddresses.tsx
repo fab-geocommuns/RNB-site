@@ -9,9 +9,11 @@ import { distance } from '@turf/turf';
 function AddressCreator({
   onSubmit,
   buildingPoint,
+  disabledAddressIds,
 }: {
   onSubmit: (address: NewAddress) => void;
   buildingPoint: [number, number];
+  disabledAddressIds: string[];
 }) {
   const [isCreating, setIsCreating] = useState(false);
 
@@ -21,6 +23,7 @@ function AddressCreator({
         size="small"
         onClick={() => setIsCreating(true)}
         iconId="fr-icon-add-line"
+        priority="tertiary no outline"
       >
         Ajouter une adresse
       </Button>
@@ -45,7 +48,9 @@ function AddressCreator({
       .filter((s) => {
         const distanceInKm = distance(s.geometry.coordinates, buildingPoint);
         return (
-          s.properties.type === 'housenumber' && distanceInKm <= maxDistanceInKm
+          s.properties.type === 'housenumber' &&
+          distanceInKm <= maxDistanceInKm &&
+          !disabledAddressIds.includes(s.properties.id)
         );
       })
       .sort((a, b) => {
@@ -63,6 +68,7 @@ function AddressCreator({
         render={(inputProps: any) => (
           <input
             {...inputProps}
+            className="fr-input"
             type="text"
             placeholder="Nouvelle addresse"
             autoFocus
@@ -107,9 +113,10 @@ export default function BuildingAddresses({
   };
   return (
     <div>
+      <label className="fr-label">Addresses du bâtiment :</label>
       {addresses.length === 0 ? (
         <div>
-          <em>Aucune adresse liée</em>
+          <small>Aucune adresse liée</small>
         </div>
       ) : (
         addresses.map((address, index) => (
@@ -134,6 +141,7 @@ export default function BuildingAddresses({
       <AddressCreator
         onSubmit={handleAddAddress}
         buildingPoint={buildingPoint}
+        disabledAddressIds={addresses.map((a) => a.id)}
       />
     </div>
   );
