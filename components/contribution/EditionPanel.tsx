@@ -2,15 +2,21 @@ import styles from '@/styles/contribution/editPanel.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { SelectedBuilding } from '@/stores/map/map-slice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
+import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
-import { useEffect } from 'react';
+import { BuildingAddressType } from './types';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
+}
+
+function anyChangesBetween(a: any, b: any) {
+  return JSON.stringify(a) !== JSON.stringify(b);
 }
 
 function EditSelectedBuildingPanelContent({
@@ -19,14 +25,33 @@ function EditSelectedBuildingPanelContent({
   selectedBuilding: SelectedBuilding;
 }) {
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
+  const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
+    selectedBuilding.addresses,
+  );
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-  const anyChanges = newStatus !== selectedBuilding.status;
+
+  const anyChanges = anyChangesBetween(
+    { status: newStatus, addresses: localAddresses.map((a) => a.id).sort() },
+    {
+      status: selectedBuilding.status,
+      addresses: selectedBuilding.addresses.map((a) => a.id).sort(),
+    },
+  );
+
   const { fetch } = useRNBFetch();
 
   useEffect(() => {
+    setNewStatus(selectedBuilding.status);
+    setLocalAddresses(selectedBuilding.addresses);
+  }, [selectedBuilding]);
+
+  const handleEditAddress = (addresses: BuildingAddressType[]) => {
+    setLocalAddresses(addresses);
+  };
+
+  useEffect(() => {
     if (error || success) {
-      // show the message for a few seconds
       const timer = setTimeout(() => {
         setError(null);
         setSuccess(false);
@@ -45,6 +70,7 @@ function EditSelectedBuildingPanelContent({
       const response = await fetch(url, {
         body: JSON.stringify({
           status: newStatus,
+          addresses_cle_interop: localAddresses.map((a) => a.id),
         }),
         method: 'PATCH',
       });
@@ -68,9 +94,15 @@ function EditSelectedBuildingPanelContent({
           status={newStatus}
           onChange={setNewStatus}
         ></BuildingStatus>
-        <button onClick={handleSubmit} disabled={!anyChanges}>
+        <BuildingAddresses
+          buildingPoint={selectedBuilding.point.coordinates}
+          addresses={localAddresses}
+          onChange={handleEditAddress}
+        />
+        <br />
+        <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
-        </button>
+        </Button>
       </PanelBody>
 
       <div className={styles.noticeContainer}>
