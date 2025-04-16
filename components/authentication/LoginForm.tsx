@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const [credentialsError, setCredentialsError] = useState(false);
@@ -114,6 +115,10 @@ export default function LoginForm() {
         <button className="fr-btn" type="submit">
           Se connecter
         </button>
+
+        <Link href="/reset-password" className="fr-link">
+          Mot de passe oublié
+        </Link>
       </form>
     </>
   );
