@@ -12,6 +12,7 @@ import {
   MapBackgroundLayer,
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
+import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
 
 type Props = {
   disabledLayers?: MapLayer[];
@@ -29,6 +30,7 @@ export default function VisuMap({
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);
+  useMapEditBuildingShape(map);
 
   return mapContainer;
 }
