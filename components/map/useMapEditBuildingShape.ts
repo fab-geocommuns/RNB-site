@@ -23,8 +23,21 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     (state: RootState) => state.map.selectedItem,
   );
   const drawMode = useSelector((state: RootState) => state.map.drawMode);
+  const buildingNewShape = useSelector(
+    (state: RootState) => state.map.buildingNewShape,
+  );
   const drawRef = useRef<any>(null);
   const dispatch = useDispatch();
+  const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
+
+  useEffect(() => {
+    if (!buildingNewShape && drawRef.current) {
+      const feature = drawRef.current.get(BUILDING_DRAW_SHAPE_FEATURE_ID);
+      if (feature) {
+        drawRef.current.delete(BUILDING_DRAW_SHAPE_FEATURE_ID);
+      }
+    }
+  }, [buildingNewShape]);
 
   useEffect(() => {
     if (map && !drawRef.current) {
@@ -84,7 +97,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   useEffect(() => {
     if (drawRef.current && drawMode) {
       drawRef.current.changeMode(drawMode, {
-        featureId: 'selected-building-shape',
+        featureId: BUILDING_DRAW_SHAPE_FEATURE_ID,
       });
     }
   }, [drawMode]);
@@ -92,7 +105,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   useEffect(() => {
     if (selectedBuilding && drawRef.current && selectedBuilding.shape) {
       const featureId = drawRef.current.add({
-        id: 'selected-building-shape',
+        id: BUILDING_DRAW_SHAPE_FEATURE_ID,
         type: 'Feature',
         properties: {},
         geometry: selectedBuilding.shape,

@@ -125,6 +125,9 @@ export const useMapLayers = (
 ) => {
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
+  const reloadBuildings = useSelector(
+    (state: RootState) => state.map.reloadBuildings,
+  );
   const dispatch = useDispatch();
   const installAllRunning = useRef(false);
 
@@ -256,7 +259,10 @@ export const useMapLayers = (
 
     map.addSource(SRC_BDGS_SHAPES, {
       type: 'vector',
-      tiles: [SRC_BDGS_SHAPES_URL],
+      // the random element is used to bypass the browser caching
+      // when a building's shape is updated, we change the random element
+      // to force a clean re-render of the data on the map
+      tiles: [SRC_BDGS_SHAPES_URL + '#' + Math.random()],
       minzoom: 16,
       maxzoom: 22,
       promoteId: 'rnb_id',
@@ -538,6 +544,12 @@ export const useMapLayers = (
     if (defaultBuildingLayer)
       dispatch(Actions.map.setLayersBuildings(defaultBuildingLayer));
   }, [defaultBackgroundLayer, defaultBuildingLayer]);
+
+  useEffect(() => {
+    if (map) {
+      installBuildings(map);
+    }
+  }, [reloadBuildings]);
 
   const adsOperationsIcons = getADSOperationIcons();
 };
