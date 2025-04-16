@@ -36,10 +36,30 @@ function AddressCreator({
     setIsCreating(false);
   };
 
+  const filterAndSortSuggestions = (
+    query: string,
+    suggestions: AddressSuggestion[],
+  ) => {
+    const maxDistanceInKm = 10;
+    return suggestions
+      .filter((s) => {
+        const distanceInKm = distance(s.geometry.coordinates, buildingPoint);
+        return (
+          s.properties.type === 'housenumber' && distanceInKm <= maxDistanceInKm
+        );
+      })
+      .sort((a, b) => {
+        const distanceA = distance(a.geometry.coordinates, buildingPoint);
+        const distanceB = distance(b.geometry.coordinates, buildingPoint);
+        return distanceA - distanceB;
+      });
+  };
+
   return (
     <div>
       <AddressInput
         onSuggestionSelected={handleSubmit}
+        onQueryResults={filterAndSortSuggestions}
         render={(inputProps: any) => (
           <input
             {...inputProps}
@@ -55,7 +75,7 @@ function AddressCreator({
           ).toFixed(2);
           return (
             <div>
-              {suggestion.properties.label} ({distanceInKm} km)
+              {suggestion.properties.label} (à {distanceInKm} km)
             </div>
           );
         }}
