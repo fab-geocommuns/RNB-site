@@ -26,6 +26,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   );
   const drawMode = useSelector((state: RootState) => state.map.drawMode);
   const drawRef = useRef<any>(null);
+  const selectedBuildingRef = useRef<string | null>(null);
 
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
@@ -56,9 +57,16 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
       // actions when a polygon is created
       const handleBuildingShapeCreate = (e: any) => {
-        // dispatch(Actions.map.setBuildingNewShape(null));
-        drawRef.current.deleteAll();
-        dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
+        // delete all other drawings
+        if (e.features) {
+          const newFeaturId = e.features[0].id;
+          for (const draw of drawRef.current.getAll().features) {
+            if (draw.id !== newFeaturId) {
+              drawRef.current.delete(draw.id);
+            }
+          }
+          dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
+        }
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
@@ -76,13 +84,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     }
   }, [map]);
 
-  // if the buildingNewShape is set to null, delete all the drawings from the map
-  useEffect(() => {
-    if (!buildingNewShape && drawRef.current) {
-      // drawRef.current.deleteAll();
-    }
-  }, [buildingNewShape]);
-
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
@@ -95,9 +96,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           // change the mode to draw_polygon instead
           dispatch(Actions.map.setDrawMode('draw_polygon'));
         } else {
-          drawRef.current.changeMode(drawMode, {
-            featureId: BUILDING_DRAW_SHAPE_FEATURE_ID,
-          });
+          for (const draw of drawRef.current.getAll().features) {
+            drawRef.current.changeMode(drawMode, {
+              featureId: draw.id,
+            });
+          }
         }
       } else if (drawMode === 'draw_polygon') {
         drawRef.current.changeMode('draw_polygon');
@@ -106,10 +109,13 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   }, [drawMode]);
 
   useEffect(() => {
-    if (selectedBuilding && drawRef.current && selectedBuilding.shape) {
-      dispatch(Actions.map.setBuildingNewShape(null));
+    if (
+      selectedBuilding &&
+      drawRef.current &&
+      selectedBuilding.shape &&
+      selectedBuilding.rnb_id !== selectedBuildingRef.current
+    ) {
       drawRef.current.deleteAll();
-
       drawRef.current.add({
         id: BUILDING_DRAW_SHAPE_FEATURE_ID,
         type: 'Feature',
@@ -125,7 +131,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           map.moveLayer(draw_layer.id, last_layer.id);
         }
       }
+      dispatch(Actions.map.setDrawMode(null));
+      // used to know if we are selecting a different building next time we click on the map
+      selectedBuildingRef.current = selectedBuilding.rnb_id;
     }
-    dispatch(Actions.map.setDrawMode(null));
   }, [selectedBuilding]);
 };
