@@ -12,23 +12,27 @@ import {
   MapBackgroundLayer,
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
+import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
 
 type Props = {
   disabledLayers?: MapLayer[];
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
+  allowEditShape?: boolean;
 };
 
 export default function VisuMap({
   disabledLayers,
   defaultBackgroundLayer,
   defaultBuildingLayer,
+  allowEditShape,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
   useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer);
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);
+  if (allowEditShape) useMapEditBuildingShape(map);
 
   return mapContainer;
 }

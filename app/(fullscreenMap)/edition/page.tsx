@@ -25,6 +25,7 @@ export default function Page() {
             defaultBackgroundLayer="satellite"
             defaultBuildingLayer="polygon"
             disabledLayers={['point']}
+            allowEditShape={true}
           />
         </div>
       </div>
