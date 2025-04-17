@@ -1,5 +1,5 @@
 // React things
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 // Store
 import { Actions, RootState } from '@/stores/store';
@@ -9,6 +9,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 
+// necessary to make the mapbox plugin work with maplibre
 MapboxDraw.constants.classes.CANVAS = 'maplibregl-canvas';
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
 MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
@@ -16,7 +17,7 @@ MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
 MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib';
 
 /**
- * Ajout et gestion des couches de la carte
+ *
  * @param map
  */
 export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
@@ -24,61 +25,92 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     (state: RootState) => state.map.selectedItem,
   );
   const drawMode = useSelector((state: RootState) => state.map.drawMode);
+  const drawRef = useRef<any>(null);
+
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
-  const drawRef = useRef<any>(null);
+
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
 
-  useEffect(() => {
-    if (!buildingNewShape && drawRef.current) {
-      const feature = drawRef.current.get(BUILDING_DRAW_SHAPE_FEATURE_ID);
-      if (feature) {
-        drawRef.current.delete(BUILDING_DRAW_SHAPE_FEATURE_ID);
-      }
-    }
-  }, [buildingNewShape]);
-
+  // add the draw plugin to the map
   useEffect(() => {
     if (map && !drawRef.current) {
-      const blue = '#3bb2d0';
-      const orange = '#fbb03b';
-
       const draw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
           polygon: true,
-          trash: true,
+          trash: false,
         },
         styles: drawStyle,
       });
       map.addControl(draw);
       drawRef.current = draw;
 
+      // actions when a polygon is updated
       const handleBuildingShapeUpdate = (e: any) => {
-        dispatch(Actions.map.setPolygonNewShape(e.features[0].geometry));
+        dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
       };
       drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
-      // drawRef.current && map.on('draw.selectionchange', (e) => {console.log("changement de selection")});
 
-      // return () => {
-      //     map.off('draw.update', handleBuildingShapeUpdate)
-      // }
+      // actions when a polygon is created
+      const handleBuildingShapeCreate = (e: any) => {
+        // dispatch(Actions.map.setBuildingNewShape(null));
+        drawRef.current.deleteAll();
+        dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
+      };
+      drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
+
+      const handleModeChange = ({ mode }) => {
+        dispatch(Actions.map.setDrawMode(mode));
+      };
+      drawRef.current && map.on('draw.modechange', handleModeChange);
+
+      // cleaning the hooks when the component is unmounted
+      return () => {
+        map.off('draw.update', handleBuildingShapeUpdate);
+        map.off('draw.create', handleBuildingShapeCreate);
+        map.off('draw.modechange', handleModeChange);
+      };
     }
   }, [map]);
 
+  // if the buildingNewShape is set to null, delete all the drawings from the map
   useEffect(() => {
-    if (drawRef.current && drawMode) {
-      drawRef.current.changeMode(drawMode, {
-        featureId: BUILDING_DRAW_SHAPE_FEATURE_ID,
-      });
+    if (!buildingNewShape && drawRef.current) {
+      // drawRef.current.deleteAll();
+    }
+  }, [buildingNewShape]);
+
+  // activate the "draw mode"
+  // can be a polygon modification or creation depending on the case
+  useEffect(() => {
+    if (map && drawRef.current) {
+      console.log('draw mode change');
+      if (drawMode === 'direct_select') {
+        const feature = drawRef.current.get(BUILDING_DRAW_SHAPE_FEATURE_ID);
+        if (feature && feature.geometry.type == 'Point') {
+          // direct_select mode is not available for a point
+          // change the mode to draw_polygon instead
+          dispatch(Actions.map.setDrawMode('draw_polygon'));
+        } else {
+          drawRef.current.changeMode(drawMode, {
+            featureId: BUILDING_DRAW_SHAPE_FEATURE_ID,
+          });
+        }
+      } else if (drawMode === 'draw_polygon') {
+        drawRef.current.changeMode('draw_polygon');
+      }
     }
   }, [drawMode]);
 
   useEffect(() => {
     if (selectedBuilding && drawRef.current && selectedBuilding.shape) {
-      const featureId = drawRef.current.add({
+      dispatch(Actions.map.setBuildingNewShape(null));
+      drawRef.current.deleteAll();
+
+      drawRef.current.add({
         id: BUILDING_DRAW_SHAPE_FEATURE_ID,
         type: 'Feature',
         properties: {},

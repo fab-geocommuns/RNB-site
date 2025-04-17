@@ -146,7 +146,7 @@ export const mapSlice = createSlice({
     setDrawMode(state, action: PayloadAction<string | null>) {
       state.drawMode = action.payload;
     },
-    setPolygonNewShape(
+    setBuildingNewShape(
       state,
       action: PayloadAction<GeoJSONCoordinates | null>,
     ) {

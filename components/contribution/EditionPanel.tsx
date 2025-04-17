@@ -41,7 +41,7 @@ function EditSelectedBuildingPanelContent({
     }
   }, [error, success]);
 
-  const handleBuildingShapeModification = async () => {
+  const handleBuildingShapeModification = () => {
     dispatch(Actions.map.setDrawMode('direct_select'));
   };
 
@@ -69,7 +69,7 @@ function EditSelectedBuildingPanelContent({
       setSuccess(true);
       // force the map to reload the building, to immediatly show the modifications made
       dispatch(Actions.map.reloadBuildings());
-      // dispatch(Actions.map.setPolygonNewShape(null));
+      dispatch(Actions.map.setBuildingNewShape(null));
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
       console.error(err);
