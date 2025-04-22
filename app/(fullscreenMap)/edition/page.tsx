@@ -1,6 +1,6 @@
 'use client';
 
-import VisuMap from '@/components/map/VisuMap';
+import { EditMap } from '@/components/map/VisuMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/AddressSearchMap';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
@@ -21,11 +21,10 @@ export default function Page() {
         <EditionPanel />
 
         <div className={styles.map__mapShell}>
-          <VisuMap
+          <EditMap
             defaultBackgroundLayer="satellite"
             defaultBuildingLayer="polygon"
             disabledLayers={['point']}
-            allowEditShape={true}
           />
         </div>
       </div>

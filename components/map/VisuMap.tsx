@@ -25,14 +25,27 @@ export default function VisuMap({
   disabledLayers,
   defaultBackgroundLayer,
   defaultBuildingLayer,
-  allowEditShape,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
   useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer);
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);
-  if (allowEditShape) useMapEditBuildingShape(map);
+
+  return mapContainer;
+}
+
+export function EditMap({
+  disabledLayers,
+  defaultBackgroundLayer,
+  defaultBuildingLayer,
+}: Props) {
+  const { map, mapContainer } = useMap({ disabledLayers });
+  useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer);
+  useMapControls(map);
+  useMapEvents(map);
+  useMapStateSync(map);
+  useMapEditBuildingShape(map);
 
   return mapContainer;
 }
