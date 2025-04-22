@@ -13,7 +13,6 @@ export interface SelectedBuilding {
   };
   addresses: {
     id: string;
-    banId: string;
     source: string;
     street_number: string;
     street_rep: string;
@@ -126,11 +125,6 @@ export const mapSlice = createSlice({
     reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
-    updateAddresses(state, action) {
-      if (state.selectedItem && state.selectedItem._type === 'building') {
-        state.selectedItem.addresses = action.payload;
-      }
-    },
   },
 
   extraReducers(builder) {
@@ -187,11 +181,6 @@ export const selectBuilding = createAsyncThunk(
     if (rnbResponse.ok) {
       const rnbData = (await rnbResponse.json()) as SelectedBuilding;
 
-      // Add banId to each addresses
-      if (rnbData?.addresses && rnbData.addresses.length > 0) {
-        dispatch(addBanUUID(rnbData));
-      }
-
       const selectedBuilding = {
         ...rnbData,
         _type: 'building',
@@ -204,43 +193,12 @@ export const selectBuilding = createAsyncThunk(
   },
 );
 
-export const addBanUUID = createAsyncThunk(
-  'map/addBanUUID',
-  async (rnbData: NonNullable<SelectedBuilding>, { dispatch, getState }) => {
-    const updatedAddresses = await Promise.all(
-      rnbData.addresses?.map(async (address) => {
-        const banResponse = await fetch(banApiUrl(address.id));
-        if (banResponse.ok) {
-          const banData = await banResponse.json();
-          return {
-            ...address,
-            banId: banData.banId,
-          };
-        }
-        return address;
-      }),
-    );
-
-    // We update only if we are still looking at the same building.
-    // Otherwise, we might experience a bug where we update the current building with the addresses of another building.
-    const state = getState();
-    // @ts-ignore
-    if (rnbData.rnb_id === state.selectedItem?.rnb_id) {
-      dispatch(mapSlice.actions.updateAddresses(updatedAddresses));
-    }
-  },
-);
-
 export function adsApiUrl(fileNumber: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/permis/' + fileNumber + '/';
 }
 
 export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
-}
-
-export function banApiUrl(interopBanId: string) {
-  return process.env.NEXT_PUBLIC_API_BAN_URL + '/lookup/' + interopBanId;
 }
 
 export const mapActions = {
