@@ -4,7 +4,7 @@ import { useState, useRef, use, useEffect } from 'react';
 import { Providers } from '@/stores/provider';
 import { useRouter } from 'next/navigation';
 
-import AddressAutocomplete from '@/components/AddressAutocomplete';
+import AddressAutocomplete from './AddressAutocomplete';
 
 import styles from '@/styles/home.module.scss';
 
