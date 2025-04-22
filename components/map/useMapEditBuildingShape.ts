@@ -94,7 +94,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
-    if (map && drawRef.current) {
+    if (drawRef.current) {
       if (drawMode === 'direct_select') {
         const feature = drawRef.current.get(BUILDING_DRAW_SHAPE_FEATURE_ID);
         if (feature && feature.geometry.type == 'Point') {

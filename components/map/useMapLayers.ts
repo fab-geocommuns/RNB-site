@@ -549,7 +549,7 @@ export const useMapLayers = (
     if (map) {
       installBuildings(map);
     }
-  }, [reloadBuildings]);
+  }, [map, reloadBuildings]);
 
   const adsOperationsIcons = getADSOperationIcons();
 };
