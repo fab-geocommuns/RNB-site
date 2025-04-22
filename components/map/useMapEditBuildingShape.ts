@@ -4,16 +4,20 @@ import { useEffect, useRef } from 'react';
 // Store
 import { Actions, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
-// import { SelectedBuilding } from '@/stores/map/map-slice';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 
 // necessary to make the mapbox plugin work with maplibre
+// @ts-ignore
 MapboxDraw.constants.classes.CANVAS = 'maplibregl-canvas';
+// @ts-ignore
 MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
+// @ts-ignore
 MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
+// @ts-ignore
 MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
+// @ts-ignore
 MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib';
 
 /**
@@ -46,6 +50,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         },
         styles: drawStyle,
       });
+      // @ts-ignore
       map.addControl(draw);
       drawRef.current = draw;
 
@@ -70,7 +75,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
-      const handleModeChange = ({ mode }) => {
+      const handleModeChange = ({ mode }: { mode: string }) => {
         dispatch(Actions.map.setDrawMode(mode));
       };
       drawRef.current && map.on('draw.modechange', handleModeChange);
@@ -82,13 +87,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         map.off('draw.modechange', handleModeChange);
       };
     }
-  }, [map]);
+  }, [map, dispatch]);
 
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (map && drawRef.current) {
-      console.log('draw mode change');
       if (drawMode === 'direct_select') {
         const feature = drawRef.current.get(BUILDING_DRAW_SHAPE_FEATURE_ID);
         if (feature && feature.geometry.type == 'Point') {
@@ -106,11 +110,13 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         drawRef.current.changeMode('draw_polygon');
       }
     }
-  }, [drawMode]);
+  }, [drawMode, dispatch]);
 
   useEffect(() => {
     if (
+      map &&
       selectedBuilding &&
+      selectedBuilding._type === 'building' &&
       drawRef.current &&
       selectedBuilding.shape &&
       selectedBuilding.rnb_id !== selectedBuildingRef.current
@@ -122,18 +128,18 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         properties: {},
         geometry: selectedBuilding.shape,
       });
-      const last_layer = map.getStyle().layers.at(-1);
-      if (last_layer) {
-        const draw_layers = map
+      const lastLayer = map.getStyle().layers.at(-1);
+      if (lastLayer) {
+        const drawLayers = map
           .getStyle()
           .layers?.filter((layer) => layer.id.includes('gl-draw'));
-        for (const draw_layer of draw_layers) {
-          map.moveLayer(draw_layer.id, last_layer.id);
+        for (const draw_layer of drawLayers) {
+          map.moveLayer(draw_layer.id, lastLayer.id);
         }
       }
       dispatch(Actions.map.setDrawMode(null));
       // used to know if we are selecting a different building next time we click on the map
       selectedBuildingRef.current = selectedBuilding.rnb_id;
     }
-  }, [selectedBuilding]);
+  }, [selectedBuilding, dispatch]);
 };

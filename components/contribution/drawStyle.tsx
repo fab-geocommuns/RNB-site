@@ -1,8 +1,7 @@
 const blue = '#3bb2d0';
 const orange = '#fbb03b';
 const white = '#fff';
-
-export default [
+const styles = [
   // Polygons
   //   Solid fill
   //   Active state defines color
@@ -99,3 +98,5 @@ export default [
     },
   },
 ];
+
+export default styles;
