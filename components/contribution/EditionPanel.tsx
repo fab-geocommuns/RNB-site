@@ -8,6 +8,8 @@ import BuildingStatus from './BuildingStatus';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Actions, AppDispatch } from '@/stores/store';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -18,6 +20,7 @@ function EditSelectedBuildingPanelContent({
 }: {
   selectedBuilding: SelectedBuilding;
 }) {
+  const rnbId = selectedBuilding.rnb_id;
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
@@ -36,10 +39,12 @@ function EditSelectedBuildingPanelContent({
     }
   }, [error, success]);
 
+  const dispatch: AppDispatch = useDispatch();
+
   const handleSubmit = async () => {
     setError(null);
     setSuccess(false);
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${rnbId}/`;
 
     try {
       const response = await fetch(url, {
@@ -53,6 +58,7 @@ function EditSelectedBuildingPanelContent({
         throw new Error(`Erreur ${response.status}`);
       }
 
+      await dispatch(Actions.map.selectBuilding(rnbId));
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
@@ -62,7 +68,7 @@ function EditSelectedBuildingPanelContent({
 
   return (
     <>
-      <RNBIDHeader rnbId={selectedBuilding.rnb_id}></RNBIDHeader>
+      <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
       <PanelBody>
         <BuildingStatus
           status={newStatus}
