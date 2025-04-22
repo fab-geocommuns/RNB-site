@@ -19,7 +19,7 @@ export class HomePage extends RNBPage {
     this.mapButton = page.locator('a', {
       hasText: 'Voir la carte des bâtiments',
     });
-    this.searchMapField = page.getByPlaceholder(/un identifiant RNB/);
+    this.searchMapField = page.getByPlaceholder(/un identifiant RNB/i);
     this.searchMapButton = page.locator('.fr-search-bar button[type="submit"]');
     this.searchMapSuggestions = page.locator(
       '[class*="addressAutocomplete_autocomplete_suggestions"]',
