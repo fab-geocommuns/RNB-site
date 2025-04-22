@@ -8,7 +8,6 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
-import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
 import { BuildingAddressType } from './types';
@@ -28,7 +27,7 @@ function EditSelectedBuildingPanelContent({
   selectedBuilding: SelectedBuilding;
 }) {
   const rnbId = selectedBuilding.rnb_id;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
@@ -65,8 +64,6 @@ function EditSelectedBuildingPanelContent({
       return () => clearTimeout(timer);
     }
   }, [error, success]);
-
-  const dispatch: AppDispatch = useDispatch();
 
   const handleSubmit = async () => {
     setError(null);

@@ -10,18 +10,20 @@ function AddressCreator({
   onSubmit,
   buildingPoint,
   disabledAddressIds,
+  isCreating,
+  onToggleCreating,
 }: {
   onSubmit: (address: NewAddress) => void;
   buildingPoint: [number, number];
   disabledAddressIds: string[];
+  isCreating: boolean;
+  onToggleCreating: (isCreating: boolean) => void;
 }) {
-  const [isCreating, setIsCreating] = useState(false);
-
   if (!isCreating) {
     return (
       <Button
         size="small"
-        onClick={() => setIsCreating(true)}
+        onClick={() => onToggleCreating(true)}
         iconId="fr-icon-add-line"
         priority="tertiary no outline"
       >
@@ -36,7 +38,7 @@ function AddressCreator({
       label: suggestion.properties.label,
     };
     onSubmit(newAddress);
-    setIsCreating(false);
+    onToggleCreating(false);
   };
 
   const filterAndSortSuggestions = (
@@ -85,7 +87,7 @@ function AddressCreator({
             </div>
           );
         }}
-        onEscapePress={() => setIsCreating(false)}
+        onEscapePress={() => onToggleCreating(false)}
         geocodeQueryParams={{
           lat: buildingPoint[1].toString(),
           lon: buildingPoint[0].toString(),
@@ -106,6 +108,7 @@ export default function BuildingAddresses({
   onChange,
   buildingPoint,
 }: BuildingAddressesProps) {
+  const [isCreating, setIsCreating] = useState(false);
   const handleAddAddress = (address: BuildingAddressType) => {
     if (!addresses.some((a) => a.id === address.id)) {
       onChange([...addresses, address]);
@@ -114,7 +117,7 @@ export default function BuildingAddresses({
   return (
     <div>
       <label className="fr-label">Addresses du bâtiment :</label>
-      {addresses.length === 0 ? (
+      {addresses.length === 0 && !isCreating ? (
         <div>
           <small>Aucune adresse liée</small>
         </div>
@@ -139,6 +142,8 @@ export default function BuildingAddresses({
         ))
       )}
       <AddressCreator
+        isCreating={isCreating}
+        onToggleCreating={setIsCreating}
         onSubmit={handleAddAddress}
         buildingPoint={buildingPoint}
         disabledAddressIds={addresses.map((a) => a.id)}
