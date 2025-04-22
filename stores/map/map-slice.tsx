@@ -22,16 +22,7 @@ export interface SelectedBuilding {
     type: 'Point';
     coordinates: [number, number];
   };
-  addresses: {
-    id: string;
-    source: string;
-    street_number: string;
-    street_rep: string;
-    street: string;
-    city_name: string;
-    city_zipcode: string;
-    city_insee_code: string;
-  }[];
+  addresses: BuildingAddress[];
   ext_ids: any[];
   plots: any[];
   is_active: boolean;
