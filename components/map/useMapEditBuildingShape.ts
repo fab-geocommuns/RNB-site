@@ -28,8 +28,10 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const selectedBuilding = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
-  const drawMode = useSelector((state: RootState) => state.map.drawMode);
-  const drawRef = useRef<any>(null);
+  const drawMode: MapboxDraw.DrawMode | null = useSelector(
+    (state: RootState) => state.map.drawMode,
+  );
+  const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
 
   const buildingNewShape = useSelector(
@@ -63,11 +65,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       // actions when a polygon is created
       const handleBuildingShapeCreate = (e: any) => {
         // delete all other drawings
-        if (e.features) {
+        if (e.features && drawRef.current) {
           const newFeaturId = e.features[0].id;
           for (const draw of drawRef.current.getAll().features) {
-            if (draw.id !== newFeaturId) {
-              drawRef.current.delete(draw.id);
+            if (draw.id && draw.id !== newFeaturId) {
+              drawRef.current.delete(draw.id.toString());
             }
           }
           dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
@@ -75,7 +77,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
-      const handleModeChange = ({ mode }: { mode: string }) => {
+      const handleModeChange = ({ mode }: { mode: MapboxDraw.DrawMode }) => {
         dispatch(Actions.map.setDrawMode(mode));
       };
       drawRef.current && map.on('draw.modechange', handleModeChange);
@@ -101,9 +103,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           dispatch(Actions.map.setDrawMode('draw_polygon'));
         } else {
           for (const draw of drawRef.current.getAll().features) {
-            drawRef.current.changeMode(drawMode, {
-              featureId: draw.id,
-            });
+            if (draw.id) {
+              drawRef.current.changeMode('direct_select', {
+                featureId: draw.id.toString(),
+              });
+            }
           }
         }
       } else if (drawMode === 'draw_polygon') {

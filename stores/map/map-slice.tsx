@@ -3,6 +3,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
 import type { GeoJSON } from 'geojson';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
 export interface SelectedBuilding {
   _type: 'building';
@@ -12,10 +13,7 @@ export interface SelectedBuilding {
     type: 'Point';
     coordinates: [number, number];
   };
-  shape: {
-    type: string;
-    coordinates: any[];
-  };
+  shape: GeoJSON.Geometry;
   addresses: {
     id: string;
     banId: string;
@@ -77,7 +75,7 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
-  drawMode: string | null;
+  drawMode: MapboxDraw.DrawMode | null;
   buildingNewShape: GeoJSON | null;
 };
 
@@ -140,7 +138,7 @@ export const mapSlice = createSlice({
         state.selectedItem.addresses = action.payload;
       }
     },
-    setDrawMode(state, action: PayloadAction<string | null>) {
+    setDrawMode(state, action: PayloadAction<MapboxDraw.DrawMode | null>) {
       state.drawMode = action.payload;
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON | null>) {
