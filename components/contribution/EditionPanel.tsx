@@ -51,7 +51,6 @@ function EditSelectedBuildingPanelContent({
   );
 
   const { fetch } = useRNBFetch();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setNewStatus(selectedBuilding.status);
