@@ -2,6 +2,7 @@
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import type { GeoJSON } from 'geojson';
 
 export interface SelectedBuilding {
   _type: 'building';
@@ -58,10 +59,6 @@ export type MapBackgroundLayer =
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
-export type GeoJSONCoordinates = {
-  type: string;
-  coordinates: any[];
-};
 
 export type MapStore = {
   panelIsOpen: boolean;
@@ -81,7 +78,7 @@ export type MapStore = {
   selectedItem?: SelectedItem;
   layers: MapLayers;
   drawMode: string | null;
-  buildingNewShape: GeoJSONCoordinates | null;
+  buildingNewShape: GeoJSON | null;
 };
 
 const initialState: MapStore = {
@@ -146,10 +143,7 @@ export const mapSlice = createSlice({
     setDrawMode(state, action: PayloadAction<string | null>) {
       state.drawMode = action.payload;
     },
-    setBuildingNewShape(
-      state,
-      action: PayloadAction<GeoJSONCoordinates | null>,
-    ) {
+    setBuildingNewShape(state, action: PayloadAction<GeoJSON | null>) {
       state.buildingNewShape = action.payload;
     },
   },
