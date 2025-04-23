@@ -1,7 +1,9 @@
 'use client';
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import type { GeoJSON } from 'geojson';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -22,6 +24,7 @@ export interface SelectedBuilding {
     type: 'Point';
     coordinates: [number, number];
   };
+  shape: GeoJSON.Geometry;
   addresses: BuildingAddress[];
   ext_ids: any[];
   plots: any[];
@@ -73,6 +76,8 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
+  drawMode: MapboxDraw.DrawMode | null;
+  buildingNewShape: GeoJSON.Geometry | null;
 };
 
 const initialState: MapStore = {
@@ -86,6 +91,8 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: ['ads'],
   },
+  drawMode: null,
+  buildingNewShape: null,
 };
 
 export const mapSlice = createSlice({
@@ -126,6 +133,17 @@ export const mapSlice = createSlice({
     },
     reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
+    },
+    updateAddresses(state, action) {
+      if (state.selectedItem && state.selectedItem._type === 'building') {
+        state.selectedItem.addresses = action.payload;
+      }
+    },
+    setDrawMode(state, action: PayloadAction<MapboxDraw.DrawMode | null>) {
+      state.drawMode = action.payload;
+    },
+    setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
+      state.buildingNewShape = action.payload;
     },
   },
 
