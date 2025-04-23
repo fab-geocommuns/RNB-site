@@ -1,12 +1,10 @@
-// React things
 import { useEffect, useRef } from 'react';
-
-// Store
 import { Actions, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
+import type { Feature } from 'geojson';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -57,13 +55,13 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       drawRef.current = draw;
 
       // actions when a polygon is updated
-      const handleBuildingShapeUpdate = (e: any) => {
+      const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
         dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
       };
       drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
 
       // actions when a polygon is created
-      const handleBuildingShapeCreate = (e: any) => {
+      const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
         // delete all other drawings
         if (e.features && drawRef.current) {
           const newFeaturId = e.features[0].id;

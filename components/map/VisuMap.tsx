@@ -18,7 +18,6 @@ type Props = {
   disabledLayers?: MapLayer[];
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
-  allowEditShape?: boolean;
 };
 
 export default function VisuMap({

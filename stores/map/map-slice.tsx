@@ -77,7 +77,7 @@ export type MapStore = {
   selectedItem?: SelectedItem;
   layers: MapLayers;
   drawMode: MapboxDraw.DrawMode | null;
-  buildingNewShape: GeoJSON | null;
+  buildingNewShape: GeoJSON.Geometry | null;
 };
 
 const initialState: MapStore = {
@@ -142,7 +142,7 @@ export const mapSlice = createSlice({
     setDrawMode(state, action: PayloadAction<MapboxDraw.DrawMode | null>) {
       state.drawMode = action.payload;
     },
-    setBuildingNewShape(state, action: PayloadAction<GeoJSON | null>) {
+    setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
       state.buildingNewShape = action.payload;
     },
   },

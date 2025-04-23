@@ -122,12 +122,12 @@ function EditSelectedBuildingPanelContent({
           onChange={handleEditAddress}
         />
         <br />
-        <button onClick={handleBuildingShapeModification}>
+        <Button onClick={handleBuildingShapeModification}>
           Modifier la géométrie du bâtiment
-        </button>
-        <button onClick={handleSubmit} disabled={!anyChanges}>
+        </Button>
+        <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
-        </button>
+        </Button>
       </PanelBody>
 
       <div className={styles.noticeContainer}>
