@@ -135,8 +135,7 @@ function EditSelectedBuildingPanelContent({
           addresses={localAddresses}
           onChange={handleEditAddress}
         />
-        <br />
-        <div>
+        <div className="fr-mb-6v">
           <label className="fr-label">Géométrie du bâtiment</label>
           <div className="fr-pt-2v fr-pb-4v">
             <span className="fr-pr-4v">

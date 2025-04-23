@@ -115,8 +115,8 @@ export default function BuildingAddresses({
     }
   };
   return (
-    <div>
-      <label className="fr-label">Addresses du bâtiment :</label>
+    <div className="fr-mb-6v">
+      <label className="fr-label">Addresses du bâtiment</label>
       {addresses.length === 0 && !isCreating ? (
         <div>
           <small>Aucune adresse liée</small>
