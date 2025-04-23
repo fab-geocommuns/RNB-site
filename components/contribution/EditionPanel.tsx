@@ -1,6 +1,6 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { Actions, RootState, AppDispatch } from '@/stores/store';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
@@ -8,8 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
-import { useDispatch } from 'react-redux';
-import { Actions, AppDispatch } from '@/stores/store';
+import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
@@ -34,12 +33,20 @@ function EditSelectedBuildingPanelContent({
   );
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const buildingNewShape = useSelector(
+    (state: RootState) => state.map.buildingNewShape,
+  );
 
   const anyChanges = anyChangesBetween(
-    { status: newStatus, addresses: localAddresses.map((a) => a.id).sort() },
+    {
+      status: newStatus,
+      addresses: localAddresses.map((a) => a.id).sort(),
+      shape: buildingNewShape,
+    },
     {
       status: selectedBuilding.status,
       addresses: selectedBuilding.addresses.map((a) => a.id).sort(),
+      shape: null,
     },
   );
 
@@ -65,17 +72,24 @@ function EditSelectedBuildingPanelContent({
     }
   }, [error, success]);
 
+  const handleBuildingShapeModification = () => {
+    dispatch(Actions.map.setDrawMode('direct_select'));
+  };
+
   const handleSubmit = async () => {
     setError(null);
     setSuccess(false);
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${rnbId}/`;
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const data = {
+      status: newStatus,
+      addresses_cle_interop: localAddresses.map((a) => a.id),
+      // send the data in WKT format
+      shape: buildingNewShape ? geojsonToWKT(buildingNewShape) : null,
+    };
 
     try {
       const response = await fetch(url, {
-        body: JSON.stringify({
-          status: newStatus,
-          addresses_cle_interop: localAddresses.map((a) => a.id),
-        }),
+        body: JSON.stringify(data),
         method: 'PATCH',
       });
 
@@ -85,9 +99,12 @@ function EditSelectedBuildingPanelContent({
 
       await dispatch(Actions.map.selectBuilding(rnbId));
       setSuccess(true);
+      // force the map to reload the building, to immediatly show the modifications made
+      dispatch(Actions.map.reloadBuildings());
+      dispatch(Actions.map.setBuildingNewShape(null));
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
-      console.error(error);
+      console.error(err);
     }
   };
 
@@ -105,6 +122,9 @@ function EditSelectedBuildingPanelContent({
           onChange={handleEditAddress}
         />
         <br />
+        <Button onClick={handleBuildingShapeModification}>
+          Modifier la géométrie du bâtiment
+        </Button>
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>

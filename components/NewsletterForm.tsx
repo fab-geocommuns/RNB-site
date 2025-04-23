@@ -11,8 +11,6 @@ export default function NewsletterForm() {
 
   // @ts-ignore
   const handleSubmit = async (e) => {
-    console.log('submit');
-
     resetFeedback();
 
     disableBtn();
@@ -32,7 +30,6 @@ export default function NewsletterForm() {
     });
 
     const data = await response.json();
-    console.log(data);
 
     enableBtn();
 

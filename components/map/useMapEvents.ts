@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Actions, AppDispatch } from '@/stores/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent, MapLibreEvent } from 'maplibre-gl';
 import {
@@ -19,19 +19,20 @@ export const useMapEvents = (map?: maplibregl.Map) => {
   useState<string>();
   const previousHoveredFeatureId = useRef<string>();
   const previousHoveredFeatureSource = useRef<string>();
+  const drawMode = useSelector((state: RootState) => state.map.drawMode);
 
   // Initialisation des événements
   useEffect(() => {
     if (map) {
       // Click sur la carte
-      map.on('click', async function (e) {
+      const handleClickEvent = (e: MapMouseEvent) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map,
           e.point.x,
           e.point.y,
         );
 
-        if (featureCloseToCursor) {
+        if (featureCloseToCursor && drawMode !== 'draw_polygon') {
           // What did we click on?
 
           if (
@@ -52,7 +53,9 @@ export const useMapEvents = (map?: maplibregl.Map) => {
             dispatch(Actions.map.selectADS(file_number));
           }
         }
-      });
+      };
+
+      map.on('click', handleClickEvent);
 
       map.on('moveend', (e: MapLibreEvent<any>) => {
         const zoom = map.getZoom();
@@ -73,7 +76,13 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        map!.getCanvas().style.cursor = featureCloseToCursor ? 'pointer' : '';
+        if (drawMode === 'draw_polygon') {
+          map!.getCanvas().style.cursor = 'crosshair';
+        } else if (featureCloseToCursor) {
+          map!.getCanvas().style.cursor = 'pointer';
+        } else {
+          map!.getCanvas().style.cursor = '';
+        }
 
         if (
           previousHoveredFeatureId.current &&
@@ -104,6 +113,10 @@ export const useMapEvents = (map?: maplibregl.Map) => {
             .source as string;
         }
       });
+
+      return () => {
+        map.off('click', handleClickEvent);
+      };
     }
-  }, [dispatch, map]);
+  }, [dispatch, map, drawMode]);
 };
