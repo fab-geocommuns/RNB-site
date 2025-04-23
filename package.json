@@ -16,6 +16,8 @@
   "dependencies": {
     "@codegouvfr/react-dsfr": "1.17",
     "@mapbox/mapbox-gl-draw": "^1.5.0",
+    "@mapgrab/map-interface": "^1.0.0",
+    "@mapgrab/playwright": "^0.0.3",
     "@reduxjs/toolkit": "^2.2.7",
     "@sentry/nextjs": "^8.47.0",
     "@terraformer/wkt": "^2.2.1",

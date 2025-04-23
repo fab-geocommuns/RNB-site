@@ -1,10 +1,11 @@
 import {
   mergeTests,
+  mergeExpects,
   Page,
   PlaywrightTestArgs,
   PlaywrightTestOptions,
-  test as base,
-  TestFixture,
+  test as baseTest,
+  expect as baseExpect,
 } from '@playwright/test';
 import { HomePage } from '@/tests/fixtures/pages/home-page';
 import { AboutPage } from '@/tests/fixtures/pages/about-page';
@@ -17,6 +18,10 @@ import { ToolsAndServicesPage } from '@/tests/fixtures/pages/tools-and-services-
 import { UseCasesPage } from '@/tests/fixtures/pages/use-cases-page';
 import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { testWithNewsletter } from '@/tests/fixtures/utils/components/newsletter';
+import {
+  test as mapGrabTest,
+  expect as mapGrabExpect,
+} from '@mapgrab/playwright';
 
 type PagesFixtures = {
   aboutPage: AboutPage;
@@ -41,7 +46,7 @@ const createPageFixture =
     await use(instance);
   };
 
-const testPage = base.extend<PagesFixtures>({
+const testPage = baseTest.extend<PagesFixtures>({
   aboutPage: createPageFixture(AboutPage),
   blogPage: createPageFixture(BlogPage),
   contactPage: createPageFixture(ContactPage),
@@ -53,4 +58,5 @@ const testPage = base.extend<PagesFixtures>({
   useCasesPage: createPageFixture(UseCasesPage),
 });
 
-export const test = mergeTests(testPage, testWithNewsletter);
+export const test = mergeTests(testPage, testWithNewsletter, mapGrabTest);
+export const expect = mergeExpects(baseExpect, mapGrabExpect);
