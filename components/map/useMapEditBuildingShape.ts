@@ -45,7 +45,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       const draw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
-          polygon: true,
+          polygon: false,
           trash: false,
         },
         styles: drawStyle,

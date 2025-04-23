@@ -11,6 +11,8 @@ import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
+import editPolygonIcon from '@/public/images/map/edition/edit_polygon.svg';
+import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -36,6 +38,7 @@ function EditSelectedBuildingPanelContent({
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
+  const drawMode = useSelector((state: RootState) => state.map.drawMode);
 
   const anyChanges = anyChangesBetween(
     {
@@ -74,6 +77,10 @@ function EditSelectedBuildingPanelContent({
 
   const handleBuildingShapeModification = () => {
     dispatch(Actions.map.setDrawMode('direct_select'));
+  };
+
+  const handleBuildingShapeCreation = () => {
+    dispatch(Actions.map.setDrawMode('draw_polygon'));
   };
 
   const handleSubmit = async () => {
@@ -122,9 +129,35 @@ function EditSelectedBuildingPanelContent({
           onChange={handleEditAddress}
         />
         <br />
-        <Button onClick={handleBuildingShapeModification}>
-          Modifier la géométrie du bâtiment
-        </Button>
+        <div>
+          <label className="fr-label">Géométrie du bâtiment</label>
+          <div className="fr-pt-2v fr-pb-4v">
+            <span className="fr-pr-4v">
+              <Button
+                onClick={handleBuildingShapeModification}
+                priority={`tertiary${drawMode === 'direct_select' ? '' : ' no outline'}`}
+              >
+                <img
+                  src={editPolygonIcon.src}
+                  height="35"
+                  title="Modifier la géométrie existante"
+                ></img>
+              </Button>
+            </span>
+            <span>
+              <Button
+                onClick={handleBuildingShapeCreation}
+                priority={`tertiary${drawMode === 'draw_polygon' ? '' : ' no outline'}`}
+              >
+                <img
+                  src={newPolygonIcon.src}
+                  height="35"
+                  title="Dessiner une nouvelle géométrie"
+                ></img>
+              </Button>
+            </span>
+          </div>
+        </div>
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>
