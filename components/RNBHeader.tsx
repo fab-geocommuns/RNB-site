@@ -55,15 +55,8 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       },
     },
     {
-      isActive: pathname.startsWith('/cas'),
-      text: "Cas d'usage",
-      linkProps: {
-        href: '/cas',
-      },
-    },
-    {
       isActive: pathname.startsWith('/blog'),
-      text: 'Actualités',
+      text: "Cas d'usage",
       linkProps: {
         href: '/blog',
       },
