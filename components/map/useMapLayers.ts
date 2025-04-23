@@ -386,7 +386,7 @@ export const useMapLayers = ({
 
     const selectedBuildingColor = selectedBuildingisGreen
       ? '#31e060'
-      : '#f57200';
+      : '#1452e3';
 
     // Polygon border
     map.addLayer({
