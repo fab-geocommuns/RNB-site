@@ -12,6 +12,7 @@ import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import editPolygonIcon from '@/public/images/map/edition/edit_polygon.svg';
+import editPolygonDisabledIcon from '@/public/images/map/edition/edit_polygon_disabled.svg';
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
@@ -80,7 +81,13 @@ function EditSelectedBuildingPanelContent({
   };
 
   const handleBuildingShapeCreation = () => {
-    dispatch(Actions.map.setDrawMode('draw_polygon'));
+    if (drawMode === 'draw_polygon') {
+      // that's a way to cancel the ongoing drawing
+      dispatch(Actions.map.setDrawMode(null));
+      dispatch(Actions.map.setBuildingNewShape(null));
+    } else {
+      dispatch(Actions.map.setDrawMode('draw_polygon'));
+    }
   };
 
   const handleSubmit = async () => {
@@ -136,9 +143,14 @@ function EditSelectedBuildingPanelContent({
               <Button
                 onClick={handleBuildingShapeModification}
                 priority={`tertiary${drawMode === 'direct_select' ? '' : ' no outline'}`}
+                disabled={selectedBuilding.shape.type === 'Point'}
               >
                 <img
-                  src={editPolygonIcon.src}
+                  src={
+                    selectedBuilding.shape.type === 'Point'
+                      ? editPolygonDisabledIcon.src
+                      : editPolygonIcon.src
+                  }
                   height="35"
                   title="Modifier la géométrie existante"
                 ></img>

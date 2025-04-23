@@ -357,7 +357,7 @@ export const useMapLayers = (
   };
 
   const installBuildingsShapesLayers = (map: maplibregl.Map) => {
-    // Polygon border
+    // Polygon fill
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
       type: 'fill',
@@ -378,7 +378,7 @@ export const useMapLayers = (
       },
     });
 
-    // Polygon fill
+    // Polygon border
     map.addLayer({
       id: LAYER_BDGS_SHAPE_FILL,
       type: 'line',

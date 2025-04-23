@@ -139,7 +139,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           map.moveLayer(draw_layer.id, lastLayer.id);
         }
       }
-      dispatch(Actions.map.setDrawMode(null));
+      if (selectedBuilding.shape.type == 'Point') {
+        dispatch(Actions.map.setDrawMode('simple_select'));
+      } else {
+        dispatch(Actions.map.setDrawMode('direct_select'));
+      }
       // used to know if we are selecting a different building next time we click on the map
       selectedBuildingRef.current = selectedBuilding.rnb_id;
     }

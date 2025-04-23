@@ -1,5 +1,5 @@
-const blue = '#3bb2d0';
-const orange = '#fbb03b';
+const blue = '#120090';
+const green = '#87d443';
 const white = '#fff';
 const styles = [
   // Polygons
@@ -10,8 +10,8 @@ const styles = [
     type: 'fill',
     filter: ['all', ['==', '$type', 'Polygon']],
     paint: {
-      'fill-color': ['case', ['==', ['get', 'active'], 'true'], orange, blue],
-      'fill-opacity': 0.5,
+      'fill-color': ['case', ['==', ['get', 'active'], 'true'], green, blue],
+      'fill-opacity': ['case', ['==', ['get', 'active'], 'true'], 0.5, 0],
     },
   },
   // Lines
@@ -27,9 +27,9 @@ const styles = [
       'line-join': 'round',
     },
     paint: {
-      'line-color': ['case', ['==', ['get', 'active'], 'true'], orange, blue],
+      'line-color': ['case', ['==', ['get', 'active'], 'true'], green, blue],
       'line-dasharray': ['literal', [0.2, 2]],
-      'line-width': 2,
+      'line-width': 3,
     },
   },
   // Points
@@ -40,7 +40,7 @@ const styles = [
     type: 'circle',
     filter: ['all', ['==', '$type', 'Point'], ['==', 'meta', 'feature']],
     paint: {
-      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 7, 5],
+      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 10, 10],
       'circle-color': white,
     },
   },
@@ -49,8 +49,8 @@ const styles = [
     type: 'circle',
     filter: ['all', ['==', '$type', 'Point'], ['==', 'meta', 'feature']],
     paint: {
-      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 5, 3],
-      'circle-color': ['case', ['==', ['get', 'active'], 'true'], orange, blue],
+      'circle-radius': 6,
+      'circle-color': green,
     },
   },
   // Vertex
@@ -82,7 +82,7 @@ const styles = [
     ],
     paint: {
       'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 5, 3],
-      'circle-color': orange,
+      'circle-color': green,
     },
   },
   // Midpoint
@@ -94,7 +94,7 @@ const styles = [
     filter: ['all', ['==', 'meta', 'midpoint']],
     paint: {
       'circle-radius': 3,
-      'circle-color': orange,
+      'circle-color': green,
     },
   },
 ];
