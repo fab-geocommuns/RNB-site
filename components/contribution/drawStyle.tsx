@@ -27,7 +27,7 @@ const styles = [
       'line-join': 'round',
     },
     paint: {
-      'line-color': ['case', ['==', ['get', 'active'], 'true'], green, blue],
+      'line-color': green,
       'line-dasharray': ['literal', [0.2, 2]],
       'line-width': 3,
     },

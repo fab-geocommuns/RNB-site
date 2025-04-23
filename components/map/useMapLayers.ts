@@ -118,11 +118,17 @@ function onMapReady(map: maplibregl.Map, callback: () => void) {
  * Ajout et gestion des couches de la carte
  * @param map
  */
-export const useMapLayers = (
-  map?: maplibregl.Map,
-  defaultBackgroundLayer?: MapBackgroundLayer,
-  defaultBuildingLayer?: MapBuildingsLayer,
-) => {
+export const useMapLayers = ({
+  map,
+  defaultBackgroundLayer,
+  defaultBuildingLayer,
+  selectedBuildingisGreen,
+}: {
+  map?: maplibregl.Map;
+  defaultBackgroundLayer?: MapBackgroundLayer;
+  defaultBuildingLayer?: MapBuildingsLayer;
+  selectedBuildingisGreen?: Boolean;
+}) => {
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
   const reloadBuildings = useSelector(
@@ -378,6 +384,10 @@ export const useMapLayers = (
       },
     });
 
+    const selectedBuildingColor = selectedBuildingisGreen
+      ? '#31e060'
+      : '#f57200';
+
     // Polygon border
     map.addLayer({
       id: LAYER_BDGS_SHAPE_FILL,
@@ -388,7 +398,7 @@ export const useMapLayers = (
         'line-color': [
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
-          '#31e060',
+          selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
           ['>', ['get', 'contributions'], 0],

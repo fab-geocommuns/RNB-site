@@ -26,7 +26,13 @@ export default function VisuMap({
   defaultBuildingLayer,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
-  useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer);
+  const selectedBuildingisGreen = true;
+  useMapLayers({
+    map,
+    defaultBackgroundLayer,
+    defaultBuildingLayer,
+    selectedBuildingisGreen,
+  });
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);
@@ -40,11 +46,16 @@ export function EditMap({
   defaultBuildingLayer,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
-  useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer);
+  const selectedBuildingisGreen = false;
+  useMapLayers({
+    map,
+    defaultBackgroundLayer,
+    defaultBuildingLayer,
+    selectedBuildingisGreen,
+  });
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);
   useMapEditBuildingShape(map);
-
   return mapContainer;
 }
