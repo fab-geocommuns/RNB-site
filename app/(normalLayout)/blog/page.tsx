@@ -25,13 +25,11 @@ async function getData(page: number) {
   return posts;
 }
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: any;
-  searchParams: any;
+export default async function Page(props: {
+  params: Promise<any>;
+  searchParams: Promise<any>;
 }) {
+  const searchParams = await props.searchParams;
   const page = searchParams?.page || 1;
   const posts = await getData(page);
 

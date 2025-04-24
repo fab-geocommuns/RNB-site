@@ -30,9 +30,10 @@ async function getData(slug: string) {
 }
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const params = await props.params;
   // The same request is made twice, but it's cached by Next.js and the React cache function
   const post = await getData(params.slug);
   return {
@@ -51,7 +52,10 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const params = await props.params;
   const post = await getData(params.slug);
   const dateStr = formattedDate(post.published_at);
 
