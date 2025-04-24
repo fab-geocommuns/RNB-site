@@ -48,7 +48,7 @@ module.exports = withSentryConfig(module.exports, {
 
   org: 'betagouv',
   project: 'rnb-site',
-  sentryUrl: 'https://sentry.incubateur.net/',
+  sentryUrl: 'https://sentry.incubateur.net',
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
