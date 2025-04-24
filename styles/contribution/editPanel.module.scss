@@ -30,6 +30,7 @@ $panel-padding: 2*$spacing;
     left: $spacing;
     z-index: 100;
     width: 400px;
+    overflow: hidden;
 }
 
 .content {
@@ -55,6 +56,7 @@ $panel-padding: 2*$spacing;
 
 .body {
     padding: $panel-padding;
+    overflow: auto;
 }
 .noticeContainer {
     position: absolute;
