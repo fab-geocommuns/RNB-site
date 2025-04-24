@@ -138,8 +138,9 @@ function EditSelectedBuildingPanelContent({
         <div className="fr-mb-6v">
           <label className="fr-label">Géométrie du bâtiment</label>
           <div className="fr-pt-2v fr-pb-4v">
-            <span className="fr-pr-4v">
+            <span style={{ display: 'inline-block', width: 250 }}>
               <Button
+                size="small"
                 onClick={handleBuildingShapeModification}
                 priority={`tertiary${drawMode === 'direct_select' ? '' : ' no outline'}`}
                 disabled={selectedBuilding.shape.type === 'Point'}
@@ -150,23 +151,36 @@ function EditSelectedBuildingPanelContent({
                       ? editPolygonDisabledIcon.src
                       : editPolygonIcon.src
                   }
-                  height="35"
+                  width="30"
                   title="Modifier la géométrie existante"
                 ></img>
+                <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
+                  Modifier la géometrie existante
+                </span>
               </Button>
             </span>
-            <span>
+            <span style={{ display: 'inline-block', width: 250 }}>
               <Button
+                size="small"
                 onClick={handleBuildingShapeCreation}
                 priority={`tertiary${drawMode === 'draw_polygon' ? '' : ' no outline'}`}
               >
                 <img
                   src={newPolygonIcon.src}
-                  height="35"
+                  width="30"
                   title="Dessiner une nouvelle géométrie"
                 ></img>
+                <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
+                  Dessiner une géométrie en partant de 0
+                </span>
               </Button>
             </span>
+            <div className="fr-text--xs fr-pt-1v">
+              {drawMode === 'direct_select' &&
+                'Modifiez la géométrie du bâtiment directement sur la carte en déplacant les sommets du polygone.'}
+              {drawMode === 'draw_polygon' &&
+                'Dessinez une géométrie du bâtiment en cliquant sur la carte. Pour finaliser la géométrie, fermez le polygone en recliquant sur le premier point.'}
+            </div>
           </div>
         </div>
         <Button onClick={handleSubmit} disabled={!anyChanges}>
