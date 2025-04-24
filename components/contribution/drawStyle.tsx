@@ -67,7 +67,7 @@ const styles = [
       ['!=', 'mode', 'simple_select'],
     ],
     paint: {
-      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 7, 5],
+      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 12, 8],
       'circle-color': white,
     },
   },
@@ -81,7 +81,7 @@ const styles = [
       ['!=', 'mode', 'simple_select'],
     ],
     paint: {
-      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 5, 3],
+      'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 8, 5],
       'circle-color': green,
     },
   },
@@ -93,7 +93,7 @@ const styles = [
     type: 'circle',
     filter: ['all', ['==', 'meta', 'midpoint']],
     paint: {
-      'circle-radius': 3,
+      'circle-radius': 7,
       'circle-color': green,
     },
   },
