@@ -76,7 +76,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
       const handleModeChange = ({ mode }: { mode: MapboxDraw.DrawMode }) => {
-        dispatch(Actions.map.setDrawMode(mode));
+        setTimeout(() => {
+          // without the timeout, the final click to close the polygon
+          // eventually selects an underlying existing polygon, ruining the current update
+          dispatch(Actions.map.setDrawMode(mode));
+        }, 0);
       };
       drawRef.current && map.on('draw.modechange', handleModeChange);
 
