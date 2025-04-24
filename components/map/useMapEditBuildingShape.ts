@@ -106,9 +106,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         } else {
           for (const draw of drawRef.current.getAll().features) {
             if (draw.id) {
-              drawRef.current.changeMode('direct_select', {
-                featureId: draw.id.toString(),
-              });
+              try {
+                drawRef.current.changeMode('direct_select', {
+                  featureId: draw.id.toString(),
+                });
+              } catch (_error) {}
             }
           }
         }
