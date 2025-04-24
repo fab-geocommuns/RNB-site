@@ -119,21 +119,30 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   }, [drawMode, dispatch]);
 
   useEffect(() => {
-    if (
-      map &&
-      selectedBuilding &&
-      selectedBuilding._type === 'building' &&
-      drawRef.current &&
-      selectedBuilding.shape &&
-      selectedBuilding.rnb_id !== selectedBuildingRef.current
-    ) {
-      drawRef.current.deleteAll();
-      drawRef.current.add({
-        id: BUILDING_DRAW_SHAPE_FEATURE_ID,
-        type: 'Feature',
-        properties: {},
-        geometry: selectedBuilding.shape,
-      });
+    if (map) {
+      if (
+        selectedBuilding &&
+        selectedBuilding._type === 'building' &&
+        drawRef.current &&
+        selectedBuilding.shape &&
+        selectedBuilding.rnb_id !== selectedBuildingRef.current
+      ) {
+        drawRef.current.deleteAll();
+        drawRef.current.add({
+          id: BUILDING_DRAW_SHAPE_FEATURE_ID,
+          type: 'Feature',
+          properties: {},
+          geometry: selectedBuilding.shape,
+        });
+        if (selectedBuilding.shape.type == 'Point') {
+          dispatch(Actions.map.setDrawMode('simple_select'));
+        } else {
+          dispatch(Actions.map.setDrawMode('direct_select'));
+        }
+        // used to know if we are selecting a different building next time we click on the map
+        selectedBuildingRef.current = selectedBuilding.rnb_id;
+      }
+
       const lastLayer = map.getStyle().layers.at(-1);
       if (lastLayer) {
         const drawLayers = map
@@ -143,13 +152,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           map.moveLayer(draw_layer.id, lastLayer.id);
         }
       }
-      if (selectedBuilding.shape.type == 'Point') {
-        dispatch(Actions.map.setDrawMode('simple_select'));
-      } else {
-        dispatch(Actions.map.setDrawMode('direct_select'));
-      }
-      // used to know if we are selecting a different building next time we click on the map
-      selectedBuildingRef.current = selectedBuilding.rnb_id;
     }
   }, [selectedBuilding, dispatch]);
 };
