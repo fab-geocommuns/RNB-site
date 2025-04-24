@@ -2,11 +2,16 @@
 
 import AddressInput from '@/components/address/AddressInput';
 import { useState } from 'react';
+import Button from '@codegouvfr/react-dsfr/Button';
+import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 
 export default function PlaygroundPage() {
   const [displayInput, setDisplayInput] = useState(false);
   return (
     <div>
+      <Tooltip title="Hello">
+        <Button>Click me</Button>
+      </Tooltip>
       {!displayInput && (
         <a href="#" onClick={() => setDisplayInput(true)}>
           Show input

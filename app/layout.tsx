@@ -1,9 +1,5 @@
 // DSFR and styles
-import { DsfrHead } from '@codegouvfr/react-dsfr/next-appdir/DsfrHead';
-import { DsfrProvider } from '@codegouvfr/react-dsfr/next-appdir/DsfrProvider';
-import { getHtmlAttributes } from '@codegouvfr/react-dsfr/next-appdir/getHtmlAttributes';
 import StartDsfr from '@/app/StartDsfr';
-import { defaultColorScheme } from '@/app/defaultColorScheme';
 import '@/styles/global.scss';
 
 // Auth
@@ -19,6 +15,8 @@ import settings from '@/logic/settings';
 import { Suspense } from 'react';
 import { Providers } from '@/stores/provider';
 import { Alerts } from '@/components/Alerts';
+import { getHtmlAttributes } from '@/dsfr-bootstrap/server-only-index';
+import { DsfrHead, DsfrProvider } from '@/dsfr-bootstrap/server-only-index';
 
 export const metadata = {
   title: 'Référentiel National des Bâtiments',
@@ -31,7 +29,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" {...getHtmlAttributes({ defaultColorScheme })}>
+    <html lang="fr" {...getHtmlAttributes({ lang: 'fr' })}>
       <head>
         <StartDsfr />
         <DsfrHead />
@@ -46,7 +44,7 @@ heap.load("${settings.heapId}");
         <Suspense>
           <Providers>
             <RNBSessionProvider>
-              <DsfrProvider>
+              <DsfrProvider lang="fr">
                 <FlashMessage />
                 <Alerts />
                 {children}
