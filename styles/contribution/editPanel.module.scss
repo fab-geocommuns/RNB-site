@@ -31,6 +31,8 @@ $panel-padding: 1.5*$spacing;
     z-index: 100;
     width: 400px;
     overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid var(--background-contrast-blue-france-active);
 }
 
 .content {
