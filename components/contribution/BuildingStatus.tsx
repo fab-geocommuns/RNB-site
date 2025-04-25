@@ -1,4 +1,5 @@
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
+import styles from '@/styles/contribution/editPanel.module.scss';
 
 export default function BuildingStatus({
   status,
@@ -24,19 +25,19 @@ export default function BuildingStatus({
 
   return (
     <>
-      <span className="fr-text--xs" style={{ textTransform: 'uppercase' }}>
-        Statut
-      </span>
-      <Select
-        nativeSelectProps={{
-          value: status,
-          onChange: (event) => {
-            onChange(event.target.value);
-          },
-        }}
-        label=""
-        options={statusList}
-      />
+      <div className={styles.panelSection}>
+        <span className={`fr-text--xs ${styles.sectionTitle}`}>Statut</span>
+        <Select
+          nativeSelectProps={{
+            value: status,
+            onChange: (event) => {
+              onChange(event.target.value);
+            },
+          }}
+          label=""
+          options={statusList}
+        />
+      </div>
     </>
   );
 }

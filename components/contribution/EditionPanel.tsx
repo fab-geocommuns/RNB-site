@@ -135,12 +135,12 @@ function EditSelectedBuildingPanelContent({
           addresses={localAddresses}
           onChange={handleEditAddress}
         />
-        <div className="fr-mb-6v">
-          <span className="fr-text--xs" style={{ textTransform: 'uppercase' }}>
+        <div className={styles.panelSection}>
+          <span className={`fr-text--xs ${styles.sectionTitle}`}>
             Géométrie
           </span>
 
-          <div className="fr-pt-2v fr-pb-4v">
+          <div className="">
             <span style={{ display: 'inline-block', width: 250 }}>
               <Button
                 size="small"
@@ -162,10 +162,13 @@ function EditSelectedBuildingPanelContent({
                 </span>
               </Button>
             </span>
-            <div className="fr-text--xs fr-pt-1v fr-mb-1v">
-              {drawMode === 'direct_select' &&
-                'Modifiez la géométrie du bâtiment directement sur la carte en déplacant les sommets du polygone.'}
-            </div>
+
+            {drawMode === 'direct_select' && (
+              <div className="fr-text--xs fr-pt-1v fr-mb-1v">
+                'Modifiez la géométrie du bâtiment directement sur la carte en
+                déplacant les sommets du polygone.'
+              </div>
+            )}
             <span style={{ display: 'inline-block', width: 250 }}>
               <Button
                 size="small"

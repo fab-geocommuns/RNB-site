@@ -5,6 +5,7 @@ import AddressInput from '@/components/address/AddressInput';
 import { AddressSuggestion } from '@/components/address/AddressAutocomplete';
 import { NewAddress, BuildingAddressType } from './types';
 import { distance } from '@turf/turf';
+import styles from '@/styles/contribution/editPanel.module.scss';
 
 function AddressCreator({
   onSubmit,
@@ -115,10 +116,8 @@ export default function BuildingAddresses({
     }
   };
   return (
-    <div className="fr-mb-6v">
-      <span className="fr-text--xs" style={{ textTransform: 'uppercase' }}>
-        Adresses
-      </span>
+    <div className={styles.panelSection}>
+      <span className={`fr-text--xs ${styles.sectionTitle}`}>Adresses</span>
 
       {addresses.length === 0 && !isCreating ? (
         <div>

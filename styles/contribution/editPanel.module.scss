@@ -34,7 +34,7 @@ $panel-padding: 1.5*$spacing;
 }
 
 .content {
-    background:white;
+    background-color: var(--background-default-grey-hover);
     box-shadow:0 0 0 2px rgba(0,0,0,.1);
     
     border-radius: 4px;
@@ -47,13 +47,30 @@ $panel-padding: 1.5*$spacing;
     right:0;
     left: 0; 
     top: 0;
+    .panelSection {
+            background: var(--background-default-grey);
+            padding: $spacing;
+            margin-bottom: $spacing;
+            border-radius: 4px;
+            border: 1px solid var(--border-open-blue-france);
+            position: relative;
+            padding-top: 36px;
+    
+            .sectionTitle {
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                text-transform: uppercase;
+                color: var(--text-mention-grey);
+            }
+        }
 }
 
 .header {
+    border-radius: 4px 4px 0 0;
     text-transform: uppercase;
     padding: 6px 12px 6px 18px;
-    background-color: var(--background-contrast-blue-france);
-    border-radius: 4px;
+    background-color: var(--background-alt-blue-france-active);
 }
 
 .body {
