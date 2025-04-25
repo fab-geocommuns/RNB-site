@@ -81,3 +81,15 @@ $panel-padding: 1.5*$spacing;
     opacity: 1;
     transform: translateY(0);
 }
+.editToggle {
+    padding-right: 48px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    div {
+        label::before {
+            margin-left: 0 !important;
+        }
+    }
+}

@@ -69,6 +69,13 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       },
     },
     {
+      isActive: pathname.startsWith('/faq'),
+      text: 'Foire aux questions',
+      linkProps: {
+        href: '/faq',
+      },
+    },
+    {
       isActive: pathname === '/a-propos',
       text: 'À propos',
       linkProps: {
@@ -88,14 +95,6 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   const handleSignout = (e) => {
     e.preventDefault();
     signOut();
-  };
-
-  let faqQA = {
-    iconId: 'fr-icon-question-fill',
-    linkProps: {
-      href: '/faq',
-    },
-    text: 'Foire aux questions',
   };
 
   let logQA = {
@@ -128,11 +127,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   const enableEditionMode =
     process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
-  const quickAccessItems = [
-    faqQA,
-    enableEditionMode ? editModeToggler : null,
-    logQA,
-  ];
+  const quickAccessItems = [enableEditionMode ? editModeToggler : null, logQA];
 
   return (
     <>
