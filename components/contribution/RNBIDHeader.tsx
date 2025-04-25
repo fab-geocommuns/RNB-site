@@ -12,12 +12,7 @@ export default function RNBIDheader({ rnbId }: Props) {
   return (
     <PanelHeader>
       <span className="fr-text--xs">Identifiant RNB</span>
-      <h1
-        className="fr-text--lg fr-m-0 fr-pl-2v"
-        style={{ display: 'inline-block' }}
-      >
-        {rnbId}
-      </h1>
+      <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
     </PanelHeader>
   );
 }

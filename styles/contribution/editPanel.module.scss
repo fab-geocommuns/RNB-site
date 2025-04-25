@@ -5,7 +5,7 @@ $spacing: 12px;
 $actions-top: 2*$spacing + $input-height;
 $actions-height: 50px;
 $shell-top: $actions-top + $spacing + $actions-height;
-$panel-padding: $spacing;
+$panel-padding: 1.5*$spacing;
 
 .actions {
     position: absolute;
@@ -51,7 +51,7 @@ $panel-padding: $spacing;
 
 .header {
     text-transform: uppercase;
-    padding: $panel-padding;
+    padding: 6px 12px 6px 18px;
     background-color: var(--background-contrast-blue-france);
     border-radius: 4px;
 }
