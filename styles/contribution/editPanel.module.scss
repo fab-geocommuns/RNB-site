@@ -36,7 +36,7 @@ $panel-padding: 1.5*$spacing;
 }
 
 .content {
-    background-color: var(--background-default-grey-active);
+    background-color: var(--background-alt-blue-france);
     box-shadow:0 0 0 2px rgba(0,0,0,.1);
     
     border-radius: 4px;
@@ -72,7 +72,7 @@ $panel-padding: 1.5*$spacing;
     border-radius: 4px 4px 0 0;
     text-transform: uppercase;
     padding: 6px 12px 6px 18px;
-    background-color: var(--background-alt-blue-france-active);
+    background-color: var(--background-alt-blue-france-hover);
     box-shadow: 0 0 5px var(--background-action-high-grey-active);
         z-index: 100;
 }
