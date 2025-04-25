@@ -165,8 +165,8 @@ function EditSelectedBuildingPanelContent({
 
             {drawMode === 'direct_select' && (
               <div className="fr-text--xs fr-pt-1v fr-mb-1v">
-                'Modifiez la géométrie du bâtiment directement sur la carte en
-                déplacant les sommets du polygone.'
+                Modifiez la géométrie du bâtiment directement sur la carte en
+                déplacant les sommets du polygone.
               </div>
             )}
             <span style={{ display: 'inline-block', width: 250 }}>
