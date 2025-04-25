@@ -24,6 +24,9 @@ export default function BuildingStatus({
 
   return (
     <>
+      <span className="fr-text--xs" style={{ textTransform: 'uppercase' }}>
+        Statut
+      </span>
       <Select
         nativeSelectProps={{
           value: status,
@@ -31,7 +34,7 @@ export default function BuildingStatus({
             onChange(event.target.value);
           },
         }}
-        label="Statut du bâtiment"
+        label=""
         options={statusList}
       />
     </>

@@ -25,7 +25,7 @@ function AddressCreator({
         size="small"
         onClick={() => onToggleCreating(true)}
         iconId="fr-icon-add-line"
-        priority="tertiary no outline"
+        priority="tertiary"
       >
         Ajouter une adresse
       </Button>
@@ -116,7 +116,10 @@ export default function BuildingAddresses({
   };
   return (
     <div className="fr-mb-6v">
-      <label className="fr-label">Addresses du bâtiment</label>
+      <span className="fr-text--xs" style={{ textTransform: 'uppercase' }}>
+        Adresses
+      </span>
+
       {addresses.length === 0 && !isCreating ? (
         <div>
           <small>Aucune adresse liée</small>
@@ -125,10 +128,11 @@ export default function BuildingAddresses({
         addresses.map((address, index) => (
           <div
             key={index}
+            className="fr-text--lg"
             style={{
               display: 'flex',
               gap: '1rem',
-              marginBottom: '0.5rem',
+              marginBottom: '0',
               alignItems: 'center',
             }}
           >

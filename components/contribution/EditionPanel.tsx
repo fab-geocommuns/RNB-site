@@ -136,7 +136,10 @@ function EditSelectedBuildingPanelContent({
           onChange={handleEditAddress}
         />
         <div className="fr-mb-6v">
-          <label className="fr-label">Géométrie du bâtiment</label>
+          <span className="fr-text--xs" style={{ textTransform: 'uppercase' }}>
+            Géométrie
+          </span>
+
           <div className="fr-pt-2v fr-pb-4v">
             <span style={{ display: 'inline-block', width: 250 }}>
               <Button
@@ -159,6 +162,10 @@ function EditSelectedBuildingPanelContent({
                 </span>
               </Button>
             </span>
+            <div className="fr-text--xs fr-pt-1v fr-mb-1v">
+              {drawMode === 'direct_select' &&
+                'Modifiez la géométrie du bâtiment directement sur la carte en déplacant les sommets du polygone.'}
+            </div>
             <span style={{ display: 'inline-block', width: 250 }}>
               <Button
                 size="small"
@@ -176,17 +183,17 @@ function EditSelectedBuildingPanelContent({
               </Button>
             </span>
             <div className="fr-text--xs fr-pt-1v">
-              {drawMode === 'direct_select' &&
-                'Modifiez la géométrie du bâtiment directement sur la carte en déplacant les sommets du polygone.'}
               {drawMode === 'draw_polygon' &&
                 'Dessinez une géométrie du bâtiment en cliquant sur la carte. Pour finaliser la géométrie, fermez le polygone en recliquant sur le premier point.'}
             </div>
           </div>
         </div>
+      </PanelBody>
+      <div className={styles.footer}>
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>
-      </PanelBody>
+      </div>
 
       <div className={styles.noticeContainer}>
         <div

@@ -3,9 +3,9 @@
 $input-height: 52px;
 $spacing: 12px;
 $actions-top: 2*$spacing + $input-height;
-$actions-height: 100px;
+$actions-height: 50px;
 $shell-top: $actions-top + $spacing + $actions-height;
-$panel-padding: 2*$spacing;
+$panel-padding: $spacing;
 
 .actions {
     position: absolute;
@@ -50,13 +50,18 @@ $panel-padding: 2*$spacing;
 }
 
 .header {
+    text-transform: uppercase;
     padding: $panel-padding;
     background-color: var(--background-contrast-blue-france);
+    border-radius: 4px;
 }
 
 .body {
     padding: $panel-padding;
     overflow: auto;
+}
+.footer {
+    padding: $panel-padding;
 }
 .noticeContainer {
     position: absolute;
