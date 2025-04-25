@@ -34,7 +34,7 @@ $panel-padding: 1.5*$spacing;
 }
 
 .content {
-    background-color: var(--background-default-grey-hover);
+    background-color: var(--background-default-grey-active);
     box-shadow:0 0 0 2px rgba(0,0,0,.1);
     
     border-radius: 4px;
@@ -81,7 +81,7 @@ $panel-padding: 1.5*$spacing;
 }
 .footer {
     padding: $spacing $spacing $spacing 2*$spacing;
-        box-shadow: 0 0px 5px var(--background-contrast-grey-hover);
+        box-shadow: 0 0px 4px var(--background-contrast-grey-active);
         z-index: 90;
 }
 .noticeContainer {
