@@ -14,6 +14,7 @@ export const authOptions = {
         token.accessToken = user.token;
         token.username = user.username;
         token.groups = user.groups;
+        token.id = user.id;
       }
 
       return token;
@@ -24,6 +25,7 @@ export const authOptions = {
         session.accessToken = token.accessToken;
         session.username = token.username;
         session.groups = token.groups;
+        session.id = token.id;
       }
 
       return session;
