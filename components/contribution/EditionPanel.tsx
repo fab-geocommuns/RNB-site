@@ -108,6 +108,40 @@ function EditSelectedBuildingPanelContent({
     }
   };
 
+  const handleDeactivateBuilding = async () => {
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const data = {
+      is_active: false,
+    };
+    const response = await fetch(url, {
+      body: JSON.stringify(data),
+      method: 'PATCH',
+    });
+    if (!response.ok) {
+      throw new Error(`Erreur ${response.status}`);
+    }
+    await dispatch(Actions.map.selectBuilding(rnbId));
+    setSuccess(true);
+    dispatch(Actions.map.reloadBuildings());
+  };
+
+  const handleActivateBuilding = async () => {
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const data = {
+      is_active: true,
+    };
+    const response = await fetch(url, {
+      body: JSON.stringify(data),
+      method: 'PATCH',
+    });
+    if (!response.ok) {
+      throw new Error(`Erreur ${response.status}`);
+    }
+    await dispatch(Actions.map.selectBuilding(rnbId));
+    setSuccess(true);
+    dispatch(Actions.map.reloadBuildings());
+  };
+
   return (
     <>
       <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
@@ -128,6 +162,24 @@ function EditSelectedBuildingPanelContent({
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>
+
+        <p>Active: {JSON.stringify(selectedBuilding.is_active)}</p>
+        {selectedBuilding.is_active && (
+          <Button
+            priority="tertiary no outline"
+            onClick={handleDeactivateBuilding}
+          >
+            Désactiver le bâtiment
+          </Button>
+        )}
+        {!selectedBuilding.is_active && (
+          <Button
+            priority="tertiary no outline"
+            onClick={handleActivateBuilding}
+          >
+            Activer le bâtiment
+          </Button>
+        )}
       </PanelBody>
 
       <div className={styles.noticeContainer}>
