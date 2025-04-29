@@ -77,8 +77,9 @@
       <p>La mise à jour du RNB est réalisé par :</p>
       <ul>
       <li><b>les importations, lors de parution de nouveaux millésimes</b> de la BDTOPO et de la BDNB</li>
-      <li><b>les flux d’autorisations du droit des sols (ADS)</b> provenant des collectivités, ainsi que tout autre flux de processus administratifs pertinents.</li>
-      <li><b>les <a href="https://rnb.beta.gouv.fr/faq#contribuer" target="_blank">contributions</a> de la communauté</b>, à savoir <b>les écritures directes dans le RNB</b> réalisées principalement par les administrations, les collectivités ou les organisations gérant des bases bâtimentaires et ayant adopté la <a href="https://rnb.beta.gouv.fr/definition" target="_blank">définition du bâtiment du RNB</a>; ainsi que par les <b>signalements reçus</b> par une personne suggérant une modification du contenu du RNB, sans la réaliser par elle-même</b></li>
+      <li><b>les flux d’autorisations du droit des sols (ADS)</b> provenant des collectivités.</li>
+      <li><b>les imports des Bases Adresses Locales (BAL)
+      <li><b>les <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#communaute-et-contributions" target="_blank">contributions</a> de la communauté</b>, à savoir <b>les éditions directes dans le RNB</b> ; ainsi que par les <b>signalements reçus</b> par une personne suggérant une modification du contenu du RNB, sans la réaliser par elle-même</b></li>
       </ul>
   - question: Qu’est ce qu'un ID-RNB ? Quelles sont ses caractéristiques ?
     key: identifiant

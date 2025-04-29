@@ -38,7 +38,7 @@ import { getDatabases } from '@/utils/databases';
 export const revalidate = 10;
 
 export default async function Home() {
-  const bannerId = 'M11Z4KK9Y338';
+  const bannerId = '32J5WGD2D3QE';
   const breakingNews = await getBreakingNews();
   let availableDatabases = null;
   try {
