@@ -20,8 +20,8 @@ import { Actions, RootState } from '@/stores/store';
 // Buildings source
 export const SRC_BDGS_POINTS = 'bdgtiles_points';
 export const SRC_BDGS_SHAPES = 'bdgtiles_shapes';
-export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf`;
-export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf`;
+export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf?only_active=false`;
+export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf?only_active=false`;
 
 // Buildings layers : point:
 export const LAYER_BDGS_POINT = 'bdgs_point';
