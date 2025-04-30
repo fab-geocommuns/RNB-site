@@ -44,6 +44,7 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 ];
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
+const DEACTIVATED_BUILDING_COLOR = '#e1000f';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -289,7 +290,6 @@ export const useMapLayers = (
     ];
 
     if (currentUserId) {
-      console.log('currentUserId', currentUserId);
       defaultBuildingFeatureFilter.push([
         'all',
         ['==', ['get', 'last_updated_by'], currentUserId],
@@ -407,8 +407,8 @@ export const useMapLayers = (
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
           ['boolean', ['get', 'is_active'], false],
-          '#ffffff',
-          '#FF0000',
+          '#1452e3',
+          DEACTIVATED_BUILDING_COLOR,
         ],
         'fill-opacity': 0.08,
       },
@@ -432,7 +432,7 @@ export const useMapLayers = (
           CONTRIBUTIONS_COLOR,
           ['boolean', ['get', 'is_active'], false],
           '#1452e3',
-          '#FF0000',
+          DEACTIVATED_BUILDING_COLOR,
         ],
         'line-width': 1.5,
       },
