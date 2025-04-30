@@ -286,7 +286,7 @@ export const useMapLayers = (
     const displayBuildingDeactivatedByCurrentUserSecondsAgo = 300;
     const defaultBuildingFeatureFilter: any = [
       'any',
-      ['==', ['get', 'is_active'], true],
+      ['==', ['coalesce', ['get', 'is_active'], true], true],
       ['==', ['get', 'in_panel'], true],
     ];
 
