@@ -124,6 +124,7 @@ export const useMapLayers = (
   map?: maplibregl.Map,
   defaultBackgroundLayer?: MapBackgroundLayer,
   defaultBuildingLayer?: MapBuildingsLayer,
+  displayRecentlyDeactivatedBuildings: boolean = false,
 ) => {
   const { user } = useRNBAuthentication();
   const currentUserId = user?.id;
@@ -289,7 +290,7 @@ export const useMapLayers = (
       ['==', ['get', 'in_panel'], true],
     ];
 
-    if (currentUserId) {
+    if (displayRecentlyDeactivatedBuildings && currentUserId) {
       defaultBuildingFeatureFilter.push([
         'all',
         ['==', ['get', 'last_updated_by'], currentUserId],
