@@ -69,6 +69,7 @@ import {
   MapLayer,
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
+import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -123,6 +124,9 @@ export const useMapLayers = (
   defaultBackgroundLayer?: MapBackgroundLayer,
   defaultBuildingLayer?: MapBuildingsLayer,
 ) => {
+  const { user } = useRNBAuthentication();
+  const currentUserId = user?.id;
+
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
   const reloadBuildings = useSelector(
@@ -276,6 +280,30 @@ export const useMapLayers = (
     });
   };
 
+  const getDefaultBuildingFeatureFilter = () => {
+    const displayBuildingDeactivatedByCurrentUserSecondsAgo = 300;
+    const defaultBuildingFeatureFilter: any = [
+      'any',
+      ['==', ['get', 'is_active'], true],
+      ['==', ['get', 'in_panel'], true],
+    ];
+
+    if (currentUserId) {
+      console.log('currentUserId', currentUserId);
+      defaultBuildingFeatureFilter.push([
+        'all',
+        ['==', ['get', 'last_updated_by'], currentUserId],
+        [
+          '<',
+          ['get', 'updated_ago_in_seconds'],
+          displayBuildingDeactivatedByCurrentUserSecondsAgo,
+        ],
+      ]);
+    }
+
+    return defaultBuildingFeatureFilter;
+  };
+
   const installBuildingsLayers = (map: maplibregl.Map) => {
     if (layers.buildings == 'point') {
       installBuildingsPointsLayers(map);
@@ -286,11 +314,13 @@ export const useMapLayers = (
   };
 
   const installBuildingsPointsLayers = (map: maplibregl.Map) => {
+    const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     // Shape for vector background
     if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_FILL,
         type: 'fill',
+        filter: defaultBuildingFeatureFilter,
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
         paint: {
@@ -302,6 +332,7 @@ export const useMapLayers = (
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_BORDER,
         type: 'line',
+        filter: defaultBuildingFeatureFilter,
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
         paint: {
@@ -328,6 +359,7 @@ export const useMapLayers = (
       type: 'circle',
       source: SRC_BDGS_POINTS,
       'source-layer': 'default',
+      filter: defaultBuildingFeatureFilter,
       paint: {
         'circle-radius': [
           'case',
@@ -357,12 +389,14 @@ export const useMapLayers = (
   };
 
   const installBuildingsShapesLayers = (map: maplibregl.Map) => {
+    const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     // Polygon border
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
       type: 'fill',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
+      filter: defaultBuildingFeatureFilter,
       paint: {
         'fill-color': [
           'case',
@@ -386,6 +420,7 @@ export const useMapLayers = (
       type: 'line',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
+      filter: defaultBuildingFeatureFilter,
       paint: {
         'line-color': [
           'case',
@@ -407,7 +442,7 @@ export const useMapLayers = (
       type: 'circle',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
-      filter: ['==', '$type', 'Point'],
+      filter: ['all', ['==', '$type', 'Point'], defaultBuildingFeatureFilter],
       paint: {
         'circle-radius': [
           'case',

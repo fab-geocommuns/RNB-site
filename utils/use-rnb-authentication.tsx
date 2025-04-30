@@ -14,6 +14,7 @@ export enum RNBAuthenticationStatus {
 type AuthenticatedUser = {
   username: string;
   groups: RNBGroup[];
+  id: number;
 };
 
 type UseRNBAuthentication = {
@@ -46,6 +47,7 @@ export const useRNBAuthentication = (options?: {
 
   if (status === 'authenticated') {
     user = {
+      ...data,
       username,
       groups,
     };
