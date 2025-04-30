@@ -3,9 +3,11 @@ import { Select } from '@codegouvfr/react-dsfr/SelectNext';
 export default function BuildingStatus({
   status,
   onChange,
+  disabled,
 }: {
   status: string;
   onChange: (status: string) => void;
+  disabled: boolean;
 }) {
   const statusList = [
     {
@@ -30,6 +32,7 @@ export default function BuildingStatus({
           onChange: (event) => {
             onChange(event.target.value);
           },
+          disabled,
         }}
         label="Statut du bâtiment"
         options={statusList}

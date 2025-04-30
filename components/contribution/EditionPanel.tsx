@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
+import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { geojsonToWKT } from '@terraformer/wkt';
@@ -26,13 +27,14 @@ function EditSelectedBuildingPanelContent({
   selectedBuilding: SelectedBuilding;
 }) {
   const rnbId = selectedBuilding.rnb_id;
+  const isActive = selectedBuilding.is_active;
   const dispatch: AppDispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
   );
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
@@ -108,34 +110,22 @@ function EditSelectedBuildingPanelContent({
     }
   };
 
-  const handleDeactivateBuilding = async () => {
+  const toggleBuildingActivation = async (isActive: boolean) => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
     const data = {
-      is_active: false,
+      is_active: isActive,
     };
+    setError(null);
+    setSuccess(false);
     const response = await fetch(url, {
       body: JSON.stringify(data),
       method: 'PATCH',
     });
     if (!response.ok) {
-      throw new Error(`Erreur ${response.status}`);
-    }
-    await dispatch(Actions.map.selectBuilding(rnbId));
-    setSuccess(true);
-    dispatch(Actions.map.reloadBuildings());
-  };
-
-  const handleActivateBuilding = async () => {
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
-    const data = {
-      is_active: true,
-    };
-    const response = await fetch(url, {
-      body: JSON.stringify(data),
-      method: 'PATCH',
-    });
-    if (!response.ok) {
-      throw new Error(`Erreur ${response.status}`);
+      setError(
+        `Erreur lors de ${isActive ? "l'activation" : 'la désactivation'} du bâtiment`,
+      );
+      return;
     }
     await dispatch(Actions.map.selectBuilding(rnbId));
     setSuccess(true);
@@ -149,37 +139,26 @@ function EditSelectedBuildingPanelContent({
         <BuildingStatus
           status={newStatus}
           onChange={setNewStatus}
+          disabled={!isActive}
         ></BuildingStatus>
         <BuildingAddresses
           buildingPoint={selectedBuilding.point.coordinates}
           addresses={localAddresses}
+          disabled={!isActive}
           onChange={handleEditAddress}
         />
         <br />
-        <Button onClick={handleBuildingShapeModification}>
+        <Button disabled={!isActive} onClick={handleBuildingShapeModification}>
           Modifier la géométrie du bâtiment
         </Button>
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>
 
-        <p>Active: {JSON.stringify(selectedBuilding.is_active)}</p>
-        {selectedBuilding.is_active && (
-          <Button
-            priority="tertiary no outline"
-            onClick={handleDeactivateBuilding}
-          >
-            Désactiver le bâtiment
-          </Button>
-        )}
-        {!selectedBuilding.is_active && (
-          <Button
-            priority="tertiary no outline"
-            onClick={handleActivateBuilding}
-          >
-            Activer le bâtiment
-          </Button>
-        )}
+        <BuildingActivationToggle
+          isActive={isActive}
+          onToggle={toggleBuildingActivation}
+        />
       </PanelBody>
 
       <div className={styles.noticeContainer}>

@@ -4,6 +4,7 @@ import Button from '@codegouvfr/react-dsfr/Button';
 type BuildingAddressProps = {
   address: BuildingAddressType;
   onRemove?: (address: BuildingAddressType) => void;
+  disabled: boolean;
 };
 
 function getAddressDisplayLabel(address: BuildingAddressType) {
@@ -15,6 +16,7 @@ function getAddressDisplayLabel(address: BuildingAddressType) {
 }
 
 export default function BuildingAddress({
+  disabled,
   address,
   onRemove,
 }: BuildingAddressProps) {
@@ -26,6 +28,7 @@ export default function BuildingAddress({
         // @ts-ignore
         <Button
           size="small"
+          disabled={disabled}
           onClick={() => onRemove(address)}
           iconId="fr-icon-delete-line"
           priority="tertiary no outline"
