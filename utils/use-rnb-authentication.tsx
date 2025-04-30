@@ -29,9 +29,8 @@ export const useRNBAuthentication = (options?: {
 }): UseRNBAuthentication => {
   const { status, data } = useSession();
   const router = useRouter();
-  const groups =
-    data && (data as any).groups ? ((data as any).groups as RNBGroup[]) : [];
-  const username = (data as any)?.username;
+  const sessionData = data as any;
+  const groups = sessionData?.groups ? (sessionData.groups as RNBGroup[]) : [];
   let user = null;
 
   useEffect(() => {
@@ -47,8 +46,8 @@ export const useRNBAuthentication = (options?: {
 
   if (status === 'authenticated') {
     user = {
-      ...data,
-      username,
+      id: sessionData.id,
+      username: sessionData.username,
       groups,
     };
   }
