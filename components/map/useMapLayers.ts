@@ -20,8 +20,8 @@ import { Actions, RootState } from '@/stores/store';
 // Buildings source
 export const SRC_BDGS_POINTS = 'bdgtiles_points';
 export const SRC_BDGS_SHAPES = 'bdgtiles_shapes';
-export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf`;
-export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf`;
+export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf?only_active=false`;
+export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf?only_active=false`;
 
 // Buildings layers : point:
 export const LAYER_BDGS_POINT = 'bdgs_point';
@@ -44,6 +44,7 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 ];
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
+const DEACTIVATED_BUILDING_COLOR = '#e1000f';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -69,6 +70,7 @@ import {
   MapLayer,
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
+import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -122,7 +124,11 @@ export const useMapLayers = (
   map?: maplibregl.Map,
   defaultBackgroundLayer?: MapBackgroundLayer,
   defaultBuildingLayer?: MapBuildingsLayer,
+  displayRecentlyDeactivatedBuildings: boolean = false,
 ) => {
+  const { user } = useRNBAuthentication();
+  const currentUserId = user?.id;
+
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
   const reloadBuildings = useSelector(
@@ -276,6 +282,29 @@ export const useMapLayers = (
     });
   };
 
+  const getDefaultBuildingFeatureFilter = () => {
+    const displayBuildingDeactivatedByCurrentUserSecondsAgo = 300;
+    const defaultBuildingFeatureFilter: any = [
+      'any',
+      ['==', ['coalesce', ['get', 'is_active'], true], true],
+      ['==', ['get', 'in_panel'], true],
+    ];
+
+    if (displayRecentlyDeactivatedBuildings && currentUserId) {
+      defaultBuildingFeatureFilter.push([
+        'all',
+        ['==', ['get', 'last_updated_by'], currentUserId],
+        [
+          '<',
+          ['get', 'updated_ago_in_seconds'],
+          displayBuildingDeactivatedByCurrentUserSecondsAgo,
+        ],
+      ]);
+    }
+
+    return defaultBuildingFeatureFilter;
+  };
+
   const installBuildingsLayers = (map: maplibregl.Map) => {
     if (layers.buildings == 'point') {
       installBuildingsPointsLayers(map);
@@ -286,11 +315,13 @@ export const useMapLayers = (
   };
 
   const installBuildingsPointsLayers = (map: maplibregl.Map) => {
+    const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     // Shape for vector background
     if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_FILL,
         type: 'fill',
+        filter: defaultBuildingFeatureFilter,
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
         paint: {
@@ -302,6 +333,7 @@ export const useMapLayers = (
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_BORDER,
         type: 'line',
+        filter: defaultBuildingFeatureFilter,
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
         paint: {
@@ -328,6 +360,7 @@ export const useMapLayers = (
       type: 'circle',
       source: SRC_BDGS_POINTS,
       'source-layer': 'default',
+      filter: defaultBuildingFeatureFilter,
       paint: {
         'circle-radius': [
           'case',
@@ -357,12 +390,14 @@ export const useMapLayers = (
   };
 
   const installBuildingsShapesLayers = (map: maplibregl.Map) => {
+    const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     // Polygon border
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
       type: 'fill',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
+      filter: defaultBuildingFeatureFilter,
       paint: {
         'fill-color': [
           'case',
@@ -372,7 +407,9 @@ export const useMapLayers = (
           '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
+          ['boolean', ['get', 'is_active'], false],
           '#1452e3',
+          DEACTIVATED_BUILDING_COLOR,
         ],
         'fill-opacity': 0.08,
       },
@@ -384,6 +421,7 @@ export const useMapLayers = (
       type: 'line',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
+      filter: defaultBuildingFeatureFilter,
       paint: {
         'line-color': [
           'case',
@@ -393,7 +431,9 @@ export const useMapLayers = (
           '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
+          ['boolean', ['get', 'is_active'], false],
           '#1452e3',
+          DEACTIVATED_BUILDING_COLOR,
         ],
         'line-width': 1.5,
       },
@@ -405,7 +445,7 @@ export const useMapLayers = (
       type: 'circle',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
-      filter: ['==', '$type', 'Point'],
+      filter: ['all', ['==', '$type', 'Point'], defaultBuildingFeatureFilter],
       paint: {
         'circle-radius': [
           'case',

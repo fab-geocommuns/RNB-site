@@ -40,7 +40,7 @@ export function EditMap({
   defaultBuildingLayer,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
-  useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer);
+  useMapLayers(map, defaultBackgroundLayer, defaultBuildingLayer, true);
   useMapControls(map);
   useMapEvents(map);
   useMapStateSync(map);

@@ -12,12 +12,14 @@ function AddressCreator({
   disabledAddressIds,
   isCreating,
   onToggleCreating,
+  disabled,
 }: {
   onSubmit: (address: NewAddress) => void;
   buildingPoint: [number, number];
   disabledAddressIds: string[];
   isCreating: boolean;
   onToggleCreating: (isCreating: boolean) => void;
+  disabled: boolean;
 }) {
   if (!isCreating) {
     return (
@@ -26,6 +28,7 @@ function AddressCreator({
         onClick={() => onToggleCreating(true)}
         iconId="fr-icon-add-line"
         priority="tertiary no outline"
+        disabled={disabled}
       >
         Ajouter une adresse
       </Button>
@@ -101,12 +104,14 @@ type BuildingAddressesProps = {
   addresses: BuildingAddressType[];
   onChange: (addresses: BuildingAddressType[]) => void;
   buildingPoint: [number, number];
+  disabled: boolean;
 };
 
 export default function BuildingAddresses({
   addresses,
   onChange,
   buildingPoint,
+  disabled,
 }: BuildingAddressesProps) {
   const [isCreating, setIsCreating] = useState(false);
   const handleAddAddress = (address: BuildingAddressType) => {
@@ -133,6 +138,7 @@ export default function BuildingAddresses({
             }}
           >
             <BuildingAddress
+              disabled={disabled}
               address={address}
               onRemove={(removedAddress) =>
                 onChange(addresses.filter((a) => a.id !== removedAddress.id))
@@ -142,6 +148,7 @@ export default function BuildingAddresses({
         ))
       )}
       <AddressCreator
+        disabled={disabled}
         isCreating={isCreating}
         onToggleCreating={setIsCreating}
         onSubmit={handleAddAddress}
