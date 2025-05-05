@@ -1,5 +1,6 @@
 import { ToggleSwitch } from '@codegouvfr/react-dsfr/ToggleSwitch';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import styles from '@/styles/contribution/editPanel.module.scss';
 
 export default function ToogleEditMode() {
   const pathname = usePathname();
@@ -16,12 +17,18 @@ export default function ToogleEditMode() {
   };
 
   return (
-    <ToggleSwitch
-      checked={editModeEnabled}
-      className=""
-      label={<span className="fr-btn">Mode édition</span>}
-      labelPosition="left"
-      onChange={toggleView}
-    />
+    <>
+      <div className={`fr-btn ${styles.editToggle}`}>
+        <div>Mode édition</div>
+        <ToggleSwitch
+          checked={editModeEnabled}
+          className=""
+          // need to put something
+          label={<span></span>}
+          labelPosition="left"
+          onChange={toggleView}
+        />
+      </div>
+    </>
   );
 }

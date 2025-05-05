@@ -11,8 +11,8 @@ function PanelHeader({ children }: { children: React.ReactNode }) {
 export default function RNBIDheader({ rnbId }: Props) {
   return (
     <PanelHeader>
-      <span>Identifiant RNB</span>
-      <span>{rnbId}</span>
+      <span className="fr-text--xs">Identifiant RNB</span>
+      <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
     </PanelHeader>
   );
 }

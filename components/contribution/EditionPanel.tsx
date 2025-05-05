@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
+import BuildingShape from './BuildingShape';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { geojsonToWKT } from '@terraformer/wkt';
@@ -36,6 +37,7 @@ function EditSelectedBuildingPanelContent({
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
+  const drawMode = useSelector((state: RootState) => state.map.drawMode);
 
   const anyChanges = anyChangesBetween(
     {
@@ -72,10 +74,6 @@ function EditSelectedBuildingPanelContent({
     }
   }, [error, success]);
 
-  const handleBuildingShapeModification = () => {
-    dispatch(Actions.map.setDrawMode('direct_select'));
-  };
-
   const handleSubmit = async () => {
     setError(null);
     setSuccess(false);
@@ -97,11 +95,11 @@ function EditSelectedBuildingPanelContent({
         throw new Error(`Erreur ${response.status}`);
       }
 
-      await dispatch(Actions.map.selectBuilding(rnbId));
       setSuccess(true);
       // force the map to reload the building, to immediatly show the modifications made
       dispatch(Actions.map.reloadBuildings());
       dispatch(Actions.map.setBuildingNewShape(null));
+      await dispatch(Actions.map.selectBuilding(rnbId));
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
       console.error(err);
@@ -121,14 +119,16 @@ function EditSelectedBuildingPanelContent({
           addresses={localAddresses}
           onChange={handleEditAddress}
         />
-        <br />
-        <Button onClick={handleBuildingShapeModification}>
-          Modifier la géométrie du bâtiment
-        </Button>
+        <BuildingShape
+          drawMode={drawMode}
+          selectedBuilding={selectedBuilding}
+        ></BuildingShape>
+      </PanelBody>
+      <div className={styles.footer}>
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>
-      </PanelBody>
+      </div>
 
       <div className={styles.noticeContainer}>
         <div

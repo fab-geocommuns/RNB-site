@@ -28,7 +28,7 @@
     "plan_ign": {
       "type": "vector",
       "tiles": ["https://data.geopf.fr/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf"],
-      "maxzoom": 18.9
+      "maxzoom": 18
     },
     "admin_express": {
       "type": "vector",
@@ -36,7 +36,7 @@
         "https://data.geopf.fr/tms/1.0.0/ADMIN_EXPRESS/{z}/{x}/{y}.pbf"
       ],
       "minzoom": 0,
-      "maxzoom": 20,
+      "maxzoom": 18,
       "scheme": "xyz"
     }
   },

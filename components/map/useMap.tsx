@@ -44,7 +44,7 @@ export const useMap = (params?: UseMapParams) => {
         container: mapContainerRef.current,
         center: [2.852577494863663, 46.820936580547134],
         zoom: 5,
-        maxZoom: 18.99,
+        maxZoom: 23,
         attributionControl: false,
         style: DEFAULT_STYLE,
       });

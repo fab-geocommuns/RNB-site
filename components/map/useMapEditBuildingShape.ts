@@ -45,7 +45,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       const draw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
-          polygon: true,
+          polygon: false,
           trash: false,
         },
         styles: drawStyle,
@@ -76,7 +76,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
       const handleModeChange = ({ mode }: { mode: MapboxDraw.DrawMode }) => {
-        dispatch(Actions.map.setDrawMode(mode));
+        setTimeout(() => {
+          // without the timeout, the final click to close the polygon
+          // eventually selects an underlying existing polygon, ruining the current update
+          dispatch(Actions.map.setDrawMode(mode));
+        }, 0);
       };
       drawRef.current && map.on('draw.modechange', handleModeChange);
 
@@ -102,9 +106,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         } else {
           for (const draw of drawRef.current.getAll().features) {
             if (draw.id) {
-              drawRef.current.changeMode('direct_select', {
-                featureId: draw.id.toString(),
-              });
+              try {
+                // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
+                drawRef.current.changeMode('direct_select', {
+                  featureId: draw.id.toString(),
+                });
+              } catch (_error) {}
             }
           }
         }
@@ -115,21 +122,30 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   }, [drawMode, dispatch]);
 
   useEffect(() => {
-    if (
-      map &&
-      selectedBuilding &&
-      selectedBuilding._type === 'building' &&
-      drawRef.current &&
-      selectedBuilding.shape &&
-      selectedBuilding.rnb_id !== selectedBuildingRef.current
-    ) {
-      drawRef.current.deleteAll();
-      drawRef.current.add({
-        id: BUILDING_DRAW_SHAPE_FEATURE_ID,
-        type: 'Feature',
-        properties: {},
-        geometry: selectedBuilding.shape,
-      });
+    if (map) {
+      if (
+        selectedBuilding &&
+        selectedBuilding._type === 'building' &&
+        drawRef.current &&
+        selectedBuilding.shape &&
+        selectedBuilding.rnb_id !== selectedBuildingRef.current
+      ) {
+        drawRef.current.deleteAll();
+        drawRef.current.add({
+          id: BUILDING_DRAW_SHAPE_FEATURE_ID,
+          type: 'Feature',
+          properties: {},
+          geometry: selectedBuilding.shape,
+        });
+        if (selectedBuilding.shape.type == 'Point') {
+          dispatch(Actions.map.setDrawMode('simple_select'));
+        } else {
+          dispatch(Actions.map.setDrawMode('direct_select'));
+        }
+        // used to know if we are selecting a different building next time we click on the map
+        selectedBuildingRef.current = selectedBuilding.rnb_id;
+      }
+
       const lastLayer = map.getStyle().layers.at(-1);
       if (lastLayer) {
         const drawLayers = map
@@ -139,9 +155,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           map.moveLayer(draw_layer.id, lastLayer.id);
         }
       }
-      dispatch(Actions.map.setDrawMode(null));
-      // used to know if we are selecting a different building next time we click on the map
-      selectedBuildingRef.current = selectedBuilding.rnb_id;
     }
   }, [selectedBuilding, dispatch]);
 };
