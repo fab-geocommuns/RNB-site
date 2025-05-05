@@ -107,6 +107,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           for (const draw of drawRef.current.getAll().features) {
             if (draw.id) {
               try {
+                // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
                 drawRef.current.changeMode('direct_select', {
                   featureId: draw.id.toString(),
                 });
