@@ -58,6 +58,7 @@ export type MapBackgroundLayer =
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
+export type EditModes = null | 'create' | 'update' | 'split' | 'merge';
 
 export type MapStore = {
   addressSearch: {
@@ -75,6 +76,7 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
+  editMode: EditModes;
   drawMode: MapboxDraw.DrawMode | null;
   buildingNewShape: GeoJSON.Geometry | null;
 };
@@ -89,6 +91,7 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: ['ads'],
   },
+  editMode: null,
   drawMode: null,
   buildingNewShape: null,
 };
@@ -136,6 +139,9 @@ export const mapSlice = createSlice({
       if (state.selectedItem && state.selectedItem._type === 'building') {
         state.selectedItem.addresses = action.payload;
       }
+    },
+    setEditMode(state, action: PayloadAction<EditModes>) {
+      state.editMode = action.payload;
     },
     setDrawMode(state, action: PayloadAction<MapboxDraw.DrawMode | null>) {
       state.drawMode = action.payload;
