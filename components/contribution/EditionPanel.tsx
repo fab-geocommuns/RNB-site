@@ -13,6 +13,8 @@ import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
+import createBuildingImage from '@/public/images/map/edition/create.svg';
+
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -169,7 +171,14 @@ export default function EditionPanel() {
       : null;
   return (
     <>
-      <div className={styles.actions}>&nbsp;{/* Actions placeholder */}</div>
+      <div className={styles.actions}>
+        <Button size="small" priority="tertiary no outline">
+          <div className={styles.action}>
+            <img src={createBuildingImage.src} alt="" height="32" width="32" />
+            <small>créer</small>
+          </div>
+        </Button>
+      </div>
 
       {selectedBuilding && (
         <PanelWrapper>

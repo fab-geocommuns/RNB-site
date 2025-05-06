@@ -3,22 +3,37 @@
 $input-height: 52px;
 $spacing: 12px;
 $actions-top: 2*$spacing + $input-height;
-$actions-height: 50px;
+$actions-height: 60px;
 $shell-top: $actions-top + $spacing + $actions-height;
 $panel-padding: 1.5*$spacing;
 
 .actions {
     position: absolute;
+    background-color: transparent;
     top: $actions-top;
     left: $spacing;
     height: $actions-height;
     right: auto;
     z-index: 100;
-    width: 400px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: left;
+        border-radius: 4px;
+    
+        button {
+            background-color: white;
+            border-radius: 4px;
+        }
+    }
 
-    // TODO: Adapt once we have buttons
-    background-color: transparent;
-    pointer-events: none;
+.action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding-top: 6px;
 }
 
 .shell {
