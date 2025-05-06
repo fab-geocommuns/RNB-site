@@ -146,13 +146,19 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuildingRef.current = selectedBuilding.rnb_id;
       }
 
-      const lastLayer = map.getStyle().layers.at(-1);
-      if (lastLayer) {
-        const drawLayers = map
-          .getStyle()
-          .layers?.filter((layer) => layer.id.includes('gl-draw'));
-        for (const draw_layer of drawLayers) {
-          map.moveLayer(draw_layer.id, lastLayer.id);
+      if (selectedBuilding) {
+        const lastLayer = map.getStyle().layers.at(-1);
+        if (lastLayer) {
+          const drawLayers = map
+            .getStyle()
+            .layers?.filter((layer) => layer.id.includes('gl-draw'));
+          for (const draw_layer of drawLayers) {
+            map.moveLayer(draw_layer.id, lastLayer.id);
+          }
+        }
+      } else {
+        if (drawRef.current) {
+          drawRef.current.deleteAll();
         }
       }
     }
