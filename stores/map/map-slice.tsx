@@ -60,7 +60,6 @@ export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {
-  panelIsOpen: boolean;
   addressSearch: {
     q?: string;
     results: any[];
@@ -81,7 +80,6 @@ export type MapStore = {
 };
 
 const initialState: MapStore = {
-  panelIsOpen: false,
   addressSearch: {
     results: [],
     unknown_rnb_id: false,
