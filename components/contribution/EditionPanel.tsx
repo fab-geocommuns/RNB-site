@@ -77,13 +77,18 @@ function EditSelectedBuildingPanelContent({
   const handleSubmit = async () => {
     setError(null);
     setSuccess(false);
+
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
-    const data = {
+
+    let data: { [key: string]: any } = {
       status: newStatus,
       addresses_cle_interop: localAddresses.map((a) => a.id),
-      // send the data in WKT format
-      shape: buildingNewShape ? geojsonToWKT(buildingNewShape) : null,
     };
+
+    if (buildingNewShape) {
+      // send the data in WKT format
+      data['shape'] = geojsonToWKT(buildingNewShape);
+    }
 
     try {
       const response = await fetch(url, {
