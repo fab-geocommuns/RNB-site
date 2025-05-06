@@ -174,12 +174,15 @@ export default function EditionPanel() {
       : null;
 
   const toggleCreateBuilding = () => {
-    const mode = editMode ? null : 'create';
-    dispatch(Actions.map.setEditMode(mode));
+    if (editMode === 'create') {
+      dispatch(Actions.map.setEditMode(null));
+    } else dispatch(Actions.map.setEditMode('create'));
   };
 
   useEffect(() => {
-    dispatch(mapActions.unselectItem());
+    if (editMode === 'create') {
+      dispatch(mapActions.unselectItem());
+    }
   }, [editMode]);
 
   return (
@@ -197,7 +200,7 @@ export default function EditionPanel() {
         </Button>
       </div>
 
-      {selectedBuilding && (
+      {editMode == 'update' && selectedBuilding && (
         <PanelWrapper>
           <EditSelectedBuildingPanelContent
             selectedBuilding={selectedBuilding}

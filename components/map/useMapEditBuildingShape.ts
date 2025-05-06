@@ -3,6 +3,7 @@ import { Actions, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
 
@@ -136,6 +137,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuilding.shape &&
         selectedBuilding.rnb_id !== selectedBuildingRef.current
       ) {
+        dispatch(Actions.map.setEditMode('update'));
         drawRef.current.deleteAll();
         drawRef.current.add({
           id: BUILDING_DRAW_SHAPE_FEATURE_ID,
@@ -153,6 +155,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       }
 
       if (selectedBuilding) {
+        // no matter what happens, drawing should be on top
         const lastLayer = map.getStyle().layers.at(-1);
         if (lastLayer) {
           const drawLayers = map
@@ -163,9 +166,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           }
         }
       } else {
+        // selectedBuilding is null => cleaning
         if (drawRef.current) {
           drawRef.current.deleteAll();
         }
+        selectedBuildingRef.current = null;
+        dispatch(Actions.map.setDrawMode('simple_select'));
       }
     }
   }, [selectedBuilding, dispatch]);
