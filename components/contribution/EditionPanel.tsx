@@ -1,7 +1,7 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { Actions, RootState, AppDispatch } from '@/stores/store';
-import { SelectedBuilding } from '@/stores/map/map-slice';
+import { mapActions, SelectedBuilding } from '@/stores/map/map-slice';
 import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
@@ -165,14 +165,31 @@ export default function EditionPanel() {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
+  const dispatch: AppDispatch = useDispatch();
+  const editMode = useSelector((state: RootState) => state.map.editMode);
+
   const selectedBuilding =
     selectedItem?._type === 'building'
       ? (selectedItem as SelectedBuilding)
       : null;
+
+  const toggleCreateBuilding = () => {
+    const mode = editMode ? null : 'create';
+    dispatch(Actions.map.setEditMode(mode));
+  };
+
+  useEffect(() => {
+    dispatch(mapActions.unselectItem());
+  }, [editMode]);
+
   return (
     <>
       <div className={styles.actions}>
-        <Button size="small" priority="tertiary no outline">
+        <Button
+          onClick={toggleCreateBuilding}
+          size="small"
+          priority="tertiary no outline"
+        >
           <div className={styles.action}>
             <img src={createBuildingImage.src} alt="" height="32" width="32" />
             <small>créer</small>
@@ -185,6 +202,14 @@ export default function EditionPanel() {
           <EditSelectedBuildingPanelContent
             selectedBuilding={selectedBuilding}
           />
+        </PanelWrapper>
+      )}
+      {editMode == 'create' && (
+        <PanelWrapper>
+          {/* <EditSelectedBuildingPanelContent
+            selectedBuilding={selectedBuilding}
+          /> */}
+          coucou
         </PanelWrapper>
       )}
     </>
