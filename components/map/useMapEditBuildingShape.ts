@@ -49,6 +49,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           trash: false,
         },
         styles: drawStyle,
+        modes: {
+          simple_select: MapboxDraw.modes.simple_select,
+          direct_select: MapboxDraw.modes.direct_select,
+          draw_polygon: MapboxDraw.modes.draw_polygon,
+        },
+        defaultMode: 'simple_select',
       });
       // @ts-ignore
       map.addControl(draw);
