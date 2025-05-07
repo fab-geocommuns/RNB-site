@@ -1,9 +1,10 @@
 'use client';
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BuildingStatus } from '@/stores/contribution/contribution-types';
+import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import type { GeoJSON } from 'geojson';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import { Actions } from '../store';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -19,7 +20,7 @@ export type BuildingAddress = {
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
-  status: BuildingStatus;
+  status: BuildingStatusType;
   point: {
     type: 'Point';
     coordinates: [number, number];
@@ -59,6 +60,7 @@ export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
+export type ShapeInteractionMode = null | 'drawing' | 'updating';
 
 export type MapStore = {
   addressSearch: {
@@ -77,7 +79,7 @@ export type MapStore = {
   selectedItem?: SelectedItem;
   layers: MapLayers;
   operation: Operation;
-  drawMode: MapboxDraw.DrawMode | null;
+  shapeInteractionMode: ShapeInteractionMode;
   buildingNewShape: GeoJSON.Geometry | null;
 };
 
@@ -92,7 +94,7 @@ const initialState: MapStore = {
     extraLayers: ['ads'],
   },
   operation: null,
-  drawMode: null,
+  shapeInteractionMode: null,
   buildingNewShape: null,
 };
 
@@ -100,6 +102,12 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
+    reset(state) {
+      // does not work => cannot draw polygon after that
+      // state.selectedItem = undefined;
+      state.shapeInteractionMode = null;
+      state.buildingNewShape = null;
+    },
     setLayersBackground(state, action) {
       state.layers.background = action.payload;
     },
@@ -143,8 +151,11 @@ export const mapSlice = createSlice({
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
     },
-    setDrawMode(state, action: PayloadAction<MapboxDraw.DrawMode | null>) {
-      state.drawMode = action.payload;
+    setShapeInteractionMode(
+      state,
+      action: PayloadAction<ShapeInteractionMode>,
+    ) {
+      state.shapeInteractionMode = action.payload;
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
       state.buildingNewShape = action.payload;
@@ -198,6 +209,7 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
+    dispatch(Actions.map.setShapeInteractionMode(null));
 
     const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
     const rnbResponse = await fetch(url);

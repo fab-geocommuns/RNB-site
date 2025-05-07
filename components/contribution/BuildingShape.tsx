@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
-import { SelectedBuilding } from '@/stores/map/map-slice';
+import { SelectedBuilding, ShapeInteractionMode } from '@/stores/map/map-slice';
 
 import Button from '@codegouvfr/react-dsfr/Button';
 
@@ -10,25 +10,25 @@ import editPolygonDisabledIcon from '@/public/images/map/edition/edit_polygon_di
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 
 export default function BuildingShape({
-  drawMode,
+  shapeInteractionMode,
   selectedBuilding,
 }: {
-  drawMode: MapboxDraw.DrawMode | null;
+  shapeInteractionMode: ShapeInteractionMode;
   selectedBuilding: SelectedBuilding;
 }) {
   const dispatch: AppDispatch = useDispatch();
 
   const handleBuildingShapeModification = () => {
-    dispatch(Actions.map.setDrawMode('direct_select'));
+    dispatch(Actions.map.setShapeInteractionMode('updating'));
   };
 
   const handleBuildingShapeCreation = () => {
-    if (drawMode === 'draw_polygon') {
+    if (shapeInteractionMode === 'drawing') {
       // that's a way to cancel the ongoing drawing
-      dispatch(Actions.map.setDrawMode(null));
+      dispatch(Actions.map.setShapeInteractionMode(null));
       dispatch(Actions.map.setBuildingNewShape(null));
     } else {
-      dispatch(Actions.map.setDrawMode('draw_polygon'));
+      dispatch(Actions.map.setShapeInteractionMode('drawing'));
     }
   };
 
@@ -42,7 +42,7 @@ export default function BuildingShape({
             <Button
               size="small"
               onClick={handleBuildingShapeModification}
-              priority={`tertiary${drawMode === 'direct_select' ? '' : ' no outline'}`}
+              priority={`tertiary${shapeInteractionMode === 'updating' ? '' : ' no outline'}`}
               disabled={selectedBuilding.shape.type === 'Point'}
             >
               <img
@@ -60,7 +60,7 @@ export default function BuildingShape({
             </Button>
           </span>
 
-          {drawMode === 'direct_select' && (
+          {shapeInteractionMode === 'updating' && (
             <div className="fr-text--xs fr-pt-1v fr-mb-1v">
               Modifiez la géométrie du bâtiment directement sur la carte en
               déplacant les sommets du polygone.
@@ -70,7 +70,7 @@ export default function BuildingShape({
             <Button
               size="small"
               onClick={handleBuildingShapeCreation}
-              priority={`tertiary${drawMode === 'draw_polygon' ? '' : ' no outline'}`}
+              priority={`tertiary${shapeInteractionMode === 'drawing' ? '' : ' no outline'}`}
             >
               <img
                 src={newPolygonIcon.src}
@@ -83,7 +83,7 @@ export default function BuildingShape({
             </Button>
           </span>
           <div className="fr-text--xs fr-pt-1v">
-            {drawMode === 'draw_polygon' && (
+            {shapeInteractionMode === 'drawing' && (
               <span>
                 Redessinez la géométrie du bâtiment {selectedBuilding.rnb_id} en
                 cliquant sur la carte. Pour finaliser la géométrie, fermez le
@@ -91,6 +91,7 @@ export default function BuildingShape({
               </span>
             )}
           </div>
+          {shapeInteractionMode || 'null'}
         </div>
       </div>
     </>

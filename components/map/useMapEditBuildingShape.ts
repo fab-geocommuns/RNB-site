@@ -6,6 +6,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
+import { ShapeInteractionMode } from '@/stores/map/map-slice';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -27,8 +28,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const selectedBuilding = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
-  const drawMode: MapboxDraw.DrawMode | null = useSelector(
-    (state: RootState) => state.map.drawMode,
+  const shapeInteractionMode: ShapeInteractionMode = useSelector(
+    (state: RootState) => state.map.shapeInteractionMode,
   );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
@@ -39,6 +40,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
+  // console.log('mode', drawRef?.current?.getMode())
 
   // add the draw plugin to the map
   useEffect(() => {
@@ -78,6 +80,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
             }
           }
           dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
+          setTimeout(() => {
+            dispatch(Actions.map.setShapeInteractionMode('updating'));
+          });
         }
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
@@ -86,7 +91,13 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         setTimeout(() => {
           // without the timeout, the final click to close the polygon
           // eventually selects an underlying existing polygon, ruining the current update
-          dispatch(Actions.map.setDrawMode(mode));
+          // if (mode === 'direct_select' || mode === 'simple_select') {
+          //   if (shapeInteractionMode !== 'updating') {
+          //     dispatch(Actions.map.setShapeInteractionMode('updating'));
+          //   }
+          // } else if (mode === 'draw_polygon' && shapeInteractionMode !== 'drawing') {
+          //   dispatch(Actions.map.setShapeInteractionMode('drawing'));
+          // }
         }, 0);
       };
       drawRef.current && map.on('draw.modechange', handleModeChange);
@@ -104,29 +115,22 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (drawRef.current) {
-      if (drawMode === 'direct_select') {
-        const feature = drawRef.current.get(BUILDING_DRAW_SHAPE_FEATURE_ID);
-        if (feature && feature.geometry.type == 'Point') {
-          // direct_select mode is not available for a point
-          // change the mode to draw_polygon instead
-          dispatch(Actions.map.setDrawMode('draw_polygon'));
-        } else {
-          for (const draw of drawRef.current.getAll().features) {
-            if (draw.id) {
-              try {
-                // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
-                drawRef.current.changeMode('direct_select', {
-                  featureId: draw.id.toString(),
-                });
-              } catch (_error) {}
-            }
+      if (shapeInteractionMode === 'updating') {
+        for (const draw of drawRef.current.getAll().features) {
+          if (draw.id) {
+            try {
+              // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
+              drawRef.current.changeMode('direct_select', {
+                featureId: draw.id.toString(),
+              });
+            } catch (_error) {}
           }
         }
-      } else if (drawMode === 'draw_polygon') {
+      } else if (shapeInteractionMode === 'drawing') {
         drawRef.current.changeMode('draw_polygon');
       }
     }
-  }, [drawMode, dispatch]);
+  }, [shapeInteractionMode, dispatch]);
 
   useEffect(() => {
     if (map) {
@@ -146,9 +150,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           geometry: selectedBuilding.shape,
         });
         if (selectedBuilding.shape.type == 'Point') {
-          dispatch(Actions.map.setDrawMode('simple_select'));
+          dispatch(Actions.map.setShapeInteractionMode('drawing'));
         } else {
-          dispatch(Actions.map.setDrawMode('direct_select'));
+          dispatch(Actions.map.setShapeInteractionMode('updating'));
         }
         // used to know if we are selecting a different building next time we click on the map
         selectedBuildingRef.current = selectedBuilding.rnb_id;
@@ -171,7 +175,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           drawRef.current.deleteAll();
         }
         selectedBuildingRef.current = null;
-        dispatch(Actions.map.setDrawMode('simple_select'));
+        // dispatch(Actions.map.setShapeInteractionMode(null));
       }
     }
   }, [selectedBuilding, dispatch]);

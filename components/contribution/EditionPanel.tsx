@@ -15,6 +15,7 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
+import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -31,7 +32,9 @@ function EditSelectedBuildingPanelContent({
 }) {
   const rnbId = selectedBuilding.rnb_id;
   const dispatch: AppDispatch = useDispatch();
-  const [newStatus, setNewStatus] = useState<string>(selectedBuilding.status);
+  const [newStatus, setNewStatus] = useState<BuildingStatusType>(
+    selectedBuilding.status,
+  );
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
   );
@@ -40,7 +43,9 @@ function EditSelectedBuildingPanelContent({
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
-  const drawMode = useSelector((state: RootState) => state.map.drawMode);
+  const shapeInteractionMode = useSelector(
+    (state: RootState) => state.map.shapeInteractionMode,
+  );
 
   const anyChanges = anyChangesBetween(
     {
@@ -131,7 +136,7 @@ function EditSelectedBuildingPanelContent({
           onChange={handleEditAddress}
         />
         <BuildingShape
-          drawMode={drawMode}
+          shapeInteractionMode={shapeInteractionMode}
           selectedBuilding={selectedBuilding}
         ></BuildingShape>
       </PanelBody>
@@ -180,12 +185,17 @@ export default function EditionPanel() {
   const toggleCreateBuilding = () => {
     if (operation === 'create') {
       dispatch(Actions.map.setOperation(null));
-    } else dispatch(Actions.map.setOperation('create'));
+    } else {
+      dispatch(Actions.map.setOperation('create'));
+    }
   };
 
   useEffect(() => {
     if (operation === 'create') {
-      dispatch(mapActions.unselectItem());
+      dispatch(Actions.map.reset());
+      dispatch(Actions.map.setShapeInteractionMode('drawing'));
+    } else if (operation === null) {
+      dispatch(Actions.map.setShapeInteractionMode(null));
     }
   }, [operation]);
 
