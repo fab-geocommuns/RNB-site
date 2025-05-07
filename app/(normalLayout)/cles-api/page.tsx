@@ -12,9 +12,6 @@ export default async function Page() {
     redirect('/login?redirect=/cles-api');
   }
 
-  console.log('-- session in page');
-  console.log(session);
-
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/auth/users/me/tokens`,
     {
