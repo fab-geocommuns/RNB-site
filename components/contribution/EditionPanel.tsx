@@ -170,7 +170,7 @@ export default function EditionPanel() {
     (state: RootState) => state.map.selectedItem,
   );
   const dispatch: AppDispatch = useDispatch();
-  const editMode = useSelector((state: RootState) => state.map.editMode);
+  const operation = useSelector((state: RootState) => state.map.operation);
 
   const selectedBuilding =
     selectedItem?._type === 'building'
@@ -178,16 +178,16 @@ export default function EditionPanel() {
       : null;
 
   const toggleCreateBuilding = () => {
-    if (editMode === 'create') {
-      dispatch(Actions.map.setEditMode(null));
-    } else dispatch(Actions.map.setEditMode('create'));
+    if (operation === 'create') {
+      dispatch(Actions.map.setOperation(null));
+    } else dispatch(Actions.map.setOperation('create'));
   };
 
   useEffect(() => {
-    if (editMode === 'create') {
+    if (operation === 'create') {
       dispatch(mapActions.unselectItem());
     }
-  }, [editMode]);
+  }, [operation]);
 
   return (
     <>
@@ -204,14 +204,14 @@ export default function EditionPanel() {
         </Button>
       </div>
 
-      {editMode == 'update' && selectedBuilding && (
+      {operation == 'update' && selectedBuilding && (
         <PanelWrapper>
           <EditSelectedBuildingPanelContent
             selectedBuilding={selectedBuilding}
           />
         </PanelWrapper>
       )}
-      {editMode == 'create' && (
+      {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
         </PanelWrapper>

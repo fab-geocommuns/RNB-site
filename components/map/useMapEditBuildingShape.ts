@@ -137,7 +137,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuilding.shape &&
         selectedBuilding.rnb_id !== selectedBuildingRef.current
       ) {
-        dispatch(Actions.map.setEditMode('update'));
+        dispatch(Actions.map.setOperation('update'));
         drawRef.current.deleteAll();
         drawRef.current.add({
           id: BUILDING_DRAW_SHAPE_FEATURE_ID,
