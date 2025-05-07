@@ -7,6 +7,7 @@ import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
+import CreationPanel from './CreationPanel';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { geojsonToWKT } from '@terraformer/wkt';
@@ -115,7 +116,10 @@ function EditSelectedBuildingPanelContent({
 
   return (
     <>
-      <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
+      <RNBIDHeader>
+        <span className="fr-text--xs">Identifiant RNB</span>
+        <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
+      </RNBIDHeader>
       <PanelBody>
         <BuildingStatus
           status={newStatus}
@@ -209,10 +213,7 @@ export default function EditionPanel() {
       )}
       {editMode == 'create' && (
         <PanelWrapper>
-          {/* <EditSelectedBuildingPanelContent
-            selectedBuilding={selectedBuilding}
-          /> */}
-          coucou
+          <CreationPanel />
         </PanelWrapper>
       )}
     </>
