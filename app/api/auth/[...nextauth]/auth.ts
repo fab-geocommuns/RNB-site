@@ -1,4 +1,11 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
+import type {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
+import type { NextAuthOptions } from 'next-auth';
+import { getServerSession } from 'next-auth';
 
 export const authOptions = {
   callbacks: {
@@ -14,11 +21,17 @@ export const authOptions = {
     },
     // @ts-ignore
     session: async ({ session, token }) => {
+      console.log('-- session function in auth.ts');
+      console.log('session', session);
+      console.log('token', token);
+
       if (token?.accessToken) {
         session.accessToken = token.accessToken;
         session.username = token.username;
         session.groups = token.groups;
       }
+
+      console.log('session after', session);
 
       return session;
     },
@@ -47,6 +60,8 @@ export const authOptions = {
 
           const user = await distantLoginResponse.json();
 
+          console.log('user', user);
+
           if (user) {
             return {
               ...user,
@@ -65,4 +80,13 @@ export const authOptions = {
   pages: {
     signIn: '/login',
   },
-};
+} satisfies NextAuthOptions;
+
+export function auth(
+  ...args:
+    | [GetServerSidePropsContext['req'], GetServerSidePropsContext['res']]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) {
+  return getServerSession(...args, authOptions);
+}
