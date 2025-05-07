@@ -81,6 +81,9 @@ $panel-padding: 1.5*$spacing;
                 color: var(--text-mention-grey);
             }
         }
+                                                                                                                                                                                                                                                                .noPad {
+                                                                                                                                                                                                                                                                    padding-top: $spacing;
+                                                                                                                                                                                                                                                                }
 }
 
 .header {
@@ -100,6 +103,10 @@ $panel-padding: 1.5*$spacing;
     padding: $spacing $spacing $spacing 2*$spacing;
         box-shadow: 0 0px 4px var(--background-contrast-grey-active);
         z-index: 90;
+    position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: var(--background-alt-blue-france);
 }
 .noticeContainer {
     position: absolute;
