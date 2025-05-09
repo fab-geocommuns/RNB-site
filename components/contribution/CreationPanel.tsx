@@ -10,7 +10,7 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import Toaster from './toaster';
+import Toaster, { throwErrorMessageForHumans } from './toaster';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -57,14 +57,14 @@ export default function CreationPanel() {
       });
 
       if (!response.ok) {
-        throw new Error(`Erreur ${response.status}`);
+        await throwErrorMessageForHumans(response);
+      } else {
+        setSuccess(true);
+        // force the map to reload the building, to immediatly show the modifications made
+        dispatch(Actions.map.reloadBuildings());
+        dispatch(Actions.map.setBuildingNewShape(null));
+        // await dispatch(Actions.map.selectBuilding(rnbId));
       }
-
-      setSuccess(true);
-      // force the map to reload the building, to immediatly show the modifications made
-      dispatch(Actions.map.reloadBuildings());
-      dispatch(Actions.map.setBuildingNewShape(null));
-      // await dispatch(Actions.map.selectBuilding(rnbId));
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
       console.error(err);

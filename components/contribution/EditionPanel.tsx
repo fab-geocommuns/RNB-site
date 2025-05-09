@@ -16,7 +16,7 @@ import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
-import Toaster from './toaster';
+import Toaster, { throwErrorMessageForHumans } from './toaster';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -74,10 +74,13 @@ function EditSelectedBuildingPanelContent({
 
   useEffect(() => {
     if (error || success) {
-      const timer = setTimeout(() => {
-        setError(null);
-        setSuccess(false);
-      }, 4000);
+      const timer = setTimeout(
+        () => {
+          setError(null);
+          setSuccess(false);
+        },
+        error ? 10000 : 4000,
+      );
 
       return () => clearTimeout(timer);
     }
@@ -106,15 +109,16 @@ function EditSelectedBuildingPanelContent({
       });
 
       if (!response.ok) {
-        throw new Error(`Erreur ${response.status}`);
+        await throwErrorMessageForHumans(response);
+      } else {
+        setSuccess(true);
+        // force the map to reload the building, to immediatly show the modifications made
+        dispatch(Actions.map.reloadBuildings());
+        dispatch(Actions.map.setBuildingNewShape(null));
+        await dispatch(Actions.map.selectBuilding(rnbId));
       }
-
-      setSuccess(true);
-      // force the map to reload the building, to immediatly show the modifications made
-      dispatch(Actions.map.reloadBuildings());
-      dispatch(Actions.map.setBuildingNewShape(null));
-      await dispatch(Actions.map.selectBuilding(rnbId));
     } catch (err: any) {
+      console.log('catch !');
       setError(err.message || 'Erreur lors de la modification');
       console.error(err);
     }
