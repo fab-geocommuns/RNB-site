@@ -100,7 +100,11 @@ export default function CreationPanel() {
             ></BuildingStatus>
 
             <BuildingAddresses
-              buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
+              buildingPoint={
+                mapCoordinates
+                  ? [mapCoordinates!.lng, mapCoordinates!.lat]
+                  : undefined
+              }
               addresses={localAddresses}
               onChange={handleEditAddress}
             />
