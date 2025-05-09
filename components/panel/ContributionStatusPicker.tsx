@@ -1,10 +1,10 @@
 import {
-  BuildingStatus,
+  BuildingStatusType,
   BuildingStatusMap,
 } from '@/stores/contribution/contribution-types';
 
 type ContributionStatusPickerProps = {
-  currentStatus: BuildingStatus;
+  currentStatus: BuildingStatusType;
 };
 
 export function ContributionStatusPicker({

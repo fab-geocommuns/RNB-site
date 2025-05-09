@@ -54,6 +54,7 @@ export const useMapStateSync = (map?: maplibregl.Map) => {
       stateMoveTo.lat &&
       stateMoveTo.lng &&
       stateMoveTo.zoom &&
+      stateMoveTo.fromMapEvent !== true &&
       map
     ) {
       const fn = stateMoveTo.fly ? 'flyTo' : 'jumpTo';
