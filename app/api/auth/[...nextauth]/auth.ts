@@ -9,7 +9,6 @@ import { getServerSession } from 'next-auth';
 
 export const authOptions = {
   callbacks: {
-    // @ts-ignore
     jwt: async ({ token, user }) => {
       if (user) {
         token.accessToken = user.token;
@@ -19,7 +18,7 @@ export const authOptions = {
 
       return token;
     },
-    // @ts-ignore
+
     session: async ({ session, token }) => {
       if (token?.accessToken) {
         session.accessToken = token.accessToken;
