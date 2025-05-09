@@ -5,6 +5,12 @@ import { auth } from '@/app/api/auth/[...nextauth]/auth';
 // Redirect
 import { redirect } from 'next/navigation';
 
+// Comps
+import CopyButton from '@/components/CopyButton';
+
+// Styles
+import { fr } from '@codegouvfr/react-dsfr';
+
 export default async function Page() {
   // We don't want to allow users that are already logged in to access this page
   const session = await auth();
@@ -26,14 +32,81 @@ export default async function Page() {
   const data = await response.json();
 
   return (
-    <div>
-      <h1>Mes clés d'API</h1>
-      <p>session token {session?.accessToken}</p>
-      <p>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </p>
-      <p>API Production : {data.production_token}</p>
-      <p>API Sandbox : {data.sandbox_token}</p>
+    <div className="fr-container fr-py-12v">
+      <div className="fr-grid-row ">
+        <div className="fr-col-12 ">
+          <h1>Mes clés d'API</h1>
+          <p className="fr-mb-12v">
+            Les clés d'API sont nécessaires pour modifier le RNB via l'API
+            d'édition.
+            <br />
+            <a
+              href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb"
+              target="_blank"
+            >
+              Consulter la documentation de l'API d'édition
+            </a>
+          </p>
+        </div>
+        <div className="fr-col-12 fr-col-md-8">
+          <div className="block block--yellow fr-mb-8v">
+            <h2 className="blockTitle">Environnement bac à sable</h2>
+            <p className="blockSubtitle">
+              <a
+                href="https://rnb-fr.gitbook.io/documentation/api-et-outils/bac-a-sable"
+                target="_blank"
+              >
+                L'environnement bac à sable
+              </a>{' '}
+              vous permet d'expérimenter sans crainte d'abîmer le RNB.{' '}
+            </p>
+            <div className="fr-my-6v">
+              <pre>{data.sandbox_token}</pre>
+            </div>
+            <div className="blockLinkShell">
+              <CopyButton
+                valueToCopy={data.sandbox_token}
+                label="Copier la clé bac à sable"
+                okMsg="Clé copiée"
+              />
+            </div>
+          </div>
+
+          <div className="block block--blue">
+            <h2 className="blockTitle">
+              <i className="fr-icon ri-error-warning-line"></i> Environnement de
+              production
+            </h2>
+            <div className="blockSubtitle">
+              <p>
+                Ecrire dans l'environnement de production modifie directement le
+                RNB et met vos contributions à disposition de tous.
+              </p>
+              <p>
+                <b>
+                  Veillez à consulter la{' '}
+                  <a href="/definition">définition du bâtiment</a> et le{' '}
+                  <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb">
+                    guide d'édition
+                  </a>{' '}
+                  avant d'éditer le RNB.
+                </b>
+              </p>
+            </div>
+
+            <div className="fr-my-6v">
+              <pre>{data.production_token}</pre>
+            </div>
+            <div className="blockLinkShell">
+              <CopyButton
+                valueToCopy={data.production_token}
+                label="Copier la clé de production"
+                okMsg="Clé copiée"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
