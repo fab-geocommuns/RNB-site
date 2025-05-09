@@ -62,6 +62,14 @@ export const useMapEvents = (map?: maplibregl.Map) => {
       map.on('moveend', (e: MapLibreEvent<any>) => {
         const zoom = map.getZoom();
         const center = map.getCenter();
+        dispatch(
+          Actions.map.setMoveTo({
+            lat: center.lat,
+            lng: center.lng,
+            zoom: zoom,
+            fromMapEvent: true,
+          }),
+        );
         const coordsQueryParam = `${center.lat.toFixed(5)},${center.lng.toFixed(5)},${zoom.toFixed(2)}`;
         const queryParams = new URLSearchParams(window.location.search);
         queryParams.set('coords', coordsQueryParam);

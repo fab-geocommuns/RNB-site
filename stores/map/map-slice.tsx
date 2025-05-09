@@ -78,6 +78,8 @@ export type MapStore = {
     lng: number;
     zoom: number;
     fly?: boolean;
+    // "true" when the coordinates have been pushed by a moveend event from the map
+    fromMapEvent: boolean;
   };
   marker?: [number, number];
   reloadBuildings?: number;
@@ -146,6 +148,10 @@ export const mapSlice = createSlice({
     },
     setMoveTo(state, action) {
       state.moveTo = action.payload;
+      if (state.moveTo) {
+        // by default, set to false
+        state.moveTo.fromMapEvent = action.payload.fromMapEvent === true;
+      }
     },
     reloadBuildings(state) {
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
