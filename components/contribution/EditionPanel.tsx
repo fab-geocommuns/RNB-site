@@ -96,11 +96,19 @@ function EditSelectedBuildingPanelContent({
       if (!response.ok) {
         await throwErrorMessageForHumans(response);
       } else {
-        toasterSuccess(dispatch, 'Modification enregistrée');
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.map.setBuildingNewShape(null));
-        await dispatch(Actions.map.selectBuilding(rnbId));
+        if (newStatus === 'demolished') {
+          toasterSuccess(
+            dispatch,
+            'Le statut démoli du bâtiment est enregistré',
+          );
+          await dispatch(Actions.map.unselectItem());
+        } else {
+          toasterSuccess(dispatch, 'Modification enregistrée');
+          await dispatch(Actions.map.selectBuilding(rnbId));
+        }
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
