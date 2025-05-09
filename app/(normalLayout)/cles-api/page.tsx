@@ -37,14 +37,14 @@ export default async function Page() {
         <div className="fr-col-12 ">
           <h1>Mes clés d'API</h1>
           <p className="fr-mb-12v">
-            Les clés d'API sont nécessaires pour modifier le RNB via l'API
-            d'édition.
+            Les clés d&apos;API sont nécessaires pour modifier le RNB via
+            l&apos;API d&apos;édition.
             <br />
             <a
               href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb"
               target="_blank"
             >
-              Consulter la documentation de l'API d'édition
+              Consulter la documentation de l&apos;API d&apos;édition
             </a>
           </p>
         </div>
@@ -56,9 +56,9 @@ export default async function Page() {
                 href="https://rnb-fr.gitbook.io/documentation/api-et-outils/bac-a-sable"
                 target="_blank"
               >
-                L'environnement bac à sable
+                L&apos;environnement bac à sable
               </a>{' '}
-              vous permet d'expérimenter sans crainte d'abîmer le RNB.{' '}
+              vous permet d&apos;expérimenter sans crainte d&apos;abîmer le RNB.{' '}
             </p>
             <div className="fr-my-6v">
               <pre>{data.sandbox_token}</pre>
@@ -79,17 +79,18 @@ export default async function Page() {
             </h2>
             <div className="blockSubtitle">
               <p>
-                Ecrire dans l'environnement de production modifie directement le
-                RNB et met vos contributions à disposition de tous.
+                Ecrire dans l&apos;environnement de production modifie
+                directement le RNB et met vos contributions à disposition de
+                tous.
               </p>
               <p>
                 <b>
                   Veillez à consulter la{' '}
                   <a href="/definition">définition du bâtiment</a> et le{' '}
                   <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb">
-                    guide d'édition
+                    guide d&apos;édition
                   </a>{' '}
-                  avant d'éditer le RNB.
+                  avant d&apos;éditer le RNB.
                 </b>
               </p>
             </div>
