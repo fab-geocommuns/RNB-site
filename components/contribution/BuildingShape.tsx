@@ -91,7 +91,6 @@ export default function BuildingShape({
               </span>
             )}
           </div>
-          {shapeInteractionMode || 'null'}
         </div>
       </div>
     </>

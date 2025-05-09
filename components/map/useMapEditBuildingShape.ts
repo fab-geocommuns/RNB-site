@@ -150,7 +150,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           geometry: selectedBuilding.shape,
         });
         if (selectedBuilding.shape.type == 'Point') {
-          dispatch(Actions.map.setShapeInteractionMode('drawing'));
+          dispatch(Actions.map.setShapeInteractionMode(null));
         } else {
           dispatch(Actions.map.setShapeInteractionMode('updating'));
         }
