@@ -2,6 +2,7 @@
 
 // Comps
 import { Header } from '@codegouvfr/react-dsfr/Header';
+import { Badge } from '@codegouvfr/react-dsfr/Badge';
 
 // Auth
 import { signOut } from 'next-auth/react';
@@ -12,8 +13,8 @@ import { usePathname } from 'next/navigation';
 
 // Logo
 import logo from '@/public/images/logo.png';
-import { use, useEffect, useState } from 'react';
-import ToggleEditMode from './ToggleEditMode';
+import { useEffect, useState } from 'react';
+import EditRNBButton from './EditRNBButton';
 
 type Props = {
   withNavigation?: boolean;
@@ -24,6 +25,9 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   const pathname = usePathname();
   const [redirectUrl, setRedirectUrl] = useState(pathname);
+
+  const [quickActions, setQuickActions] = useState([]);
+  const [title, setTitle] = useState('Référentiel National des Bâtiments');
 
   const nav = [
     {
@@ -90,37 +94,95 @@ export default function RNBHeader({ withNavigation = true }: Props) {
     signOut();
   };
 
-  let logQA = {
-    iconId: 'fr-icon-lock-line',
-    linkProps: {
-      href: '/login?redirect=' + redirectUrl,
-    },
-    text: 'Se connecter',
-  };
-
-  if (session) {
-    logQA = {
-      iconId: 'fr-icon-logout-box-r-line',
-      linkProps: {
-        href: '#',
-        // @ts-ignore
-        onClick: (e) => {
-          handleSignout(e);
-        },
-      },
-      text: 'Se déconnecter',
-    };
-  }
-
   useEffect(() => {
     setRedirectUrl(window.location.href);
   }, [pathname]);
 
-  const editModeToggler = <ToggleEditMode />;
-
   const enableEditionMode =
     process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
-  const quickAccessItems = [enableEditionMode ? editModeToggler : null, logQA];
+
+  const editBtn = <EditRNBButton />;
+
+  // Change quick actions and title based on current page and user session
+  useEffect(() => {
+    let newQuickActions = [];
+
+    // Show some quick actions depending on the current page
+    // User is on the edition page or not
+    if (pathname === '/edition') {
+      // Back to site
+      let goBackToSiteQA = {
+        iconId: 'fr-icon-arrow-left-line',
+        linkProps: {
+          href: '/',
+        },
+        text: 'Retour au site',
+      };
+      newQuickActions.push(goBackToSiteQA);
+
+      // Title
+
+      setTitle(
+        // @ts-ignore
+        <>
+          Référentiel National des Bâtiments
+          <br />
+          <Badge as="span" noIcon severity="success" small>
+            Mode Édition
+          </Badge>
+        </>,
+      );
+
+      // Edition guide
+      let editionGuide = {
+        iconId: 'fr-icon-community-line',
+        linkProps: {
+          href: '/guide',
+        },
+        text: "Guide d'édition",
+      };
+      newQuickActions.push(editionGuide);
+    } else {
+      // Go to Edition
+
+      if (enableEditionMode) {
+        let goToEditionQA = editBtn;
+        newQuickActions.push(goToEditionQA);
+      }
+
+      setTitle('Référentiel National des Bâtiments');
+    }
+
+    // Show some quick actions depending on the login status
+    if (session) {
+      // Add the "Se déconnecter" action
+      let logoutQA = {
+        iconId: 'fr-icon-logout-box-r-line',
+        linkProps: {
+          href: '#',
+          // @ts-ignore
+          onClick: (e) => {
+            handleSignout(e);
+          },
+        },
+        text: 'Se déconnecter',
+      };
+      newQuickActions.push(logoutQA);
+    } else {
+      let loginQA = {
+        iconId: 'fr-icon-lock-line',
+        linkProps: {
+          href: '/login?redirect=' + redirectUrl,
+        },
+        text: 'Se connecter',
+      };
+      newQuickActions.push(loginQA);
+    }
+
+    // Set
+    // @ts-ignore
+    setQuickActions(newQuickActions);
+  }, [pathname, session]);
 
   return (
     <>
@@ -132,7 +194,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
             Française
           </>
         }
-        serviceTitle="Référentiel National des Bâtiments"
+        serviceTitle={title}
         navigation={withNavigation && nav}
         homeLinkProps={{
           href: '/',
@@ -144,7 +206,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           orientation: 'vertical',
         }}
         // @ts-ignore
-        quickAccessItems={quickAccessItems}
+        quickAccessItems={quickActions}
       />
     </>
   );
