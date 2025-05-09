@@ -16,7 +16,11 @@ import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
-import Toaster, { throwErrorMessageForHumans } from './toaster';
+import Toaster, {
+  throwErrorMessageForHumans,
+  toasterError,
+  toasterSuccess,
+} from './toaster';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -39,8 +43,6 @@ function EditSelectedBuildingPanelContent({
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
   );
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
@@ -72,24 +74,7 @@ function EditSelectedBuildingPanelContent({
     setLocalAddresses(addresses);
   };
 
-  useEffect(() => {
-    if (error || success) {
-      const timer = setTimeout(
-        () => {
-          setError(null);
-          setSuccess(false);
-        },
-        error ? 10000 : 4000,
-      );
-
-      return () => clearTimeout(timer);
-    }
-  }, [error, success]);
-
   const handleSubmit = async () => {
-    setError(null);
-    setSuccess(false);
-
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
 
     let data: { [key: string]: any } = {
@@ -111,15 +96,14 @@ function EditSelectedBuildingPanelContent({
       if (!response.ok) {
         await throwErrorMessageForHumans(response);
       } else {
-        setSuccess(true);
+        toasterSuccess(dispatch, 'Modification enregistrée');
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.map.setBuildingNewShape(null));
         await dispatch(Actions.map.selectBuilding(rnbId));
       }
     } catch (err: any) {
-      console.log('catch !');
-      setError(err.message || 'Erreur lors de la modification');
+      toasterError(dispatch, err.message || 'Erreur lors de la modification');
       console.error(err);
     }
   };
@@ -150,12 +134,6 @@ function EditSelectedBuildingPanelContent({
           Valider les modifications
         </Button>
       </div>
-
-      <Toaster
-        successMsg="Modification enregistrée"
-        errorMsg={error}
-        success={success}
-      ></Toaster>
     </>
   );
 }
@@ -224,6 +202,8 @@ export default function EditionPanel() {
           <CreationPanel />
         </PanelWrapper>
       )}
+
+      <Toaster></Toaster>
     </>
   );
 }

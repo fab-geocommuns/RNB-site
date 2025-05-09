@@ -61,6 +61,11 @@ export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
+export type ToasterInfos = {
+  success: boolean;
+  successMsg: string;
+  errorMsg: string;
+};
 
 export type MapStore = {
   addressSearch: {
@@ -81,6 +86,7 @@ export type MapStore = {
   operation: Operation;
   shapeInteractionMode: ShapeInteractionMode;
   buildingNewShape: GeoJSON.Geometry | null;
+  toasterInfos: ToasterInfos;
 };
 
 const initialState: MapStore = {
@@ -96,6 +102,7 @@ const initialState: MapStore = {
   operation: null,
   shapeInteractionMode: null,
   buildingNewShape: null,
+  toasterInfos: { success: true, successMsg: '', errorMsg: '' },
 };
 
 export const mapSlice = createSlice({
@@ -159,6 +166,9 @@ export const mapSlice = createSlice({
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
       state.buildingNewShape = action.payload;
+    },
+    setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
+      state.toasterInfos = action.payload;
     },
   },
 

@@ -15,17 +15,17 @@ $panel-padding: 1.5*$spacing;
     height: $actions-height;
     right: auto;
     z-index: 100;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    border-radius: 4px;
+
+    button {
+        background-color: white;
         border-radius: 4px;
-    
-        button {
-            background-color: white;
-            border-radius: 4px;
-        }
     }
+}
 
 .action {
     display: flex;
@@ -37,7 +37,7 @@ $panel-padding: 1.5*$spacing;
 }
 
 .shell {
-    position:absolute;
+    position: absolute;
 
     top: $shell-top;
     right: auto;
@@ -52,38 +52,40 @@ $panel-padding: 1.5*$spacing;
 
 .content {
     background-color: var(--background-alt-blue-france);
-    box-shadow:0 0 0 2px rgba(0,0,0,.1);
-    
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, .1);
+
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     max-height: 100%;
 
-    position:absolute;
+    position: absolute;
     bottom: 0;
-    right:0;
-    left: 0; 
+    right: 0;
+    left: 0;
     top: 0;
+
     .panelSection {
-            background: var(--background-default-grey);
-            padding: $spacing;
-            margin-bottom: $spacing;
-            border-radius: 4px;
-            border: 1px solid var(--border-open-blue-france);
-            position: relative;
-            padding-top: 36px;
-    
-            .sectionTitle {
-                position: absolute;
-                top: 6px;
-                left: 6px;
-                text-transform: uppercase;
-                color: var(--text-mention-grey);
-            }
+        background: var(--background-default-grey);
+        padding: $spacing;
+        margin-bottom: $spacing;
+        border-radius: 4px;
+        border: 1px solid var(--border-open-blue-france);
+        position: relative;
+        padding-top: 36px;
+
+        .sectionTitle {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            text-transform: uppercase;
+            color: var(--text-mention-grey);
         }
-                                                                                                                                                                                                                                                                .noPad {
-                                                                                                                                                                                                                                                                    padding-top: $spacing;
-                                                                                                                                                                                                                                                                }
+    }
+
+    .noPad {
+        padding-top: $spacing;
+    }
 }
 
 .header {
@@ -92,40 +94,49 @@ $panel-padding: 1.5*$spacing;
     padding: 6px 12px 6px 18px;
     background-color: var(--background-alt-blue-france-hover);
     box-shadow: 0 0 5px var(--background-action-high-grey-active);
-        z-index: 100;
+    z-index: 100;
 }
 
 .body {
     padding: $panel-padding;
     overflow: auto;
 }
+
 .footer {
     padding: $spacing $spacing $spacing 2*$spacing;
-        box-shadow: 0 0px 4px var(--background-contrast-grey-active);
-        z-index: 90;
+    box-shadow: 0 0px 4px var(--background-contrast-grey-active);
+    z-index: 90;
     position: absolute;
-        bottom: 0;
-        width: 100%;
-        background: var(--background-alt-blue-france);
+    bottom: 0;
+    width: 100%;
+    background: var(--background-alt-blue-france);
 }
+
 .noticeContainer {
-    position: absolute;
+    pointer-events: none;
+    background-color: transparent;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 100;
+    display: flex;
+    justify-content: center;
 }
 
 .notice {
     opacity: 0;
     transform: translateY(100%);
-    transition: opacity 0.4s ease, transform 0.5s ease;
+    transition: none;
 }
 
 .noticeVisible {
     opacity: 1;
     transform: translateY(0);
+    transition: opacity 0.4s ease, transform 0.5s ease;
+    pointer-events: auto;
 }
+
 .editToggle {
     padding-right: 48px !important;
     display: flex;
