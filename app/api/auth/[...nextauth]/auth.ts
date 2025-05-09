@@ -1,8 +1,14 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
+import type {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
+import type { NextAuthOptions } from 'next-auth';
+import { getServerSession } from 'next-auth';
 
 export const authOptions = {
   callbacks: {
-    // @ts-ignore
     jwt: async ({ token, user }) => {
       if (user) {
         token.accessToken = user.token;
@@ -12,7 +18,7 @@ export const authOptions = {
 
       return token;
     },
-    // @ts-ignore
+
     session: async ({ session, token }) => {
       if (token?.accessToken) {
         session.accessToken = token.accessToken;
@@ -65,4 +71,13 @@ export const authOptions = {
   pages: {
     signIn: '/login',
   },
-};
+} satisfies NextAuthOptions;
+
+export function auth(
+  ...args:
+    | [GetServerSidePropsContext['req'], GetServerSidePropsContext['res']]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) {
+  return getServerSession(...args, authOptions);
+}
