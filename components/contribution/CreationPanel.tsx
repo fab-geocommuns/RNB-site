@@ -85,11 +85,17 @@ export default function CreationPanel() {
       <PanelBody>
         {shapeInteractionMode === 'drawing' && (
           <div className={`${styles.panelSection} ${styles.noPad}`}>
-            <div>Tracez la géométrie du bâtiment sur la carte.</div>
-            <div className="fr-pt-3v">
-              Pour terminer le tracé, fermez le polygone en recliquant sur le
-              premier point que vous avez placé.
-            </div>
+            {mapCoordinates && mapCoordinates.zoom < 18 ? (
+              <div>Zoomez sur la carte pour pouvoir tracer le bâtiment.</div>
+            ) : (
+              <>
+                <div>Tracez la géométrie du bâtiment sur la carte.</div>
+                <div className="fr-pt-3v">
+                  Pour terminer le tracé, fermez le polygone en recliquant sur
+                  le premier point que vous avez placé.
+                </div>
+              </>
+            )}
           </div>
         )}
         {shapeInteractionMode === 'updating' && (
