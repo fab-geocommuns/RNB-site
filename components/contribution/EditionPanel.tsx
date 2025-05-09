@@ -1,7 +1,7 @@
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { Actions, RootState, AppDispatch } from '@/stores/store';
-import { mapActions, SelectedBuilding } from '@/stores/map/map-slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState, useEffect } from 'react';
 import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
@@ -16,6 +16,7 @@ import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import Toaster from './toaster';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -146,18 +147,11 @@ function EditSelectedBuildingPanelContent({
         </Button>
       </div>
 
-      <div className={styles.noticeContainer}>
-        <div
-          className={`${styles.notice} ${success || error ? styles.noticeVisible : ''}`}
-        >
-          {success && (
-            <Notice title="Modification enregistrée" severity="info" />
-          )}
-          {error && (
-            <Notice title="Modification impossible" severity="warning" />
-          )}
-        </div>
-      </div>
+      <Toaster
+        successMsg="Modification enregistrée"
+        errorMsg={error}
+        success={success}
+      ></Toaster>
     </>
   );
 }

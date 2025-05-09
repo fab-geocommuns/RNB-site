@@ -10,6 +10,7 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import Toaster from './toaster';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -26,6 +27,8 @@ export default function CreationPanel() {
     [],
   );
   const { fetch } = useRNBFetch();
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
 
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
@@ -36,8 +39,8 @@ export default function CreationPanel() {
   };
 
   const createBuilding = async () => {
-    // setError(null);
-    // setSuccess(false);
+    setError(null);
+    setSuccess(false);
 
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/`;
 
@@ -57,13 +60,13 @@ export default function CreationPanel() {
         throw new Error(`Erreur ${response.status}`);
       }
 
-      // setSuccess(true);
+      setSuccess(true);
       // force the map to reload the building, to immediatly show the modifications made
       dispatch(Actions.map.reloadBuildings());
       dispatch(Actions.map.setBuildingNewShape(null));
       // await dispatch(Actions.map.selectBuilding(rnbId));
     } catch (err: any) {
-      // setError(err.message || 'Erreur lors de la modification');
+      setError(err.message || 'Erreur lors de la modification');
       console.error(err);
     }
   };
@@ -109,6 +112,11 @@ export default function CreationPanel() {
           <Button onClick={createBuilding}>Créer le bâtiment</Button>
         </div>
       )}
+      <Toaster
+        successMsg="Bâtiment créé avec succès"
+        errorMsg={error}
+        success={success}
+      ></Toaster>
     </>
   );
 }
