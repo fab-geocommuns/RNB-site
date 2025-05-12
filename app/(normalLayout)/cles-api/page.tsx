@@ -12,7 +12,7 @@ import CopyButton from '@/components/CopyButton';
 import { fr } from '@codegouvfr/react-dsfr';
 
 export default async function Page() {
-  // We don't want to allow users that are already logged in to access this page
+  // We don't want to allow anonymous visitors to access this page
   const session = await auth();
   if (!session) {
     redirect('/login?redirect=/cles-api');
