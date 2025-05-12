@@ -13,7 +13,7 @@ export default async function Page() {
   // We don't want to allow anonymous visitors to access this page
   const session = await auth();
   if (!session) {
-    redirect('/login?redirect=/cles-api');
+    redirect('/login?redirect=/mon-compte/cles-api');
   }
 
   const response = await fetch(
