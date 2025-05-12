@@ -91,7 +91,7 @@ export default async function Page() {
             </h2>
             <div className="blockSubtitle">
               <p>
-                Ecrire dans l&apos;environnement de production modifie
+                Écrire dans l&apos;environnement de production modifie
                 directement le RNB et met vos contributions à disposition de
                 tous.
               </p>
