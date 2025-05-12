@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 
 // Comps
 import CopyButton from '@/components/CopyButton';
+import { Notice } from '@codegouvfr/react-dsfr/Notice';
 
 export default async function Page() {
   // We don't want to allow anonymous visitors to access this page
@@ -57,16 +58,30 @@ export default async function Page() {
               </a>{' '}
               vous permet d&apos;expérimenter sans crainte d&apos;abîmer le RNB.{' '}
             </p>
+
             <div className="fr-my-6v">
-              <pre>{data.sandbox_token}</pre>
+              {data.sandbox_token === null ? (
+                <Notice
+                  description="La création de votre clé de bac à sable a échoué, l'équipe RNB a été prévenue du problème et fait son possible pour le résoudre."
+                  severity="warning"
+                  iconDisplayed={true}
+                />
+              ) : (
+                <pre>{data.sandbox_token}</pre>
+              )}
             </div>
-            <div className="blockLinkShell">
-              <CopyButton
-                valueToCopy={data.sandbox_token}
-                label="Copier la clé bac à sable"
-                okMsg="Clé copiée"
-              />
-            </div>
+
+            {data.sandbox_token != null ? (
+              <div className="blockLinkShell">
+                <CopyButton
+                  valueToCopy={data.sandbox_token}
+                  label="Copier la clé bac à sable"
+                  okMsg="Clé copiée"
+                />
+              </div>
+            ) : (
+              ''
+            )}
           </div>
 
           <div className="block block--blue">
