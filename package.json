@@ -49,6 +49,7 @@
   "devDependencies": {
     "@playwright/test": "^1.46.0",
     "@types/mapbox__mapbox-gl-draw": "^1.4.8",
+    "@types/react-copy-to-clipboard": "^5.0.7",
     "@types/terraformer__wkt": "^2.0.3",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.8",
