@@ -8,9 +8,6 @@ import { redirect } from 'next/navigation';
 // Comps
 import CopyButton from '@/components/CopyButton';
 
-// Styles
-import { fr } from '@codegouvfr/react-dsfr';
-
 export default async function Page() {
   // We don't want to allow anonymous visitors to access this page
   const session = await auth();
