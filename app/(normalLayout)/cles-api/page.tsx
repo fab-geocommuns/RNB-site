@@ -62,9 +62,11 @@ export default async function Page() {
             <div className="fr-my-6v">
               {data.sandbox_token === null ? (
                 <Notice
-                  description="La création de votre clé de bac à sable a échoué, l'équipe RNB a été prévenue du problème et fait son possible pour le résoudre."
+                  description="la création de votre clé de bac à sable a échoué, l'équipe RNB a été prévenue du problème et fait son possible pour le résoudre."
                   severity="warning"
                   iconDisplayed={true}
+                  isClosable={false}
+                  title="Erreur :"
                 />
               ) : (
                 <pre>{data.sandbox_token}</pre>
