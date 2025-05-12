@@ -155,19 +155,29 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
     // Show some quick actions depending on the login status
     if (session) {
-      // Add the "Se déconnecter" action
-      let logoutQA = {
-        iconId: 'fr-icon-logout-box-r-line',
+      // My account
+      let myAccountQA = {
+        iconId: 'ri-arrow-down-circle-line',
         linkProps: {
-          href: '#',
-          // @ts-ignore
-          onClick: (e) => {
-            handleSignout(e);
-          },
+          href: '/mon-compte',
         },
-        text: 'Se déconnecter',
+        text: 'Mon compte',
       };
-      newQuickActions.push(logoutQA);
+      newQuickActions.push(myAccountQA);
+
+      // Add the "Se déconnecter" action
+      // let logoutQA = {
+      //   iconId: 'fr-icon-logout-box-r-line',
+      //   linkProps: {
+      //     href: '#',
+      //     // @ts-ignore
+      //     onClick: (e) => {
+      //       handleSignout(e);
+      //     },
+      //   },
+      //   text: 'Se déconnecter',
+      // };
+      // newQuickActions.push(logoutQA);
     } else {
       let loginQA = {
         iconId: 'fr-icon-lock-line',

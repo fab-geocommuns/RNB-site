@@ -20,7 +20,7 @@ body .group {
     font-weight: 500;
     //margin: $btnMargin;
     display: inline-block;
-    margin-right: 1px;
+
     color: $btnTextColor;
 
     &:hover {
@@ -36,7 +36,7 @@ body .group {
     line-height: $btnLineHeight;
     display: inline-block;
     color: $btnTextColor;
-
+    margin-right: 1px;
     &:hover {
       background-color: $btnBckgColorHover;
     }
