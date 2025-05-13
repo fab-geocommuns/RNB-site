@@ -19,7 +19,9 @@ export const useMapEvents = (map?: maplibregl.Map) => {
   useState<string>();
   const previousHoveredFeatureId = useRef<string>();
   const previousHoveredFeatureSource = useRef<string>();
-  const drawMode = useSelector((state: RootState) => state.map.drawMode);
+  const shapeInteractionMode = useSelector(
+    (state: RootState) => state.map.shapeInteractionMode,
+  );
 
   // Initialisation des événements
   useEffect(() => {
@@ -32,7 +34,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        if (featureCloseToCursor && drawMode !== 'draw_polygon') {
+        if (featureCloseToCursor && shapeInteractionMode !== 'drawing') {
           // What did we click on?
 
           if (
@@ -60,6 +62,14 @@ export const useMapEvents = (map?: maplibregl.Map) => {
       map.on('moveend', (e: MapLibreEvent<any>) => {
         const zoom = map.getZoom();
         const center = map.getCenter();
+        dispatch(
+          Actions.map.setMoveTo({
+            lat: center.lat,
+            lng: center.lng,
+            zoom: zoom,
+            fromMapEvent: true,
+          }),
+        );
         const coordsQueryParam = `${center.lat.toFixed(5)},${center.lng.toFixed(5)},${zoom.toFixed(2)}`;
         const queryParams = new URLSearchParams(window.location.search);
         queryParams.set('coords', coordsQueryParam);
@@ -76,7 +86,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        if (drawMode === 'draw_polygon') {
+        if (shapeInteractionMode === 'drawing') {
           map!.getCanvas().style.cursor = 'crosshair';
         } else if (featureCloseToCursor) {
           map!.getCanvas().style.cursor = 'pointer';
@@ -118,5 +128,5 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         map.off('click', handleClickEvent);
       };
     }
-  }, [dispatch, map, drawMode]);
+  }, [dispatch, map, shapeInteractionMode]);
 };

@@ -1,12 +1,13 @@
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
 import styles from '@/styles/contribution/editPanel.module.scss';
+import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 
 export default function BuildingStatus({
   status,
   onChange,
 }: {
-  status: string;
-  onChange: (status: string) => void;
+  status: BuildingStatusType;
+  onChange: (status: BuildingStatusType) => void;
 }) {
   const statusList = [
     {
@@ -31,7 +32,7 @@ export default function BuildingStatus({
           nativeSelectProps={{
             value: status,
             onChange: (event) => {
-              onChange(event.target.value);
+              onChange(event.target.value as BuildingStatusType);
             },
           }}
           label=""
