@@ -286,15 +286,10 @@ export const useMapLayers = ({
   };
 
   const getDefaultBuildingFeatureFilter = () => {
-    const hiddenStatuses: BuildingStatusType[] = ['demolished'];
     const defaultBuildingFeatureFilter: any = [
-      'any',
-      [
-        'all',
-        ['==', ['coalesce', ['get', 'is_active'], true], true],
-        ['!', ['in', ['get', 'status'], ...hiddenStatuses]],
-      ],
-      ['==', ['get', 'in_panel'], true],
+      'all',
+      ['==', ['coalesce', ['get', 'is_active'], true], true],
+      ['!=', ['get', 'status'], 'demolished'],
     ];
 
     return defaultBuildingFeatureFilter;
