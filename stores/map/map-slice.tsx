@@ -112,8 +112,7 @@ export const mapSlice = createSlice({
   initialState,
   reducers: {
     reset(state) {
-      // does not work => cannot draw polygon after that
-      // state.selectedItem = undefined;
+      state.selectedItem = undefined;
       state.shapeInteractionMode = null;
       state.buildingNewShape = null;
     },

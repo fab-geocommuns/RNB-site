@@ -38,7 +38,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
-  // console.log('mode', drawRef?.current?.getMode())
 
   // add the draw plugin to the map
   useEffect(() => {
@@ -155,7 +154,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         // selectedBuilding is null => cleaning
         deleteFeatures(drawRef.current);
         selectedBuildingRef.current = null;
-        // dispatch(Actions.map.setShapeInteractionMode(null));
       }
     }
   }, [selectedBuilding, dispatch]);
@@ -169,7 +167,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
       for (const draw of currentDrawRef.getAll().features) {
         // @ts-ignore
-        const flat_array = draw.geometry.coordinates.flat(Infinity);
+        const flat_array = draw.geometry.coordinates
+          ? draw.geometry.coordinates.flat(Infinity)
+          : [];
         if (draw.id && flat_array.length > 1) {
           currentDrawRef.delete(draw.id.toString());
         }

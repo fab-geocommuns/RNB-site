@@ -175,7 +175,6 @@ export default function EditionPanel() {
 
   useEffect(() => {
     if (operation === 'create') {
-      dispatch(Actions.map.unselectItem());
       dispatch(Actions.map.reset());
       dispatch(Actions.map.setShapeInteractionMode('drawing'));
     } else if (operation === null) {
