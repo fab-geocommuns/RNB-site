@@ -13,10 +13,9 @@ function CalloutWithLink({
   return (
     <div
       className={fr.cx('fr-container', 'fr-p-5v', 'fr-text--sm')}
-      style={{ backgroundColor: 'var(--background-alt-brown-caramel)' }}
+      style={{ backgroundColor: 'var(--background-alt-yellow-tournesol)' }}
     >
-      {description}
-      <br />
+      {description}{' '}
       <Link href="#" onClick={onClick}>
         {linkLabel}
       </Link>
@@ -36,7 +35,7 @@ export default function BuildingActivationToggle({
   if (isActive) {
     return (
       <CalloutWithLink
-        description="Ce bâtiment ne devrait pas faire partie du RNB ?"
+        description="Ce bâtiment n'en est pas un selon la définition du RNB ?"
         linkLabel="Désactiver le bâtiment"
         onClick={() => onToggle(false)}
       />
