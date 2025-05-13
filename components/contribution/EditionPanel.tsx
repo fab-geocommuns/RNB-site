@@ -45,8 +45,6 @@ function EditSelectedBuildingPanelContent({
     selectedBuilding.addresses,
   );
 
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
@@ -103,16 +101,8 @@ function EditSelectedBuildingPanelContent({
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.map.setBuildingNewShape(null));
-        if (newStatus === 'demolished') {
-          toasterSuccess(
-            dispatch,
-            'Le statut démoli du bâtiment est enregistré',
-          );
-          await dispatch(Actions.map.unselectItem());
-        } else {
-          toasterSuccess(dispatch, 'Modification enregistrée');
-          await dispatch(Actions.map.selectBuilding(rnbId));
-        }
+        toasterSuccess(dispatch, 'Modification enregistrée');
+        await dispatch(Actions.map.selectBuilding(rnbId));
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
@@ -125,20 +115,22 @@ function EditSelectedBuildingPanelContent({
     const data = {
       is_active: isActive,
     };
-    setError(null);
-    setSuccess(false);
     const response = await fetch(url, {
       body: JSON.stringify(data),
       method: 'PATCH',
     });
     if (!response.ok) {
-      setError(
+      toasterError(
+        dispatch,
         `Erreur lors de ${isActive ? "l'activation" : 'la désactivation'} du bâtiment`,
       );
       return;
     }
+    toasterSuccess(
+      dispatch,
+      `Le bâtiment a été ${isActive ? 'réactivé' : 'désactivé'}`,
+    );
     await dispatch(Actions.map.selectBuilding(rnbId));
-    setSuccess(true);
     dispatch(Actions.map.reloadBuildings());
   };
 
