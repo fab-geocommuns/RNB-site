@@ -10,8 +10,7 @@ export default function FullscreenLayout({
     <>
       <RNBHeader withNavigation={false} />
       <Notice
-        title="Le mode édition est en phase de test."
-        description="Envoyez-nous vos commentaires sur son utilisation à rnb@beta.gouv.fr"
+        title="Le mode édition est phase de développement et certaines fonctionnalités ne sont pas encore disponibles."
         severity="info"
       />
       {children}
