@@ -132,9 +132,6 @@ export const useMapLayers = ({
   defaultBuildingLayer?: MapBuildingsLayer;
   selectedBuildingisGreen?: Boolean;
 }) => {
-  const { user } = useRNBAuthentication();
-  const currentUserId = user?.id;
-
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
   const reloadBuildings = useSelector(
