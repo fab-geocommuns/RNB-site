@@ -8,4 +8,4 @@ export const BuildingStatusMap = {
   demolished: 'Démoli',
 };
 
-export type BuildingStatus = keyof typeof BuildingStatusMap;
+export type BuildingStatusType = keyof typeof BuildingStatusMap;
