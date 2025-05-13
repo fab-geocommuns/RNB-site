@@ -36,9 +36,14 @@ export default function CreationPanel() {
   );
   const { fetch } = useRNBFetch();
 
+  const cancelCreation = () => {
+    dispatch(Actions.map.reset());
+    dispatch(Actions.map.setOperation(null));
+  };
+
   useEffect(() => {
     if (buildingNewShape && shapeInteractionMode === 'drawing') {
-      setStep(1);
+      setStep(2);
     }
   }, [shapeInteractionMode, buildingNewShape]);
 
@@ -118,11 +123,14 @@ export default function CreationPanel() {
           </>
         )}
       </PanelBody>
-      {step === 2 && (
-        <div className={styles.footer}>
+      <div className={styles.footer}>
+        {step === 2 && (
           <Button onClick={createBuilding}>Créer le bâtiment</Button>
-        </div>
-      )}
+        )}
+        <Button onClick={cancelCreation} priority="tertiary no outline">
+          Annuler
+        </Button>
+      </div>
     </>
   );
 }

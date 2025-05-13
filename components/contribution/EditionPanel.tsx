@@ -116,6 +116,11 @@ function EditSelectedBuildingPanelContent({
     }
   };
 
+  const cancelUpdate = () => {
+    dispatch(Actions.map.setOperation(null));
+    dispatch(Actions.map.reset());
+  };
+
   return (
     <>
       <RNBIDHeader>
@@ -141,6 +146,11 @@ function EditSelectedBuildingPanelContent({
         <Button onClick={handleSubmit} disabled={!anyChanges}>
           Valider les modifications
         </Button>
+        {anyChanges && (
+          <Button onClick={cancelUpdate} priority="tertiary no outline">
+            Annuler
+          </Button>
+        )}
       </div>
     </>
   );
