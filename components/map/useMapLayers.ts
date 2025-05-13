@@ -400,12 +400,12 @@ export const useMapLayers = ({
           ['boolean', ['feature-state', 'in_panel'], false],
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
-          '#132353',
+          '#87d443',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
-          '#1452e3',
+          '#14afe3',
         ],
-        'line-width': 1.5,
+        'line-width': 2.5,
       },
     });
 
