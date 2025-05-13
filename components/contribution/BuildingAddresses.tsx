@@ -30,6 +30,7 @@ function AddressCreator({
         iconId="fr-icon-add-line"
         priority="tertiary"
         disabled={disabled}
+        title={disabled ? 'Le bâtiment est désactivé' : ''}
       >
         Ajouter une adresse
       </Button>

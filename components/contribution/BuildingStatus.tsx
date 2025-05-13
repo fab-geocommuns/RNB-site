@@ -36,7 +36,8 @@ export default function BuildingStatus({
             onChange: (event) => {
               onChange(event.target.value as BuildingStatusType);
             },
-            disabled
+            disabled,
+            title: disabled ? 'Le bâtiment est désactivé' : '',
           }}
           label=""
           options={statusList}
