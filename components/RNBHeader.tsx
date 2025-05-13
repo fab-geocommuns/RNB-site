@@ -3,8 +3,8 @@
 // Comps
 import { Header } from '@codegouvfr/react-dsfr/Header';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
-import { useIsModalOpen } from '@codegouvfr/react-dsfr/Modal/useIsModalOpen';
 
 // Auth
 import { signOut } from 'next-auth/react';
@@ -95,12 +95,6 @@ export default function RNBHeader({ withNavigation = true }: Props) {
     },
   ];
 
-  // @ts-ignore
-  const handleSignout = (e) => {
-    e.preventDefault();
-    signOut();
-  };
-
   useEffect(() => {
     setRedirectUrl(window.location.href);
   }, [pathname]);
@@ -171,29 +165,24 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         text: 'Mon compte',
       };
       newQuickActions.push(myAccountQA);
-
-      // Add the "Se déconnecter" action
-      // let logoutQA = {
-      //   iconId: 'fr-icon-logout-box-r-line',
-      //   linkProps: {
-      //     href: '#',
-      //     // @ts-ignore
-      //     onClick: (e) => {
-      //       handleSignout(e);
-      //     },
-      //   },
-      //   text: 'Se déconnecter',
-      // };
-      // newQuickActions.push(logoutQA);
     } else {
       let loginQA = {
-        iconId: 'fr-icon-lock-line',
+        iconId: 'fr-icon-account-circle-line',
         linkProps: {
           href: '/login?redirect=' + redirectUrl,
         },
         text: 'Se connecter',
       };
       newQuickActions.push(loginQA);
+
+      let registerQA = {
+        iconId: 'fr-icon-add-circle-fill',
+        linkProps: {
+          href: '/login',
+        },
+        text: "S'inscrire",
+      };
+      newQuickActions.push(registerQA);
     }
 
     // Set
@@ -203,30 +192,39 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   return (
     <>
-      <explainModal.Component title="Participer au RNB">
+      <explainModal.Component title="Participer au Référentiel National des Bâtiments">
+        <Notice
+          title="Phase de test :"
+          description="le service d'édition est en phase de test en vue d'un démarrage
+            officiel fin juin 2025."
+          severity="info"
+          isClosable={false}
+          className="fr-my-4w"
+        />
+
         <p>
-          Le Référentiel National des Bâtiments a vocation à être la base de
-          données de bâtiments la plus à jour du pays.
+          Le Référentiel National des Bâtiments (RNB) a vocation à être la base
+          de données de bâtiments la plus à jour du pays.
         </p>
         <p>
-          Pour cela, il est alimenté par de grandes bases de données de portée
-          nationale mais aussi par les contributions de tous ceux ayant une
-          connaissance fine de leur territoire.
+          Pour cela, il est alimenté par de grandes bases de données à la portée
+          nationale mais aussi par les contributions de ceux ayant une
+          connaissance fine de leur territoire. Tout le monde, services de
+          l'État, collectivités, citoyens, entreprises ou associations est
+          invité à apporter sa pierre au RNB.
         </p>
-        <p>
-          Tout le monde, services de l'État, collectivités, citoyens,
-          entreprises ou associations est invité à apporter sa pierre au RNB.
-        </p>
-        <p>
+        <p className="fr-mb-4w">
           Le RNB est entièrement transparent. Chaque contribution est
           historisée, tracée et mise à disposition de tous.
         </p>
-        <p>
-          <b>
-            Le service d'édition est en phase de test en vue d'un démarrage
-            officiel fin juin 2025.
-          </b>
-        </p>
+        <div className="fr-btns-group fr-btns-group--inline-md">
+          <a href="/definition" className="fr-btn fr-btn--primary">
+            S'inscrire
+          </a>
+          <a href="/guide" className="fr-btn fr-btn--tertiary">
+            Consulter le guide d'édition
+          </a>
+        </div>
       </explainModal.Component>
       <Header
         brandTop={
