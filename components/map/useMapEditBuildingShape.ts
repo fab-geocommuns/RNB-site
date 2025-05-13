@@ -168,7 +168,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       for (const draw of currentDrawRef.getAll().features) {
         // @ts-ignore
         const flat_array = draw.geometry.coordinates
-          ? draw.geometry.coordinates.flat(Infinity)
+          ? // @ts-ignore
+            draw.geometry.coordinates.flat(Infinity)
           : [];
         if (draw.id && flat_array.length > 1) {
           currentDrawRef.delete(draw.id.toString());
