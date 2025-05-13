@@ -10,7 +10,7 @@ export default function FullscreenLayout({
     <>
       <RNBHeader withNavigation={false} />
       <Notice
-        title="Le mode édition est phase de développement et certaines fonctionnalités ne sont pas encore disponibles."
+        title="Le mode édition est en phase de développement et certaines fonctionnalités ne sont pas encore disponibles."
         severity="info"
       />
       {children}
