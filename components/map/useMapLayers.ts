@@ -20,8 +20,8 @@ import { Actions, RootState } from '@/stores/store';
 // Buildings source
 export const SRC_BDGS_POINTS = 'bdgtiles_points';
 export const SRC_BDGS_SHAPES = 'bdgtiles_shapes';
-export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf?only_active=false`;
-export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf?only_active=false`;
+export const SRC_BDGS_SHAPES_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/shapes/{x}/{y}/{z}.pbf?only_active_and_real=false`;
+export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x}/{y}/{z}.pbf?only_active_and_real=false`;
 
 // Buildings layers : point:
 export const LAYER_BDGS_POINT = 'bdgs_point';
@@ -44,7 +44,6 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 ];
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
-const DEACTIVATED_BUILDING_COLOR = '#e1000f';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -71,6 +70,7 @@ import {
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -126,13 +126,11 @@ export const useMapLayers = ({
   defaultBackgroundLayer,
   defaultBuildingLayer,
   selectedBuildingisGreen,
-  displayRecentlyDeactivatedBuildings,
 }: {
   map?: maplibregl.Map;
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
   selectedBuildingisGreen?: Boolean;
-  displayRecentlyDeactivatedBuildings: boolean;
 }) => {
   const { user } = useRNBAuthentication();
   const currentUserId = user?.id;
@@ -291,24 +289,16 @@ export const useMapLayers = ({
   };
 
   const getDefaultBuildingFeatureFilter = () => {
-    const displayBuildingDeactivatedByCurrentUserSecondsAgo = 300;
+    const hiddenStatuses: BuildingStatusType[] = ['demolished'];
     const defaultBuildingFeatureFilter: any = [
       'any',
-      ['==', ['coalesce', ['get', 'is_active'], true], true],
+      [
+        'all',
+        ['==', ['coalesce', ['get', 'is_active'], true], true],
+        ['!', ['in', ['get', 'status'], ...hiddenStatuses]],
+      ],
       ['==', ['get', 'in_panel'], true],
     ];
-
-    if (displayRecentlyDeactivatedBuildings && currentUserId) {
-      defaultBuildingFeatureFilter.push([
-        'all',
-        ['==', ['get', 'last_updated_by'], currentUserId],
-        [
-          '<',
-          ['get', 'updated_ago_in_seconds'],
-          displayBuildingDeactivatedByCurrentUserSecondsAgo,
-        ],
-      ]);
-    }
 
     return defaultBuildingFeatureFilter;
   };
@@ -399,6 +389,10 @@ export const useMapLayers = ({
 
   const installBuildingsShapesLayers = (map: maplibregl.Map) => {
     const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
+    const selectedBuildingColor = selectedBuildingisGreen
+      ? '#31e060'
+      : '#1452e3';
+
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
       type: 'fill',
@@ -409,22 +403,16 @@ export const useMapLayers = ({
         'fill-color': [
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
-          '#31e060',
+          selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
-          ['boolean', ['get', 'is_active'], false],
           '#1452e3',
-          DEACTIVATED_BUILDING_COLOR,
         ],
         'fill-opacity': 0.08,
       },
     });
-
-    const selectedBuildingColor = selectedBuildingisGreen
-      ? '#31e060'
-      : '#1452e3';
 
     // Polygon border
     map.addLayer({
@@ -442,9 +430,7 @@ export const useMapLayers = ({
           '#132353',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
-          ['boolean', ['get', 'is_active'], false],
           '#1452e3',
-          DEACTIVATED_BUILDING_COLOR,
         ],
         'line-width': 1.5,
       },
