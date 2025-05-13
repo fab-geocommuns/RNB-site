@@ -14,6 +14,7 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
+import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import Toaster, {
   throwErrorMessageForHumans,
@@ -187,12 +188,26 @@ export default function EditionPanel() {
       <div className={styles.actions}>
         <Button
           onClick={toggleCreateBuilding}
+          className={operation === 'create' ? styles.buttonSelected : ''}
           size="small"
           priority="tertiary no outline"
         >
           <div className={styles.action}>
-            <img src={createBuildingImage.src} alt="" height="32" width="32" />
-            <small>créer</small>
+            <img
+              src={
+                operation === 'create'
+                  ? createSelectedBuildingImage.src
+                  : createBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'create' ? styles.actionSelected : ''}
+            >
+              créer
+            </small>
           </div>
         </Button>
       </div>

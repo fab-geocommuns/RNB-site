@@ -1,7 +1,7 @@
 import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import BuildingStatus from './BuildingStatus';
