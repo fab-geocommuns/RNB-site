@@ -14,7 +14,6 @@ export const authOptions = {
         token.accessToken = user.token;
         token.username = user.username;
         token.groups = user.groups;
-        token.id = user.id;
       }
 
       return token;

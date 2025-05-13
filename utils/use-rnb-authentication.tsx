@@ -14,7 +14,6 @@ export enum RNBAuthenticationStatus {
 type AuthenticatedUser = {
   username: string;
   groups: RNBGroup[];
-  id: number;
 };
 
 type UseRNBAuthentication = {
@@ -29,8 +28,9 @@ export const useRNBAuthentication = (options?: {
 }): UseRNBAuthentication => {
   const { status, data } = useSession();
   const router = useRouter();
-  const sessionData = data as any;
-  const groups = sessionData?.groups ? (sessionData.groups as RNBGroup[]) : [];
+  const groups =
+    data && (data as any).groups ? ((data as any).groups as RNBGroup[]) : [];
+  const username = (data as any)?.username;
   let user = null;
 
   useEffect(() => {
@@ -46,8 +46,7 @@ export const useRNBAuthentication = (options?: {
 
   if (status === 'authenticated') {
     user = {
-      id: sessionData.id,
-      username: sessionData.username,
+      username,
       groups,
     };
   }
