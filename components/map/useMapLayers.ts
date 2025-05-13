@@ -403,9 +403,9 @@ export const useMapLayers = ({
           '#87d443',
           ['>', ['get', 'contributions'], 0],
           CONTRIBUTIONS_COLOR,
-          '#14afe3',
+          '#1452e3',
         ],
-        'line-width': 2.5,
+        'line-width': 2.1,
       },
     });
 
