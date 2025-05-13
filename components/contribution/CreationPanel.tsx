@@ -1,7 +1,7 @@
 import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import BuildingStatus from './BuildingStatus';
@@ -25,16 +25,22 @@ export default function CreationPanel() {
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.map.shapeInteractionMode,
   );
+  const buildingNewShape = useSelector(
+    (state: RootState) => state.map.buildingNewShape,
+  );
   const mapCoordinates = useSelector((state: RootState) => state.map.moveTo);
   const [newStatus, setNewStatus] = useState<BuildingStatusType>('constructed');
+  const [step, setStep] = useState<number>(1);
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     [],
   );
   const { fetch } = useRNBFetch();
 
-  const buildingNewShape = useSelector(
-    (state: RootState) => state.map.buildingNewShape,
-  );
+  useEffect(() => {
+    if (buildingNewShape && shapeInteractionMode === 'drawing') {
+      setStep(1);
+    }
+  }, [shapeInteractionMode, buildingNewShape]);
 
   const handleEditAddress = (addresses: BuildingAddressType[]) => {
     setLocalAddresses(addresses);
@@ -74,15 +80,15 @@ export default function CreationPanel() {
     <>
       <RNBIDHeader>
         <span className="fr-text--xs">Créer un nouveau bâtiment </span>
-        {shapeInteractionMode === 'drawing' && (
+        {step == 1 && (
           <h1 className="fr-text--lg fr-m-0">étape 1 - Géométrie</h1>
         )}
-        {shapeInteractionMode === 'updating' && (
+        {step == 2 && (
           <h1 className="fr-text--lg fr-m-0">étape 2 - informations</h1>
         )}
       </RNBIDHeader>
       <PanelBody>
-        {shapeInteractionMode === 'drawing' && (
+        {step === 1 && (
           <div className={`${styles.panelSection} ${styles.noPad}`}>
             {mapCoordinates && mapCoordinates.zoom < 18 ? (
               <div>Zoomez sur la carte pour pouvoir tracer le bâtiment.</div>
@@ -97,7 +103,7 @@ export default function CreationPanel() {
             )}
           </div>
         )}
-        {shapeInteractionMode === 'updating' && (
+        {step === 2 && (
           <>
             <BuildingStatus
               status={newStatus}
@@ -112,7 +118,7 @@ export default function CreationPanel() {
           </>
         )}
       </PanelBody>
-      {shapeInteractionMode === 'updating' && (
+      {step === 2 && (
         <div className={styles.footer}>
           <Button onClick={createBuilding}>Créer le bâtiment</Button>
         </div>

@@ -160,6 +160,7 @@ export default function EditionPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.map.operation);
+  const zoomLevel = useSelector((state: RootState) => state.map.moveTo?.zoom);
 
   const selectedBuilding =
     selectedItem?._type === 'building'
@@ -177,11 +178,17 @@ export default function EditionPanel() {
   useEffect(() => {
     if (operation === 'create') {
       dispatch(Actions.map.reset());
-      dispatch(Actions.map.setShapeInteractionMode('drawing'));
+
+      // you can draw if the zoom level is high enough
+      if (zoomLevel && zoomLevel > 18) {
+        dispatch(Actions.map.setShapeInteractionMode('drawing'));
+      } else {
+        dispatch(Actions.map.setShapeInteractionMode(null));
+      }
     } else if (operation === null) {
       dispatch(Actions.map.setShapeInteractionMode(null));
     }
-  }, [operation]);
+  }, [operation, zoomLevel]);
 
   return (
     <>
