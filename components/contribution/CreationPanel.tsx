@@ -43,7 +43,7 @@ export default function CreationPanel() {
   const createBuilding = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/`;
 
-    let data: { [key: string]: any } = {
+    const data: { [key: string]: any } = {
       status: newStatus,
       addresses_cle_interop: localAddresses.map((a) => a.id),
       shape: geojsonToWKT(buildingNewShape!),
@@ -63,7 +63,6 @@ export default function CreationPanel() {
         dispatch(Actions.map.setBuildingNewShape(null));
         dispatch(Actions.map.setOperation(null));
         toasterSuccess(dispatch, 'Bâtiment créé avec succès');
-        // await dispatch(Actions.map.selectBuilding(rnbId));
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
