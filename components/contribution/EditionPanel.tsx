@@ -9,7 +9,6 @@ import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
