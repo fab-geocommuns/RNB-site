@@ -203,22 +203,23 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         />
 
         <p>
-          Le Référentiel National des Bâtiments référence l&apos;ensemble des
-          bâtiments du territoire et leur attribue un identifiant unique.
-        </p>
-        <p>
-          Pour être constamment à jour, il est alimenté par de grandes bases de
-          données à portée nationale mais aussi par les contributions de ceux
+          Pour être constamment tenu à jour, le RNB est alimenté par de grandes
+          bases de données nationales mais aussi par les contributions de ceux
           ayant une connaissance fine de leur territoire. Tout le monde,
           services de l&apos;État, collectivités, citoyens, entreprises ou
           associations est invité à apporter sa pierre au RNB.
+        </p>
+        <p>
+          Partagez la connaissance de votre territoire, c&apos;est bénéficiez en
+          retour des améliorations apportées par les autres pour une donnée
+          bâtimentaire la plus proche du terrain.
         </p>
         <p className="fr-mb-4w">
           Le RNB est entièrement transparent. Chaque contribution est
           historisée, tracée et mise à disposition de tous.
         </p>
         <div className="fr-btns-group fr-btns-group--inline-md">
-          <a href="/definition" className="fr-btn fr-btn--primary">
+          <a href="/login" className="fr-btn fr-btn--primary">
             S&apos;inscrire
           </a>
           <a href="/guide" className="fr-btn fr-btn--tertiary">
