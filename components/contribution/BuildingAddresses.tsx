@@ -15,7 +15,7 @@ function AddressCreator({
   onToggleCreating,
 }: {
   onSubmit: (address: NewAddress) => void;
-  buildingPoint?: [number, number];
+  buildingPoint: [number, number];
   disabledAddressIds: string[];
   isCreating: boolean;
   onToggleCreating: (isCreating: boolean) => void;
@@ -48,41 +48,35 @@ function AddressCreator({
   ) => {
     const maxDistanceInKm = 10;
     let results = suggestions.filter((s) => {
+      const distanceInKm = distance(s.geometry.coordinates, buildingPoint);
+
       let condition =
         s.properties.type === 'housenumber' &&
-        !disabledAddressIds.includes(s.properties.id);
-
-      if (buildingPoint) {
-        const distanceInKm = distance(s.geometry.coordinates, buildingPoint);
-        condition = condition && distanceInKm <= maxDistanceInKm;
-      }
+        !disabledAddressIds.includes(s.properties.id) &&
+        distanceInKm <= maxDistanceInKm;
 
       return condition;
     });
-    if (buildingPoint) {
-      results.sort((a, b) => {
-        const distanceA = distance(a.geometry.coordinates, buildingPoint);
-        const distanceB = distance(b.geometry.coordinates, buildingPoint);
-        return distanceA - distanceB;
-      });
-    }
+    results.sort((a, b) => {
+      const distanceA = distance(a.geometry.coordinates, buildingPoint);
+      const distanceB = distance(b.geometry.coordinates, buildingPoint);
+      return distanceA - distanceB;
+    });
+
     return results;
   };
 
   const renderSuggestion = (suggestion: AddressSuggestion) => {
-    if (buildingPoint) {
-      const distanceInKm = distance(
-        suggestion.geometry.coordinates,
-        buildingPoint,
-      ).toFixed(2);
-      return (
-        <div>
-          {suggestion.properties.label} (à {distanceInKm} km)
-        </div>
-      );
-    } else {
-      return <div>{suggestion.properties.label}</div>;
-    }
+    const distanceInKm = distance(
+      suggestion.geometry.coordinates,
+      buildingPoint,
+    ).toFixed(2);
+
+    return (
+      <div>
+        {suggestion.properties.label} (à {distanceInKm} km)
+      </div>
+    );
   };
 
   return (
@@ -117,7 +111,7 @@ function AddressCreator({
 type BuildingAddressesProps = {
   addresses: BuildingAddressType[];
   onChange: (addresses: BuildingAddressType[]) => void;
-  buildingPoint?: [number, number];
+  buildingPoint: [number, number];
 };
 
 export default function BuildingAddresses({
