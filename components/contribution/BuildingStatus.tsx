@@ -5,11 +5,9 @@ import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 export default function BuildingStatus({
   status,
   onChange,
-  disabled,
 }: {
   status: BuildingStatusType;
   onChange: (status: BuildingStatusType) => void;
-  disabled?: boolean;
 }) {
   const statusList = [
     {
@@ -36,8 +34,6 @@ export default function BuildingStatus({
             onChange: (event) => {
               onChange(event.target.value as BuildingStatusType);
             },
-            disabled,
-            title: disabled ? 'Le bâtiment est désactivé' : '',
           }}
           label=""
           options={statusList}

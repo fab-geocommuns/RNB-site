@@ -35,8 +35,8 @@ export default function BuildingActivationToggle({
   if (isActive) {
     return (
       <CalloutWithLink
-        description="Ce bâtiment n'en est pas un selon la définition du RNB ?"
-        linkLabel="Désactiver le bâtiment"
+        description="Ceci n'est pas un bâtiment selon la définition du RNB ?"
+        linkLabel="Désactiver l'ID-RNB"
         onClick={() => onToggle(false)}
       />
     );
@@ -44,8 +44,8 @@ export default function BuildingActivationToggle({
 
   return (
     <CalloutWithLink
-      description="Ce bâtiment fait partie du RNB et a été désactivé par erreur ?"
-      linkLabel="Réactiver le bâtiment"
+      description="Cet ID-RNB a été désactivé par erreur ?"
+      linkLabel="Réactiver l'ID-RNB"
       onClick={() => onToggle(true)}
     />
   );

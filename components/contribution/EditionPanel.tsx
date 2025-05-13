@@ -141,21 +141,23 @@ function EditSelectedBuildingPanelContent({
         <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
       </RNBIDHeader>
       <PanelBody>
-        <BuildingStatus
-          status={newStatus}
-          onChange={setNewStatus}
-          disabled={!isActive}
-        ></BuildingStatus>
-        <BuildingAddresses
-          buildingPoint={selectedBuilding.point.coordinates}
-          addresses={localAddresses}
-          disabled={!isActive}
-          onChange={handleEditAddress}
-        />
-        <BuildingShape
-          shapeInteractionMode={shapeInteractionMode}
-          selectedBuilding={selectedBuilding}
-        ></BuildingShape>
+        {isActive && (
+          <>
+            <BuildingStatus
+              status={newStatus}
+              onChange={setNewStatus}
+            ></BuildingStatus>
+            <BuildingAddresses
+              buildingPoint={selectedBuilding.point.coordinates}
+              addresses={localAddresses}
+              onChange={handleEditAddress}
+            />
+            <BuildingShape
+              shapeInteractionMode={shapeInteractionMode}
+              selectedBuilding={selectedBuilding}
+            ></BuildingShape>
+          </>
+        )}
         <BuildingActivationToggle
           isActive={isActive}
           onToggle={toggleBuildingActivation}
