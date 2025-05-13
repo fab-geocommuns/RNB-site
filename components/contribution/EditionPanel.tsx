@@ -8,6 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
+import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
@@ -35,6 +36,7 @@ function EditSelectedBuildingPanelContent({
   selectedBuilding: SelectedBuilding;
 }) {
   const rnbId = selectedBuilding.rnb_id;
+  const isActive = selectedBuilding.is_active;
   const dispatch: AppDispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<BuildingStatusType>(
     selectedBuilding.status,
@@ -42,6 +44,7 @@ function EditSelectedBuildingPanelContent({
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
   );
+
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
@@ -98,21 +101,37 @@ function EditSelectedBuildingPanelContent({
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.map.setBuildingNewShape(null));
-        if (newStatus === 'demolished') {
-          toasterSuccess(
-            dispatch,
-            'Le statut démoli du bâtiment est enregistré',
-          );
-          await dispatch(Actions.map.unselectItem());
-        } else {
-          toasterSuccess(dispatch, 'Modification enregistrée');
-          await dispatch(Actions.map.selectBuilding(rnbId));
-        }
+        toasterSuccess(dispatch, 'Modification enregistrée');
+        await dispatch(Actions.map.selectBuilding(rnbId));
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
       console.error(err);
     }
+  };
+
+  const toggleBuildingActivation = async (isActive: boolean) => {
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const data = {
+      is_active: isActive,
+    };
+    const response = await fetch(url, {
+      body: JSON.stringify(data),
+      method: 'PATCH',
+    });
+    if (!response.ok) {
+      toasterError(
+        dispatch,
+        `Erreur lors de ${isActive ? "l'activation" : 'la désactivation'} du bâtiment`,
+      );
+      return;
+    }
+    toasterSuccess(
+      dispatch,
+      `Le bâtiment a été ${isActive ? 'réactivé' : 'désactivé'}`,
+    );
+    await dispatch(Actions.map.selectBuilding(rnbId));
+    dispatch(Actions.map.reloadBuildings());
   };
 
   return (
@@ -122,22 +141,30 @@ function EditSelectedBuildingPanelContent({
         <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
       </RNBIDHeader>
       <PanelBody>
-        <BuildingStatus
-          status={newStatus}
-          onChange={setNewStatus}
-        ></BuildingStatus>
-        <BuildingAddresses
-          buildingPoint={selectedBuilding.point.coordinates}
-          addresses={localAddresses}
-          onChange={handleEditAddress}
+        {isActive && (
+          <>
+            <BuildingStatus
+              status={newStatus}
+              onChange={setNewStatus}
+            ></BuildingStatus>
+            <BuildingAddresses
+              buildingPoint={selectedBuilding.point.coordinates}
+              addresses={localAddresses}
+              onChange={handleEditAddress}
+            />
+            <BuildingShape
+              shapeInteractionMode={shapeInteractionMode}
+              selectedBuilding={selectedBuilding}
+            ></BuildingShape>
+          </>
+        )}
+        <BuildingActivationToggle
+          isActive={isActive}
+          onToggle={toggleBuildingActivation}
         />
-        <BuildingShape
-          shapeInteractionMode={shapeInteractionMode}
-          selectedBuilding={selectedBuilding}
-        ></BuildingShape>
       </PanelBody>
       <div className={styles.footer}>
-        <Button onClick={handleSubmit} disabled={!anyChanges}>
+        <Button onClick={handleSubmit} disabled={!isActive || !anyChanges}>
           Valider les modifications
         </Button>
       </div>
