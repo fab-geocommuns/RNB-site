@@ -203,15 +203,15 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         />
 
         <p>
-          Le Référentiel National des Bâtiments (RNB) a vocation à être la base
-          de données de bâtiments la plus à jour du pays.
+          Le Référentiel National des Bâtiments référence l&apos;ensemble des
+          bâtiments du territoire et leur attribue un identifiant unique.
         </p>
         <p>
-          Pour cela, il est alimenté par de grandes bases de données à la portée
-          nationale mais aussi par les contributions de ceux ayant une
-          connaissance fine de leur territoire. Tout le monde, services de
-          l'État, collectivités, citoyens, entreprises ou associations est
-          invité à apporter sa pierre au RNB.
+          Pour être constamment à jour, il est alimenté par de grandes bases de
+          données à la portée nationale mais aussi par les contributions de ceux
+          ayant une connaissance fine de leur territoire. Tout le monde,
+          services de l&apos;État, collectivités, citoyens, entreprises ou
+          associations est invité à apporter sa pierre au RNB.
         </p>
         <p className="fr-mb-4w">
           Le RNB est entièrement transparent. Chaque contribution est
@@ -219,10 +219,10 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         </p>
         <div className="fr-btns-group fr-btns-group--inline-md">
           <a href="/definition" className="fr-btn fr-btn--primary">
-            S'inscrire
+            S&apos;inscrire
           </a>
           <a href="/guide" className="fr-btn fr-btn--tertiary">
-            Consulter le guide d'édition
+            Consulter le guide d&apos;édition
           </a>
         </div>
       </explainModal.Component>

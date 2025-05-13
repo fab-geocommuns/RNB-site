@@ -31,7 +31,7 @@ export default async function Page() {
 
   return (
     <>
-      <h1>Mes clés d'API</h1>
+      <h1>Mes clés d&apos;API</h1>
       <p className="fr-mb-12v">
         Les clés d&apos;API sont nécessaires pour modifier le RNB via l&apos;API
         d&apos;édition.
