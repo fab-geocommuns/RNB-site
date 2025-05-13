@@ -9,7 +9,7 @@ export default function BuildingStatus({
 }: {
   status: BuildingStatusType;
   onChange: (status: BuildingStatusType) => void;
-  disabled: boolean;
+  disabled?: boolean;
 }) {
   const statusList = [
     {

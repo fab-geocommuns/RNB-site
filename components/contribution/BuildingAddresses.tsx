@@ -20,7 +20,7 @@ function AddressCreator({
   disabledAddressIds: string[];
   isCreating: boolean;
   onToggleCreating: (isCreating: boolean) => void;
-  disabled: boolean;
+  disabled?: boolean;
 }) {
   if (!isCreating) {
     return (
@@ -106,7 +106,7 @@ type BuildingAddressesProps = {
   addresses: BuildingAddressType[];
   onChange: (addresses: BuildingAddressType[]) => void;
   buildingPoint: [number, number];
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 export default function BuildingAddresses({
