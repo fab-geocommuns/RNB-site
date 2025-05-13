@@ -164,7 +164,7 @@ function EditSelectedBuildingPanelContent({
         />
       </PanelBody>
       <div className={styles.footer}>
-        <Button onClick={handleSubmit} disabled={!anyChanges}>
+        <Button onClick={handleSubmit} disabled={!isActive || !anyChanges}>
           Valider les modifications
         </Button>
       </div>
