@@ -208,7 +208,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         </p>
         <p>
           Pour être constamment à jour, il est alimenté par de grandes bases de
-          données à la portée nationale mais aussi par les contributions de ceux
+          données à portée nationale mais aussi par les contributions de ceux
           ayant une connaissance fine de leur territoire. Tout le monde,
           services de l&apos;État, collectivités, citoyens, entreprises ou
           associations est invité à apporter sa pierre au RNB.
