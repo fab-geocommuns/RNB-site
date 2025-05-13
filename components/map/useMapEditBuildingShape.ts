@@ -87,26 +87,10 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
-      const handleModeChange = ({ mode }: { mode: MapboxDraw.DrawMode }) => {
-        setTimeout(() => {
-          // without the timeout, the final click to close the polygon
-          // eventually selects an underlying existing polygon, ruining the current update
-          // if (mode === 'direct_select' || mode === 'simple_select') {
-          //   if (shapeInteractionMode !== 'updating') {
-          //     dispatch(Actions.map.setShapeInteractionMode('updating'));
-          //   }
-          // } else if (mode === 'draw_polygon' && shapeInteractionMode !== 'drawing') {
-          //   dispatch(Actions.map.setShapeInteractionMode('drawing'));
-          // }
-        }, 0);
-      };
-      drawRef.current && map.on('draw.modechange', handleModeChange);
-
       // cleaning the hooks when the component is unmounted
       return () => {
         map.off('draw.update', handleBuildingShapeUpdate);
         map.off('draw.create', handleBuildingShapeCreate);
-        map.off('draw.modechange', handleModeChange);
       };
     }
   }, [map, dispatch]);
