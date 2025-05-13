@@ -34,9 +34,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
 
-  const buildingNewShape = useSelector(
-    (state: RootState) => state.map.buildingNewShape,
-  );
+  const operation = useSelector((state: RootState) => state.map.operation);
 
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
@@ -155,24 +153,33 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         }
       } else {
         // selectedBuilding is null => cleaning
-        if (drawRef.current) {
-          // for some reason, calling deleteAll blocks the drawing of a new shape
-          // even if only one feature is drawn on the map, there are 2 of them in  the list of features
-          // deleting the empty one makes it impossible to draw a new one afterwards
-          // so I manually delete the non empty features
-
-          // drawRef.current.deleteAll();
-          for (const draw of drawRef.current.getAll().features) {
-            // @ts-ignore
-            const flat_array = draw.geometry.coordinates.flat(Infinity);
-            if (draw.id && flat_array.length > 1) {
-              drawRef.current.delete(draw.id.toString());
-            }
-          }
-        }
+        deleteFeatures(drawRef.current);
         selectedBuildingRef.current = null;
         // dispatch(Actions.map.setShapeInteractionMode(null));
       }
     }
   }, [selectedBuilding, dispatch]);
+
+  const deleteFeatures = (currentDrawRef: MapboxDraw | null) => {
+    if (currentDrawRef) {
+      // for some reason, calling deleteAll blocks the drawing of a new shape
+      // even if only one feature is drawn on the map, there are 2 of them in  the list of features
+      // deleting the empty one makes it impossible to draw a new one afterwards
+      // so I manually delete the non empty features
+
+      for (const draw of currentDrawRef.getAll().features) {
+        // @ts-ignore
+        const flat_array = draw.geometry.coordinates.flat(Infinity);
+        if (draw.id && flat_array.length > 1) {
+          currentDrawRef.delete(draw.id.toString());
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (operation === null) {
+      deleteFeatures(drawRef.current);
+    }
+  }, [operation]);
 };
