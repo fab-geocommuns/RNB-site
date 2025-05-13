@@ -1,13 +1,22 @@
 // Styles
 import styles from '@/styles/editRNBButton.module.scss';
 
-export default function EditRNBButton() {
+export default function EditRNBButton({ modal }: any) {
+  const explainBtnClickHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    modal.open();
+  };
+
   return (
     <>
       <span className={styles.group}>
-        <span className={styles.infoBtn}>
+        <a
+          href="#"
+          className={styles.infoBtn}
+          onClick={(e) => explainBtnClickHandler(e)}
+        >
           <i className="fr-icon fr-icon-question-line"></i>
-        </span>
+        </a>
         <a href="/edition" className={styles.editBtn}>
           Éditer le RNB
         </a>

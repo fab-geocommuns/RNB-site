@@ -3,6 +3,8 @@
 // Comps
 import { Header } from '@codegouvfr/react-dsfr/Header';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import { createModal } from '@codegouvfr/react-dsfr/Modal';
+import { useIsModalOpen } from '@codegouvfr/react-dsfr/Modal/useIsModalOpen';
 
 // Auth
 import { signOut } from 'next-auth/react';
@@ -19,6 +21,11 @@ import EditRNBButton from './EditRNBButton';
 type Props = {
   withNavigation?: boolean;
 };
+
+const explainModal = createModal({
+  id: 'explain-edit-rnb',
+  isOpenedByDefault: false,
+});
 
 export default function RNBHeader({ withNavigation = true }: Props) {
   const { data: session } = useSession();
@@ -101,7 +108,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   const enableEditionMode =
     process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
 
-  const editBtn = <EditRNBButton />;
+  const editBtn = <EditRNBButton modal={explainModal} />;
 
   // Change quick actions and title based on current page and user session
   useEffect(() => {
@@ -196,6 +203,31 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   return (
     <>
+      <explainModal.Component title="Participer au RNB">
+        <p>
+          Le Référentiel National des Bâtiments a vocation à être la base de
+          données de bâtiments la plus à jour du pays.
+        </p>
+        <p>
+          Pour cela, il est alimenté par de grandes bases de données de portée
+          nationale mais aussi par les contributions de tous ceux ayant une
+          connaissance fine de leur territoire.
+        </p>
+        <p>
+          Tout le monde, services de l'État, collectivités, citoyens,
+          entreprises ou associations est invité à apporter sa pierre au RNB.
+        </p>
+        <p>
+          Le RNB est entièrement transparent. Chaque contribution est
+          historisée, tracée et mise à disposition de tous.
+        </p>
+        <p>
+          <b>
+            Le service d'édition est en phase de test en vue d'un démarrage
+            officiel fin juin 2025.
+          </b>
+        </p>
+      </explainModal.Component>
       <Header
         brandTop={
           <>
