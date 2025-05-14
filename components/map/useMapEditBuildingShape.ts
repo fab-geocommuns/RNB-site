@@ -84,10 +84,22 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
+      // delete a selected vertice of a polygon with the delete or backspace key
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (
+          (event.key === 'Delete' || event.key === 'Backspace') &&
+          drawRef.current?.getMode() == 'direct_select'
+        ) {
+          drawRef.current.trash();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+
       // cleaning the hooks when the component is unmounted
       return () => {
         map.off('draw.update', handleBuildingShapeUpdate);
         map.off('draw.create', handleBuildingShapeCreate);
+        window.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [map, dispatch]);
