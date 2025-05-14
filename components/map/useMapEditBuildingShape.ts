@@ -93,13 +93,14 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           drawRef.current.trash();
         }
       };
-      window.addEventListener('keydown', handleKeyDown);
+      const mapContainer = map.getContainer();
+      mapContainer.addEventListener('keydown', handleKeyDown);
 
       // cleaning the hooks when the component is unmounted
       return () => {
         map.off('draw.update', handleBuildingShapeUpdate);
         map.off('draw.create', handleBuildingShapeCreate);
-        window.removeEventListener('keydown', handleKeyDown);
+        mapContainer.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [map, dispatch]);
