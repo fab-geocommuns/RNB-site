@@ -54,6 +54,12 @@ export const useMap = (params?: UseMapParams) => {
         mapContainerRef.current!.style.opacity = '1';
       });
 
+      // disable map rotation using right click + drag
+      newMap.dragRotate.disable();
+
+      // disable map rotation using touch rotation gesture
+      newMap.touchZoomRotate.disableRotation();
+
       setMap(newMap);
     }
   }, []);
