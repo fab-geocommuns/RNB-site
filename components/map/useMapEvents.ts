@@ -116,7 +116,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
 
   useEffect(() => {
     if (map) {
-      map.on('moveend', (e: MapLibreEvent<any>) => {
+      const handleMoveEnd = (e: MapLibreEvent<any>) => {
         const zoom = map.getZoom();
         const center = map.getCenter();
         dispatch(
@@ -133,7 +133,13 @@ export const useMapEvents = (map?: maplibregl.Map) => {
         const newUrl = new URL(window.location.href);
         newUrl.search = queryParams.toString();
         window.history.replaceState({}, '', newUrl);
-      });
+      };
+
+      map.on('moveend', handleMoveEnd);
+
+      return () => {
+        map.off('moveend', handleMoveEnd);
+      };
     }
   }, [map]);
 };
