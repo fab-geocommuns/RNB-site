@@ -4,7 +4,7 @@ Bienvenue sur le répertoire de code du site du Référentiel National des Bâti
 
 Si vous souhaitez accéder au répertoire contenant les ressources concernant la construction du standard du référentiel dans le cadre du groupe de travail CNIG sur le thème du bâiment, c'est par [ici](https://github.com/fab-geocommuns/BatID)
 
-Si vous souhaitez accéder au répertoire de code contenant le coeur technique du projet (imports, API, logique métier), [rdv ici](https://github.com/fab-geocommuns/RNB-coeur)
+Si vous souhaitez accéder au répertoire de code contenant le coeur technique du projet (imports, API, logique métier), [rdv ici](https://github.com/fab-geocommuns/RNB-coeur).
 
 ## Getting Started
 
