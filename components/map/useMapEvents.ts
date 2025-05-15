@@ -59,27 +59,8 @@ export const useMapEvents = (map?: maplibregl.Map) => {
 
       map.on('click', handleClickEvent);
 
-      map.on('moveend', (e: MapLibreEvent<any>) => {
-        const zoom = map.getZoom();
-        const center = map.getCenter();
-        dispatch(
-          Actions.map.setMoveTo({
-            lat: center.lat,
-            lng: center.lng,
-            zoom: zoom,
-            fromMapEvent: true,
-          }),
-        );
-        const coordsQueryParam = `${center.lat.toFixed(5)},${center.lng.toFixed(5)},${zoom.toFixed(2)}`;
-        const queryParams = new URLSearchParams(window.location.search);
-        queryParams.set('coords', coordsQueryParam);
-        const newUrl = new URL(window.location.href);
-        newUrl.search = queryParams.toString();
-        window.history.replaceState({}, '', newUrl);
-      });
-
-      // Évenement de déplacement du curseur: changement de pointeur si proche d'un bâtiment
-      map.on('mousemove', (e: MapMouseEvent) => {
+      /////////////
+      const handleMouseMove = (e: MapMouseEvent) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map!,
           e.point.x,
@@ -122,11 +103,43 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           previousHoveredFeatureSource.current = featureCloseToCursor?.layer
             .source as string;
         }
-      });
+      };
+      // Évenement de déplacement du curseur: changement de pointeur si proche d'un bâtiment
+      map.on('mousemove', handleMouseMove);
 
       return () => {
         map.off('click', handleClickEvent);
+        map.off('mousemove', handleMouseMove);
       };
     }
   }, [dispatch, map, shapeInteractionMode]);
+
+  useEffect(() => {
+    if (map) {
+      const handleMoveEnd = (e: MapLibreEvent<any>) => {
+        const zoom = map.getZoom();
+        const center = map.getCenter();
+        dispatch(
+          Actions.map.setMoveTo({
+            lat: center.lat,
+            lng: center.lng,
+            zoom: zoom,
+            fromMapEvent: true,
+          }),
+        );
+        const coordsQueryParam = `${center.lat.toFixed(5)},${center.lng.toFixed(5)},${zoom.toFixed(2)}`;
+        const queryParams = new URLSearchParams(window.location.search);
+        queryParams.set('coords', coordsQueryParam);
+        const newUrl = new URL(window.location.href);
+        newUrl.search = queryParams.toString();
+        window.history.replaceState({}, '', newUrl);
+      };
+
+      map.on('moveend', handleMoveEnd);
+
+      return () => {
+        map.off('moveend', handleMoveEnd);
+      };
+    }
+  }, [map]);
 };
