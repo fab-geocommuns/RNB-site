@@ -8,12 +8,14 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
+import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
+import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import Toaster, {
   throwErrorMessageForHumans,
@@ -35,6 +37,7 @@ function EditSelectedBuildingPanelContent({
   selectedBuilding: SelectedBuilding;
 }) {
   const rnbId = selectedBuilding.rnb_id;
+  const isActive = selectedBuilding.is_active;
   const dispatch: AppDispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<BuildingStatusType>(
     selectedBuilding.status,
@@ -42,6 +45,7 @@ function EditSelectedBuildingPanelContent({
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
   );
+
   const buildingNewShape = useSelector(
     (state: RootState) => state.map.buildingNewShape,
   );
@@ -98,21 +102,42 @@ function EditSelectedBuildingPanelContent({
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.map.setBuildingNewShape(null));
-        if (newStatus === 'demolished') {
-          toasterSuccess(
-            dispatch,
-            'Le statut démoli du bâtiment est enregistré',
-          );
-          await dispatch(Actions.map.unselectItem());
-        } else {
-          toasterSuccess(dispatch, 'Modification enregistrée');
-          await dispatch(Actions.map.selectBuilding(rnbId));
-        }
+        toasterSuccess(dispatch, 'Modification enregistrée');
+        await dispatch(Actions.map.selectBuilding(rnbId));
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
       console.error(err);
     }
+  };
+
+  const cancelUpdate = () => {
+    dispatch(Actions.map.setOperation(null));
+    dispatch(Actions.map.reset());
+  };
+
+  const toggleBuildingActivation = async (isActive: boolean) => {
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
+    const data = {
+      is_active: isActive,
+    };
+    const response = await fetch(url, {
+      body: JSON.stringify(data),
+      method: 'PATCH',
+    });
+    if (!response.ok) {
+      toasterError(
+        dispatch,
+        `Erreur lors de ${isActive ? "l'activation" : 'la désactivation'} du bâtiment`,
+      );
+      return;
+    }
+    toasterSuccess(
+      dispatch,
+      `Le bâtiment a été ${isActive ? 'réactivé' : 'désactivé'}`,
+    );
+    await dispatch(Actions.map.selectBuilding(rnbId));
+    dispatch(Actions.map.reloadBuildings());
   };
 
   return (
@@ -122,24 +147,37 @@ function EditSelectedBuildingPanelContent({
         <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
       </RNBIDHeader>
       <PanelBody>
-        <BuildingStatus
-          status={newStatus}
-          onChange={setNewStatus}
-        ></BuildingStatus>
-        <BuildingAddresses
-          buildingPoint={selectedBuilding.point.coordinates}
-          addresses={localAddresses}
-          onChange={handleEditAddress}
+        {isActive && (
+          <>
+            <BuildingStatus
+              status={newStatus}
+              onChange={setNewStatus}
+            ></BuildingStatus>
+            <BuildingAddresses
+              buildingPoint={selectedBuilding.point.coordinates}
+              addresses={localAddresses}
+              onChange={handleEditAddress}
+            />
+            <BuildingShape
+              shapeInteractionMode={shapeInteractionMode}
+              selectedBuilding={selectedBuilding}
+            ></BuildingShape>
+          </>
+        )}
+        <BuildingActivationToggle
+          isActive={isActive}
+          onToggle={toggleBuildingActivation}
         />
-        <BuildingShape
-          shapeInteractionMode={shapeInteractionMode}
-          selectedBuilding={selectedBuilding}
-        ></BuildingShape>
       </PanelBody>
       <div className={styles.footer}>
-        <Button onClick={handleSubmit} disabled={!anyChanges}>
+        <Button onClick={handleSubmit} disabled={!isActive || !anyChanges}>
           Valider les modifications
         </Button>
+        {anyChanges && (
+          <Button onClick={cancelUpdate} priority="tertiary no outline">
+            Annuler
+          </Button>
+        )}
       </div>
     </>
   );
@@ -159,6 +197,7 @@ export default function EditionPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.map.operation);
+  const zoomLevel = useSelector((state: RootState) => state.map.moveTo?.zoom);
 
   const selectedBuilding =
     selectedItem?._type === 'building'
@@ -176,23 +215,43 @@ export default function EditionPanel() {
   useEffect(() => {
     if (operation === 'create') {
       dispatch(Actions.map.reset());
-      dispatch(Actions.map.setShapeInteractionMode('drawing'));
+
+      // you can draw if the zoom level is high enough
+      if (zoomLevel && zoomLevel > 18) {
+        dispatch(Actions.map.setShapeInteractionMode('drawing'));
+      } else {
+        dispatch(Actions.map.setShapeInteractionMode(null));
+      }
     } else if (operation === null) {
       dispatch(Actions.map.setShapeInteractionMode(null));
     }
-  }, [operation]);
+  }, [operation, zoomLevel]);
 
   return (
     <>
       <div className={styles.actions}>
         <Button
           onClick={toggleCreateBuilding}
+          className={operation === 'create' ? styles.buttonSelected : ''}
           size="small"
           priority="tertiary no outline"
         >
           <div className={styles.action}>
-            <img src={createBuildingImage.src} alt="" height="32" width="32" />
-            <small>créer</small>
+            <img
+              src={
+                operation === 'create'
+                  ? createSelectedBuildingImage.src
+                  : createBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'create' ? styles.actionSelected : ''}
+            >
+              créer
+            </small>
           </div>
         </Button>
       </div>
