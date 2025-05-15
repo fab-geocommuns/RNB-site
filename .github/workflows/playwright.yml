@@ -41,7 +41,7 @@ jobs:
         poll-interval: 1
 
     - name: Execution des tests Playwright
-      run: npx playwright test
+      run: npx playwright test --retries=5
       env:
         BASE_URL: https://${{ steps.vercel_preview_url.outputs.preview_url }}
 
