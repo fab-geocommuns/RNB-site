@@ -8,6 +8,12 @@ const nextConfig = {
         destination: 'https://rnb-fr.gitbook.io/documentation',
         permanent: false,
       },
+      {
+        source: '/guide',
+        destination:
+          'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb',
+        permanent: false,
+      },
     ];
   },
 

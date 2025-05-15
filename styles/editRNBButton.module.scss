@@ -1,0 +1,49 @@
+body .group {
+  $btnPadding: 0.25rem 0.75rem;
+  $btnMargin: 0 0.5rem 1rem;
+  $btnFontSize: 0.875rem;
+  $btnLineHeight: 1.5rem;
+
+  font-size: $btnFontSize;
+
+  $btnBckgColor: #f4f6ff;
+  $btnBckgColorHover: #d6deff;
+  $btnTextColor: #000091;
+
+  margin-right: 20px;
+
+  .editBtn {
+    background-color: $btnBckgColor;
+    line-height: $btnLineHeight;
+    padding: $btnPadding;
+    font-family: 'Marianne', arial, sans-serif;
+    font-weight: 500;
+    //margin: $btnMargin;
+    display: inline-block;
+
+    color: $btnTextColor;
+
+    &:hover {
+      background-color: $btnBckgColorHover;
+    }
+  }
+  .infoBtn {
+    background-color: $btnBckgColor;
+    padding: $btnPadding;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    line-height: $btnLineHeight;
+    display: inline-block;
+    color: $btnTextColor;
+    margin-right: 1px;
+    &:hover {
+      background-color: $btnBckgColorHover;
+    }
+
+    i::before {
+      height: 19px;
+      width: 19px;
+      vertical-align: -4px;
+    }
+  }
+}
