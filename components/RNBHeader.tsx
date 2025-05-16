@@ -7,7 +7,6 @@ import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 
 // Auth
-import { signOut } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 
 // Routes
