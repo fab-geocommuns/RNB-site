@@ -1,7 +1,20 @@
+'use client';
+
 // Styles
 import styles from '@/styles/editRNBButton.module.scss';
 
+// Routes
+import { usePathname, useSearchParams } from 'next/navigation';
+
 export default function EditRNBButton({ modal }: any) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  let editUrl = '/edition';
+  if (pathname === '/carte') {
+    editUrl = `/edition?${searchParams.toString()}`;
+  }
+
   const explainBtnClickHandler = (e: React.MouseEvent) => {
     e.preventDefault();
     modal.open();
@@ -17,7 +30,7 @@ export default function EditRNBButton({ modal }: any) {
         >
           <i className="fr-icon fr-icon-question-line"></i>
         </a>
-        <a href="/edition" className={styles.editBtn}>
+        <a href={editUrl} className={styles.editBtn}>
           Éditer le RNB
         </a>
       </span>

@@ -91,10 +91,7 @@ export default function Page() {
                   identifiants RNB
                 </div>
                 <div className="fr-pt-3w">
-                  <a
-                    href="https://www.data.gouv.fr/fr/datasets/?tag=rnb"
-                    className="fr-link"
-                  >
+                  <a href="/outils-services/rapprochement" className="fr-link">
                     Les parcourir
                   </a>
                 </div>
