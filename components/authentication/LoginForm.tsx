@@ -60,7 +60,7 @@ export default function LoginForm() {
         <>
           <div className="fr-mb-3w">
             <Alert
-              description="Identifiant ou mot de passe incorrect"
+              description="Email ou mot de passe incorrect"
               severity="error"
               small
               closable={false}
@@ -89,7 +89,7 @@ export default function LoginForm() {
       >
         <div className="fr-input-group">
           <label className="fr-label" htmlFor="username">
-            Identifiant
+            Email
           </label>
 
           <input
@@ -112,6 +112,16 @@ export default function LoginForm() {
             id="password"
             autoFocus={prefilledEmail !== ''}
           />
+        </div>
+
+        <div className="fr-mb-3w">
+          <a
+            className="fr-link fr-link--bold"
+            href="/auth/forgot-password"
+            title="Mot de passe oublié ?"
+          >
+            Mot de passe oublié ?
+          </a>
         </div>
 
         <button className="fr-btn" type="submit">
