@@ -5,7 +5,11 @@ import { redirect } from 'next/navigation';
 // Components
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 
-export default async function ForgotPasswordPage({ searchParams }) {
+export default async function ForgotPasswordPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | undefined>;
+}) {
   // Custom server action to handle the form submission
   async function requestNewPassword(data: FormData) {
     'use server';
