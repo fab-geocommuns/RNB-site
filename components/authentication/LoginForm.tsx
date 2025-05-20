@@ -27,6 +27,8 @@ export default function LoginForm() {
 
   const prefilledEmail = params.get('email') || '';
 
+  const [email, setEmail] = useState(prefilledEmail);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -34,13 +36,13 @@ export default function LoginForm() {
     setCredentialsError(false);
 
     const form = e.currentTarget;
-    const username = (form.elements.namedItem('username') as HTMLInputElement)
+    const email = (form.elements.namedItem('username') as HTMLInputElement)
       .value;
     const password = (form.elements.namedItem('password') as HTMLInputElement)
       .value;
 
     const loginResult = await signIn('credentials', {
-      username,
+      username: email,
       password,
       callbackUrl: redirectUrl,
       redirect: false,
@@ -97,6 +99,10 @@ export default function LoginForm() {
             type="text"
             name="username"
             id="username"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             defaultValue={prefilledEmail}
           />
         </div>
@@ -117,7 +123,7 @@ export default function LoginForm() {
         <div className="fr-mb-3w">
           <a
             className="fr-link fr-link--bold"
-            href="/auth/forgot-password"
+            href={`/auth/mdp-oublie?email=${encodeURIComponent(email)}`}
             title="Mot de passe oublié ?"
           >
             Mot de passe oublié ?
