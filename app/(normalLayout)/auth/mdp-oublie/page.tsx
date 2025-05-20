@@ -69,9 +69,9 @@ export default async function ForgotPasswordPage({ searchParams }) {
                 )}
 
                 <p>
-                  Indiquez l'email de votre compte RNB pour que nous puissions
-                  vous envoyer des instructions de réinitilisation de votre mot
-                  de passe.
+                  Indiquez l&apos;email de votre compte RNB pour que nous
+                  puissions vous envoyer des instructions de réinitilisation de
+                  votre mot de passe.
                 </p>
                 <form action={requestNewPassword}>
                   <div className="fr-input-group fr-mb-6v fr-mt-10v">
