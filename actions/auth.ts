@@ -20,9 +20,12 @@ export async function changePassword(
     },
   );
 
-  const resData = await res.json();
-
-  console.log('Change password response', resData);
+  // Check if the response is successful
+  // If the response is not 204, we need to parse the response body
+  let resData;
+  if (res.status !== 204) {
+    resData = await res.json();
+  }
 
   return {
     response_code: res.status,
