@@ -210,7 +210,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           associations est invité à apporter sa pierre au RNB.
         </p>
         <p>
-          Partagez la connaissance de votre territoire, c&apos;est bénéficiez en
+          Partager la connaissance de votre territoire, c&apos;est bénéficier en
           retour des améliorations apportées par les autres pour une donnée
           bâtimentaire la plus proche du terrain.
         </p>
