@@ -24,15 +24,15 @@ export default function ChangePasswordForm({
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const new_pwd = data.get('password') as string;
-    const new_pwd_confirmation = data.get('password_confirmation') as string;
+    const newPwd = data.get('password') as string;
+    const newPwdConfirmation = data.get('password_confirmation') as string;
 
     // Call the action
     const result = await changePassword(
       b64UserId,
       token,
-      new_pwd,
-      new_pwd_confirmation,
+      newPwd,
+      newPwdConfirmation,
     );
 
     if (result.response_code === 204) {
