@@ -117,7 +117,7 @@ export default async function Home() {
         <div className="section">
           <div className="fr-grid-row fr-grid-row--gutters">
             <div className="fr-col-12 fr-col-md-7">
-              <div className="block block--blue">
+              <div className="block block--blue block--fill">
                 <h3 className="block__title">Carte des bâtiments</h3>
                 <p className="block__subtitle">
                   Cherchez une adresse ou un identifiant RNB et consultez les 43

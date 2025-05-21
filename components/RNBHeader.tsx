@@ -7,11 +7,10 @@ import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 
 // Auth
-import { signOut } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 
 // Routes
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 // Logo
 import logo from '@/public/images/logo.png';
@@ -31,6 +30,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   const { data: session } = useSession();
 
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [redirectUrl, setRedirectUrl] = useState(pathname);
 
   const [quickActions, setQuickActions] = useState([]);
@@ -115,7 +115,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       let goBackToSiteQA = {
         iconId: 'fr-icon-arrow-left-line',
         linkProps: {
-          href: '/',
+          href: `/carte?${searchParams.toString()}`,
         },
         text: 'Retour au site',
       };
