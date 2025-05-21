@@ -27,6 +27,9 @@ export default function LoginForm() {
 
   const prefilledEmail = params.get('email') || '';
 
+  const [email, setEmail] = useState(prefilledEmail);
+  const [password, setPassword] = useState('');
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -34,14 +37,10 @@ export default function LoginForm() {
     setCredentialsError(false);
 
     const form = e.currentTarget;
-    const username = (form.elements.namedItem('username') as HTMLInputElement)
-      .value;
-    const password = (form.elements.namedItem('password') as HTMLInputElement)
-      .value;
 
     const loginResult = await signIn('credentials', {
-      username,
-      password,
+      username: email,
+      password: password,
       callbackUrl: redirectUrl,
       redirect: false,
     });
@@ -60,7 +59,7 @@ export default function LoginForm() {
         <>
           <div className="fr-mb-3w">
             <Alert
-              description="Identifiant ou mot de passe incorrect"
+              description="Email ou mot de passe incorrect"
               severity="error"
               small
               closable={false}
@@ -88,15 +87,19 @@ export default function LoginForm() {
         method="post"
       >
         <div className="fr-input-group">
-          <label className="fr-label" htmlFor="username">
-            Identifiant
+          <label className="fr-label" htmlFor="email">
+            Email
           </label>
 
           <input
             className="fr-input"
             type="text"
-            name="username"
-            id="username"
+            name="email"
+            id="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             defaultValue={prefilledEmail}
           />
         </div>
@@ -110,8 +113,22 @@ export default function LoginForm() {
             type="password"
             name="password"
             id="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             autoFocus={prefilledEmail !== ''}
           />
+        </div>
+
+        <div className="fr-mb-3w">
+          <a
+            className="fr-link fr-link--bold"
+            href={`/auth/mdp-oublie?email=${encodeURIComponent(email)}`}
+            title="Mot de passe oublié ?"
+          >
+            Mot de passe oublié ?
+          </a>
         </div>
 
         <button className="fr-btn" type="submit">
