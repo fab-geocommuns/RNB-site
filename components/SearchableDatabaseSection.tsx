@@ -1,20 +1,21 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
 import DBCard from './DBCard';
-import { DiffusionDatabase, Attribute } from './diffusionDatabase.type';
+import { DiffusionDatabase } from './diffusionDatabase.type';
 import SearchBar from '@codegouvfr/react-dsfr/SearchBar';
 
 import styles from '@/styles/searchBlock.module.scss';
 import { fuzzySearchAttributes } from './util/fuzzySearchAttributes';
-import va, { track } from '@vercel/analytics';
+import va from '@vercel/analytics';
 // @ts-ignore
 import debounce from 'lodash.debounce';
 import useQueryParamState from '@/utils/useQueryParamState';
-interface Props {
+import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
+
+type Props = {
   databases: DiffusionDatabase[];
-}
+};
 
 const AttributesSearchBar = ({
   onDebouncedChange,
@@ -52,15 +53,16 @@ const AttributesSearchBar = ({
   );
 };
 
-const EmptyState = () => {
+const EmptyState = ({ query }: { query: string }) => {
   return (
-    <div>
-      Aucun attribut correspondant à cette description n’a été trouvé dans les
-      bases dans lesquelles les ID-RNB sont diffusés.
-      <br />
+    <CallOut
+      title={`Aucun attribut correspondant à « ${query} » n’a été trouvé`}
+      iconId="ri-information-line"
+      colorVariant="blue-ecume"
+    >
       Voici d’autres bases qui pourraient contenir les données qui vous
-      intéressent :
-    </div>
+      intéressent.
+    </CallOut>
   );
 };
 
@@ -112,7 +114,7 @@ export default function SearchableDatabaseSection({ databases }: Props) {
         />
       </div>
       <div>
-        {searchActive && !anySearchResults && <EmptyState />}
+        {searchActive && !anySearchResults && <EmptyState query={search} />}
         {displayedDatabases.map((database) => (
           <DBCard
             key={database.id}
