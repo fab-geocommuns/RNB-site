@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 type Props = {
   onSuggestionSelected: (suggestion: AddressSuggestion) => void;
-  onEnterPress?: () => void;
+  onEnterPress?: (value: string) => void;
   onEscapePress?: () => void;
   additionalSuggestionsClassname?: string;
   render: (inputProps: {
@@ -52,7 +52,7 @@ export default function AddressInput({
     setKeyDown(e);
 
     if (e.key === 'Enter' && onEnterPress) {
-      onEnterPress();
+      onEnterPress(query);
     }
 
     if (e.key === 'Escape') {
