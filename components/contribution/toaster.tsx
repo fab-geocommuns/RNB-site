@@ -2,7 +2,7 @@ import Notice from '@codegouvfr/react-dsfr/Notice';
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState, store } from '@/stores/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export async function throwErrorMessageForHumans(response: Response) {
   const errorData = await response.json();
@@ -26,9 +26,8 @@ export async function throwErrorMessageForHumans(response: Response) {
 export function toasterSuccess(dispatch: AppDispatch, msg: string) {
   dispatch(
     Actions.map.setToasterInfos({
-      success: true,
-      successMsg: msg,
-      errorMsg: '',
+      state: 'success',
+      message: msg,
     }),
   );
 }
@@ -36,44 +35,53 @@ export function toasterSuccess(dispatch: AppDispatch, msg: string) {
 export function toasterError(dispatch: AppDispatch, msg: string) {
   dispatch(
     Actions.map.setToasterInfos({
-      success: false,
-      successMsg: '',
-      errorMsg: msg,
+      state: 'error',
+      message: msg,
     }),
   );
 }
 
 export function toasterReset(dispatch: AppDispatch) {
-  toasterSuccess(dispatch, '');
+  dispatch(
+    Actions.map.setToasterInfos({
+      state: null,
+      message: '',
+    }),
+  );
 }
 
 export default function Toaster() {
   const toasterInfos = useSelector(
     (state: RootState) => state.map.toasterInfos,
   );
-  const dispatch: AppDispatch = useDispatch();
+  const [showToaster, setShowToaster] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => {
-        toasterReset(dispatch);
-      },
-      toasterInfos.success ? 4000 : 10000,
-    );
-    return () => clearTimeout(timer);
+    if (toasterInfos.state) {
+      setShowToaster(true);
+      const timer = setTimeout(
+        () => {
+          setShowToaster(false);
+        },
+        toasterInfos.state === 'success' ? 6000 : 12000,
+      );
+      return () => clearTimeout(timer);
+    } else {
+      setShowToaster(false);
+    }
   }, [toasterInfos]);
 
   return (
     <>
       <div className={styles.noticeContainer}>
         <div
-          className={`${styles.notice} ${toasterInfos.successMsg || toasterInfos.errorMsg ? styles.noticeVisible : ''}`}
+          className={`${styles.notice} ${showToaster ? styles.noticeVisible : ''}`}
         >
-          {toasterInfos.success && (
-            <Notice title={toasterInfos.successMsg} severity="info" />
-          )}
-          {toasterInfos.errorMsg && (
-            <Notice title={toasterInfos.errorMsg} severity="warning" />
+          {showToaster && (
+            <Notice
+              title={toasterInfos.message}
+              severity={toasterInfos.state === 'success' ? 'info' : 'warning'}
+            />
           )}
         </div>
       </div>

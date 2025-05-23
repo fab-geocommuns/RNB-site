@@ -135,19 +135,18 @@ $panel-padding: 1.5*$spacing;
     z-index: 100;
     display: flex;
     justify-content: center;
-}
-
-.notice {
-    opacity: 0;
-    transform: translateY(100%);
-    transition: none;
-}
-
-.noticeVisible {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.4s ease, transform 0.5s ease;
-    pointer-events: auto;
+    .notice {
+        opacity: 0;
+        transform: translateY(100%);
+        transition: none;
+    }
+    
+    .noticeVisible {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.4s ease, transform 0.5s ease;
+        pointer-events: auto;
+    }
 }
 
 .editToggle {
