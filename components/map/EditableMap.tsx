@@ -131,6 +131,10 @@ function EditedShape({
 
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
 
+  useEffect(() => {
+    setCurrentShape(editedShape);
+  }, [editedShape]);
+
   // add the draw plugin to the map
   useEffect(() => {
     console.log('EditedShape mounted', currentShape);
@@ -158,6 +162,7 @@ function EditedShape({
       const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
         console.log('handleBuildingShapeUpdate', e.features[0].geometry);
         setCurrentShape(e.features[0].geometry);
+        //onCloseShape(e.features[0].geometry);
       };
       map.on('draw.update', handleBuildingShapeUpdate);
 
@@ -225,21 +230,23 @@ function EditedShape({
       return;
     }
 
-    drawRef.current.deleteAll();
-    drawRef.current.add({
-      id: BUILDING_DRAW_SHAPE_FEATURE_ID,
-      type: 'Feature',
-      properties: {},
-      geometry: currentShape,
-    });
+    if (currentShape) {
+      drawRef.current.deleteAll();
+      drawRef.current.add({
+        id: BUILDING_DRAW_SHAPE_FEATURE_ID,
+        type: 'Feature',
+        properties: {},
+        geometry: currentShape,
+      });
 
-    const lastLayer = map.getStyle().layers.at(-1);
-    if (lastLayer) {
-      const drawLayers = map
-        .getStyle()
-        .layers?.filter((layer) => layer.id.includes('gl-draw'));
-      for (const draw_layer of drawLayers) {
-        map.moveLayer(draw_layer.id, lastLayer.id);
+      const lastLayer = map.getStyle().layers.at(-1);
+      if (lastLayer) {
+        const drawLayers = map
+          .getStyle()
+          .layers?.filter((layer) => layer.id.includes('gl-draw'));
+        for (const draw_layer of drawLayers) {
+          map.moveLayer(draw_layer.id, lastLayer.id);
+        }
       }
     }
   }, [map, drawRef.current, currentShape]);
