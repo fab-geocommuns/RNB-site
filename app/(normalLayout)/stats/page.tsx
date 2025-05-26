@@ -2,6 +2,7 @@
 
 // Styles
 import styles from '@/styles/stats.module.scss';
+import Link from 'next/link';
 
 // Settings
 import { useState } from 'react';
@@ -76,9 +77,9 @@ export default function Page() {
                 <h2>{stat_display('building_counts')}</h2>
                 <div>Bâtiments référencés</div>
                 <div className="fr-pt-3w">
-                  <a href="/carte" className="fr-link">
+                  <Link href="/carte" className="fr-link">
                     Voir la carte
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -91,9 +92,12 @@ export default function Page() {
                   identifiants RNB
                 </div>
                 <div className="fr-pt-3w">
-                  <a href="/outils-services/rapprochement" className="fr-link">
+                  <Link
+                    href="/outils-services/rapprochement"
+                    className="fr-link"
+                  >
                     Les parcourir
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -103,9 +107,9 @@ export default function Page() {
                 <h2>{stat_display('contributions_count')}</h2>
                 <div>Signalements d&apos;erreur reçus</div>
                 <div className="fr-pt-3w">
-                  <a href="/carte" className="fr-link">
+                  <Link href="/carte" className="fr-link">
                     Faire un signalement
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -12,6 +12,7 @@ hljs.registerLanguage('python', python);
 import TagsList from '@/components/blog/TagsList';
 import BackToTop from '@/components/BackToTop';
 import NewsletterForm from '@/components/NewsletterForm';
+import Link from 'next/link';
 
 // Style
 import styles from '@/styles/blogArticle.module.scss';
@@ -95,8 +96,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <p>
                 <b>Infolettre et réseaux</b>
                 <br />
-                Restez informé des <a href="/blog">actualités</a> du RNB en vous
-                inscrivant à l&apos;infolettre ou en nous suivant sur{' '}
+                Restez informé des <Link href="/blog">actualités</Link> du RNB
+                en vous inscrivant à l&apos;infolettre ou en nous suivant sur{' '}
                 <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">
                   LinkedIn
                 </a>
