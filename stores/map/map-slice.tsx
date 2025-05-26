@@ -140,6 +140,7 @@ export const mapSlice = createSlice({
       state.addressSearch.unknown_rnb_id = action.payload;
     },
     setMarker(state, action) {
+      // if(state.operation === 'create') state.operation = null;
       state.marker = action.payload;
     },
     setMoveTo(state, action) {
