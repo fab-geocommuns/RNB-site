@@ -8,9 +8,9 @@ import ChangePasswordForm from '@/components/ChangePasswordForm';
 export default async function ResetPasswordPage({
   params,
 }: {
-  params: { b64UserId: string; token: string };
+  params: Promise<{ b64UserId: string; token: string }>;
 }) {
-  const { b64UserId, token } = params;
+  const { b64UserId, token } = await params;
 
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();
