@@ -14,7 +14,7 @@ import {
  * Ajout et gestion des événements de la carte
  * @param map
  */
-export const useMapEvents = (map?: maplibregl.Map) => {
+export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   useState<string>();
   const previousHoveredFeatureId = useRef<string>();
@@ -47,13 +47,14 @@ export const useMapEvents = (map?: maplibregl.Map) => {
             // It is a building
             const rnb_id = featureCloseToCursor.properties.rnb_id;
             dispatch(Actions.map.selectBuilding(rnb_id));
-          }
-
-          if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
+          } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
             // It is an ADS
             const file_number = featureCloseToCursor.properties.file_number;
             dispatch(Actions.map.selectADS(file_number));
           }
+        } else {
+          // click out unselects the currently selected item
+          dispatch(Actions.map.unselectItem());
         }
       };
 
