@@ -11,7 +11,25 @@ test.describe("Page d'accueil", () => {
     await expect(homePage.faqButton).toHaveAttribute('href', /faq/);
   });
 
-  test('doit contenir le champ de recherche rapide pour la carte qui fonctionne avec clavier', async ({
+  test("doit contenir le champ de recherche rapide d'ID-RNB pour la carte", async ({
+    homePage,
+    page,
+    mapLocator,
+    browserName,
+  }) => {
+    await expect(homePage.searchMapField).toBeVisible();
+    await homePage.searchMapField.scrollIntoViewIfNeeded();
+    await homePage.searchMapField.fill('CDVXSAKG94Q5');
+    await homePage.searchMapField.press('Enter');
+    await page.waitForURL('**/carte*');
+
+    if (browserName !== 'firefox') {
+      const ign = mapLocator('filter["==", ["get", "rnb_id"], "CDVXSAKG94Q5"]');
+      await expect(ign).toBeVisibleOnMap();
+    }
+  });
+
+  test("doit contenir le champ de recherche rapide d'adresse pour la carte qui fonctionne avec clavier", async ({
     homePage,
     page,
     mapLocator,
@@ -31,7 +49,7 @@ test.describe("Page d'accueil", () => {
     }
   });
 
-  test('doit contenir le champ de recherche rapide pour la carte qui fonctionne avec la souris', async ({
+  test("doit contenir le champ de recherche rapide d'adresse pour la carte qui fonctionne avec la souris", async ({
     homePage,
     page,
     mapLocator,
