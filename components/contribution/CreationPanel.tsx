@@ -73,10 +73,9 @@ export default function CreationPanel() {
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.map.setBuildingNewShape(null));
         dispatch(Actions.map.setOperation(null));
-        response.json().then((data) => {
-          const rnb_id = data.rnb_id;
-          toasterSuccess(dispatch, `Bâtiment ${rnb_id} créé avec succès`);
-        });
+        const data = await response.json();
+        const rnb_id = data.rnb_id;
+        toasterSuccess(dispatch, `Bâtiment ${rnb_id} créé avec succès`);
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
