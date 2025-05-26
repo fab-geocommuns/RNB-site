@@ -64,13 +64,7 @@ export const SRC_PLOTS = 'plotstiles';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
-import {
-  MapBackgroundLayer,
-  MapLayer,
-  MapBuildingsLayer,
-} from '@/stores/map/map-slice';
-import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
-import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import { MapBackgroundLayer, MapBuildingsLayer } from '@/stores/map/map-slice';
 
 export const STYLES: Record<
   MapBackgroundLayer,
