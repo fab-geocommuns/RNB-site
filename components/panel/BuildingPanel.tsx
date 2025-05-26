@@ -3,8 +3,7 @@
 import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
-// @ts-ignore
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
 
 // Styles
