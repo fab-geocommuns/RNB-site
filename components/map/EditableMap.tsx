@@ -1,4 +1,5 @@
 import { Map, Layer, Source, useMap } from 'react-map-gl/maplibre';
+// @ts-ignore
 import type { FillLayer, LineLayer } from 'react-map-gl/maplibre';
 import satellite from '@/components/map/mapstyles/satellite.json';
 import { useRef, useEffect, useState } from 'react';
@@ -24,15 +25,14 @@ type DisplayLayer = 'point' | 'shape';
 export type Layer = BaseLayer | ExtraLayer | DisplayLayer;
 
 type Props = {
-  editedShape: GeoJSON.FeatureCollection | null;
-  onEditedShapeChange: (shape: GeoJSON.FeatureCollection) => void;
-  selectedId: string;
+  editedShape: GeoJSON.Geometry | null;
+  onEditedShapeChange: (shape: GeoJSON.Geometry) => void;
   coords: { lat: number; lng: number } | null;
   setCoords: (coords: { lat: number; lng: number }) => void;
   zoom: number;
   setZoom: (zoom: number) => void;
-  layers: Layer[];
-  onLayersChange: (layers: Layer[]) => void;
+  layers: string[];
+  onLayersChange: (layers: string[]) => void;
   isEditing: boolean;
   onCancelEdition: () => void;
 };
@@ -115,9 +115,9 @@ export default function EditableMap({
 }
 
 type EditedShapeProps = {
-  editedShape: GeoJSON.FeatureCollection | null;
+  editedShape: GeoJSON.Geometry | null;
   onCancel: () => void;
-  onCloseShape: (shape: GeoJSON.FeatureCollection) => void;
+  onCloseShape: (shape: GeoJSON.Geometry) => void;
 };
 
 function EditedShape({
