@@ -144,7 +144,7 @@ export default function AddressSearchMap() {
     const position = featureToPosition(suggestion);
     // Add a marker to the map
     dispatch(
-      Actions.map.setMarker({
+      Actions.map.setMarkerAndReset({
         lat: position.lat,
         lng: position.lng,
       }),
