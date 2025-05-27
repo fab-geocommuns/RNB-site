@@ -16,7 +16,6 @@ import AddressAutocomplete, {
   AddressSuggestion,
 } from '@/components/address/AddressAutocomplete';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
-import { queryIsRnbId, queryIsCoordinates } from '@/components/address/utils';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(
@@ -61,6 +60,7 @@ export default function AddressSearchMap() {
     // If the query is coordinates we bypass the address search as well and focus the area
     if (e.key === 'Enter' && queryIsCoordinates(query)) {
       const coordinates = query.split(',');
+
       dispatch(
         Actions.map.setMoveTo({
           lat: parseFloat(coordinates[0]),
@@ -74,12 +74,25 @@ export default function AddressSearchMap() {
     setKeyDown(e);
   };
 
+  const queryIsRnbId = (q: string) => {
+    return q.match(
+      /^[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}[\s|-]?[a-zA-Z0-9]{4}$/,
+    );
+  };
+
+  const queryIsCoordinates = (q: string) => {
+    // Format is `lat,lng,zoom`
+    return q.match(
+      /^[0-9]{1,2}\.[0-9]{1,10},(-)?[0-9]{1,2}\.[0-9]{1,10},[0-9]{1,2}\.?[0-9]{0,10}$/,
+    );
+  };
+
   // used when loading the page with a rnb id in the URL
   const search = async (q: string, coords: string[] | null) => {
     if (queryIsRnbId(q)) {
       setAutocompleteActive(false);
+      setQuery(q);
       const building = (await dispatch(Actions.map.selectBuilding(q))) as any;
-      console.log('ADRESS', coords[2]);
       dispatch(
         Actions.map.setMoveTo({
           lat: parseFloat(building.payload.point.coordinates[1]),
@@ -114,7 +127,6 @@ export default function AddressSearchMap() {
   const handleCoordinates = (coords: string[]) => {
     // fill the input with the address
     setAutocompleteActive(false);
-    console.log('handleCoordinates', coords[2]);
     dispatch(
       Actions.map.setMoveTo({
         lat: parseFloat(coords[0]),
@@ -129,12 +141,8 @@ export default function AddressSearchMap() {
     const coords = params.get('coords');
     const coordinates =
       coords && queryIsCoordinates(coords) ? coords.split(',') : null;
-    if (q !== null) {
-      search(q, coordinates);
-    }
-    if (coordinates !== null) {
-      handleCoordinates(coordinates);
-    }
+    if (q !== null) search(q, coordinates);
+    if (coordinates !== null) handleCoordinates(coordinates);
   }, []);
 
   // @ts-ignore

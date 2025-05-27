@@ -188,7 +188,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
     // Set
     // @ts-ignore
     setQuickActions(newQuickActions);
-  }, [pathname, session]);
+  }, [pathname, session, searchParams]);
 
   return (
     <>

@@ -9,7 +9,6 @@ import { usePathname, useSearchParams } from 'next/navigation';
 export default function EditRNBButton({ modal }: any) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   let editUrl = '/edition';
   if (pathname === '/carte') {
     editUrl = `/edition?${searchParams.toString()}`;
