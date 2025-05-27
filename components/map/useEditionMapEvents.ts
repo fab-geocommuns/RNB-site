@@ -34,27 +34,28 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        if (featureCloseToCursor && shapeInteractionMode !== 'drawing') {
-          // What did we click on?
-
-          if (
-            [
-              LAYER_BDGS_POINT,
-              LAYER_BDGS_SHAPE_BORDER,
-              LAYER_BDGS_SHAPE_POINT,
-            ].includes(featureCloseToCursor.layer.id)
-          ) {
-            // It is a building
-            const rnb_id = featureCloseToCursor.properties.rnb_id;
-            dispatch(Actions.map.selectBuilding(rnb_id));
-          } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
-            // It is an ADS
-            const file_number = featureCloseToCursor.properties.file_number;
-            dispatch(Actions.map.selectADS(file_number));
+        if (shapeInteractionMode !== 'drawing') {
+          if (featureCloseToCursor) {
+            // What did we click on?
+            if (
+              [
+                LAYER_BDGS_POINT,
+                LAYER_BDGS_SHAPE_BORDER,
+                LAYER_BDGS_SHAPE_POINT,
+              ].includes(featureCloseToCursor.layer.id)
+            ) {
+              // It is a building
+              const rnb_id = featureCloseToCursor.properties.rnb_id;
+              dispatch(Actions.map.selectBuilding(rnb_id));
+            } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
+              // It is an ADS
+              const file_number = featureCloseToCursor.properties.file_number;
+              dispatch(Actions.map.selectADS(file_number));
+            }
+          } else {
+            // click out unselects the currently selected item
+            dispatch(Actions.map.unselectItem());
           }
-        } else {
-          // click out unselects the currently selected item
-          dispatch(Actions.map.unselectItem());
         }
       };
 
