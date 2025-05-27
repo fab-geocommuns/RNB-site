@@ -97,7 +97,7 @@ export default function CreationPanel() {
           <div className={`${styles.panelSection} ${styles.noPad}`}>
             {mapCoordinates && mapCoordinates.zoom < 18 ? (
               <div style={{ display: 'flex' }}>
-                <span class="fr-pr-2v">
+                <span className="fr-pr-2v">
                   <i className="fr-icon-warning-line"></i>
                 </span>
                 Zoomez sur la carte pour pouvoir tracer le bâtiment avec
