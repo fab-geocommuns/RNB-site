@@ -1,9 +1,10 @@
 // DSFR and styles
-import { DsfrHead } from '@codegouvfr/react-dsfr/next-appdir/DsfrHead';
-import { DsfrProvider } from '@codegouvfr/react-dsfr/next-appdir/DsfrProvider';
-import { getHtmlAttributes } from '@codegouvfr/react-dsfr/next-appdir/getHtmlAttributes';
-import StartDsfr from '@/app/StartDsfr';
-import { defaultColorScheme } from '@/app/defaultColorScheme';
+import {
+  getHtmlAttributes,
+  DsfrHead,
+} from '../dsfr-bootstrap/server-only-index';
+import { DsfrProvider } from '../dsfr-bootstrap';
+import { defaultColorScheme } from '../dsfr-bootstrap/defaultColorScheme';
 import '@/styles/global.scss';
 
 // Auth
@@ -30,10 +31,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const lang = 'fr';
   return (
-    <html lang="fr" {...getHtmlAttributes({ defaultColorScheme })}>
+    <html lang={lang} {...getHtmlAttributes({ lang })}>
       <head>
-        <StartDsfr />
         <DsfrHead />
         <Script id="heap">
           {`
@@ -46,7 +47,7 @@ heap.load("${settings.heapId}");
         <Suspense>
           <Providers>
             <RNBSessionProvider>
-              <DsfrProvider>
+              <DsfrProvider lang={lang}>
                 <FlashMessage />
                 <Alerts />
                 {children}
