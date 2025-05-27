@@ -2,6 +2,8 @@
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import type { GeoJSON } from 'geojson';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import { Actions } from '../store';
 
 export type BuildingAddress = {
@@ -60,8 +62,9 @@ export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
 export type ToasterInfos = {
-  state: null | 'success' | 'error';
-  message: string;
+  success: boolean;
+  successMsg: string;
+  errorMsg: string;
 };
 
 export type MapStore = {
@@ -101,7 +104,7 @@ const initialState: MapStore = {
   operation: null,
   shapeInteractionMode: null,
   buildingNewShape: null,
-  toasterInfos: { state: null, message: '' },
+  toasterInfos: { success: true, successMsg: '', errorMsg: '' },
 };
 
 export const mapSlice = createSlice({
@@ -140,7 +143,7 @@ export const mapSlice = createSlice({
       state.addressSearch.unknown_rnb_id = action.payload;
     },
     setMarkerAndReset(state, action) {
-      if (state.operation === 'create') state.operation = null;
+      state.operation = null;
       state.marker = action.payload;
     },
     setMoveTo(state, action) {
