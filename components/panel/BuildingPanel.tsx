@@ -24,11 +24,14 @@ import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
+import EditRNBButton from '../EditRNBButton';
+
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
 }
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
+  const editBtn = <EditRNBButton />;
   const [copied, setCopied] = useState(false);
   const { is } = useRNBAuthentication();
 
@@ -138,6 +141,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
               )}
             </div>
           </CopyToClipboard>
+          {editBtn}
         </div>
       </div>
 
