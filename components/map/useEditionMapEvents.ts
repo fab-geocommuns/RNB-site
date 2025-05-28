@@ -31,6 +31,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           map,
           e.point.x,
           e.point.y,
+          0,
         );
 
         if (shapeInteractionMode !== 'drawing') {
@@ -66,6 +67,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           map!,
           e.point.x,
           e.point.y,
+          0,
         );
 
         if (shapeInteractionMode === 'drawing') {
