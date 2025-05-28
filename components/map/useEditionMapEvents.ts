@@ -16,8 +16,8 @@ import {
  */
 export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
-  const previousHoveredFeatureId = useRef<string>();
-  const previousHoveredFeatureSource = useRef<string>();
+  const previousHoveredFeatureId = useRef<string | undefined>(undefined);
+  const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.map.shapeInteractionMode,
   );
