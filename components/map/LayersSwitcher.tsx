@@ -111,9 +111,6 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
       case 'vectorOsm':
         setBtnImage(backgroundPlanOSM);
         break;
-      case 'satelliteOrtho':
-        setBtnImage(backgroundSatellite);
-        break;
       default:
         setBtnImage(backgroundSatellite);
         break;
