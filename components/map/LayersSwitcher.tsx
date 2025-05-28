@@ -111,6 +111,9 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
       case 'vectorOsm':
         setBtnImage(backgroundPlanOSM);
         break;
+      case 'satelliteOrtho':
+        setBtnImage(backgroundSatellite);
+        break;
       default:
         setBtnImage(backgroundSatellite);
         break;
@@ -157,6 +160,15 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     isActive={mapLayers.background === 'satellite'}
                     label="Satellite"
                     onClick={() => handleChangeBackgroundClick('satellite')}
+                    image={backgroundSatellite}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('satelliteOrtho')}
+                    isActive={mapLayers.background === 'satelliteOrtho'}
+                    label="Satellite Ortho"
+                    onClick={() =>
+                      handleChangeBackgroundClick('satelliteOrtho')
+                    }
                     image={backgroundSatellite}
                   />
                 </ul>

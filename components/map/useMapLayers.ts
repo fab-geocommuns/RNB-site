@@ -82,8 +82,12 @@ export const STYLES: Record<
     name: 'Satellite',
     style: satellite as StyleSpecification,
   },
+  satelliteOrtho: {
+    name: 'Satellite Ortho',
+    style: satellite as StyleSpecification,
+  },
 };
-
+console.log(STYLES);
 export const DEFAULT_STYLE =
   STYLES[
     (process.env.FOND_DE_CARTE_PAR_DEFAUT as keyof typeof STYLES) ||
