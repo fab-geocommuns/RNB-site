@@ -184,7 +184,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           ? // @ts-ignore
             draw.geometry.coordinates.flat(Infinity)
           : [];
-        if (draw.id && flat_array.length > 1) {
+        if (draw.id && flat_array.length > 4) {
           currentDrawRef.delete(draw.id.toString());
         }
       }
