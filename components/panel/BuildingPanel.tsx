@@ -3,28 +3,28 @@
 import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
-import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
 import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
+import CopyToClipboard from '@/components/util/CopyToClipboard';
 
 // Styles
-import { fr } from '@codegouvfr/react-dsfr';
-import styles from '@/styles/panelBuilding.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
+import styles from '@/styles/panelBuilding.module.scss';
+import { fr } from '@codegouvfr/react-dsfr';
 
 // Analytics
 import va from '@vercel/analytics';
 
 // Hooks
-import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import React, { useEffect, useState } from 'react';
 
 // Store
-import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
