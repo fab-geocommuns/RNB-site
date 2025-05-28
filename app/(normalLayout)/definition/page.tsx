@@ -8,7 +8,6 @@ import { parse } from 'yaml';
 import BuildingList from '@/app/(normalLayout)/definition/BuildingList';
 import { BuildingExample } from '@/app/(normalLayout)/definition/BuildingList.type';
 import BuildingDistinctions from '@/app/(normalLayout)/definition/BuildingDistinctions';
-import { StartDsfrOnHydration } from '@codegouvfr/react-dsfr/next-app-router';
 
 async function fetchBuildingList() {
   const jsonDirectory = path.join(process.cwd(), 'data');
@@ -24,7 +23,6 @@ export default async function Page() {
   const buildingList = (await fetchBuildingList()) as BuildingExample[];
   return (
     <>
-      <StartDsfrOnHydration />
       <div className="fr-container">
         <div className="fr-grid-row">
           <div className="fr-col-12 fr-py-12v">
