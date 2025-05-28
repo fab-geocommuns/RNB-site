@@ -6,6 +6,7 @@ import { useMap } from '@/components/map/useMap';
 import { useMapLayers } from '@/components/map/useMapLayers';
 import { useMapControls } from '@/components/map/useMapControls';
 import { useEditionMapEvents } from '@/components/map/useEditionMapEvents';
+import { useMapSyncCoordinates } from '@/components/map/useMapSyncCoordinates';
 import { useMapStateSync } from '@/components/map/useMapStateSync';
 import {
   MapLayer,
@@ -35,6 +36,7 @@ export default function EditMap({
   });
 
   useMapControls(map);
+  useMapSyncCoordinates(map);
   useEditionMapEvents(map);
   useMapStateSync(map);
   useMapEditBuildingShape(map);
