@@ -13,6 +13,8 @@ import {
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
 import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
+import { Actions, AppDispatch } from '@/stores/store';
+import { useDispatch } from 'react-redux';
 
 type Props = {
   disabledLayers?: MapLayer[];
@@ -45,7 +47,7 @@ export function EditMap({
   defaultBuildingLayer,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
-
+  const dispatch: AppDispatch = useDispatch();
   useMapLayers({
     map,
     defaultBackgroundLayer,
@@ -54,7 +56,11 @@ export function EditMap({
   });
 
   useMapControls(map);
-  useMapEvents(map);
+  useMapEvents(map, {
+    onBuildingClick: (building: any) => {
+      dispatch(Actions.contribution.selectBuilding(building.rnb_id));
+    },
+  });
   useMapStateSync(map);
   useMapEditBuildingShape(map);
   return mapContainer;

@@ -196,7 +196,12 @@ export default function EditionPanel() {
     (state: RootState) => state.map.selectedItem,
   );
   const dispatch: AppDispatch = useDispatch();
-  const operation = useSelector((state: RootState) => state.map.operation);
+  const operation = useSelector(
+    (state: RootState) => state.contribution.operation,
+  );
+  const selectedItems = useSelector(
+    (state: RootState) => state.contribution.mergedItems,
+  );
   const zoomLevel = useSelector((state: RootState) => state.map.moveTo?.zoom);
 
   const selectedBuilding =
@@ -204,11 +209,19 @@ export default function EditionPanel() {
       ? (selectedItem as SelectedBuilding)
       : null;
 
-  const toggleCreateBuilding = () => {
-    if (operation === 'create') {
-      dispatch(Actions.map.setOperation(null));
+  const toggleMergeBuilding = () => {
+    if (operation === 'merging') {
+      dispatch(Actions.contribution.stopOperation());
     } else {
-      dispatch(Actions.map.setOperation('create'));
+      dispatch(Actions.contribution.startMerging());
+    }
+  };
+
+  const toggleCreateBuilding = () => {
+    if (operation === 'creating') {
+      dispatch(Actions.contribution.startCreating());
+    } else {
+      dispatch(Actions.contribution.stopOperation());
     }
   };
 
@@ -254,6 +267,30 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
+        <Button
+          onClick={toggleMergeBuilding}
+          className={operation === 'create' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'create'
+                  ? createSelectedBuildingImage.src
+                  : createBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'create' ? styles.actionSelected : ''}
+            >
+              créer
+            </small>
+          </div>
+        </Button>
       </div>
 
       {operation == 'update' && selectedBuilding && (
@@ -266,6 +303,12 @@ export default function EditionPanel() {
       {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
+        </PanelWrapper>
+      )}
+      {operation == 'merging' && (
+        <PanelWrapper>
+          <div>Selection:</div>
+          <div>{JSON.stringify(selectedItems)}</div>
         </PanelWrapper>
       )}
 

@@ -14,7 +14,12 @@ import {
  * Ajout et gestion des événements de la carte
  * @param map
  */
-export const useMapEvents = (map?: maplibregl.Map) => {
+export const useMapEvents = (
+  map: maplibregl.Map,
+  { onBuildingClick }: { onBuildingClick: (building: any) => void } = {
+    onBuildingClick: () => {},
+  },
+) => {
   const dispatch: AppDispatch = useDispatch();
   useState<string>();
   const previousHoveredFeatureId = useRef<string>();
@@ -46,7 +51,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           ) {
             // It is a building
             const rnb_id = featureCloseToCursor.properties.rnb_id;
-            dispatch(Actions.map.selectBuilding(rnb_id));
+            onBuildingClick(featureCloseToCursor.properties);
           }
 
           if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
