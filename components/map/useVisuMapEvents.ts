@@ -18,9 +18,6 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   const previousHoveredFeatureId = useRef<string>();
   const previousHoveredFeatureSource = useRef<string>();
-  const shapeInteractionMode = useSelector(
-    (state: RootState) => state.map.shapeInteractionMode,
-  );
 
   // Initialisation des événements
   useEffect(() => {
@@ -33,7 +30,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        if (featureCloseToCursor && shapeInteractionMode !== 'drawing') {
+        if (featureCloseToCursor) {
           // What did we click on?
 
           if (
@@ -66,9 +63,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        if (shapeInteractionMode === 'drawing') {
-          map!.getCanvas().style.cursor = 'crosshair';
-        } else if (featureCloseToCursor) {
+        if (featureCloseToCursor) {
           map!.getCanvas().style.cursor = 'pointer';
         } else {
           map!.getCanvas().style.cursor = '';
