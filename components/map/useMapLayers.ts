@@ -2,6 +2,7 @@
 import vectorOsm from '@/components/map/mapstyles/vector-osm.json';
 import vectorIgnStandard from '@/components/map/mapstyles/vector-ign-standard.json';
 import satellite from '@/components/map/mapstyles/satellite.json';
+import satelliteOrtho from '@/components/map/mapstyles/satellite-ortho.json';
 
 // Maplibre styles
 import maplibregl, { StyleSpecification } from 'maplibre-gl';
@@ -84,10 +85,9 @@ export const STYLES: Record<
   },
   satelliteOrtho: {
     name: 'Satellite Ortho',
-    style: satellite as StyleSpecification,
+    style: satelliteOrtho as StyleSpecification,
   },
 };
-console.log(STYLES);
 export const DEFAULT_STYLE =
   STYLES[
     (process.env.FOND_DE_CARTE_PAR_DEFAUT as keyof typeof STYLES) ||
