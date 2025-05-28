@@ -139,7 +139,8 @@ export const mapSlice = createSlice({
     setAddressSearchUnknownRNBId(state, action) {
       state.addressSearch.unknown_rnb_id = action.payload;
     },
-    setMarker(state, action) {
+    setMarkerAndReset(state, action) {
+      state.operation = null;
       state.marker = action.payload;
     },
     setMoveTo(state, action) {
