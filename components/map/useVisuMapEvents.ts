@@ -16,7 +16,6 @@ import {
  */
 export const useVisuMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
-  useState<string>();
   const previousHoveredFeatureId = useRef<string>();
   const previousHoveredFeatureSource = useRef<string>();
   const shapeInteractionMode = useSelector(
