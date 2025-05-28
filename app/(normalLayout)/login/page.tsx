@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import styles from '@/styles/login.module.scss';
 import LoginForm from '@/components/authentication/LoginForm';
 import CreateAccountForm from '@/components/authentication/CreateAccountForm';
+import { StartDsfrOnHydration } from '@codegouvfr/react-dsfr/next-app-router';
 
 export default async function LoginPage() {
   // We don't want to allow users that are already logged in to access this page
@@ -18,6 +19,7 @@ export default async function LoginPage() {
 
   return (
     <>
+      <StartDsfrOnHydration />
       <main className="fr-pt-md-14v" role="main">
         <div className="fr-container fr-container--fluid fr-mb-md-14v">
           <div className="fr-grid-row fr-grid-row--gutters">

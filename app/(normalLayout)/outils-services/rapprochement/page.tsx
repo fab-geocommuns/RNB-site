@@ -19,6 +19,7 @@ import mountainPhoto from '@/public/images/bdgs-mountains.jpg';
 import metalBdgPhoto from '@/public/images/metal-bdg.jpg';
 import bdgRiverPhoto from '@/public/images/bdg-river.jpg';
 import siloPhoto from '@/public/images/silo-bdg.jpg';
+import Link from 'next/link';
 
 export default async function Page() {
   let dbs = null;
@@ -47,12 +48,14 @@ export default async function Page() {
                 <h2 className="blockTitle">Comment faire ?</h2>
                 <ol>
                   <li>
-                    <a href="#liste">Identifiez les bases</a> contenant les
-                    informations qui vous intéressent
+                    <Link href="#liste">Identifiez les bases</Link> contenant
+                    les informations qui vous intéressent
                   </li>
                   <li>
-                    <a href="#identifiants">Obtenez les identifiants RNB</a> de
-                    vos bâtiments grâce à nos outils et services
+                    <Link href="#identifiants">
+                      Obtenez les identifiants RNB
+                    </Link>{' '}
+                    de vos bâtiments grâce à nos outils et services
                   </li>
                   <li>
                     Croisez les bases en utilisant les identifiants RNB comme
@@ -174,18 +177,18 @@ export default async function Page() {
                 <ul>
                   <li>
                     Article :{' '}
-                    <a href="/blog/identifiant-batiment-perenne">
+                    <Link href="/blog/identifiant-batiment-perenne">
                       Qu&apos;est-ce qu&apos;est un ID de bâtiment pérenne ?
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     Standard :{' '}
-                    <a href="/definition">
+                    <Link href="/definition">
                       la définition retenue d&apos;un bâtiment
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    La <a href="/faq">Foire aux Questions</a> du RNB
+                    La <Link href="/faq">Foire aux Questions</Link> du RNB
                   </li>
                 </ul>
               </div>

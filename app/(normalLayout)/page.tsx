@@ -34,6 +34,7 @@ import { getBreakingNews } from '@/utils/blog';
 
 // Utils
 import { getDatabases } from '@/utils/databases';
+import Link from 'next/link';
 
 export const revalidate = 10;
 
@@ -63,9 +64,9 @@ export default async function Home() {
                     bâtiments et l&apos;échange d&apos;informations les
                     concernant
                   </p>
-                  <a href="/carte" className="fr-btn">
+                  <Link href="/carte" className="fr-btn">
                     Voir la carte des bâtiments
-                  </a>
+                  </Link>
                 </div>
 
                 <div className={styles.banner__arrowtarget}>
@@ -74,12 +75,12 @@ export default async function Home() {
                     alt=""
                     className={styles.banner__arrow}
                   />
-                  <a
+                  <Link
                     href={`carte?q=${bannerId}`}
                     className={styles.banner__rnb_id}
                   >
                     {bannerId}
-                  </a>
+                  </Link>
                 </div>
 
                 <ImageNext
@@ -131,11 +132,11 @@ export default async function Home() {
               <div className="block block--paleBlue">
                 <h3 className="block__title">Actualités</h3>
                 <p>
-                  Restez informé des <a href="/blog">actualités</a> du RNB en
-                  vous inscrivant à l&apos;infolettre ou en nous suivant sur{' '}
-                  <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">
+                  Restez informé des <Link href="/blog">actualités</Link> du RNB
+                  en vous inscrivant à l&apos;infolettre ou en nous suivant sur{' '}
+                  <Link href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">
                     LinkedIn
-                  </a>
+                  </Link>
                   .
                 </p>
                 <NewsletterForm />
@@ -238,9 +239,9 @@ export default async function Home() {
                   géographique et forestière (IGN).
                 </p>
                 <div className="blockLinkShell">
-                  <a href="/faq" className="fr-btn fr-btn--secondary">
+                  <Link href="/faq" className="fr-btn fr-btn--secondary">
                     Consulter la Foire aux Questions
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

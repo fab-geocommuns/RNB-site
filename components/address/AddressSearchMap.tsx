@@ -76,7 +76,7 @@ export default function AddressSearchMap() {
   };
 
   // used when loading the page with a rnb id in the URL
-  const search = async (q: string) => {
+  const search = async (q: string, coords: string[] | null) => {
     if (queryIsRnbId(q)) {
       setAutocompleteActive(false);
       setQuery(q);
@@ -85,7 +85,7 @@ export default function AddressSearchMap() {
         Actions.map.setMoveTo({
           lat: parseFloat(building.payload.point.coordinates[1]),
           lng: parseFloat(building.payload.point.coordinates[0]),
-          zoom: 20,
+          zoom: coords?.length ? parseFloat(coords[2]) : 20,
         }),
       );
     } else {
@@ -112,31 +112,25 @@ export default function AddressSearchMap() {
     return mapPosition;
   };
 
-  const handleCoordinates = (coords: string) => {
-    if (queryIsCoordinates(coords)) {
-      // fill the input with the address
-      setAutocompleteActive(false);
-      const coordinates = coords.split(',');
-
-      dispatch(
-        Actions.map.setMoveTo({
-          lat: parseFloat(coordinates[0]),
-          lng: parseFloat(coordinates[1]),
-          zoom: parseFloat(coordinates[2]),
-        }),
-      );
-    }
+  const handleCoordinates = (coords: string[]) => {
+    // fill the input with the address
+    setAutocompleteActive(false);
+    dispatch(
+      Actions.map.setMoveTo({
+        lat: parseFloat(coords[0]),
+        lng: parseFloat(coords[1]),
+        zoom: parseFloat(coords[2]),
+      }),
+    );
   };
 
   useEffect(() => {
     const q = params.get('q');
     const coords = params.get('coords');
-    if (q !== null) {
-      search(q);
-    }
-    if (coords !== null) {
-      handleCoordinates(coords);
-    }
+    const coordinates =
+      coords && queryIsCoordinates(coords) ? coords.split(',') : null;
+    if (q !== null) search(q, coordinates);
+    if (coordinates !== null) handleCoordinates(coordinates);
   }, []);
 
   // @ts-ignore
@@ -144,7 +138,7 @@ export default function AddressSearchMap() {
     const position = featureToPosition(suggestion);
     // Add a marker to the map
     dispatch(
-      Actions.map.setMarker({
+      Actions.map.setMarkerAndReset({
         lat: position.lat,
         lng: position.lng,
       }),

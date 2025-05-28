@@ -2,6 +2,7 @@
 
 import { signOut } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function LoginBtn() {
   const { data: session } = useSession();
@@ -26,9 +27,9 @@ export default function LoginBtn() {
     );
   } else {
     return (
-      <a href="/login" className="fr-btn fr-btn--secondary">
+      <Link href="/login" className="fr-btn fr-btn--secondary">
         Se connecter
-      </a>
+      </Link>
     );
   }
 }
