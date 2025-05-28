@@ -5,6 +5,7 @@ import { Header } from '@codegouvfr/react-dsfr/Header';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
+import Link from 'next/link';
 
 // Auth
 import { useSession } from 'next-auth/react';
@@ -219,12 +220,12 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           historisée, tracée et mise à disposition de tous.
         </p>
         <div className="fr-btns-group fr-btns-group--inline-md">
-          <a href="/login" className="fr-btn fr-btn--primary">
+          <Link href="/login" className="fr-btn fr-btn--primary">
             S&apos;inscrire
-          </a>
-          <a href="/guide" className="fr-btn fr-btn--tertiary">
+          </Link>
+          <Link href="/guide" className="fr-btn fr-btn--tertiary">
             Consulter le guide d&apos;édition
-          </a>
+          </Link>
         </div>
       </explainModal.Component>
       <Header

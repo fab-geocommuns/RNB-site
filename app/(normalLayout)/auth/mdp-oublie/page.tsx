@@ -8,8 +8,10 @@ import { Alert } from '@codegouvfr/react-dsfr/Alert';
 export default async function ForgotPasswordPage({
   searchParams,
 }: {
-  searchParams: Record<string, string | undefined>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }) {
+  const { success, email: defaultEmail } = await searchParams;
+
   // Custom server action to handle the form submission
   async function requestNewPassword(data: FormData) {
     'use server';
@@ -34,9 +36,6 @@ export default async function ForgotPasswordPage({
       redirect('/auth/mdp-oublie?success=false');
     }
   }
-
-  const defaultEmail = searchParams.email;
-  const success = searchParams.success;
 
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();

@@ -1,16 +1,21 @@
 'use client';
 
 import AddressInput from '@/components/address/AddressInput';
+import { StartDsfrOnHydration } from '@codegouvfr/react-dsfr/next-app-router';
 import { useState } from 'react';
+import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 
 export default function PlaygroundPage() {
   const [displayInput, setDisplayInput] = useState(false);
   return (
     <div>
+      <StartDsfrOnHydration />
       {!displayInput && (
-        <a href="#" onClick={() => setDisplayInput(true)}>
-          Show input
-        </a>
+        <Tooltip kind="hover" title="Toggle the address input">
+          <a href="#" onClick={() => setDisplayInput(true)}>
+            Show input
+          </a>
+        </Tooltip>
       )}
       {displayInput && (
         <AddressInput

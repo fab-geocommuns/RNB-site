@@ -26,13 +26,12 @@ async function getData(page: number) {
 }
 
 export default async function Page({
-  params,
   searchParams,
 }: {
-  params: any;
-  searchParams: any;
+  searchParams: Promise<{ page: number }>;
 }) {
-  const page = searchParams?.page || 1;
+  const { page: defaultPage = 1 } = await searchParams;
+  const page = defaultPage;
   const posts = await getData(page);
 
   const nextPageUrl = function () {

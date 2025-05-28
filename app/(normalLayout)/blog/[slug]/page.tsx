@@ -12,6 +12,7 @@ hljs.registerLanguage('python', python);
 import TagsList from '@/components/blog/TagsList';
 import BackToTop from '@/components/BackToTop';
 import NewsletterForm from '@/components/NewsletterForm';
+import Link from 'next/link';
 
 // Style
 import styles from '@/styles/blogArticle.module.scss';
@@ -30,11 +31,12 @@ async function getData(slug: string) {
 }
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } },
+  { params }: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // The same request is made twice, but it's cached by Next.js and the React cache function
-  const post = await getData(params.slug);
+  const { slug } = await params;
+  const post = await getData(slug);
   return {
     title: post.title,
     description: post.excerpt,
@@ -51,8 +53,13 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const post = await getData(params.slug);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = await getData(slug);
   const dateStr = formattedDate(post.published_at);
 
   // find all code pre blocks in the html and replace them with highlighted code
@@ -95,8 +102,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <p>
                 <b>Infolettre et réseaux</b>
                 <br />
-                Restez informé des <a href="/blog">actualités</a> du RNB en vous
-                inscrivant à l&apos;infolettre ou en nous suivant sur{' '}
+                Restez informé des <Link href="/blog">actualités</Link> du RNB
+                en vous inscrivant à l&apos;infolettre ou en nous suivant sur{' '}
                 <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">
                   LinkedIn
                 </a>

@@ -36,8 +36,6 @@ export default function LoginForm() {
     setSuccessMessage(null);
     setCredentialsError(false);
 
-    const form = e.currentTarget;
-
     const loginResult = await signIn('credentials', {
       username: email,
       password: password,
@@ -100,7 +98,6 @@ export default function LoginForm() {
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-            defaultValue={prefilledEmail}
           />
         </div>
 

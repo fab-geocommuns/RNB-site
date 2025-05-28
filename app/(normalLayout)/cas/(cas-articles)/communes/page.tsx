@@ -1,4 +1,5 @@
 import { Highlight } from '@codegouvfr/react-dsfr/Highlight';
+import Link from 'next/link';
 
 export default function Page() {
   return (
@@ -50,12 +51,12 @@ export default function Page() {
       </Highlight>
 
       <p>
-        La <a href="/definition">définition commune de l’objet “bâti”</a> ainsi
-        que l’existence d’un référentiel national des bâtiments partagé par tous
-        doit permettre à toutes les communes d’assurer la cohérence du système
-        d’information et la transversalité des données de la collectivité entre
-        les différents services (finance, urbanisme, habitat, patrimoine,
-        environnement, etc.).
+        La <Link href="/definition">définition commune de l’objet “bâti”</Link>{' '}
+        ainsi que l’existence d’un référentiel national des bâtiments partagé
+        par tous doit permettre à toutes les communes d’assurer la cohérence du
+        système d’information et la transversalité des données de la
+        collectivité entre les différents services (finance, urbanisme, habitat,
+        patrimoine, environnement, etc.).
       </p>
       <p>
         A terme, cela doit même permettre à la commune de plus facilement

@@ -1,5 +1,6 @@
 // Styles
 import styles from '@/styles/tools.module.scss';
+import Link from 'next/link';
 
 export default function Outils() {
   return (
@@ -31,9 +32,9 @@ export default function Outils() {
                     </div>
                   </form>
                   <div className="blockLinkShell">
-                    <a className="fr-btn fr-btn--secondary" href="/carte">
+                    <Link className="fr-btn fr-btn--secondary" href="/carte">
                       Consulter la carte
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -65,9 +66,9 @@ export default function Outils() {
                     accès libre.
                   </p>
                   <div className="blockLinkShell">
-                    <a href="/doc" className="fr-btn fr-btn--secondary">
+                    <Link href="/doc" className="fr-btn fr-btn--secondary">
                       Consulter la documentation
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

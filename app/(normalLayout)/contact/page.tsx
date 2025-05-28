@@ -9,8 +9,7 @@ import styles from '@/styles/contact.module.scss';
 
 // Comps
 import { Tile } from '@codegouvfr/react-dsfr/Tile';
-// @ts-ignore
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CopyToClipboard from '@/components/util/CopyToClipboard';
 
 // Logos
 import faqIllu from '@/public/images/faq-illu.svg';

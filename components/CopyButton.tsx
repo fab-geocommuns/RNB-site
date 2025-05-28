@@ -1,6 +1,6 @@
 'use client';
 
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CopyToClipboard from '@/components/util/CopyToClipboard';
 import { useState } from 'react';
 
 export default function CopyButton({

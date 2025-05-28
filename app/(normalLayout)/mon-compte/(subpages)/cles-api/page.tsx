@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 // Comps
 import CopyButton from '@/components/CopyButton';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
+import Link from 'next/link';
 
 export default async function Page() {
   // We don't want to allow anonymous visitors to access this page
@@ -96,7 +97,7 @@ export default async function Page() {
           <p>
             <b>
               Veillez à consulter la{' '}
-              <a href="/definition">définition du bâtiment</a> et le{' '}
+              <Link href="/definition">définition du bâtiment</Link> et le{' '}
               <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb">
                 guide d&apos;édition
               </a>{' '}
