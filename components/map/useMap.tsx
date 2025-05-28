@@ -35,7 +35,6 @@ export const useMap = (params?: UseMapParams) => {
       !mapContainerRef.current.classList.contains('maplibregl-map')
     ) {
       mapContainerRef.current.style.opacity = '0';
-      console.log(DEFAULT_STYLE);
       const newMap: maplibregl.Map = new maplibregl.Map({
         container: mapContainerRef.current,
         center: [2.852577494863663, 46.820936580547134],
