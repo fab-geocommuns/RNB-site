@@ -31,6 +31,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const shapeInteractionMode: ShapeInteractionMode = useSelector(
     (state: RootState) => state.map.shapeInteractionMode,
   );
+  const shapeInteractionCounter: number = useSelector(
+    (state: RootState) => state.map.shapeInteractionCounter,
+  );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
 
@@ -124,7 +127,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         drawRef.current.changeMode('draw_polygon');
       }
     }
-  }, [shapeInteractionMode, dispatch]);
+  }, [shapeInteractionMode, shapeInteractionCounter, dispatch]);
 
   useEffect(() => {
     if (map) {
@@ -135,7 +138,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuilding.shape &&
         selectedBuilding.rnb_id !== selectedBuildingRef.current
       ) {
-        dispatch(Actions.map.setOperation('update'));
         drawRef.current.deleteAll();
         drawRef.current.add({
           id: BUILDING_DRAW_SHAPE_FEATURE_ID,
@@ -143,11 +145,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           properties: {},
           geometry: selectedBuilding.shape,
         });
-        if (selectedBuilding.shape.type == 'Point') {
-          dispatch(Actions.map.setShapeInteractionMode(null));
-        } else {
-          dispatch(Actions.map.setShapeInteractionMode('updating'));
-        }
         // used to know if we are selecting a different building next time we click on the map
         selectedBuildingRef.current = selectedBuilding.rnb_id;
       }

@@ -214,17 +214,6 @@ export default function EditionPanel() {
     }
   };
 
-  useEffect(() => {
-    if (operation === 'create') {
-      dispatch(Actions.map.reset());
-      dispatch(Actions.map.setShapeInteractionMode('drawing'));
-    } else if (operation === null) {
-      if (shapeInteractionMode !== null) {
-        dispatch(Actions.map.setShapeInteractionMode(null));
-      }
-    }
-  }, [operation]);
-
   return (
     <>
       <div className={styles.actions}>

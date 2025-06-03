@@ -1,8 +1,13 @@
 'use client';
 
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  createListenerMiddleware,
+} from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
-import { Actions } from '../store';
+import { Actions, AppDispatch, RootState } from '../store';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -84,6 +89,7 @@ export type MapStore = {
   layers: MapLayers;
   operation: Operation;
   shapeInteractionMode: ShapeInteractionMode;
+  shapeInteractionCounter: number;
   buildingNewShape: GeoJSON.Geometry | null;
   toasterInfos: ToasterInfos;
 };
@@ -100,6 +106,7 @@ const initialState: MapStore = {
   },
   operation: null,
   shapeInteractionMode: null,
+  shapeInteractionCounter: 0,
   buildingNewShape: null,
   toasterInfos: { state: null, message: '' },
 };
@@ -109,7 +116,6 @@ export const mapSlice = createSlice({
   initialState,
   reducers: {
     reset(state) {
-      state.selectedItem = undefined;
       state.shapeInteractionMode = null;
       state.buildingNewShape = null;
     },
@@ -127,7 +133,6 @@ export const mapSlice = createSlice({
         state.layers.extraLayers.splice(index, 1);
       }
     },
-
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {
         state.addressSearch.q = action.payload;
@@ -166,6 +171,9 @@ export const mapSlice = createSlice({
       action: PayloadAction<ShapeInteractionMode>,
     ) {
       state.shapeInteractionMode = action.payload;
+    },
+    incrementShapeInteractionCounter(state) {
+      state.shapeInteractionCounter = state.shapeInteractionCounter + 1;
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
       state.buildingNewShape = action.payload;
@@ -222,7 +230,6 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
-    dispatch(Actions.map.setShapeInteractionMode(null));
 
     const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
     const rnbResponse = await fetch(url);
@@ -263,5 +270,42 @@ export const mapActions = {
   selectBuilding,
   selectADS,
 };
+// Create d'un middleware pour réagir aux changements du store
+export const listenerMiddleware = createListenerMiddleware();
+
+listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
+  actionCreator: mapSlice.actions.setOperation,
+  effect: async (action, listenerApi) => {
+    const state = listenerApi.getState();
+    const operation = state.map.operation;
+
+    // a chaque changement d'operation, on reset le store
+    listenerApi.dispatch(Actions.map.reset());
+    listenerApi.dispatch(Actions.map.incrementShapeInteractionCounter());
+
+    // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
+    switch (operation) {
+      case null:
+        break;
+      case 'create':
+        listenerApi.dispatch(Actions.map.unselectItem());
+        listenerApi.dispatch(Actions.map.setShapeInteractionMode('drawing'));
+        break;
+      case 'update':
+        if (state.map.selectedItem?._type === 'building') {
+          if (state.map.selectedItem.shape.type === 'Point') {
+            listenerApi.dispatch(Actions.map.setShapeInteractionMode(null));
+          } else {
+            listenerApi.dispatch(
+              Actions.map.setShapeInteractionMode('updating'),
+            );
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  },
+});
 
 export const mapReducer = mapSlice.reducer;
