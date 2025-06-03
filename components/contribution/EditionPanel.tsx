@@ -1,27 +1,27 @@
-import styles from '@/styles/contribution/editPanel.module.scss';
-import { useSelector, useDispatch } from 'react-redux';
-import { Actions, RootState, AppDispatch } from '@/stores/store';
-import { SelectedBuilding } from '@/stores/map/map-slice';
-import { useState, useEffect } from 'react';
-import RNBIDHeader from './RNBIDHeader';
-import BuildingStatus from './BuildingStatus';
-import BuildingAddresses from './BuildingAddresses';
-import BuildingShape from './BuildingShape';
-import CreationPanel from './CreationPanel';
-import BuildingActivationToggle from './BuildingActivationToggle';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { geojsonToWKT } from '@terraformer/wkt';
-import { BuildingAddressType } from './types';
-import Button from '@codegouvfr/react-dsfr/Button';
-
+import TabPanel from '@/components/panel/TabPanel';
 import createBuildingImage from '@/public/images/map/edition/create.svg';
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import { SelectedBuilding } from '@/stores/map/map-slice';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
+import styles from '@/styles/contribution/editPanel.module.scss';
+import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import Button from '@codegouvfr/react-dsfr/Button';
+import { geojsonToWKT } from '@terraformer/wkt';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import BuildingActivationToggle from './BuildingActivationToggle';
+import BuildingAddresses from './BuildingAddresses';
+import BuildingShape from './BuildingShape';
+import BuildingStatus from './BuildingStatus';
+import CreationPanel from './CreationPanel';
+import RNBIDHeader from './RNBIDHeader';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
+import { BuildingAddressType } from './types';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -139,9 +139,9 @@ function EditSelectedBuildingPanelContent({
     await dispatch(Actions.map.selectBuilding(rnbId));
     dispatch(Actions.map.reloadBuildings());
   };
-
   return (
     <>
+      <TabPanel />
       <RNBIDHeader>
         <span className="fr-text--xs">Identifiant RNB</span>
         <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
@@ -197,9 +197,6 @@ export default function EditionPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.edition.operation);
-  const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
-  );
 
   const selectedBuilding =
     selectedItem?._type === 'building'
