@@ -89,7 +89,6 @@ export type MapStore = {
   layers: MapLayers;
   operation: Operation;
   shapeInteractionMode: ShapeInteractionMode;
-  shapeInteractionCounter: number;
   buildingNewShape: GeoJSON.Geometry | null;
   toasterInfos: ToasterInfos;
 };
@@ -106,7 +105,6 @@ const initialState: MapStore = {
   },
   operation: null,
   shapeInteractionMode: null,
-  shapeInteractionCounter: 0,
   buildingNewShape: null,
   toasterInfos: { state: null, message: '' },
 };
@@ -171,9 +169,6 @@ export const mapSlice = createSlice({
       action: PayloadAction<ShapeInteractionMode>,
     ) {
       state.shapeInteractionMode = action.payload;
-    },
-    incrementShapeInteractionCounter(state) {
-      state.shapeInteractionCounter = state.shapeInteractionCounter + 1;
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
       state.buildingNewShape = action.payload;
@@ -280,8 +275,7 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     const operation = state.map.operation;
 
     // a chaque changement d'operation, on reset le store
-    listenerApi.dispatch(Actions.map.reset());
-    listenerApi.dispatch(Actions.map.incrementShapeInteractionCounter());
+    await listenerApi.dispatch(Actions.map.reset());
 
     // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
     switch (operation) {

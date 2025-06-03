@@ -31,9 +31,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const shapeInteractionMode: ShapeInteractionMode = useSelector(
     (state: RootState) => state.map.shapeInteractionMode,
   );
-  const shapeInteractionCounter: number = useSelector(
-    (state: RootState) => state.map.shapeInteractionCounter,
-  );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
 
@@ -127,7 +124,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         drawRef.current.changeMode('draw_polygon');
       }
     }
-  }, [shapeInteractionMode, shapeInteractionCounter, dispatch]);
+  }, [shapeInteractionMode, dispatch]);
 
   useEffect(() => {
     if (map) {
