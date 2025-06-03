@@ -1,7 +1,7 @@
 'use client';
 
 // Hooks
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Styles
 import styles from '@/styles/panel.module.scss';
@@ -10,11 +10,12 @@ import styles from '@/styles/panel.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Comps
-import { Actions, AppDispatch, RootState } from '@/stores/store';
-import BuildingPanel from '@/components/panel/BuildingPanel';
+import RNBIDHeader from '@/components/contribution/RNBIDHeader';
 import ADSPanel from '@/components/panel/ADSPanel';
+import BuildingPanel from '@/components/panel/BuildingPanel';
+import TabPanel from '@/components/panel/TabPanel';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { SelectedBuilding } from '@/stores/map/map-slice';
 
 export default function VisuPanel() {
   // Store
@@ -46,12 +47,15 @@ export default function VisuPanel() {
       <>
         <div className={styles.shell} data-testid="visu-panel">
           <div className={styles.content}>
-            <div className={styles.head}>
-              <h1 className={styles.title}>{title()}</h1>
-              <a href="#" onClick={close} className={styles.closeLink}>
-                <i className="fr-icon-close-line" />
-              </a>
-            </div>
+            <TabPanel />
+            <RNBIDHeader>
+              <div className={styles.head}>
+                <h1 className={styles.title}>{title()}</h1>
+                <a href="#" onClick={close} className={styles.closeLink}>
+                  <i className="fr-icon-close-line" />
+                </a>
+              </div>
+            </RNBIDHeader>
 
             <div className={styles.body}>
               {selectedItem?._type === 'building' && (
