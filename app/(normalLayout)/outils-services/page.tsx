@@ -1,5 +1,5 @@
 // Styles
-import styles from '@/styles/tools.module.scss';
+import AddressSearchHome from '@/components/address/AddressSearchHome';
 import Link from 'next/link';
 
 export default function Outils() {
@@ -18,19 +18,7 @@ export default function Outils() {
                     Consultez les 43 millions de bâtiments du RNB. Retrouvez un
                     bâtiment grâce à son identifiant ou son adresse.
                   </p>
-                  <form action="/carte" method="get">
-                    <div className="fr-search-bar">
-                      <input
-                        className="fr-input"
-                        type="text"
-                        name="q"
-                        placeholder="un bâtiment : SBW3-HVPC-LHD8 ou une adresse : 42, rue des architectes, Nantes"
-                      />
-                      <button className="fr-btn" type="submit">
-                        Rechercher
-                      </button>
-                    </div>
-                  </form>
+                  <AddressSearchHome />
                   <div className="blockLinkShell">
                     <Link className="fr-btn fr-btn--secondary" href="/carte">
                       Consulter la carte
