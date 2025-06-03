@@ -17,6 +17,7 @@ import AddressAutocomplete, {
 } from '@/components/address/AddressAutocomplete';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { queryIsRnbId, queryIsCoordinates } from '@/components/address/utils';
+import { selectBuildingAndSetOperationUpdate } from '@/stores/map/map-slice';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(
@@ -44,7 +45,7 @@ export default function AddressSearchMap() {
     // If the query is a RNB ID we bypass the address search
     if (e.key === 'Enter' && queryIsRnbId(query)) {
       const building = (await dispatch(
-        Actions.map.selectBuilding(query),
+        selectBuildingAndSetOperationUpdate(query),
       )) as any;
       if (building.payload) {
         dispatch(
@@ -80,7 +81,9 @@ export default function AddressSearchMap() {
     if (queryIsRnbId(q)) {
       setAutocompleteActive(false);
       setQuery(q);
-      const building = (await dispatch(Actions.map.selectBuilding(q))) as any;
+      const building = (await dispatch(
+        selectBuildingAndSetOperationUpdate(q),
+      )) as any;
       dispatch(
         Actions.map.setMoveTo({
           lat: parseFloat(building.payload.point.coordinates[1]),

@@ -9,6 +9,7 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
+import { selectBuildingAndSetOperationUpdate } from '@/stores/map/map-slice';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -46,7 +47,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
             ) {
               // It is a building
               const rnb_id = featureCloseToCursor.properties.rnb_id;
-              dispatch(Actions.map.selectBuilding(rnb_id));
+              dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
             } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
               // It is an ADS
               const file_number = featureCloseToCursor.properties.file_number;
@@ -54,7 +55,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
             }
           } else {
             // click out unselects the currently selected item
-            dispatch(Actions.map.unselectItem());
+            dispatch(Actions.map.setOperation(null));
           }
         }
       };
