@@ -1,8 +1,13 @@
 'use client';
 
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  createListenerMiddleware,
+} from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
-import { Actions } from '../store';
+import { Actions, AppDispatch, RootState } from '../store';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -109,7 +114,6 @@ export const mapSlice = createSlice({
   initialState,
   reducers: {
     reset(state) {
-      state.selectedItem = undefined;
       state.shapeInteractionMode = null;
       state.buildingNewShape = null;
     },
@@ -127,7 +131,6 @@ export const mapSlice = createSlice({
         state.layers.extraLayers.splice(index, 1);
       }
     },
-
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {
         state.addressSearch.q = action.payload;
@@ -222,7 +225,6 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
-    dispatch(Actions.map.setShapeInteractionMode(null));
 
     const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
     const rnbResponse = await fetch(url);
@@ -242,6 +244,14 @@ export const selectBuilding = createAsyncThunk(
   },
 );
 
+export const selectBuildingAndSetOperationUpdate =
+  (rnb_id: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const building = await dispatch(Actions.map.selectBuilding(rnb_id));
+    dispatch(Actions.map.setOperation('update'));
+    return building;
+  };
+
 export function adsApiUrl(fileNumber: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/permis/' + fileNumber + '/';
 }
@@ -256,5 +266,41 @@ export const mapActions = {
   selectBuilding,
   selectADS,
 };
+// Create d'un middleware pour réagir aux changements du store
+export const listenerMiddleware = createListenerMiddleware();
+
+listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
+  actionCreator: mapSlice.actions.setOperation,
+  effect: async (action, listenerApi) => {
+    const state = listenerApi.getState();
+    const operation = state.map.operation;
+
+    // a chaque changement d'operation, on reset le store
+    await listenerApi.dispatch(Actions.map.reset());
+
+    // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
+    switch (operation) {
+      case null:
+        break;
+      case 'create':
+        listenerApi.dispatch(Actions.map.unselectItem());
+        listenerApi.dispatch(Actions.map.setShapeInteractionMode('drawing'));
+        break;
+      case 'update':
+        if (state.map.selectedItem?._type === 'building') {
+          if (state.map.selectedItem.shape.type === 'Point') {
+            listenerApi.dispatch(Actions.map.setShapeInteractionMode(null));
+          } else {
+            listenerApi.dispatch(
+              Actions.map.setShapeInteractionMode('updating'),
+            );
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  },
+});
 
 export const mapReducer = mapSlice.reducer;

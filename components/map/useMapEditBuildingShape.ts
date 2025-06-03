@@ -135,7 +135,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuilding.shape &&
         selectedBuilding.rnb_id !== selectedBuildingRef.current
       ) {
-        dispatch(Actions.map.setOperation('update'));
         drawRef.current.deleteAll();
         drawRef.current.add({
           id: BUILDING_DRAW_SHAPE_FEATURE_ID,
@@ -143,11 +142,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           properties: {},
           geometry: selectedBuilding.shape,
         });
-        if (selectedBuilding.shape.type == 'Point') {
-          dispatch(Actions.map.setShapeInteractionMode(null));
-        } else {
-          dispatch(Actions.map.setShapeInteractionMode('updating'));
-        }
         // used to know if we are selecting a different building next time we click on the map
         selectedBuildingRef.current = selectedBuilding.rnb_id;
       }
@@ -184,7 +178,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           ? // @ts-ignore
             draw.geometry.coordinates.flat(Infinity)
           : [];
-        if (draw.id && flat_array.length > 1) {
+        if (draw.id && flat_array.length > 4) {
           currentDrawRef.delete(draw.id.toString());
         }
       }

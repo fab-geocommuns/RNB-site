@@ -9,12 +9,13 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
+import { selectBuildingAndSetOperationUpdate } from '@/stores/map/map-slice';
 
 /**
  * Ajout et gestion des événements de la carte
  * @param map
  */
-export const useMapEvents = (map?: maplibregl.Map) => {
+export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
@@ -31,27 +32,30 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           map,
           e.point.x,
           e.point.y,
+          0,
         );
 
-        if (featureCloseToCursor && shapeInteractionMode !== 'drawing') {
-          // What did we click on?
-
-          if (
-            [
-              LAYER_BDGS_POINT,
-              LAYER_BDGS_SHAPE_BORDER,
-              LAYER_BDGS_SHAPE_POINT,
-            ].includes(featureCloseToCursor.layer.id)
-          ) {
-            // It is a building
-            const rnb_id = featureCloseToCursor.properties.rnb_id;
-            dispatch(Actions.map.selectBuilding(rnb_id));
-          }
-
-          if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
-            // It is an ADS
-            const file_number = featureCloseToCursor.properties.file_number;
-            dispatch(Actions.map.selectADS(file_number));
+        if (shapeInteractionMode !== 'drawing') {
+          if (featureCloseToCursor) {
+            // What did we click on?
+            if (
+              [
+                LAYER_BDGS_POINT,
+                LAYER_BDGS_SHAPE_BORDER,
+                LAYER_BDGS_SHAPE_POINT,
+              ].includes(featureCloseToCursor.layer.id)
+            ) {
+              // It is a building
+              const rnb_id = featureCloseToCursor.properties.rnb_id;
+              dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
+            } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
+              // It is an ADS
+              const file_number = featureCloseToCursor.properties.file_number;
+              dispatch(Actions.map.selectADS(file_number));
+            }
+          } else {
+            // click out unselects the currently selected item
+            dispatch(Actions.map.setOperation(null));
           }
         }
       };
@@ -64,6 +68,7 @@ export const useMapEvents = (map?: maplibregl.Map) => {
           map!,
           e.point.x,
           e.point.y,
+          0,
         );
 
         if (shapeInteractionMode === 'drawing') {
@@ -112,33 +117,4 @@ export const useMapEvents = (map?: maplibregl.Map) => {
       };
     }
   }, [dispatch, map, shapeInteractionMode]);
-
-  useEffect(() => {
-    if (map) {
-      const handleMoveEnd = (e: MapLibreEvent<any>) => {
-        const zoom = map.getZoom();
-        const center = map.getCenter();
-        dispatch(
-          Actions.map.setMoveTo({
-            lat: center.lat,
-            lng: center.lng,
-            zoom: zoom,
-            fromMapEvent: true,
-          }),
-        );
-        const coordsQueryParam = `${center.lat.toFixed(5)},${center.lng.toFixed(5)},${zoom.toFixed(2)}`;
-        const queryParams = new URLSearchParams(window.location.search);
-        queryParams.set('coords', coordsQueryParam);
-        const newUrl = new URL(window.location.href);
-        newUrl.search = queryParams.toString();
-        window.history.replaceState({}, '', newUrl);
-      };
-
-      map.on('moveend', handleMoveEnd);
-
-      return () => {
-        map.off('moveend', handleMoveEnd);
-      };
-    }
-  }, [map]);
 };
