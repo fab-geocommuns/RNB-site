@@ -1,6 +1,6 @@
 'use client';
 
-import { EditMap } from '@/components/map/VisuMap';
+import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
