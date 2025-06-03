@@ -1,27 +1,27 @@
-import TabPanel from '@/components/panel/TabPanel';
-import createBuildingImage from '@/public/images/map/edition/create.svg';
-import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
-import { BuildingStatusType } from '@/stores/contribution/contribution-types';
-import { SelectedBuilding } from '@/stores/map/map-slice';
-import { Actions, AppDispatch, RootState } from '@/stores/store';
-import styles from '@/styles/contribution/editPanel.module.scss';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import Button from '@codegouvfr/react-dsfr/Button';
-import { geojsonToWKT } from '@terraformer/wkt';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import BuildingActivationToggle from './BuildingActivationToggle';
-import BuildingAddresses from './BuildingAddresses';
-import BuildingShape from './BuildingShape';
-import BuildingStatus from './BuildingStatus';
-import CreationPanel from './CreationPanel';
-import RNBIDHeader from './RNBIDHeader';
+import TabPanel from "@/components/panel/TabPanel";
+import createBuildingImage from "@/public/images/map/edition/create.svg";
+import createSelectedBuildingImage from "@/public/images/map/edition/create_selected.svg";
+import { BuildingStatusType } from "@/stores/contribution/contribution-types";
+import { SelectedBuilding } from "@/stores/map/map-slice";
+import { Actions, AppDispatch, RootState } from "@/stores/store";
+import styles from "@/styles/contribution/editPanel.module.scss";
+import { useRNBFetch } from "@/utils/use-rnb-fetch";
+import Button from "@codegouvfr/react-dsfr/Button";
+import { geojsonToWKT } from "@terraformer/wkt";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import BuildingActivationToggle from "./BuildingActivationToggle";
+import BuildingAddresses from "./BuildingAddresses";
+import BuildingShape from "./BuildingShape";
+import BuildingStatus from "./BuildingStatus";
+import CreationPanel from "./CreationPanel";
+import RNBIDHeader from "./RNBIDHeader";
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
-} from './toaster';
-import { BuildingAddressType } from './types';
+} from "./toaster";
+import { BuildingAddressType } from "./types";
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -87,13 +87,13 @@ function EditSelectedBuildingPanelContent({
 
     if (buildingNewShape) {
       // send the data in WKT format
-      data['shape'] = geojsonToWKT(buildingNewShape);
+      data["shape"] = geojsonToWKT(buildingNewShape);
     }
 
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),
-        method: 'PATCH',
+        method: "PATCH",
       });
 
       if (!response.ok) {
@@ -106,7 +106,7 @@ function EditSelectedBuildingPanelContent({
         await dispatch(Actions.map.selectBuilding(rnbId));
       }
     } catch (err: any) {
-      toasterError(dispatch, err.message || 'Erreur lors de la modification');
+      toasterError(dispatch, err.message || "Erreur lors de la modification");
       console.error(err);
     }
   };
@@ -123,18 +123,18 @@ function EditSelectedBuildingPanelContent({
     };
     const response = await fetch(url, {
       body: JSON.stringify(data),
-      method: 'PATCH',
+      method: "PATCH",
     });
     if (!response.ok) {
       toasterError(
         dispatch,
-        `Erreur lors de ${isActive ? "l'activation" : 'la désactivation'} du bâtiment`,
+        `Erreur lors de ${isActive ? "l'activation" : "la désactivation"} du bâtiment`,
       );
       return;
     }
     toasterSuccess(
       dispatch,
-      `Le bâtiment a été ${isActive ? 'réactivé' : 'désactivé'}`,
+      `Le bâtiment a été ${isActive ? "réactivé" : "désactivé"}`,
     );
     await dispatch(Actions.map.selectBuilding(rnbId));
     dispatch(Actions.map.reloadBuildings());
@@ -197,9 +197,9 @@ export default function EditionPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.edition.operation);
-
+  const zoomLevel = useSelector((state: RootState) => state.map.moveTo?.zoom);
   const selectedBuilding =
-    selectedItem?._type === 'building'
+    selectedItem?._type === "building"
       ? (selectedItem as SelectedBuilding)
       : null;
 
@@ -211,19 +211,34 @@ export default function EditionPanel() {
     }
   };
 
+  useEffect(() => {
+    if (operation === 'create') {
+      dispatch(Actions.edition.reset());
+
+      // you can draw if the zoom level is high enough
+      if (zoomLevel && zoomLevel > 18) {
+        dispatch(Actions.edition.setShapeInteractionMode('drawing'));
+      } else {
+        dispatch(Actions.edition.setShapeInteractionMode(null));
+      }
+    } else if (operation === null) {
+      dispatch(Actions.edition.setShapeInteractionMode(null));
+    }
+  };
+
   return (
     <>
       <div className={styles.actions}>
         <Button
           onClick={toggleCreateBuilding}
-          className={operation === 'create' ? styles.buttonSelected : ''}
+          className={operation === "create" ? styles.buttonSelected : ""}
           size="small"
           priority="tertiary no outline"
         >
           <div className={styles.action}>
             <img
               src={
-                operation === 'create'
+                operation === "create"
                   ? createSelectedBuildingImage.src
                   : createBuildingImage.src
               }
@@ -232,7 +247,7 @@ export default function EditionPanel() {
               width="32"
             />
             <small
-              className={operation === 'create' ? styles.actionSelected : ''}
+              className={operation === "create" ? styles.actionSelected : ""}
             >
               créer
             </small>
@@ -240,14 +255,14 @@ export default function EditionPanel() {
         </Button>
       </div>
 
-      {operation == 'update' && selectedBuilding && (
+      {operation == "update" && selectedBuilding && (
         <PanelWrapper>
           <EditSelectedBuildingPanelContent
             selectedBuilding={selectedBuilding}
           />
         </PanelWrapper>
       )}
-      {operation == 'create' && (
+      {operation == "create" && (
         <PanelWrapper>
           <CreationPanel />
         </PanelWrapper>
