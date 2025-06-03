@@ -1,28 +1,28 @@
 // Types
 // Store
-import { bdgApiUrl, SelectedBuilding } from "@/stores/map/map-slice";
+import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
-import ContributionForm from "@/components/ContributionForm";
-import CopyToClipboard from "@/components/util/CopyToClipboard";
+import ContributionForm from '@/components/ContributionForm';
+import CopyToClipboard from '@/components/util/CopyToClipboard';
 
 // Styles
-import panelStyles from "@/styles/panel.module.scss";
-import styles from "@/styles/panelBuilding.module.scss";
-import { fr } from "@codegouvfr/react-dsfr";
+import panelStyles from '@/styles/panel.module.scss';
+import styles from '@/styles/panelBuilding.module.scss';
+import { fr } from '@codegouvfr/react-dsfr';
 
 // Analytics
-import va from "@vercel/analytics";
+import va from '@vercel/analytics';
 
 // Hooks
-import { ContributionStatusPicker } from "@/components/panel/ContributionStatusPicker";
-import { BuildingAdresses } from "@/components/panel/adresse/BuildingAdresses";
-import { RNBGroup, useRNBAuthentication } from "@/utils/use-rnb-authentication";
-import React, { useEffect, useState } from "react";
+import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
+import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
+import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import React, { useEffect, useState } from 'react';
 
 // Store
-import { Actions, AppDispatch, RootState } from "@/stores/store";
-import { useDispatch, useSelector } from "react-redux";
+import { Actions, AppDispatch, RootState } from '@/stores/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -44,13 +44,13 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
   function addSpace(rnb_id: string) {
     if (rnb_id) {
-      return rnb_id.split("").map((char, i) => {
-        let classes = "";
+      return rnb_id.split('').map((char, i) => {
+        let classes = '';
         if (i == 4 || i == 8) {
-          classes = styles["small-left-padding"];
+          classes = styles['small-left-padding'];
         }
         return (
-          <span key={"rnb-id-char" + i} className={classes}>
+          <span key={'rnb-id-char' + i} className={classes}>
             {char}
           </span>
         );
@@ -72,7 +72,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   };
 
   const handleCopy = () => {
-    va.track("rnbid-copied", { rnb_id: bdg!.rnb_id });
+    va.track('rnbid-copied', { rnb_id: bdg!.rnb_id });
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -104,7 +104,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
   const handlePlotBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    dispatch(Actions.map.toggleExtraLayer("plots"));
+    dispatch(Actions.map.toggleExtraLayer('plots'));
   };
 
   const isSectionOpen = (section: string) => {
@@ -113,7 +113,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
   useEffect(() => {
     if (bdg?.rnb_id !== undefined) {
-      va.track("open-side-panel", { rnb_id: bdg.rnb_id });
+      va.track('open-side-panel', { rnb_id: bdg.rnb_id });
     }
   }, [bdg?.rnb_id]);
 
@@ -129,11 +129,11 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             <div className={styles.rnbidShell__copy}>
               {copied ? (
                 <span>
-                  Copié <i className={fr.cx("fr-icon-success-line")}></i>
+                  Copié <i className={fr.cx('fr-icon-success-line')}></i>
                 </span>
               ) : (
                 <span>
-                  Copier <i className={fr.cx("fr-icon-clipboard-line")}></i>
+                  Copier <i className={fr.cx('fr-icon-clipboard-line')}></i>
                 </span>
               )}
             </div>
@@ -156,7 +156,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
       {!is(RNBGroup.CONTRIBUTORS) && (
         <div className={panelStyles.section}>
-          <h2 className={panelStyles.sectionTitle + " fr-mb-2v"}>
+          <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
             Améliorez le RNB
           </h2>
           <ContributionForm />
@@ -169,14 +169,14 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         >
           <a
             href="#"
-            className={` ${panelStyles.sectionToggler} ${isSectionOpen("correspondances") ? panelStyles.sectionTogglerOpen : ""}`}
-            onClick={(e) => toggleSection(e, "correspondances")}
+            className={` ${panelStyles.sectionToggler} ${isSectionOpen('correspondances') ? panelStyles.sectionTogglerOpen : ''}`}
+            onClick={(e) => toggleSection(e, 'correspondances')}
           >
             <span className={panelStyles.sectionTogglerIcon}>▸</span>
             Correspondances BD Topo & BDNB
           </a>
         </h2>
-        {isSectionOpen("correspondances") && (
+        {isSectionOpen('correspondances') && (
           <div className={panelStyles.sectionBody}>
             {bdg?.ext_ids?.length === 0 ? (
               <div>
@@ -201,17 +201,17 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         >
           <a
             href="#"
-            className={` ${panelStyles.sectionToggler} ${isSectionOpen("parcelles") ? panelStyles.sectionTogglerOpen : ""}`}
-            onClick={(e) => toggleSection(e, "parcelles")}
+            className={` ${panelStyles.sectionToggler} ${isSectionOpen('parcelles') ? panelStyles.sectionTogglerOpen : ''}`}
+            onClick={(e) => toggleSection(e, 'parcelles')}
           >
             <span className={panelStyles.sectionTogglerIcon}>▸</span>
             Parcelles cadastrales
           </a>
         </h2>
-        {isSectionOpen("parcelles") && (
+        {isSectionOpen('parcelles') && (
           <>
             <div className={panelStyles.plotWarning}>
-              Les parcelles sont associées au bâtiment{" "}
+              Les parcelles sont associées au bâtiment{' '}
               <b>via un croisement géométrique</b> et non administratif. <br />
               <a
                 target="_blank"
@@ -262,7 +262,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                 className="fr-btn fr-btn--sm fr-btn--tertiary"
                 onClick={(e) => handlePlotBtnClick(e)}
               >
-                {mapLayers.extraLayers.includes("plots") ? (
+                {mapLayers.extraLayers.includes('plots') ? (
                   <span>Cacher les parcelles</span>
                 ) : (
                   <span>Afficher les parcelles sur la carte</span>
