@@ -242,6 +242,13 @@ export const selectBuilding = createAsyncThunk(
   },
 );
 
+export const selectBuildingAndSetOperationUpdate =
+  (rnb_id: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    await dispatch(Actions.map.selectBuilding(rnb_id));
+    dispatch(Actions.map.setOperation('update'));
+  };
+
 export function adsApiUrl(fileNumber: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/permis/' + fileNumber + '/';
 }
