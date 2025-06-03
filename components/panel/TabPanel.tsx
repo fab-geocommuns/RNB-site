@@ -1,10 +1,10 @@
-import styles from "@/styles/contribution/editPanel.module.scss";
-import { usePathname, useSearchParams } from "next/navigation";
+import styles from '@/styles/contribution/editPanel.module.scss';
+import { usePathname, useSearchParams } from 'next/navigation';
 export default function TabPanel() {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const tabIsActive = (route: string): string => {
-    return pathName === route ? "tabActive" : "";
+    return pathName === route ? 'tabActive' : '';
   };
 
   return (
@@ -15,10 +15,10 @@ export default function TabPanel() {
         aria-label="[Onglets de liens entre informations et modification]"
       >
         <li
-          className={`${styles[tabIsActive("/carte")]} ${styles.tab}`}
+          className={`${styles[tabIsActive('/carte')]} ${styles.tab}`}
           role="presentation"
         >
-          {tabIsActive("/carte").length ? (
+          {tabIsActive('/carte').length ? (
             <span className={`${styles.tabLink} ${styles.tabLinkDisabled}`}>
               Informations
             </span>
@@ -29,10 +29,10 @@ export default function TabPanel() {
           )}
         </li>
         <li
-          className={`${styles[tabIsActive("/edition")]} ${styles.tab}`}
+          className={`${styles[tabIsActive('/edition')]} ${styles.tab}`}
           role="presentation"
         >
-          {tabIsActive("/edition").length ? (
+          {tabIsActive('/edition').length ? (
             <span className={`${styles.tabLink} ${styles.tabLinkDisabled}`}>
               Modifier
             </span>

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 // Styles
-import styles from "@/styles/editRNBButton.module.scss";
+import styles from '@/styles/editRNBButton.module.scss';
 
 // Routes
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function EditRNBButton({ modal }: any) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const editUrl =
-    pathname === "/carte" ? `/edition?${searchParams.toString()}` : "/edition";
+    pathname === '/carte' ? `/edition?${searchParams.toString()}` : '/edition';
 
   const explainBtnClickHandler = (e: React.MouseEvent) => {
     e.preventDefault();
