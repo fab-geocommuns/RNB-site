@@ -247,8 +247,9 @@ export const selectBuilding = createAsyncThunk(
 export const selectBuildingAndSetOperationUpdate =
   (rnb_id: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    await dispatch(Actions.map.selectBuilding(rnb_id));
+    const building = await dispatch(Actions.map.selectBuilding(rnb_id));
     dispatch(Actions.map.setOperation('update'));
+    return building;
   };
 
 export function adsApiUrl(fileNumber: string) {
