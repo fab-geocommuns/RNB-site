@@ -23,10 +23,10 @@ function PanelBody({ children }: { children: React.ReactNode }) {
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.map.shapeInteractionMode,
+    (state: RootState) => state.edition.shapeInteractionMode,
   );
   const buildingNewShape = useSelector(
-    (state: RootState) => state.map.buildingNewShape,
+    (state: RootState) => state.edition.buildingNewShape,
   );
   const mapCoordinates = useSelector((state: RootState) => state.map.moveTo);
   const [newStatus, setNewStatus] = useState<BuildingStatusType>('constructed');
@@ -37,8 +37,8 @@ export default function CreationPanel() {
   const { fetch } = useRNBFetch();
 
   const cancelCreation = () => {
-    dispatch(Actions.map.reset());
-    dispatch(Actions.map.setOperation(null));
+    dispatch(Actions.edition.reset());
+    dispatch(Actions.edition.setOperation(null));
   };
 
   useEffect(() => {
@@ -71,8 +71,8 @@ export default function CreationPanel() {
       } else {
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
-        dispatch(Actions.map.setBuildingNewShape(null));
-        dispatch(Actions.map.setOperation(null));
+        dispatch(Actions.edition.setBuildingNewShape(null));
+        dispatch(Actions.edition.setOperation(null));
         const data = await response.json();
         const rnb_id = data.rnb_id;
         toasterSuccess(dispatch, `Bâtiment ${rnb_id} créé avec succès`);

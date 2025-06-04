@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
-import { SelectedBuilding, ShapeInteractionMode } from '@/stores/map/map-slice';
+import { SelectedBuilding } from '@/stores/map/map-slice';
+import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 
 import Button from '@codegouvfr/react-dsfr/Button';
 
@@ -19,16 +20,16 @@ export default function BuildingShape({
   const dispatch: AppDispatch = useDispatch();
 
   const handleBuildingShapeModification = () => {
-    dispatch(Actions.map.setShapeInteractionMode('updating'));
+    dispatch(Actions.edition.setShapeInteractionMode('updating'));
   };
 
   const handleBuildingShapeCreation = () => {
     if (shapeInteractionMode === 'drawing') {
       // that's a way to cancel the ongoing drawing
-      dispatch(Actions.map.setShapeInteractionMode(null));
-      dispatch(Actions.map.setBuildingNewShape(null));
+      dispatch(Actions.edition.setShapeInteractionMode(null));
+      dispatch(Actions.edition.setBuildingNewShape(null));
     } else {
-      dispatch(Actions.map.setShapeInteractionMode('drawing'));
+      dispatch(Actions.edition.setShapeInteractionMode('drawing'));
     }
   };
 

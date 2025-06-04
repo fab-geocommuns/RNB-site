@@ -17,7 +17,7 @@ import AddressAutocomplete, {
 } from '@/components/address/AddressAutocomplete';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { queryIsRnbId, queryIsCoordinates } from '@/components/address/utils';
-import { selectBuildingAndSetOperationUpdate } from '@/stores/map/map-slice';
+import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
 export default function AddressSearchMap() {
   const unknown_rnb_id = useSelector(

@@ -9,7 +9,7 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
-import { selectBuildingAndSetOperationUpdate } from '@/stores/map/map-slice';
+import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -20,7 +20,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.map.shapeInteractionMode,
+    (state: RootState) => state.edition.shapeInteractionMode,
   );
 
   // Initialisation des événements
@@ -55,7 +55,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
             }
           } else {
             // click out unselects the currently selected item
-            dispatch(Actions.map.setOperation(null));
+            dispatch(Actions.edition.setOperation(null));
           }
         }
       };
