@@ -1,4 +1,4 @@
-@import "../vars.scss";
+@import '../vars.scss';
 
 $input-height: 52px;
 $spacing: 12px;
@@ -8,176 +8,176 @@ $shell-top: $actions-top + $spacing + $actions-height;
 $panel-padding: 1.5 * $spacing;
 
 .actions {
-  position: absolute;
-  background-color: transparent;
-  top: $actions-top;
-  left: $spacing;
-  height: $actions-height;
-  right: auto;
-  z-index: 100;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: left;
-  border-radius: 4px;
-
-  button {
-    background-color: white;
-    border-radius: 4px;
-  }
-  .buttonSelected {
-    background-color: var(--text-action-high-blue-france) !important;
-    :hover {
-      background-color: var(--text-action-high-blue-france);
-    }
-  }
-
-  .action {
+    position: absolute;
+    background-color: transparent;
+    top: $actions-top;
+    left: $spacing;
+    height: $actions-height;
+    right: auto;
+    z-index: 100;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    text-transform: uppercase;
+    justify-content: left;
     border-radius: 4px;
-    padding-top: 6px;
-    .actionSelected {
-      color: white;
+
+    button {
+        background-color: white;
+        border-radius: 4px;
     }
-  }
+    .buttonSelected {
+        background-color: var(--text-action-high-blue-france) !important;
+        :hover {
+            background-color: var(--text-action-high-blue-france);
+        }
+    }
+
+    .action {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-transform: uppercase;
+        border-radius: 4px;
+        padding-top: 6px;
+        .actionSelected {
+            color: white;
+        }
+    }
 }
 
 .shell {
-  position: absolute;
+    position: absolute;
 
-  top: $shell-top;
-  right: auto;
-  bottom: $spacing;
-  left: $spacing;
-  z-index: 100;
-  width: 400px;
-  overflow: hidden;
-  border-radius: 4px;
-  border: 1px solid var(--background-contrast-blue-france-active);
+    top: $shell-top;
+    right: auto;
+    bottom: $spacing;
+    left: $spacing;
+    z-index: 100;
+    width: 400px;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid var(--background-contrast-blue-france-active);
 }
 
 .content {
-  background-color: var(--background-alt-blue-france);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-alt-blue-france);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
-
-  .panelSection {
-    background: var(--background-default-grey);
-    padding: $spacing;
-    margin-bottom: $spacing;
     border-radius: 4px;
-    border: 1px solid var(--border-open-blue-france);
-    position: relative;
-    padding-top: 36px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
 
-    .sectionTitle {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      text-transform: uppercase;
-      color: var(--text-mention-grey);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+
+    .panelSection {
+        background: var(--background-default-grey);
+        padding: $spacing;
+        margin-bottom: $spacing;
+        border-radius: 4px;
+        border: 1px solid var(--border-open-blue-france);
+        position: relative;
+        padding-top: 36px;
+
+        .sectionTitle {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            text-transform: uppercase;
+            color: var(--text-mention-grey);
+        }
     }
-  }
 
-  .noPad {
-    padding-top: $spacing;
-  }
+    .noPad {
+        padding-top: $spacing;
+    }
 }
 .tabList {
-  order: 0;
+    order: 0;
 }
 .tab {
-  background-color: transparent;
-  list-style: none;
-  margin-right: 5px;
-  margin-top: 5px;
-  padding: 5px;
-  padding-right: 20px;
-  padding-left: 20px;
-  background-image: none;
+    background-color: transparent;
+    list-style: none;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 5px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-image: none;
 }
 .tabLink {
-  background-image: none;
+    background-image: none;
 }
 .tabActive {
-  background-color: var(--background-alt-blue-france-hover);
-  border-top: 2px solid var(--background-action-high-blue-france);
+    background-color: var(--background-alt-blue-france-hover);
+    border-top: 2px solid var(--background-action-high-blue-france);
 }
 .tabLinkDisabled {
-  pointer-events: none;
+    pointer-events: none;
 }
 .header {
-  text-transform: uppercase;
-  padding: 6px 12px 6px 18px;
-  background-color: var(--background-alt-blue-france-hover);
-  z-index: 100;
+    text-transform: uppercase;
+    padding: 6px 12px 6px 18px;
+    background-color: var(--background-alt-blue-france-hover);
+    z-index: 100;
 }
 
 .body {
-  padding: $panel-padding $panel-padding 0 $panel-padding;
-  flex-grow: 1;
-  flex-shrink: 1;
-  overflow: auto;
+    padding: $panel-padding $panel-padding 0 $panel-padding;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: auto;
 }
 
 .footer {
-  padding: $spacing $spacing $spacing 2 * $spacing;
-  box-shadow: 0 0px 4px var(--background-contrast-grey-active);
-  z-index: 90;
-  flex-shrink: 1;
-  flex-grow: 0;
-  width: 100%;
-  background: var(--background-alt-blue-france);
+    padding: $spacing $spacing $spacing 2 * $spacing;
+    box-shadow: 0 0px 4px var(--background-contrast-grey-active);
+    z-index: 90;
+    flex-shrink: 1;
+    flex-grow: 0;
+    width: 100%;
+    background: var(--background-alt-blue-france);
 }
 
 .noticeContainer {
-  pointer-events: none;
-  background-color: transparent;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  .notice {
-    opacity: 0;
-    transform: translateY(100%);
-    transition: none;
-  }
+    pointer-events: none;
+    background-color: transparent;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    .notice {
+        opacity: 0;
+        transform: translateY(100%);
+        transition: none;
+    }
 
-  .noticeVisible {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-      opacity 0.4s ease,
-      transform 0.5s ease;
-    pointer-events: auto;
-  }
+    .noticeVisible {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+            opacity 0.4s ease,
+            transform 0.5s ease;
+        pointer-events: auto;
+    }
 }
 
 .editToggle {
-  padding-right: 48px !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    padding-right: 48px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  div {
-    label::before {
-      margin-left: 0 !important;
+    div {
+        label::before {
+            margin-left: 0 !important;
+        }
     }
-  }
 }
