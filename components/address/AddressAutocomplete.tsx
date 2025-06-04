@@ -173,7 +173,7 @@ export default function AddressAutocomplete({
     });
   };
 
-  const suggestions = addressSuggestions.map((s, i) => (
+  const suggestions = addressSuggestions.slice(0, 10).map((s, i) => (
     <div
       onMouseEnter={() => setHighlightedSuggestionIndex(i)}
       onMouseDown={() => selectSuggestion(s)}
