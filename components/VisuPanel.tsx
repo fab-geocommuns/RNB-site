@@ -18,8 +18,8 @@ import { SelectedBuilding } from '@/stores/map/map-slice';
 
 export default function VisuPanel() {
   // Store
-  const selectedItem = useSelector(
-    (state: RootState) => state.map.selectedItem,
+  const selectedItem = useSelector((state: RootState) =>
+    state.map.selectedItem ? state.map.selectedItem[0] : undefined,
   );
   const dispatch: AppDispatch = useDispatch();
   const [comment, setComment] = useState('');

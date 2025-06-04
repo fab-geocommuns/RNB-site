@@ -31,8 +31,8 @@ export default function AddressSearchMap() {
   const [autocompleteActive, setAutocompleteActive] = useState(true);
 
   // State
-  const selectedItem = useSelector(
-    (state: RootState) => state.map.selectedItem,
+  const selectedItem = useSelector((state: RootState) =>
+    state.map.selectedItem ? state.map.selectedItem[0] : undefined,
   );
   const dispatch: AppDispatch = useDispatch();
 

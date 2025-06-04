@@ -14,8 +14,8 @@ import { SelectedItem } from '@/stores/map/map-slice';
  */
 export const useMapStateSyncSelectedBuilding = (map?: maplibregl.Map) => {
   // Selected item
-  const selectedItem = useSelector(
-    (state: RootState) => state.map.selectedItem,
+  const selectedItem = useSelector((state: RootState) =>
+    state.map.selectedItem ? state.map.selectedItem[0] : undefined,
   );
   const [previousSelectedItem, setPreviousSelectedItem] = useState<any>();
 
@@ -114,6 +114,7 @@ export const useMapStateSyncSelectedBuilding = (map?: maplibregl.Map) => {
     // Then, highlight the current selected item
 
     if (selectedItem && map) {
+      console.log('USEMAPSTATE', selectedItem);
       const sources = getFeatureTypeSource(selectedItem);
       const id = getFeatureId(selectedItem);
 

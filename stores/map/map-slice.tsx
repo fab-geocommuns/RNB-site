@@ -63,7 +63,7 @@ export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
-export type ShapeInteractionMode = null | 'drawing' | 'updating';
+export type ShapeInteractionMode = null | 'drawing' | 'updating' | 'merging';
 export type ToasterInfos = {
   state: null | 'success' | 'error';
   message: string;
@@ -85,7 +85,7 @@ export type MapStore = {
   };
   marker?: [number, number];
   reloadBuildings?: number;
-  selectedItem?: SelectedItem;
+  selectedItem?: [SelectedItem];
   layers: MapLayers;
   operation: Operation;
   shapeInteractionMode: ShapeInteractionMode;
@@ -157,8 +157,8 @@ export const mapSlice = createSlice({
       state.reloadBuildings = Math.random(); // Force le trigger de useEffect
     },
     updateAddresses(state, action) {
-      if (state.selectedItem && state.selectedItem._type === 'building') {
-        state.selectedItem.addresses = action.payload;
+      if (state.selectedItem && state.selectedItem[0]._type === 'building') {
+        state.selectedItem[0].addresses = action.payload;
       }
     },
     setOperation(state, action: PayloadAction<Operation>) {
@@ -180,13 +180,26 @@ export const mapSlice = createSlice({
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
+      console.log('extraReducers', state.operation);
       // No building selected
+      console.log(action.payload);
       if (!action.payload) {
         state.selectedItem = undefined;
+      } else if (state.operation === 'merge') {
+        if (state.selectedItem) {
+          const itemExist = state.selectedItem.some(
+            (item) => item.rnb_id === action.payload.rnb_id,
+          );
+          if (itemExist) {
+            state.selectedItem = state.selectedItem.filter(
+              (item) => item.rnb_id !== action.payload.rnb_id,
+            );
+          } else state.selectedItem = [...state.selectedItem, action.payload];
+        }
       } else {
-        state.selectedItem = action.payload;
+        state.selectedItem = [action.payload];
       }
-
+      console.log(state.selectedItem);
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
       } else {
@@ -197,7 +210,7 @@ export const mapSlice = createSlice({
     });
 
     builder.addCase(selectADS.fulfilled, (state, action) => {
-      state.selectedItem = action.payload;
+      state.selectedItem = [action.payload];
     });
   },
 });
@@ -228,7 +241,6 @@ export const selectBuilding = createAsyncThunk(
 
     const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
     const rnbResponse = await fetch(url);
-
     if (rnbResponse.ok) {
       const rnbData = (await rnbResponse.json()) as SelectedBuilding;
 
@@ -236,7 +248,6 @@ export const selectBuilding = createAsyncThunk(
         ...rnbData,
         _type: 'building',
       } satisfies SelectedBuilding;
-
       return selectedBuilding;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
@@ -248,7 +259,9 @@ export const selectBuildingAndSetOperationUpdate =
   (rnb_id: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const building = await dispatch(Actions.map.selectBuilding(rnb_id));
-    dispatch(Actions.map.setOperation('update'));
+    if (getState().map.operation !== 'merge') {
+      dispatch(Actions.map.setOperation('update'));
+    }
     return building;
   };
 
@@ -277,18 +290,22 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
 
     // a chaque changement d'operation, on reset le store
     await listenerApi.dispatch(Actions.map.reset());
-
     // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
     switch (operation) {
       case null:
         break;
       case 'create':
+        console.log('create');
         listenerApi.dispatch(Actions.map.unselectItem());
         listenerApi.dispatch(Actions.map.setShapeInteractionMode('drawing'));
         break;
       case 'update':
-        if (state.map.selectedItem?._type === 'building') {
-          if (state.map.selectedItem.shape.type === 'Point') {
+        console.log('update');
+        if (
+          state.map.selectedItem &&
+          state.map.selectedItem[0]._type === 'building'
+        ) {
+          if (state.map.selectedItem[0].shape.type === 'Point') {
             listenerApi.dispatch(Actions.map.setShapeInteractionMode(null));
           } else {
             listenerApi.dispatch(
@@ -296,7 +313,11 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
             );
           }
         }
-        break;
+      // case 'merge':
+      //   console.log('merge', state.map.selectedItem?._type)
+      //   listenerApi.dispatch(Actions.map.unselectItem());
+      //   listenerApi.dispatch(Actions.map.setShapeInteractionMode('drawing'));
+      //   break;
       default:
         break;
     }

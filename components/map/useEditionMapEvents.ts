@@ -34,7 +34,9 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
           0,
         );
-
+        console.log('map', map);
+        console.log(e.point.x);
+        console.log(e.point.y);
         if (shapeInteractionMode !== 'drawing') {
           if (featureCloseToCursor) {
             // What did we click on?
@@ -49,11 +51,13 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               const rnb_id = featureCloseToCursor.properties.rnb_id;
               dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
             } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
+              console.log('LAYER_ADS_CIRCLE');
               // It is an ADS
               const file_number = featureCloseToCursor.properties.file_number;
               dispatch(Actions.map.selectADS(file_number));
             }
           } else {
+            console.log('setOperation');
             // click out unselects the currently selected item
             dispatch(Actions.map.setOperation(null));
           }
@@ -72,6 +76,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         );
 
         if (shapeInteractionMode === 'drawing') {
+          console.log('ICII', featureCloseToCursor);
           map!.getCanvas().style.cursor = 'crosshair';
         } else if (featureCloseToCursor) {
           map!.getCanvas().style.cursor = 'pointer';

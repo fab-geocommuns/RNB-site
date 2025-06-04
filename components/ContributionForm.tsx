@@ -84,7 +84,7 @@ export default function ContributionForm() {
         // Warn the map and the contribution counter there is a new one
         Bus.emit('contribution:new', {
           // @ts-ignore
-          rnb_id: selectedBuilding!.rnb_id,
+          rnb_id: selectedBuilding![0].rnb_id,
         });
 
         /* Empty textarea */
@@ -130,7 +130,7 @@ export default function ContributionForm() {
         type="hidden"
         className="fr-input"
         // @ts-ignore
-        value={selectedBuilding?.rnb_id}
+        value={selectedBuilding[0].rnb_id}
       />
       <textarea
         onFocus={handleFocus}

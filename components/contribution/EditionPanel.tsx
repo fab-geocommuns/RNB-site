@@ -8,6 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
+import MergePanel from './MergePanel';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToWKT } from '@terraformer/wkt';
@@ -192,8 +193,8 @@ function PanelWrapper({ children }: { children: React.ReactNode }) {
 }
 
 export default function EditionPanel() {
-  const selectedItem = useSelector(
-    (state: RootState) => state.map.selectedItem,
+  const selectedItem = useSelector((state: RootState) =>
+    state.map.selectedItem ? state.map.selectedItem[0] : null,
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.map.operation);
@@ -211,6 +212,13 @@ export default function EditionPanel() {
       dispatch(Actions.map.setOperation(null));
     } else {
       dispatch(Actions.map.setOperation('create'));
+    }
+  };
+  const toggleMergeBuilding = () => {
+    if (operation === 'merge') {
+      dispatch(Actions.map.setOperation(null));
+    } else {
+      dispatch(Actions.map.setOperation('merge'));
     }
   };
 
@@ -241,6 +249,30 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
+        <Button
+          onClick={toggleMergeBuilding}
+          className={operation === 'create' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'merge'
+                  ? createSelectedBuildingImage.src
+                  : createBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'merge' ? styles.actionSelected : ''}
+            >
+              fusionner
+            </small>
+          </div>
+        </Button>
       </div>
 
       {operation == 'update' && selectedBuilding && (
@@ -253,6 +285,11 @@ export default function EditionPanel() {
       {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
+        </PanelWrapper>
+      )}
+      {operation == 'merge' && (
+        <PanelWrapper>
+          <MergePanel />
         </PanelWrapper>
       )}
 

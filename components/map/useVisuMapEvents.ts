@@ -42,6 +42,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           ) {
             // It is a building
             const rnb_id = featureCloseToCursor.properties.rnb_id;
+            console.log('CLICK');
             dispatch(Actions.map.selectBuilding(rnb_id));
           }
 

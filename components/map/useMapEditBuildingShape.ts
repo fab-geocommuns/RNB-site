@@ -25,8 +25,8 @@ MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib';
  * @param map
  */
 export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
-  const selectedBuilding = useSelector(
-    (state: RootState) => state.map.selectedItem,
+  const selectedBuilding = useSelector((state: RootState) =>
+    state.map.selectedItem ? state.map.selectedItem[0] : undefined,
   );
   const shapeInteractionMode: ShapeInteractionMode = useSelector(
     (state: RootState) => state.map.shapeInteractionMode,
@@ -129,10 +129,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   useEffect(() => {
     if (map) {
       if (
-        selectedBuilding &&
-        selectedBuilding._type === 'building' &&
+        selectedBuilding?._type === 'building' &&
         drawRef.current &&
-        selectedBuilding.shape &&
+        selectedBuilding?.shape &&
         selectedBuilding.rnb_id !== selectedBuildingRef.current
       ) {
         drawRef.current.deleteAll();
