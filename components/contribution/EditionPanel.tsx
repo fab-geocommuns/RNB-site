@@ -47,10 +47,10 @@ function EditSelectedBuildingPanelContent({
   );
 
   const buildingNewShape = useSelector(
-    (state: RootState) => state.edition.buildingNewShape,
+    (state: RootState) => state.edition.updateCreate.buildingNewShape,
   );
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
 
   const anyChanges = anyChangesBetween(
@@ -198,7 +198,7 @@ export default function EditionPanel() {
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.edition.operation);
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
 
   const selectedBuilding =

@@ -29,7 +29,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     (state: RootState) => state.map.selectedItem,
   );
   const shapeInteractionMode: ShapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);

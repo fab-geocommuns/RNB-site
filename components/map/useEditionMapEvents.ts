@@ -20,7 +20,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
 
   // Initialisation des événements

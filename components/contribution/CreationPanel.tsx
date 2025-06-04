@@ -23,10 +23,10 @@ function PanelBody({ children }: { children: React.ReactNode }) {
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
   const buildingNewShape = useSelector(
-    (state: RootState) => state.edition.buildingNewShape,
+    (state: RootState) => state.edition.updateCreate.buildingNewShape,
   );
   const mapCoordinates = useSelector((state: RootState) => state.map.moveTo);
   const [newStatus, setNewStatus] = useState<BuildingStatusType>('constructed');

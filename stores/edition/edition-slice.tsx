@@ -16,18 +16,34 @@ export type ToasterInfos = {
   message: string;
 };
 
+export type MergeInfos = {
+  candidates: string[];
+};
+
 export type EditionStore = {
+  // data shared by all operations
   operation: Operation;
-  shapeInteractionMode: ShapeInteractionMode;
-  buildingNewShape: GeoJSON.Geometry | null;
   toasterInfos: ToasterInfos;
+
+  updateCreate: {
+    shapeInteractionMode: ShapeInteractionMode;
+    buildingNewShape: GeoJSON.Geometry | null;
+  };
+
+  merge: MergeInfos;
+  // split: SplitInfos;
 };
 
 const initialState: EditionStore = {
   operation: null,
-  shapeInteractionMode: null,
-  buildingNewShape: null,
   toasterInfos: { state: null, message: '' },
+  updateCreate: {
+    shapeInteractionMode: null,
+    buildingNewShape: null,
+  },
+  merge: {
+    candidates: [],
+  },
 };
 
 export const editionSlice = createSlice({
@@ -35,8 +51,8 @@ export const editionSlice = createSlice({
   initialState,
   reducers: {
     reset(state) {
-      state.shapeInteractionMode = null;
-      state.buildingNewShape = null;
+      state.updateCreate.shapeInteractionMode = null;
+      state.updateCreate.buildingNewShape = null;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
@@ -45,10 +61,10 @@ export const editionSlice = createSlice({
       state,
       action: PayloadAction<ShapeInteractionMode>,
     ) {
-      state.shapeInteractionMode = action.payload;
+      state.updateCreate.shapeInteractionMode = action.payload;
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
-      state.buildingNewShape = action.payload;
+      state.updateCreate.buildingNewShape = action.payload;
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
