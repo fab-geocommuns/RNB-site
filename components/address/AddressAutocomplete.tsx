@@ -155,6 +155,7 @@ export default function AddressAutocomplete({
     let query_url = new URL(apiUrl);
     query_url.searchParams.set('q', q);
     query_url.searchParams.set('autocomplete', '1');
+    query_url.searchParams.set('limit', '30');
 
     Object.keys(geocodeQueryParams).forEach((key) => {
       query_url.searchParams.set(key, geocodeQueryParams[key]);
@@ -172,7 +173,7 @@ export default function AddressAutocomplete({
     });
   };
 
-  const suggestions = addressSuggestions.map((s, i) => (
+  const suggestions = addressSuggestions.slice(0, 10).map((s, i) => (
     <div
       onMouseEnter={() => setHighlightedSuggestionIndex(i)}
       onMouseDown={() => selectSuggestion(s)}
