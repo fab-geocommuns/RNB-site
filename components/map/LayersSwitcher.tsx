@@ -159,6 +159,15 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     onClick={() => handleChangeBackgroundClick('satellite')}
                     image={backgroundSatellite}
                   />
+                  <LayerButton
+                    isAvailable={isAvailable('satelliteOrtho')}
+                    isActive={mapLayers.background === 'satelliteOrtho'}
+                    label="Satellite (Ortho)"
+                    onClick={() =>
+                      handleChangeBackgroundClick('satelliteOrtho')
+                    }
+                    image={backgroundSatellite}
+                  />
                 </ul>
               </div>
             </div>

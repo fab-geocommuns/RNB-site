@@ -57,6 +57,7 @@ export type MapLayers = {
 
 export type MapBackgroundLayer =
   | 'satellite'
+  | 'satelliteOrtho'
   | 'vectorOsm'
   | 'vectorIgnStandard';
 export type MapBuildingsLayer = 'point' | 'polygon';
