@@ -3,7 +3,6 @@
 import {
   createAsyncThunk,
   createSlice,
-  PayloadAction,
   createListenerMiddleware,
 } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
@@ -62,12 +61,6 @@ export type MapBackgroundLayer =
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
-export type Operation = null | 'create' | 'update' | 'split' | 'merge';
-export type ShapeInteractionMode = null | 'drawing' | 'updating';
-export type ToasterInfos = {
-  state: null | 'success' | 'error';
-  message: string;
-};
 
 export type MapStore = {
   addressSearch: {
@@ -87,10 +80,6 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
-  operation: Operation;
-  shapeInteractionMode: ShapeInteractionMode;
-  buildingNewShape: GeoJSON.Geometry | null;
-  toasterInfos: ToasterInfos;
 };
 
 const initialState: MapStore = {
@@ -103,20 +92,12 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: ['ads'],
   },
-  operation: null,
-  shapeInteractionMode: null,
-  buildingNewShape: null,
-  toasterInfos: { state: null, message: '' },
 };
 
 export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    reset(state) {
-      state.shapeInteractionMode = null;
-      state.buildingNewShape = null;
-    },
     setLayersBackground(state, action) {
       state.layers.background = action.payload;
     },
@@ -143,7 +124,6 @@ export const mapSlice = createSlice({
       state.addressSearch.unknown_rnb_id = action.payload;
     },
     setMarkerAndReset(state, action) {
-      state.operation = null;
       state.marker = action.payload;
     },
     setMoveTo(state, action) {
@@ -160,21 +140,6 @@ export const mapSlice = createSlice({
       if (state.selectedItem && state.selectedItem._type === 'building') {
         state.selectedItem.addresses = action.payload;
       }
-    },
-    setOperation(state, action: PayloadAction<Operation>) {
-      state.operation = action.payload;
-    },
-    setShapeInteractionMode(
-      state,
-      action: PayloadAction<ShapeInteractionMode>,
-    ) {
-      state.shapeInteractionMode = action.payload;
-    },
-    setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
-      state.buildingNewShape = action.payload;
-    },
-    setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
-      state.toasterInfos = action.payload;
     },
   },
 
@@ -244,14 +209,6 @@ export const selectBuilding = createAsyncThunk(
   },
 );
 
-export const selectBuildingAndSetOperationUpdate =
-  (rnb_id: string) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const building = await dispatch(Actions.map.selectBuilding(rnb_id));
-    dispatch(Actions.map.setOperation('update'));
-    return building;
-  };
-
 export function adsApiUrl(fileNumber: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/permis/' + fileNumber + '/';
 }
@@ -266,41 +223,5 @@ export const mapActions = {
   selectBuilding,
   selectADS,
 };
-// Create d'un middleware pour réagir aux changements du store
-export const listenerMiddleware = createListenerMiddleware();
-
-listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
-  actionCreator: mapSlice.actions.setOperation,
-  effect: async (action, listenerApi) => {
-    const state = listenerApi.getState();
-    const operation = state.map.operation;
-
-    // a chaque changement d'operation, on reset le store
-    await listenerApi.dispatch(Actions.map.reset());
-
-    // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
-    switch (operation) {
-      case null:
-        break;
-      case 'create':
-        listenerApi.dispatch(Actions.map.unselectItem());
-        listenerApi.dispatch(Actions.map.setShapeInteractionMode('drawing'));
-        break;
-      case 'update':
-        if (state.map.selectedItem?._type === 'building') {
-          if (state.map.selectedItem.shape.type === 'Point') {
-            listenerApi.dispatch(Actions.map.setShapeInteractionMode(null));
-          } else {
-            listenerApi.dispatch(
-              Actions.map.setShapeInteractionMode('updating'),
-            );
-          }
-        }
-        break;
-      default:
-        break;
-    }
-  },
-});
 
 export const mapReducer = mapSlice.reducer;
