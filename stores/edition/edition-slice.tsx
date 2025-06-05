@@ -90,10 +90,10 @@ export const editionSlice = createSlice({
 
 export const selectBuildingAndSetOperationUpdate =
   (rnb_properties: {
-    contributions: number;
-    is_active: boolean;
+    contributions?: number;
+    is_active?: boolean;
     rnb_id: string;
-    status: string;
+    status?: string;
   }) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     let building;
