@@ -8,6 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
+import MergePanel from './MergePanel';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToWKT } from '@terraformer/wkt';
@@ -207,10 +208,19 @@ export default function EditionPanel() {
       : null;
 
   const toggleCreateBuilding = () => {
+    dispatch(Actions.edition.resetCandidates());
     if (operation === 'create') {
       dispatch(Actions.edition.setOperation(null));
     } else {
       dispatch(Actions.edition.setOperation('create'));
+    }
+  };
+  const toggleMergeBuilding = () => {
+    if (operation === 'merge') {
+      dispatch(Actions.edition.setOperation(null));
+    } else {
+      dispatch(Actions.edition.resetCandidates());
+      dispatch(Actions.edition.setOperation('merge'));
     }
   };
 
@@ -241,6 +251,30 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
+        <Button
+          onClick={toggleMergeBuilding}
+          className={operation === 'merge' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'merge'
+                  ? createSelectedBuildingImage.src
+                  : createBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'merge' ? styles.actionSelected : ''}
+            >
+              fusionner
+            </small>
+          </div>
+        </Button>
       </div>
 
       {operation == 'update' && selectedBuilding && (
@@ -253,6 +287,11 @@ export default function EditionPanel() {
       {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
+        </PanelWrapper>
+      )}
+      {operation == 'merge' && (
+        <PanelWrapper>
+          <MergePanel />
         </PanelWrapper>
       )}
 

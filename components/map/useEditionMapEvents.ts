@@ -34,7 +34,6 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
           0,
         );
-
         if (shapeInteractionMode !== 'drawing') {
           if (featureCloseToCursor) {
             // What did we click on?
@@ -46,8 +45,8 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               ].includes(featureCloseToCursor.layer.id)
             ) {
               // It is a building
-              const rnb_id = featureCloseToCursor.properties.rnb_id;
-              dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
+              const rnb_properties = featureCloseToCursor.properties;
+              dispatch(selectBuildingAndSetOperationUpdate(rnb_properties));
             } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
               // It is an ADS
               const file_number = featureCloseToCursor.properties.file_number;
