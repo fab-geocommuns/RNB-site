@@ -9,7 +9,7 @@ export default function CreationPanel() {
     <>
       {candidatesToMerge.length ? (
         candidatesToMerge.map((candidate) => (
-          <div>
+          <div key={candidate.rnb_id}>
             <div>{candidate.rnb_id}</div>
             <div>{candidate.status}</div>
           </div>
