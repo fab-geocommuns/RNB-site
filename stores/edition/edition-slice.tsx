@@ -18,7 +18,6 @@ export type ToasterInfos = {
 
 export type MergeInfos = {
   candidates: BuildingCandidatesToMerge[];
-  candidateToremove: BuildingCandidatesToMerge | null;
 };
 
 export type EditionStore = {
@@ -49,7 +48,6 @@ const initialState: EditionStore = {
   },
   merge: {
     candidates: [],
-    candidateToremove: null,
   },
 };
 
@@ -59,7 +57,6 @@ export const editionSlice = createSlice({
   reducers: {
     resetCandidates(state) {
       state.merge.candidates = [];
-      state.merge.candidateToremove = null;
     },
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
@@ -69,7 +66,6 @@ export const editionSlice = createSlice({
       state,
       action: PayloadAction<{
         candidates: BuildingCandidatesToMerge[];
-        candidateToremove: BuildingCandidatesToMerge | null;
       }>,
     ) {
       state.merge = action.payload;
@@ -109,8 +105,6 @@ export const selectBuildingAndSetOperationUpdate =
     } else {
       building = rnb_properties;
       dispatch(Actions.edition.setOperation('merge'));
-      console.log(building);
-      console.log(getState().edition.merge.candidates);
       dispatch(
         Actions.edition.setCandidates(
           formatCandidates(rnb_properties, getState().edition.merge.candidates),
@@ -180,12 +174,10 @@ function formatCandidates(
       candidates: candidates.filter(
         (item: BuildingCandidatesToMerge) => item.rnb_id !== candidate.rnb_id,
       ),
-      candidateToremove: candidate,
     };
   } else
     return {
       candidates: [...candidates, candidate],
-      candidateToremove: null,
     };
 }
 
