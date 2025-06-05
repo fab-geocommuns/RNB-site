@@ -44,8 +44,9 @@ export default function AddressSearchMap() {
 
     // If the query is a RNB ID we bypass the address search
     if (e.key === 'Enter' && queryIsRnbId(query)) {
+      console.log(query);
       const building = (await dispatch(
-        selectBuildingAndSetOperationUpdate(query),
+        selectBuildingAndSetOperationUpdate({ rnb_id: query }),
       )) as any;
       if (building.payload) {
         dispatch(
@@ -82,7 +83,7 @@ export default function AddressSearchMap() {
       setAutocompleteActive(false);
       setQuery(q);
       const building = (await dispatch(
-        selectBuildingAndSetOperationUpdate(q),
+        selectBuildingAndSetOperationUpdate({ rnb_id: q }),
       )) as any;
       dispatch(
         Actions.map.setMoveTo({

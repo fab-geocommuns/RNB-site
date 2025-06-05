@@ -116,7 +116,6 @@ export const useMapStateSyncSelectedBuilding = (map?: maplibregl.Map) => {
     if (selectedItem && map) {
       const sources = getFeatureTypeSource(selectedItem);
       const id = getFeatureId(selectedItem);
-
       if (id) {
         for (const source of sources) {
           if (map.getSource(source)) {

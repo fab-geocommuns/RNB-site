@@ -78,7 +78,7 @@ export type MapStore = {
   };
   marker?: [number, number];
   reloadBuildings?: number;
-  selectedItem?: SelectedItem;
+  selectedItem?: SelectedItem | null;
   layers: MapLayers;
 };
 
@@ -126,6 +126,9 @@ export const mapSlice = createSlice({
     setMarkerAndReset(state, action) {
       state.marker = action.payload;
     },
+    resetSelectedItem(state) {
+      state.selectedItem = null;
+    },
     setMoveTo(state, action) {
       state.moveTo = action.payload;
       if (state.moveTo) {
@@ -146,12 +149,8 @@ export const mapSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
       // No building selected
-      if (!action.payload) {
-        state.selectedItem = undefined;
-      } else {
-        state.selectedItem = action.payload;
-      }
-
+      if (!action.payload) state.selectedItem = undefined;
+      else state.selectedItem = action.payload;
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
       } else {

@@ -17,7 +17,8 @@ export type ToasterInfos = {
 };
 
 export type MergeInfos = {
-  candidates: string[];
+  candidates: BuildingCandidatesToMerge[];
+  candidateToremove: BuildingCandidatesToMerge | null;
 };
 
 export type EditionStore = {
@@ -33,7 +34,12 @@ export type EditionStore = {
   merge: MergeInfos;
   // split: SplitInfos;
 };
-
+export interface BuildingCandidatesToMerge {
+  contributions?: number;
+  is_active?: boolean;
+  rnb_id: string;
+  status?: string;
+}
 const initialState: EditionStore = {
   operation: null,
   toasterInfos: { state: null, message: '' },
@@ -43,6 +49,7 @@ const initialState: EditionStore = {
   },
   merge: {
     candidates: [],
+    candidateToremove: null,
   },
 };
 
@@ -50,9 +57,22 @@ export const editionSlice = createSlice({
   name: 'edition',
   initialState,
   reducers: {
+    resetCandidates(state) {
+      state.merge.candidates = [];
+      state.merge.candidateToremove = null;
+    },
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
+    },
+    setCandidates(
+      state,
+      action: PayloadAction<{
+        candidates: BuildingCandidatesToMerge[];
+        candidateToremove: BuildingCandidatesToMerge | null;
+      }>,
+    ) {
+      state.merge = action.payload;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
@@ -73,10 +93,30 @@ export const editionSlice = createSlice({
 });
 
 export const selectBuildingAndSetOperationUpdate =
-  (rnb_id: string) =>
+  (rnb_properties: {
+    contributions?: number;
+    is_active?: boolean;
+    rnb_id: string;
+    status?: string;
+  }) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const building = await dispatch(Actions.map.selectBuilding(rnb_id));
-    dispatch(Actions.edition.setOperation('update'));
+    let building;
+    if (getState().edition.operation !== 'merge') {
+      building = await dispatch(
+        Actions.map.selectBuilding(rnb_properties.rnb_id),
+      );
+      dispatch(Actions.edition.setOperation('update'));
+    } else {
+      building = rnb_properties;
+      dispatch(Actions.edition.setOperation('merge'));
+      console.log(building);
+      console.log(getState().edition.merge.candidates);
+      dispatch(
+        Actions.edition.setCandidates(
+          formatCandidates(rnb_properties, getState().edition.merge.candidates),
+        ),
+      );
+    }
     return building;
   };
 
@@ -105,6 +145,12 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
           Actions.edition.setShapeInteractionMode('drawing'),
         );
         break;
+      case 'merge':
+        // listenerApi.dispatch(Actions.map.unselectItem());
+        listenerApi.dispatch(
+          Actions.edition.setShapeInteractionMode('updating'),
+        );
+        break;
       case 'update':
         if (state.map.selectedItem?._type === 'building') {
           if (state.map.selectedItem.shape.type === 'Point') {
@@ -121,6 +167,27 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     }
   },
 });
+
+function formatCandidates(
+  candidate: BuildingCandidatesToMerge,
+  candidates: BuildingCandidatesToMerge[],
+) {
+  const itemExist = candidates.some(
+    (item: BuildingCandidatesToMerge) => item.rnb_id === candidate.rnb_id,
+  );
+  if (itemExist) {
+    return {
+      candidates: candidates.filter(
+        (item: BuildingCandidatesToMerge) => item.rnb_id !== candidate.rnb_id,
+      ),
+      candidateToremove: candidate,
+    };
+  } else
+    return {
+      candidates: [...candidates, candidate],
+      candidateToremove: null,
+    };
+}
 
 export const editionActions = editionSlice.actions;
 export const editionReducer = editionSlice.reducer;
