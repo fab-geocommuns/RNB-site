@@ -86,13 +86,13 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
 function setMapLayer(
   sources: string[],
   map: maplibregl.Map,
-  method: string,
+  method: 'setFeatureState' | 'removeFeatureState',
   id?: string,
   obj?: { in_panel: boolean },
 ) {
   for (const source of sources) {
     if (map.getSource(source)) {
-      map[method](
+      (map[method] as any)(
         {
           source,
           id,
