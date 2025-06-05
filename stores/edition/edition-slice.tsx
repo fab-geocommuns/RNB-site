@@ -8,7 +8,6 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { Actions, AppDispatch, RootState } from '../store';
-import { SelectedBuilding } from '@/stores/map/map-slice';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -18,8 +17,8 @@ export type ToasterInfos = {
 };
 
 export type MergeInfos = {
-  candidates: SelectedBuilding[];
-  candidateToremove: SelectedBuilding | null;
+  candidates: BuildingCandidatesToMerge[];
+  candidateToremove: BuildingCandidatesToMerge | null;
 };
 
 export type EditionStore = {
@@ -35,7 +34,12 @@ export type EditionStore = {
   merge: MergeInfos;
   // split: SplitInfos;
 };
-
+export interface BuildingCandidatesToMerge {
+  contributions?: number;
+  is_active?: boolean;
+  rnb_id: string;
+  status?: string;
+}
 const initialState: EditionStore = {
   operation: null,
   toasterInfos: { state: null, message: '' },
@@ -64,8 +68,8 @@ export const editionSlice = createSlice({
     setCandidates(
       state,
       action: PayloadAction<{
-        candidates: SelectedBuilding[];
-        candidateToremove: SelectedBuilding;
+        candidates: BuildingCandidatesToMerge[];
+        candidateToremove: BuildingCandidatesToMerge | null;
       }>,
     ) {
       state.merge = action.payload;
@@ -105,6 +109,8 @@ export const selectBuildingAndSetOperationUpdate =
     } else {
       building = rnb_properties;
       dispatch(Actions.edition.setOperation('merge'));
+      console.log(building);
+      console.log(getState().edition.merge.candidates);
       dispatch(
         Actions.edition.setCandidates(
           formatCandidates(rnb_properties, getState().edition.merge.candidates),
@@ -163,16 +169,16 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
 });
 
 function formatCandidates(
-  candidate: SelectedBuilding,
-  candidates: SelectedBuilding[],
+  candidate: BuildingCandidatesToMerge,
+  candidates: BuildingCandidatesToMerge[],
 ) {
   const itemExist = candidates.some(
-    (item: SelectedBuilding) => item.rnb_id === candidate.rnb_id,
+    (item: BuildingCandidatesToMerge) => item.rnb_id === candidate.rnb_id,
   );
   if (itemExist) {
     return {
       candidates: candidates.filter(
-        (item: SelectedBuilding) => item.rnb_id !== candidate.rnb_id,
+        (item: BuildingCandidatesToMerge) => item.rnb_id !== candidate.rnb_id,
       ),
       candidateToremove: candidate,
     };

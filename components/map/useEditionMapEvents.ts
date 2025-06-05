@@ -10,6 +10,7 @@ import {
   LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
+import { BuildingCandidatesToMerge } from '@/stores/edition/edition-slice';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -45,7 +46,12 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               ].includes(featureCloseToCursor.layer.id)
             ) {
               // It is a building
-              const rnb_properties = featureCloseToCursor.properties;
+              const rnb_properties: BuildingCandidatesToMerge = {
+                rnb_id: featureCloseToCursor.properties.rnb_id,
+                contributions: featureCloseToCursor.properties.contributions,
+                is_active: featureCloseToCursor.properties.is_active,
+                status: featureCloseToCursor.properties.status,
+              };
               dispatch(selectBuildingAndSetOperationUpdate(rnb_properties));
             } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
               // It is an ADS
