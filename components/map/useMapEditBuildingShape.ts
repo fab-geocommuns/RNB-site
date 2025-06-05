@@ -122,6 +122,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         }
       } else if (shapeInteractionMode === 'drawing') {
         drawRef.current.changeMode('draw_polygon');
+      } else if (shapeInteractionMode === null) {
+        drawRef.current.changeMode('simple_select');
       }
     }
   }, [shapeInteractionMode, dispatch]);
