@@ -25,7 +25,7 @@ export async function throwErrorMessageForHumans(response: Response) {
 
 export function toasterSuccess(dispatch: AppDispatch, msg: string) {
   dispatch(
-    Actions.map.setToasterInfos({
+    Actions.edition.setToasterInfos({
       state: 'success',
       message: msg,
     }),
@@ -34,7 +34,7 @@ export function toasterSuccess(dispatch: AppDispatch, msg: string) {
 
 export function toasterError(dispatch: AppDispatch, msg: string) {
   dispatch(
-    Actions.map.setToasterInfos({
+    Actions.edition.setToasterInfos({
       state: 'error',
       message: msg,
     }),
@@ -43,7 +43,7 @@ export function toasterError(dispatch: AppDispatch, msg: string) {
 
 export function toasterReset(dispatch: AppDispatch) {
   dispatch(
-    Actions.map.setToasterInfos({
+    Actions.edition.setToasterInfos({
       state: null,
       message: '',
     }),
@@ -52,7 +52,7 @@ export function toasterReset(dispatch: AppDispatch) {
 
 export default function Toaster() {
   const toasterInfos = useSelector(
-    (state: RootState) => state.map.toasterInfos,
+    (state: RootState) => state.edition.toasterInfos,
   );
   const [showToaster, setShowToaster] = useState(false);
 

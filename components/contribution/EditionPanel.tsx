@@ -47,10 +47,10 @@ function EditSelectedBuildingPanelContent({
   );
 
   const buildingNewShape = useSelector(
-    (state: RootState) => state.map.buildingNewShape,
+    (state: RootState) => state.edition.updateCreate.buildingNewShape,
   );
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.map.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
 
   const anyChanges = anyChangesBetween(
@@ -101,7 +101,7 @@ function EditSelectedBuildingPanelContent({
       } else {
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
-        dispatch(Actions.map.setBuildingNewShape(null));
+        dispatch(Actions.edition.setBuildingNewShape(null));
         toasterSuccess(dispatch, 'Modification enregistrée');
         await dispatch(Actions.map.selectBuilding(rnbId));
       }
@@ -112,8 +112,8 @@ function EditSelectedBuildingPanelContent({
   };
 
   const cancelUpdate = () => {
-    dispatch(Actions.map.setOperation(null));
-    dispatch(Actions.map.reset());
+    dispatch(Actions.edition.setOperation(null));
+    dispatch(Actions.edition.reset());
   };
 
   const toggleBuildingActivation = async (isActive: boolean) => {
@@ -196,9 +196,9 @@ export default function EditionPanel() {
     (state: RootState) => state.map.selectedItem,
   );
   const dispatch: AppDispatch = useDispatch();
-  const operation = useSelector((state: RootState) => state.map.operation);
+  const operation = useSelector((state: RootState) => state.edition.operation);
   const shapeInteractionMode = useSelector(
-    (state: RootState) => state.map.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
 
   const selectedBuilding =
@@ -208,9 +208,9 @@ export default function EditionPanel() {
 
   const toggleCreateBuilding = () => {
     if (operation === 'create') {
-      dispatch(Actions.map.setOperation(null));
+      dispatch(Actions.edition.setOperation(null));
     } else {
-      dispatch(Actions.map.setOperation('create'));
+      dispatch(Actions.edition.setOperation('create'));
     }
   };
 

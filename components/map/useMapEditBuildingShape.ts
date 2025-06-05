@@ -6,7 +6,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
-import { ShapeInteractionMode } from '@/stores/map/map-slice';
+import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -29,12 +29,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     (state: RootState) => state.map.selectedItem,
   );
   const shapeInteractionMode: ShapeInteractionMode = useSelector(
-    (state: RootState) => state.map.shapeInteractionMode,
+    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
 
-  const operation = useSelector((state: RootState) => state.map.operation);
+  const operation = useSelector((state: RootState) => state.edition.operation);
 
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
@@ -62,7 +62,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
       // actions when a polygon is updated
       const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
-        dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
+        dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
       };
       drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
 
@@ -76,9 +76,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
               drawRef.current.delete(draw.id.toString());
             }
           }
-          dispatch(Actions.map.setBuildingNewShape(e.features[0].geometry));
+          dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
           setTimeout(() => {
-            dispatch(Actions.map.setShapeInteractionMode('updating'));
+            dispatch(Actions.edition.setShapeInteractionMode('updating'));
           });
         }
       };
