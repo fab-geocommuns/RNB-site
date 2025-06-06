@@ -17,7 +17,7 @@ export type ToasterInfos = {
 };
 
 export type MergeInfos = {
-  candidates: BuildingCandidatesToMerge[];
+  candidates: string[];
 };
 
 export type EditionStore = {
@@ -35,8 +35,8 @@ export type EditionStore = {
 };
 export interface BuildingCandidatesToMerge {
   contributions?: number;
-  is_active?: boolean;
-  rnb_id: string;
+  isActive?: boolean;
+  rnbId: string;
   status?: string;
 }
 const initialState: EditionStore = {
@@ -65,7 +65,7 @@ export const editionSlice = createSlice({
     setCandidates(
       state,
       action: PayloadAction<{
-        candidates: BuildingCandidatesToMerge[];
+        candidates: string[];
       }>,
     ) {
       state.merge = action.payload;
@@ -88,32 +88,25 @@ export const editionSlice = createSlice({
   },
 });
 
-export const selectBuildingAndSetOperationUpdate =
-  (rnb_properties: {
-    contributions?: number;
-    is_active?: boolean;
-    rnb_id: string;
-    status?: string;
-  }) =>
+export const selectBuildingsAndSetCandidates =
+  (rnbId: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    let building;
-    if (getState().edition.operation !== 'merge') {
-      building = await dispatch(
-        Actions.map.selectBuilding(rnb_properties.rnb_id),
-      );
-      dispatch(Actions.edition.setOperation('update'));
-    } else {
-      building = rnb_properties;
-      dispatch(Actions.edition.setOperation('merge'));
-      dispatch(
-        Actions.edition.setCandidates(
-          formatCandidates(rnb_properties, getState().edition.merge.candidates),
-        ),
-      );
-    }
-    return building;
+    dispatch(Actions.map.unselectItem());
+    dispatch(Actions.edition.setOperation('merge'));
+    dispatch(
+      Actions.edition.setCandidates(
+        formatCandidates(rnbId, getState().edition.merge.candidates),
+      ),
+    );
   };
 
+export const selectBuildingAndSetOperationUpdate =
+  (rnbId: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const building = await dispatch(Actions.map.selectBuilding(rnbId));
+    dispatch(Actions.edition.setOperation('update'));
+    return building;
+  };
 // Create d'un middleware pour réagir aux changements du store
 export const listenerMiddleware = createListenerMiddleware();
 
@@ -135,14 +128,9 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
         break;
       case 'create':
         listenerApi.dispatch(Actions.map.unselectItem());
+        listenerApi.dispatch(Actions.edition.resetCandidates());
         listenerApi.dispatch(
           Actions.edition.setShapeInteractionMode('drawing'),
-        );
-        break;
-      case 'merge':
-        // listenerApi.dispatch(Actions.map.unselectItem());
-        listenerApi.dispatch(
-          Actions.edition.setShapeInteractionMode('updating'),
         );
         break;
       case 'update':
@@ -162,18 +150,11 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   },
 });
 
-function formatCandidates(
-  candidate: BuildingCandidatesToMerge,
-  candidates: BuildingCandidatesToMerge[],
-) {
-  const itemExist = candidates.some(
-    (item: BuildingCandidatesToMerge) => item.rnb_id === candidate.rnb_id,
-  );
+function formatCandidates(candidate: string, candidates: string[]) {
+  const itemExist = candidates.some((item: string) => item === candidate);
   if (itemExist) {
     return {
-      candidates: candidates.filter(
-        (item: BuildingCandidatesToMerge) => item.rnb_id !== candidate.rnb_id,
-      ),
+      candidates: candidates.filter((item: string) => item !== candidate),
     };
   } else
     return {

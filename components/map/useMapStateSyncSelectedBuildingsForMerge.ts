@@ -19,7 +19,7 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
     (state: RootState) => state.edition.merge.candidates,
   );
   const operation = useSelector((state: RootState) => state.edition.operation);
-  const prevSelectedRef = useRef<BuildingCandidatesToMerge[]>([]);
+  const prevSelectedRef = useRef<string[]>([]);
 
   useEffect(() => {
     const prevSelected = prevSelectedRef.current;
@@ -36,26 +36,24 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
     }
     if (map && candidatesToMerge) {
       if (candidatesToMerge.length === 0 && prevSelected.length) {
-        setFeatureStateLayer(sources, map, prevSelected[0].rnb_id, false);
+        setFeatureStateLayer(sources, map, prevSelected[0], false);
       }
       candidatesToMerge.map((candidate) => {
         let inPanel = true;
-        let id = candidate.rnb_id;
+        let id = candidate;
         if (candidatesToMerge.length < prevSelected.length) {
           const filterIdToRemove = prevSelected.filter(
             (item) =>
-              !candidatesToMerge.some(
-                (candidate) => candidate.rnb_id === item.rnb_id,
-              ),
+              !candidatesToMerge.some((candidate) => candidate === item),
           );
           inPanel = false;
-          id = filterIdToRemove[0].rnb_id;
+          id = filterIdToRemove[0];
         }
         setFeatureStateLayer(sources, map, id, inPanel);
       });
     }
     prevSelectedRef.current = candidatesToMerge;
-  }, [candidatesToMerge, operation, candidatesToMerge]);
+  }, [candidatesToMerge, operation]);
 };
 
 function setMapLayer(
