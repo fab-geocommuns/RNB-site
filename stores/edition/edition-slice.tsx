@@ -150,7 +150,7 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   },
 });
 
-function formatCandidates(candidate: string, candidates: string[]) {
+export function formatCandidates(candidate: string, candidates: string[]) {
   const itemExist = candidates.some((item: string) => item === candidate);
   if (itemExist) {
     return {
