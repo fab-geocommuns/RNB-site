@@ -78,7 +78,7 @@ export type MapStore = {
   };
   marker?: [number, number];
   reloadBuildings?: number;
-  selectedItem?: SelectedItem | null;
+  selectedItem?: SelectedItem;
   layers: MapLayers;
 };
 
@@ -125,9 +125,6 @@ export const mapSlice = createSlice({
     },
     setMarkerAndReset(state, action) {
       state.marker = action.payload;
-    },
-    resetSelectedItem(state) {
-      state.selectedItem = null;
     },
     setMoveTo(state, action) {
       state.moveTo = action.payload;

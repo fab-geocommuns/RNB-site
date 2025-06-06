@@ -208,19 +208,18 @@ export default function EditionPanel() {
       : null;
 
   const toggleCreateBuilding = () => {
-    dispatch(Actions.edition.resetCandidates());
     if (operation === 'create') {
       dispatch(Actions.edition.setOperation(null));
     } else {
       dispatch(Actions.edition.setOperation('create'));
     }
   };
-  const toggleMergeBuilding = () => {
+  const toggleMergeBuilding = async () => {
     if (operation === 'merge') {
       dispatch(Actions.edition.setOperation(null));
     } else {
-      dispatch(Actions.edition.resetCandidates());
       dispatch(Actions.edition.setOperation('merge'));
+      console.log('toggleMergeBuilding', operation);
     }
   };
 
