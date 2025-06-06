@@ -7,6 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { Actions, AppDispatch, RootState } from '../store';
+import { fetchBuilding } from '@/utils/request';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -186,19 +187,9 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
-
-    const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
-    const rnbResponse = await fetch(url);
-
-    if (rnbResponse.ok) {
-      const rnbData = (await rnbResponse.json()) as SelectedBuilding;
-
-      const selectedBuilding = {
-        ...rnbData,
-        _type: 'building',
-      } satisfies SelectedBuilding;
-
-      return selectedBuilding;
+    const buildingFetched = await fetchBuilding(rnbId);
+    if (buildingFetched?.rnb_id) {
+      return buildingFetched;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }
