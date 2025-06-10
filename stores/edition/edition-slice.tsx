@@ -33,12 +33,6 @@ export type EditionStore = {
   merge: MergeInfos;
   // split: SplitInfos;
 };
-export interface BuildingCandidatesToMerge {
-  contributions?: number;
-  isActive?: boolean;
-  rnbId: string;
-  status?: string;
-}
 const initialState: EditionStore = {
   operation: null,
   toasterInfos: { state: null, message: '' },

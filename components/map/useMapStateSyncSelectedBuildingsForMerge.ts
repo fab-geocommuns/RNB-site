@@ -5,7 +5,6 @@ import {
   SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
 import { RootState } from '@/stores/store';
-import { BuildingCandidatesToMerge } from '@/stores/edition/edition-slice';
 import maplibregl from 'maplibre-gl';
 
 /**

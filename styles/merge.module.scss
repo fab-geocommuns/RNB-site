@@ -1,0 +1,110 @@
+$spacing: 12px;
+$actions-height: 60px;
+$panel-padding: 1.5*$spacing;
+
+.mergePanel_body {
+    padding: $panel-padding $panel-padding 0 $panel-padding;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: auto;
+    padding-bottom: 85px;
+    display: flex;
+    flex-direction: column;
+}
+.mergePanel__loader {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    span {
+        font-size: 14px;
+        margin-top: 20px;
+    }
+}
+.mergePanel__descWrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    background: var(--background-default-grey);
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border-open-blue-france);
+}
+.mergePanel__descText {
+    font-weight: 700;
+}
+.mergePanel__textNoBuilding {
+    font-weight: 700;
+    margin: auto;
+}
+.mergePanel__descSubText {
+    font-size: 14px;
+    line-height: 1.2;
+}
+.mergePanel__infoWrapper {
+    border-bottom: 1px solid var(--border-open-blue-france);
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.mergePanel__rnbIdWrapper {
+    display: flex;
+    color: #ce0500;
+    margin-bottom: 20px;
+}
+.mergePanel__rnbId {
+    color: #0063cb;
+    font-weight: 700;
+    width: 100%;
+}
+.mergePanel__addressesWrapper {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.mergePanel__addressWrapper {
+    display: flex;
+    flex-direction: column;
+}
+.mergePanel__addressText {
+    line-height: 1.2;
+}
+.mergePanel__label {
+    font-weight: 700;
+    line-height: 2;
+}
+.mergePanel__summary {
+    margin-top: 20px;
+    font-size: 14px;
+}
+.mergePanel__summaryText {
+    font-weight: 700;
+}
+.mergePanel__card {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    span {
+        line-height: 1.2;
+    }
+}
+.mergePanel__cardText {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.footer {
+    padding: $spacing $spacing $spacing 2*$spacing;
+    box-shadow: 0 0px 4px var(--background-contrast-grey-active);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    z-index: 90;
+    display: flex;
+    justify-content: space-between;
+    flex-shrink: 1;
+    flex-grow: 0;
+    width: 100%;
+    background: var(--background-alt-blue-france);
+}
