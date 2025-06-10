@@ -13,7 +13,7 @@ export default function Page() {
   const [stats, setStats] = useState({
     building_counts: null,
     api_calls_since_2024_count: null,
-    contributions_count: null,
+    reports_count: null,
     data_gouv_publication_count: null,
   });
   const [loading, setLoading] = useState(true);
@@ -104,7 +104,7 @@ export default function Page() {
 
             <div className="fr-col-12 fr-col-md-6">
               <div className={styles['stat-card'] + ' fr-p-6v'}>
-                <h2>{stat_display('contributions_count')}</h2>
+                <h2>{stat_display('reports_count')}</h2>
                 <div>Signalements d&apos;erreur reçus</div>
                 <div className="fr-pt-3w">
                   <Link href="/carte" className="fr-link">
