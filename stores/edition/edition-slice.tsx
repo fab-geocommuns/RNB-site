@@ -3,11 +3,12 @@
 import {
   createListenerMiddleware,
   createSlice,
-  ListenerEffect,
   ListenerEffectAPI,
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { Actions, AppDispatch, RootState } from '../store';
+import { BuildingStatusType } from '../contribution/contribution-types';
+import { BuildingAddress } from '../map/map-slice';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -18,6 +19,18 @@ export type ToasterInfos = {
 
 export type MergeInfos = {
   candidates: string[];
+};
+
+export type SplitInfos = {
+  splitCandidateId: string | null;
+  childrenNumber: number | null;
+  children: SplitChild[];
+};
+
+export type SplitChild = {
+  status: BuildingStatusType;
+  shape: GeoJSON.Geometry;
+  addresses: BuildingAddress[];
 };
 
 export type EditionStore = {
@@ -31,7 +44,7 @@ export type EditionStore = {
   };
 
   merge: MergeInfos;
-  // split: SplitInfos;
+  split: SplitInfos;
 };
 
 const initialState: EditionStore = {
@@ -43,6 +56,11 @@ const initialState: EditionStore = {
   },
   merge: {
     candidates: [],
+  },
+  split: {
+    splitCandidateId: null,
+    childrenNumber: null,
+    children: [],
   },
 };
 
