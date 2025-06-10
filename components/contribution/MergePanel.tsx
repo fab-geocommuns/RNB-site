@@ -141,8 +141,8 @@ export default function CreationPanel() {
                           </span>
                           {candidate?.addresses?.length ? (
                             <div>
-                              {candidate.addresses.map((addresse) => (
-                                <div>
+                              {candidate.addresses.map((addresse, i) => (
+                                <div key={i}>
                                   <div
                                     className={
                                       styles.mergePanel__addressWrapper
