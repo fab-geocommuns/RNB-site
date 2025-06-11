@@ -7,8 +7,9 @@ import BuildingStatus from './BuildingStatus';
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import BuildingAddresses from './BuildingAddresses';
-import { BuildingAddress } from '@/stores/map/map-slice';
 import { BuildingAddressType } from './types';
+import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
+import { BuildingAddress } from '@/stores/map/map-slice';
 
 const INITIAL_STEP = 0;
 
@@ -27,48 +28,44 @@ export default function SplitPanel() {
     (state: RootState) => state.edition.split.location,
   );
   const stepsN: number = splitChildrenN + 1;
-  const [currentStep, setCurrentStep] = useState(0);
-  const currentChild = currentStep - 1;
-
+  const currentChildSelected = useSelector(
+    (state: RootState) => state.edition.split.currentChildSelected,
+  );
   const setChildrenNumber = (n: string) => {
     dispatch(Actions.edition.setSplitChildrenNumber(parseInt(n)));
   };
 
   const nextStep = () => {
-    if (currentStep < stepsN - 1) {
-      setCurrentStep(currentStep + 1);
+    const i = currentChildSelected === null ? -1 : currentChildSelected;
+    if (i < splitChildrenN) {
+      dispatch(Actions.edition.setCurrentChildSelected(i + 1));
     }
   };
 
   const previousStep = () => {
-    if (currentStep > INITIAL_STEP) {
-      setCurrentStep(currentStep - 1);
+    const i = currentChildSelected || 0;
+
+    if (i === 0) {
+      dispatch(Actions.edition.setCurrentChildSelected(null));
+    } else if (i > 0) {
+      dispatch(Actions.edition.setCurrentChildSelected(i - 1));
     }
   };
 
-  const setStatus = (currentChild: number, status: BuildingStatusType) => {
-    dispatch(
-      Actions.edition.setSplitChildStatus({
-        childIndex: currentChild,
-        status: status,
-      }),
-    );
+  const setStatus = (status: BuildingStatusType) => {
+    dispatch(Actions.edition.setSplitChildStatus(status));
   };
-  const setAddresses = (
-    currentChild: number,
-    addresses: BuildingAddressType[],
-  ) => {
-    dispatch(
-      Actions.edition.setSplitAddresses({
-        childIndex: currentChild,
-        addresses: addresses,
-      }),
-    );
+  const setAddresses = (addresses: BuildingAddressType[]) => {
+    dispatch(Actions.edition.setSplitAddresses(addresses));
+  };
+
+  const handleSplitBuildingShapeCreation = () => {
+    dispatch(Actions.edition.setShapeInteractionMode('drawing'));
   };
 
   return (
     <>
-      {currentStep === INITIAL_STEP && (
+      {currentChildSelected === null && (
         <>
           coucou split split candidate : {splitCandidateId}
           <Select
@@ -94,32 +91,52 @@ export default function SplitPanel() {
         </>
       )}
 
-      {currentStep > INITIAL_STEP && (
+      {currentChildSelected !== null && currentChildSelected >= 0 && (
         <>
+          coucou
           <div>
-            Batiment {currentStep} / {splitChildrenN}
+            Batiment {currentChildSelected + 1} / {splitChildrenN}
           </div>
           <BuildingStatus
-            status={children[currentChild].status}
-            onChange={(status) => setStatus(currentChild, status)}
+            status={children[currentChildSelected].status}
+            onChange={(status) => setStatus(status)}
           ></BuildingStatus>
           {location}
           <BuildingAddresses
             buildingPoint={location!}
-            addresses={children[currentChild].addresses}
+            addresses={children[currentChildSelected].addresses}
             onChange={(addresses: BuildingAddressType[]) => {
-              setAddresses(currentChild, addresses);
+              setAddresses(addresses);
             }}
           />
+          <Button
+            size="small"
+            onClick={handleSplitBuildingShapeCreation}
+            priority={`tertiary`}
+          >
+            <img
+              src={newPolygonIcon.src}
+              width="30"
+              title="Dessiner une nouvelle géométrie"
+            ></img>
+            <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
+              Dessiner la géométrie du bâtiment
+            </span>
+          </Button>
         </>
       )}
 
-      {currentStep > INITIAL_STEP && (
+      {currentChildSelected !== null && (
         <Button onClick={previousStep}>précédent</Button>
       )}
       <div></div>
-      {currentStep < stepsN - 1 && <Button onClick={nextStep}>Suivant</Button>}
-      {currentStep === stepsN - 1 && <Button onClick={nextStep}>FIN</Button>}
+      {(currentChildSelected === null ||
+        currentChildSelected < splitChildrenN - 1) && (
+        <Button onClick={nextStep}>Suivant</Button>
+      )}
+      {currentChildSelected && currentChildSelected === splitChildrenN - 1 && (
+        <Button onClick={nextStep}>FIN</Button>
+      )}
     </>
   );
 }

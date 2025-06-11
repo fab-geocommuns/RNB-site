@@ -60,30 +60,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       map.addControl(draw);
       drawRef.current = draw;
 
-      // actions when a polygon is updated
-      const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
-        dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
-      };
-      drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
-
-      // actions when a polygon is created
-      const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
-        // delete all other drawings
-        if (e.features && drawRef.current) {
-          const newFeaturId = e.features[0].id;
-          for (const draw of drawRef.current.getAll().features) {
-            if (draw.id && draw.id !== newFeaturId) {
-              drawRef.current.delete(draw.id.toString());
-            }
-          }
-          dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
-          setTimeout(() => {
-            dispatch(Actions.edition.setShapeInteractionMode('updating'));
-          });
-        }
-      };
-      drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
-
       // delete a selected vertice of a polygon with the delete or backspace key
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
@@ -98,12 +74,50 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
       // cleaning the hooks when the component is unmounted
       return () => {
-        map.off('draw.update', handleBuildingShapeUpdate);
-        map.off('draw.create', handleBuildingShapeCreate);
         mapContainer.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [map, dispatch]);
+
+  useEffect(() => {
+    if (map) {
+      // actions when a polygon is updated
+      const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
+        dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
+      };
+      drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
+
+      // actions when a polygon is created
+      const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
+        if (operation && operation in ['create', 'update']) {
+          console.log('coucou');
+          // delete all other drawings
+          if (e.features && drawRef.current) {
+            const newFeaturId = e.features[0].id;
+            for (const draw of drawRef.current.getAll().features) {
+              if (draw.id && draw.id !== newFeaturId) {
+                drawRef.current.delete(draw.id.toString());
+              }
+            }
+            dispatch(
+              Actions.edition.setBuildingNewShape(e.features[0].geometry),
+            );
+            setTimeout(() => {
+              dispatch(Actions.edition.setShapeInteractionMode('updating'));
+            });
+          }
+        } else if (operation === 'split') {
+          console.log('coucou split');
+        }
+      };
+      drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
+
+      return () => {
+        map.off('draw.update', handleBuildingShapeUpdate);
+        map.off('draw.create', handleBuildingShapeCreate);
+      };
+    }
+  }, [map, operation]);
 
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
@@ -129,7 +143,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   }, [shapeInteractionMode, dispatch]);
 
   useEffect(() => {
-    if (map) {
+    if (map && operation && operation in ['create', 'updated']) {
       if (
         selectedBuilding &&
         selectedBuilding._type === 'building' &&
@@ -165,7 +179,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuildingRef.current = null;
       }
     }
-  }, [selectedBuilding, dispatch]);
+  }, [selectedBuilding, operation, dispatch]);
 
   const deleteFeatures = (currentDrawRef: MapboxDraw | null) => {
     if (currentDrawRef) {

@@ -9,6 +9,7 @@ import {
 import { Actions, AppDispatch, RootState } from '../store';
 import { BuildingStatusType } from '../contribution/contribution-types';
 import { BuildingAddress } from '../map/map-slice';
+import { BuildingAddressType } from '@/components/contribution/types';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -26,13 +27,14 @@ export type SplitInfos = {
   // where is the split candidate located ? Used for address search
   location: [number, number] | null;
   childrenNumber: number;
+  currentChildSelected: number | null;
   children: SplitChild[];
 };
 
 export type SplitChild = {
   status: BuildingStatusType;
   shape: GeoJSON.Geometry | null;
-  addresses: BuildingAddress[];
+  addresses: BuildingAddressType[];
 };
 
 export type EditionStore = {
@@ -62,6 +64,7 @@ const initialState: EditionStore = {
   split: {
     splitCandidateId: null,
     location: null,
+    currentChildSelected: null,
     childrenNumber: 2,
     children: [],
   },
@@ -107,24 +110,21 @@ export const editionSlice = createSlice({
           shape: null,
           addresses: [],
         }));
-      console.log('set childs');
     },
-    setSplitChildStatus(
-      state,
-      action: PayloadAction<{ childIndex: number; status: BuildingStatusType }>,
-    ) {
-      const payload = action.payload;
-      state.split.children[payload.childIndex].status = payload.status;
+    setCurrentChildSelected(state, action: PayloadAction<number | null>) {
+      state.split.currentChildSelected = action.payload;
     },
-    setSplitAddresses(
-      state,
-      action: PayloadAction<{
-        childIndex: number;
-        addresses: BuildingAddressType[];
-      }>,
-    ) {
-      const payload = action.payload;
-      state.split.children[payload.childIndex].addresses = payload.addresses;
+    setSplitChildStatus(state, action: PayloadAction<BuildingStatusType>) {
+      if (state.split.currentChildSelected) {
+        state.split.children[state.split.currentChildSelected].status =
+          action.payload;
+      }
+    },
+    setSplitAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
+      if (state.split.currentChildSelected) {
+        state.split.children[state.split.currentChildSelected].addresses =
+          action.payload;
+      }
     },
   },
 });
