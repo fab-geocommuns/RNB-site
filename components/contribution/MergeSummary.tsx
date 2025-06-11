@@ -8,21 +8,33 @@ interface MergeSummaryProps {
   buildingsMerged: (SelectedBuilding | undefined)[] | null;
 }
 
+<<<<<<< HEAD
 export default function MergeSummary({
   newBuilding,
   buildingsMerged,
 }: MergeSummaryProps) {
+=======
+export default function MergeSummary({ newBuilding, buildingsMerged }) {
+>>>>>>> d0ec334 (new panel version)
   return (
     <>
       <div>
         {buildingsMerged && buildingsMerged.length > 0 && (
           <div className={styles.mergePanel__summaryHeaderWrapper}>
             <h3 className={styles.mergePanel__summaryTitle}>
+<<<<<<< HEAD
               Bâtiments fusionnés (ID-RNB)
             </h3>
             <div className={styles.mergePanel__summaryHeader}>
               {buildingsMerged.map(
                 (building: SelectedBuilding | undefined) =>
+=======
+              Bâtiments fusionnés (RNB ID)
+            </h3>
+            <div className={styles.mergePanel__summaryHeader}>
+              {buildingsMerged.map(
+                (building: SelectedBuilding) =>
+>>>>>>> d0ec334 (new panel version)
                   building && (
                     <div
                       key={building.rnb_id}
