@@ -8,7 +8,10 @@ interface MergeSummaryProps {
   buildingsMerged: (SelectedBuilding | undefined)[] | null;
 }
 
-export default function MergeSummary({ newBuilding, buildingsMerged }) {
+export default function MergeSummary({
+  newBuilding,
+  buildingsMerged,
+}: MergeSummaryProps) {
   return (
     <>
       <div>
@@ -19,7 +22,7 @@ export default function MergeSummary({ newBuilding, buildingsMerged }) {
             </h3>
             <div className={styles.mergePanel__summaryHeader}>
               {buildingsMerged.map(
-                (building: SelectedBuilding) =>
+                (building: SelectedBuilding | undefined) =>
                   building && (
                     <div
                       key={building.rnb_id}
