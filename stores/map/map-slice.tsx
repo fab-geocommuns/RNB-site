@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { Actions, AppDispatch, RootState } from '../store';
-import { fetchBuilding } from '@/utils/request';
+import { fetchBuilding } from '@/utils/requests';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -141,6 +141,9 @@ export const mapSlice = createSlice({
       if (state.selectedItem && state.selectedItem._type === 'building') {
         state.selectedItem.addresses = action.payload;
       }
+    },
+    removeBuildings(state) {
+      state.selectedItem = undefined;
     },
   },
 

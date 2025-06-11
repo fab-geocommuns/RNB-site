@@ -1,3 +1,4 @@
+$title-color: #1a3b68;
 $spacing: 12px;
 $actions-height: 60px;
 $panel-padding: 1.5*$spacing;
@@ -34,10 +35,14 @@ $panel-padding: 1.5*$spacing;
 }
 .mergePanel__descText {
     font-weight: 700;
+    margin-bottom: 10px;
 }
 .mergePanel__textNoBuilding {
     font-weight: 700;
-    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
 }
 .mergePanel__descSubText {
     font-size: 14px;
@@ -50,10 +55,12 @@ $panel-padding: 1.5*$spacing;
 }
 .mergePanel__rnbIdWrapper {
     display: flex;
-    color: #ce0500;
+    color: var(--background-action-high-grey-active);
     margin-bottom: 20px;
 }
 .mergePanel__rnbId {
+    display: flex;
+    justify-content: space-between;
     color: #0063cb;
     font-weight: 700;
     width: 100%;
@@ -92,6 +99,38 @@ $panel-padding: 1.5*$spacing;
 .mergePanel__cardText {
     font-weight: 700;
     margin-bottom: 10px;
+}
+.mergePanel__summaryHeaderWrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.mergePanel__summaryTitle {
+    font-size: .8rem;
+    line-height: 1em;
+    margin:0;
+    text-transform: uppercase;
+    flex: 1 0 0;
+}
+.mergePanel__summaryHeader {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+.mergePanel__summaryMerged {
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 5px;
+    background-color: #0063cb;
+    width: fit-content;
+}
+.mergePanel__rnbIdMerged {
+    font-size: 14px;
+    color: white;
+}
+.mergePanel__newBuildingWrapper {
+    background-color: #e6feda;
 }
 .footer {
     padding: $spacing $spacing $spacing 2*$spacing;

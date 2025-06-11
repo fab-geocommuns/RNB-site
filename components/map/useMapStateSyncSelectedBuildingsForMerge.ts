@@ -17,6 +17,9 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
   const candidatesToMerge = useSelector(
     (state: RootState) => state.edition.merge.candidates,
   );
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
   const operation = useSelector((state: RootState) => state.edition.operation);
   const prevSelectedRef = useRef<string[]>([]);
 
@@ -24,18 +27,11 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
     const prevSelected = prevSelectedRef.current;
     const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
     if (map && operation !== 'merge') {
-      const onSourceData = (e: any) => {
-        if (checkSource(e)) setMapLayer(sources, map, 'removeFeatureState');
-      };
-      map.on('sourcedata', (e) => onSourceData(e));
-      setMapLayer(sources, map, 'removeFeatureState');
-      return () => {
-        map.off('sourcedata', onSourceData);
-      };
+      removeFeatureStateInLayers(sources, map);
     }
     if (map && candidatesToMerge) {
       if (candidatesToMerge.length === 0 && prevSelected.length) {
-        setFeatureStateLayer(sources, map, prevSelected[0], false);
+        setFeatureStateInLayers(sources, map, prevSelected[0], false);
       }
       candidatesToMerge.map((candidate) => {
         let inPanel = true;
@@ -48,8 +44,11 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
           inPanel = false;
           id = filterIdToRemove[0];
         }
-        setFeatureStateLayer(sources, map, id, inPanel);
+        setFeatureStateInLayers(sources, map, id, inPanel);
       });
+    }
+    if (map && !selectedItem && !candidatesToMerge.length) {
+      removeFeatureStateInLayers(sources, map);
     }
     prevSelectedRef.current = candidatesToMerge;
   }, [candidatesToMerge, operation]);
@@ -75,7 +74,19 @@ function setMapLayer(
     }
   }
 }
-function setFeatureStateLayer(
+
+function removeFeatureStateInLayers(sources: string[], map: maplibregl.Map) {
+  const onSourceData = (e: any) => {
+    if (checkSource(e)) setMapLayer(sources, map, 'removeFeatureState');
+  };
+  map.on('sourcedata', (e) => onSourceData(e));
+  setMapLayer(sources, map, 'removeFeatureState');
+  return () => {
+    map.off('sourcedata', onSourceData);
+  };
+}
+
+function setFeatureStateInLayers(
   sources: string[],
   map: maplibregl.Map,
   id: string,

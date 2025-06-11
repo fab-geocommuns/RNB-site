@@ -16,13 +16,17 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
+useMapEditBuildingShape;
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
+import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
+import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
+import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -214,12 +218,12 @@ export default function EditionPanel() {
       dispatch(Actions.edition.setOperation('create'));
     }
   };
-  const toggleMergeBuilding = async () => {
+  const toggleMergeBuilding = () => {
+    dispatch(Actions.map.removeBuildings());
     if (operation === 'merge') {
       dispatch(Actions.edition.setOperation(null));
     } else {
       dispatch(Actions.edition.setOperation('merge'));
-      console.log('toggleMergeBuilding', operation);
     }
   };
 
@@ -260,8 +264,8 @@ export default function EditionPanel() {
             <img
               src={
                 operation === 'merge'
-                  ? createSelectedBuildingImage.src
-                  : createBuildingImage.src
+                  ? mergeSelectedBuildingImage.src
+                  : mergeBuildingImage.src
               }
               alt=""
               height="32"

@@ -82,7 +82,7 @@ export const editionSlice = createSlice({
   },
 });
 
-export const selectBuildingsAndSetCandidates =
+export const selectBuildingsAndSetMergeCandidates =
   (rnbId: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(Actions.map.unselectItem());
