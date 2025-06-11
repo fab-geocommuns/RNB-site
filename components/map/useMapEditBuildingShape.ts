@@ -110,6 +110,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           dispatch(
             Actions.edition.setSplitBuildingShape(e.features[0].geometry),
           );
+          setTimeout(() => {
+            dispatch(Actions.edition.setShapeInteractionMode('updating'));
+          });
         }
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);

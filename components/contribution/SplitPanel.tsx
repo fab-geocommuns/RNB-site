@@ -1,7 +1,6 @@
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BuildingStatus from './BuildingStatus';
 import { SplitChild } from '@/stores/edition/edition-slice';
@@ -9,12 +8,15 @@ import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import BuildingAddresses from './BuildingAddresses';
 import { BuildingAddressType } from './types';
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
-import { BuildingAddress } from '@/stores/map/map-slice';
+import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
+import { toasterError, toasterSuccess } from './toaster';
 
 const INITIAL_STEP = 0;
 
 export default function SplitPanel() {
   const dispatch: AppDispatch = useDispatch();
+  const { fetch } = useRNBFetch();
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
@@ -31,6 +33,7 @@ export default function SplitPanel() {
   const currentChildSelected = useSelector(
     (state: RootState) => state.edition.split.currentChildSelected,
   );
+  const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
   const setChildrenNumber = (n: string) => {
     dispatch(Actions.edition.setSplitChildrenNumber(parseInt(n)));
   };
@@ -61,6 +64,30 @@ export default function SplitPanel() {
 
   const handleSplitBuildingShapeCreation = () => {
     dispatch(Actions.edition.setShapeInteractionMode('drawing'));
+  };
+
+  const handleSubmit = async () => {
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
+
+    try {
+      const response = await fetch(url, {
+        body: JSON.stringify({ created_buildings: splitChildrenForAPI }),
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        // await throwErrorMessageForHumans(response);
+      } else {
+        // force the map to reload the building, to immediatly show the modifications made
+        dispatch(Actions.map.reloadBuildings());
+        // dispatch(Actions.edition.setBuildingNewShape(null));
+        toasterSuccess(dispatch, 'Scission enregistrée');
+        // await dispatch(Actions.map.selectBuilding(rnbId));
+      }
+    } catch (err: any) {
+      toasterError(dispatch, err.message || 'Erreur lors de la scission');
+      console.error(err);
+    }
   };
 
   return (
@@ -135,7 +162,7 @@ export default function SplitPanel() {
         <Button onClick={nextStep}>Suivant</Button>
       )}
       {currentChildSelected && currentChildSelected === splitChildrenN - 1 && (
-        <Button onClick={nextStep}>FIN</Button>
+        <Button onClick={handleSubmit}>FIN</Button>
       )}
     </>
   );
