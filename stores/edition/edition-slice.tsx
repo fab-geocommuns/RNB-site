@@ -23,13 +23,15 @@ export type MergeInfos = {
 
 export type SplitInfos = {
   splitCandidateId: string | null;
-  childrenNumber: number | null;
+  // where is the split candidate located ? Used for address search
+  location: [number, number] | null;
+  childrenNumber: number;
   children: SplitChild[];
 };
 
 export type SplitChild = {
   status: BuildingStatusType;
-  shape: GeoJSON.Geometry;
+  shape: GeoJSON.Geometry | null;
   addresses: BuildingAddress[];
 };
 
@@ -59,7 +61,8 @@ const initialState: EditionStore = {
   },
   split: {
     splitCandidateId: null,
-    childrenNumber: null,
+    location: null,
+    childrenNumber: 2,
     children: [],
   },
 };
@@ -86,6 +89,42 @@ export const editionSlice = createSlice({
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
+    },
+    setSplitCandidateAndLocation(
+      state,
+      action: PayloadAction<{ rnb_id: string; location: [number, number] }>,
+    ) {
+      state.split.splitCandidateId = action.payload.rnb_id;
+      state.split.location = action.payload.location;
+    },
+    setSplitChildrenNumber(state, action: PayloadAction<number>) {
+      const n = action.payload;
+      state.split.childrenNumber = n;
+      state.split.children = Array(n)
+        .fill({})
+        .map((_item) => ({
+          status: 'constructed',
+          shape: null,
+          addresses: [],
+        }));
+      console.log('set childs');
+    },
+    setSplitChildStatus(
+      state,
+      action: PayloadAction<{ childIndex: number; status: BuildingStatusType }>,
+    ) {
+      const payload = action.payload;
+      state.split.children[payload.childIndex].status = payload.status;
+    },
+    setSplitAddresses(
+      state,
+      action: PayloadAction<{
+        childIndex: number;
+        addresses: BuildingAddressType[];
+      }>,
+    ) {
+      const payload = action.payload;
+      state.split.children[payload.childIndex].addresses = payload.addresses;
     },
   },
 });
