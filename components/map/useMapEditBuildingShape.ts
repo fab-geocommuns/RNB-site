@@ -109,22 +109,26 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (drawRef.current) {
-      if (shapeInteractionMode === 'updating') {
-        for (const draw of drawRef.current.getAll().features) {
-          if (draw.id) {
-            try {
-              // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
-              drawRef.current.changeMode('direct_select', {
-                featureId: draw.id.toString(),
-              });
-            } catch (_error) {}
+      if (operation === 'create') {
+        if (shapeInteractionMode === 'updating') {
+          for (const draw of drawRef.current.getAll().features) {
+            if (draw.id) {
+              try {
+                // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
+                drawRef.current.changeMode('direct_select', {
+                  featureId: draw.id.toString(),
+                });
+              } catch (_error) {}
+            }
           }
+        } else if (shapeInteractionMode === 'drawing') {
+          drawRef.current.changeMode('draw_polygon');
         }
-      } else if (shapeInteractionMode === 'drawing') {
-        drawRef.current.changeMode('draw_polygon');
+      } else {
+        drawRef.current.deleteAll();
       }
     }
-  }, [shapeInteractionMode, dispatch]);
+  }, [shapeInteractionMode, operation, dispatch]);
 
   useEffect(() => {
     if (map) {

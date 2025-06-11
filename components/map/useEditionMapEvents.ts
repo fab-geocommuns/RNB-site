@@ -9,7 +9,7 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
-import { selectBuildingsAndSetCandidates } from '@/stores/edition/edition-slice';
+import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
 /**
@@ -49,7 +49,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               // It is a building
               if (operation === 'merge') {
                 dispatch(
-                  selectBuildingsAndSetCandidates(
+                  selectBuildingsAndSetMergeCandidates(
                     featureCloseToCursor.properties.rnb_id,
                   ),
                 );
