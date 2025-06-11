@@ -107,7 +107,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
             });
           }
         } else if (operation === 'split') {
-          console.log('coucou split');
+          dispatch(
+            Actions.edition.setSplitBuildingShape(e.features[0].geometry),
+          );
         }
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);

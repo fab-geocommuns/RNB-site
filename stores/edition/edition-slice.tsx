@@ -115,14 +115,20 @@ export const editionSlice = createSlice({
       state.split.currentChildSelected = action.payload;
     },
     setSplitChildStatus(state, action: PayloadAction<BuildingStatusType>) {
-      if (state.split.currentChildSelected) {
+      if (state.split.currentChildSelected !== null) {
         state.split.children[state.split.currentChildSelected].status =
           action.payload;
       }
     },
     setSplitAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
-      if (state.split.currentChildSelected) {
+      if (state.split.currentChildSelected !== null) {
         state.split.children[state.split.currentChildSelected].addresses =
+          action.payload;
+      }
+    },
+    setSplitBuildingShape(state, action: PayloadAction<GeoJSON.Geometry>) {
+      if (state.split.currentChildSelected !== null) {
+        state.split.children[state.split.currentChildSelected].shape =
           action.payload;
       }
     },
