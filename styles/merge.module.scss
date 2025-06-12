@@ -69,6 +69,9 @@ $panel-padding: 1.5*$spacing;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+    &:last-child {
+        margin-top: 20px;
+    }
 }
 .mergePanel__addressWrapper {
     display: flex;
