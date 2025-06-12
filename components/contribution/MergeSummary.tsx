@@ -18,7 +18,7 @@ export default function MergeSummary({
         {buildingsMerged && buildingsMerged.length > 0 && (
           <div className={styles.mergePanel__summaryHeaderWrapper}>
             <h3 className={styles.mergePanel__summaryTitle}>
-              Bâtiments fusionnés (RNB ID)
+              Bâtiments fusionnés (ID-RNB)
             </h3>
             <div className={styles.mergePanel__summaryHeader}>
               {buildingsMerged.map(

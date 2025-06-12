@@ -69,9 +69,6 @@ $panel-padding: 1.5*$spacing;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
-    &:last-child {
-        margin-top: 20px;
-    }
 }
 .mergePanel__addressWrapper {
     display: flex;
@@ -125,12 +122,12 @@ $panel-padding: 1.5*$spacing;
     padding-top: 5px;
     padding-bottom: 5px;
     margin: 5px;
-    background-color: #0063cb;
+    background-color: var(--background-contrast-grey);
     width: fit-content;
 }
 .mergePanel__rnbIdMerged {
     font-size: 14px;
-    color: white;
+    color: var(--text-default-grey);
 }
 .mergePanel__newBuildingWrapper {
     background-color: #e6feda;
