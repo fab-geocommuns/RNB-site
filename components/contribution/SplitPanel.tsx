@@ -128,7 +128,6 @@ export default function SplitPanel() {
 
       {currentChildSelected !== null && currentChildSelected >= 0 && (
         <>
-          coucou
           <div>
             Batiment {currentChildSelected + 1} / {splitChildrenN}
           </div>
@@ -136,7 +135,6 @@ export default function SplitPanel() {
             status={children[currentChildSelected].status}
             onChange={(status) => setStatus(status)}
           ></BuildingStatus>
-          {location}
           <BuildingAddresses
             buildingPoint={location!}
             addresses={children[currentChildSelected].addresses}
