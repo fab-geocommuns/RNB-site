@@ -35,6 +35,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const selectedBuildingRef = useRef<string | null>(null);
 
   const operation = useSelector((state: RootState) => state.edition.operation);
+  const operationIsUpdateCreateNull = ['create', 'update', null].includes(
+    operation,
+  );
 
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
@@ -89,8 +92,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
       // actions when a polygon is created
       const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
-        if (operation && operation in ['create', 'update']) {
-          console.log('coucou');
+        if (operationIsUpdateCreateNull) {
           // delete all other drawings
           if (e.features && drawRef.current) {
             const newFeaturId = e.features[0].id;
@@ -148,7 +150,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   }, [shapeInteractionMode, dispatch]);
 
   useEffect(() => {
-    if (map && operation && operation in ['create', 'updated']) {
+    if (map && operationIsUpdateCreateNull) {
       if (
         selectedBuilding &&
         selectedBuilding._type === 'building' &&
