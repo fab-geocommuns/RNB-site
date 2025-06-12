@@ -8,7 +8,6 @@ import {
 } from '@reduxjs/toolkit';
 import { Actions, AppDispatch, RootState } from '../store';
 import { BuildingStatusType } from '../contribution/contribution-types';
-import { BuildingAddress } from '../map/map-slice';
 import { BuildingAddressType } from '@/components/contribution/types';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
@@ -35,6 +34,16 @@ export type SplitChild = {
   status: BuildingStatusType;
   shape: GeoJSON.Geometry | null;
   addresses: BuildingAddressType[];
+};
+
+const createEmptySplitChildren = (n: number): SplitChild[] => {
+  return Array(n)
+    .fill({})
+    .map((_item) => ({
+      status: 'constructed',
+      shape: null,
+      addresses: [],
+    }));
 };
 
 export type EditionStore = {
@@ -66,7 +75,7 @@ const initialState: EditionStore = {
     location: null,
     currentChildSelected: null,
     childrenNumber: 2,
-    children: [],
+    children: createEmptySplitChildren(2),
   },
 };
 
@@ -103,13 +112,7 @@ export const editionSlice = createSlice({
     setSplitChildrenNumber(state, action: PayloadAction<number>) {
       const n = action.payload;
       state.split.childrenNumber = n;
-      state.split.children = Array(n)
-        .fill({})
-        .map((_item) => ({
-          status: 'constructed',
-          shape: null,
-          addresses: [],
-        }));
+      state.split.children = createEmptySplitChildren(n);
     },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
       state.split.currentChildSelected = action.payload;
