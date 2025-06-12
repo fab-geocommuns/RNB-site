@@ -98,23 +98,40 @@ $panel-padding: 1.5 * $spacing;
 }
 .tabList {
     order: 0;
+    border: 1px solid var(--text-mention-grey);
+    border-radius: 3px;
+    margin: 10px;
+    padding: 5px;
+    width: initial;
+}
+.icon {
+    margin-right: 5px;
 }
 .tab {
     background-color: transparent;
     list-style: none;
-    margin-right: 5px;
-    margin-top: 5px;
     padding: 5px;
-    padding-right: 20px;
-    padding-left: 20px;
+    margin-top: 0;
+    padding-right: 15px;
+    padding-left: 15px;
     background-image: none;
+    width: 50%;
+    display: flex;
+    justify-content: center;
 }
 .tabLink {
     background-image: none;
+    display: flex;
+    align-items: center;
+    &:hover {
+        opacity: 0.7;
+    }
 }
 .tabActive {
     background-color: var(--background-alt-blue-france-hover);
-    border-top: 2px solid var(--background-action-high-blue-france);
+    &:hover {
+        opacity: 1;
+    }
 }
 .tabLinkDisabled {
     pointer-events: none;
