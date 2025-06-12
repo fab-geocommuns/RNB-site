@@ -27,11 +27,7 @@ import Toaster, {
   toasterSuccess,
 } from './toaster';
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
-<<<<<<< HEAD
 const enableMergeMode = process.env.NEXT_PUBLIC_MERGE_ENABLED === 'true';
-=======
-
->>>>>>> d0ec334 (new panel version)
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -258,7 +254,6 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
-<<<<<<< HEAD
         {enableMergeMode && (
           <Button
             onClick={toggleMergeBuilding}
@@ -285,32 +280,6 @@ export default function EditionPanel() {
             </div>
           </Button>
         )}
-=======
-        <Button
-          onClick={toggleMergeBuilding}
-          className={operation === 'merge' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'merge'
-                  ? mergeSelectedBuildingImage.src
-                  : mergeBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'merge' ? styles.actionSelected : ''}
-            >
-              fusionner
-            </small>
-          </div>
-        </Button>
->>>>>>> d0ec334 (new panel version)
       </div>
 
       {operation == 'update' && selectedBuilding && (

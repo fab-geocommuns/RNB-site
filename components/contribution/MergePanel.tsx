@@ -110,7 +110,6 @@ export default function MergePanel() {
         </div>
       ) : (
         <div className={styles.mergePanel_body}>
-<<<<<<< HEAD
           {!isLoading && (
             <div className={styles.mergePanel__descWrapper}>
               <span className={styles.mergePanel__descText}>
@@ -122,17 +121,6 @@ export default function MergePanel() {
               </span>
             </div>
           )}
-=======
-          <div className={styles.mergePanel__descWrapper}>
-            <span className={styles.mergePanel__descText}>
-              Sélectionner les bâtiments à fusionner
-            </span>
-            <span className={styles.mergePanel__descSubText}>
-              Je sélectionne sur la carte les bâtiments attenants qui doivent
-              être fusionner
-            </span>
-          </div>
->>>>>>> d0ec334 (new panel version)
           {isLoading ? (
             <div className={styles.mergePanel__loader}>
               <Loader />
@@ -194,11 +182,7 @@ export default function MergePanel() {
             </div>
           )}
           <div className={styles.footer}>
-<<<<<<< HEAD
             <Button onClick={handleSubmit} disabled={isLoading}>
-=======
-            <Button onClick={handleSubmit} disabled={!isActive}>
->>>>>>> d0ec334 (new panel version)
               Valider la fusion
             </Button>
             <Button onClick={cancelMerge} priority="tertiary no outline">

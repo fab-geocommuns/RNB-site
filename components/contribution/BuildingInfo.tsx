@@ -22,15 +22,12 @@ export default function BuildingInfo({
           </div>
         </div>
         <div className={styles.mergePanel__addressesWrapper}>
-<<<<<<< HEAD
           <span className={styles.mergePanel__label}>Statut du bâtiment</span>
           <div className="fr-badge fr-badge--success fr-badge--no-icon">
             <span>{BuildingStatusMap[building.status]}</span>
           </div>
         </div>
         <div className={styles.mergePanel__addressesWrapper}>
-=======
->>>>>>> d0ec334 (new panel version)
           <span className={styles.mergePanel__label}>
             {building?.addresses?.length > 1 ? 'Adresses' : 'Adresse'}
           </span>
@@ -50,44 +47,10 @@ export default function BuildingInfo({
             </div>
           ) : (
             <span className={styles.mergePanel__addressText}>
-<<<<<<< HEAD
               <i>Aucune adresse disponible</i>
             </span>
           )}
         </div>
-=======
-              Aucune adresse disponible
-            </span>
-          )}
-        </div>
-        <div className={styles.mergePanel__addressesWrapper}>
-          <span className={styles.mergePanel__label}>Statut du bâtiment</span>
-          <div className="fr-badge fr-badge--success fr-badge--no-icon">
-            <span>{BuildingStatusMap[building.status]}</span>
-          </div>
-        </div>
-        <div className={styles.mergePanel__addressesWrapper}>
-          <span className={styles.mergePanel__label}>
-            {building?.ext_ids?.length > 1 ? 'Sources' : 'Source'}
-          </span>
-          {building?.ext_ids?.length && (
-            <div>
-              {building.ext_ids.map(
-                (source: { id: string; source: string }) => (
-                  <div key={source.id}>
-                    <div className={styles.mergePanel__addressWrapper}>
-                      <span className={styles.mergePanel__addressText}>
-                        {source.source.toUpperCase()} :{' '}
-                        {source.id.toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          )}
-        </div>
->>>>>>> d0ec334 (new panel version)
       </div>
     </>
   );
