@@ -33,7 +33,6 @@ export type EditionStore = {
   merge: MergeInfos;
   // split: SplitInfos;
 };
-
 const initialState: EditionStore = {
   operation: null,
   toasterInfos: { state: null, message: '' },
@@ -50,9 +49,20 @@ export const editionSlice = createSlice({
   name: 'edition',
   initialState,
   reducers: {
+    resetCandidates(state) {
+      state.merge.candidates = [];
+    },
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
+    },
+    setCandidates(
+      state,
+      action: PayloadAction<{
+        candidates: string[];
+      }>,
+    ) {
+      state.merge = action.payload;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
@@ -72,14 +82,25 @@ export const editionSlice = createSlice({
   },
 });
 
-export const selectBuildingAndSetOperationUpdate =
-  (rnb_id: string) =>
+export const selectBuildingsAndSetMergeCandidates =
+  (rnbId: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const building = await dispatch(Actions.map.selectBuilding(rnb_id));
+    dispatch(Actions.map.unselectItem());
+    dispatch(Actions.edition.setOperation('merge'));
+    dispatch(
+      Actions.edition.setCandidates(
+        formatCandidates(rnbId, getState().edition.merge.candidates),
+      ),
+    );
+  };
+
+export const selectBuildingAndSetOperationUpdate =
+  (rnbId: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const building = await dispatch(Actions.map.selectBuilding(rnbId));
     dispatch(Actions.edition.setOperation('update'));
     return building;
   };
-
 // Create d'un middleware pour réagir aux changements du store
 export const listenerMiddleware = createListenerMiddleware();
 
@@ -101,6 +122,7 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
         break;
       case 'create':
         listenerApi.dispatch(Actions.map.unselectItem());
+        listenerApi.dispatch(Actions.edition.resetCandidates());
         listenerApi.dispatch(
           Actions.edition.setShapeInteractionMode('drawing'),
         );
@@ -121,6 +143,18 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     }
   },
 });
+
+export function formatCandidates(candidate: string, candidates: string[]) {
+  const itemExist = candidates.some((item: string) => item === candidate);
+  if (itemExist) {
+    return {
+      candidates: candidates.filter((item: string) => item !== candidate),
+    };
+  } else
+    return {
+      candidates: [...candidates, candidate],
+    };
+}
 
 export const editionActions = editionSlice.actions;
 export const editionReducer = editionSlice.reducer;

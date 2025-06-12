@@ -9,6 +9,7 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
+import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
 /**
@@ -22,6 +23,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
+  const operation = useSelector((state: RootState) => state.edition.operation);
 
   // Initialisation des événements
   useEffect(() => {
@@ -34,7 +36,6 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
           0,
         );
-
         if (shapeInteractionMode !== 'drawing') {
           if (featureCloseToCursor) {
             // What did we click on?
@@ -46,8 +47,19 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               ].includes(featureCloseToCursor.layer.id)
             ) {
               // It is a building
-              const rnb_id = featureCloseToCursor.properties.rnb_id;
-              dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
+              if (operation === 'merge') {
+                dispatch(
+                  selectBuildingsAndSetMergeCandidates(
+                    featureCloseToCursor.properties.rnb_id,
+                  ),
+                );
+              } else {
+                dispatch(
+                  selectBuildingAndSetOperationUpdate(
+                    featureCloseToCursor.properties.rnb_id,
+                  ),
+                );
+              }
             } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
               // It is an ADS
               const file_number = featureCloseToCursor.properties.file_number;
@@ -116,5 +128,5 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         map.off('mousemove', handleMouseMove);
       };
     }
-  }, [dispatch, map, shapeInteractionMode]);
+  }, [dispatch, map, shapeInteractionMode, operation]);
 };

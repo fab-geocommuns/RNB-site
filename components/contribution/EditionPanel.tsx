@@ -8,6 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
+import MergePanel from './MergePanel';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToWKT } from '@terraformer/wkt';
@@ -15,14 +16,18 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
+useMapEditBuildingShape;
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
+import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
+import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
-
+import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
+const enableMergeMode = process.env.NEXT_PUBLIC_MERGE_ENABLED === 'true';
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -213,7 +218,15 @@ export default function EditionPanel() {
       dispatch(Actions.edition.setOperation('create'));
     }
   };
-
+  const toggleMergeBuilding = () => {
+    dispatch(Actions.map.removeBuildings());
+    if (operation === 'merge') {
+      dispatch(Actions.edition.setOperation(null));
+      dispatch(Actions.edition.resetCandidates());
+    } else {
+      dispatch(Actions.edition.setOperation('merge'));
+    }
+  };
   return (
     <>
       <div className={styles.actions}>
@@ -241,6 +254,32 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
+        {enableMergeMode && (
+          <Button
+            onClick={toggleMergeBuilding}
+            className={operation === 'merge' ? styles.buttonSelected : ''}
+            size="small"
+            priority="tertiary no outline"
+          >
+            <div className={styles.action}>
+              <img
+                src={
+                  operation === 'merge'
+                    ? mergeSelectedBuildingImage.src
+                    : mergeBuildingImage.src
+                }
+                alt=""
+                height="32"
+                width="32"
+              />
+              <small
+                className={operation === 'merge' ? styles.actionSelected : ''}
+              >
+                fusionner
+              </small>
+            </div>
+          </Button>
+        )}
       </div>
 
       {operation == 'update' && selectedBuilding && (
@@ -253,6 +292,11 @@ export default function EditionPanel() {
       {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
+        </PanelWrapper>
+      )}
+      {operation == 'merge' && (
+        <PanelWrapper>
+          <MergePanel />
         </PanelWrapper>
       )}
 
