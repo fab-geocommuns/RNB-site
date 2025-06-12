@@ -1,4 +1,6 @@
 import styles from '@/styles/merge.module.scss';
+import DeployableBlock from '@/components/DeployableBlock';
+import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 import { BuildingStatusMap } from '@/stores/contribution/contribution-types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { ReactNode } from 'react';
@@ -41,7 +43,7 @@ export default function BuildingInfo({
             </div>
           ) : (
             <span className={styles.mergePanel__addressText}>
-              Aucune adresse disponible
+              <i>Aucune adresse disponible</i>
             </span>
           )}
         </div>
@@ -52,25 +54,9 @@ export default function BuildingInfo({
           </div>
         </div>
         <div className={styles.mergePanel__addressesWrapper}>
-          <span className={styles.mergePanel__label}>
-            {building?.ext_ids?.length > 1 ? 'Sources' : 'Source'}
-          </span>
-          {building?.ext_ids?.length && (
-            <div>
-              {building.ext_ids.map(
-                (source: { id: string; source: string }) => (
-                  <div key={source.id}>
-                    <div className={styles.mergePanel__addressWrapper}>
-                      <span className={styles.mergePanel__addressText}>
-                        {source.source.toUpperCase()} :{' '}
-                        {source.id.toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          )}
+          <DeployableBlock title="Correspondances BD Topo & BDNB">
+            <BdTopoBdnbContent building={building} />
+          </DeployableBlock>
         </div>
       </div>
     </>

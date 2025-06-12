@@ -222,6 +222,7 @@ export default function EditionPanel() {
     dispatch(Actions.map.removeBuildings());
     if (operation === 'merge') {
       dispatch(Actions.edition.setOperation(null));
+      dispatch(Actions.edition.resetCandidates());
     } else {
       dispatch(Actions.edition.setOperation('merge'));
     }

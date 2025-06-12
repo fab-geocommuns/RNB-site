@@ -21,9 +21,6 @@ export default function MergePanel() {
   const candidatesToMerge = useSelector(
     (state: RootState) => state.edition.merge.candidates,
   );
-  const selectedItem = useSelector(
-    (state: RootState) => state.map.selectedItem,
-  );
   const isActive = candidatesToMerge.length > 1;
   const { fetch } = useRNBFetch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -180,7 +177,7 @@ export default function MergePanel() {
             </div>
           )}
           <div className={styles.footer}>
-            <Button onClick={handleSubmit} disabled={!isActive}>
+            <Button onClick={handleSubmit} disabled={isLoading}>
               Valider la fusion
             </Button>
             <Button onClick={cancelMerge} priority="tertiary no outline">
