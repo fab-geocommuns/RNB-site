@@ -27,7 +27,7 @@ import Toaster, {
   toasterSuccess,
 } from './toaster';
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
-
+const enableMergeMode = process.env.NEXT_PUBLIC_MERGE_ENABLED === 'true';
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -227,7 +227,6 @@ export default function EditionPanel() {
       dispatch(Actions.edition.setOperation('merge'));
     }
   };
-
   return (
     <>
       <div className={styles.actions}>
@@ -255,30 +254,32 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
-        <Button
-          onClick={toggleMergeBuilding}
-          className={operation === 'merge' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'merge'
-                  ? mergeSelectedBuildingImage.src
-                  : mergeBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'merge' ? styles.actionSelected : ''}
-            >
-              fusionner
-            </small>
-          </div>
-        </Button>
+        {enableMergeMode && (
+          <Button
+            onClick={toggleMergeBuilding}
+            className={operation === 'merge' ? styles.buttonSelected : ''}
+            size="small"
+            priority="tertiary no outline"
+          >
+            <div className={styles.action}>
+              <img
+                src={
+                  operation === 'merge'
+                    ? mergeSelectedBuildingImage.src
+                    : mergeBuildingImage.src
+                }
+                alt=""
+                height="32"
+                width="32"
+              />
+              <small
+                className={operation === 'merge' ? styles.actionSelected : ''}
+              >
+                fusionner
+              </small>
+            </div>
+          </Button>
+        )}
       </div>
 
       {operation == 'update' && selectedBuilding && (
