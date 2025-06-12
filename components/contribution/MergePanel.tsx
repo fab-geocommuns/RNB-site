@@ -107,15 +107,17 @@ export default function MergePanel() {
         </div>
       ) : (
         <div className={styles.mergePanel_body}>
-          <div className={styles.mergePanel__descWrapper}>
-            <span className={styles.mergePanel__descText}>
-              Sélectionner les bâtiments à fusionner
-            </span>
-            <span className={styles.mergePanel__descSubText}>
-              Je sélectionne sur la carte les bâtiments attenants qui doivent
-              être fusionner
-            </span>
-          </div>
+          {!isLoading && (
+            <div className={styles.mergePanel__descWrapper}>
+              <span className={styles.mergePanel__descText}>
+                Sélectionner les bâtiments à fusionner
+              </span>
+              <span className={styles.mergePanel__descSubText}>
+                Sélectionnez sur la carte les bâtiments attenants qui doivent
+                être fusionnés
+              </span>
+            </div>
+          )}
           {isLoading ? (
             <div className={styles.mergePanel__loader}>
               <Loader />
