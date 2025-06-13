@@ -33,9 +33,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
-
   const operation = useSelector((state: RootState) => state.edition.operation);
-
+  const prevOperationRef = useRef<string | null>(null);
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
 
@@ -109,28 +108,24 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (drawRef.current) {
-      if (operation === 'create') {
-        if (shapeInteractionMode === 'updating') {
-          for (const draw of drawRef.current.getAll().features) {
-            if (draw.id) {
-              try {
-                // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
-                drawRef.current.changeMode('direct_select', {
-                  featureId: draw.id.toString(),
-                });
-              } catch (_error) {}
-            }
+      if (shapeInteractionMode === 'updating') {
+        for (const draw of drawRef.current.getAll().features) {
+          if (draw.id) {
+            try {
+              // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
+              drawRef.current.changeMode('direct_select', {
+                featureId: draw.id.toString(),
+              });
+            } catch (_error) {}
           }
-        } else if (shapeInteractionMode === 'drawing') {
-          drawRef.current.changeMode('draw_polygon');
-        } else if (shapeInteractionMode === null) {
-          drawRef.current.changeMode('simple_select');
         }
-      } else {
-        drawRef.current.deleteAll();
+      } else if (shapeInteractionMode === 'drawing') {
+        drawRef.current.changeMode('draw_polygon');
+      } else if (shapeInteractionMode === null) {
+        drawRef.current.changeMode('simple_select');
       }
     }
-  }, [shapeInteractionMode, operation, dispatch]);
+  }, [shapeInteractionMode, dispatch]);
 
   useEffect(() => {
     if (map) {
@@ -192,8 +187,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   };
 
   useEffect(() => {
-    if (operation === null) {
+    const prevOperation = prevOperationRef.current;
+    if (operation !== prevOperation) {
       deleteFeatures(drawRef.current);
+      selectedBuildingRef.current = null;
     }
+    prevOperationRef.current = operation;
   }, [operation]);
 };

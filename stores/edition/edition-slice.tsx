@@ -112,13 +112,13 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   ) => {
     const state = listenerApi.getState();
     const operation = state.edition.operation;
-
     // a chaque changement d'operation, on reset le store
     await listenerApi.dispatch(Actions.edition.reset());
 
     // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
     switch (operation) {
       case null:
+        listenerApi.dispatch(Actions.edition.resetCandidates());
         break;
       case 'create':
         listenerApi.dispatch(Actions.map.unselectItem());
@@ -128,6 +128,7 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
         );
         break;
       case 'update':
+        listenerApi.dispatch(Actions.edition.resetCandidates());
         if (state.map.selectedItem?._type === 'building') {
           if (state.map.selectedItem.shape.type === 'Point') {
             listenerApi.dispatch(Actions.edition.setShapeInteractionMode(null));

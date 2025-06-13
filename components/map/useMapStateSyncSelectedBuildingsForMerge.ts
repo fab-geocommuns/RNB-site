@@ -22,13 +22,11 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
   );
   const operation = useSelector((state: RootState) => state.edition.operation);
   const prevSelectedRef = useRef<string[]>([]);
+  const prevOperationRef = useRef<string | null>(null);
 
   useEffect(() => {
     const prevSelected = prevSelectedRef.current;
     const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
-    if (map && operation !== 'merge') {
-      removeFeatureStateInLayers(sources, map);
-    }
     if (map && candidatesToMerge) {
       if (candidatesToMerge.length === 0 && prevSelected.length) {
         setFeatureStateInLayers(sources, map, prevSelected[0], false);
@@ -52,6 +50,17 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
     }
     prevSelectedRef.current = candidatesToMerge;
   }, [candidatesToMerge, operation]);
+
+  useEffect(() => {
+    const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
+    if (map) {
+      const prevOperation = prevOperationRef.current;
+      if (operation !== prevOperation) {
+        removeFeatureStateInLayers(sources, map);
+      }
+      prevOperationRef.current = operation;
+    }
+  }, [operation]);
 };
 
 function setMapLayer(
