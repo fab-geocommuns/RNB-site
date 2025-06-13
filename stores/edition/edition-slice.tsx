@@ -88,6 +88,11 @@ export const editionSlice = createSlice({
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
+      state.split.currentChildSelected = null;
+      state.split.childrenNumber = 2;
+      state.split.children = createEmptySplitChildren(2);
+      state.split.location = null;
+      state.split.splitCandidateId = null;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;

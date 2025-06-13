@@ -124,6 +124,8 @@ $panel-padding: 1.5*$spacing;
     flex-grow: 0;
     width: 100%;
     background: var(--background-alt-blue-france);
+    display: flex;
+    justify-content: space-between;
 }
 
 .noticeContainer {

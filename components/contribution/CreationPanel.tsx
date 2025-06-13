@@ -100,7 +100,7 @@ export default function CreationPanel() {
             {mapCoordinates && mapCoordinates.zoom < 18 ? (
               <div style={{ display: 'flex' }}>
                 <span className="fr-pr-2v">
-                  <i className="fr-icon-warning-line"></i>
+                  <i className="fr-icon-feedback-line"></i>
                 </span>
                 Zoomez sur la carte pour pouvoir tracer le bâtiment avec
                 précision

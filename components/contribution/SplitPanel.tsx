@@ -118,9 +118,16 @@ function SplitBuildingInitialStep({
       </PanelBody>
       <div className={styles.footer}>
         <Button
+          onClick={() => cancelSplit(dispatch)}
+          priority="tertiary no outline"
+        >
+          Annuler
+        </Button>
+        <Button
           onClick={() =>
             nextStep(currentChildSelected, splitChildrenN, dispatch)
           }
+          priority="secondary"
         >
           Suivant
         </Button>
@@ -128,6 +135,10 @@ function SplitBuildingInitialStep({
     </>
   );
 }
+
+const cancelSplit = (dispatch: AppDispatch) => {
+  dispatch(Actions.edition.setOperation(null));
+};
 
 function SplitBuildingChildInfosStep({
   currentChildSelected,
@@ -152,11 +163,9 @@ function SplitBuildingChildInfosStep({
     dispatch(Actions.edition.setSplitAddresses(addresses));
   };
 
-  const handleSplitBuildingShapeCreation = () => {
-    dispatch(Actions.edition.setShapeInteractionMode('drawing'));
-  };
-
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
+  const currentChildHasNoShape =
+    children[currentChildSelected].shapeId === null;
   const { fetch } = useRNBFetch();
 
   const handleSubmit = async () => {
@@ -205,23 +214,37 @@ function SplitBuildingChildInfosStep({
             setAddresses(addresses);
           }}
         />
-        <Button
-          size="small"
-          onClick={handleSplitBuildingShapeCreation}
-          priority={`tertiary`}
-        >
-          <img
-            src={newPolygonIcon.src}
-            width="30"
-            title="Dessiner une nouvelle géométrie"
-          ></img>
-          <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
-            Dessiner la géométrie du bâtiment
-          </span>
-        </Button>
+        <div className={`${styles.panelSection} ${styles.noPad}`}>
+          {currentChildHasNoShape && (
+            <div style={{ display: 'flex' }}>
+              <span className="fr-pr-2v">
+                <i className="fr-icon-feedback-line" aria-hidden="true"></i>
+              </span>
+              Tracez la géométrie du bâtiment sur la carte. Un double-clic
+              termine le tracé.
+            </div>
+          )}
+          {!currentChildHasNoShape && (
+            <>
+              <span className="fr-pr-2v">
+                <i className="fr-icon-chat-check-line" aria-hidden="true"></i>
+              </span>
+              Géométrie tracée
+            </>
+          )}
+        </div>
       </PanelBody>
       <div className={styles.footer}>
-        <Button onClick={() => previousStep(currentChildSelected, dispatch)}>
+        <Button
+          onClick={() => cancelSplit(dispatch)}
+          priority="tertiary no outline"
+        >
+          Annuler
+        </Button>
+        <Button
+          onClick={() => previousStep(currentChildSelected, dispatch)}
+          priority="secondary"
+        >
           précédent
         </Button>
 
@@ -230,12 +253,19 @@ function SplitBuildingChildInfosStep({
             onClick={() =>
               nextStep(currentChildSelected, splitChildrenN, dispatch)
             }
+            disabled={currentChildHasNoShape}
+            priority="secondary"
+            title={
+              currentChildHasNoShape
+                ? 'Veuillez tracer une géométrie pour ce bâtiment'
+                : ''
+            }
           >
             Suivant
           </Button>
         )}
         {currentChildSelected === splitChildrenN - 1 && (
-          <Button onClick={handleSubmit}>FIN</Button>
+          <Button onClick={handleSubmit}>Scinder</Button>
         )}
       </div>
     </>
