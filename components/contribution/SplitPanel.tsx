@@ -42,11 +42,13 @@ export default function SplitPanel() {
     const i = currentChildSelected === null ? -1 : currentChildSelected;
     if (i < splitChildrenN) {
       dispatch(Actions.edition.setCurrentChildSelected(i + 1));
+      dispatch(Actions.edition.setShapeInteractionMode(null));
     }
   };
 
   const previousStep = () => {
     const i = currentChildSelected || 0;
+    dispatch(Actions.edition.setShapeInteractionMode(null));
 
     if (i === 0) {
       dispatch(Actions.edition.setCurrentChildSelected(null));
