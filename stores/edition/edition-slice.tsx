@@ -120,10 +120,10 @@ export const editionSlice = createSlice({
       const currentChildSelected = action.payload;
       state.split.currentChildSelected = currentChildSelected;
       if (currentChildSelected !== null) {
-        if (state.split.children[currentChildSelected].shape === null) {
-          state.updateCreate.shapeInteractionMode = 'drawing';
-        } else {
+        if (state.split.children[currentChildSelected].shapeId) {
           state.updateCreate.shapeInteractionMode = 'updating';
+        } else {
+          state.updateCreate.shapeInteractionMode = 'drawing';
         }
       }
     },

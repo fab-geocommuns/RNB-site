@@ -22,3 +22,12 @@ export const selectSplitChildrenForAPI = createSelector(
       return data;
     }),
 );
+
+export const selectSplitShapeIdForCurrentChild = createSelector(
+  [selectSplitChildren, (state) => state.edition.split.currentChildSelected],
+  (children: SplitChild[], currentChildSelected) => {
+    if (currentChildSelected !== null) {
+      return children[currentChildSelected].shapeId;
+    }
+  },
+);

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Actions, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -7,6 +7,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
+import { selectSplitShapeIdForCurrentChild } from '@/stores/edition/edition-selector';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -38,6 +39,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const operationIsUpdateCreateNull = ['create', 'update', null].includes(
     operation,
   );
+  const currentSplitShapeId = useSelector(selectSplitShapeIdForCurrentChild);
 
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
@@ -138,28 +140,60 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     }
   }, [map, operation]);
 
+  // shapeInteractionMode is 'updating' and current operation is update, create or null
+  const handleShapeUpdateForOperationUCN = useCallback(() => {
+    if (drawRef.current) {
+      for (const draw of drawRef.current.getAll().features) {
+        if (draw.id) {
+          try {
+            // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
+            drawRef.current.changeMode('direct_select', {
+              featureId: draw.id.toString(),
+            });
+          } catch (_error) {}
+        }
+      }
+    }
+  }, [drawRef.current]);
+
+  // shapeInteractionMode is 'updating' and current operation is update, create or null
+  const handleShapeUpdateForOperationSplit = useCallback(() => {
+    if (drawRef.current) {
+      if (currentSplitShapeId) {
+        for (const draw of drawRef.current.getAll().features) {
+          if (draw.id === currentSplitShapeId) {
+            drawRef.current.changeMode('direct_select', {
+              featureId: currentSplitShapeId?.toString(),
+            });
+          }
+        }
+      }
+    }
+  }, [drawRef.current, currentSplitShapeId]);
+
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (drawRef.current) {
-      if (shapeInteractionMode === 'updating') {
-        for (const draw of drawRef.current.getAll().features) {
-          if (draw.id) {
-            try {
-              // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
-              drawRef.current.changeMode('direct_select', {
-                featureId: draw.id.toString(),
-              });
-            } catch (_error) {}
+      switch (shapeInteractionMode) {
+        case 'updating':
+          if (operationIsUpdateCreateNull) {
+            handleShapeUpdateForOperationUCN();
+          } else if (operation === 'split') {
+            handleShapeUpdateForOperationSplit();
           }
-        }
-      } else if (shapeInteractionMode === 'drawing') {
-        drawRef.current.changeMode('draw_polygon');
-      } else if (shapeInteractionMode === null) {
-        drawRef.current.changeMode('simple_select');
+          break;
+        case 'drawing':
+          drawRef.current.changeMode('draw_polygon');
+          break;
+        case null:
+          drawRef.current.changeMode('simple_select');
+          break;
+        default:
+          break;
       }
     }
-  }, [shapeInteractionMode, dispatch]);
+  }, [shapeInteractionMode, operation, currentSplitShapeId, dispatch]);
 
   useEffect(() => {
     if (map && operationIsUpdateCreateNull) {
