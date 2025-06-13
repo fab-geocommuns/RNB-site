@@ -374,6 +374,7 @@ export const useMapLayers = ({
   };
 
   const installBuildingsShapesLayers = (map: maplibregl.Map) => {
+    console.log('installBuildingsShapesLayers');
     const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     const selectedBuildingColor = selectedBuildingisGreen
       ? '#31e060'

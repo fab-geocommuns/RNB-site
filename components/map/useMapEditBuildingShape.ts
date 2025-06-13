@@ -33,9 +33,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   );
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
-
   const operation = useSelector((state: RootState) => state.edition.operation);
-
+  const prevOperationRef = useRef<string | null>(null);
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
 
@@ -188,8 +187,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   };
 
   useEffect(() => {
-    if (operation === null) {
+    const prevOperation = prevOperationRef.current;
+    if (operation !== prevOperation) {
       deleteFeatures(drawRef.current);
+      selectedBuildingRef.current = null;
     }
+    prevOperationRef.current = operation;
   }, [operation]);
 };

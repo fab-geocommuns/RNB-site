@@ -5,6 +5,8 @@ import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
 // Comps
 import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
+import DeployableBlock from '@/components/DeployableBlock';
+import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 
 // Styles
 import { fr } from '@codegouvfr/react-dsfr';
@@ -31,8 +33,6 @@ interface BuildingPanelProps {
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
   const { is } = useRNBAuthentication();
-
-  const [openSections, setOpenSections] = useState<string[]>([]);
 
   // Store
   const dispatch: AppDispatch = useDispatch();
@@ -80,15 +80,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   };
 
   // @ts-ignore
-  const toggleSection = (e, section: string) => {
-    e.preventDefault();
-
-    if (openSections.includes(section)) {
-      setOpenSections(openSections.filter((s) => s !== section));
-    } else {
-      setOpenSections([...openSections, section]);
-    }
-  };
 
   const relevantPlots = () => {
     const plots = bdg?.plots.filter((plot) => {
@@ -105,10 +96,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const handlePlotBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     dispatch(Actions.map.toggleExtraLayer('plots'));
-  };
-
-  const isSectionOpen = (section: string) => {
-    return openSections.includes(section);
   };
 
   useEffect(() => {
@@ -162,53 +149,17 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
           <ContributionForm />
         </div>
       )}
-
       <div className={panelStyles.section}>
-        <h2
-          className={`${panelStyles.sectionTitle} ${panelStyles.sectionTitle__openable}`}
+        <DeployableBlock
+          title="Correspondances BD Topo & BDNB"
+          className="blue"
         >
-          <a
-            href="#"
-            className={` ${panelStyles.sectionToggler} ${isSectionOpen('correspondances') ? panelStyles.sectionTogglerOpen : ''}`}
-            onClick={(e) => toggleSection(e, 'correspondances')}
-          >
-            <span className={panelStyles.sectionTogglerIcon}>▸</span>
-            Correspondances BD Topo & BDNB
-          </a>
-        </h2>
-        {isSectionOpen('correspondances') && (
-          <div className={panelStyles.sectionBody}>
-            {bdg?.ext_ids?.length === 0 ? (
-              <div>
-                <em>Aucun lien avec une autre base de donnée.</em>
-              </div>
-            ) : (
-              bdg?.ext_ids?.map((ext_id) => (
-                <div key={ext_id.id} className={panelStyles.sectionListItem}>
-                  <span>Base de données : {ext_id.source}</span>
-                  <br />
-                  <span>Identifiant : {ext_id.id}</span>
-                </div>
-              ))
-            )}
-          </div>
-        )}
+          <BdTopoBdnbContent building={bdg} />
+        </DeployableBlock>
       </div>
 
       <div className={panelStyles.section}>
-        <h2
-          className={`${panelStyles.sectionTitle} ${panelStyles.sectionTitle__openable}`}
-        >
-          <a
-            href="#"
-            className={` ${panelStyles.sectionToggler} ${isSectionOpen('parcelles') ? panelStyles.sectionTogglerOpen : ''}`}
-            onClick={(e) => toggleSection(e, 'parcelles')}
-          >
-            <span className={panelStyles.sectionTogglerIcon}>▸</span>
-            Parcelles cadastrales
-          </a>
-        </h2>
-        {isSectionOpen('parcelles') && (
+        <DeployableBlock title="Parcelles cadastrales" className="blue">
           <>
             <div className={panelStyles.plotWarning}>
               Les parcelles sont associées au bâtiment{' '}
@@ -220,7 +171,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                 En savoir plus
               </a>
             </div>
-
             {bdg?.plots?.length === 0 ? (
               <>Pas de parcelles</>
             ) : (
@@ -255,7 +205,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                 </div>
               </>
             )}
-
             <div className="fr-mt-6v">
               <a
                 href="#"
@@ -270,7 +219,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
               </a>
             </div>
           </>
-        )}
+        </DeployableBlock>
       </div>
 
       <div className={panelStyles.section}>
