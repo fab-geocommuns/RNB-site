@@ -7,10 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit",
     "e2e": "npx playwright test",
     "e2e-ui": "npx playwright test --ui",
     "predev": "only-include-used-icons",
@@ -59,8 +55,7 @@
     "sass": "^1.77.8"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+    "**/*.{js,jsx,ts,tsx,json,css,md}": [
       "prettier --write"
     ],
     "**/*.{json,css,scss,md}": [
