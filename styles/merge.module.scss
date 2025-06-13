@@ -37,6 +37,10 @@ $panel-padding: 1.5 * $spacing;
   font-weight: 700;
   margin-bottom: 10px;
 }
+.mergePanel__textarea {
+    height: 150px;
+    border: 1px solid var(--background-contrast-grey-active);
+}
 .mergePanel__textNoBuilding {
   font-weight: 700;
   display: flex;
