@@ -7,6 +7,7 @@ import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
+  SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
@@ -18,10 +19,14 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
+  const previousSplitCandidate = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
   const operation = useSelector((state: RootState) => state.edition.operation);
+  const splitCandidateId = useSelector(
+    (state: RootState) => state.edition.split.splitCandidateId,
+  );
 
   // Initialisation des événements
   useEffect(() => {
@@ -134,4 +139,30 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
       };
     }
   }, [dispatch, map, shapeInteractionMode, operation]);
+
+  // split candidate highlighting
+  useEffect(() => {
+    if (map && splitCandidateId) {
+      if (previousSplitCandidate.current) {
+        map.removeFeatureState({
+          source: SRC_BDGS_SHAPES,
+          sourceLayer: 'default',
+          id: previousSplitCandidate.current,
+        });
+        previousSplitCandidate.current = undefined;
+      }
+
+      if (operation === 'split') {
+        map.setFeatureState(
+          {
+            source: SRC_BDGS_SHAPES,
+            id: splitCandidateId,
+            sourceLayer: 'default',
+          },
+          { in_panel: true },
+        );
+        previousSplitCandidate.current = splitCandidateId;
+      }
+    }
+  }, [map, splitCandidateId, operation]);
 };

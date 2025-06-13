@@ -209,7 +209,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   };
 
   useEffect(() => {
-    if (operation === null) {
+    if (operation === null || operation === 'split') {
       deleteFeatures(drawRef.current);
     }
   }, [operation]);
