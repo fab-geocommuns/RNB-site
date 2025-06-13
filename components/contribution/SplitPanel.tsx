@@ -182,9 +182,8 @@ function SplitBuildingChildInfosStep({
       } else {
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
-        // dispatch(Actions.edition.setBuildingNewShape(null));
-        toasterSuccess(dispatch, 'Scission enregistrée');
-        // await dispatch(Actions.map.selectBuilding(rnbId));
+        dispatch(Actions.edition.setOperation(null));
+        toasterSuccess(dispatch, 'Bâtiment scindé avec succès');
       }
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la scission');
