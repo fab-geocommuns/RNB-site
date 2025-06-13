@@ -32,7 +32,7 @@ export default function EditMap({
     map,
     defaultBackgroundLayer,
     defaultBuildingLayer,
-    selectedBuildingisGreen: false,
+    selectedBuildingisGreen: true,
   });
 
   useMapControls(map);
