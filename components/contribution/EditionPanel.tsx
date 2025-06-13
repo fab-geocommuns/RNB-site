@@ -16,12 +16,17 @@ import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
+
+import splitBuildingImage from '@/public/images/map/edition/split.svg';
+import splitSelectedBuildingImage from '@/public/images/map/edition/split_selected.svg';
+
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
+import SplitPanel from './SplitPanel';
 
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -214,6 +219,14 @@ export default function EditionPanel() {
     }
   };
 
+  const toggleSplitBuilding = () => {
+    if (operation === 'split') {
+      dispatch(Actions.edition.setOperation(null));
+    } else {
+      dispatch(Actions.edition.setOperation('split'));
+    }
+  };
+
   return (
     <>
       <div className={styles.actions}>
@@ -241,6 +254,31 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
+
+        <Button
+          onClick={toggleSplitBuilding}
+          className={operation === 'split' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'split'
+                  ? splitSelectedBuildingImage.src
+                  : splitBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'split' ? styles.actionSelected : ''}
+            >
+              scinder
+            </small>
+          </div>
+        </Button>
       </div>
 
       {operation == 'update' && selectedBuilding && (
@@ -253,6 +291,11 @@ export default function EditionPanel() {
       {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
+        </PanelWrapper>
+      )}
+      {operation == 'split' && (
+        <PanelWrapper>
+          <SplitPanel />
         </PanelWrapper>
       )}
 

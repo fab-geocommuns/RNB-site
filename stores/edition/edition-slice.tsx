@@ -3,11 +3,12 @@
 import {
   createListenerMiddleware,
   createSlice,
-  ListenerEffect,
   ListenerEffectAPI,
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { Actions, AppDispatch, RootState } from '../store';
+import { BuildingStatusType } from '../contribution/contribution-types';
+import { BuildingAddressType } from '@/components/contribution/types';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -18,6 +19,33 @@ export type ToasterInfos = {
 
 export type MergeInfos = {
   candidates: string[];
+};
+
+export type SplitInfos = {
+  splitCandidateId: string | null;
+  // where is the split candidate located ? Used for address search
+  location: [number, number] | null;
+  childrenNumber: number;
+  currentChildSelected: number | null;
+  children: SplitChild[];
+};
+
+export type SplitChild = {
+  status: BuildingStatusType;
+  shape: GeoJSON.Geometry | null;
+  shapeId: string | null | undefined | number;
+  addresses: BuildingAddressType[];
+};
+
+const createEmptySplitChildren = (n: number): SplitChild[] => {
+  return Array(n)
+    .fill({})
+    .map((_item) => ({
+      status: 'constructed',
+      shape: null,
+      shapeId: null,
+      addresses: [],
+    }));
 };
 
 export type EditionStore = {
@@ -31,7 +59,7 @@ export type EditionStore = {
   };
 
   merge: MergeInfos;
-  // split: SplitInfos;
+  split: SplitInfos;
 };
 
 const initialState: EditionStore = {
@@ -44,6 +72,13 @@ const initialState: EditionStore = {
   merge: {
     candidates: [],
   },
+  split: {
+    splitCandidateId: null,
+    location: null,
+    currentChildSelected: null,
+    childrenNumber: 2,
+    children: createEmptySplitChildren(2),
+  },
 };
 
 export const editionSlice = createSlice({
@@ -53,6 +88,11 @@ export const editionSlice = createSlice({
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
+      state.split.currentChildSelected = null;
+      state.split.childrenNumber = 2;
+      state.split.children = createEmptySplitChildren(2);
+      state.split.location = null;
+      state.split.splitCandidateId = null;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
@@ -68,6 +108,69 @@ export const editionSlice = createSlice({
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
+    },
+    setSplitCandidateAndLocation(
+      state,
+      action: PayloadAction<{ rnb_id: string; location: [number, number] }>,
+    ) {
+      state.split.splitCandidateId = action.payload.rnb_id;
+      state.split.location = action.payload.location;
+    },
+    setSplitChildrenNumber(state, action: PayloadAction<number>) {
+      const n = action.payload;
+      state.split.childrenNumber = n;
+      state.split.children = createEmptySplitChildren(n);
+    },
+    setCurrentChildSelected(state, action: PayloadAction<number | null>) {
+      const currentChildSelected = action.payload;
+      state.split.currentChildSelected = currentChildSelected;
+      if (currentChildSelected !== null) {
+        if (state.split.children[currentChildSelected].shapeId) {
+          state.updateCreate.shapeInteractionMode = 'updating';
+        } else {
+          state.updateCreate.shapeInteractionMode = 'drawing';
+        }
+      }
+    },
+    setSplitChildStatus(state, action: PayloadAction<BuildingStatusType>) {
+      if (state.split.currentChildSelected !== null) {
+        state.split.children[state.split.currentChildSelected].status =
+          action.payload;
+      }
+    },
+    setSplitAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
+      if (state.split.currentChildSelected !== null) {
+        state.split.children[state.split.currentChildSelected].addresses =
+          action.payload;
+      }
+    },
+    setSplitBuildingShape(
+      state,
+      action: PayloadAction<{
+        shape: GeoJSON.Geometry;
+        shapeId: string | undefined | number;
+      }>,
+    ) {
+      if (state.split.currentChildSelected !== null) {
+        state.split.children[state.split.currentChildSelected].shape =
+          action.payload.shape;
+        state.split.children[state.split.currentChildSelected].shapeId =
+          action.payload.shapeId;
+      }
+    },
+    updateSplitBuildingShape(
+      state,
+      action: PayloadAction<{
+        shape: GeoJSON.Geometry;
+        shapeId: string | undefined | number;
+      }>,
+    ) {
+      if (state.split.currentChildSelected !== null) {
+        const childIndex = state.split.children.findIndex(
+          (child) => child.shapeId === action.payload.shapeId,
+        );
+        state.split.children[childIndex].shape = action.payload.shape;
+      }
     },
   },
 });
@@ -116,6 +219,22 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
           }
         }
         break;
+      case 'split':
+        // in case user first click the building, then clicks on split action
+        if (
+          state.map.selectedItem &&
+          state.map.selectedItem._type === 'building'
+        ) {
+          const building = state.map.selectedItem;
+          listenerApi.dispatch(
+            Actions.edition.setSplitCandidateAndLocation({
+              rnb_id: building.rnb_id,
+              location: building.point.coordinates,
+            }),
+          );
+        }
+        // now we can safely unselect the building
+        listenerApi.dispatch(Actions.map.unselectItem());
       default:
         break;
     }

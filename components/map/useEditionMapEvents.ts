@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
-import { MapMouseEvent, MapLibreEvent } from 'maplibre-gl';
+import { MapMouseEvent } from 'maplibre-gl';
 import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
-  LAYER_ADS_CIRCLE,
+  SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
@@ -19,8 +19,13 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
+  const previousSplitCandidate = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
+  );
+  const operation = useSelector((state: RootState) => state.edition.operation);
+  const splitCandidateId = useSelector(
+    (state: RootState) => state.edition.split.splitCandidateId,
   );
 
   // Initialisation des événements
@@ -35,7 +40,27 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           0,
         );
 
-        if (shapeInteractionMode !== 'drawing') {
+        if (operation === 'update' || operation === null) {
+          if (shapeInteractionMode !== 'drawing') {
+            if (featureCloseToCursor) {
+              // What did we click on?
+              if (
+                [
+                  LAYER_BDGS_POINT,
+                  LAYER_BDGS_SHAPE_BORDER,
+                  LAYER_BDGS_SHAPE_POINT,
+                ].includes(featureCloseToCursor.layer.id)
+              ) {
+                // It is a building
+                const rnb_id = featureCloseToCursor.properties.rnb_id;
+                dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
+              }
+            } else {
+              // click out unselects the currently selected item
+              dispatch(Actions.edition.setOperation(null));
+            }
+          }
+        } else if (operation === 'split') {
           if (featureCloseToCursor) {
             // What did we click on?
             if (
@@ -45,17 +70,14 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                 LAYER_BDGS_SHAPE_POINT,
               ].includes(featureCloseToCursor.layer.id)
             ) {
-              // It is a building
               const rnb_id = featureCloseToCursor.properties.rnb_id;
-              dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
-            } else if (featureCloseToCursor.layer.id === LAYER_ADS_CIRCLE) {
-              // It is an ADS
-              const file_number = featureCloseToCursor.properties.file_number;
-              dispatch(Actions.map.selectADS(file_number));
+              dispatch(
+                Actions.edition.setSplitCandidateAndLocation({
+                  rnb_id: rnb_id,
+                  location: [e.lngLat.lng, e.lngLat.lat],
+                }),
+              );
             }
-          } else {
-            // click out unselects the currently selected item
-            dispatch(Actions.edition.setOperation(null));
           }
         }
       };
@@ -93,7 +115,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           );
         }
 
-        if (featureCloseToCursor) {
+        if (featureCloseToCursor && operation === null) {
           map.setFeatureState(
             {
               source: featureCloseToCursor.layer.source,
@@ -116,5 +138,31 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         map.off('mousemove', handleMouseMove);
       };
     }
-  }, [dispatch, map, shapeInteractionMode]);
+  }, [dispatch, map, shapeInteractionMode, operation]);
+
+  // split candidate highlighting
+  useEffect(() => {
+    if (map) {
+      if (previousSplitCandidate.current) {
+        map.removeFeatureState({
+          source: SRC_BDGS_SHAPES,
+          sourceLayer: 'default',
+          id: previousSplitCandidate.current,
+        });
+        previousSplitCandidate.current = undefined;
+      }
+
+      if (operation === 'split' && splitCandidateId) {
+        map.setFeatureState(
+          {
+            source: SRC_BDGS_SHAPES,
+            id: splitCandidateId,
+            sourceLayer: 'default',
+          },
+          { in_panel: true },
+        );
+        previousSplitCandidate.current = splitCandidateId;
+      }
+    }
+  }, [map, splitCandidateId, operation]);
 };
