@@ -33,6 +33,7 @@ export type SplitInfos = {
 export type SplitChild = {
   status: BuildingStatusType;
   shape: GeoJSON.Geometry | null;
+  shapeId: string | null | undefined | number;
   addresses: BuildingAddressType[];
 };
 
@@ -42,6 +43,7 @@ const createEmptySplitChildren = (n: number): SplitChild[] => {
     .map((_item) => ({
       status: 'constructed',
       shape: null,
+      shapeId: null,
       addresses: [],
     }));
 };
@@ -129,10 +131,32 @@ export const editionSlice = createSlice({
           action.payload;
       }
     },
-    setSplitBuildingShape(state, action: PayloadAction<GeoJSON.Geometry>) {
+    setSplitBuildingShape(
+      state,
+      action: PayloadAction<{
+        shape: GeoJSON.Geometry;
+        shapeId: string | undefined | number;
+      }>,
+    ) {
       if (state.split.currentChildSelected !== null) {
         state.split.children[state.split.currentChildSelected].shape =
-          action.payload;
+          action.payload.shape;
+        state.split.children[state.split.currentChildSelected].shapeId =
+          action.payload.shapeId;
+      }
+    },
+    updateSplitBuildingShape(
+      state,
+      action: PayloadAction<{
+        shape: GeoJSON.Geometry;
+        shapeId: string | undefined | number;
+      }>,
+    ) {
+      if (state.split.currentChildSelected !== null) {
+        const childIndex = state.split.children.findIndex(
+          (child) => child.shapeId === action.payload.shapeId,
+        );
+        state.split.children[childIndex].shape = action.payload.shape;
       }
     },
   },

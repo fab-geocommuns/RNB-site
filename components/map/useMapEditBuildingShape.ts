@@ -86,7 +86,16 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     if (map) {
       // actions when a polygon is updated
       const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
-        dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
+        if (operationIsUpdateCreateNull) {
+          dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
+        } else if (operation === 'split') {
+          dispatch(
+            Actions.edition.updateSplitBuildingShape({
+              shape: e.features[0].geometry,
+              shapeId: e.features[0].id,
+            }),
+          );
+        }
       };
       drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
 
@@ -110,7 +119,10 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           }
         } else if (operation === 'split') {
           dispatch(
-            Actions.edition.setSplitBuildingShape(e.features[0].geometry),
+            Actions.edition.setSplitBuildingShape({
+              shape: e.features[0].geometry,
+              shapeId: e.features[0].id,
+            }),
           );
           setTimeout(() => {
             dispatch(Actions.edition.setShapeInteractionMode('updating'));
