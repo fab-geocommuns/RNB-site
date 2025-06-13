@@ -108,15 +108,6 @@ function SplitBuildingInitialStep({
                   { value: '9', label: 9 },
                 ]}
               />
-              <div className={styles.footer}>
-                <Button
-                  onClick={() =>
-                    nextStep(currentChildSelected, splitChildrenN, dispatch)
-                  }
-                >
-                  Suivant
-                </Button>
-              </div>
             </>
           )}
 
@@ -125,6 +116,15 @@ function SplitBuildingInitialStep({
           )}
         </div>
       </PanelBody>
+      <div className={styles.footer}>
+        <Button
+          onClick={() =>
+            nextStep(currentChildSelected, splitChildrenN, dispatch)
+          }
+        >
+          Suivant
+        </Button>
+      </div>
     </>
   );
 }
@@ -188,14 +188,12 @@ function SplitBuildingChildInfosStep({
       <RNBIDHeader>
         <span className="fr-text--xs">Scinder un bâtiment</span>
         <h1 className="fr-text--lg fr-m-0">
-          Étape 2 - Bâtiment issu de la scission
+          Étape {currentChildSelected + 2}/{splitChildrenN + 1} - Infos bâtiment{' '}
+          {currentChildSelected + 1}
         </h1>
       </RNBIDHeader>
 
       <PanelBody>
-        <div>
-          Batiment {currentChildSelected + 1} / {splitChildrenN}
-        </div>
         <BuildingStatus
           status={children[currentChildSelected].status}
           onChange={(status) => setStatus(status)}
@@ -252,14 +250,11 @@ const nextStep = (
   const i = currentChildSelected === null ? -1 : currentChildSelected;
   if (i < splitChildrenN) {
     dispatch(Actions.edition.setCurrentChildSelected(i + 1));
-    dispatch(Actions.edition.setShapeInteractionMode(null));
   }
 };
 
 const previousStep = (currentChildSelected: number, dispatch: AppDispatch) => {
   const i = currentChildSelected || 0;
-  dispatch(Actions.edition.setShapeInteractionMode(null));
-
   if (i === 0) {
     dispatch(Actions.edition.setCurrentChildSelected(null));
   } else if (i > 0) {

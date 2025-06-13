@@ -117,7 +117,15 @@ export const editionSlice = createSlice({
       state.split.children = createEmptySplitChildren(n);
     },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
-      state.split.currentChildSelected = action.payload;
+      const currentChildSelected = action.payload;
+      state.split.currentChildSelected = currentChildSelected;
+      if (currentChildSelected !== null) {
+        if (state.split.children[currentChildSelected].shape === null) {
+          state.updateCreate.shapeInteractionMode = 'drawing';
+        } else {
+          state.updateCreate.shapeInteractionMode = 'updating';
+        }
+      }
     },
     setSplitChildStatus(state, action: PayloadAction<BuildingStatusType>) {
       if (state.split.currentChildSelected !== null) {
