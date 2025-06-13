@@ -142,7 +142,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
 
   // split candidate highlighting
   useEffect(() => {
-    if (map && splitCandidateId) {
+    if (map) {
       if (previousSplitCandidate.current) {
         map.removeFeatureState({
           source: SRC_BDGS_SHAPES,
@@ -152,7 +152,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         previousSplitCandidate.current = undefined;
       }
 
-      if (operation === 'split') {
+      if (operation === 'split' && splitCandidateId) {
         map.setFeatureState(
           {
             source: SRC_BDGS_SHAPES,
