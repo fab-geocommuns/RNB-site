@@ -182,6 +182,22 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
           }
         }
         break;
+      case 'split':
+        // in case user first click the building, then clicks on split action
+        if (
+          state.map.selectedItem &&
+          state.map.selectedItem._type === 'building'
+        ) {
+          const building = state.map.selectedItem;
+          listenerApi.dispatch(
+            Actions.edition.setSplitCandidateAndLocation({
+              rnb_id: building.rnb_id,
+              location: building.point.coordinates,
+            }),
+          );
+        }
+        // now we can safely unselect the building
+        listenerApi.dispatch(Actions.map.unselectItem());
       default:
         break;
     }
