@@ -115,7 +115,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           );
         }
 
-        if (featureCloseToCursor) {
+        if (featureCloseToCursor && operation === null) {
           map.setFeatureState(
             {
               source: featureCloseToCursor.layer.source,
