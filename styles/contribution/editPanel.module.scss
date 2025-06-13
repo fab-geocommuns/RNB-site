@@ -1,11 +1,11 @@
-@import "../vars.scss";
+@import '../vars.scss';
 
 $input-height: 52px;
 $spacing: 12px;
-$actions-top: 2*$spacing + $input-height;
+$actions-top: 2 * $spacing + $input-height;
 $actions-height: 60px;
 $shell-top: $actions-top + $spacing + $actions-height;
-$panel-padding: 1.5*$spacing;
+$panel-padding: 1.5 * $spacing;
 
 .actions {
     position: absolute;
@@ -40,12 +40,10 @@ $panel-padding: 1.5*$spacing;
         border-radius: 4px;
         padding-top: 6px;
         .actionSelected {
-            color:white;
+            color: white;
         }
     }
 }
-
-
 
 .shell {
     position: absolute;
@@ -63,7 +61,7 @@ $panel-padding: 1.5*$spacing;
 
 .content {
     background-color: var(--background-alt-blue-france);
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 
     border-radius: 4px;
     display: flex;
@@ -98,13 +96,50 @@ $panel-padding: 1.5*$spacing;
         padding-top: $spacing;
     }
 }
-
+.tabList {
+    order: 0;
+    border: 1px solid var(--text-mention-grey);
+    border-radius: 3px;
+    margin: 10px;
+    padding: 5px;
+    width: initial;
+}
+.icon {
+    margin-right: 5px;
+}
+.tab {
+    background-color: transparent;
+    list-style: none;
+    padding: 5px;
+    margin-top: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    background-image: none;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+.tabLink {
+    background-image: none;
+    display: flex;
+    align-items: center;
+    &:hover {
+        opacity: 0.7;
+    }
+}
+.tabActive {
+    background-color: var(--background-alt-blue-france-hover);
+    &:hover {
+        opacity: 1;
+    }
+}
+.tabLinkDisabled {
+    pointer-events: none;
+}
 .header {
-    border-radius: 4px 4px 0 0;
     text-transform: uppercase;
     padding: 6px 12px 6px 18px;
     background-color: var(--background-alt-blue-france-hover);
-    box-shadow: 0 0 5px var(--background-action-high-grey-active);
     z-index: 100;
 }
 
@@ -116,7 +151,7 @@ $panel-padding: 1.5*$spacing;
 }
 
 .footer {
-    padding: $spacing $spacing $spacing 2*$spacing;
+    padding: $spacing $spacing $spacing 2 * $spacing;
     box-shadow: 0 0px 4px var(--background-contrast-grey-active);
     z-index: 90;
     flex-shrink: 1;
@@ -140,11 +175,13 @@ $panel-padding: 1.5*$spacing;
         transform: translateY(100%);
         transition: none;
     }
-    
+
     .noticeVisible {
         opacity: 1;
         transform: translateY(0);
-        transition: opacity 0.4s ease, transform 0.5s ease;
+        transition:
+            opacity 0.4s ease,
+            transform 0.5s ease;
         pointer-events: auto;
     }
 }
