@@ -11,12 +11,17 @@ import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
 import { toasterError, toasterSuccess } from './toaster';
+import RNBIDHeader from './RNBIDHeader';
+import styles from '@/styles/contribution/editPanel.module.scss';
 
 const INITIAL_STEP = 0;
 
+function PanelBody({ children }: { children: React.ReactNode }) {
+  return <div className={styles.body}>{children}</div>;
+}
+
 export default function SplitPanel() {
   const dispatch: AppDispatch = useDispatch();
-  const { fetch } = useRNBFetch();
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
@@ -26,36 +31,119 @@ export default function SplitPanel() {
   const children: SplitChild[] = useSelector(
     (state: RootState) => state.edition.split.children,
   );
-  const location = useSelector(
-    (state: RootState) => state.edition.split.location,
-  );
   const stepsN: number = splitChildrenN + 1;
   const currentChildSelected = useSelector(
     (state: RootState) => state.edition.split.currentChildSelected,
   );
-  const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
+
+  return (
+    <>
+      {currentChildSelected === null && (
+        <SplitBuildingInitialStep
+          splitCandidateId={splitCandidateId}
+          currentChildSelected={currentChildSelected}
+          splitChildrenN={splitChildrenN}
+        ></SplitBuildingInitialStep>
+      )}
+
+      {splitCandidateId &&
+        currentChildSelected !== null &&
+        currentChildSelected >= 0 && (
+          <SplitBuildingChildInfosStep
+            splitCandidateId={splitCandidateId}
+            currentChildSelected={currentChildSelected}
+            splitChildrenN={splitChildrenN}
+            children={children}
+          ></SplitBuildingChildInfosStep>
+        )}
+    </>
+  );
+}
+
+function SplitBuildingInitialStep({
+  splitCandidateId,
+  splitChildrenN,
+  currentChildSelected,
+}: {
+  splitCandidateId: string | null;
+  splitChildrenN: number;
+  currentChildSelected: number | null;
+}) {
+  const dispatch: AppDispatch = useDispatch();
   const setChildrenNumber = (n: string) => {
     dispatch(Actions.edition.setSplitChildrenNumber(parseInt(n)));
   };
 
-  const nextStep = () => {
-    const i = currentChildSelected === null ? -1 : currentChildSelected;
-    if (i < splitChildrenN) {
-      dispatch(Actions.edition.setCurrentChildSelected(i + 1));
-      dispatch(Actions.edition.setShapeInteractionMode(null));
-    }
-  };
+  return (
+    <>
+      <RNBIDHeader>
+        <span className="fr-text--xs">Scinder un bâtiment</span>
+        <h1 className="fr-text--lg fr-m-0">Étape 1 - Sélection du bâtiment</h1>
+      </RNBIDHeader>
 
-  const previousStep = () => {
-    const i = currentChildSelected || 0;
-    dispatch(Actions.edition.setShapeInteractionMode(null));
+      <PanelBody>
+        <div className={`${styles.panelSection} ${styles.noPad}`}>
+          {splitCandidateId && (
+            <>
+              <div className="fr-pb-3v">
+                En combien de bâtiments souhaitez-vous scinder{' '}
+                {splitCandidateId} ?
+              </div>
+              <Select
+                nativeSelectProps={{
+                  value: splitChildrenN?.toString(),
+                  onChange: (event) => {
+                    setChildrenNumber(event.target.value);
+                  },
+                }}
+                label=""
+                options={[
+                  { value: '2', label: 2 },
+                  { value: '3', label: 3 },
+                  { value: '4', label: 4 },
+                  { value: '5', label: 5 },
+                  { value: '6', label: 6 },
+                  { value: '7', label: 7 },
+                  { value: '8', label: 8 },
+                  { value: '9', label: 9 },
+                ]}
+              />
+              <div className={styles.footer}>
+                <Button
+                  onClick={() =>
+                    nextStep(currentChildSelected, splitChildrenN, dispatch)
+                  }
+                >
+                  Suivant
+                </Button>
+              </div>
+            </>
+          )}
 
-    if (i === 0) {
-      dispatch(Actions.edition.setCurrentChildSelected(null));
-    } else if (i > 0) {
-      dispatch(Actions.edition.setCurrentChildSelected(i - 1));
-    }
-  };
+          {splitCandidateId === null && (
+            <>Sélectionnez un bâtiment à scinder sur la carte.</>
+          )}
+        </div>
+      </PanelBody>
+    </>
+  );
+}
+
+function SplitBuildingChildInfosStep({
+  currentChildSelected,
+  splitChildrenN,
+  children,
+  splitCandidateId,
+}: {
+  currentChildSelected: number;
+  splitChildrenN: number;
+  children: SplitChild[];
+  splitCandidateId: string;
+}) {
+  const dispatch: AppDispatch = useDispatch();
+  const location = useSelector(
+    (state: RootState) => state.edition.split.location,
+  );
 
   const setStatus = (status: BuildingStatusType) => {
     dispatch(Actions.edition.setSplitChildStatus(status));
@@ -67,6 +155,9 @@ export default function SplitPanel() {
   const handleSplitBuildingShapeCreation = () => {
     dispatch(Actions.edition.setShapeInteractionMode('drawing'));
   };
+
+  const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
+  const { fetch } = useRNBFetch();
 
   const handleSubmit = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
@@ -94,84 +185,84 @@ export default function SplitPanel() {
 
   return (
     <>
-      {currentChildSelected === null && (
-        <>
-          {splitCandidateId && (
-            <>
-              Indiquez en combien de bâtiments vous souhaitez scinder{' '}
-              {splitCandidateId} :
-              <Select
-                nativeSelectProps={{
-                  value: splitChildrenN?.toString(),
-                  onChange: (event) => {
-                    setChildrenNumber(event.target.value);
-                  },
-                }}
-                label=""
-                options={[
-                  { value: '2', label: 2 },
-                  { value: '3', label: 3 },
-                  { value: '4', label: 4 },
-                  { value: '5', label: 5 },
-                  { value: '6', label: 6 },
-                  { value: '7', label: 7 },
-                  { value: '8', label: 8 },
-                  { value: '9', label: 9 },
-                ]}
-              />
-            </>
-          )}
+      <RNBIDHeader>
+        <span className="fr-text--xs">Scinder un bâtiment</span>
+        <h1 className="fr-text--lg fr-m-0">
+          Étape 2 - Bâtiment issu de la scission
+        </h1>
+      </RNBIDHeader>
 
-          {splitCandidateId === null && (
-            <>Sélectionnez un bâtiment à scinder sur la carte.</>
-          )}
-        </>
-      )}
+      <PanelBody>
+        <div>
+          Batiment {currentChildSelected + 1} / {splitChildrenN}
+        </div>
+        <BuildingStatus
+          status={children[currentChildSelected].status}
+          onChange={(status) => setStatus(status)}
+        ></BuildingStatus>
+        <BuildingAddresses
+          buildingPoint={location!}
+          addresses={children[currentChildSelected].addresses}
+          onChange={(addresses: BuildingAddressType[]) => {
+            setAddresses(addresses);
+          }}
+        />
+        <Button
+          size="small"
+          onClick={handleSplitBuildingShapeCreation}
+          priority={`tertiary`}
+        >
+          <img
+            src={newPolygonIcon.src}
+            width="30"
+            title="Dessiner une nouvelle géométrie"
+          ></img>
+          <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
+            Dessiner la géométrie du bâtiment
+          </span>
+        </Button>
+      </PanelBody>
+      <div className={styles.footer}>
+        <Button onClick={() => previousStep(currentChildSelected, dispatch)}>
+          précédent
+        </Button>
 
-      {currentChildSelected !== null && currentChildSelected >= 0 && (
-        <>
-          <div>
-            Batiment {currentChildSelected + 1} / {splitChildrenN}
-          </div>
-          <BuildingStatus
-            status={children[currentChildSelected].status}
-            onChange={(status) => setStatus(status)}
-          ></BuildingStatus>
-          <BuildingAddresses
-            buildingPoint={location!}
-            addresses={children[currentChildSelected].addresses}
-            onChange={(addresses: BuildingAddressType[]) => {
-              setAddresses(addresses);
-            }}
-          />
+        {currentChildSelected < splitChildrenN - 1 && (
           <Button
-            size="small"
-            onClick={handleSplitBuildingShapeCreation}
-            priority={`tertiary`}
+            onClick={() =>
+              nextStep(currentChildSelected, splitChildrenN, dispatch)
+            }
           >
-            <img
-              src={newPolygonIcon.src}
-              width="30"
-              title="Dessiner une nouvelle géométrie"
-            ></img>
-            <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
-              Dessiner la géométrie du bâtiment
-            </span>
+            Suivant
           </Button>
-        </>
-      )}
-
-      {currentChildSelected !== null && (
-        <Button onClick={previousStep}>précédent</Button>
-      )}
-      <div></div>
-      {(currentChildSelected === null ||
-        currentChildSelected < splitChildrenN - 1) && (
-        <Button onClick={nextStep}>Suivant</Button>
-      )}
-      {currentChildSelected && currentChildSelected === splitChildrenN - 1 && (
-        <Button onClick={handleSubmit}>FIN</Button>
-      )}
+        )}
+        {currentChildSelected === splitChildrenN - 1 && (
+          <Button onClick={handleSubmit}>FIN</Button>
+        )}
+      </div>
     </>
   );
 }
+
+const nextStep = (
+  currentChildSelected: number | null,
+  splitChildrenN: number,
+  dispatch: AppDispatch,
+) => {
+  const i = currentChildSelected === null ? -1 : currentChildSelected;
+  if (i < splitChildrenN) {
+    dispatch(Actions.edition.setCurrentChildSelected(i + 1));
+    dispatch(Actions.edition.setShapeInteractionMode(null));
+  }
+};
+
+const previousStep = (currentChildSelected: number, dispatch: AppDispatch) => {
+  const i = currentChildSelected || 0;
+  dispatch(Actions.edition.setShapeInteractionMode(null));
+
+  if (i === 0) {
+    dispatch(Actions.edition.setCurrentChildSelected(null));
+  } else if (i > 0) {
+    dispatch(Actions.edition.setCurrentChildSelected(i - 1));
+  }
+};
