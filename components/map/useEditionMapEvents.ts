@@ -61,7 +61,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               dispatch(Actions.edition.setOperation(null));
             }
           }
-        } else if (operation === 'split') {
+        } else if (operation === 'split' && splitCandidateId === null) {
           if (featureCloseToCursor) {
             // What did we click on?
             if (
