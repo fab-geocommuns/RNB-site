@@ -287,30 +287,6 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
-        <Button
-          onClick={toggleSplitBuilding}
-          className={operation === 'split' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'split'
-                  ? splitSelectedBuildingImage.src
-                  : splitBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'split' ? styles.actionSelected : ''}
-            >
-              scinder
-            </small>
-          </div>
-        </Button>
         {enableMergeMode && (
           <Button
             onClick={toggleMergeBuilding}
@@ -337,6 +313,30 @@ export default function EditionPanel() {
             </div>
           </Button>
         )}
+        <Button
+          onClick={toggleSplitBuilding}
+          className={operation === 'split' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'split'
+                  ? splitSelectedBuildingImage.src
+                  : splitBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'split' ? styles.actionSelected : ''}
+            >
+              scinder
+            </small>
+          </div>
+        </Button>
       </div>
 
       {operation == 'update' && selectedBuilding && (
