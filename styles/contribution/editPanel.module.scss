@@ -164,3 +164,15 @@ $panel-padding: 1.5*$spacing;
         }
     }
 }
+.editLoader {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    span {
+        font-size: 14px;
+        margin-top: 20px;
+    }
+}

@@ -2,6 +2,7 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import { fetchBuilding } from '@/utils/requests';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -136,17 +137,16 @@ export const mapSlice = createSlice({
         state.selectedItem.addresses = action.payload;
       }
     },
+    removeBuildings(state) {
+      state.selectedItem = undefined;
+    },
   },
 
   extraReducers(builder) {
     builder.addCase(selectBuilding.fulfilled, (state, action) => {
       // No building selected
-      if (!action.payload) {
-        state.selectedItem = undefined;
-      } else {
-        state.selectedItem = action.payload;
-      }
-
+      if (!action.payload) state.selectedItem = undefined;
+      else state.selectedItem = action.payload;
       if (action.payload) {
         window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
       } else {
@@ -185,19 +185,9 @@ export const selectBuilding = createAsyncThunk(
   'map/selectBuilding',
   async (rnbId: string | null, { dispatch }) => {
     if (!rnbId) return;
-
-    const url = bdgApiUrl(rnbId + '?from=site&withPlots=1');
-    const rnbResponse = await fetch(url);
-
-    if (rnbResponse.ok) {
-      const rnbData = (await rnbResponse.json()) as SelectedBuilding;
-
-      const selectedBuilding = {
-        ...rnbData,
-        _type: 'building',
-      } satisfies SelectedBuilding;
-
-      return selectedBuilding;
+    const buildingFetched = await fetchBuilding(rnbId);
+    if (buildingFetched?.rnb_id) {
+      return buildingFetched;
     } else {
       dispatch(mapSlice.actions.setAddressSearchUnknownRNBId(true));
     }

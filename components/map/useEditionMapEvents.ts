@@ -9,6 +9,7 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
+import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
 /**
@@ -78,6 +79,14 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                 }),
               );
             }
+          }
+        } else if (operation === 'merge') {
+          if (featureCloseToCursor) {
+            dispatch(
+              selectBuildingsAndSetMergeCandidates(
+                featureCloseToCursor.properties.rnb_id,
+              ),
+            );
           }
         }
       };

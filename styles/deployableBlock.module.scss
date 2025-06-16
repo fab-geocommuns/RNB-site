@@ -1,0 +1,43 @@
+@import "vars.scss";
+
+.blue {
+    .sectionTitle {
+      color:#0063cb;
+    }    
+}
+.sectionTitle {
+    font-size: .9em;
+    line-height: 1.3em;
+    margin-bottom: .2rem;
+}
+.sectionToggler {
+    text-decoration:none;
+    background: none;
+    border: none;
+}
+.sectionTogglerIcon {
+    margin-right:.4rem;
+    color:black;
+    display: inline-block;
+    transition: transform .3s;
+}
+
+.sectionTogglerOpen {
+    span {
+        transform: rotate(90deg);
+    }
+}
+
+
+.sectionBody {
+    font-size: .9em;
+    line-height: 1.3em;
+}
+
+.sectionListItem {
+    flex: 1 0 0;
+    margin-bottom:.8em
+}
+.sectionListItem:last-child {
+    margin-bottom: 0;
+}

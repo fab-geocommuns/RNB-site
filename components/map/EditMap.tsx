@@ -14,6 +14,8 @@ import {
   MapBuildingsLayer,
 } from '@/stores/map/map-slice';
 import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
+import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
+import { useMapStateSyncSelectedBuildingsForMerge } from '@/components/map/useMapStateSyncSelectedBuildingsForMerge';
 
 type Props = {
   disabledLayers?: MapLayer[];
@@ -40,5 +42,7 @@ export default function EditMap({
   useEditionMapEvents(map);
   useMapStateSync(map);
   useMapEditBuildingShape(map);
+  useMapStateSyncSelectedBuilding(map);
+  useMapStateSyncSelectedBuildingsForMerge(map);
   return mapContainer;
 }
