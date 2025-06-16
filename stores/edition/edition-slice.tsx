@@ -182,6 +182,18 @@ export const editionSlice = createSlice({
         state.split.children[childIndex].shape = action.payload.shape;
       }
     },
+    setCurrentChildFromShapeId(
+      state,
+      action: PayloadAction<string | undefined | number>,
+    ) {
+      const shapeId = action.payload;
+      const childIndex = state.split.children.findIndex(
+        (child) => child.shapeId === shapeId,
+      );
+      if (childIndex >= 0) {
+        state.split.currentChildSelected = childIndex;
+      }
+    },
   },
 });
 

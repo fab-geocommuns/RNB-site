@@ -133,9 +133,23 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       };
       drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
 
+      const handleSelectionChange = ({
+        features,
+      }: {
+        features: Array<Feature>;
+      }) => {
+        if (operation === 'split' && features.length === 1) {
+          // a click on a previously drawn shape selects the corresponding building in the panel
+          const featureId = features[0].id;
+          dispatch(Actions.edition.setCurrentChildFromShapeId(featureId));
+        }
+      };
+      drawRef.current && map.on('draw.selectionchange', handleSelectionChange);
+
       return () => {
         map.off('draw.update', handleBuildingShapeUpdate);
         map.off('draw.create', handleBuildingShapeCreate);
+        map.off('draw.selectionchange', handleSelectionChange);
       };
     }
   }, [map, operation]);
