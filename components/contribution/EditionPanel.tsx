@@ -8,21 +8,27 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
+import MergePanel from './MergePanel';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { BuildingAddressType } from './types';
+import { Loader } from '@/components/Loader';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
+useMapEditBuildingShape;
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
+import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
+import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
-
+import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
+const enableMergeMode = process.env.NEXT_PUBLIC_MERGE_ENABLED === 'true';
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -38,6 +44,7 @@ function EditSelectedBuildingPanelContent({
 }) {
   const rnbId = selectedBuilding.rnb_id;
   const isActive = selectedBuilding.is_active;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<BuildingStatusType>(
     selectedBuilding.status,
@@ -78,6 +85,7 @@ function EditSelectedBuildingPanelContent({
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
 
     let data: { [key: string]: any } = {
@@ -105,8 +113,10 @@ function EditSelectedBuildingPanelContent({
         toasterSuccess(dispatch, 'Modification enregistrée');
         await dispatch(Actions.map.selectBuilding(rnbId));
       }
+      setIsLoading(false);
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
+      setIsLoading(false);
       console.error(err);
     }
   };
@@ -121,6 +131,7 @@ function EditSelectedBuildingPanelContent({
     const data = {
       is_active: isActive,
     };
+    console.log(isLoading);
     const response = await fetch(url, {
       body: JSON.stringify(data),
       method: 'PATCH',
@@ -147,30 +158,42 @@ function EditSelectedBuildingPanelContent({
         <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
       </RNBIDHeader>
       <PanelBody>
-        {isActive && (
-          <>
-            <BuildingStatus
-              status={newStatus}
-              onChange={setNewStatus}
-            ></BuildingStatus>
-            <BuildingAddresses
-              buildingPoint={selectedBuilding.point.coordinates}
-              addresses={localAddresses}
-              onChange={handleEditAddress}
-            />
-            <BuildingShape
-              shapeInteractionMode={shapeInteractionMode}
-              selectedBuilding={selectedBuilding}
-            ></BuildingShape>
-          </>
+        {isLoading ? (
+          <div className={styles.editLoader}>
+            <Loader />
+            <span>Chargement en cours</span>
+          </div>
+        ) : (
+          isActive && (
+            <>
+              <BuildingStatus
+                status={newStatus}
+                onChange={setNewStatus}
+              ></BuildingStatus>
+              <BuildingAddresses
+                buildingPoint={selectedBuilding.point.coordinates}
+                addresses={localAddresses}
+                onChange={handleEditAddress}
+              />
+              <BuildingShape
+                shapeInteractionMode={shapeInteractionMode}
+                selectedBuilding={selectedBuilding}
+              ></BuildingShape>
+            </>
+          )
         )}
-        <BuildingActivationToggle
-          isActive={isActive}
-          onToggle={toggleBuildingActivation}
-        />
+        {!isLoading && (
+          <BuildingActivationToggle
+            isActive={isActive}
+            onToggle={toggleBuildingActivation}
+          />
+        )}
       </PanelBody>
       <div className={styles.footer}>
-        <Button onClick={handleSubmit} disabled={!isActive || !anyChanges}>
+        <Button
+          onClick={handleSubmit}
+          disabled={!isActive || !anyChanges || isLoading}
+        >
           Valider les modifications
         </Button>
         {anyChanges && (
@@ -213,7 +236,15 @@ export default function EditionPanel() {
       dispatch(Actions.edition.setOperation('create'));
     }
   };
-
+  const toggleMergeBuilding = () => {
+    dispatch(Actions.map.removeBuildings());
+    if (operation === 'merge') {
+      dispatch(Actions.edition.setOperation(null));
+      dispatch(Actions.edition.resetCandidates());
+    } else {
+      dispatch(Actions.edition.setOperation('merge'));
+    }
+  };
   return (
     <>
       <div className={styles.actions}>
@@ -241,6 +272,32 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
+        {enableMergeMode && (
+          <Button
+            onClick={toggleMergeBuilding}
+            className={operation === 'merge' ? styles.buttonSelected : ''}
+            size="small"
+            priority="tertiary no outline"
+          >
+            <div className={styles.action}>
+              <img
+                src={
+                  operation === 'merge'
+                    ? mergeSelectedBuildingImage.src
+                    : mergeBuildingImage.src
+                }
+                alt=""
+                height="32"
+                width="32"
+              />
+              <small
+                className={operation === 'merge' ? styles.actionSelected : ''}
+              >
+                fusionner
+              </small>
+            </div>
+          </Button>
+        )}
       </div>
 
       {operation == 'update' && selectedBuilding && (
@@ -253,6 +310,11 @@ export default function EditionPanel() {
       {operation == 'create' && (
         <PanelWrapper>
           <CreationPanel />
+        </PanelWrapper>
+      )}
+      {operation == 'merge' && (
+        <PanelWrapper>
+          <MergePanel />
         </PanelWrapper>
       )}
 
