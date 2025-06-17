@@ -44,13 +44,10 @@ export default function MergePanel() {
   }, [candidatesToMerge]);
   const cancelMerge = () => {
     dispatch(Actions.edition.setOperation(null));
-    dispatch(Actions.edition.resetCandidates());
   };
   const newMerge = () => {
-    dispatch(Actions.edition.resetCandidates());
-    dispatch(Actions.map.removeBuildings());
     setNewBuilding(null);
-    dispatch(Actions.map.reloadBuildings());
+    dispatch(Actions.edition.setOperation('merge'));
   };
   const selectCandidateToRemove = (rnbId: string) => {
     dispatch(

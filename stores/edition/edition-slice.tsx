@@ -84,12 +84,10 @@ export const editionSlice = createSlice({
   name: 'edition',
   initialState,
   reducers: {
-    resetCandidates(state) {
-      state.merge.candidates = [];
-    },
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
+      state.merge.candidates = [];
       state.split.currentChildSelected = null;
       state.split.childrenNumber = 2;
       state.split.children = createEmptySplitChildren(2);
@@ -201,7 +199,6 @@ export const selectBuildingsAndSetMergeCandidates =
   (rnbId: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(Actions.map.unselectItem());
-    dispatch(Actions.edition.setOperation('merge'));
     dispatch(
       Actions.edition.setCandidates(
         formatCandidates(rnbId, getState().edition.merge.candidates),
@@ -233,17 +230,14 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
     switch (operation) {
       case null:
-        listenerApi.dispatch(Actions.edition.resetCandidates());
         break;
       case 'create':
         listenerApi.dispatch(Actions.map.unselectItem());
-        listenerApi.dispatch(Actions.edition.resetCandidates());
         listenerApi.dispatch(
           Actions.edition.setShapeInteractionMode('drawing'),
         );
         break;
       case 'update':
-        listenerApi.dispatch(Actions.edition.resetCandidates());
         if (state.map.selectedItem?._type === 'building') {
           if (state.map.selectedItem.shape.type === 'Point') {
             listenerApi.dispatch(Actions.edition.setShapeInteractionMode(null));
