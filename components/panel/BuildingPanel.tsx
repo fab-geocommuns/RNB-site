@@ -1,6 +1,6 @@
 // Types
 // Store
-import { bdgApiUrl, SelectedBuilding } from '@/stores/map/map-slice';
+import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
 import CopyToClipboard from '@/components/util/CopyToClipboard';
@@ -79,16 +79,15 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     }, 2000);
   };
 
-  // @ts-ignore
-
-  const relevantPlots = () => {
-    const plots = bdg?.plots.filter((plot) => {
-      // We only show plots that cover more than 5% of the building
-      return plot.bdg_cover_ratio > 0.05;
-    });
+  const relevantPlots = (): Plot[] => {
+    const plots =
+      bdg?.plots?.filter((plot: Plot) => {
+        // We only show plots that cover more than 5% of the building
+        return plot.bdg_cover_ratio > 0.05;
+      }) || [];
 
     // Sort plots by desc cover ratio
-    plots.sort((a, b) => b.bdg_cover_ratio - a.bdg_cover_ratio);
+    plots.sort((a: Plot, b: Plot) => b.bdg_cover_ratio - a.bdg_cover_ratio);
 
     return plots;
   };
@@ -171,8 +170,10 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                 En savoir plus
               </a>
             </div>
-            {bdg?.plots?.length === 0 ? (
-              <>Pas de parcelles</>
+            {relevantPlots().length === 0 ? (
+              <small className="fr-text--sm fr-text--grey fr-ml-2v">
+                Pas de parcelles associées à ce bâtiment
+              </small>
             ) : (
               <>
                 <div className="fr-table fr-table--sm fr-table--no-scroll fr-table--bordered fr-m-0-5v">
@@ -187,7 +188,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                             </tr>
                           </thead>
                           <tbody>
-                            {relevantPlots().map((plot) => {
+                            {relevantPlots().map((plot: Plot) => {
                               return (
                                 <tr key={plot.id}>
                                   <td>{plot.id}</td>
