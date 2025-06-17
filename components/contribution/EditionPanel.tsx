@@ -34,6 +34,7 @@ import Toaster, {
 import SplitPanel from './SplitPanel';
 
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
+import { Operation } from '@/stores/edition/edition-slice';
 const enableMergeMode = true;
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
@@ -226,40 +227,24 @@ export default function EditionPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.edition.operation);
-  const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
-  );
 
   const selectedBuilding =
     selectedItem?._type === 'building'
       ? (selectedItem as SelectedBuilding)
       : null;
 
-  const toggleCreateBuilding = () => {
-    if (operation === 'create') {
+  const toggleOperation = (operationName: Operation) => () => {
+    if (operation === operationName) {
       dispatch(Actions.edition.setOperation(null));
     } else {
-      dispatch(Actions.edition.setOperation('create'));
+      dispatch(Actions.edition.setOperation(operationName));
     }
   };
 
-  const toggleSplitBuilding = () => {
-    if (operation === 'split') {
-      dispatch(Actions.edition.setOperation(null));
-    } else {
-      dispatch(Actions.edition.setOperation('split'));
-    }
-  };
+  const toggleCreateBuilding = toggleOperation('create');
+  const toggleSplitBuilding = toggleOperation('split');
+  const toggleMergeBuilding = toggleOperation('merge');
 
-  const toggleMergeBuilding = () => {
-    dispatch(Actions.map.removeBuildings());
-    if (operation === 'merge') {
-      dispatch(Actions.edition.setOperation(null));
-      dispatch(Actions.edition.resetCandidates());
-    } else {
-      dispatch(Actions.edition.setOperation('merge'));
-    }
-  };
   return (
     <>
       <div className={styles.actions}>
