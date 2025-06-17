@@ -53,7 +53,7 @@ export default function SplitPanel() {
             splitCandidateId={splitCandidateId}
             currentChildSelected={currentChildSelected}
             splitChildrenN={splitChildrenN}
-            children={children}
+            childrenB={children}
           ></SplitBuildingChildInfosStep>
         )}
     </>
@@ -143,12 +143,12 @@ const cancelSplit = (dispatch: AppDispatch) => {
 function SplitBuildingChildInfosStep({
   currentChildSelected,
   splitChildrenN,
-  children,
+  childrenB,
   splitCandidateId,
 }: {
   currentChildSelected: number;
   splitChildrenN: number;
-  children: SplitChild[];
+  childrenB: SplitChild[];
   splitCandidateId: string;
 }) {
   const dispatch: AppDispatch = useDispatch();
@@ -165,7 +165,7 @@ function SplitBuildingChildInfosStep({
 
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
   const currentChildHasNoShape =
-    children[currentChildSelected].shapeId === null;
+    childrenB[currentChildSelected].shapeId === null;
   const { fetch } = useRNBFetch();
 
   const handleSubmit = async () => {
@@ -203,12 +203,12 @@ function SplitBuildingChildInfosStep({
 
       <PanelBody>
         <BuildingStatus
-          status={children[currentChildSelected].status}
+          status={childrenB[currentChildSelected].status}
           onChange={(status) => setStatus(status)}
         ></BuildingStatus>
         <BuildingAddresses
           buildingPoint={location!}
-          addresses={children[currentChildSelected].addresses}
+          addresses={childrenB[currentChildSelected].addresses}
           onChange={(addresses: BuildingAddressType[]) => {
             setAddresses(addresses);
           }}
