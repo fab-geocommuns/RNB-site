@@ -34,7 +34,7 @@ import Toaster, {
 import SplitPanel from './SplitPanel';
 
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
-const enableMergeMode = process.env.NEXT_PUBLIC_MERGE_ENABLED === 'true';
+const enableMergeMode = true;
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
