@@ -20,6 +20,11 @@ export type BuildingAddress = {
   city_insee_code: string;
 };
 
+export type Plot = {
+  id: string;
+  bdg_cover_ratio: number;
+};
+
 export interface SelectedBuilding {
   _type: 'building';
   rnb_id: string;
@@ -31,7 +36,7 @@ export interface SelectedBuilding {
   shape: GeoJSON.Geometry;
   addresses: BuildingAddress[];
   ext_ids: any[];
-  plots: any[];
+  plots: Plot[] | null;
   is_active: boolean;
 }
 
