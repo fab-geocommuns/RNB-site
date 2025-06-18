@@ -132,12 +132,12 @@ export default function CreationPanel() {
         )}
       </PanelBody>
       <div className={styles.footer}>
-        {step === 2 && (
-          <Button onClick={createBuilding}>Créer le bâtiment</Button>
-        )}
         <Button onClick={cancelCreation} priority="tertiary no outline">
           Annuler
         </Button>
+        {step === 2 && (
+          <Button onClick={createBuilding}>Créer le bâtiment</Button>
+        )}
       </div>
     </>
   );

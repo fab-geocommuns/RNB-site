@@ -176,11 +176,19 @@ export default function MergePanel() {
             </div>
           )}
           <div className={styles.footer}>
-            <Button onClick={handleSubmit} disabled={isLoading}>
-              Valider la fusion
-            </Button>
             <Button onClick={cancelMerge} priority="tertiary no outline">
               Annuler
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={isLoading || (candidatesWithAddresses?.length ?? 0) < 2}
+              title={
+                (candidatesWithAddresses?.length ?? 0) > 1
+                  ? `Fusionner ${candidatesWithAddresses?.length} bâtiments en un seul`
+                  : 'Sélectionnez au moins 2 bâtiments à fusionner'
+              }
+            >
+              Valider la fusion
             </Button>
           </div>
         </div>
