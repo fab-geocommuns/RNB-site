@@ -28,50 +28,69 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
+  const selectedBuildingRnbId = useSelector((state: RootState) =>
+    state.map.selectedItem?._type === 'building'
+      ? state.map.selectedItem.rnb_id
+      : null,
+  );
 
   // Initialisation des événements
   useEffect(() => {
     if (map) {
       // Click sur la carte
       const handleClickEvent = (e: MapMouseEvent) => {
-        const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
+        const featureOnCursor = getNearestFeatureFromCursorWithBuffer(
           map,
           e.point.x,
           e.point.y,
           0,
         );
+        const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
+          map,
+          e.point.x,
+          e.point.y,
+          5,
+        );
+
+        const rnbIdClickedOn = featureOnCursor
+          ? featureOnCursor.properties.rnb_id
+          : undefined;
+        const rnbIdClickedClose = featureCloseToCursor
+          ? featureCloseToCursor.properties.rnb_id
+          : undefined;
 
         if (operation === 'update' || operation === null) {
           if (shapeInteractionMode !== 'drawing') {
-            if (featureCloseToCursor) {
+            if (featureOnCursor && rnbIdClickedOn !== selectedBuildingRnbId) {
               // What did we click on?
               if (
                 [
                   LAYER_BDGS_POINT,
                   LAYER_BDGS_SHAPE_BORDER,
                   LAYER_BDGS_SHAPE_POINT,
-                ].includes(featureCloseToCursor.layer.id)
+                ].includes(featureOnCursor.layer.id)
               ) {
-                // It is a building
-                const rnb_id = featureCloseToCursor.properties.rnb_id;
-                dispatch(selectBuildingAndSetOperationUpdate(rnb_id));
+                dispatch(selectBuildingAndSetOperationUpdate(rnbIdClickedOn));
               }
-            } else {
-              // click out unselects the currently selected item
+            } else if (
+              featureOnCursor === undefined &&
+              rnbIdClickedClose !== selectedBuildingRnbId
+            ) {
+              // click out unselects the currently selected item, unless the click is very close to the currently edited building
               dispatch(Actions.edition.setOperation(null));
             }
           }
         } else if (operation === 'split' && splitCandidateId === null) {
-          if (featureCloseToCursor) {
+          if (featureOnCursor) {
             // What did we click on?
             if (
               [
                 LAYER_BDGS_POINT,
                 LAYER_BDGS_SHAPE_BORDER,
                 LAYER_BDGS_SHAPE_POINT,
-              ].includes(featureCloseToCursor.layer.id)
+              ].includes(featureOnCursor.layer.id)
             ) {
-              const rnb_id = featureCloseToCursor.properties.rnb_id;
+              const rnb_id = featureOnCursor.properties.rnb_id;
               dispatch(
                 Actions.edition.setSplitCandidateAndLocation({
                   rnb_id: rnb_id,
@@ -81,10 +100,10 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
             }
           }
         } else if (operation === 'merge') {
-          if (featureCloseToCursor) {
+          if (featureOnCursor) {
             dispatch(
               selectBuildingsAndSetMergeCandidates(
-                featureCloseToCursor.properties.rnb_id,
+                featureOnCursor.properties.rnb_id,
               ),
             );
           }
@@ -147,7 +166,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         map.off('mousemove', handleMouseMove);
       };
     }
-  }, [dispatch, map, shapeInteractionMode, operation]);
+  }, [dispatch, map, shapeInteractionMode, operation, selectedBuildingRnbId]);
 
   // split candidate highlighting
   useEffect(() => {

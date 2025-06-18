@@ -230,6 +230,7 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     // en fonction de l'opération nouvellement selectionnée, on dispatch des actions spécifiques
     switch (operation) {
       case null:
+        listenerApi.dispatch(Actions.map.unselectItem());
         break;
       case 'create':
         listenerApi.dispatch(Actions.map.unselectItem());
