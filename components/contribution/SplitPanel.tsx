@@ -30,7 +30,7 @@ export default function SplitPanel() {
     (state: RootState) => state.edition.split.splitCandidateId,
   );
   const splitChildrenN = useSelector(
-    (state: RootState) => state.edition.split.childrenNumber,
+    (state: RootState) => state.edition.split.children.length,
   );
   const children: SplitChild[] = useSelector(
     (state: RootState) => state.edition.split.children,

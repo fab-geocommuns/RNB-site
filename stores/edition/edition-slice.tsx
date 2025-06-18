@@ -25,7 +25,6 @@ export type SplitInfos = {
   splitCandidateId: string | null;
   // where is the split candidate located ? Used for address search
   location: [number, number] | null;
-  childrenNumber: number;
   currentChildSelected: number | null;
   children: SplitChild[];
 };
@@ -75,7 +74,6 @@ const initialState: EditionStore = {
     splitCandidateId: null,
     location: null,
     currentChildSelected: null,
-    childrenNumber: 2,
     children: createEmptySplitChildren(2),
   },
 };
@@ -89,7 +87,6 @@ export const editionSlice = createSlice({
       state.updateCreate.buildingNewShape = null;
       state.merge.candidates = [];
       state.split.currentChildSelected = null;
-      state.split.childrenNumber = 2;
       state.split.children = createEmptySplitChildren(2);
       state.split.location = null;
       state.split.splitCandidateId = null;
@@ -126,7 +123,6 @@ export const editionSlice = createSlice({
     },
     setSplitChildrenNumber(state, action: PayloadAction<number>) {
       const n = action.payload;
-      state.split.childrenNumber = n;
       state.split.children = createEmptySplitChildren(n);
     },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
