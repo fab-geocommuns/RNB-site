@@ -268,7 +268,17 @@ function SplitBuildingChildInfosStep({
           </Button>
         )}
         {currentChildSelected === splitChildrenN - 1 && (
-          <Button onClick={handleSubmit}>Scinder</Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={currentChildHasNoShape}
+            title={
+              currentChildHasNoShape
+                ? 'Veuillez tracer une géométrie pour ce bâtiment'
+                : `Scinder le bâtiment en ${splitChildrenN}`
+            }
+          >
+            Scinder
+          </Button>
         )}
       </div>
     </>
