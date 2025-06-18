@@ -10,7 +10,11 @@ import { BuildingAddressType } from './types';
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
-import { toasterError, toasterSuccess } from './toaster';
+import {
+  throwErrorMessageForHumans,
+  toasterError,
+  toasterSuccess,
+} from './toaster';
 import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
 
@@ -178,7 +182,7 @@ function SplitBuildingChildInfosStep({
       });
 
       if (!response.ok) {
-        // await throwErrorMessageForHumans(response);
+        await throwErrorMessageForHumans(response);
       } else {
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
