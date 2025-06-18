@@ -35,7 +35,6 @@ import SplitPanel from './SplitPanel';
 
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
 import { Operation } from '@/stores/edition/edition-slice';
-const enableMergeMode = true;
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -272,32 +271,30 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
-        {enableMergeMode && (
-          <Button
-            onClick={toggleMergeBuilding}
-            className={operation === 'merge' ? styles.buttonSelected : ''}
-            size="small"
-            priority="tertiary no outline"
-          >
-            <div className={styles.action}>
-              <img
-                src={
-                  operation === 'merge'
-                    ? mergeSelectedBuildingImage.src
-                    : mergeBuildingImage.src
-                }
-                alt=""
-                height="32"
-                width="32"
-              />
-              <small
-                className={operation === 'merge' ? styles.actionSelected : ''}
-              >
-                fusionner
-              </small>
-            </div>
-          </Button>
-        )}
+        <Button
+          onClick={toggleMergeBuilding}
+          className={operation === 'merge' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'merge'
+                  ? mergeSelectedBuildingImage.src
+                  : mergeBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'merge' ? styles.actionSelected : ''}
+            >
+              fusionner
+            </small>
+          </div>
+        </Button>
         <Button
           onClick={toggleSplitBuilding}
           className={operation === 'split' ? styles.buttonSelected : ''}
