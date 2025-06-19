@@ -142,7 +142,10 @@ export const editionSlice = createSlice({
           action.payload;
       }
     },
-    setSplitAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
+    setSplitChildAddresses(
+      state,
+      action: PayloadAction<BuildingAddressType[]>,
+    ) {
       if (state.split.selectedChildIndex !== null) {
         state.split.children[state.split.selectedChildIndex].addresses =
           action.payload;

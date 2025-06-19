@@ -164,7 +164,7 @@ function SplitBuildingChildInfosStep({
     dispatch(Actions.edition.setSplitChildStatus(status));
   };
   const setAddresses = (addresses: BuildingAddressType[]) => {
-    dispatch(Actions.edition.setSplitAddresses(addresses));
+    dispatch(Actions.edition.setSplitChildAddresses(addresses));
   };
 
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
