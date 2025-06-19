@@ -247,7 +247,7 @@ function SplitBuildingChildInfosStep({
           onClick={() => previousStep(selectedChildIndex, dispatch)}
           priority="secondary"
         >
-          précédent
+          Précédent
         </Button>
 
         {selectedChildIndex < splitChildrenCount - 1 && (
