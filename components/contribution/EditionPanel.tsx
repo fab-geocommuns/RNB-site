@@ -321,16 +321,18 @@ export default function EditionPanel() {
         </Button>
       </div>
 
-      <PanelWrapper>
-        {operation == 'update' && selectedBuilding && (
-          <EditSelectedBuildingPanelContent
-            selectedBuilding={selectedBuilding}
-          />
-        )}
-        {operation == 'create' && <CreationPanel />}
-        {operation == 'split' && <SplitPanel />}
-        {operation == 'merge' && <MergePanel />}
-      </PanelWrapper>
+      {operation && (
+        <PanelWrapper>
+          {operation == 'update' && selectedBuilding && (
+            <EditSelectedBuildingPanelContent
+              selectedBuilding={selectedBuilding}
+            />
+          )}
+          {operation == 'create' && <CreationPanel />}
+          {operation == 'split' && <SplitPanel />}
+          {operation == 'merge' && <MergePanel />}
+        </PanelWrapper>
+      )}
 
       <Toaster></Toaster>
     </>
