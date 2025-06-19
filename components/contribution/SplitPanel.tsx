@@ -131,6 +131,7 @@ function SplitBuildingInitialStep({
           onClick={() =>
             nextStep(selectedChildIndex, splitChildrenCount, dispatch)
           }
+          disabled={splitCandidateId === null}
           priority="secondary"
         >
           Suivant
