@@ -36,26 +36,26 @@ export default function SplitPanel() {
     (state: RootState) => state.edition.split.children,
   );
   const stepsN: number = splitChildrenCount + 1;
-  const currentChildSelected = useSelector(
-    (state: RootState) => state.edition.split.currentChildSelected,
+  const selectedChildIndex = useSelector(
+    (state: RootState) => state.edition.split.selectedChildIndex,
   );
 
   return (
     <>
-      {currentChildSelected === null && (
+      {selectedChildIndex === null && (
         <SplitBuildingInitialStep
           splitCandidateId={splitCandidateId}
-          currentChildSelected={currentChildSelected}
+          selectedChildIndex={selectedChildIndex}
           splitChildrenCount={splitChildrenCount}
         ></SplitBuildingInitialStep>
       )}
 
       {splitCandidateId &&
-        currentChildSelected !== null &&
-        currentChildSelected >= 0 && (
+        selectedChildIndex !== null &&
+        selectedChildIndex >= 0 && (
           <SplitBuildingChildInfosStep
             splitCandidateId={splitCandidateId}
-            currentChildSelected={currentChildSelected}
+            selectedChildIndex={selectedChildIndex}
             splitChildrenCount={splitChildrenCount}
             childrenB={children}
           ></SplitBuildingChildInfosStep>
@@ -67,11 +67,11 @@ export default function SplitPanel() {
 function SplitBuildingInitialStep({
   splitCandidateId,
   splitChildrenCount,
-  currentChildSelected,
+  selectedChildIndex,
 }: {
   splitCandidateId: string | null;
   splitChildrenCount: number;
-  currentChildSelected: number | null;
+  selectedChildIndex: number | null;
 }) {
   const dispatch: AppDispatch = useDispatch();
   const setChildrenNumber = (n: string) => {
@@ -129,7 +129,7 @@ function SplitBuildingInitialStep({
         </Button>
         <Button
           onClick={() =>
-            nextStep(currentChildSelected, splitChildrenCount, dispatch)
+            nextStep(selectedChildIndex, splitChildrenCount, dispatch)
           }
           priority="secondary"
         >
@@ -145,12 +145,12 @@ const cancelSplit = (dispatch: AppDispatch) => {
 };
 
 function SplitBuildingChildInfosStep({
-  currentChildSelected,
+  selectedChildIndex,
   splitChildrenCount,
   childrenB,
   splitCandidateId,
 }: {
-  currentChildSelected: number;
+  selectedChildIndex: number;
   splitChildrenCount: number;
   childrenB: SplitChild[];
   splitCandidateId: string;
@@ -168,8 +168,7 @@ function SplitBuildingChildInfosStep({
   };
 
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
-  const currentChildHasNoShape =
-    childrenB[currentChildSelected].shapeId === null;
+  const currentChildHasNoShape = childrenB[selectedChildIndex].shapeId === null;
   const { fetch } = useRNBFetch();
 
   const handleSubmit = async () => {
@@ -200,19 +199,19 @@ function SplitBuildingChildInfosStep({
       <RNBIDHeader>
         <span className="fr-text--xs">Scinder un bâtiment</span>
         <h1 className="fr-text--lg fr-m-0">
-          Étape {currentChildSelected + 2}/{splitChildrenCount + 1} - Infos
-          bâtiment {currentChildSelected + 1}
+          Étape {selectedChildIndex + 2}/{splitChildrenCount + 1} - Infos
+          bâtiment {selectedChildIndex + 1}
         </h1>
       </RNBIDHeader>
 
       <PanelBody>
         <BuildingStatus
-          status={childrenB[currentChildSelected].status}
+          status={childrenB[selectedChildIndex].status}
           onChange={(status) => setStatus(status)}
         ></BuildingStatus>
         <BuildingAddresses
           buildingPoint={location!}
-          addresses={childrenB[currentChildSelected].addresses}
+          addresses={childrenB[selectedChildIndex].addresses}
           onChange={(addresses: BuildingAddressType[]) => {
             setAddresses(addresses);
           }}
@@ -245,16 +244,16 @@ function SplitBuildingChildInfosStep({
           Annuler
         </Button>
         <Button
-          onClick={() => previousStep(currentChildSelected, dispatch)}
+          onClick={() => previousStep(selectedChildIndex, dispatch)}
           priority="secondary"
         >
           précédent
         </Button>
 
-        {currentChildSelected < splitChildrenCount - 1 && (
+        {selectedChildIndex < splitChildrenCount - 1 && (
           <Button
             onClick={() =>
-              nextStep(currentChildSelected, splitChildrenCount, dispatch)
+              nextStep(selectedChildIndex, splitChildrenCount, dispatch)
             }
             disabled={currentChildHasNoShape}
             priority="secondary"
@@ -267,7 +266,7 @@ function SplitBuildingChildInfosStep({
             Suivant
           </Button>
         )}
-        {currentChildSelected === splitChildrenCount - 1 && (
+        {selectedChildIndex === splitChildrenCount - 1 && (
           <Button
             onClick={handleSubmit}
             disabled={currentChildHasNoShape}
@@ -286,18 +285,18 @@ function SplitBuildingChildInfosStep({
 }
 
 const nextStep = (
-  currentChildSelected: number | null,
+  selectedChildIndex: number | null,
   splitChildrenCount: number,
   dispatch: AppDispatch,
 ) => {
-  const i = currentChildSelected === null ? -1 : currentChildSelected;
+  const i = selectedChildIndex === null ? -1 : selectedChildIndex;
   if (i < splitChildrenCount) {
     dispatch(Actions.edition.setCurrentChildSelected(i + 1));
   }
 };
 
-const previousStep = (currentChildSelected: number, dispatch: AppDispatch) => {
-  const i = currentChildSelected || 0;
+const previousStep = (selectedChildIndex: number, dispatch: AppDispatch) => {
+  const i = selectedChildIndex || 0;
   if (i === 0) {
     dispatch(Actions.edition.setCurrentChildSelected(null));
   } else if (i > 0) {

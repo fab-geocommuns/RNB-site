@@ -25,7 +25,7 @@ export type SplitInfos = {
   splitCandidateId: string | null;
   // where is the split candidate located ? Used for address search
   location: [number, number] | null;
-  currentChildSelected: number | null;
+  selectedChildIndex: number | null;
   children: SplitChild[];
 };
 
@@ -73,7 +73,7 @@ const initialState: EditionStore = {
   split: {
     splitCandidateId: null,
     location: null,
-    currentChildSelected: null,
+    selectedChildIndex: null,
     children: createEmptySplitChildren(2),
   },
 };
@@ -86,7 +86,7 @@ export const editionSlice = createSlice({
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
       state.merge.candidates = [];
-      state.split.currentChildSelected = null;
+      state.split.selectedChildIndex = null;
       state.split.children = createEmptySplitChildren(2);
       state.split.location = null;
       state.split.splitCandidateId = null;
@@ -126,10 +126,10 @@ export const editionSlice = createSlice({
       state.split.children = createEmptySplitChildren(n);
     },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
-      const currentChildSelected = action.payload;
-      state.split.currentChildSelected = currentChildSelected;
-      if (currentChildSelected !== null) {
-        if (state.split.children[currentChildSelected].shapeId) {
+      const selectedChildIndex = action.payload;
+      state.split.selectedChildIndex = selectedChildIndex;
+      if (selectedChildIndex !== null) {
+        if (state.split.children[selectedChildIndex].shapeId) {
           state.updateCreate.shapeInteractionMode = 'updating';
         } else {
           state.updateCreate.shapeInteractionMode = 'drawing';
@@ -137,14 +137,14 @@ export const editionSlice = createSlice({
       }
     },
     setSplitChildStatus(state, action: PayloadAction<BuildingStatusType>) {
-      if (state.split.currentChildSelected !== null) {
-        state.split.children[state.split.currentChildSelected].status =
+      if (state.split.selectedChildIndex !== null) {
+        state.split.children[state.split.selectedChildIndex].status =
           action.payload;
       }
     },
     setSplitAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
-      if (state.split.currentChildSelected !== null) {
-        state.split.children[state.split.currentChildSelected].addresses =
+      if (state.split.selectedChildIndex !== null) {
+        state.split.children[state.split.selectedChildIndex].addresses =
           action.payload;
       }
     },
@@ -155,10 +155,10 @@ export const editionSlice = createSlice({
         shapeId: string | undefined | number;
       }>,
     ) {
-      if (state.split.currentChildSelected !== null) {
-        state.split.children[state.split.currentChildSelected].shape =
+      if (state.split.selectedChildIndex !== null) {
+        state.split.children[state.split.selectedChildIndex].shape =
           action.payload.shape;
-        state.split.children[state.split.currentChildSelected].shapeId =
+        state.split.children[state.split.selectedChildIndex].shapeId =
           action.payload.shapeId;
       }
     },
@@ -169,7 +169,7 @@ export const editionSlice = createSlice({
         shapeId: string | undefined | number;
       }>,
     ) {
-      if (state.split.currentChildSelected !== null) {
+      if (state.split.selectedChildIndex !== null) {
         const childIndex = state.split.children.findIndex(
           (child) => child.shapeId === action.payload.shapeId,
         );
@@ -185,7 +185,7 @@ export const editionSlice = createSlice({
         (child) => child.shapeId === shapeId,
       );
       if (childIndex >= 0) {
-        state.split.currentChildSelected = childIndex;
+        state.split.selectedChildIndex = childIndex;
       }
     },
   },
