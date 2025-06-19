@@ -100,7 +100,7 @@ export default function CreationPanel() {
             {mapCoordinates && mapCoordinates.zoom < 18 ? (
               <div style={{ display: 'flex' }}>
                 <span className="fr-pr-2v">
-                  <i className="fr-icon-warning-line"></i>
+                  <i className="fr-icon-feedback-line"></i>
                 </span>
                 Zoomez sur la carte pour pouvoir tracer le bâtiment avec
                 précision
@@ -108,10 +108,7 @@ export default function CreationPanel() {
             ) : (
               <>
                 <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                <div className="fr-pt-3v">
-                  Pour terminer le tracé, fermez le polygone en recliquant sur
-                  le premier point que vous avez placé.
-                </div>
+                <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
               </>
             )}
           </div>
@@ -132,12 +129,12 @@ export default function CreationPanel() {
         )}
       </PanelBody>
       <div className={styles.footer}>
-        {step === 2 && (
-          <Button onClick={createBuilding}>Créer le bâtiment</Button>
-        )}
         <Button onClick={cancelCreation} priority="tertiary no outline">
           Annuler
         </Button>
+        {step === 2 && (
+          <Button onClick={createBuilding}>Créer le bâtiment</Button>
+        )}
       </div>
     </>
   );

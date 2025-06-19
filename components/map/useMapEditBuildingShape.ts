@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Actions, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -7,6 +7,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
+import { selectSplitShapeIdForCurrentChild } from '@/stores/edition/edition-selector';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -34,6 +35,11 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const drawRef = useRef<MapboxDraw | null>(null);
   const selectedBuildingRef = useRef<string | null>(null);
   const operation = useSelector((state: RootState) => state.edition.operation);
+  const operationIsUpdateCreateNull = ['create', 'update', null].includes(
+    operation,
+  );
+  const currentSplitShapeId = useSelector(selectSplitShapeIdForCurrentChild);
+
   const prevOperationRef = useRef<string | null>(null);
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
@@ -59,30 +65,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       map.addControl(draw);
       drawRef.current = draw;
 
-      // actions when a polygon is updated
-      const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
-        dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
-      };
-      drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
-
-      // actions when a polygon is created
-      const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
-        // delete all other drawings
-        if (e.features && drawRef.current) {
-          const newFeaturId = e.features[0].id;
-          for (const draw of drawRef.current.getAll().features) {
-            if (draw.id && draw.id !== newFeaturId) {
-              drawRef.current.delete(draw.id.toString());
-            }
-          }
-          dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
-          setTimeout(() => {
-            dispatch(Actions.edition.setShapeInteractionMode('updating'));
-          });
-        }
-      };
-      drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
-
       // delete a selected vertice of a polygon with the delete or backspace key
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
@@ -97,38 +79,138 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
       // cleaning the hooks when the component is unmounted
       return () => {
-        map.off('draw.update', handleBuildingShapeUpdate);
-        map.off('draw.create', handleBuildingShapeCreate);
         mapContainer.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [map, dispatch]);
 
+  useEffect(() => {
+    if (map) {
+      // actions when a polygon is updated
+      const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
+        if (operationIsUpdateCreateNull) {
+          dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
+        } else if (operation === 'split') {
+          dispatch(
+            Actions.edition.updateSplitBuildingShape({
+              shape: e.features[0].geometry,
+              shapeId: e.features[0].id,
+            }),
+          );
+        }
+      };
+      drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
+
+      // actions when a polygon is created
+      const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
+        if (operationIsUpdateCreateNull) {
+          // delete all other drawings
+          if (e.features && drawRef.current) {
+            const newFeaturId = e.features[0].id;
+            for (const draw of drawRef.current.getAll().features) {
+              if (draw.id && draw.id !== newFeaturId) {
+                drawRef.current.delete(draw.id.toString());
+              }
+            }
+            dispatch(
+              Actions.edition.setBuildingNewShape(e.features[0].geometry),
+            );
+            setTimeout(() => {
+              dispatch(Actions.edition.setShapeInteractionMode('updating'));
+            });
+          }
+        } else if (operation === 'split') {
+          dispatch(
+            Actions.edition.setSplitChildBuildingShape({
+              shape: e.features[0].geometry,
+              shapeId: e.features[0].id,
+            }),
+          );
+          setTimeout(() => {
+            dispatch(Actions.edition.setShapeInteractionMode('updating'));
+          });
+        }
+      };
+      drawRef.current && map.on('draw.create', handleBuildingShapeCreate);
+
+      const handleSelectionChange = ({
+        features,
+      }: {
+        features: Array<Feature>;
+      }) => {
+        if (operation === 'split' && features.length === 1) {
+          // a click on a previously drawn shape selects the corresponding building in the panel
+          const featureId = features[0].id;
+          dispatch(Actions.edition.setCurrentChildFromShapeId(featureId));
+        }
+      };
+      drawRef.current && map.on('draw.selectionchange', handleSelectionChange);
+
+      return () => {
+        map.off('draw.update', handleBuildingShapeUpdate);
+        map.off('draw.create', handleBuildingShapeCreate);
+        map.off('draw.selectionchange', handleSelectionChange);
+      };
+    }
+  }, [map, operation]);
+
+  // shapeInteractionMode is 'updating' and current operation is update, create or null
+  const handleShapeUpdateForOperationUCN = useCallback(() => {
+    if (drawRef.current) {
+      for (const draw of drawRef.current.getAll().features) {
+        if (draw.id) {
+          try {
+            // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
+            drawRef.current.changeMode('direct_select', {
+              featureId: draw.id.toString(),
+            });
+          } catch (_error) {}
+        }
+      }
+    }
+  }, [drawRef.current]);
+
+  // shapeInteractionMode is 'updating' and current operation is update, create or null
+  const handleShapeUpdateForOperationSplit = useCallback(() => {
+    if (drawRef.current) {
+      if (currentSplitShapeId) {
+        for (const draw of drawRef.current.getAll().features) {
+          if (draw.id === currentSplitShapeId) {
+            drawRef.current.changeMode('direct_select', {
+              featureId: currentSplitShapeId?.toString(),
+            });
+          }
+        }
+      }
+    }
+  }, [drawRef.current, currentSplitShapeId]);
+
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (drawRef.current) {
-      if (shapeInteractionMode === 'updating') {
-        for (const draw of drawRef.current.getAll().features) {
-          if (draw.id) {
-            try {
-              // the changemode function call may crash for some polygons (if you start drawing a polygon and switch back to the edit mode)
-              drawRef.current.changeMode('direct_select', {
-                featureId: draw.id.toString(),
-              });
-            } catch (_error) {}
+      switch (shapeInteractionMode) {
+        case 'updating':
+          if (operationIsUpdateCreateNull) {
+            handleShapeUpdateForOperationUCN();
+          } else if (operation === 'split') {
+            handleShapeUpdateForOperationSplit();
           }
-        }
-      } else if (shapeInteractionMode === 'drawing') {
-        drawRef.current.changeMode('draw_polygon');
-      } else if (shapeInteractionMode === null) {
-        drawRef.current.changeMode('simple_select');
+          break;
+        case 'drawing':
+          drawRef.current.changeMode('draw_polygon');
+          break;
+        case null:
+          drawRef.current.changeMode('simple_select');
+          break;
+        default:
+          break;
       }
     }
-  }, [shapeInteractionMode, dispatch]);
+  }, [shapeInteractionMode, operation, currentSplitShapeId, dispatch]);
 
   useEffect(() => {
-    if (map) {
+    if (map && operationIsUpdateCreateNull) {
       if (
         selectedBuilding &&
         selectedBuilding._type === 'building' &&
@@ -164,7 +246,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         selectedBuildingRef.current = null;
       }
     }
-  }, [selectedBuilding, dispatch]);
+  }, [selectedBuilding, operation, dispatch]);
 
   const deleteFeatures = (currentDrawRef: MapboxDraw | null) => {
     if (currentDrawRef) {
@@ -187,8 +269,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   };
 
   useEffect(() => {
-    const prevOperation = prevOperationRef.current;
-    if (operation !== prevOperation) {
+    if (operation === null || operation === 'split') {
       deleteFeatures(drawRef.current);
       selectedBuildingRef.current = null;
     }

@@ -1,12 +1,7 @@
 'use client';
 
-import {
-  createAsyncThunk,
-  createSlice,
-  createListenerMiddleware,
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
-import { Actions, AppDispatch, RootState } from '../store';
 import { fetchBuilding } from '@/utils/requests';
 
 export type BuildingAddress = {
