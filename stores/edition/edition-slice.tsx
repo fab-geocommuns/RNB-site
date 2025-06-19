@@ -151,7 +151,7 @@ export const editionSlice = createSlice({
           action.payload;
       }
     },
-    setSplitBuildingShape(
+    setSplitChildBuildingShape(
       state,
       action: PayloadAction<{
         shape: GeoJSON.Geometry;

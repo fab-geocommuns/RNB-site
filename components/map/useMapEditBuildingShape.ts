@@ -121,7 +121,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           }
         } else if (operation === 'split') {
           dispatch(
-            Actions.edition.setSplitBuildingShape({
+            Actions.edition.setSplitChildBuildingShape({
               shape: e.features[0].geometry,
               shapeId: e.features[0].id,
             }),
