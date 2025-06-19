@@ -7,7 +7,12 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
-import { selectSplitShapeIdForCurrentChild } from '@/stores/edition/edition-selector';
+import {
+  selectSplitChildren,
+  selectSplitShapeIdForCurrentChild,
+} from '@/stores/edition/edition-selector';
+import { useMapDrawDisplayShapes } from './useMapDrawDisplayShapes';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -43,6 +48,28 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const prevOperationRef = useRef<string | null>(null);
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
+
+  let displayedShapes: (GeoJSON.Geometry | null)[] = [];
+  let displayedShapeIds: (string | null)[] = [];
+
+  const splitChildren = useSelector(selectSplitChildren);
+  const buildingNewShape = useSelector(
+    (state: RootState) => state.edition.updateCreate.buildingNewShape,
+  );
+
+  if (operation === 'split') {
+    displayedShapes = splitChildren.map((child) => child.shape || null);
+    displayedShapeIds = splitChildren.map(
+      (child) => child.shapeId?.toString() ?? null,
+    );
+  } else {
+    const building = selectedBuilding as SelectedBuilding | null;
+    displayedShapes = [buildingNewShape || building?.shape || null];
+    displayedShapeIds = [
+      building?.rnb_id || (buildingNewShape ? 'building-new-shape' : null),
+    ];
+  }
+  useMapDrawDisplayShapes(map, drawRef, displayedShapes, displayedShapeIds);
 
   // add the draw plugin to the map
   useEffect(() => {
@@ -104,14 +131,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       // actions when a polygon is created
       const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
         if (operationIsUpdateCreateNull) {
-          // delete all other drawings
           if (e.features && drawRef.current) {
-            const newFeaturId = e.features[0].id;
-            for (const draw of drawRef.current.getAll().features) {
-              if (draw.id && draw.id !== newFeaturId) {
-                drawRef.current.delete(draw.id.toString());
-              }
-            }
             dispatch(
               Actions.edition.setBuildingNewShape(e.features[0].geometry),
             );
