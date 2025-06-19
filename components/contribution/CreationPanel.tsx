@@ -108,10 +108,7 @@ export default function CreationPanel() {
             ) : (
               <>
                 <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                <div className="fr-pt-3v">
-                  Pour terminer le tracé, fermez le polygone en recliquant sur
-                  le premier point que vous avez placé.
-                </div>
+                <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
               </>
             )}
           </div>
