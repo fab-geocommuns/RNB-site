@@ -29,13 +29,13 @@ export default function SplitPanel() {
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
-  const splitChildrenN = useSelector(
+  const splitChildrenCount = useSelector(
     (state: RootState) => state.edition.split.children.length,
   );
   const children: SplitChild[] = useSelector(
     (state: RootState) => state.edition.split.children,
   );
-  const stepsN: number = splitChildrenN + 1;
+  const stepsN: number = splitChildrenCount + 1;
   const currentChildSelected = useSelector(
     (state: RootState) => state.edition.split.currentChildSelected,
   );
@@ -46,7 +46,7 @@ export default function SplitPanel() {
         <SplitBuildingInitialStep
           splitCandidateId={splitCandidateId}
           currentChildSelected={currentChildSelected}
-          splitChildrenN={splitChildrenN}
+          splitChildrenCount={splitChildrenCount}
         ></SplitBuildingInitialStep>
       )}
 
@@ -56,7 +56,7 @@ export default function SplitPanel() {
           <SplitBuildingChildInfosStep
             splitCandidateId={splitCandidateId}
             currentChildSelected={currentChildSelected}
-            splitChildrenN={splitChildrenN}
+            splitChildrenCount={splitChildrenCount}
             childrenB={children}
           ></SplitBuildingChildInfosStep>
         )}
@@ -66,11 +66,11 @@ export default function SplitPanel() {
 
 function SplitBuildingInitialStep({
   splitCandidateId,
-  splitChildrenN,
+  splitChildrenCount,
   currentChildSelected,
 }: {
   splitCandidateId: string | null;
-  splitChildrenN: number;
+  splitChildrenCount: number;
   currentChildSelected: number | null;
 }) {
   const dispatch: AppDispatch = useDispatch();
@@ -95,7 +95,7 @@ function SplitBuildingInitialStep({
               </div>
               <Select
                 nativeSelectProps={{
-                  value: splitChildrenN?.toString(),
+                  value: splitChildrenCount?.toString(),
                   onChange: (event) => {
                     setChildrenNumber(event.target.value);
                   },
@@ -129,7 +129,7 @@ function SplitBuildingInitialStep({
         </Button>
         <Button
           onClick={() =>
-            nextStep(currentChildSelected, splitChildrenN, dispatch)
+            nextStep(currentChildSelected, splitChildrenCount, dispatch)
           }
           priority="secondary"
         >
@@ -146,12 +146,12 @@ const cancelSplit = (dispatch: AppDispatch) => {
 
 function SplitBuildingChildInfosStep({
   currentChildSelected,
-  splitChildrenN,
+  splitChildrenCount,
   childrenB,
   splitCandidateId,
 }: {
   currentChildSelected: number;
-  splitChildrenN: number;
+  splitChildrenCount: number;
   childrenB: SplitChild[];
   splitCandidateId: string;
 }) {
@@ -200,8 +200,8 @@ function SplitBuildingChildInfosStep({
       <RNBIDHeader>
         <span className="fr-text--xs">Scinder un bâtiment</span>
         <h1 className="fr-text--lg fr-m-0">
-          Étape {currentChildSelected + 2}/{splitChildrenN + 1} - Infos bâtiment{' '}
-          {currentChildSelected + 1}
+          Étape {currentChildSelected + 2}/{splitChildrenCount + 1} - Infos
+          bâtiment {currentChildSelected + 1}
         </h1>
       </RNBIDHeader>
 
@@ -251,10 +251,10 @@ function SplitBuildingChildInfosStep({
           précédent
         </Button>
 
-        {currentChildSelected < splitChildrenN - 1 && (
+        {currentChildSelected < splitChildrenCount - 1 && (
           <Button
             onClick={() =>
-              nextStep(currentChildSelected, splitChildrenN, dispatch)
+              nextStep(currentChildSelected, splitChildrenCount, dispatch)
             }
             disabled={currentChildHasNoShape}
             priority="secondary"
@@ -267,14 +267,14 @@ function SplitBuildingChildInfosStep({
             Suivant
           </Button>
         )}
-        {currentChildSelected === splitChildrenN - 1 && (
+        {currentChildSelected === splitChildrenCount - 1 && (
           <Button
             onClick={handleSubmit}
             disabled={currentChildHasNoShape}
             title={
               currentChildHasNoShape
                 ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                : `Scinder le bâtiment en ${splitChildrenN}`
+                : `Scinder le bâtiment en ${splitChildrenCount}`
             }
           >
             Scinder
@@ -287,11 +287,11 @@ function SplitBuildingChildInfosStep({
 
 const nextStep = (
   currentChildSelected: number | null,
-  splitChildrenN: number,
+  splitChildrenCount: number,
   dispatch: AppDispatch,
 ) => {
   const i = currentChildSelected === null ? -1 : currentChildSelected;
-  if (i < splitChildrenN) {
+  if (i < splitChildrenCount) {
     dispatch(Actions.edition.setCurrentChildSelected(i + 1));
   }
 };
