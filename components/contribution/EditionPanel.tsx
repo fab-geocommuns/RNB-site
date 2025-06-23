@@ -19,6 +19,10 @@ import Button from '@codegouvfr/react-dsfr/Button';
 import createBuildingImage from '@/public/images/map/edition/create.svg';
 useMapEditBuildingShape;
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
+
+import splitBuildingImage from '@/public/images/map/edition/split.svg';
+import splitSelectedBuildingImage from '@/public/images/map/edition/split_selected.svg';
+
 import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
@@ -27,8 +31,10 @@ import Toaster, {
   toasterError,
   toasterSuccess,
 } from './toaster';
+import SplitPanel from './SplitPanel';
+
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
-const enableMergeMode = process.env.NEXT_PUBLIC_MERGE_ENABLED === 'true';
+import { Operation } from '@/stores/edition/edition-slice';
 function PanelBody({ children }: { children: React.ReactNode }) {
   return <div className={styles.body}>{children}</div>;
 }
@@ -220,31 +226,24 @@ export default function EditionPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.edition.operation);
-  const shapeInteractionMode = useSelector(
-    (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
-  );
 
   const selectedBuilding =
     selectedItem?._type === 'building'
       ? (selectedItem as SelectedBuilding)
       : null;
 
-  const toggleCreateBuilding = () => {
-    if (operation === 'create') {
+  const toggleOperation = (operationName: Operation) => () => {
+    if (operation === operationName) {
       dispatch(Actions.edition.setOperation(null));
     } else {
-      dispatch(Actions.edition.setOperation('create'));
+      dispatch(Actions.edition.setOperation(operationName));
     }
   };
-  const toggleMergeBuilding = () => {
-    dispatch(Actions.map.removeBuildings());
-    if (operation === 'merge') {
-      dispatch(Actions.edition.setOperation(null));
-      dispatch(Actions.edition.resetCandidates());
-    } else {
-      dispatch(Actions.edition.setOperation('merge'));
-    }
-  };
+
+  const toggleCreateBuilding = toggleOperation('create');
+  const toggleSplitBuilding = toggleOperation('split');
+  const toggleMergeBuilding = toggleOperation('merge');
+
   return (
     <>
       <div className={styles.actions}>
@@ -272,49 +271,66 @@ export default function EditionPanel() {
             </small>
           </div>
         </Button>
-        {enableMergeMode && (
-          <Button
-            onClick={toggleMergeBuilding}
-            className={operation === 'merge' ? styles.buttonSelected : ''}
-            size="small"
-            priority="tertiary no outline"
-          >
-            <div className={styles.action}>
-              <img
-                src={
-                  operation === 'merge'
-                    ? mergeSelectedBuildingImage.src
-                    : mergeBuildingImage.src
-                }
-                alt=""
-                height="32"
-                width="32"
-              />
-              <small
-                className={operation === 'merge' ? styles.actionSelected : ''}
-              >
-                fusionner
-              </small>
-            </div>
-          </Button>
-        )}
+        <Button
+          onClick={toggleMergeBuilding}
+          className={operation === 'merge' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'merge'
+                  ? mergeSelectedBuildingImage.src
+                  : mergeBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'merge' ? styles.actionSelected : ''}
+            >
+              fusionner
+            </small>
+          </div>
+        </Button>
+        <Button
+          onClick={toggleSplitBuilding}
+          className={operation === 'split' ? styles.buttonSelected : ''}
+          size="small"
+          priority="tertiary no outline"
+        >
+          <div className={styles.action}>
+            <img
+              src={
+                operation === 'split'
+                  ? splitSelectedBuildingImage.src
+                  : splitBuildingImage.src
+              }
+              alt=""
+              height="32"
+              width="32"
+            />
+            <small
+              className={operation === 'split' ? styles.actionSelected : ''}
+            >
+              scinder
+            </small>
+          </div>
+        </Button>
       </div>
 
-      {operation == 'update' && selectedBuilding && (
+      {operation && (
         <PanelWrapper>
-          <EditSelectedBuildingPanelContent
-            selectedBuilding={selectedBuilding}
-          />
-        </PanelWrapper>
-      )}
-      {operation == 'create' && (
-        <PanelWrapper>
-          <CreationPanel />
-        </PanelWrapper>
-      )}
-      {operation == 'merge' && (
-        <PanelWrapper>
-          <MergePanel />
+          {operation == 'update' && selectedBuilding && (
+            <EditSelectedBuildingPanelContent
+              selectedBuilding={selectedBuilding}
+            />
+          )}
+          {operation == 'create' && <CreationPanel />}
+          {operation == 'split' && <SplitPanel />}
+          {operation == 'merge' && <MergePanel />}
         </PanelWrapper>
       )}
 

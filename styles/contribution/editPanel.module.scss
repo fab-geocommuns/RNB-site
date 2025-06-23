@@ -24,7 +24,7 @@ $panel-padding: 1.5*$spacing;
     button {
         background-color: white;
         border-radius: 4px;
-        margin-right: 15px;
+        margin-right: $spacing;
     }
     .buttonSelected {
         background-color: var(--text-action-high-blue-france) !important;
@@ -124,6 +124,8 @@ $panel-padding: 1.5*$spacing;
     flex-grow: 0;
     width: 100%;
     background: var(--background-alt-blue-france);
+    display: flex;
+    justify-content: space-between;
 }
 
 .noticeContainer {
