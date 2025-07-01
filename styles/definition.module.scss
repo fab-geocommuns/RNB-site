@@ -1,28 +1,23 @@
-@import "vars.scss";
+@import 'vars.scss';
 
 .bdgDefinition {
+  margin-bottom: 2rem;
+  font-size: 1.04em;
 
-    
-    margin-bottom: 2rem;
-    font-size: 1.04em;
+  padding-left: 10px;
+  border-left: 4px solid rgb(31, 141, 73, 0.7);
 
-    padding-left: 10px;
-    border-left: 4px solid rgb(31,141,73,.7);
-
-    @media (min-width: $bp-md) {
-        font-size: 1.1em;
-        padding-left: 25px;
-        border-left: 6px solid rgb(31,141,73,.7);
-    }
-    
-    
-    
+  @media (min-width: $bp-md) {
+    font-size: 1.1em;
+    padding-left: 25px;
+    border-left: 6px solid rgb(31, 141, 73, 0.7);
+  }
 }
 
 .bdgDefinitionContext {
-    opacity: .85;
+  opacity: 0.85;
 }
 
 .badgeWithoutContent::before {
-    margin-right: -2px;
+  margin-right: -2px;
 }

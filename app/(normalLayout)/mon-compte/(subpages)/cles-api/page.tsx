@@ -54,7 +54,8 @@ export default async function Page() {
           >
             L&apos;environnement bac à sable
           </a>{' '}
-          vous permet d&apos;expérimenter sans crainte d&apos;abîmer le RNB.{' '}
+          vous permet d&apos;expérimenter sans crainte d&apos;abîmer le
+          RNB.{' '}
         </p>
 
         <div className="fr-my-6v">
