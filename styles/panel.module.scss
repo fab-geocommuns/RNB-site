@@ -1,218 +1,205 @@
-@import "vars.scss";
+@import 'vars.scss';
 
 .shell {
-    // The .shell is the invisible container
-    position:absolute;
+  // The .shell is the invisible container
+  position: absolute;
 
-    top:100px;
-    right:0;
-    bottom: 0;
-    left:0;
-    z-index: 100;
-    
-    @media (min-width: $bp-md) {
-        max-width: 400px;
-        width: 400px;
-        right: auto;
-        left:12px;
-        top:74px;
-        bottom: 10px;
-    }
-    
+  top: 100px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+
+  @media (min-width: $bp-md) {
+    max-width: 400px;
+    width: 400px;
+    right: auto;
+    left: 12px;
+    top: 74px;
+    bottom: 10px;
+  }
 }
 
 .content {
+  $head-height: 35px;
+  $body-x-padding: 15px;
 
-    $head-height: 35px;
-    $body-x-padding: 15px;
+  // Content is all what we display
+  background: white;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 
-    // Content is all what we display
-    background:white;
-    box-shadow:0 0 0 2px rgba(0,0,0,.1);
-    
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  @media (min-width: $bp-md) {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    bottom: auto;
+  }
+
+  .head {
+    $title-color: #414e71;
+    height: $head-height;
+    min-height: $head-height;
+    max-height: $head-height;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f6ff;
+
+    padding-left: $body-x-padding;
+    padding-right: 7px;
+
+    .title {
+      color: $title-color;
+      font-size: 0.8rem;
+      line-height: 1em;
+      margin: 0;
+      text-transform: uppercase;
+      flex: 1 0 0;
+    }
+
+    .closeLink {
+      margin-left: 1rem;
+      color: $title-color;
+      opacity: 0.8;
+      background: none;
+      text-decoration: none;
+      i::before {
+        width: 25px;
+        height: 25px;
+      }
+    }
+    .closeLink:hover {
+      color: white;
+      background: black;
+    }
+  }
+
+  .body {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100% - #{$head-height});
+    padding: 20px $body-x-padding 20px $body-x-padding;
+  }
+
+  .footer {
     display: flex;
     flex-direction: column;
-    max-height: 100%;
+    border-top: 2px solid rgba(0, 0, 0, 0.6);
+    background-color: #bccdff;
 
-    position:absolute;
-    bottom: 0;
-    right:0;
-    left: 0;    
+    .footerActions {
+      display: flex;
+      & > * {
+        flex: 1 1 0;
+        padding: 0.25rem 0;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s ease-in-out;
 
-    @media (min-width: $bp-md) {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-        bottom:auto;
-    }
-
-    .head {
-
-        $title-color: #414e71;
-        height: $head-height;
-        min-height: $head-height;
-        max-height: $head-height;
-    
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #f4f6ff;
-    
-        padding-left: $body-x-padding;
-        padding-right: 7px;
-    
-        .title {
-            color: $title-color;
-            font-size: .8rem;
-            line-height: 1em;
-            margin:0;
-            text-transform: uppercase;
-            flex: 1 0 0;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
         }
-        
-        .closeLink {
-            margin-left: 1rem;
-            color: $title-color;
-            opacity: .8;
-            background: none;
-            text-decoration: none;
-            i::before {
-                width: 25px;
-                height: 25px;
-            }
-        }
-        .closeLink:hover {
-            
-            color:white;
-            background: black;
-        }
-    
+
+        border-right: 1px solid rgba(0, 0, 0, 0.4);
+      }
+
+      & > *:last-child {
+        border-right-color: transparent;
+      }
     }
-
-    .body {
-    
-        flex-grow: 1;
-        overflow-y: auto;
-        max-height: calc(100% - #{$head-height});
-        padding:20px $body-x-padding 20px $body-x-padding;
-
-    }
-
-    .footer {
-        display: flex;
-        flex-direction: column;
-        border-top: 2px solid rgba(0, 0, 0, 0.6);
-        background-color: #bccdff;
-
-        .footerActions {
-            display: flex;
-            & > * {
-                flex: 1 1 0;
-                padding: 0.25rem 0;
-                text-align: center;
-                cursor: pointer;
-                transition: all 0.25s ease-in-out;
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
-                }
-
-                border-right: 1px solid rgba(0, 0, 0, 0.4);
-            }
-
-            & > *:last-child {
-                border-right-color: transparent;
-            }
-        }
-    }
+  }
 }
-
 
 .section {
-    padding-bottom: 1.7rem;
+  padding-bottom: 1.7rem;
 }
-
 
 .sectionTitle {
-    font-size: .9em;
-    line-height: 1.3em;
-    color:#0063cb;
-    margin-bottom: .2rem;
+  font-size: 0.9em;
+  line-height: 1.3em;
+  color: #0063cb;
+  margin-bottom: 0.2rem;
 }
 .sectionToggler {
-    text-decoration:none;
-    background: none;
-    border: none;
-    
-    
+  text-decoration: none;
+  background: none;
+  border: none;
 }
 
 .sectionTogglerIcon {
-    margin-right:.4rem;
-    color:black;
-    display: inline-block;
-    transition: transform .3s;
+  margin-right: 0.4rem;
+  color: black;
+  display: inline-block;
+  transition: transform 0.3s;
 }
 
 .sectionTogglerOpen {
-    
-    span {
-        transform: rotate(90deg);
-    }
+  span {
+    transform: rotate(90deg);
+  }
 }
 
-
 .sectionBody {
-    font-size: .9em;
-    line-height: 1.3em;
+  font-size: 0.9em;
+  line-height: 1.3em;
 }
 
 .sectionListItem {
-    flex: 1 0 0;
-    margin-bottom:.8em
+  flex: 1 0 0;
+  margin-bottom: 0.8em;
 }
 .sectionListItem:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .small-left-padding {
-    padding-left: 2px;
+  padding-left: 2px;
 }
 
 .editAdresse {
+  display: flex;
+
+  & > *:first-child {
+    flex: 1 0 0;
+  }
+
+  .editAction {
     display: flex;
+    align-items: start;
 
-    & > *:first-child {
-        flex: 1 0 0;
+    button {
+      margin-left: 0.25rem;
     }
 
-    .editAction {
-        display: flex;
-        align-items: start;
-
-        button {
-            margin-left: 0.25rem;
-        }
-
-        button:before {
-            margin-right: 0!important;
-        }
+    button:before {
+      margin-right: 0 !important;
     }
+  }
 }
 
 .plotWarning {
-    font-size: .9em;
-    background-color: #fff4f3;
-    line-height: 1.3em;
-    padding: .7rem;
-    color:rgba(0, 0, 0, 0.6);
-    margin-top:1.2rem;
-    margin-bottom: 1.3rem;
+  font-size: 0.9em;
+  background-color: #fff4f3;
+  line-height: 1.3em;
+  padding: 0.7rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 1.2rem;
+  margin-bottom: 1.3rem;
 }
 
 body .coverRatioCell {
-    text-align: right;
+  text-align: right;
 }

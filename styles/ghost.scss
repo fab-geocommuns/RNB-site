@@ -28,18 +28,16 @@ production stylesheet in assets/built/screen.css
 
 /* Import CSS reset and base styles */
 
-@import "ghost/global.css";
-@import "ghost/screen.css";
-@import "ghost/audio.css";
-@import "ghost/blockquote.css";
-@import "ghost/bookmark.css";
-@import "ghost/button.css";
-@import "ghost/callout.css";
-@import "ghost/collection.css";
-@import "ghost/file.css";
-@import "ghost/gallery.css";
-@import "ghost/product.css";
-@import "ghost/toggle.css";
-@import "ghost/video.css";
-
-
+@import 'ghost/global.css';
+@import 'ghost/screen.css';
+@import 'ghost/audio.css';
+@import 'ghost/blockquote.css';
+@import 'ghost/bookmark.css';
+@import 'ghost/button.css';
+@import 'ghost/callout.css';
+@import 'ghost/collection.css';
+@import 'ghost/file.css';
+@import 'ghost/gallery.css';
+@import 'ghost/product.css';
+@import 'ghost/toggle.css';
+@import 'ghost/video.css';

@@ -1,89 +1,78 @@
-@import "vars.scss";
+@import 'vars.scss';
 
 .card {
-    display: flex;
-    align-items: start;
-    background:#f4f6ff;
-    margin-bottom: 2rem;
-    padding:33px 27px;
-    border-radius: 5px;
+  display: flex;
+  align-items: start;
+  background: #f4f6ff;
+  margin-bottom: 2rem;
+  padding: 33px 27px;
+  border-radius: 5px;
 
-    flex-direction: column;
-    @media (min-width: $bp-md) {
-        flex-direction: row;
-    }
-
+  flex-direction: column;
+  @media (min-width: $bp-md) {
+    flex-direction: row;
+  }
 }
 
 .logoShell {
-    
-    margin-bottom: .3rem;
+  margin-bottom: 0.3rem;
 
-    width: 52px;
-    height: 52px;
-    flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
 
-    background: white;
-    border:1px solid #ddd;
-    padding: 8px;
-    border-radius: 7px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 7px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    @media (min-width: $bp-md) {
-        
-        margin-right: 1.1rem;
-        margin-top:9px;
-        margin-bottom: 0;
-        
-    }
+  @media (min-width: $bp-md) {
+    margin-right: 1.1rem;
+    margin-top: 9px;
+    margin-bottom: 0;
+  }
 }
 
 .logo {
-    
-    
-    
-    width: 100%;
-    height: auto;
-    
-    
-    
+  width: 100%;
+  height: auto;
 }
 
 .titleBlock {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
-
 .title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 0;
-    letter-spacing: -0.03em;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  letter-spacing: -0.03em;
 }
 
 .meta {
-    font-weight: 500;
-    letter-spacing: -0.03em;
+  font-weight: 500;
+  letter-spacing: -0.03em;
 
-    span {
-        display: inline-block;
-        margin-right: 15px;
-    }
+  span {
+    display: inline-block;
+    margin-right: 15px;
+  }
 }
 
 .tagShell {
-    display: inline-block;
-    margin-right: .4rem;
+  display: inline-block;
+  margin-right: 0.4rem;
 }
 
 .cardBody {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .attributesTable {
-    max-height: 348px;
-    overflow-y: auto;
+  max-height: 348px;
+  overflow-y: auto;
 }

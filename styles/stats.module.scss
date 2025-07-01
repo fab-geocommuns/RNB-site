@@ -1,17 +1,16 @@
 .stats {
-    h1 {
-        text-align: center;
-    }
+  h1 {
+    text-align: center;
+  }
 }
 
 .stat-card {
-    border: 1px solid var(--border-default-grey);
-    
-    
-    text-align: center;
+  border: 1px solid var(--border-default-grey);
 
-    h1 {
-        text-align: center;
-        color: var(--blue-france-sun-113-625);
-    }
+  text-align: center;
+
+  h1 {
+    text-align: center;
+    color: var(--blue-france-sun-113-625);
+  }
 }

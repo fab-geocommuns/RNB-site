@@ -1,31 +1,30 @@
-@import "vars.scss";
+@import 'vars.scss';
 
 .pivotBlock {
-    background: #FFF8F0;
-    padding:40px 20px;
+  background: #fff8f0;
+  padding: 40px 20px;
 
-    @media (min-width: $bp-md) {
-        padding:40px;
-    }
+  @media (min-width: $bp-md) {
+    padding: 40px;
+  }
 }
 
 .pivotBlockTitle {
-    text-align: center;
-    max-width: 500px;
-    margin:0 auto 80px auto;
-    font-size: 1.20em;
-    line-height: 1.35em;
-    font-weight: 700;
-    opacity: .8;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 80px auto;
+  font-size: 1.2em;
+  line-height: 1.35em;
+  font-weight: 700;
+  opacity: 0.8;
 }
 
 .pivotBlockSentence {
-    text-align: center;
-    max-width: 700px;
-    margin:0 auto;
-    
-    
-    font-size: 1.2em;
-    line-height: 1.3em;
-    font-weight: 500;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+
+  font-size: 1.2em;
+  line-height: 1.3em;
+  font-weight: 500;
 }
