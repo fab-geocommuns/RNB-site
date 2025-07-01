@@ -1,0 +1,53 @@
+@import 'vars.scss';
+
+.summerChallenge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 100;
+
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+
+  @media (max-width: $bp-md) {
+    top: 70px; // Pour éviter le conflit avec la barre de recherche sur mobile
+    right: 12px;
+    left: auto;
+    min-width: 180px;
+  }
+}
+
+.title {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #161616;
+  text-align: center;
+}
+
+.scoreSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scoreItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #161616;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export const useSummerGamesData = () => {
+export const useSummerGamesData = (limit: number) => {
+  console.log('useSummerGamesData limit:', limit);
   const [loading, setLoading] = useState(true);
   const [summerGamesData, setSummerGamesData] = useState<any>();
 
@@ -91,7 +92,7 @@ export const useSummerGamesData = () => {
     };
 
     getData();
-  }, []);
+  }, [limit]);
 
   return {
     summerGamesData,

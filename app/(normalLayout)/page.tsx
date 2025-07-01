@@ -146,7 +146,11 @@ export default async function Home() {
           </div>
         </div>
 
-        <SummerGame />
+        <SummerGame
+          title="Le défi de l'été du RNB"
+          limit={5}
+          showRankingLink={true}
+        />
 
         <div className="section section__big">
           <div className={styles.dbsShell}>

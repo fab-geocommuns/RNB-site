@@ -222,25 +222,38 @@ $title-color-hover: #25589f;
 }
 
 .buttonsShell {
-  text-align: center;
-  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 
   .btn {
     padding: 10px 20px;
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.55);
+    border: 2px solid rgba(255, 255, 255, 0.75);
     background-image: none;
+
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+
+    color: rgba(0, 0, 0, 0.7);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.75);
+    }
 
     &.btn_primary {
       background-color: $title-color;
+      border: 2px solid $title-color;
 
       color: #fff;
       text-decoration: none;
 
-      font-weight: bold;
-      font-size: 1.1em;
-
       &:hover {
         background-color: $title-color-hover;
+        border-color: $title-color-hover;
       }
     }
   }

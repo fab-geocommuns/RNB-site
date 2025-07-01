@@ -9,8 +9,16 @@ import { useSummerGamesData } from '@/utils/summerGames';
 
 export const revalidate = 10;
 
-export default function SummerGame() {
-  const { summerGamesData, loading } = useSummerGamesData();
+export default function SummerGame({
+  title,
+  limit,
+  showRankingLink,
+}: {
+  title: string;
+  limit: number;
+  showRankingLink?: boolean;
+}) {
+  const { summerGamesData, loading } = useSummerGamesData(limit);
 
   return (
     !loading &&
@@ -19,7 +27,7 @@ export default function SummerGame() {
         <div className={`section section_big ${styles.seriousShell}`}>
           <div className={styles.shell}>
             <div className={`section__titleblock ${styles.titleShell}`}>
-              <h2 className="section__title">Le défi de l&apos;été du RNB</h2>
+              <h2 className="section__title">{title}</h2>
 
               <p className={`section__subtitle ${styles.instruction}`}>
                 Cet été, le RNB s'ouvre largement à l'édition collaborative.
@@ -117,7 +125,6 @@ export default function SummerGame() {
                   <RankTable
                     title="Classement des départements *"
                     ranks={summerGamesData.department}
-                    limit={5}
                   />
                 </div>
 
@@ -125,7 +132,6 @@ export default function SummerGame() {
                   <RankTable
                     title="Classement des villes *"
                     ranks={summerGamesData.city}
-                    limit={5}
                   />
                 </div>
 
@@ -133,7 +139,6 @@ export default function SummerGame() {
                   <RankTable
                     title="Classement des participants *"
                     ranks={summerGamesData.individual}
-                    limit={5}
                   />
                 </div>
               </div>
@@ -149,6 +154,11 @@ export default function SummerGame() {
               <a href="/edition" className={`${styles.btn}`}>
                 En savoir plus
               </a>
+              {showRankingLink && (
+                <a href="/defi-ete" className={`${styles.btn}`}>
+                  Voir le classement
+                </a>
+              )}
             </div>
           </div>
         </div>

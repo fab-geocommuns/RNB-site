@@ -3,6 +3,7 @@
 import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
+import SummerChallenge from '@/components/summerGames/SummerChallenge';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 import styles from '@/styles/mapPage.module.scss';
@@ -19,6 +20,12 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
+        <SummerChallenge
+          globalScore={800}
+          globalObjective={1000}
+          personalScore={373}
+          personalRank={9}
+        />
 
         <div className={styles.map__mapShell}>
           <EditMap
