@@ -7,14 +7,39 @@ export const useSummerGamesData = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url =
-          process.env.NEXT_PUBLIC_API_BASE + '/contributions/ranking/';
+        // const url =
+        //   process.env.NEXT_PUBLIC_API_BASE + '/contributions/ranking/';
 
-        const response = await fetch(url, {
-          cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        const ranks = await response.json();
+        // const response = await fetch(url, {
+        //   cache: 'no-cache',
+        //   headers: { 'Content-Type': 'application/json' },
+        // });
+        // const ranks = await response.json();
+
+        const ranks = {
+          global: 8000, // Example total contributions
+          individual: [
+            [100, 'Alice'],
+            [90, 'Bob'],
+            [80, 'Charlie'],
+            [70, 'David'],
+            [60, 'Eve'],
+          ],
+          city: [
+            ['75', 'Paris', 500],
+            ['69', 'Lyon', 300],
+            ['33', 'Marseille', 200],
+            ['44', 'Toulouse', 150],
+            ['59', 'Nice', 100],
+          ],
+          departement: [
+            ['75', 'Paris', 1000],
+            ['69', 'Rhône', 800],
+            ['33', 'Gironde', 600],
+            ['44', 'Haute-Garonne', 400],
+            ['59', 'Alpes-Maritimes', 300],
+          ],
+        };
 
         let formatted = {
           individual: [],
