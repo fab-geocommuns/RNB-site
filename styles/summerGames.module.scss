@@ -52,12 +52,12 @@ $bckg-color: #000091;
 
 .titleShell {
   h2 {
-    //font-family: RocherColor;
     font-size: 3em;
     margin-bottom: 3rem;
-    //color: $title-color;
+
     color: lighten($title-color, $amount: 10);
     font-weight: bold;
+    text-transform: uppercase;
 
     text-shadow:
       0px 3px 0px darken($title-color, 35),
@@ -75,11 +75,6 @@ $bckg-color: #000091;
     margin-right: auto;
     line-height: 1.3em;
   }
-}
-
-.titleResult {
-  font-family: RocherColor;
-  font-size: 2rem;
 }
 
 .barShell {

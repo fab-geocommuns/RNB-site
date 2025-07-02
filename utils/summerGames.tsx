@@ -21,7 +21,7 @@ export const useSummerGamesData = (limit: number) => {
           department: [],
           city: [],
           shared: {
-            goal: 10000,
+            goal: ranks.goal,
             absolute: 0,
             percent: 0,
           },
