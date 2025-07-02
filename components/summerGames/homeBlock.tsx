@@ -34,7 +34,7 @@ export default function SummerGame({
                 Participez à l'enrichissement du Référentiel National des
                 Bâtiments et permettez à chacun de profiter de vos
                 contributions. Les résultats du défi de l'été aideront à définir
-                les futures règles de participation au RNB.
+                les futures règles de gouvernance du RNB.
               </p>
             </div>
 
@@ -123,21 +123,21 @@ export default function SummerGame({
               <div className={styles.ranks}>
                 <div className={styles.ranksTable}>
                   <RankTable
-                    title="Classement des départements *"
+                    title="Classement des départements"
                     ranks={summerGamesData.department}
                   />
                 </div>
 
                 <div className={styles.ranksTable}>
                   <RankTable
-                    title="Classement des villes *"
+                    title="Classement des villes"
                     ranks={summerGamesData.city}
                   />
                 </div>
 
                 <div className={styles.ranksTable}>
                   <RankTable
-                    title="Classement des participants *"
+                    title="Classement des participants"
                     ranks={summerGamesData.individual}
                   />
                 </div>

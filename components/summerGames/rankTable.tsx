@@ -40,15 +40,7 @@ export default function RankTable({
       <div className={styles.rankTable}>
         {displayedRanks.map((rank, index) => (
           <div key={index} className={styles.rankRow}>
-            <div className={styles.rankMedalShell}>
-              {mapRankToMedal[index] && (
-                <ImageNext
-                  className={styles.medal}
-                  src={mapRankToMedal[index]}
-                  alt="Médaille"
-                ></ImageNext>
-              )}
-            </div>
+            <div className={styles.rankMedalShell}>{index + 1} •</div>
             <div className={styles.rankNameShell}>{rank.name}</div>
             <div className={styles.rankCountShell}>{rank.count}</div>
           </div>

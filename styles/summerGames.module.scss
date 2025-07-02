@@ -1,5 +1,10 @@
-$title-color: #1a3b68;
+//$title-color: #1a3b68;
+//$title-color-hover: #25589f;
+
+$title-color: #e7e9f0;
 $title-color-hover: #25589f;
+
+$bckg-color: #000091;
 
 .seriousShell {
   padding: 25px 30px;
@@ -9,19 +14,16 @@ $title-color-hover: #25589f;
   padding: 1rem;
   padding-bottom: 3rem;
   // Retro gaming style
-  background-image: linear-gradient(
-    140deg,
-    hsl(175deg 86% 94%) 0%,
-    hsl(177deg 86% 92%) 13%,
-    hsl(178deg 86% 89%) 28%,
-    hsl(179deg 86% 86%) 44%,
-    hsl(180deg 86% 83%) 58%,
-    hsl(181deg 89% 79%) 71%,
-    hsl(182deg 91% 76%) 82%,
-    hsl(183deg 94% 72%) 90%,
-    hsl(184deg 97% 67%) 96%,
-    hsl(184deg 99% 61%) 100%
-  );
+  // background-image: background: #131C2B;
+
+  // Summer night
+  // background: linear-gradient(
+  //   180deg,
+  //   rgba(19, 28, 43, 1) 0%,
+  //   rgba(44, 67, 110, 1) 68%,
+  //   rgba(50, 86, 104, 1) 100%
+  // );
+  background-color: $bckg-color;
 
   border-radius: 9px;
 
@@ -54,12 +56,19 @@ $title-color-hover: #25589f;
     font-size: 3em;
     margin-bottom: 3rem;
     //color: $title-color;
-    color: #102d57;
+    color: lighten($title-color, $amount: 10);
     font-weight: bold;
+
+    text-shadow:
+      0px 3px 0px darken($title-color, 35),
+      0px 14px 10px rgba(0, 0, 0, 0.15),
+      0px 24px 2px rgba(0, 0, 0, 0.1),
+      0px 34px 30px rgba(0, 0, 0, 0.1);
   }
 
   .instruction {
-    color: $title-color;
+    //color: $title-color;
+    color: white;
     margin-bottom: 3.5rem;
     max-width: 800px;
     margin-left: auto;
@@ -83,6 +92,7 @@ $title-color-hover: #25589f;
 
 .bar {
   border: 2px solid white;
+  border-radius: 10px;
   height: 30px;
   background: rgba(255, 255, 255, 0.3);
   //background-color: #cffcfb;
@@ -91,20 +101,33 @@ $title-color-hover: #25589f;
 
 .progress {
   // Retro gaming style
-  background-image: linear-gradient(
-    90deg,
-    hsl(43deg 100% 65%) 0%,
-    hsl(42deg 100% 63%) 9%,
-    hsl(40deg 100% 62%) 18%,
-    hsl(39deg 100% 61%) 27%,
-    hsl(38deg 100% 59%) 36%,
-    hsl(37deg 100% 58%) 45%,
-    hsl(36deg 100% 57%) 55%,
-    hsl(34deg 100% 55%) 64%,
-    hsl(33deg 100% 54%) 73%,
-    hsl(32deg 100% 52%) 82%,
-    hsl(31deg 100% 51%) 91%,
-    hsl(30deg 100% 50%) 100%
+  // background-image: linear-gradient(
+  //   90deg,
+  //   hsl(43deg 100% 65%) 0%,
+  //   hsl(42deg 100% 63%) 9%,
+  //   hsl(40deg 100% 62%) 18%,
+  //   hsl(39deg 100% 61%) 27%,
+  //   hsl(38deg 100% 59%) 36%,
+  //   hsl(37deg 100% 58%) 45%,
+  //   hsl(36deg 100% 57%) 55%,
+  //   hsl(34deg 100% 55%) 64%,
+  //   hsl(33deg 100% 54%) 73%,
+  //   hsl(32deg 100% 52%) 82%,
+  //   hsl(31deg 100% 51%) 91%,
+  //   hsl(30deg 100% 50%) 100%
+  // );
+
+  // background: linear-gradient(
+  //   251deg,
+  //   rgba(242, 206, 46, 1) 0%,
+  //   rgba(252, 242, 131, 1) 100%
+  // );
+  //background: #fc5a50;
+  border-radius: 8px;
+  background: linear-gradient(
+    251deg,
+    rgba(242, 190, 46, 1) 0%,
+    rgba(250, 229, 40, 1) 100%
   );
 
   // Peach style
@@ -138,8 +161,9 @@ $title-color-hover: #25589f;
 .legend {
   font-weight: 600;
   //color:#163060;
-  color: $title-color;
-  opacity: 0.9;
+  //color: $title-color;
+  color: rgba(255, 255, 255, 1);
+
   //font-style: italic;
   margin-bottom: 0.6rem;
   line-height: 1.1em;
@@ -156,7 +180,8 @@ $title-color-hover: #25589f;
   display: flex;
   width: 90%;
   margin: auto;
-  background: rgba(255, 255, 255, 0.5);
+  //background: rgba(255, 255, 255, 0.5);
+  color: white;
 
   & > * {
     flex: 1 0 0;
@@ -169,6 +194,9 @@ $title-color-hover: #25589f;
 
 .rankShell {
   padding: 26px;
+
+  //background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
 
   @media screen and (max-width: 640px) {
     flex-direction: column;
@@ -229,8 +257,8 @@ $title-color-hover: #25589f;
   .btn {
     padding: 10px 20px;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.55);
-    border: 2px solid rgba(255, 255, 255, 0.75);
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
     background-image: none;
 
     margin-left: 10px;
@@ -238,22 +266,21 @@ $title-color-hover: #25589f;
     font-weight: bold;
     font-size: 1.1em;
 
-    color: rgba(0, 0, 0, 0.7);
+    color: white;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.75);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     &.btn_primary {
-      background-color: $title-color;
-      border: 2px solid $title-color;
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid black;
 
-      color: #fff;
+      color: white;
       text-decoration: none;
 
       &:hover {
-        background-color: $title-color-hover;
-        border-color: $title-color-hover;
+        background: rgba(0, 0, 0, 0.45);
       }
     }
   }
@@ -276,16 +303,17 @@ $title-color-hover: #25589f;
 
 .score {
   display: flex;
-  background-color: rgba(255, 255, 255, 0.65);
+  //background-color: rgba(255, 255, 255, 0.25);
 
   border-radius: 1000px;
   border: 2px solid white;
   font-size: 0.9em;
   align-items: center;
   margin: 0 10px;
+  color: white;
 }
 .scoreReward {
-  background-color: rgba(255, 255, 255, 0.55);
+  background-color: rgba(255, 255, 255, 0.15);
   height: 30px;
   min-height: 30px;
   padding-left: 10px;
@@ -301,7 +329,99 @@ $title-color-hover: #25589f;
   margin-left: 2px;
 }
 .scoreAction {
-  padding-left: 8px;
+  padding-left: 12px;
   padding-right: 8px;
   font-size: 0.9em;
+}
+@import 'vars.scss';
+
+.editMapBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 100;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 2px;
+  padding: 6px;
+  border-radius: 4px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+
+  @media (max-width: $bp-md) {
+    top: 70px; // Pour éviter le conflit avec la barre de recherche sur mobile
+    right: 12px;
+    left: auto;
+    min-width: 180px;
+  }
+}
+
+body .editMapBadgeInside {
+  color: $title-color;
+  background: $bckg-color;
+
+  padding: 0.7rem 1.3rem;
+  border-radius: 0.25rem;
+
+  display: flex;
+  align-items: center;
+  &:hover {
+    background: #1212ff;
+  }
+}
+
+.editMapBadgeTitle {
+  font-weight: bold;
+  line-height: 1.2em;
+  font-size: 0.92em;
+  margin-right: 2.5rem;
+  text-transform: uppercase;
+}
+
+.editMapBadgeSubpart {
+  margin-right: 1rem;
+  line-height: 1em;
+}
+.editMapBadgeSubpartTitle {
+  font-size: 0.65em;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+  //color: rgba(250, 229, 40, 1);
+}
+.editMapBadgeSubpartValue {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.title {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #161616;
+  text-align: center;
+}
+
+.scoreSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scoreItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #161616;
 }

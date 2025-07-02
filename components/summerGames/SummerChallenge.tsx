@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/summerChallenge.module.scss';
+import styles from '@/styles/summerGames.module.scss';
 
 interface SummerChallengeProps {
   globalScore: number;
@@ -20,24 +20,26 @@ export default function SummerChallenge({
   };
 
   return (
-    <div className={styles.summerChallenge}>
-      <h3 className={styles.title}>Défi de l'été</h3>
-
-      <div className={styles.scoreSection}>
-        <div className={styles.scoreItem}>
-          <span className={styles.label}>Score global :</span>
-          <span className={styles.value}>
+    <div className={styles.editMapBadge}>
+      <a href="/defi-ete" className={styles.editMapBadgeInside}>
+        <div className={styles.editMapBadgeTitle}>
+          Le défi <br />
+          de l'été
+        </div>
+        <div className={styles.editMapBadgeSubpart}>
+          <div className={styles.editMapBadgeSubpartTitle}>Score global</div>
+          <div className={styles.editMapBadgeSubpartValue}>
             {globalScore}/{globalObjective}
-          </span>
+          </div>
         </div>
 
-        <div className={styles.scoreItem}>
-          <span className={styles.label}>Mon score :</span>
-          <span className={styles.value}>
+        <div className={styles.editMapBadgeSubpart}>
+          <div className={styles.editMapBadgeSubpartTitle}>Mon score</div>
+          <div className={styles.editMapBadgeSubpartValue}>
             {personalScore} ({formatRank(personalRank)})
-          </span>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
   );
 }
