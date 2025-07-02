@@ -30,8 +30,8 @@ export const useSummerGamesData = (limit: number) => {
         // individual
         formatted.individual = ranks.individual.map((rank: any) => {
           return {
-            name: '#' + rank[1],
-            count: rank[0],
+            name: rank[0],
+            count: rank[1],
           };
         });
 
