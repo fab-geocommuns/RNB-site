@@ -30,6 +30,11 @@ export function toasterSuccess(dispatch: AppDispatch, msg: string) {
       message: msg,
     }),
   );
+
+  // Summer challenge
+  // This is a hacky plug to update the badge when a successful operation occurs.
+  // Ideally, we should have a more structured way to handle this.
+  store.dispatch(Actions.edition.setSummerChallengeBadgeUpdatedAt(Date.now()));
 }
 
 export function toasterError(dispatch: AppDispatch, msg: string) {

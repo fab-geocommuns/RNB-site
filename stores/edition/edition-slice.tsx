@@ -120,6 +120,12 @@ export const editionSlice = createSlice({
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
     },
+    setSummerChallengeBadgeUpdatedAt(
+      state,
+      action: PayloadAction<number | null>,
+    ) {
+      state.summerChallengeBadgeUpdatedAt = action.payload;
+    },
     setSplitCandidateAndLocation(
       state,
       action: PayloadAction<{ rnb_id: string; location: [number, number] }>,

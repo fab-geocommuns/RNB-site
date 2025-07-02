@@ -7,9 +7,16 @@ import SummerChallenge from '@/components/summerGames/SummerChallenge';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 import styles from '@/styles/mapPage.module.scss';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 export default function Page() {
   const { user } = useRNBAuthentication({ require: true });
+
+  // Summer challenge
+  const summerChallengeBadgeUpdatedAt = useSelector(
+    (state: RootState) => state.edition.summerChallengeBadgeUpdatedAt,
+  );
 
   if (!user) {
     return <>Chargement en cours</>;
@@ -25,6 +32,7 @@ export default function Page() {
           globalObjective={1000}
           personalScore={373}
           personalRank={9}
+          updatedAt={summerChallengeBadgeUpdatedAt || 0}
         />
 
         <div className={styles.map__mapShell}>

@@ -6,6 +6,7 @@ interface SummerChallengeProps {
   globalObjective: number;
   personalScore: number;
   personalRank: number;
+  updatedAt: number;
 }
 
 export default function SummerChallenge({
@@ -13,6 +14,7 @@ export default function SummerChallenge({
   globalObjective,
   personalScore,
   personalRank,
+  updatedAt,
 }: SummerChallengeProps) {
   const formatRank = (rank: number): string => {
     if (rank === 1) return '1er';
