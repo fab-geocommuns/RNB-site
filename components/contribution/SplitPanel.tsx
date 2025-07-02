@@ -17,12 +17,7 @@ import {
 } from './toaster';
 import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
-
-const INITIAL_STEP = 0;
-
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
+import { PanelBody } from '../ui/Panel';
 
 export default function SplitPanel() {
   const dispatch: AppDispatch = useDispatch();

@@ -5,7 +5,7 @@ import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 // Comps
 import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
-import DeployableBlock from '@/components/DeployableBlock';
+import DeployableBlock from '@/components/ui/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 
 // Styles
@@ -21,6 +21,7 @@ import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import PanelTabs from './PanelTabs';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -104,10 +105,10 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   }, [bdg?.rnb_id]);
 
   return (
-    <div>
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Identifiant RNB</h2>
+    <PanelBody>
+      <PanelTabs />
 
+      <div className={panelStyles.section}>
         <div className={styles.rnbidShell}>
           <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
@@ -231,6 +232,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
           </a>
         </div>
       </div>
-    </div>
+    </PanelBody>
   );
 }
