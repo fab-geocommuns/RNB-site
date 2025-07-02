@@ -35,9 +35,8 @@ import SplitPanel from './SplitPanel';
 
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
 import { Operation } from '@/stores/edition/edition-slice';
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
+import PanelTabs from '../panel/PanelTabs';
+import { PanelBody } from '../ui/Panel';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -163,6 +162,7 @@ function EditSelectedBuildingPanelContent({
         <span className="fr-text--xs">Identifiant RNB</span>
         <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
       </RNBIDHeader>
+      <PanelTabs />
       <PanelBody>
         {isLoading ? (
           <div className={styles.editLoader}>

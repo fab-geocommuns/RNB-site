@@ -44,14 +44,8 @@ export default function VisuPanel() {
   if (selectedItem) {
     return (
       <>
-        <div className={styles.shell} data-testid="visu-panel">
-          <div className={styles.content}>
-            <div className={styles.head}>
-              <h1 className={styles.title}>{title()}</h1>
-              <a href="#" onClick={close} className={styles.closeLink}>
-                <i className="fr-icon-close-line" />
-              </a>
-            </div>
+        <PanelWrapper>
+          <PanelHeader onClose={close}>{title()}</PanelHeader>
 
             <div className={styles.body}>
               {selectedItem?._type === 'building' && (
@@ -60,7 +54,7 @@ export default function VisuPanel() {
               {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
             </div>
           </div>
-        </div>
+        </PanelWrapper>
       </>
     );
   } else {

@@ -3,7 +3,10 @@
 }
 .rnbidShell {
   background: var(--background-alt-blue-france);
+  display: flex;
+  justify-content: space-between;
 }
+
 .rnbidShell__copy {
   background: var(--background-contrast-blue-france);
   background-color: #bccdff;
@@ -11,6 +14,8 @@
   font-size: 0.9em;
   padding: 0.3rem;
   text-align: center;
+  display: flex;
+  align-items: center;
 }
 .rnbidShell__copy i {
   opacity: 0.8;

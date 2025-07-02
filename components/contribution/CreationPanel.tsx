@@ -15,10 +15,7 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
+import { PanelBody } from '../ui/Panel';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
