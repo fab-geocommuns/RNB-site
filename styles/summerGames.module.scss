@@ -67,7 +67,6 @@ $bckg-color: #000091;
   }
 
   .instruction {
-    //color: $title-color;
     color: white;
     margin-bottom: 3.5rem;
     max-width: 800px;
@@ -95,29 +94,6 @@ $bckg-color: #000091;
 }
 
 .progress {
-  // Retro gaming style
-  // background-image: linear-gradient(
-  //   90deg,
-  //   hsl(43deg 100% 65%) 0%,
-  //   hsl(42deg 100% 63%) 9%,
-  //   hsl(40deg 100% 62%) 18%,
-  //   hsl(39deg 100% 61%) 27%,
-  //   hsl(38deg 100% 59%) 36%,
-  //   hsl(37deg 100% 58%) 45%,
-  //   hsl(36deg 100% 57%) 55%,
-  //   hsl(34deg 100% 55%) 64%,
-  //   hsl(33deg 100% 54%) 73%,
-  //   hsl(32deg 100% 52%) 82%,
-  //   hsl(31deg 100% 51%) 91%,
-  //   hsl(30deg 100% 50%) 100%
-  // );
-
-  // background: linear-gradient(
-  //   251deg,
-  //   rgba(242, 206, 46, 1) 0%,
-  //   rgba(252, 242, 131, 1) 100%
-  // );
-  //background: #fc5a50;
   border-radius: 8px;
   background: linear-gradient(
     251deg,
@@ -125,20 +101,6 @@ $bckg-color: #000091;
     rgba(250, 229, 40, 1) 100%
   );
 
-  // Peach style
-  // background-image: linear-gradient(
-  //   270deg,
-  //   hsl(354deg 73% 35%) 0%,
-  //   hsl(357deg 58% 41%) 7%,
-  //   hsl(357deg 49% 47%) 16%,
-  //   hsl(357deg 46% 52%) 29%,
-  //   hsl(357deg 49% 57%) 44%,
-  //   hsl(357deg 54% 63%) 62%,
-  //   hsl(356deg 59% 68%) 78%,
-  //   hsl(356deg 66% 73%) 90%,
-  //   hsl(355deg 76% 78%) 97%,
-  //   hsl(354deg 91% 83%) 100%
-  // );
   height: 100%;
   display: flex;
   justify-content: flex-end;
@@ -155,11 +117,7 @@ $bckg-color: #000091;
 
 .legend {
   font-weight: 600;
-  //color:#163060;
-  //color: $title-color;
   color: rgba(255, 255, 255, 1);
-
-  //font-style: italic;
   margin-bottom: 0.6rem;
   line-height: 1.1em;
   text-align: center;
@@ -175,7 +133,6 @@ $bckg-color: #000091;
   display: flex;
   width: 90%;
   margin: auto;
-  //background: rgba(255, 255, 255, 0.5);
   color: white;
 
   & > * {
@@ -189,8 +146,6 @@ $bckg-color: #000091;
 
 .rankShell {
   padding: 26px;
-
-  //background: rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.1);
 
   @media screen and (max-width: 640px) {
@@ -220,7 +175,6 @@ $bckg-color: #000091;
   .medal {
     width: 16px;
     height: auto;
-    // -webkit-filter: drop-shadow( 1px 1px 1px rgba(31, 74, 11, .3));
     filter: drop-shadow(1px 1px 0px rgba(31, 74, 11, 0.5));
   }
 
@@ -298,8 +252,6 @@ $bckg-color: #000091;
 
 .score {
   display: flex;
-  //background-color: rgba(255, 255, 255, 0.25);
-
   border-radius: 1000px;
   border: 2px solid white;
   font-size: 0.9em;
@@ -328,7 +280,6 @@ $bckg-color: #000091;
   padding-right: 8px;
   font-size: 0.9em;
 }
-@import 'vars.scss';
 
 .editMapBadge {
   position: absolute;
@@ -342,13 +293,6 @@ $bckg-color: #000091;
 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   min-width: 200px;
-
-  @media (max-width: $bp-md) {
-    top: 70px; // Pour éviter le conflit avec la barre de recherche sur mobile
-    right: 12px;
-    left: auto;
-    min-width: 180px;
-  }
 }
 
 body .editMapBadgeInside {
@@ -382,7 +326,6 @@ body .editMapBadgeInside {
   font-weight: 400;
   text-transform: uppercase;
   margin-bottom: 0.2rem;
-  //color: rgba(250, 229, 40, 1);
 }
 .editMapBadgeSubpartValue {
   font-size: 1em;

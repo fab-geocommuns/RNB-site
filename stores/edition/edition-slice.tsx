@@ -59,6 +59,9 @@ export type EditionStore = {
 
   merge: MergeInfos;
   split: SplitInfos;
+
+  // Summer challenge
+  summerChallengeBadgeUpdatedAt: number | null;
 };
 const initialState: EditionStore = {
   operation: null,
@@ -76,6 +79,9 @@ const initialState: EditionStore = {
     selectedChildIndex: null,
     children: createEmptySplitChildren(2),
   },
+
+  // Summer challenge
+  summerChallengeBadgeUpdatedAt: null,
 };
 
 export const editionSlice = createSlice({
