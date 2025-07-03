@@ -43,6 +43,7 @@ import {
   PanelWrapper,
   PanelFooter,
 } from '../ui/Panel';
+import RNBIDCopier from '../panel/RNBIDCopier';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -167,6 +168,9 @@ function EditSelectedBuildingPanelContent({
       <PanelHeader onClose={close}>Bâtiment</PanelHeader>
       <PanelBody>
         <PanelSection>
+          <RNBIDCopier rnbId={selectedBuilding.rnb_id} />
+        </PanelSection>
+        <PanelSection>
           <PanelTabs />
         </PanelSection>
         {isLoading ? (
@@ -176,7 +180,7 @@ function EditSelectedBuildingPanelContent({
           </div>
         ) : (
           isActive && (
-            <PanelSection>
+            <>
               <BuildingStatus
                 status={newStatus}
                 onChange={setNewStatus}
@@ -190,7 +194,7 @@ function EditSelectedBuildingPanelContent({
                 shapeInteractionMode={shapeInteractionMode}
                 selectedBuilding={selectedBuilding}
               ></BuildingShape>
-            </PanelSection>
+            </>
           )
         )}
         {!isLoading && (

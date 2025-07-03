@@ -22,7 +22,8 @@ import { ContributionStatusPicker } from '@/components/panel/ContributionStatusP
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import PanelTabs from './PanelTabs';
-import { PanelBody, PanelSection } from '../ui/Panel';
+import { PanelSection } from '../ui/Panel';
+import RNBIDCopier from './RNBIDCopier';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,7 +34,6 @@ interface BuildingPanelProps {
 }
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
-  const [copied, setCopied] = useState(false);
   const { is } = useRNBAuthentication();
 
   // Store
@@ -44,41 +44,11 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     return bdgApiUrl(bdg!.rnb_id);
   };
 
-  function addSpace(rnb_id: string) {
-    if (rnb_id) {
-      return rnb_id.split('').map((char, i) => {
-        let classes = '';
-        if (i == 4 || i == 8) {
-          classes = styles['small-left-padding'];
-        }
-        return (
-          <span key={'rnb-id-char' + i} className={classes}>
-            {char}
-          </span>
-        );
-      });
-    } else {
-      return null;
-    }
-  }
-
   const coverRatioDisplay = (ratio: number) => {
     // % with two decimals
     const percentage = (ratio * 100).toFixed(2);
 
     return `${percentage}%`;
-  };
-
-  const easyRnbId = () => {
-    return addSpace(bdg!.rnb_id);
-  };
-
-  const handleCopy = () => {
-    va.track('rnbid-copied', { rnb_id: bdg!.rnb_id });
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
   };
 
   const relevantPlots = (): Plot[] => {
@@ -108,27 +78,10 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   return (
     <>
       <PanelSection>
-        <PanelTabs />
+        <RNBIDCopier rnbId={bdg!.rnb_id} />
       </PanelSection>
-
       <PanelSection>
-        <div className={styles.rnbidShell}>
-          <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
-
-          <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
-            <div className={styles.rnbidShell__copy}>
-              {copied ? (
-                <span>
-                  Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                </span>
-              ) : (
-                <span>
-                  Copier <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                </span>
-              )}
-            </div>
-          </CopyToClipboard>
-        </div>
+        <PanelTabs />
       </PanelSection>
 
       <PanelSection
