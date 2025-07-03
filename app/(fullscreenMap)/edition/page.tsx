@@ -27,13 +27,7 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
-        <SummerChallenge
-          globalScore={800}
-          globalObjective={1000}
-          personalScore={373}
-          personalRank={9}
-          updatedAt={summerChallengeBadgeUpdatedAt || 0}
-        />
+        <SummerChallenge updatedAt={summerChallengeBadgeUpdatedAt || 0} />
 
         <div className={styles.map__mapShell}>
           <EditMap

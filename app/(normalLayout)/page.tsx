@@ -147,7 +147,12 @@ export default async function Home() {
         </div>
 
         <SummerGame
-          title="Le défi de l'été du RNB"
+          title={
+            <>
+              <span>🧑‍🔬 🤝 🗺️</span>
+              L'expérience collaborative de l'été
+            </>
+          }
           limit={5}
           showRankingLink={true}
         />

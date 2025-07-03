@@ -29,16 +29,21 @@ export default function SummerGame({
             <div className={`section__titleblock ${styles.titleShell}`}>
               <h2 className="section__title">{title}</h2>
 
-              <p className={`section__subtitle ${styles.instruction}`}>
-                Cet été, le RNB s'ouvre largement à l'édition collaborative.
-                Participez à l'enrichissement du Référentiel National des
-                Bâtiments et permettez à chacun de profiter de vos
-                contributions. Les résultats du défi de l'été aideront à définir
-                les futures règles de gouvernance du RNB.
-              </p>
+              <div className={`section__subtitle ${styles.instruction}`}>
+                <p>
+                  Comment faire vivre un référentiel collaboratif ? <br />
+                  Comment améliorer le lien bâtiment adresse ?<br />
+                  Quels acteurs souhaitent alimenter le RNB ?
+                </p>
+                <p>
+                  Cet été, le RNB organise une expérience et s'ouvre largement à
+                  l'édition collaborative. Faites monter le score de qualité du
+                  RNB, de votre ville et de votre département.
+                </p>
+              </div>
             </div>
 
-            <div className={styles.scoresDesc}>
+            {/* <div className={styles.scoresDesc}>
               <div className={styles.scoresRow}>
                 <div className={styles.score}>
                   <div className={styles.scoreAction}>
@@ -96,7 +101,7 @@ export default function SummerGame({
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className={styles.progressShell}>
               <div className={styles.barShell}>
@@ -145,6 +150,11 @@ export default function SummerGame({
             </div>
 
             <div className={styles.buttonsShell}>
+              {showRankingLink && (
+                <a href="/defi-ete" className={`${styles.btn}`}>
+                  Voir le classement
+                </a>
+              )}
               <a
                 href="/edition"
                 className={`${styles.btn} ${styles.btn_primary}`}
@@ -154,11 +164,6 @@ export default function SummerGame({
               <a href="/edition" className={`${styles.btn}`}>
                 En savoir plus
               </a>
-              {showRankingLink && (
-                <a href="/defi-ete" className={`${styles.btn}`}>
-                  Voir le classement
-                </a>
-              )}
             </div>
           </div>
         </div>

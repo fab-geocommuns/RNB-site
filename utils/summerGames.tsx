@@ -1,5 +1,41 @@
 import { useEffect, useState } from 'react';
 
+export const useSummerGameUserData = (userId: number, updatedAt: number) => {
+  const [loading, setLoading] = useState(true);
+  const [summerGameUserData, setSummerGameUserData] = useState<any>();
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const url =
+          process.env.NEXT_PUBLIC_API_BASE +
+          '/editions/ranking/' +
+          userId +
+          '/';
+
+        const response = await fetch(url, {
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await response.json();
+
+        setSummerGameUserData(data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, [updatedAt]);
+
+  return {
+    summerGameUserData,
+    loading,
+  };
+};
+
 export const useSummerGamesData = (limit: number) => {
   console.log('useSummerGamesData limit:', limit);
   const [loading, setLoading] = useState(true);
@@ -52,7 +88,9 @@ export const useSummerGamesData = (limit: number) => {
         });
 
         // global
+        ranks.global = 1337;
         formatted.shared['absolute'] = ranks.global;
+
         formatted.shared.percent = Math.round(
           (ranks.global / formatted.shared.goal) * 100,
         );
