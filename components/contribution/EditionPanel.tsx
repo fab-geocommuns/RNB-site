@@ -36,7 +36,13 @@ import SplitPanel from './SplitPanel';
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
 import { Operation } from '@/stores/edition/edition-slice';
 import PanelTabs from '../panel/PanelTabs';
-import { PanelBody } from '../ui/Panel';
+import {
+  PanelBody,
+  PanelHeader,
+  PanelSection,
+  PanelWrapper,
+  PanelFooter,
+} from '../ui/Panel';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -158,12 +164,11 @@ function EditSelectedBuildingPanelContent({
 
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Identifiant RNB</span>
-        <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
-      </RNBIDHeader>
-      <PanelTabs />
+      <PanelHeader onClose={close}>Bâtiment</PanelHeader>
       <PanelBody>
+        <PanelSection>
+          <PanelTabs />
+        </PanelSection>
         {isLoading ? (
           <div className={styles.editLoader}>
             <Loader />
@@ -171,7 +176,7 @@ function EditSelectedBuildingPanelContent({
           </div>
         ) : (
           isActive && (
-            <>
+            <PanelSection>
               <BuildingStatus
                 status={newStatus}
                 onChange={setNewStatus}
@@ -185,17 +190,19 @@ function EditSelectedBuildingPanelContent({
                 shapeInteractionMode={shapeInteractionMode}
                 selectedBuilding={selectedBuilding}
               ></BuildingShape>
-            </>
+            </PanelSection>
           )
         )}
         {!isLoading && (
-          <BuildingActivationToggle
-            isActive={isActive}
-            onToggle={toggleBuildingActivation}
-          />
+          <PanelSection>
+            <BuildingActivationToggle
+              isActive={isActive}
+              onToggle={toggleBuildingActivation}
+            />
+          </PanelSection>
         )}
       </PanelBody>
-      <div className={styles.footer}>
+      <PanelFooter>
         <Button
           onClick={handleSubmit}
           disabled={!isActive || !anyChanges || isLoading}
@@ -207,16 +214,8 @@ function EditSelectedBuildingPanelContent({
             Annuler
           </Button>
         )}
-      </div>
+      </PanelFooter>
     </>
-  );
-}
-
-function PanelWrapper({ children }: { children: React.ReactNode }) {
-  return (
-    <div className={styles.shell}>
-      <div className={styles.content}>{children}</div>
-    </div>
   );
 }
 
@@ -322,7 +321,7 @@ export default function EditionPanel() {
       </div>
 
       {operation && (
-        <PanelWrapper>
+        <PanelWrapper withActions>
           {operation == 'update' && selectedBuilding && (
             <EditSelectedBuildingPanelContent
               selectedBuilding={selectedBuilding}

@@ -15,7 +15,7 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-import { PanelBody } from '../ui/Panel';
+import { PanelBody, PanelFooter } from '../ui/Panel';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -125,14 +125,14 @@ export default function CreationPanel() {
           </>
         )}
       </PanelBody>
-      <div className={styles.footer}>
+      <PanelFooter>
         <Button onClick={cancelCreation} priority="tertiary no outline">
           Annuler
         </Button>
         {step === 2 && (
           <Button onClick={createBuilding}>Créer le bâtiment</Button>
         )}
-      </div>
+      </PanelFooter>
     </>
   );
 }

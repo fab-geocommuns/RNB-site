@@ -14,7 +14,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { SelectedBuilding } from '@/stores/map/map-slice';
+import { PanelBody, PanelHeader, PanelWrapper } from '@/components/ui/Panel';
 
 export default function VisuPanel() {
   // Store
@@ -47,13 +47,12 @@ export default function VisuPanel() {
         <PanelWrapper>
           <PanelHeader onClose={close}>{title()}</PanelHeader>
 
-            <div className={styles.body}>
-              {selectedItem?._type === 'building' && (
-                <BuildingPanel bdg={selectedItem} />
-              )}
-              {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
-            </div>
-          </div>
+          <PanelBody>
+            {selectedItem?._type === 'building' && (
+              <BuildingPanel bdg={selectedItem} />
+            )}
+            {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
+          </PanelBody>
         </PanelWrapper>
       </>
     );
