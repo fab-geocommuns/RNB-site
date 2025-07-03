@@ -7,7 +7,7 @@ $actions-height: 60px;
 $shell-top: $actions-top;
 $shell-top-with-actions: $actions-height + $shell-top + $spacing;
 $head-height: 36px;
-$panel-padding: 1.5 * $spacing;
+$panel-padding: $spacing;
 
 .shell {
   position: absolute;
@@ -211,4 +211,30 @@ $panel-padding: 1.5 * $spacing;
     font-size: 14px;
     margin-top: 20px;
   }
+}
+
+// Source: https://css-scroll-shadows.vercel.app/
+.scrollGradient {
+  background:
+    linear-gradient(#ffffff 33%, rgba(255, 255, 255, 0)),
+    linear-gradient(rgba(255, 255, 255, 0), #ffffff 66%) 0 100%,
+    radial-gradient(
+      farthest-side at 50% 0,
+      rgba(34, 34, 34, 0.5),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+        farthest-side at 50% 100%,
+        rgba(34, 34, 34, 0.5),
+        rgba(0, 0, 0, 0)
+      )
+      0 100%;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+  background-size:
+    100% 15px,
+    100% 15px,
+    100% 5px,
+    100% 5px;
 }

@@ -73,7 +73,11 @@ export function PanelSectionBody({ children }: PanelSectionBodyProps) {
 }
 
 export function PanelBody({ children }: PanelBodyProps) {
-  return <div className={styles.body}>{children}</div>;
+  return (
+    <div className={[styles.body, styles.scrollGradient].join(' ')}>
+      {children}
+    </div>
+  );
 }
 
 export function PanelFooter({ children }: PanelFooterProps) {
