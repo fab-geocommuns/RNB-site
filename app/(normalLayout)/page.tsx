@@ -149,7 +149,7 @@ export default async function Home() {
         <SummerGame
           title={
             <>
-              <span>🧑‍🔬 🤝 🗺️</span>
+              <span>🧑‍🔬 🤝 🗺️ 👩‍🔬 </span>
               L'expérience collaborative de l'été
             </>
           }

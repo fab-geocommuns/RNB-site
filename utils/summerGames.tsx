@@ -88,7 +88,6 @@ export const useSummerGamesData = (limit: number) => {
         });
 
         // global
-        ranks.global = 1337;
         formatted.shared['absolute'] = ranks.global;
 
         formatted.shared.percent = Math.round(

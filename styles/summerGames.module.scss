@@ -284,8 +284,8 @@ $accent-color-light: #ffea00;
 }
 
 body .editMapBadgeInside {
-  color: $title-color;
-  background: $bckg-color;
+  color: white;
+  background: #00176a;
 
   padding: 0.7rem 1.3rem;
   border-radius: 0.25rem;
@@ -293,7 +293,7 @@ body .editMapBadgeInside {
   display: flex;
   align-items: center;
   &:hover {
-    background: #1212ff;
+    background: #0a2a9e;
   }
 }
 
@@ -318,6 +318,29 @@ body .editMapBadgeInside {
 .editMapBadgeSubpartValue {
   font-size: 1em;
   font-weight: bold;
+  position: relative;
+}
+
+@keyframes score-animation {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-20px);
+    opacity: 0.3;
+  }
+}
+
+.scoreAnimation {
+  position: absolute;
+  animation: score-animation 3s ease-out;
+  color: $accent-color;
+  //background: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  left: 80%;
+  transform: translateX(-40%);
 }
 
 .title {

@@ -6,7 +6,7 @@ export default function Page() {
       <div className="fr-grid-row">
         <div className="fr-col-12 fr-col-md-12 fr-py-12v">
           <SummerGame
-            title="Classement du défi 2025"
+            title="Classement de l'expérience collaborative"
             limit={100}
             showRankingLink={false}
           />
