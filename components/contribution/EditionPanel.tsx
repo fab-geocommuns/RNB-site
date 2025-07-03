@@ -165,7 +165,7 @@ function EditSelectedBuildingPanelContent({
 
   return (
     <>
-      <PanelHeader onClose={close}>Bâtiment</PanelHeader>
+      <PanelHeader onClose={cancelUpdate}>Bâtiment</PanelHeader>
       <PanelBody>
         <PanelSection>
           <RNBIDCopier rnbId={selectedBuilding.rnb_id} />
