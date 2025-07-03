@@ -15,7 +15,7 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-import { PanelBody, PanelFooter } from '../ui/Panel';
+import { PanelBody, PanelFooter, PanelHeader, PanelSection } from '../ui/Panel';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -82,47 +82,49 @@ export default function CreationPanel() {
 
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Créer un nouveau bâtiment </span>
-        {step == 1 && (
-          <h1 className="fr-text--lg fr-m-0">étape 1 - Géométrie</h1>
-        )}
-        {step == 2 && (
-          <h1 className="fr-text--lg fr-m-0">étape 2 - informations</h1>
-        )}
-      </RNBIDHeader>
+      <PanelHeader>Créer un nouveau bâtiment</PanelHeader>
       <PanelBody>
         {step === 1 && (
-          <div className={`${styles.panelSection} ${styles.noPad}`}>
-            {mapCoordinates && mapCoordinates.zoom < 18 ? (
-              <div style={{ display: 'flex' }}>
-                <span className="fr-pr-2v">
-                  <i className="fr-icon-feedback-line"></i>
-                </span>
-                Zoomez sur la carte pour pouvoir tracer le bâtiment avec
-                précision
-              </div>
-            ) : (
-              <>
-                <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
-              </>
-            )}
-          </div>
+          <PanelSection
+            title="Etape 1 - Géométrie"
+            body={
+              mapCoordinates && mapCoordinates.zoom < 18 ? (
+                <div style={{ display: 'flex' }}>
+                  <span className="fr-pr-2v">
+                    <i className="fr-icon-feedback-line"></i>
+                  </span>
+                  Zoomez sur la carte pour pouvoir tracer le bâtiment avec
+                  précision
+                </div>
+              ) : (
+                <>
+                  <div>Tracez la géométrie du bâtiment sur la carte.</div>
+                  <div className="fr-pt-3v">
+                    Un double-clic termine le tracé.
+                  </div>
+                </>
+              )
+            }
+          />
         )}
         {step === 2 && (
-          <>
-            <BuildingStatus
-              status={newStatus}
-              onChange={setNewStatus}
-            ></BuildingStatus>
+          <PanelSection
+            title="Etape 2 - informations"
+            body={
+              <>
+                <BuildingStatus
+                  status={newStatus}
+                  onChange={setNewStatus}
+                ></BuildingStatus>
 
-            <BuildingAddresses
-              buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
-              addresses={localAddresses}
-              onChange={handleEditAddress}
-            />
-          </>
+                <BuildingAddresses
+                  buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
+                  addresses={localAddresses}
+                  onChange={handleEditAddress}
+                />
+              </>
+            }
+          />
         )}
       </PanelBody>
       <PanelFooter>

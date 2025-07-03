@@ -95,7 +95,7 @@ $panel-padding: 1.5 * $spacing;
     background-color: #f4f6ff;
 
     padding-left: $panel-padding;
-    padding-right: $panel-padding;
+    padding-right: 6px;
 
     .title {
       color: $title-color;
@@ -142,15 +142,6 @@ $panel-padding: 1.5 * $spacing;
   .noPad {
     padding-top: $spacing;
   }
-}
-
-.header {
-  border-radius: 4px 4px 0 0;
-  text-transform: uppercase;
-  padding: 6px 12px 6px 18px;
-  background-color: var(--background-alt-blue-france-hover);
-  box-shadow: 0 0 5px var(--background-action-high-grey-active);
-  z-index: 100;
 }
 
 .body {
