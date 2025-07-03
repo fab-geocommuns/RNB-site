@@ -276,7 +276,7 @@ $accent-color-light: #ffea00;
   z-index: 100;
   background: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 2px;
-  padding: 6px;
+  padding: 4px;
   border-radius: 4px;
 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -298,11 +298,11 @@ body .editMapBadgeInside {
 }
 
 .editMapBadgeTitle {
-  font-weight: bold;
   line-height: 1.2em;
   font-size: 0.92em;
   margin-right: 2.5rem;
   text-transform: uppercase;
+  font-family: SummerGameTitle, sans-serif;
 }
 
 .editMapBadgeSubpart {
@@ -313,10 +313,10 @@ body .editMapBadgeInside {
   font-size: 0.65em;
   font-weight: 400;
   text-transform: uppercase;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
 }
 .editMapBadgeSubpartValue {
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: bold;
   position: relative;
 }
