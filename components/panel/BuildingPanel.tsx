@@ -5,7 +5,7 @@ import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 // Comps
 import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
-import DeployableBlock from '@/components/DeployableBlock';
+import DeployableBlock from '@/components/ui/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 
 // Styles
@@ -21,6 +21,9 @@ import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import PanelTabs from './PanelTabs';
+import { PanelSection } from '../ui/Panel';
+import RNBIDCopier from './RNBIDCopier';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +34,6 @@ interface BuildingPanelProps {
 }
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
-  const [copied, setCopied] = useState(false);
   const { is } = useRNBAuthentication();
 
   // Store
@@ -42,41 +44,11 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     return bdgApiUrl(bdg!.rnb_id);
   };
 
-  function addSpace(rnb_id: string) {
-    if (rnb_id) {
-      return rnb_id.split('').map((char, i) => {
-        let classes = '';
-        if (i == 4 || i == 8) {
-          classes = styles['small-left-padding'];
-        }
-        return (
-          <span key={'rnb-id-char' + i} className={classes}>
-            {char}
-          </span>
-        );
-      });
-    } else {
-      return null;
-    }
-  }
-
   const coverRatioDisplay = (ratio: number) => {
     // % with two decimals
     const percentage = (ratio * 100).toFixed(2);
 
     return `${percentage}%`;
-  };
-
-  const easyRnbId = () => {
-    return addSpace(bdg!.rnb_id);
-  };
-
-  const handleCopy = () => {
-    va.track('rnbid-copied', { rnb_id: bdg!.rnb_id });
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
   };
 
   const relevantPlots = (): Plot[] => {
@@ -104,60 +76,36 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   }, [bdg?.rnb_id]);
 
   return (
-    <div>
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Identifiant RNB</h2>
+    <>
+      <PanelSection>
+        <RNBIDCopier rnbId={bdg!.rnb_id} />
+      </PanelSection>
+      <PanelSection>
+        <PanelTabs />
+      </PanelSection>
 
-        <div className={styles.rnbidShell}>
-          <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
-
-          <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
-            <div className={styles.rnbidShell__copy}>
-              {copied ? (
-                <span>
-                  Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                </span>
-              ) : (
-                <span>
-                  Copier <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                </span>
-              )}
-            </div>
-          </CopyToClipboard>
-        </div>
-      </div>
-
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
-        <div className={panelStyles.sectionBody}>
-          <ContributionStatusPicker currentStatus={bdg.status} />
-        </div>
-      </div>
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Adresses</h2>
-        <div className={panelStyles.sectionBody}>
-          <BuildingAdresses adresses={bdg.addresses} />
-        </div>
-      </div>
+      <PanelSection
+        title="Statut du bâtiment"
+        body={<ContributionStatusPicker currentStatus={bdg.status} />}
+      />
+      <PanelSection
+        title="Adresses"
+        body={<BuildingAdresses adresses={bdg.addresses} />}
+      />
 
       {!is(RNBGroup.CONTRIBUTORS) && (
-        <div className={panelStyles.section}>
-          <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
-            Améliorez le RNB
-          </h2>
-          <ContributionForm />
-        </div>
+        <PanelSection title="Améliorez le RNB" body={<ContributionForm />} />
       )}
-      <div className={panelStyles.section}>
+      <PanelSection>
         <DeployableBlock
           title="Correspondances BD Topo & BDNB"
           className="blue"
         >
           <BdTopoBdnbContent building={bdg} />
         </DeployableBlock>
-      </div>
+      </PanelSection>
 
-      <div className={panelStyles.section}>
+      <PanelSection>
         <DeployableBlock title="Parcelles cadastrales" className="blue">
           <>
             <div className={panelStyles.plotWarning}>
@@ -221,16 +169,16 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             </div>
           </>
         </DeployableBlock>
-      </div>
+      </PanelSection>
 
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Lien API</h2>
-        <div className={panelStyles.sectionBody}>
+      <PanelSection
+        title="Lien API"
+        body={
           <a href={apiUrl()} target="_blank">
             Format JSON
           </a>
-        </div>
-      </div>
-    </div>
+        }
+      />
+    </>
   );
 }

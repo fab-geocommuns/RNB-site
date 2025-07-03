@@ -16,6 +16,7 @@ import Toaster, {
   toasterError,
   toasterSuccess,
 } from './toaster';
+import { PanelFooter } from '../ui/Panel';
 export default function MergePanel() {
   const dispatch: AppDispatch = useDispatch();
   const candidatesToMerge = useSelector(
@@ -98,9 +99,9 @@ export default function MergePanel() {
             newBuilding={newBuilding}
             buildingsMerged={candidatesWithAddresses}
           />
-          <div className={styles.footer}>
+          <PanelFooter>
             <Button onClick={newMerge}>Nouvelle fusion</Button>
-          </div>
+          </PanelFooter>
         </div>
       ) : (
         <div className={styles.mergePanel_body}>
@@ -175,7 +176,7 @@ export default function MergePanel() {
               )}
             </div>
           )}
-          <div className={styles.footer}>
+          <PanelFooter>
             <Button onClick={cancelMerge} priority="tertiary no outline">
               Annuler
             </Button>
@@ -190,7 +191,7 @@ export default function MergePanel() {
             >
               Valider la fusion
             </Button>
-          </div>
+          </PanelFooter>
         </div>
       )}
     </>
