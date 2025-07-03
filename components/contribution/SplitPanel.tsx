@@ -17,7 +17,7 @@ import {
 } from './toaster';
 import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { PanelBody } from '../ui/Panel';
+import { PanelBody, PanelFooter } from '../ui/Panel';
 
 export default function SplitPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -115,7 +115,7 @@ function SplitBuildingInitialStep({
           )}
         </div>
       </PanelBody>
-      <div className={styles.footer}>
+      <PanelFooter>
         <Button
           onClick={() => cancelSplit(dispatch)}
           priority="tertiary no outline"
@@ -131,7 +131,7 @@ function SplitBuildingInitialStep({
         >
           Suivant
         </Button>
-      </div>
+      </PanelFooter>
     </>
   );
 }
@@ -232,7 +232,7 @@ function SplitBuildingChildInfosStep({
           )}
         </div>
       </PanelBody>
-      <div className={styles.footer}>
+      <PanelFooter>
         <Button
           onClick={() => cancelSplit(dispatch)}
           priority="tertiary no outline"
@@ -275,7 +275,7 @@ function SplitBuildingChildInfosStep({
             Scinder
           </Button>
         )}
-      </div>
+      </PanelFooter>
     </>
   );
 }

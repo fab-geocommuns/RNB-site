@@ -22,6 +22,7 @@ import { ContributionStatusPicker } from '@/components/panel/ContributionStatusP
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import PanelTabs from './PanelTabs';
+import { PanelBody, PanelSection } from '../ui/Panel';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -105,10 +106,12 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   }, [bdg?.rnb_id]);
 
   return (
-    <PanelBody>
-      <PanelTabs />
+    <>
+      <PanelSection>
+        <PanelTabs />
+      </PanelSection>
 
-      <div className={panelStyles.section}>
+      <PanelSection>
         <div className={styles.rnbidShell}>
           <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
@@ -126,39 +129,30 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             </div>
           </CopyToClipboard>
         </div>
-      </div>
+      </PanelSection>
 
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
-        <div className={panelStyles.sectionBody}>
-          <ContributionStatusPicker currentStatus={bdg.status} />
-        </div>
-      </div>
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Adresses</h2>
-        <div className={panelStyles.sectionBody}>
-          <BuildingAdresses adresses={bdg.addresses} />
-        </div>
-      </div>
+      <PanelSection
+        title="Statut du bâtiment"
+        body={<ContributionStatusPicker currentStatus={bdg.status} />}
+      />
+      <PanelSection
+        title="Adresses"
+        body={<BuildingAdresses adresses={bdg.addresses} />}
+      />
 
       {!is(RNBGroup.CONTRIBUTORS) && (
-        <div className={panelStyles.section}>
-          <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
-            Améliorez le RNB
-          </h2>
-          <ContributionForm />
-        </div>
+        <PanelSection title="Améliorez le RNB" body={<ContributionForm />} />
       )}
-      <div className={panelStyles.section}>
+      <PanelSection>
         <DeployableBlock
           title="Correspondances BD Topo & BDNB"
           className="blue"
         >
           <BdTopoBdnbContent building={bdg} />
         </DeployableBlock>
-      </div>
+      </PanelSection>
 
-      <div className={panelStyles.section}>
+      <PanelSection>
         <DeployableBlock title="Parcelles cadastrales" className="blue">
           <>
             <div className={panelStyles.plotWarning}>
@@ -222,16 +216,16 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             </div>
           </>
         </DeployableBlock>
-      </div>
+      </PanelSection>
 
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Lien API</h2>
-        <div className={panelStyles.sectionBody}>
+      <PanelSection
+        title="Lien API"
+        body={
           <a href={apiUrl()} target="_blank">
             Format JSON
           </a>
-        </div>
-      </div>
-    </PanelBody>
+        }
+      />
+    </>
   );
 }
