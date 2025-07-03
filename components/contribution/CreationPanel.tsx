@@ -82,7 +82,9 @@ export default function CreationPanel() {
 
   return (
     <>
-      <PanelHeader>Créer un nouveau bâtiment</PanelHeader>
+      <PanelHeader onClose={cancelCreation}>
+        Créer un nouveau bâtiment
+      </PanelHeader>
       <PanelBody>
         {step === 1 && (
           <PanelSection

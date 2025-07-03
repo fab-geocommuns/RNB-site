@@ -14,7 +14,7 @@ export default function PanelTabs() {
     <SegmentedControl
       hideLegend
       classes={{
-        root: fr.cx('fr-mb-2w', 'fr-col-12'),
+        root: fr.cx('fr-col-12'),
         elements: fr.cx('fr-col-12'),
         'element-each': fr.cx('fr-col-6'),
       }}
