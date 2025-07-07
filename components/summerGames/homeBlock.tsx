@@ -13,6 +13,7 @@ export default function SummerGame({
   title,
   limit,
   showRankingLink,
+  withScoreDetails = false,
 }: {
   title: string;
   limit: number;
@@ -43,65 +44,69 @@ export default function SummerGame({
               </div>
             </div>
 
-            {/* <div className={styles.scoresDesc}>
-              <div className={styles.scoresRow}>
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>
-                    Corriger des adresses
+            {withScoreDetails && (
+              <div className={styles.scoresDesc}>
+                <div className={styles.scoresRow}>
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>
+                      Corriger des adresses
+                    </div>
+                    <div className={styles.scoreReward}>
+                      3 <span className={styles.scoreRewardPoint}>points</span>
+                    </div>
                   </div>
-                  <div className={styles.scoreReward}>
-                    3 <span className={styles.scoreRewardPoint}>points</span>
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>Créer un bâtiment</div>
+                    <div className={styles.scoreReward}>
+                      2 <span className={styles.scoreRewardPoint}>points</span>
+                    </div>
                   </div>
-                </div>
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>Créer un bâtiment</div>
-                  <div className={styles.scoreReward}>
-                    2 <span className={styles.scoreRewardPoint}>points</span>
+
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>
+                      Désactiver un bâtiment
+                    </div>
+                    <div className={styles.scoreReward}>
+                      2 <span className={styles.scoreRewardPoint}>points</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>Corriger une forme</div>
+                    <div className={styles.scoreReward}>
+                      1 <span className={styles.scoreRewardPoint}>point</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>
-                    Désactiver un bâtiment
+                <div className={styles.scoresRow}>
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>
+                      Scinder un bâtiment
+                    </div>
+                    <div className={styles.scoreReward}>
+                      1 <span className={styles.scoreRewardPoint}>point</span>
+                    </div>
                   </div>
-                  <div className={styles.scoreReward}>
-                    2 <span className={styles.scoreRewardPoint}>points</span>
-                  </div>
-                </div>
 
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>Corriger une forme</div>
-                  <div className={styles.scoreReward}>
-                    1 <span className={styles.scoreRewardPoint}>point</span>
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>
+                      Fusionner des bâtiments
+                    </div>
+                    <div className={styles.scoreReward}>
+                      1 <span className={styles.scoreRewardPoint}>point</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.score}>
+                    <div className={styles.scoreAction}>Modifier le statut</div>
+                    <div className={styles.scoreReward}>
+                      1 <span className={styles.scoreRewardPoint}>point</span>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div className={styles.scoresRow}>
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>Scinder un bâtiment</div>
-                  <div className={styles.scoreReward}>
-                    1 <span className={styles.scoreRewardPoint}>point</span>
-                  </div>
-                </div>
-
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>
-                    Fusionner des bâtiments
-                  </div>
-                  <div className={styles.scoreReward}>
-                    1 <span className={styles.scoreRewardPoint}>point</span>
-                  </div>
-                </div>
-
-                <div className={styles.score}>
-                  <div className={styles.scoreAction}>Modifier le statut</div>
-                  <div className={styles.scoreReward}>
-                    1 <span className={styles.scoreRewardPoint}>point</span>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+            )}
 
             <div className={styles.progressShell}>
               <div className={styles.barShell}>
