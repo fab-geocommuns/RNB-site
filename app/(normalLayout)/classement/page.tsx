@@ -9,6 +9,7 @@ export default function Page() {
             title="Classement de l'expérience collaborative"
             limit={100}
             showRankingLink={false}
+            withScoreDetails={true}
           />
         </div>
       </div>

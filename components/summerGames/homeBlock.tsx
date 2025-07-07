@@ -18,6 +18,7 @@ export default function SummerGame({
   title: string;
   limit: number;
   showRankingLink?: boolean;
+  withScoreDetails?: boolean;
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
 
