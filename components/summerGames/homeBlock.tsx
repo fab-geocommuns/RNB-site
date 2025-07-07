@@ -156,7 +156,7 @@ export default function SummerGame({
 
             <div className={styles.buttonsShell}>
               {showRankingLink && (
-                <a href="/defi-ete" className={`${styles.btn}`}>
+                <a href="/classement" className={`${styles.btn}`}>
                   Voir le classement
                 </a>
               )}

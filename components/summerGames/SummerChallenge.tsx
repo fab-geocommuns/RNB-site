@@ -74,7 +74,7 @@ export default function SummerChallenge({ updatedAt }: SummerChallengeProps) {
 
   return (
     <div className={styles.editMapBadge}>
-      <a href="/defi-ete" className={styles.editMapBadgeInside}>
+      <a href="/classement" className={styles.editMapBadgeInside}>
         <div className={styles.editMapBadgeTitle}>
           L'expérience <br />
           collaborative
