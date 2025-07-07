@@ -1,24 +1,22 @@
 .operationShell {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 .operationIconShell {
+  $size: 25px;
 
-    $size: 25px;
+  width: $size;
+  height: $size;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1000px;
+  background-color: #fbbf24;
+  margin-right: 6px;
 
-    width: $size;
-    height: $size;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 1000px;
-    background-color: #fbbf24;
-    margin-right: 6px;
-    
-    img {
-        width: $size * 0.55;
-        height: auto;
-    }
+  img {
+    width: $size * 0.55;
+    height: auto;
+  }
 }

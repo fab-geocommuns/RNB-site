@@ -1,83 +1,78 @@
-@import "vars.scss";
+@import 'vars.scss';
 
 .map,
 .map__mapShell {
-    display: flex;
-    flex: 1 1 0;
-    position: relative;
+  display: flex;
+  flex: 1 1 0;
+  position: relative;
 }
-
 
 .map__InputShell {
-    padding: 6px;
-    background: white;
-    position: absolute;
-    z-index: 101;
+  padding: 6px;
+  background: white;
+  position: absolute;
+  z-index: 101;
 
-    top: 12px;
-    right: 12px;
-    left: 12px;
+  top: 12px;
+  right: 12px;
+  left: 12px;
 
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, .1);
-    border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 
-    @media (min-width: $bp-md) {
-        max-width: 400px;
-        width: 400px;
-        right: auto;
-    }
-
+  @media (min-width: $bp-md) {
+    max-width: 400px;
+    width: 400px;
+    right: auto;
+  }
 }
 
-
 .geodisplay {
-
-    display: flex;
+  display: flex;
 }
 
 .geodisplay__panel {
-    min-width: 350px;
-    padding: 20px 10px;
-    height: 100%;
-    overflow-y: auto;
+  min-width: 350px;
+  padding: 20px 10px;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .geodisplay__map {
-    height: 100%;
-    flex: 1;
+  height: 100%;
+  flex: 1;
 }
 
 .searchLabel {
-    font-size: .9em;
-    line-height: 1.3em;
-    opacity: 1;
-    font-weight: 600;
-    margin-bottom: .2rem;
+  font-size: 0.9em;
+  line-height: 1.3em;
+  opacity: 1;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
 }
 
 @keyframes shake {
-    0% {
-        margin-left: 0rem;
-    }
+  0% {
+    margin-left: 0rem;
+  }
 
-    25% {
-        margin-left: 0.5rem;
-    }
+  25% {
+    margin-left: 0.5rem;
+  }
 
-    75% {
-        margin-left: -0.5rem;
-    }
+  75% {
+    margin-left: -0.5rem;
+  }
 
-    100% {
-        margin-left: 0rem;
-    }
+  100% {
+    margin-left: 0rem;
+  }
 }
 
 .shake {
-    animation: shake 0.2s ease-in-out 0s 2;
+  animation: shake 0.2s ease-in-out 0s 2;
 }
 
 .fr-input--error {
-    color: var(--error-425-625-active) !important;
+  color: var(--error-425-625-active) !important;
 }
-
