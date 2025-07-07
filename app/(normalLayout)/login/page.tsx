@@ -11,7 +11,7 @@ export default async function LoginPage() {
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();
   if (session) {
-    redirect('/');
+    redirect('/edition');
   }
 
   const enableCreateAccount = process.env.ENABLE_CREATE_ACCOUNT === 'true';
