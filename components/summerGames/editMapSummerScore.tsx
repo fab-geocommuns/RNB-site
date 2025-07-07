@@ -2,6 +2,7 @@
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/summerGames.module.scss';
+import ProgressBar from './ProgressBar';
 
 import { useSummerGameUserData } from '@/utils/summerGames';
 
@@ -111,17 +112,11 @@ export default function EditMapSummerScore({
             </div>
           </>
         )}
-        {summerGameUserData && summerGameUserData.goal > 0 && (
-          <div className={styles.progressBarContainer}>
-            <div
-              className={styles.progressBar}
-              style={{
-                width: `${
-                  (summerGameUserData.global * 100) / summerGameUserData.goal
-                }%`,
-              }}
-            ></div>
-          </div>
+        {summerGameUserData && (
+          <ProgressBar
+            score={summerGameUserData.global}
+            goal={summerGameUserData.goal}
+          />
         )}
       </a>
     </div>

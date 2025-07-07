@@ -16,6 +16,7 @@ import va from '@vercel/analytics';
 
 // Bus
 import Bus from '@/utils/Bus';
+import VisuMapSummerScore from '@/components/summerGames/visuMapSummerScore';
 
 export default function RNBMap() {
   // //////////////////////
@@ -56,6 +57,7 @@ export default function RNBMap() {
       <div className={styles.map}>
         <AddressSearchMap />
         <VisuPanel />
+        <VisuMapSummerScore />
 
         <div className={styles.map__mapShell}>
           <VisuMap />
