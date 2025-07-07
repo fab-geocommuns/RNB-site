@@ -50,7 +50,7 @@ export default function SummerChallenge({ updatedAt }: SummerChallengeProps) {
           setIsAnimating((prev) => ({ ...prev, global: true }));
           setTimeout(
             () => setIsAnimating((prev) => ({ ...prev, global: false })),
-            3000,
+            2000,
           ); // Animation duration
         }
 
@@ -59,7 +59,7 @@ export default function SummerChallenge({ updatedAt }: SummerChallengeProps) {
           setIsAnimating((prev) => ({ ...prev, user: true }));
           setTimeout(
             () => setIsAnimating((prev) => ({ ...prev, user: false })),
-            3000,
+            2000,
           ); // Animation duration
         }
       }
@@ -111,6 +111,18 @@ export default function SummerChallenge({ updatedAt }: SummerChallengeProps) {
               </div>
             </div>
           </>
+        )}
+        {summerGameUserData && summerGameUserData.goal > 0 && (
+          <div className={styles.progressBarContainer}>
+            <div
+              className={styles.progressBar}
+              style={{
+                width: `${
+                  (summerGameUserData.global * 100) / summerGameUserData.goal
+                }%`,
+              }}
+            ></div>
+          </div>
         )}
       </a>
     </div>
