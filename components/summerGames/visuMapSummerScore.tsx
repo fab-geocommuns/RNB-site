@@ -12,7 +12,7 @@ export default function VisuMapSummerScore() {
       <div className={styles.mapSummerScore}>
         <a href="/edition" className={styles.mapSummerScoreInside}>
           <div className={styles.mapSummerScoreTitle}>
-            L'expérience <br />
+            L&apos;expérience <br />
             collaborative
           </div>
 
