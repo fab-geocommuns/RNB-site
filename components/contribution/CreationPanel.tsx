@@ -1,5 +1,3 @@
-import RNBIDHeader from './RNBIDHeader';
-import styles from '@/styles/contribution/editPanel.module.scss';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +13,13 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-import { PanelBody, PanelFooter, PanelHeader, PanelSection } from '../ui/Panel';
+import {
+  PanelBody,
+  PanelFooter,
+  PanelHeader,
+  PanelSection,
+  PanelStep,
+} from '../ui/Panel';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -87,46 +91,39 @@ export default function CreationPanel() {
       </PanelHeader>
       <PanelBody>
         {step === 1 && (
-          <PanelSection
-            title="Etape 1 - Géométrie"
-            body={
-              mapCoordinates && mapCoordinates.zoom < 18 ? (
-                <div style={{ display: 'flex' }}>
-                  <span className="fr-pr-2v">
-                    <i className="fr-icon-feedback-line"></i>
-                  </span>
-                  Zoomez sur la carte pour pouvoir tracer le bâtiment avec
-                  précision
-                </div>
-              ) : (
-                <>
-                  <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                  <div className="fr-pt-3v">
-                    Un double-clic termine le tracé.
-                  </div>
-                </>
-              )
-            }
-          />
+          <PanelStep title="Etape 1 - Géométrie">
+            {mapCoordinates && mapCoordinates.zoom < 18 ? (
+              <div style={{ display: 'flex' }}>
+                <span className="fr-pr-2v">
+                  <i className="fr-icon-feedback-line"></i>
+                </span>
+                Zoomez sur la carte pour pouvoir tracer le bâtiment avec
+                précision
+              </div>
+            ) : (
+              <>
+                <div>Tracez la géométrie du bâtiment sur la carte.</div>
+                <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
+              </>
+            )}
+          </PanelStep>
         )}
         {step === 2 && (
-          <PanelSection
-            title="Etape 2 - informations"
-            body={
-              <>
-                <BuildingStatus
-                  status={newStatus}
-                  onChange={setNewStatus}
-                ></BuildingStatus>
+          <>
+            <PanelStep title="Etape 2 - Informations">
+              Renseignez les informations du bâtiment nouvellement créé
+            </PanelStep>
+            <BuildingStatus
+              status={newStatus}
+              onChange={setNewStatus}
+            ></BuildingStatus>
 
-                <BuildingAddresses
-                  buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
-                  addresses={localAddresses}
-                  onChange={handleEditAddress}
-                />
-              </>
-            }
-          />
+            <BuildingAddresses
+              buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
+              addresses={localAddresses}
+              onChange={handleEditAddress}
+            />
+          </>
         )}
       </PanelBody>
       <PanelFooter>

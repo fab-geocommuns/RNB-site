@@ -139,8 +139,8 @@ $panel-padding: $spacing;
     }
   }
 
-  .noPad {
-    padding-top: $spacing;
+  .panelSection:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -237,4 +237,24 @@ $panel-padding: $spacing;
     100% 15px,
     100% 5px,
     100% 5px;
+}
+
+.panelStep {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  background: var(--background-default-grey);
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--border-open-blue-france);
+
+  .panelStepTitle {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .panelStepDescription {
+    font-size: 14px;
+    line-height: 1.2;
+  }
 }

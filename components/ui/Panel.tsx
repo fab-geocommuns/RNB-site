@@ -83,3 +83,17 @@ export function PanelBody({ children }: PanelBodyProps) {
 export function PanelFooter({ children }: PanelFooterProps) {
   return <div className={styles.footer}>{children}</div>;
 }
+
+type PanelStepProps = {
+  title: React.ReactNode;
+  children: React.ReactNode;
+};
+
+export function PanelStep({ title, children }: PanelStepProps) {
+  return (
+    <div className={styles.panelStep}>
+      <span className={styles.panelStepTitle}>{title}</span>
+      <span className={styles.panelStepDescription}>{children}</span>
+    </div>
+  );
+}

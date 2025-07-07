@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Actions, RootState, AppDispatch } from '@/stores/store';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { useState, useEffect } from 'react';
-import RNBIDHeader from './RNBIDHeader';
 import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';

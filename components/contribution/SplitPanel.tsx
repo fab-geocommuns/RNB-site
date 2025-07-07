@@ -15,9 +15,14 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
-import { PanelBody, PanelFooter } from '../ui/Panel';
+import {
+  PanelBody,
+  PanelFooter,
+  PanelHeader,
+  PanelSection,
+  PanelStep,
+} from '../ui/Panel';
 
 export default function SplitPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -75,45 +80,45 @@ function SplitBuildingInitialStep({
 
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">Étape 1 - Sélection du bâtiment</h1>
-      </RNBIDHeader>
+      <PanelHeader onClose={() => cancelSplit(dispatch)}>
+        Scinder un bâtiment
+      </PanelHeader>
 
       <PanelBody>
-        <div className={`${styles.panelSection} ${styles.noPad}`}>
-          {splitCandidateId && (
-            <>
-              <div className="fr-pb-3v">
-                En combien de bâtiments souhaitez-vous scinder{' '}
-                {splitCandidateId} ?
-              </div>
-              <Select
-                nativeSelectProps={{
-                  value: splitChildrenCount?.toString(),
-                  onChange: (event) => {
-                    setChildrenNumber(event.target.value);
-                  },
-                }}
-                label=""
-                options={[
-                  { value: '2', label: 2 },
-                  { value: '3', label: 3 },
-                  { value: '4', label: 4 },
-                  { value: '5', label: 5 },
-                  { value: '6', label: 6 },
-                  { value: '7', label: 7 },
-                  { value: '8', label: 8 },
-                  { value: '9', label: 9 },
-                ]}
-              />
-            </>
-          )}
-
+        <PanelStep title="Etape 1 - Sélection du bâtiment">
           {splitCandidateId === null && (
             <>Sélectionnez un bâtiment à scinder sur la carte.</>
           )}
-        </div>
+          {splitCandidateId && (
+            <>
+              En combien de bâtiments souhaitez-vous scinder {splitCandidateId}{' '}
+              ?
+            </>
+          )}
+        </PanelStep>
+        {splitCandidateId && (
+          <PanelSection title="Nombre de bâtiments enfants">
+            <Select
+              nativeSelectProps={{
+                value: splitChildrenCount?.toString(),
+                onChange: (event) => {
+                  setChildrenNumber(event.target.value);
+                },
+              }}
+              label=""
+              options={[
+                { value: '2', label: 2 },
+                { value: '3', label: 3 },
+                { value: '4', label: 4 },
+                { value: '5', label: 5 },
+                { value: '6', label: 6 },
+                { value: '7', label: 7 },
+                { value: '8', label: 8 },
+                { value: '9', label: 9 },
+              ]}
+            />
+          </PanelSection>
+        )}
       </PanelBody>
       <PanelFooter>
         <Button
@@ -190,17 +195,25 @@ function SplitBuildingChildInfosStep({
     }
   };
 
+  const ordinal = (n: number) => {
+    if (n === 1) return '1er';
+
+    return `${n}ème`;
+  };
+
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">
-          Étape {selectedChildIndex + 2}/{splitChildrenCount + 1} - Infos
-          bâtiment {selectedChildIndex + 1}
-        </h1>
-      </RNBIDHeader>
+      <PanelHeader onClose={() => cancelSplit(dispatch)}>
+        Scinder un bâtiment
+      </PanelHeader>
 
       <PanelBody>
+        <PanelStep
+          title={`Etape ${selectedChildIndex + 2}/${splitChildrenCount + 1} - Infos bâtiment ${selectedChildIndex + 1}`}
+        >
+          Renseignez les informations du {ordinal(selectedChildIndex + 1)}{' '}
+          enfant issu de la scission du bâtiment {splitCandidateId}
+        </PanelStep>
         <BuildingStatus
           status={childrenB[selectedChildIndex].status}
           onChange={(status) => setStatus(status)}
