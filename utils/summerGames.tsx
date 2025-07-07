@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useSummerGameUserData = (userId: number, updatedAt: number) => {
+export const useSummerGameUserData = (username: string, updatedAt: number) => {
   const [loading, setLoading] = useState(true);
   const [summerGameUserData, setSummerGameUserData] = useState<any>();
 
@@ -10,7 +10,7 @@ export const useSummerGameUserData = (userId: number, updatedAt: number) => {
         const url =
           process.env.NEXT_PUBLIC_API_BASE +
           '/editions/ranking/' +
-          userId +
+          username +
           '/';
 
         const response = await fetch(url, {

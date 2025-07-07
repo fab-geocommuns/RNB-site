@@ -1,5 +1,8 @@
+'use client';
+import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/summerGames.module.scss';
+import { useSession } from 'next-auth/react';
 
 import { useSummerGameUserData } from '@/utils/summerGames';
 
@@ -15,7 +18,14 @@ interface SummerChallengeProps {
 }
 
 export default function SummerChallenge({ updatedAt }: SummerChallengeProps) {
-  const { summerGameUserData, loading } = useSummerGameUserData(1, updatedAt);
+  const { user } = useRNBAuthentication({ require: true });
+
+  console.log('User:', user);
+
+  const { summerGameUserData, loading } = useSummerGameUserData(
+    user?.username,
+    updatedAt,
+  );
   const [scoreDiff, setScoreDiff] = useState({ global: 0, user: 0 });
   const [isAnimating, setIsAnimating] = useState({
     global: false,
