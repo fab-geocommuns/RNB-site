@@ -409,3 +409,22 @@ body .mapSummerScoreInside {
 .userRank {
   font-size: 0.8em;
 }
+
+.loginShell {
+  background-image: url('/images/summerGames/summergame2025.png');
+  background-size: cover;
+  color: white;
+  border-radius: 8px;
+  padding: 20px;
+
+  p {
+    font-weight: 700;
+  }
+}
+
+.loginShellTitle {
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+  color: white;
+  font-family: SummerGameTitle, sans-serif;
+  font-weight: 500;
+}
