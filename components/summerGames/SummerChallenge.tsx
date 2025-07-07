@@ -17,10 +17,10 @@ interface SummerChallengeProps {
   updatedAt: number;
 }
 
-export default function SummerChallenge({ updatedAt }: SummerChallengeProps) {
+export default function EditMapSummerScore({
+  updatedAt,
+}: SummerChallengeProps) {
   const { user } = useRNBAuthentication({ require: true });
-
-  console.log('User:', user);
 
   const { summerGameUserData, loading } = useSummerGameUserData(
     user?.username,

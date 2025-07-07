@@ -37,7 +37,6 @@ export const useSummerGameUserData = (username: string, updatedAt: number) => {
 };
 
 export const useSummerGamesData = (limit: number) => {
-  console.log('useSummerGamesData limit:', limit);
   const [loading, setLoading] = useState(true);
   const [summerGamesData, setSummerGamesData] = useState<any>();
 
