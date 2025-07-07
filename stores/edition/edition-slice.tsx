@@ -61,7 +61,7 @@ export type EditionStore = {
   split: SplitInfos;
 
   // Summer challenge
-  summerChallengeBadgeUpdatedAt: number | null;
+  editMapSummerScoreUpdatedAt: number | null;
 };
 const initialState: EditionStore = {
   operation: null,
@@ -81,7 +81,7 @@ const initialState: EditionStore = {
   },
 
   // Summer challenge
-  summerChallengeBadgeUpdatedAt: null,
+  editMapSummerScoreUpdatedAt: null,
 };
 
 export const editionSlice = createSlice({
@@ -124,7 +124,7 @@ export const editionSlice = createSlice({
       state,
       action: PayloadAction<number | null>,
     ) {
-      state.summerChallengeBadgeUpdatedAt = action.payload;
+      state.editMapSummerScoreUpdatedAt = action.payload;
     },
     setSplitCandidateAndLocation(
       state,

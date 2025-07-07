@@ -82,13 +82,13 @@ export default function EditMapSummerScore({
         {!loading && summerGameUserData && (
           <>
             <div className={styles.mapSummerScoreSubpart}>
-              <div className={styles.editMapBadgeSubpartTitle}>
+              <div className={styles.mapSummerScoreSubpartTitle}>
                 Score global
               </div>
-              <div className={styles.editMapBadgeSubpartValue}>
+              <div className={styles.mapSummerScoreSubpartValue}>
                 {summerGameUserData.global}/{summerGameUserData.goal}
                 {isAnimating.global && (
-                  <span className={styles.scoreAnimation}>
+                  <span className={styles.mapSummerScoreAnimation}>
                     +{scoreDiff.global}
                   </span>
                 )}

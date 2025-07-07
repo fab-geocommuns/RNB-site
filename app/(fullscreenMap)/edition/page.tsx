@@ -3,7 +3,7 @@
 import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
-import EditMapSummerScore from '@/components/summerGames/SummerChallenge';
+import EditMapSummerScore from '@/components/summerGames/editMapSummerScore';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 import styles from '@/styles/mapPage.module.scss';
@@ -14,8 +14,8 @@ export default function Page() {
   const { user } = useRNBAuthentication({ require: true });
 
   // Summer challenge
-  const summerChallengeBadgeUpdatedAt = useSelector(
-    (state: RootState) => state.edition.summerChallengeBadgeUpdatedAt,
+  const editMapSummerScoreUpdatedAt = useSelector(
+    (state: RootState) => state.edition.editMapSummerScoreUpdatedAt,
   );
 
   if (!user) {
@@ -27,7 +27,7 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
-        <EditMapSummerScore updatedAt={summerChallengeBadgeUpdatedAt || 0} />
+        <EditMapSummerScore updatedAt={editMapSummerScoreUpdatedAt || 0} />
 
         <div className={styles.map__mapShell}>
           <EditMap
