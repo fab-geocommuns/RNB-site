@@ -1,13 +1,17 @@
 .loader {
-    border: 10px solid white; /* Light grey */
-    border-top: 10px solid var(--blue-france-sun-113-625); /* Blue */
-    border-radius: 50%;
-    width: 90px;
-    height: 90px;
-    animation: spin 1.5s linear infinite;
+  border: 10px solid white; /* Light grey */
+  border-top: 10px solid var(--blue-france-sun-113-625); /* Blue */
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
   }
+}
