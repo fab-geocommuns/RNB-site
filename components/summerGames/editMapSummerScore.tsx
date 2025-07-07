@@ -2,7 +2,6 @@
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/summerGames.module.scss';
-import { useSession } from 'next-auth/react';
 
 import { useSummerGameUserData } from '@/utils/summerGames';
 
@@ -13,13 +12,13 @@ interface SummerGameUserData {
   user_rank: number;
 }
 
-interface SummerChallengeProps {
+interface EditMapSummerScoreProps {
   updatedAt: number;
 }
 
 export default function EditMapSummerScore({
   updatedAt,
-}: SummerChallengeProps) {
+}: EditMapSummerScoreProps) {
   const { user } = useRNBAuthentication({ require: true });
 
   const { summerGameUserData, loading } = useSummerGameUserData(
@@ -73,16 +72,16 @@ export default function EditMapSummerScore({
   };
 
   return (
-    <div className={styles.editMapBadge}>
-      <a href="/classement" className={styles.editMapBadgeInside}>
-        <div className={styles.editMapBadgeTitle}>
+    <div className={styles.mapSummerScore}>
+      <a href="/classement" className={styles.mapSummerScoreInside}>
+        <div className={styles.mapSummerScoreTitle}>
           L'expérience <br />
           collaborative
         </div>
 
         {!loading && summerGameUserData && (
           <>
-            <div className={styles.editMapBadgeSubpart}>
+            <div className={styles.mapSummerScoreSubpart}>
               <div className={styles.editMapBadgeSubpartTitle}>
                 Score global
               </div>
@@ -96,15 +95,15 @@ export default function EditMapSummerScore({
               </div>
             </div>
 
-            <div className={styles.editMapBadgeSubpart}>
-              <div className={styles.editMapBadgeSubpartTitle}>Mon score</div>
-              <div className={styles.editMapBadgeSubpartValue}>
+            <div className={styles.mapSummerScoreSubpart}>
+              <div className={styles.mapSummerScoreSubpartTitle}>Mon score</div>
+              <div className={styles.mapSummerScoreSubpartValue}>
                 {summerGameUserData.user_score}{' '}
                 <span className={styles.userRank}>
                   ({formatRank(summerGameUserData.user_rank)})
                 </span>
                 {isAnimating.user && (
-                  <span className={styles.scoreAnimation}>
+                  <span className={styles.mapSummerScoreAnimation}>
                     +{scoreDiff.user}
                   </span>
                 )}
