@@ -31,7 +31,7 @@ export default async function LoginPage() {
                   L&apos;expérience collaborative de l&apos;été
                 </h2>
                 <p>
-                  Créez un compte pour participer à l'expérimentation
+                  Créez un compte pour participer à l&apos;expérimentation
                   collaborative organisée par le RNB. Une fois connecté, vous
                   pourrez directement éditer le référentiel et faire monter son
                   niveau de qualité.
