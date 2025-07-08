@@ -282,8 +282,8 @@ export const useMapLayers = ({
   const getDefaultBuildingFeatureFilter = () => {
     const defaultBuildingFeatureFilter: any = [
       'all',
-      ['==', ['coalesce', ['get', 'is_active'], true], true],
-      ['!=', ['get', 'status'], 'demolished'],
+      ['==', 'is_active', true],
+      ['!=', 'status', 'demolished'],
     ];
 
     return defaultBuildingFeatureFilter;
