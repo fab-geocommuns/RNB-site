@@ -76,7 +76,7 @@ export default function EditMapSummerScore({
     <div className={styles.mapSummerScore}>
       <a href="/classement" className={styles.mapSummerScoreInside}>
         <div className={styles.mapSummerScoreTitle}>
-          L'&apos;expérience <br />
+          L&apos;expérience <br />
           collaborative
         </div>
 
