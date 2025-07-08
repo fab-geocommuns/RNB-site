@@ -150,7 +150,7 @@ export default async function Home() {
           title={
             <>
               <span>🧑‍🔬 🤝 🗺️ 👩‍🔬 </span>
-              L'expérience collaborative de l'été
+              L&apos;expérience collaborative de l&apos;été
             </>
           }
           limit={5}
