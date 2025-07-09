@@ -171,7 +171,10 @@ export default function SummerGame({
               >
                 Participer
               </a>
-              <a href="/edition" className={`${styles.btn}`}>
+              <a
+                href="/blog/lancez-vous-dans-ledition-collaborative-du-rnb-cet-ete"
+                className={`${styles.btn}`}
+              >
                 En savoir plus
               </a>
             </div>
