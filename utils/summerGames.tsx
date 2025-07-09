@@ -7,11 +7,10 @@ export const useSummerGameUserData = (username: string, updatedAt: number) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url =
+        const url = new URL(
           process.env.NEXT_PUBLIC_API_BASE +
-          '/editions/ranking/' +
-          username +
-          '/';
+            `/editions/ranking/${encodeURIComponent(username)}/`,
+        );
 
         const response = await fetch(url, {
           cache: 'no-cache',
@@ -43,10 +42,12 @@ export const useSummerGamesData = (limit: number) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url =
-          process.env.NEXT_PUBLIC_API_BASE +
-          '/editions/ranking/?max_rank=' +
-          limit;
+        const url = new URL(
+          process.env.NEXT_PUBLIC_API_BASE + '/editions/ranking/',
+        );
+        url.searchParams.append('max_rank', limit.toString());
+
+        console.log(url);
 
         const response = await fetch(url, {
           cache: 'no-cache',
