@@ -8,12 +8,10 @@ import ImageNext from 'next/image';
 import medalGoldPic from '@/public/images/summerGames/medal_gold.svg';
 import medalSilverPic from '@/public/images/summerGames/medal_silver.svg';
 import medalBronzePic from '@/public/images/summerGames/medal_bronze.svg';
-import { useEffect, useState } from 'react';
 
 type RankTableProps = {
   title: string;
   ranks: any[];
-  limit: number;
 };
 
 const mapRankToMedal: Record<number, string> = {
