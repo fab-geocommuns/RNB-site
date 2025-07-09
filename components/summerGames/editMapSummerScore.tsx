@@ -6,17 +6,17 @@ import ProgressBar from './ProgressBar';
 
 import { useSummerGameUserData } from '@/utils/summerGames';
 
-interface SummerGameUserData {
+type SummerGameUserData = {
   global: number;
   goal: number;
   user_score: number;
   user_rank: number;
-}
+};
 
-interface EditMapSummerScoreProps {
+type EditMapSummerScoreProps = {
   updatedAt: number;
   username: string;
-}
+};
 
 export default function EditMapSummerScore({
   updatedAt,
