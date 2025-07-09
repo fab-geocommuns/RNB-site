@@ -135,7 +135,6 @@ export default function SummerGame({
               <div className={styles.ranks}>
                 <div className={styles.ranksTable}>
                   <RankTable
-                    limit={5}
                     title="Classement des départements"
                     ranks={summerGamesData.department}
                   />
@@ -143,7 +142,6 @@ export default function SummerGame({
 
                 <div className={styles.ranksTable}>
                   <RankTable
-                    limit={5}
                     title="Classement des villes"
                     ranks={summerGamesData.city}
                   />
@@ -151,7 +149,6 @@ export default function SummerGame({
 
                 <div className={styles.ranksTable}>
                   <RankTable
-                    limit={5}
                     title="Classement des participants"
                     ranks={summerGamesData.individual}
                   />

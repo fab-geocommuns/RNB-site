@@ -22,23 +22,13 @@ const mapRankToMedal: Record<number, string> = {
   2: medalBronzePic,
 };
 
-export default function RankTable({
-  title,
-  ranks,
-  limit = 100,
-}: RankTableProps) {
-  const [displayedRanks, setDisplayedRanks] = useState<any[]>([]);
-
-  useEffect(() => {
-    setDisplayedRanks(ranks.slice(0, limit));
-  }, [limit, ranks]);
-
+export default function RankTable({ title, ranks }: RankTableProps) {
   return (
     <div className={styles.rankShell}>
       <div className={styles.legend}>{title}</div>
 
       <div className={styles.rankTable}>
-        {displayedRanks.map((rank, index) => (
+        {ranks.map((rank, index) => (
           <div key={index} className={styles.rankRow}>
             <div className={styles.rankMedalShell}>{index + 1} •</div>
             <div className={styles.rankNameShell}>{rank.name}</div>
