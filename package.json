@@ -36,7 +36,7 @@
     "js-cookie": "^3.0.5",
     "lodash.debounce": "^4.0.8",
     "maplibre-gl": "^5.3.1",
-    "next": "15.3.2",
+    "next": "15.3.4",
     "next-auth": "^4.24.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -55,7 +55,7 @@
     "sass": "^1.77.8"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,json,css,md}": [
+    "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
   },

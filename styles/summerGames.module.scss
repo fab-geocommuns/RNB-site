@@ -10,6 +10,7 @@ $accent-color-light: #ffea00;
 
 .seriousShell {
   padding: 25px 30px;
+  padding: 25px 30px;
 }
 
 .shell {
@@ -58,6 +59,11 @@ $accent-color-light: #ffea00;
   margin: 0 auto 40px auto;
   margin-bottom: 3.5rem;
   text-align: right;
+  max-width: min(90%, 800px);
+  width: 800px;
+  margin: 0 auto 40px auto;
+  margin-bottom: 3.5rem;
+  text-align: right;
 }
 
 .bar {
@@ -87,7 +93,11 @@ $accent-color-light: #ffea00;
 .progressTotal {
   line-height: 100%;
   font-weight: 600;
+  line-height: 100%;
+  font-weight: 600;
 
+  color: white;
+  padding-right: 5px;
   color: white;
   padding-right: 5px;
 }
@@ -99,6 +109,11 @@ $accent-color-light: #ffea00;
   line-height: 1.1em;
   text-align: center;
 
+  .legend_subtitle {
+    font-weight: 400;
+    font-size: 0.7em;
+    text-transform: uppercase;
+  }
   .legend_subtitle {
     font-weight: 400;
     font-size: 0.7em;
@@ -122,6 +137,9 @@ $accent-color-light: #ffea00;
   @media screen and (max-width: 750px) {
     flex-direction: column;
   }
+  @media screen and (max-width: 750px) {
+    flex-direction: column;
+  }
 }
 
 .ranksTable {
@@ -140,9 +158,14 @@ $accent-color-light: #ffea00;
     flex-direction: column;
     padding: 1rem;
   }
+  @media screen and (max-width: 640px) {
+    flex-direction: column;
+    padding: 1rem;
+  }
 }
 
 .rankTable {
+  font-size: 1em;
   font-size: 1em;
 
   .rankRow {
@@ -150,7 +173,20 @@ $accent-color-light: #ffea00;
     align-items: center;
     padding: 3px;
   }
+  .rankRow {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+  }
 
+  .rankMedalShell {
+    width: 27px;
+    max-width: 27px;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
   .rankMedalShell {
     width: 27px;
     max-width: 27px;
@@ -169,7 +205,16 @@ $accent-color-light: #ffea00;
   .rankNameShell {
     flex-grow: 1;
   }
+  .rankNameShell {
+    flex-grow: 1;
+  }
 
+  .rankCountShell {
+    width: 40px;
+    max-width: 40px;
+    flex-grow: 0;
+    text-align: right;
+  }
   .rankCountShell {
     width: 40px;
     max-width: 40px;
@@ -179,6 +224,11 @@ $accent-color-light: #ffea00;
 }
 
 .ranksExplain {
+  font-size: small;
+  color: $title-color;
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 3rem;
   font-size: small;
   color: $title-color;
   text-align: center;
