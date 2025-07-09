@@ -43,7 +43,10 @@ export const useSummerGamesData = (limit: number) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = process.env.NEXT_PUBLIC_API_BASE + '/editions/ranking/';
+        const url =
+          process.env.NEXT_PUBLIC_API_BASE +
+          '/editions/ranking/?max_rank=' +
+          limit;
 
         const response = await fetch(url, {
           cache: 'no-cache',
