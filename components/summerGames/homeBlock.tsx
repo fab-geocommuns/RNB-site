@@ -38,10 +38,10 @@ export default function SummerGame({
                   Quels acteurs souhaitent alimenter le RNB ?
                 </p>
                 <p>
-                  Cet été, le RNB organise une expérience et s&apos;ouvre
-                  largement à l&apos;édition collaborative. Faites monter le
-                  score de qualité du RNB, de votre ville et de votre
-                  département.
+                  Du 10 juillet au 10 septembre, le RNB organise une expérience
+                  et s&apos;ouvre largement à l&apos;édition collaborative.
+                  Faites monter le score de qualité du RNB, de votre ville et de
+                  votre département.
                 </p>
               </div>
             </div>
