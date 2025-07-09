@@ -73,6 +73,18 @@ export default function WithFooterLayout({
                 },
                 text: 'Budget',
               },
+              {
+                linkProps: {
+                  href: 'https://rnb-fr.gitbook.io/documentation/a-propos/mentions-legales-et-politique-de-confidentialite',
+                },
+                text: 'Mentions légales',
+              },
+              {
+                linkProps: {
+                  href: 'https://rnb-fr.gitbook.io/documentation/a-propos/mentions-legales-et-politique-de-confidentialite',
+                },
+                text: 'Politique de confidentialité',
+              },
             ],
           },
           {
