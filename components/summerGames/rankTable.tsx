@@ -1,9 +1,6 @@
 // Styles
 import styles from '@/styles/summerGames.module.scss';
 
-// Comps
-import ImageNext from 'next/image';
-
 // Images
 import medalGoldPic from '@/public/images/summerGames/medal_gold.svg';
 import medalSilverPic from '@/public/images/summerGames/medal_silver.svg';
@@ -12,12 +9,6 @@ import medalBronzePic from '@/public/images/summerGames/medal_bronze.svg';
 type RankTableProps = {
   title: string;
   ranks: any[];
-};
-
-const mapRankToMedal: Record<number, string> = {
-  0: medalGoldPic,
-  1: medalSilverPic,
-  2: medalBronzePic,
 };
 
 export default function RankTable({ title, ranks }: RankTableProps) {
