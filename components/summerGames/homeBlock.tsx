@@ -6,6 +6,7 @@ import RankTable from './rankTable';
 
 // Utils
 import { useSummerGamesData } from '@/utils/summerGames';
+import Link from 'next/link';
 
 export const revalidate = 10;
 
@@ -158,22 +159,22 @@ export default function SummerGame({
 
             <div className={styles.buttonsShell}>
               {showRankingLink && (
-                <a href="/classement" className={`${styles.btn}`}>
+                <Link href="/classement" className={`${styles.btn}`}>
                   Voir le classement
-                </a>
+                </Link>
               )}
-              <a
+              <Link
                 href="/edition"
                 className={`${styles.btn} ${styles.btn_primary}`}
               >
                 Participer
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/blog/lancez-vous-dans-ledition-collaborative-du-rnb-cet-ete"
                 className={`${styles.btn}`}
               >
                 En savoir plus
-              </a>
+              </Link>
             </div>
           </div>
         </div>
