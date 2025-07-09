@@ -27,7 +27,10 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
-        <EditMapSummerScore updatedAt={editMapSummerScoreUpdatedAt || 0} />
+        <EditMapSummerScore
+          updatedAt={editMapSummerScoreUpdatedAt || 0}
+          username={user.username}
+        />
 
         <div className={styles.map__mapShell}>
           <EditMap

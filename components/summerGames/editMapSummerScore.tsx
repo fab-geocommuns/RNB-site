@@ -15,15 +15,15 @@ interface SummerGameUserData {
 
 interface EditMapSummerScoreProps {
   updatedAt: number;
+  username: string;
 }
 
 export default function EditMapSummerScore({
   updatedAt,
+  username,
 }: EditMapSummerScoreProps) {
-  const { user } = useRNBAuthentication({ require: true });
-
   const { summerGameUserData, loading } = useSummerGameUserData(
-    user?.username,
+    username,
     updatedAt,
   );
   const [scoreDiff, setScoreDiff] = useState({ global: 0, user: 0 });
