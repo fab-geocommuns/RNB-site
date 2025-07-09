@@ -194,16 +194,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   return (
     <>
       <explainModal.Component title="Participer au Référentiel National des Bâtiments">
-        <Notice
-          title="Phase de test :"
-          description="le service d'édition est en phase de test en vue d'un démarrage
-            officiel fin juin 2025."
-          severity="info"
-          isClosable={false}
-          className="fr-my-4w"
-        />
-
-        <p>
+        <p className="fr-mt-4w">
           Pour être constamment tenu à jour, le RNB est alimenté par de grandes
           bases de données nationales mais aussi par les contributions de ceux
           ayant une connaissance fine de leur territoire. Tout le monde,

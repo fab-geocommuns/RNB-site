@@ -9,6 +9,7 @@ import NewsletterForm from '@/components/NewsletterForm';
 import AddressSearchHome from '@/components/address/AddressSearchHome';
 import DatabaseSearchForm from '@/components/DatabaseSearchForm';
 import PivotIllustration from '@/components/PivotIllustration';
+import SummerGame from '@/components/summerGames/homeBlock';
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg';
@@ -144,6 +145,17 @@ export default async function Home() {
             </div>
           </div>
         </div>
+
+        <SummerGame
+          title={
+            <>
+              <span>🧑‍🔬 🤝 🗺️ 👩‍🔬 </span>
+              L&apos;expérience collaborative de l&apos;été
+            </>
+          }
+          limit={5}
+          showRankingLink={true}
+        />
 
         <div className="section section__big">
           <div className={styles.dbsShell}>

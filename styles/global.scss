@@ -1,4 +1,5 @@
 @import 'vars.scss';
+@import 'vars.scss';
 
 @font-face {
   font-family: 'Itim';
@@ -6,15 +7,11 @@
 }
 
 @font-face {
-  font-family: 'RocherColor';
-  src: url('/fonts/RocherColorGX-3f0e7056.woff2') format('woff2');
+  font-family: 'SummerGameTitle';
+  src: url('/fonts/JockeyOne-Regular.ttf') format('truetype');
+
   font-weight: normal;
   font-style: normal;
-}
-
-@font-face {
-  font-family: 'Playwrite';
-  src: url('/fonts/PlaywriteNO-VariableFont_wght.ttf') format('truetype');
 }
 
 @import 'page.scss';
