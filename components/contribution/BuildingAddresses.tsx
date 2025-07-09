@@ -6,6 +6,7 @@ import { AddressSuggestion } from '@/components/address/AddressAutocomplete';
 import { NewAddress, BuildingAddressType } from './types';
 import { distance } from '@turf/turf';
 import styles from '@/styles/contribution/editPanel.module.scss';
+import { PanelSection } from '../ui/Panel';
 
 function AddressCreator({
   onSubmit,
@@ -116,42 +117,47 @@ export default function BuildingAddresses({
     }
   };
   return (
-    <div className={styles.panelSection}>
-      <span className={`fr-text--xs ${styles.sectionTitle}`}>Adresses</span>
-
-      {addresses.length === 0 && !isCreating ? (
-        <div>
-          <small>Aucune adresse liée</small>
-        </div>
-      ) : (
-        addresses.map((address, index) => (
-          <div
-            key={index}
-            className="fr-text--lg"
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              marginBottom: '0',
-              alignItems: 'center',
-            }}
-          >
-            <BuildingAddress
-              address={address}
-              onRemove={(removedAddress) =>
-                onChange(addresses.filter((a) => a.id !== removedAddress.id))
-              }
-            />
-          </div>
-        ))
-      )}
-      <div className="fr-pt-2v"></div>
-      <AddressCreator
-        isCreating={isCreating}
-        onToggleCreating={setIsCreating}
-        onSubmit={handleAddAddress}
-        buildingPoint={buildingPoint}
-        disabledAddressIds={addresses.map((a) => a.id)}
-      />
-    </div>
+    <PanelSection
+      title="Adresses"
+      body={
+        <>
+          {addresses.length === 0 && !isCreating ? (
+            <div>
+              <small>Aucune adresse liée</small>
+            </div>
+          ) : (
+            addresses.map((address, index) => (
+              <div
+                key={index}
+                className="fr-text--lg"
+                style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  marginBottom: '0',
+                  alignItems: 'center',
+                }}
+              >
+                <BuildingAddress
+                  address={address}
+                  onRemove={(removedAddress) =>
+                    onChange(
+                      addresses.filter((a) => a.id !== removedAddress.id),
+                    )
+                  }
+                />
+              </div>
+            ))
+          )}
+          <div className="fr-pt-2v"></div>
+          <AddressCreator
+            isCreating={isCreating}
+            onToggleCreating={setIsCreating}
+            onSubmit={handleAddAddress}
+            buildingPoint={buildingPoint}
+            disabledAddressIds={addresses.map((a) => a.id)}
+          />
+        </>
+      }
+    />
   );
 }
