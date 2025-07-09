@@ -20,7 +20,7 @@ export default function PanelTabs() {
       }}
       segments={[
         {
-          iconId: 'fr-icon-clipboard-line',
+          iconId: 'fr-icon-building-line',
           label: 'Informations',
           nativeInputProps: {
             checked: tabIsActive('/carte'),
@@ -30,7 +30,7 @@ export default function PanelTabs() {
           },
         },
         {
-          iconId: 'fr-icon-clipboard-line',
+          iconId: 'fr-icon-edit-line',
           label: 'Edition',
           nativeInputProps: {
             checked: tabIsActive('/edition'),
