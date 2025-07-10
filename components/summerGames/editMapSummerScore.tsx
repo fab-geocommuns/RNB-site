@@ -99,10 +99,16 @@ export default function EditMapSummerScore({
             <div className={styles.mapSummerScoreSubpart}>
               <div className={styles.mapSummerScoreSubpartTitle}>Mon score</div>
               <div className={styles.mapSummerScoreSubpartValue}>
-                {summerGameUserData.user_score}{' '}
-                <span className={styles.userRank}>
-                  ({formatRank(summerGameUserData.user_rank)})
-                </span>
+                {summerGameUserData.user_score}
+                {summerGameUserData.user_score > 0 && (
+                  <>
+                    {' '}
+                    <span className={styles.userRank}>
+                      ({formatRank(summerGameUserData.user_rank)})
+                    </span>
+                  </>
+                )}
+
                 {isAnimating.user && (
                   <span className={styles.mapSummerScoreAnimation}>
                     +{scoreDiff.user}
