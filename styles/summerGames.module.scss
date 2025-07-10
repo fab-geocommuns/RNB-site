@@ -1,3 +1,5 @@
+@import 'vars.scss';
+
 $title-color: white;
 
 $title-color-hover: #25589f;
@@ -31,6 +33,12 @@ $accent-color-light: #ffea00;
     color: white;
     font-family: SummerGameTitle, sans-serif;
     font-weight: 500;
+
+    @media screen and (min-width: $bp-md) {
+      font-size: 4em;
+      line-height: 1em;
+    }
+
     span {
       display: block;
       margin-bottom: 0.4em;
@@ -137,9 +145,6 @@ $accent-color-light: #ffea00;
   @media screen and (max-width: 750px) {
     flex-direction: column;
   }
-  @media screen and (max-width: 750px) {
-    flex-direction: column;
-  }
 }
 
 .ranksTable {
@@ -158,10 +163,6 @@ $accent-color-light: #ffea00;
     flex-direction: column;
     padding: 1rem;
   }
-  @media screen and (max-width: 640px) {
-    flex-direction: column;
-    padding: 1rem;
-  }
 }
 
 .rankTable {
@@ -173,23 +174,10 @@ $accent-color-light: #ffea00;
     align-items: center;
     padding: 3px;
   }
-  .rankRow {
-    display: flex;
-    align-items: center;
-    padding: 3px;
-  }
 
   .rankMedalShell {
-    width: 27px;
-    max-width: 27px;
-    flex-grow: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .rankMedalShell {
-    width: 27px;
-    max-width: 27px;
+    width: 40px;
+    max-width: 40px;
     flex-grow: 0;
     display: flex;
     align-items: center;
@@ -205,16 +193,7 @@ $accent-color-light: #ffea00;
   .rankNameShell {
     flex-grow: 1;
   }
-  .rankNameShell {
-    flex-grow: 1;
-  }
 
-  .rankCountShell {
-    width: 40px;
-    max-width: 40px;
-    flex-grow: 0;
-    text-align: right;
-  }
   .rankCountShell {
     width: 40px;
     max-width: 40px;
