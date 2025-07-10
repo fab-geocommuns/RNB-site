@@ -173,23 +173,10 @@ $accent-color-light: #ffea00;
     align-items: center;
     padding: 3px;
   }
-  .rankRow {
-    display: flex;
-    align-items: center;
-    padding: 3px;
-  }
 
   .rankMedalShell {
-    width: 27px;
-    max-width: 27px;
-    flex-grow: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .rankMedalShell {
-    width: 27px;
-    max-width: 27px;
+    width: 40px;
+    max-width: 40px;
     flex-grow: 0;
     display: flex;
     align-items: center;
@@ -205,16 +192,7 @@ $accent-color-light: #ffea00;
   .rankNameShell {
     flex-grow: 1;
   }
-  .rankNameShell {
-    flex-grow: 1;
-  }
 
-  .rankCountShell {
-    width: 40px;
-    max-width: 40px;
-    flex-grow: 0;
-    text-align: right;
-  }
   .rankCountShell {
     width: 40px;
     max-width: 40px;
