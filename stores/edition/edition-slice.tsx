@@ -59,6 +59,9 @@ export type EditionStore = {
 
   merge: MergeInfos;
   split: SplitInfos;
+
+  // Summer challenge
+  editMapSummerScoreUpdatedAt: number | null;
 };
 const initialState: EditionStore = {
   operation: null,
@@ -76,6 +79,9 @@ const initialState: EditionStore = {
     selectedChildIndex: null,
     children: createEmptySplitChildren(2),
   },
+
+  // Summer challenge
+  editMapSummerScoreUpdatedAt: null,
 };
 
 export const editionSlice = createSlice({
@@ -113,6 +119,12 @@ export const editionSlice = createSlice({
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
+    },
+    setSummerChallengeBadgeUpdatedAt(
+      state,
+      action: PayloadAction<number | null>,
+    ) {
+      state.editMapSummerScoreUpdatedAt = action.payload;
     },
     setSplitCandidateAndLocation(
       state,

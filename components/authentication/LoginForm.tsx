@@ -15,7 +15,7 @@ export default function LoginForm() {
   // Get the redirect query parameter
   const params = useSearchParams();
 
-  let redirectUrl = '/';
+  let redirectUrl = '/edition';
   const redirect = params.get('redirect');
   if (redirect) {
     redirectUrl = redirect;
