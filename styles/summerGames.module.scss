@@ -33,6 +33,12 @@ $accent-color-light: #ffea00;
     color: white;
     font-family: SummerGameTitle, sans-serif;
     font-weight: 500;
+
+    @media screen and (min-width: $bp-md) {
+      font-size: 4em;
+      line-height: 1em;
+    }
+
     span {
       display: block;
       margin-bottom: 0.4em;
@@ -111,6 +117,11 @@ $accent-color-light: #ffea00;
   line-height: 1.1em;
   text-align: center;
 
+  .legend_subtitle {
+    font-weight: 400;
+    font-size: 0.7em;
+    text-transform: uppercase;
+  }
   .legend_subtitle {
     font-weight: 400;
     font-size: 0.7em;
