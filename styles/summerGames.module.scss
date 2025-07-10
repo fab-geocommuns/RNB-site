@@ -1,3 +1,5 @@
+@import 'vars.scss';
+
 $title-color: white;
 
 $title-color-hover: #25589f;
@@ -114,11 +116,6 @@ $accent-color-light: #ffea00;
     font-size: 0.7em;
     text-transform: uppercase;
   }
-  .legend_subtitle {
-    font-weight: 400;
-    font-size: 0.7em;
-    text-transform: uppercase;
-  }
 }
 
 .ranks {
@@ -137,9 +134,6 @@ $accent-color-light: #ffea00;
   @media screen and (max-width: 750px) {
     flex-direction: column;
   }
-  @media screen and (max-width: 750px) {
-    flex-direction: column;
-  }
 }
 
 .ranksTable {
@@ -154,10 +148,6 @@ $accent-color-light: #ffea00;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 
-  @media screen and (max-width: 640px) {
-    flex-direction: column;
-    padding: 1rem;
-  }
   @media screen and (max-width: 640px) {
     flex-direction: column;
     padding: 1rem;
