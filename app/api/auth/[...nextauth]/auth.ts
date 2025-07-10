@@ -53,14 +53,7 @@ export const authOptions = {
 
           const user = await distantLoginResponse.json();
 
-          if (user) {
-            return {
-              ...user,
-              username: credentials!.username,
-            };
-          }
-
-          return null;
+          return user;
         } catch (error) {
           console.error('Auth error:', error);
           return null;
