@@ -1,22 +1,22 @@
+import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
+import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
+import styles from '@/styles/contribution/editPanel.module.scss';
+import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import BuildingStatus from './BuildingStatus';
-import { SplitChild } from '@/stores/edition/edition-slice';
-import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import BuildingAddresses from './BuildingAddresses';
-import { BuildingAddressType } from './types';
-import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
+import BuildingStatus from './BuildingStatus';
+import RNBIDHeader from './RNBIDHeader';
 import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
-import RNBIDHeader from './RNBIDHeader';
-import styles from '@/styles/contribution/editPanel.module.scss';
+import { BuildingAddressType } from './types';
 
 const INITIAL_STEP = 0;
 
@@ -171,13 +171,19 @@ function SplitBuildingChildInfosStep({
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
   const currentChildHasNoShape = childrenB[selectedChildIndex].shapeId === null;
   const { fetch } = useRNBFetch();
-
+  const [commentValue, setCommentValue] = useState('');
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentValue(event.target.value);
+  };
   const handleSubmit = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
-
+    let data: { [key: string]: any } = {
+      created_buildings: splitChildrenForAPI,
+    };
+    if (commentValue.length) data = { ...data, comment: commentValue };
     try {
       const response = await fetch(url, {
-        body: JSON.stringify({ created_buildings: splitChildrenForAPI }),
+        body: JSON.stringify(data),
         method: 'POST',
       });
 
@@ -235,6 +241,19 @@ function SplitBuildingChildInfosStep({
               Géométrie tracée
             </>
           )}
+        </div>
+        <div className={`${styles.panelSection}`}>
+          <div className={`fr-text--xs ${styles.sectionTitle}`}>
+            <label htmlFor="comment">Commentaire (optionnel)</label>
+          </div>
+          <textarea
+            value={commentValue}
+            onChange={handleChange}
+            id="comment"
+            name="text"
+            className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+            placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la scission ? Laissez un commentaire ici."
+          />
         </div>
       </PanelBody>
       <div className={styles.footer}>
