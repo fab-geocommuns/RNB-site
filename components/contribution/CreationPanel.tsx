@@ -139,7 +139,7 @@ export default function CreationPanel() {
                 id="comment"
                 name="text"
                 className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la création ? Laissez un commentaire ici."
+                placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
               />
             </div>
           </>
