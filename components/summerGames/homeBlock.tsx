@@ -29,7 +29,7 @@ export default function SummerGame({
       <>
         <div className={`section section_big ${styles.seriousShell}`}>
           <div className={styles.shell}>
-            <div className={`section__titleblock ${styles.titleShell}`}>
+            <div className={`section__titleblock ${styles.titleblock}`}>
               <h2 className="section__title">{title}</h2>
 
               <div className={`section__subtitle ${styles.instruction}`}>
@@ -171,7 +171,7 @@ export default function SummerGame({
               </Link>
               <Link
                 href="/blog/lancez-vous-dans-ledition-collaborative-du-rnb-cet-ete"
-                className={`${styles.btn}`}
+                className={`${styles.btn} ${styles.btnKnowMore}`}
               >
                 En savoir plus
               </Link>
