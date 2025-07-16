@@ -351,6 +351,9 @@ $accent-color-light: #ffea00;
 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   min-width: 200px;
+  @media (max-width: 770px) {
+    display: none;
+  }
 }
 
 body .mapSummerScoreInside {
