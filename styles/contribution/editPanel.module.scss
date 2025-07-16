@@ -176,3 +176,7 @@ $panel-padding: 1.5 * $spacing;
     margin-top: 20px;
   }
 }
+.textarea {
+  height: 150px;
+  border: 1px solid var(--background-contrast-grey-active);
+}
