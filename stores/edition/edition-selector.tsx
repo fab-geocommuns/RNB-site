@@ -26,7 +26,7 @@ export const selectSplitChildrenForAPI = createSelector(
 export const selectSplitShapeIdForCurrentChild = createSelector(
   [selectSplitChildren, (state) => state.edition.split.selectedChildIndex],
   (children: SplitChild[], selectedChildIndex) => {
-    if (selectedChildIndex !== null) {
+    if (selectedChildIndex !== null && selectedChildIndex < children.length) {
       return children[selectedChildIndex].shapeId;
     }
   },

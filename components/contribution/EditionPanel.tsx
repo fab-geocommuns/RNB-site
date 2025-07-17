@@ -143,7 +143,6 @@ function EditSelectedBuildingPanelContent({
     const data = {
       is_active: isActive,
     };
-    console.log(isLoading);
     const response = await fetch(url, {
       body: JSON.stringify(data),
       method: 'PATCH',

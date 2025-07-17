@@ -180,3 +180,9 @@ $panel-padding: 1.5 * $spacing;
   height: 150px;
   border: 1px solid var(--background-contrast-grey-active);
 }
+.resumeSplit {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

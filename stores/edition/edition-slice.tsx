@@ -140,7 +140,10 @@ export const editionSlice = createSlice({
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
       const selectedChildIndex = action.payload;
       state.split.selectedChildIndex = selectedChildIndex;
-      if (selectedChildIndex !== null) {
+      if (
+        selectedChildIndex !== null &&
+        state.split.selectedChildIndex !== state.split.children.length
+      ) {
         if (state.split.children[selectedChildIndex].shapeId) {
           state.updateCreate.shapeInteractionMode = 'updating';
         } else {
