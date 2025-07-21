@@ -4,7 +4,8 @@ $input-height: 52px;
 $spacing: 12px;
 $actions-top: 2 * $spacing + $input-height;
 $actions-height: 60px;
-$shell-top: $actions-top + $spacing + $actions-height;
+$shell-top: $spacing;
+$shell-top-with-actions: $actions-top + $actions-height + $shell-top;
 $panel-padding: 1.5 * $spacing;
 
 .actions {
@@ -58,6 +59,10 @@ $panel-padding: 1.5 * $spacing;
   overflow: hidden;
   border-radius: 4px;
   border: 1px solid var(--background-contrast-blue-france-active);
+}
+
+.shell.withActions {
+  top: $shell-top-with-actions;
 }
 
 .content {

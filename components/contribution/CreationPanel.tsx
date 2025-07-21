@@ -1,5 +1,3 @@
-import RNBIDHeader from './RNBIDHeader';
-import styles from '@/styles/contribution/editPanel.module.scss';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,10 +13,13 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
+import {
+  PanelBody,
+  PanelFooter,
+  PanelHeader,
+  PanelSection,
+  PanelStep,
+} from '../ui/Panel';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -85,18 +86,12 @@ export default function CreationPanel() {
 
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Créer un nouveau bâtiment </span>
-        {step == 1 && (
-          <h1 className="fr-text--lg fr-m-0">étape 1 - Géométrie</h1>
-        )}
-        {step == 2 && (
-          <h1 className="fr-text--lg fr-m-0">étape 2 - informations</h1>
-        )}
-      </RNBIDHeader>
+      <PanelHeader onClose={cancelCreation}>
+        Créer un nouveau bâtiment
+      </PanelHeader>
       <PanelBody>
         {step === 1 && (
-          <div className={`${styles.panelSection} ${styles.noPad}`}>
+          <PanelStep title="Etape 1 - Géométrie">
             {mapCoordinates && mapCoordinates.zoom < 18 ? (
               <div style={{ display: 'flex' }}>
                 <span className="fr-pr-2v">
@@ -111,10 +106,13 @@ export default function CreationPanel() {
                 <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
               </>
             )}
-          </div>
+          </PanelStep>
         )}
         {step === 2 && (
           <>
+            <PanelStep title="Etape 2 - Informations">
+              Renseignez les informations du bâtiment nouvellement créé
+            </PanelStep>
             <BuildingStatus
               status={newStatus}
               onChange={setNewStatus}
@@ -128,14 +126,14 @@ export default function CreationPanel() {
           </>
         )}
       </PanelBody>
-      <div className={styles.footer}>
+      <PanelFooter>
         <Button onClick={cancelCreation} priority="tertiary no outline">
           Annuler
         </Button>
         {step === 2 && (
           <Button onClick={createBuilding}>Créer le bâtiment</Button>
         )}
-      </div>
+      </PanelFooter>
     </>
   );
 }
