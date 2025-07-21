@@ -11,12 +11,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ score, goal }) => {
     return null;
   }
 
+  const progressPercentage = (score / goal) * 100;
+
   return (
     <div className={styles.progressBarContainer}>
       <div
         className={styles.progressBar}
         style={{
-          width: `${(score * 100) / goal}%`,
+          width: `${Math.min(progressPercentage, 100)}%`,
         }}
       ></div>
     </div>
