@@ -5,7 +5,6 @@ import {
   BuildingStatusMap,
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
-import VisuMap from '@/components/map/VisuMap';
 
 export default function Details({
   detailsInfo,
@@ -89,10 +88,6 @@ export default function Details({
             </div>
           </div>
         )}
-
-        <div>
-          <VisuMap />
-        </div>
       </div>
       <div>
         <h2 className={styles.detailsSubtitle}>
