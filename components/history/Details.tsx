@@ -1,4 +1,5 @@
 import styles from '@/styles/history.module.scss';
+import changedImage from '@/public/images/history/changed.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
 import { formatDate } from '@/components/history/Timeline';
 import {
@@ -24,7 +25,7 @@ export default function Details({
           </h2>
         )}
         {detailsInfo.event?.author?.username && (
-          <span className={styles.detailInfo}>
+          <span className={`${styles.detailInfo} ${styles.user}`}>
             Par {detailsInfo.event.author.username}
           </span>
         )}
@@ -32,7 +33,21 @@ export default function Details({
           {detailsInfo.status && (
             <div className={styles.detailInfo}>
               <div className={styles.detailLabel}>
-                <span>Statut physique :</span>
+                <span className={styles.label}>
+                  Statut physique :
+                  {detailsInfo.event?.details?.updated_fields?.includes(
+                    'status',
+                  ) && (
+                    <div className={styles.changedWrapper}>
+                      <img
+                        src={changedImage.src}
+                        alt="Modifié"
+                        width="12"
+                        height="12"
+                      />
+                    </div>
+                  )}
+                </span>
               </div>
               <span>
                 {BuildingStatusMap[detailsInfo.status as BuildingStatusType] ||
@@ -42,14 +57,44 @@ export default function Details({
           )}
           <div className={styles.detailInfo}>
             <div className={styles.detailLabel}>
-              <span>État :</span>
+              <span className={styles.label}>
+                État :
+                {detailsInfo.event?.details?.updated_fields?.includes(
+                  'is_active',
+                ) && (
+                  <div className={styles.changedWrapper}>
+                    <img
+                      src={changedImage.src}
+                      alt="Modifié"
+                      width="12"
+                      height="12"
+                    />
+                  </div>
+                )}
+              </span>
             </div>
             <span>{detailsInfo.is_active ? 'Activé' : 'Désactivé'}</span>
           </div>
         </div>
         <div className={styles.detailInfo}>
           <div className={styles.detailAddresses}>
-            <span className={styles.detailLabel}>Adresses : </span>
+            <span className={styles.detailLabel}>
+              <span className={styles.label}>
+                Adresses :
+                {detailsInfo.event?.details?.updated_fields?.includes(
+                  'addresses',
+                ) && (
+                  <div className={styles.changedWrapper}>
+                    <img
+                      src={changedImage.src}
+                      alt="Modifié"
+                      width="12"
+                      height="12"
+                    />
+                  </div>
+                )}
+              </span>
+            </span>
             {detailsInfo?.addresses?.length ? (
               <div className={styles.detailAddressItems}>
                 {detailsInfo.addresses.map((addresse, i) => (
@@ -76,7 +121,23 @@ export default function Details({
         </div>
         {detailsInfo.ext_ids?.length && (
           <div className={styles.detailAddresses}>
-            <span className={styles.detailLabel}>Identifiants externes : </span>
+            <span className={styles.detailLabel}>
+              <span className={styles.label}>
+                Identifiants externes :
+                {detailsInfo.event?.details?.updated_fields?.includes(
+                  'ext_ids',
+                ) && (
+                  <div className={styles.changedWrapper}>
+                    <img
+                      src={changedImage.src}
+                      alt="Modifié"
+                      width="12"
+                      height="12"
+                    />
+                  </div>
+                )}
+              </span>
+            </span>
             <div className={styles.detailAddressItems}>
               {detailsInfo.ext_ids.map((extId, i) => (
                 <div key={i}>
@@ -85,6 +146,68 @@ export default function Details({
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {detailsInfo.event?.details?.updated_fields && (
+          <div className={styles.detailInfo}>
+            <div className={styles.detailLabel}>
+              <span>Champs modifiés :</span>
+            </div>
+            <div className={styles.detailAddressItems}>
+              {detailsInfo.event.details.updated_fields.map(
+                (field: string, index: number) => (
+                  <div key={index}>
+                    {field === 'is_active' && (
+                      <span>
+                        État : {detailsInfo.is_active ? 'Activé' : 'Désactivé'}
+                      </span>
+                    )}
+                    {field === 'status' && detailsInfo.status && (
+                      <span>
+                        Statut physique :{' '}
+                        {BuildingStatusMap[
+                          detailsInfo.status as BuildingStatusType
+                        ] || detailsInfo.status}
+                      </span>
+                    )}
+                    {field === 'addresses' && detailsInfo.addresses?.length && (
+                      <div>
+                        <span>Adresses :</span>
+                        {detailsInfo.addresses.map((address, i) => (
+                          <div key={i}>
+                            {address.street_number}
+                            {address.street_rep} {address.street}{' '}
+                            {address.city_zipcode} {address.city_name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {field === 'ext_ids' && detailsInfo.ext_ids?.length && (
+                      <div>
+                        <span>Identifiants externes :</span>
+                        {detailsInfo.ext_ids.map((extId, i) => (
+                          <div key={i}>
+                            {extId.source} - {extId.id} (version{' '}
+                            {extId.source_version})
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {field === 'shape' && (
+                      <span>Forme du bâtiment modifiée</span>
+                    )}
+                    {![
+                      'is_active',
+                      'status',
+                      'addresses',
+                      'ext_ids',
+                      'shape',
+                    ].includes(field) && <span>{field}</span>}
+                  </div>
+                ),
+              )}
             </div>
           </div>
         )}

@@ -33,7 +33,11 @@
   align-items: center;
   gap: 0.1875rem;
 }
-
+.label {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
 .buildingId {
   font-size: 1.5rem;
   font-weight: bold;
@@ -179,7 +183,7 @@
 
 .detailLabel {
   text-align: end;
-  width: 10rem;
+  width: 14rem;
   font-weight: 600;
   margin-right: 0.5rem;
   color: #161616;
@@ -201,6 +205,16 @@
 .responsiveButton {
   display: none;
 }
+.changedWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.3rem;
+  width: 1.3rem;
+  background-color: pink;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
 @media (max-width: 48rem) {
   .container {
     position: fixed;
@@ -212,6 +226,16 @@
   .detailAddresses {
     flex-direction: column;
     margin-bottom: 1rem;
+    background-color: white;
+    padding: 0.8rem;
+    border-radius: 0.1rem;
+  }
+  .detailAddresses {
+    padding: 0rem;
+  }
+  .user {
+    background-color: transparent;
+    padding: 0;
   }
   .detailSection {
     position: fixed;
@@ -236,6 +260,7 @@
   .detailLabel {
     width: 100%;
     text-align: initial;
+    margin-bottom: 0.3rem;
   }
 
   .mainGrid {
@@ -281,5 +306,12 @@
   .detailsWrapper {
     padding-bottom: 1.5rem;
     margin-bottom: 1.5rem;
+  }
+  .label {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .changedWrapper {
+    margin-left: 1rem;
   }
 }
