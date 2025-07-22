@@ -47,8 +47,6 @@ export const useSummerGamesData = (limit: number) => {
         );
         url.searchParams.append('max_rank', limit.toString());
 
-        console.log(url);
-
         const response = await fetch(url, {
           cache: 'no-cache',
           headers: { 'Content-Type': 'application/json' },
