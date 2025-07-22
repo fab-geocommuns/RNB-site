@@ -20,7 +20,6 @@ function addDashToFields(fields: string[]): string {
   return fields.map((field: string) => formatFields(field)).join(' - ');
 }
 
-// Helper function to format date
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
   return (
