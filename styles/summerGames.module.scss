@@ -43,12 +43,18 @@ $accent-color-light: #ffea00;
     }
 
     @media screen and (max-width: 640px) {
+      span:first-child {
+        font-size: 2.4rem;
+      }
       font-size: 2.2em;
       margin-bottom: 1em;
     }
 
     @media screen and (max-width: 500px) {
       font-size: 2em;
+      width: 300px;
+      margin: auto;
+      margin-bottom: 1em;
     }
 
     span {
@@ -77,6 +83,7 @@ $accent-color-light: #ffea00;
     }
     @media screen and (max-width: 640px) {
       margin-bottom: 20px;
+      text-align: initial;
     }
   }
 }
