@@ -116,7 +116,9 @@
 .timelineDescriptionTitle {
   font-size: 0.9rem;
 }
-
+.timelineDescription {
+  margin-bottom: 0.5rem;
+}
 .timelineDescriptionTitle {
   font-weight: 500;
 }
@@ -159,9 +161,15 @@
 
   &:last-child {
     margin-top: 1rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 }
-
+.banLink {
+  margin-left: 14.5rem;
+  color: blue;
+  font-size: 0.8rem;
+}
 .detailsSubtitle {
   margin-bottom: 0;
   font-size: 1.6rem;
@@ -174,10 +182,11 @@
   display: flex;
   flex-direction: column;
 }
-
+.detailBlockInfo {
+  margin-bottom: 1.5rem;
+}
 .detailInfo {
   display: flex;
-  margin-bottom: 0.6rem;
 }
 
 .detailLabel {
@@ -190,13 +199,16 @@
 
 .detailAddresses {
   display: flex;
+  margin-bottom: 0.3rem;
 }
 
 .detailAddressItems {
   display: flex;
   flex-direction: column;
 }
-
+.roleEvent {
+  margin-left: 0.3rem;
+}
 .mergePanel__addressText {
   font-weight: 500;
 }

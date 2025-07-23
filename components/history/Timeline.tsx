@@ -105,14 +105,22 @@ export default function TimelineHistory({
                   <span>Version actuelle</span>
                 </div>
               )}
-              {history.event?.author?.username && (
+              {displayUsername(history) && (
                 <div className={styles.eventAuthor}>
-                  {history.event.author.username}
+                  {displayUsername(history)}
                 </div>
               )}
               <div className={styles.eventDate}>
                 {formatDate(history.updated_at)}
               </div>
+              {history?.event?.origin?.type === 'import' && (
+                <div className={styles.timelineDescription}>
+                  <span>
+                    {capitalized(history.event?.origin?.type)} automatique de la{' '}
+                    {history.event?.origin?.details?.imported_database}
+                  </span>
+                </div>
+              )}
               {history.event.type === 'update' &&
                 history.event?.details?.updated_fields && (
                   <div>
@@ -183,4 +191,13 @@ export default function TimelineHistory({
       </div>
     </section>
   );
+}
+
+function displayUsername(history: ApiHistoryItem): string | null {
+  if (history?.event?.origin?.type === 'import') return 'Équipe RNB';
+  if (history?.event?.author?.username) return history.event.author.username;
+  return null;
+}
+function capitalized(word: string): string {
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }

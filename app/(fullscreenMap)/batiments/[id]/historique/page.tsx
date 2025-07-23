@@ -13,6 +13,9 @@ export interface ApiHistoryItem {
   is_active: boolean;
   shape: any;
   status: string;
+  point: {
+    coordinates: number[];
+  };
   event: {
     id: string;
     type: string;
