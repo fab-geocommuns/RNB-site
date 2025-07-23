@@ -29,7 +29,7 @@ export default function SummerGame({
       <>
         <div className={`section section_big ${styles.seriousShell}`}>
           <div className={styles.shell}>
-            <div className={`section__titleblock ${styles.titleShell}`}>
+            <div className={`section__titleblock ${styles.titleblock}`}>
               <h2 className="section__title">{title}</h2>
 
               <div className={`section__subtitle ${styles.instruction}`}>
@@ -163,7 +163,10 @@ export default function SummerGame({
 
             <div className={styles.buttonsShell}>
               {showRankingLink && (
-                <Link href="/classement" className={`${styles.btn}`}>
+                <Link
+                  href="/classement"
+                  className={`${styles.btn} ${styles.btnRank}`}
+                >
                   Voir le classement
                 </Link>
               )}
