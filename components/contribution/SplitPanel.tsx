@@ -189,29 +189,14 @@ function SplitBuildingChildInfosStep({
   const { fetch } = useRNBFetch();
   const [commentValue, setCommentValue] = useState('');
   const handleSubmit = async () => {
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
-    let data: { [key: string]: any } = {
-      created_buildings: splitChildrenForAPI,
-    };
-    if (commentValue.length) data = { ...data, comment: commentValue };
-    try {
-      const response = await fetch(url, {
-        body: JSON.stringify(data),
-        method: 'POST',
-      });
-
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      } else {
-        // force the map to reload the building, to immediatly show the modifications made
-        dispatch(Actions.map.reloadBuildings());
-        dispatch(Actions.edition.setOperation(null));
-        toasterSuccess(dispatch, 'Bâtiment scindé avec succès');
-      }
-    } catch (err: any) {
-      toasterError(dispatch, err.message || 'Erreur lors de la scission');
-      console.error(err);
-    }
+    await handleSplitSubmit(
+      splitCandidateId,
+      splitChildrenForAPI,
+      commentValue,
+      setCommentValue,
+      dispatch,
+      fetch,
+    );
   };
 
   return (
@@ -339,29 +324,14 @@ function SplitBuildingSummaryStep({
   };
 
   const handleSubmit = async () => {
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
-    let data: { [key: string]: any } = {
-      created_buildings: splitChildrenForAPI,
-    };
-    if (commentValue.length) data = { ...data, comment: commentValue };
-    try {
-      const response = await fetch(url, {
-        body: JSON.stringify(data),
-        method: 'POST',
-      });
-
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      } else {
-        // force the map to reload the building, to immediatly show the modifications made
-        dispatch(Actions.map.reloadBuildings());
-        dispatch(Actions.edition.setOperation(null));
-        toasterSuccess(dispatch, 'Bâtiment scindé avec succès');
-      }
-    } catch (err: any) {
-      toasterError(dispatch, err.message || 'Erreur lors de la scission');
-      console.error(err);
-    }
+    await handleSplitSubmit(
+      splitCandidateId,
+      splitChildrenForAPI,
+      commentValue,
+      setCommentValue,
+      dispatch,
+      fetch,
+    );
   };
 
   return (
@@ -457,5 +427,38 @@ const previousStep = (selectedChildIndex: number, dispatch: AppDispatch) => {
     dispatch(Actions.edition.setCurrentChildSelected(null));
   } else if (i > 0) {
     dispatch(Actions.edition.setCurrentChildSelected(i - 1));
+  }
+};
+
+const handleSplitSubmit = async (
+  splitCandidateId: string,
+  splitChildrenForAPI: any,
+  commentValue: string,
+  setCommentValue: (value: string) => void,
+  dispatch: AppDispatch,
+  fetch: any,
+) => {
+  const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
+  let data: { [key: string]: any } = {
+    created_buildings: splitChildrenForAPI,
+  };
+  if (commentValue.length) data = { ...data, comment: commentValue };
+  try {
+    const response = await fetch(url, {
+      body: JSON.stringify(data),
+      method: 'POST',
+    });
+    if (!response.ok) {
+      await throwErrorMessageForHumans(response);
+    } else {
+      // force the map to reload the building, to immediatly show the modifications made
+      dispatch(Actions.map.reloadBuildings());
+      dispatch(Actions.edition.setOperation(null));
+      toasterSuccess(dispatch, 'Bâtiment scindé avec succès');
+      setCommentValue('');
+    }
+  } catch (err: any) {
+    toasterError(dispatch, err.message || 'Erreur lors de la scission');
+    console.error(err);
   }
 };

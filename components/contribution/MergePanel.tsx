@@ -62,13 +62,13 @@ export default function MergePanel() {
     setIsLoading(true);
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/merge/`;
 
-    const data: { [key: string]: any } = {
+    let data: { [key: string]: any } = {
       comment: commentValue,
       rnb_ids: candidatesToMerge,
       status: 'constructed',
       merge_existing_addresses: true,
     };
-
+    if (commentValue.length) data = { ...data, comment: commentValue };
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),

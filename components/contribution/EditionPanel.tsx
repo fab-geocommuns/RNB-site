@@ -108,7 +108,6 @@ function EditSelectedBuildingPanelContent({
       // send the data in WKT format
       data['shape'] = geojsonToWKT(buildingNewShape);
     }
-
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),

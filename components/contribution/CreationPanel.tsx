@@ -55,13 +55,12 @@ export default function CreationPanel() {
   const createBuilding = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/`;
 
-    const data: { [key: string]: any } = {
-      comment: commentValue,
+    let data: { [key: string]: any } = {
       status: newStatus,
       addresses_cle_interop: localAddresses.map((a) => a.id),
       shape: geojsonToWKT(buildingNewShape!),
     };
-
+    if (commentValue.length) data = { ...data, comment: commentValue };
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),
