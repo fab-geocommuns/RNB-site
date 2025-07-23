@@ -249,9 +249,6 @@ $accent-color-light: #ffea00;
   margin-top: 70px;
   @media screen and (max-width: 640px) {
     margin-top: 30px;
-    &:not(:has(.btnRank)) .btn {
-      width: 100%;
-    }
   }
   .btn {
     padding: 10px 20px;
@@ -267,9 +264,9 @@ $accent-color-light: #ffea00;
     font-size: 1em;
     color: white;
     @media screen and (max-width: 640px) {
-      width: calc(50% - 20px);
-      margin-bottom: 10px;
-      margin-top: 10px;
+      width: 100%;
+      margin-bottom: 5px;
+      margin-top: 5px;
     }
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
@@ -283,7 +280,6 @@ $accent-color-light: #ffea00;
       text-decoration: none;
       @media screen and (max-width: 640px) {
         order: 3;
-        width: 100%;
       }
       &:hover {
         background: rgba(255, 255, 255, 0.85);
@@ -489,7 +485,8 @@ body .mapSummerScoreInside {
   color: white;
   border-radius: 8px;
   padding: 20px;
-  margin: 10px;
+  margin: 20px;
+  margin-top: 40px;
   p {
     font-weight: 700;
   }
