@@ -32,9 +32,9 @@ test.describe('Edition', () => {
       editionPage,
       httpMocker,
       mapController,
-      mapLocator,
     }) => {
-      await editionPage.goToBuilding('DWEZKKAXTAG2');
+      const targetBuilding = '6NFTV4Z6DP92';
+      await editionPage.goToBuilding(targetBuilding);
       await expect(editionPage.panel).toBeVisible();
 
       const map = mapController('mainMap');
@@ -63,7 +63,7 @@ test.describe('Edition', () => {
 
       await httpMocker.mockAPIRequest(
         'POST',
-        '/buildings/DWEZKKAXTAG2/split/?from=site',
+        `/buildings/${targetBuilding}/split/?from=site`,
         {
           created_buildings: [
             {
