@@ -149,68 +149,6 @@ export default function Details({
             </div>
           </div>
         )}
-
-        {detailsInfo.event?.details?.updated_fields && (
-          <div className={styles.detailInfo}>
-            <div className={styles.detailLabel}>
-              <span>Champs modifiés :</span>
-            </div>
-            <div className={styles.detailAddressItems}>
-              {detailsInfo.event.details.updated_fields.map(
-                (field: string, index: number) => (
-                  <div key={index}>
-                    {field === 'is_active' && (
-                      <span>
-                        État : {detailsInfo.is_active ? 'Activé' : 'Désactivé'}
-                      </span>
-                    )}
-                    {field === 'status' && detailsInfo.status && (
-                      <span>
-                        Statut physique :{' '}
-                        {BuildingStatusMap[
-                          detailsInfo.status as BuildingStatusType
-                        ] || detailsInfo.status}
-                      </span>
-                    )}
-                    {field === 'addresses' && detailsInfo.addresses?.length && (
-                      <div>
-                        <span>Adresses :</span>
-                        {detailsInfo.addresses.map((address, i) => (
-                          <div key={i}>
-                            {address.street_number}
-                            {address.street_rep} {address.street}{' '}
-                            {address.city_zipcode} {address.city_name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {field === 'ext_ids' && detailsInfo.ext_ids?.length && (
-                      <div>
-                        <span>Identifiants externes :</span>
-                        {detailsInfo.ext_ids.map((extId, i) => (
-                          <div key={i}>
-                            {extId.source} - {extId.id} (version{' '}
-                            {extId.source_version})
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {field === 'shape' && (
-                      <span>Forme du bâtiment modifiée</span>
-                    )}
-                    {![
-                      'is_active',
-                      'status',
-                      'addresses',
-                      'ext_ids',
-                      'shape',
-                    ].includes(field) && <span>{field}</span>}
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
-        )}
       </div>
       <div>
         <h2 className={styles.detailsSubtitle}>
