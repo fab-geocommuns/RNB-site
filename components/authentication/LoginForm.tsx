@@ -83,6 +83,7 @@ export default function LoginForm() {
         }}
         action="api/auth/callback/credentials"
         method="post"
+        data-testid="login-form"
       >
         <div className="fr-input-group">
           <label className="fr-label" htmlFor="email">

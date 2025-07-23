@@ -14,10 +14,12 @@ import { ContactPage } from '@/tests/fixtures/pages/contact-page';
 import { DefinitionPage } from '@/tests/fixtures/pages/definition-page';
 import { FaqPage } from '@/tests/fixtures/pages/faq-page';
 import { MapPage } from '@/tests/fixtures/pages/map-page';
+import { EditionPage } from '@/tests/fixtures/pages/edition-page';
 import { ToolsAndServicesPage } from '@/tests/fixtures/pages/tools-and-services-page';
 import { UseCasesPage } from '@/tests/fixtures/pages/use-cases-page';
 import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { testWithNewsletter } from '@/tests/fixtures/utils/components/newsletter';
+import { HttpMocker, createHttpMocker } from '@/tests/fixtures/utils/http-mock';
 import {
   test as mapGrabTest,
   expect as mapGrabExpect,
@@ -31,8 +33,10 @@ type PagesFixtures = {
   faqPage: FaqPage;
   homePage: HomePage;
   mapPage: MapPage;
+  editionPage: EditionPage;
   toolsAndServicesPage: ToolsAndServicesPage;
   useCasesPage: UseCasesPage;
+  httpMocker: HttpMocker;
 };
 
 const createPageFixture =
@@ -54,8 +58,13 @@ const testPage = baseTest.extend<PagesFixtures>({
   faqPage: createPageFixture(FaqPage),
   homePage: createPageFixture(HomePage),
   mapPage: createPageFixture(MapPage),
+  editionPage: createPageFixture(EditionPage),
   toolsAndServicesPage: createPageFixture(ToolsAndServicesPage),
   useCasesPage: createPageFixture(UseCasesPage),
+  httpMocker: async ({ page }, use) => {
+    const httpMocker = createHttpMocker(page);
+    await use(httpMocker);
+  },
 });
 
 export const test = mergeTests(testPage, testWithNewsletter, mapGrabTest);
