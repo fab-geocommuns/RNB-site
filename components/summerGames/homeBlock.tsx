@@ -75,7 +75,9 @@ export default function SummerGame({
                   </div>
 
                   <div className={styles.score}>
-                    <div className={styles.scoreAction}>Corriger une forme</div>
+                    <div className={styles.scoreAction}>
+                      Corriger une géométrie
+                    </div>
                     <div className={styles.scoreReward}>
                       1 <span className={styles.scoreRewardPoint}>point</span>
                     </div>
@@ -102,7 +104,7 @@ export default function SummerGame({
                   </div>
 
                   <div className={styles.score}>
-                    <div className={styles.scoreAction}>Modifier le statut</div>
+                    <div className={styles.scoreAction}>Corriger le statut</div>
                     <div className={styles.scoreReward}>
                       1 <span className={styles.scoreRewardPoint}>point</span>
                     </div>
@@ -124,7 +126,9 @@ export default function SummerGame({
                 <div className={styles.bar}>
                   <div
                     className={styles.progress}
-                    style={{ width: summerGamesData.shared.percent + '%' }}
+                    style={{
+                      width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
+                    }}
                   >
                     <span className={styles.progressTotal}>
                       {summerGamesData.shared.absolute}
