@@ -78,7 +78,7 @@ export default function Toaster() {
 
   return (
     <>
-      <div className={styles.noticeContainer}>
+      <div className={styles.noticeContainer} data-testid="toaster">
         <div
           className={`${styles.notice} ${showToaster ? styles.noticeVisible : ''}`}
         >
