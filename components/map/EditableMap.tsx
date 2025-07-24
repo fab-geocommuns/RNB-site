@@ -1,6 +1,6 @@
 import { Map, Layer, Source, useMap } from 'react-map-gl/maplibre';
 // @ts-ignore
-import type { FillLayer, LineLayer } from 'react-map-gl/maplibre';
+import type { FillLayer, LayerProps, LineLayer } from 'react-map-gl/maplibre';
 import satellite from '@/components/map/mapstyles/satellite.json';
 import { useRef, useEffect, useState } from 'react';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -70,6 +70,15 @@ const layer2: LineLayer = {
   },
 };
 
+const dataLayer: LayerProps = {
+  id: 'data-layer',
+  type: 'line',
+  paint: {
+    'line-color': '#1452e3',
+    'line-width': 2,
+  },
+};
+
 export default function EditableMap({
   editedShape,
   onEditedShapeChange,
@@ -102,6 +111,33 @@ export default function EditableMap({
       >
         <Layer {...layer1} />
         <Layer {...layer2} />
+      </Source>
+      <Source
+        type="geojson"
+        id="data-source"
+        data={{
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Polygon',
+                coordinates: [
+                  [
+                    [2.1545258249518895, 46.239201426173],
+                    [2.1926346506357675, 46.241219789732696],
+                    [2.1976128305672944, 46.21830106351615],
+                    [2.150234290528317, 46.225308321839464],
+                    [2.1545258249518895, 46.239201426173],
+                  ],
+                ],
+              },
+            },
+          ],
+        }}
+      >
+        <Layer {...dataLayer} />
       </Source>
       {isEditing && (
         <EditedShape
