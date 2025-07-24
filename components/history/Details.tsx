@@ -106,12 +106,14 @@ export default function Details({
                 )}
               </span>
             </span>
-            <div className={styles.detailMap}>
-              <VisuMapReact
-                point={detailsInfo.point}
-                shape={detailsInfo.shape}
-              />
-            </div>
+            {detailsInfo.point && detailsInfo.shape && (
+              <div className={styles.detailMap}>
+                <VisuMapReact
+                  point={detailsInfo.point}
+                  shape={detailsInfo.shape}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.detailBlockInfo}>
