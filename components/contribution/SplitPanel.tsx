@@ -159,6 +159,28 @@ const cancelSplit = (dispatch: AppDispatch) => {
   dispatch(Actions.edition.setOperation(null));
 };
 
+const ordinal = (n: number): string => {
+  if (n === 1) return '1er';
+  return `${n}ème`;
+};
+
+const handleErrorResponse = async (
+  response: Response,
+  dispatch: AppDispatch,
+) => {
+  const errorData = await response.json();
+  if (typeof errorData === 'object' && errorData.created_buildings) {
+    const firstKey = Object.keys(errorData.created_buildings)[0];
+    const errorsOnFirstField = Object.values(
+      errorData.created_buildings[firstKey],
+    )[0] as string[];
+    const errorMessage = `Erreur sur le ${ordinal(parseInt(firstKey) + 1)} enfant : ${errorsOnFirstField.join(', ')}`;
+    toasterError(dispatch, errorMessage);
+    return;
+  }
+  await throwErrorMessageForHumans(response);
+};
+
 function SplitBuildingChildInfosStep({
   selectedChildIndex,
   splitChildrenCount,
