@@ -2,6 +2,7 @@ import styles from '@/styles/history.module.scss';
 import changedImage from '@/public/images/history/changed.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
 import { formatDate } from '@/components/history/Timeline';
+import VisuMapReact from '@/components/map/VisuMapReact';
 import {
   BuildingStatusMap,
   BuildingStatusType,
@@ -56,13 +57,11 @@ export default function Details({
                   ] || detailsInfo.status}
                 </span>
               </div>
-              <a
-                href={formatLinkGoBackIgn(detailsInfo)}
-                target="_blank"
-                className={styles.banLink}
-              >
-                Consulter le site Remonter le Temps de l&apos;IGN
-              </a>
+              <div className={styles.banLink}>
+                <a href={formatLinkGoBackIgn(detailsInfo)} target="_blank">
+                  Consulter le site Remonter le Temps de l&apos;IGN
+                </a>
+              </div>
             </div>
           )}
           <div className={styles.detailBlockInfo}>
@@ -85,6 +84,33 @@ export default function Details({
                 </span>
               </div>
               <span>{detailsInfo.is_active ? 'Activé' : 'Désactivé'}</span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.detailBlockInfo}>
+          <div className={styles.detailInfo}>
+            <span className={styles.detailLabel}>
+              <span className={styles.label}>
+                Géométrie :
+                {detailsInfo.event?.details?.updated_fields?.includes(
+                  'shape',
+                ) && (
+                  <div className={styles.changedWrapper}>
+                    <img
+                      src={changedImage.src}
+                      alt="Modifié"
+                      width="12"
+                      height="12"
+                    />
+                  </div>
+                )}
+              </span>
+            </span>
+            <div className={styles.detailMap}>
+              <VisuMapReact
+                point={detailsInfo.point}
+                shape={detailsInfo.shape}
+              />
             </div>
           </div>
         </div>
@@ -130,13 +156,11 @@ export default function Details({
                   </span>
                 )}
               </div>
-              <a
-                href={formatLinkBan(detailsInfo)}
-                target="_blank"
-                className={styles.banLink}
-              >
-                Consulter la Base Adresse Nationale à cet endroit
-              </a>
+              <div className={styles.banLink}>
+                <a href={formatLinkBan(detailsInfo)} target="_blank">
+                  Consulter la Base Adresse Nationale à cet endroit
+                </a>
+              </div>
             </div>
           </div>
         </div>

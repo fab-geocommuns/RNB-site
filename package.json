@@ -41,6 +41,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-fuzzy-highlighter": "^1.1.1",
+    "react-map-gl": "^8.0.4",
     "react-redux": "^9.2.0",
     "typescript": "5.5.4",
     "yaml": "^2.5.0"
