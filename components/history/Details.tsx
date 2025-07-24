@@ -120,9 +120,7 @@ export default function Details({
                             {addresse.city_zipcode} {addresse.city_name}
                           </span>
                         </div>
-                        <span>
-                          ({addresse.source} : {addresse.id})
-                        </span>
+                        <span>(Clé BAN : {addresse.id})</span>
                       </div>
                     ))}
                   </div>
