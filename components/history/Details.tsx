@@ -65,6 +65,10 @@ export default function Details({
                 <a href={formatLinkGoBackIgn(detailsInfo)} target="_blank">
                   Consulter le site Remonter le Temps de l&apos;IGN
                 </a>
+                <br />
+                <a href={formatPanoramaxLink(detailsInfo)} target="_blank">
+                  Consulter le site Panoramax
+                </a>
               </div>
             </div>
           )}
@@ -164,7 +168,7 @@ export default function Details({
               </div>
               <div className={styles.banLink}>
                 <a href={formatLinkBan(detailsInfo)} target="_blank">
-                  Consulter la Base Adresse Nationale à cet endroit
+                  Consulter le site de la Base Adresse Nationale
                 </a>
               </div>
             </div>
@@ -249,6 +253,7 @@ export default function Details({
                       (parentId: string, i: number) => (
                         <span key={i}>
                           <Link
+                            target="_blank"
                             href={`/batiments/${parentId}/historique/#${detailsInfo.event?.id}`}
                           >
                             {parentId}
@@ -270,6 +275,7 @@ export default function Details({
                   </div>
                   <span>
                     <Link
+                      target="_blank"
                       href={`/batiments/${detailsInfo.event?.details?.merge_child}/historique/#${detailsInfo.event?.id}`}
                     >
                       {detailsInfo.event?.details?.merge_child}
@@ -291,6 +297,7 @@ export default function Details({
                   </div>
                   <span>
                     <Link
+                      target="_blank"
                       href={`/batiments/${detailsInfo.event?.details?.split_parent}/historique/#${detailsInfo.event?.id}`}
                     >
                       {detailsInfo.event?.details?.split_parent}
@@ -367,4 +374,9 @@ function formatLinkGoBackIgn(infos: ApiHistoryItem) {
   if (infos?.point?.coordinates)
     return `https://remonterletemps.ign.fr/comparer/?lon=${infos.point.coordinates[0]}&lat=${infos.point.coordinates[1]}&z=18.50&layer1=10&layer2=16`;
   return 'https://remonterletemps.ign.fr/comparer';
+}
+function formatPanoramaxLink(infos: ApiHistoryItem) {
+  if (infos?.point?.coordinates)
+    return `https://api.panoramax.xyz/?focus=map&map=18.5/${infos.point.coordinates[1]}/${infos.point.coordinates[0]}`;
+  return 'https://panoramax.fr/';
 }

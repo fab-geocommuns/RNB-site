@@ -7,10 +7,18 @@ export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
   if (historyItem.event?.type === 'reactivation') return 'Réactivation';
   if (historyItem.event?.type === 'merge') {
     if (historyItem.event?.details?.merge_role === 'parent') {
-      return 'Désactivation suite à une fusion';
+      return (
+        'Désactivation suite à la fusion de ' +
+        historyItem.event?.details?.merge_parents.length +
+        ' bâtiments'
+      );
     }
     if (historyItem.event?.details?.merge_role === 'child') {
-      return 'Création suite à une fusion';
+      return (
+        'Création suite à la fusion de ' +
+        historyItem.event?.details?.merge_parents.length +
+        ' bâtiments'
+      );
     }
   }
   if (historyItem.event?.type === 'split') {
