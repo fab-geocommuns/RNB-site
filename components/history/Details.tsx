@@ -8,6 +8,8 @@ import {
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
 
+import { getHumanFriendlyOperation } from '@/logic/history';
+
 export default function Details({
   detailsInfo,
   responsivePanelIsOpen,
@@ -22,12 +24,13 @@ export default function Details({
       <div className={styles.detailsWrapper}>
         {detailsInfo.updated_at && (
           <h2 className={styles.detailsSubtitle}>
-            Version publiée le {formatDate(detailsInfo.updated_at)}
+            {getHumanFriendlyOperation(detailsInfo)}
           </h2>
         )}
         {detailsInfo.event?.author?.username && (
           <span className={`${styles.detailInfo} ${styles.user}`}>
-            Par {detailsInfo.event.author.username}
+            Le {formatDate(detailsInfo.updated_at)} - par{' '}
+            {detailsInfo.event.author.username}
           </span>
         )}
         <div className={styles.detailBlock}>
