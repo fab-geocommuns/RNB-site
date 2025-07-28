@@ -143,7 +143,7 @@ export default function Details({
                 {detailsInfo?.addresses?.length ? (
                   <div className={styles.detailAddressItems}>
                     {detailsInfo.addresses.map((addresse, i) => (
-                      <div key={i}>
+                      <div className="fr-mb-4v" key={i}>
                         <div>
                           <span className={styles.mergePanel__addressText}>
                             {addresse.street_number}
