@@ -256,6 +256,7 @@ function roleEvent(infos: ApiHistoryItem): string | null {
 
 function formatType(type: string): string {
   if (type === 'reactivation') return 'réactivation';
+  if (type === 'deactivation') return 'désactivation';
   if (type === 'update') return 'mise à jour';
   if (type === 'creation') return 'création';
   if (type === 'merge') return 'fusion';
