@@ -9,6 +9,7 @@ import {
 } from '@/stores/contribution/contribution-types';
 
 import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
+import Link from 'next/link';
 
 export default function Details({
   detailsInfo,
@@ -143,7 +144,7 @@ export default function Details({
                 {detailsInfo?.addresses?.length ? (
                   <div className={styles.detailAddressItems}>
                     {detailsInfo.addresses.map((addresse, i) => (
-                      <div className="fr-mb-4v" key={i}>
+                      <div className="fr-mb-3v" key={i}>
                         <div>
                           <span className={styles.mergePanel__addressText}>
                             {addresse.street_number}
@@ -151,13 +152,13 @@ export default function Details({
                             {addresse.city_zipcode} {addresse.city_name}
                           </span>
                         </div>
-                        <span>(Clé BAN : {addresse.id})</span>
+                        <small>(Clé BAN : {addresse.id})</small>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <span>
-                    <i>Aucune adresse disponible</i>
+                    <i>Aucune adresse liée à ce bâtiment</i>
                   </span>
                 )}
               </div>
@@ -190,7 +191,7 @@ export default function Details({
             </span>
             <div className={styles.detailAddressItems}>
               {detailsInfo.ext_ids.map((extId, i) => (
-                <div key={i}>
+                <div className="fr-mb-3v" key={i}>
                   <span>
                     {extId.source} - {extId.id} (version {extId.source_version})
                   </span>
@@ -234,6 +235,52 @@ export default function Details({
                 )}
               </div>
             </div>
+          )}
+          {detailsInfo.event?.type === 'split' && (
+            <>
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Parent de la scission :</span>
+                  </div>
+                  <span>
+                    <Link
+                      href={`/batiments/${detailsInfo.event?.details?.split_parent}/historique/#${detailsInfo.event?.id}`}
+                    >
+                      {detailsInfo.event?.details?.split_parent}
+                    </Link>
+                    {detailsInfo.event?.details?.split_parent ==
+                      detailsInfo.rnb_id && <span> (ce bâtiment)</span>}
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Enfants de la scission :</span>
+                  </div>
+                  <span>
+                    {detailsInfo.event?.details?.split_children.map(
+                      (childId: string, i: number) => (
+                        <span key={i}>
+                          <Link
+                            target="_blank"
+                            href={`/batiments/${childId}/historique/#${detailsInfo.event?.id}`}
+                          >
+                            {childId}
+                          </Link>
+                          {childId === detailsInfo.rnb_id && ' (ce bâtiment)'}
+                          {i <
+                            detailsInfo.event?.details?.split_children.length -
+                              1 && ', '}
+                        </span>
+                      ),
+                    )}
+                  </span>
+                </div>
+              </div>
+            </>
           )}
           {detailsInfo.event?.id && (
             <div className={styles.detailBlockInfo}>
