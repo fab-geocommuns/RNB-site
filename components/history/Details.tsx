@@ -236,6 +236,52 @@ export default function Details({
               </div>
             </div>
           )}
+
+          {detailsInfo.event?.type === 'merge' && (
+            <>
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Parents de la fusion :</span>
+                  </div>
+                  <span>
+                    {detailsInfo.event?.details?.merge_parents.map(
+                      (parentId: string, i: number) => (
+                        <span key={i}>
+                          <Link
+                            href={`/batiments/${parentId}/historique/#${detailsInfo.event?.id}`}
+                          >
+                            {parentId}
+                          </Link>
+                          {parentId === detailsInfo.rnb_id && ' (ce bâtiment)'}
+                          {i <
+                            detailsInfo.event?.details?.merge_parents.length -
+                              1 && ', '}
+                        </span>
+                      ),
+                    )}
+                  </span>
+                </div>
+              </div>
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Enfant de la fusion :</span>
+                  </div>
+                  <span>
+                    <Link
+                      href={`/batiments/${detailsInfo.event?.details?.merge_child}/historique/#${detailsInfo.event?.id}`}
+                    >
+                      {detailsInfo.event?.details?.merge_child}
+                    </Link>
+                    {detailsInfo.event?.details?.merge_child ==
+                      detailsInfo.rnb_id && <span> (ce bâtiment)</span>}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
+
           {detailsInfo.event?.type === 'split' && (
             <>
               <div className={styles.detailBlockInfo}>
