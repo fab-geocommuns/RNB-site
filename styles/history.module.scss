@@ -160,10 +160,13 @@
   }
 
   &:last-child {
-    margin-top: 1rem;
+    margin-top: 4rem;
     margin-bottom: 0;
     padding-bottom: 0;
   }
+}
+.detailMap {
+  width: 25rem;
 }
 .banLink {
   margin-left: 14.5rem;
@@ -227,6 +230,9 @@
   margin-right: 0.5rem;
 }
 @media (max-width: 48rem) {
+  .detailMap {
+    width: 100%;
+  }
   .container {
     position: fixed;
     top: 10rem;
@@ -236,13 +242,16 @@
   .detailInfo,
   .detailAddresses {
     flex-direction: column;
-    margin-bottom: 1rem;
-    background-color: white;
+  }
+  .detailBlockInfo,
+  .detailAddresses {
     padding: 0.8rem;
     border-radius: 0.1rem;
+    background-color: white;
+    margin-bottom: 1rem;
   }
-  .detailAddresses {
-    padding: 0rem;
+  .banLink {
+    margin-left: 0;
   }
   .user {
     background-color: transparent;
@@ -267,6 +276,9 @@
   }
   .detailsWrapper:first-child {
     border-bottom-color: grey;
+  }
+  .detailsWrapper:last-child {
+    margin-top: 2rem;
   }
   .detailLabel {
     width: 100%;
@@ -299,7 +311,7 @@
     border-right: none;
   }
   .detailBlock {
-    margin-top: 1rem;
+    margin-top: 2rem;
   }
   .responsiveButtonInitial {
     left: calc(90% - 1.875rem);
