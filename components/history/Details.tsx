@@ -8,7 +8,7 @@ import {
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
 
-import { getHumanFriendlyOperation } from '@/logic/history';
+import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
 
 export default function Details({
   detailsInfo,
@@ -24,15 +24,15 @@ export default function Details({
       <div className={styles.detailsWrapper}>
         {detailsInfo.updated_at && (
           <h2 className={styles.detailsSubtitle}>
-            {getHumanFriendlyOperation(detailsInfo)}
+            {getHistoryLongTitle(detailsInfo)}
           </h2>
         )}
-        {detailsInfo.event?.author?.username && (
-          <span className={`${styles.detailInfo} ${styles.user}`}>
-            Le {formatDate(detailsInfo.updated_at)} - par{' '}
-            {detailsInfo.event.author.username}
-          </span>
-        )}
+
+        <span className={`${styles.detailInfo} ${styles.user}`}>
+          Le {formatDate(detailsInfo.updated_at)} - par{' '}
+          {displayAuthor(detailsInfo)}
+        </span>
+
         <div className={styles.detailBlock}>
           {detailsInfo.status && (
             <div className={styles.detailBlockInfo}>
