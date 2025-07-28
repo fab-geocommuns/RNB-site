@@ -2,13 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Map, Layer, Source } from 'react-map-gl/maplibre';
 import satellite from '@/components/map/mapstyles/satellite.json';
 import type { LayerProps } from 'react-map-gl/maplibre';
-import type { FeatureCollection, Feature, Point, MultiPolygon } from 'geojson';
+import type {
+  FeatureCollection,
+  Feature,
+  Point,
+  MultiPolygon,
+  Polygon,
+  Geometry,
+} from 'geojson';
 import type { StyleSpecification } from 'maplibre-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface VisuMapReactProps {
   point?: { coordinates: number[] };
-  shape?: { coordinates: number[][][][] };
+  shape?: Geometry;
 }
 
 const VisuMapReact = ({ point, shape }: VisuMapReactProps) => {
@@ -40,11 +47,8 @@ const VisuMapReact = ({ point, shape }: VisuMapReactProps) => {
       features.push({
         type: 'Feature',
         properties: { type: 'polygon' },
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: shape.coordinates,
-        },
-      } as Feature<MultiPolygon>);
+        geometry: shape,
+      });
     }
     return {
       type: 'FeatureCollection',
@@ -55,11 +59,10 @@ const VisuMapReact = ({ point, shape }: VisuMapReactProps) => {
   const polygonLayer: LayerProps = {
     id: 'building-polygon',
     type: 'fill',
-    source: 'bdgtiles_shapes',
-    'source-layer': 'default',
+    filter: ['==', ['get', 'type'], 'polygon'],
     paint: {
       'fill-color': '#1452e3',
-      'fill-opacity': 1,
+      'fill-opacity': 0,
     },
   };
 
