@@ -8,7 +8,7 @@ import activateBuildingImage from '@/public/images/history/checked.svg';
 import updateBuildingImage from '@/public/images/history/update.svg';
 import historyImage from '@/public/images/history/history.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
-
+import { getHistoryShortTitle, displayAuthor } from '@/logic/history';
 function formatFields(field: string): string {
   if (field === 'status') return 'statut';
   if (field === 'shape') return 'forme';
@@ -105,13 +105,15 @@ export default function TimelineHistory({
                   <span>Version actuelle</span>
                 </div>
               )}
-              {displayUsername(history) && (
-                <div className={styles.eventAuthor}>
-                  {displayUsername(history)}
-                </div>
-              )}
+
+              <div className={styles.eventAuthor}>
+                {getHistoryShortTitle(history)}
+              </div>
+
               <div className={styles.eventDate}>
-                {formatDate(history.updated_at)}
+                Le {formatDate(history.updated_at)}
+                <br />
+                par {displayAuthor(history)}
               </div>
               {history?.event?.origin?.type === 'import' && (
                 <div className={styles.timelineDescription}>
@@ -132,59 +134,6 @@ export default function TimelineHistory({
                     </span>
                   </div>
                 )}
-              {history.event.type === 'creation' && (
-                <div>
-                  <span className={`${styles.timelineDescriptionTitle}`}>
-                    Création du bâtiment
-                  </span>
-                </div>
-              )}
-              {history.event.type === 'merge' && (
-                <div className={`${styles.timelineDescription}`}>
-                  <div>
-                    <span className={`${styles.timelineDescriptionTitle}`}>
-                      Fusion des bâtiments :{' '}
-                    </span>
-                    <span>
-                      {addDashToFields(history.event?.details?.merge_parents)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className={`${styles.timelineDescriptionTitle}`}>
-                      Bâtiment fusionné :{' '}
-                    </span>
-                    <span>{history.event?.details.merge_child}</span>
-                  </div>
-                </div>
-              )}
-              {history.event.type === 'split' && (
-                <div className={`${styles.timelineDescription}`}>
-                  <div>
-                    <span className={`${styles.timelineDescriptionTitle}`}>
-                      Scission du bâtiment :{' '}
-                    </span>
-                    <span>{history.event?.details.split_parent}</span>
-                  </div>
-                  <div>
-                    <span className={`${styles.timelineDescriptionTitle}`}>
-                      Bêtiment divisés :{' '}
-                    </span>
-                    <span>
-                      {addDashToFields(history.event?.details?.split_children)}
-                    </span>
-                  </div>
-                </div>
-              )}
-              {history.event.type === 'deactivation' && (
-                <div className={`${styles.timelineDescriptionTitle}`}>
-                  <span>Désactivation du bâtiment</span>
-                </div>
-              )}
-              {history.event.type === 'reactivation' && (
-                <div className={`${styles.timelineDescriptionTitle}`}>
-                  <span>Réactivation du bâtiment</span>
-                </div>
-              )}
             </button>
           </div>
         ))}
@@ -193,11 +142,6 @@ export default function TimelineHistory({
   );
 }
 
-function displayUsername(history: ApiHistoryItem): string | null {
-  if (history?.event?.origin?.type === 'import') return 'Équipe RNB';
-  if (history?.event?.author?.username) return history.event.author.username;
-  return null;
-}
 function capitalized(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }

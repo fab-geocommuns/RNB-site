@@ -8,6 +8,9 @@ import {
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
 
+import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
+import Link from 'next/link';
+
 export default function Details({
   detailsInfo,
   responsivePanelIsOpen,
@@ -22,14 +25,15 @@ export default function Details({
       <div className={styles.detailsWrapper}>
         {detailsInfo.updated_at && (
           <h2 className={styles.detailsSubtitle}>
-            Version publiée le {formatDate(detailsInfo.updated_at)}
+            {getHistoryLongTitle(detailsInfo)}
           </h2>
         )}
-        {detailsInfo.event?.author?.username && (
-          <span className={`${styles.detailInfo} ${styles.user}`}>
-            Par {detailsInfo.event.author.username}
-          </span>
-        )}
+
+        <span className={`${styles.detailInfo} ${styles.user}`}>
+          Le {formatDate(detailsInfo.updated_at)} - par{' '}
+          {displayAuthor(detailsInfo)}
+        </span>
+
         <div className={styles.detailBlock}>
           {detailsInfo.status && (
             <div className={styles.detailBlockInfo}>
@@ -60,6 +64,10 @@ export default function Details({
               <div className={styles.banLink}>
                 <a href={formatLinkGoBackIgn(detailsInfo)} target="_blank">
                   Consulter le site Remonter le Temps de l&apos;IGN
+                </a>
+                <br />
+                <a href={formatPanoramaxLink(detailsInfo)} target="_blank">
+                  Consulter le site Panoramax
                 </a>
               </div>
             </div>
@@ -140,7 +148,7 @@ export default function Details({
                 {detailsInfo?.addresses?.length ? (
                   <div className={styles.detailAddressItems}>
                     {detailsInfo.addresses.map((addresse, i) => (
-                      <div key={i}>
+                      <div className="fr-mb-3v" key={i}>
                         <div>
                           <span className={styles.mergePanel__addressText}>
                             {addresse.street_number}
@@ -148,19 +156,19 @@ export default function Details({
                             {addresse.city_zipcode} {addresse.city_name}
                           </span>
                         </div>
-                        <span>(Clé BAN : {addresse.id})</span>
+                        <small>(Clé BAN : {addresse.id})</small>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <span>
-                    <i>Aucune adresse disponible</i>
+                    <i>Aucune adresse liée à ce bâtiment</i>
                   </span>
                 )}
               </div>
               <div className={styles.banLink}>
                 <a href={formatLinkBan(detailsInfo)} target="_blank">
-                  Consulter la Base Adresse Nationale à cet endroit
+                  Consulter le site de la Base Adresse Nationale
                 </a>
               </div>
             </div>
@@ -187,7 +195,7 @@ export default function Details({
             </span>
             <div className={styles.detailAddressItems}>
               {detailsInfo.ext_ids.map((extId, i) => (
-                <div key={i}>
+                <div className="fr-mb-3v" key={i}>
                   <span>
                     {extId.source} - {extId.id} (version {extId.source_version})
                   </span>
@@ -232,6 +240,101 @@ export default function Details({
               </div>
             </div>
           )}
+
+          {detailsInfo.event?.type === 'merge' && (
+            <>
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Parents de la fusion :</span>
+                  </div>
+                  <span>
+                    {detailsInfo.event?.details?.merge_parents.map(
+                      (parentId: string, i: number) => (
+                        <span key={i}>
+                          <Link
+                            target="_blank"
+                            href={`/batiments/${parentId}/historique/#${detailsInfo.event?.id}`}
+                          >
+                            {parentId}
+                          </Link>
+                          {parentId === detailsInfo.rnb_id && ' (ce bâtiment)'}
+                          {i <
+                            detailsInfo.event?.details?.merge_parents.length -
+                              1 && ', '}
+                        </span>
+                      ),
+                    )}
+                  </span>
+                </div>
+              </div>
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Enfant de la fusion :</span>
+                  </div>
+                  <span>
+                    <Link
+                      target="_blank"
+                      href={`/batiments/${detailsInfo.event?.details?.merge_child}/historique/#${detailsInfo.event?.id}`}
+                    >
+                      {detailsInfo.event?.details?.merge_child}
+                    </Link>
+                    {detailsInfo.event?.details?.merge_child ==
+                      detailsInfo.rnb_id && <span> (ce bâtiment)</span>}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
+
+          {detailsInfo.event?.type === 'split' && (
+            <>
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Parent de la scission :</span>
+                  </div>
+                  <span>
+                    <Link
+                      target="_blank"
+                      href={`/batiments/${detailsInfo.event?.details?.split_parent}/historique/#${detailsInfo.event?.id}`}
+                    >
+                      {detailsInfo.event?.details?.split_parent}
+                    </Link>
+                    {detailsInfo.event?.details?.split_parent ==
+                      detailsInfo.rnb_id && <span> (ce bâtiment)</span>}
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.detailBlockInfo}>
+                <div className={styles.detailInfo}>
+                  <div className={styles.detailLabel}>
+                    <span>Enfants de la scission :</span>
+                  </div>
+                  <span>
+                    {detailsInfo.event?.details?.split_children.map(
+                      (childId: string, i: number) => (
+                        <span key={i}>
+                          <Link
+                            target="_blank"
+                            href={`/batiments/${childId}/historique/#${detailsInfo.event?.id}`}
+                          >
+                            {childId}
+                          </Link>
+                          {childId === detailsInfo.rnb_id && ' (ce bâtiment)'}
+                          {i <
+                            detailsInfo.event?.details?.split_children.length -
+                              1 && ', '}
+                        </span>
+                      ),
+                    )}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
           {detailsInfo.event?.id && (
             <div className={styles.detailBlockInfo}>
               <div className={styles.detailInfo}>
@@ -271,4 +374,9 @@ function formatLinkGoBackIgn(infos: ApiHistoryItem) {
   if (infos?.point?.coordinates)
     return `https://remonterletemps.ign.fr/comparer/?lon=${infos.point.coordinates[0]}&lat=${infos.point.coordinates[1]}&z=18.50&layer1=10&layer2=16`;
   return 'https://remonterletemps.ign.fr/comparer';
+}
+function formatPanoramaxLink(infos: ApiHistoryItem) {
+  if (infos?.point?.coordinates)
+    return `https://api.panoramax.xyz/?focus=map&map=18.5/${infos.point.coordinates[1]}/${infos.point.coordinates[0]}`;
+  return 'https://panoramax.fr/';
 }
