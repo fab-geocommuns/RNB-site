@@ -166,7 +166,7 @@ export default function Details({
             </div>
           </div>
         </div>
-        {detailsInfo.ext_ids?.length && (
+        {detailsInfo.ext_ids?.length > 0 && (
           <div className={styles.detailAddresses}>
             <span className={styles.detailLabel}>
               <span className={styles.label}>
