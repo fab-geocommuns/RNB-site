@@ -1,3 +1,5 @@
+@import 'vars.scss';
+
 $title-color: white;
 
 $title-color-hover: #25589f;
@@ -10,19 +12,22 @@ $accent-color-light: #ffea00;
 
 .seriousShell {
   padding: 25px 30px;
-  padding: 25px 30px;
+  padding-right: 0;
+  padding-left: 0;
 }
 
 .shell {
   padding: 100px 1rem 70px;
-
   background-image: url('/images/summerGames/summergame2025.png');
   background-size: cover;
-
   border-radius: 20px;
+  @media screen and (max-width: 640px) {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
 }
 
-.titleShell {
+.titleblock {
   h2 {
     font-size: 4em;
     line-height: 1em;
@@ -31,10 +36,36 @@ $accent-color-light: #ffea00;
     color: white;
     font-family: SummerGameTitle, sans-serif;
     font-weight: 500;
+
+    @media screen and (max-width: 1060px) {
+      font-size: 3em;
+      line-height: 1em;
+    }
+
+    @media screen and (max-width: 640px) {
+      span:first-child {
+        font-size: 2.4rem;
+      }
+      font-size: 2.2em;
+      margin-bottom: 1em;
+    }
+
+    @media screen and (max-width: 500px) {
+      font-size: 2em;
+      width: 300px;
+      margin: auto;
+      margin-bottom: 1em;
+    }
+
     span {
       display: block;
       margin-bottom: 0.4em;
       font-size: 0.9em;
+
+      @media screen and (max-width: 640px) {
+        font-size: 0.6em;
+        margin-bottom: 0.5em;
+      }
     }
   }
 
@@ -50,6 +81,10 @@ $accent-color-light: #ffea00;
       font-size: 1em;
       line-height: 1.3em;
     }
+    @media screen and (max-width: 640px) {
+      margin-bottom: 20px;
+      text-align: initial;
+    }
   }
 }
 
@@ -64,6 +99,9 @@ $accent-color-light: #ffea00;
   margin: 0 auto 40px auto;
   margin-bottom: 3.5rem;
   text-align: right;
+  @media screen and (max-width: 640px) {
+    margin-bottom: 30px;
+  }
 }
 
 .bar {
@@ -137,15 +175,16 @@ $accent-color-light: #ffea00;
   @media screen and (max-width: 750px) {
     flex-direction: column;
   }
-  @media screen and (max-width: 750px) {
-    flex-direction: column;
-  }
 }
 
 .ranksTable {
   margin-right: 10px;
   &:last-child {
     margin-right: 0;
+  }
+  @media screen and (max-width: 750px) {
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 }
 
@@ -154,10 +193,6 @@ $accent-color-light: #ffea00;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 
-  @media screen and (max-width: 640px) {
-    flex-direction: column;
-    padding: 1rem;
-  }
   @media screen and (max-width: 640px) {
     flex-direction: column;
     padding: 1rem;
@@ -173,23 +208,10 @@ $accent-color-light: #ffea00;
     align-items: center;
     padding: 3px;
   }
-  .rankRow {
-    display: flex;
-    align-items: center;
-    padding: 3px;
-  }
 
   .rankMedalShell {
-    width: 27px;
-    max-width: 27px;
-    flex-grow: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .rankMedalShell {
-    width: 27px;
-    max-width: 27px;
+    width: 40px;
+    max-width: 40px;
     flex-grow: 0;
     display: flex;
     align-items: center;
@@ -205,16 +227,7 @@ $accent-color-light: #ffea00;
   .rankNameShell {
     flex-grow: 1;
   }
-  .rankNameShell {
-    flex-grow: 1;
-  }
 
-  .rankCountShell {
-    width: 40px;
-    max-width: 40px;
-    flex-grow: 0;
-    text-align: right;
-  }
   .rankCountShell {
     width: 40px;
     max-width: 40px;
@@ -239,22 +252,29 @@ $accent-color-light: #ffea00;
 .buttonsShell {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   margin-top: 70px;
-
+  @media screen and (max-width: 640px) {
+    margin-top: 30px;
+  }
   .btn {
     padding: 10px 20px;
     text-align: center;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.45);
     background-image: none;
-
     margin-left: 10px;
     margin-right: 10px;
     font-weight: bold;
-    font-size: 1.1em;
-
+    font-size: 1em;
     color: white;
-
+    @media screen and (max-width: 640px) {
+      width: 100%;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
@@ -265,7 +285,9 @@ $accent-color-light: #ffea00;
 
       color: darken($accent-color, 90%);
       text-decoration: none;
-
+      @media screen and (max-width: 640px) {
+        order: 3;
+      }
       &:hover {
         background: rgba(255, 255, 255, 0.85);
       }
@@ -295,6 +317,7 @@ $accent-color-light: #ffea00;
   font-size: 0.9em;
   align-items: center;
   margin: 0 10px;
+  margin-bottom: 10px;
   color: white;
 }
 .scoreReward {
@@ -331,6 +354,9 @@ $accent-color-light: #ffea00;
 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   min-width: 200px;
+  @media (max-width: 770px) {
+    display: none;
+  }
 }
 
 body .mapSummerScoreInside {
@@ -466,7 +492,8 @@ body .mapSummerScoreInside {
   color: white;
   border-radius: 8px;
   padding: 20px;
-
+  margin: 20px;
+  margin-top: 40px;
   p {
     font-weight: 700;
   }
