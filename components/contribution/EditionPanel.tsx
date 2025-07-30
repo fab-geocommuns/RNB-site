@@ -74,13 +74,11 @@ function EditSelectedBuildingPanelContent({
       status: newStatus,
       addresses: localAddresses.map((a) => a.id).sort(),
       shape: buildingNewShape,
-      comment: commentValue,
     },
     {
       status: selectedBuilding.status,
       addresses: selectedBuilding.addresses.map((a) => a.id).sort(),
       shape: null,
-      comment: '',
     },
   );
 
