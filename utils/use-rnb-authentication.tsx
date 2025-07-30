@@ -27,6 +27,8 @@ export const useRNBAuthentication = (options?: {
   require: boolean;
 }): UseRNBAuthentication => {
   const { status, data } = useSession();
+  console.log(data);
+  console.log(status);
   const router = useRouter();
   const groups =
     data && (data as any).groups ? ((data as any).groups as RNBGroup[]) : [];

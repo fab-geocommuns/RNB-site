@@ -2,6 +2,7 @@
 
 // Hooks
 import React, { useState, useRef, useEffect } from 'react';
+import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,11 +25,11 @@ import { Actions, RootState } from '@/stores/store';
 
 export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
-
   const selectedBuilding = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
-
+  const { is, user } = useRNBAuthentication();
+  console.log(user);
   const msgInput = useRef<HTMLInputElement>(null);
 
   const emptyMsgInput = () => {
@@ -143,20 +144,23 @@ export default function ContributionForm() {
         placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB. "
       ></textarea>
 
-      <div className="fr-mb-1v">
-        <label className="fr-text--sm ">
-          Suivez le traitement de votre signalement
-        </label>
-      </div>
-      <input
-        onChange={changeEmail}
-        value={email}
-        name="email"
-        type="email"
-        className="fr-input fr-text--sm fr-mb-2v"
-        placeholder="Votre adresse email (optionnelle)"
-      />
-
+      {!is(RNBGroup.CONTRIBUTORS) && (
+        <div>
+          <div className="fr-mb-1v">
+            <label className="fr-text--sm ">
+              Suivez le traitement de votre signalement
+            </label>
+          </div>
+          <input
+            onChange={changeEmail}
+            value={email}
+            name="email"
+            type="email"
+            className="fr-input fr-text--sm fr-mb-2v"
+            placeholder="Votre adresse email (optionnelle)"
+          />
+        </div>
+      )}
       <Button disabled={sending} size="small" type="submit">
         {sending && <span>Envoi en cours ...</span>}
         {!sending && <span>Envoyer mon signalement</span>}

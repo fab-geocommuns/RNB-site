@@ -20,7 +20,6 @@ import va from '@vercel/analytics';
 import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
-import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +31,6 @@ interface BuildingPanelProps {
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
-  const { is } = useRNBAuthentication();
 
   // Store
   const dispatch: AppDispatch = useDispatch();
@@ -140,14 +138,12 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </div>
       </div>
 
-      {!is(RNBGroup.CONTRIBUTORS) && (
-        <div className={panelStyles.section}>
-          <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
-            Améliorez le RNB
-          </h2>
-          <ContributionForm />
-        </div>
-      )}
+      <div className={panelStyles.section}>
+        <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
+          Améliorez le RNB
+        </h2>
+        <ContributionForm />
+      </div>
       <div className={panelStyles.section}>
         <DeployableBlock
           title="Correspondances BD Topo & BDNB"
