@@ -27,6 +27,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# test env files
+.env.test
+
 # vercel
 .vercel
 
@@ -34,7 +37,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 env.local
-env.test
 
 /test-results/
 /playwright-report/
