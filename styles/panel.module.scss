@@ -203,3 +203,11 @@
 body .coverRatioCell {
   text-align: right;
 }
+.callout {
+  padding: 0.6rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  span {
+    font-size: 0.875rem;
+  }
+}
