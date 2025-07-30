@@ -16,7 +16,7 @@ function CalloutWithLink({
       style={{ backgroundColor: 'var(--background-alt-yellow-tournesol)' }}
     >
       {description}{' '}
-      <Link href="#" onClick={onClick}>
+      <Link href="#" onClick={onClick} data-testid="toggle-activation-button">
         {linkLabel}
       </Link>
     </div>

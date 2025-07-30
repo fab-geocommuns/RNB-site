@@ -44,6 +44,8 @@ jobs:
         run: npx playwright test
         env:
           BASE_URL: https://${{ steps.vercel_preview_url.outputs.preview_url }}
+          TEST_ACCOUNT_EMAIL: ${{ secrets.TEST_ACCOUNT_EMAIL }}
+          TEST_ACCOUNT_PASSWORD: ${{ secrets.TEST_ACCOUNT_PASSWORD }}
 
       - name: Ajout du commentaire dans la PR
         uses: daun/playwright-report-summary@v3

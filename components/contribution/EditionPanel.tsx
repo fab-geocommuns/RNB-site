@@ -211,9 +211,15 @@ function EditSelectedBuildingPanelContent({
   );
 }
 
-function PanelWrapper({ children }: { children: React.ReactNode }) {
+function PanelWrapper({
+  children,
+  testId,
+}: {
+  children: React.ReactNode;
+  testId?: string;
+}) {
   return (
-    <div className={styles.shell}>
+    <div className={styles.shell} data-testid={testId}>
       <div className={styles.content}>{children}</div>
     </div>
   );
@@ -321,7 +327,7 @@ export default function EditionPanel() {
       </div>
 
       {operation && (
-        <PanelWrapper>
+        <PanelWrapper testId="edition-panel">
           {operation == 'update' && selectedBuilding && (
             <EditSelectedBuildingPanelContent
               selectedBuilding={selectedBuilding}
