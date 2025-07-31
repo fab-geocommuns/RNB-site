@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   SRC_BDGS_POINTS,
   SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
-import { RootState } from '@/stores/store';
+import { RootState, AppDispatch, Actions } from '@/stores/store';
 import maplibregl from 'maplibre-gl';
+import { MapMouseEvent } from 'maplibre-gl';
+import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 
 /**
  * Gestion de la synchronisation entre la selection d'un item et le store Redux
@@ -14,8 +16,12 @@ import maplibregl from 'maplibre-gl';
 export const useMapStateSyncSelectedBuildingsForMerge = (
   map?: maplibregl.Map,
 ) => {
+  const dispatch: AppDispatch = useDispatch();
   const candidatesToMerge = useSelector(
     (state: RootState) => state.edition.merge.candidates,
+  );
+  const newBuilding = useSelector(
+    (state: RootState) => state.edition.merge.newBuilding,
   );
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
@@ -54,6 +60,18 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
   useEffect(() => {
     const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
     if (map) {
+      const handleClickEvent = (e: MapMouseEvent) => {
+        const featureOnCursor = getNearestFeatureFromCursorWithBuffer(
+          map,
+          e.point.x,
+          e.point.y,
+          0,
+        );
+        if (featureOnCursor === undefined) {
+          dispatch(Actions.edition.setOperation(null));
+        }
+      };
+      map.on('click', handleClickEvent);
       const prevOperation = prevOperationRef.current;
       if (operation !== prevOperation) {
         removeFeatureStateInLayers(sources, map);
