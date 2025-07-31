@@ -1,10 +1,12 @@
 import styles from '@/styles/merge.module.scss';
 import { BuildingStatusMap } from '@/stores/contribution/contribution-types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
+import { SplitChild } from '@/stores/edition/edition-slice';
 import { ReactNode } from 'react';
+import { isNewAddress, BuildingAddressType } from './types';
 
 interface BuildingInfoProps {
-  building: SelectedBuilding;
+  building: SelectedBuilding | SplitChild;
   children?: ReactNode;
 }
 
@@ -14,13 +16,17 @@ export default function BuildingInfo({
 }: BuildingInfoProps) {
   return (
     <>
-      <div key={building?.rnb_id} className={styles.mergePanel__infoWrapper}>
-        <div className={styles.mergePanel__rnbIdWrapper}>
-          <div className={styles.mergePanel__rnbId}>
-            <span className="fr-text--lg fr-m-0">{building.rnb_id}</span>
-            {children}
+      <div className={styles.mergePanel__infoWrapper}>
+        {(building as SelectedBuilding)?.rnb_id && (
+          <div className={styles.mergePanel__rnbIdWrapper}>
+            <div className={styles.mergePanel__rnbId}>
+              <span className="fr-text--lg fr-m-0">
+                {(building as SelectedBuilding).rnb_id}
+              </span>
+              {children}
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles.mergePanel__addressesWrapper}>
           <span className={styles.mergePanel__label}>Statut du bâtiment</span>
           <div className="fr-badge fr-badge--success fr-badge--no-icon">
@@ -37,9 +43,9 @@ export default function BuildingInfo({
                 <div key={i}>
                   <div className={styles.mergePanel__addressWrapper}>
                     <span className={styles.mergePanel__addressText}>
-                      {addresse.street_number}
-                      {addresse.street_rep} {addresse.street}{' '}
-                      {addresse.city_zipcode} {addresse.city_name}
+                      {isNewAddress(addresse)
+                        ? addresse.label
+                        : `${addresse.street_number}${addresse.street_rep} ${addresse.street}, ${addresse.city_zipcode} ${addresse.city_name}`}
                     </span>
                   </div>
                 </div>

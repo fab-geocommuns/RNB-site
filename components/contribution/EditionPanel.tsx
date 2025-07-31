@@ -51,6 +51,7 @@ function EditSelectedBuildingPanelContent({
   const rnbId = selectedBuilding.rnb_id;
   const isActive = selectedBuilding.is_active;
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [commentValue, setCommentValue] = useState('');
   const dispatch: AppDispatch = useDispatch();
   const [newStatus, setNewStatus] = useState<BuildingStatusType>(
     selectedBuilding.status,
@@ -65,7 +66,9 @@ function EditSelectedBuildingPanelContent({
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
-
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentValue(event.target.value);
+  };
   const anyChanges = anyChangesBetween(
     {
       status: newStatus,
@@ -98,12 +101,11 @@ function EditSelectedBuildingPanelContent({
       status: newStatus,
       addresses_cle_interop: localAddresses.map((a) => a.id),
     };
-
+    if (commentValue.length) data = { ...data, comment: commentValue };
     if (buildingNewShape) {
       // send the data in WKT format
       data['shape'] = geojsonToWKT(buildingNewShape);
     }
-
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),
@@ -113,6 +115,7 @@ function EditSelectedBuildingPanelContent({
       if (!response.ok) {
         await throwErrorMessageForHumans(response);
       } else {
+        setCommentValue('');
         // force the map to reload the building, to immediatly show the modifications made
         dispatch(Actions.map.reloadBuildings());
         dispatch(Actions.edition.setBuildingNewShape(null));
@@ -184,6 +187,19 @@ function EditSelectedBuildingPanelContent({
                 shapeInteractionMode={shapeInteractionMode}
                 selectedBuilding={selectedBuilding}
               ></BuildingShape>
+              <div className={`${styles.panelSection}`}>
+                <div className={`fr-text--xs ${styles.sectionTitle}`}>
+                  <label htmlFor="comment">Commentaire</label>
+                </div>
+                <textarea
+                  value={commentValue}
+                  onChange={handleChange}
+                  id="comment"
+                  name="text"
+                  className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+                  placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
+                />
+              </div>
             </>
           )
         )}

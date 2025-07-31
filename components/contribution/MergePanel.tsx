@@ -25,6 +25,7 @@ export default function MergePanel() {
   const { fetch } = useRNBFetch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newBuilding, setNewBuilding] = useState<SelectedBuilding | null>(null);
+  const [commentValue, setCommentValue] = useState('');
   const [candidatesWithAddresses, setCandidatesWithAddresses] = useState<
     (SelectedBuilding | undefined)[] | null
   >(null);
@@ -49,6 +50,9 @@ export default function MergePanel() {
     setNewBuilding(null);
     dispatch(Actions.edition.setOperation('merge'));
   };
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentValue(event.target.value);
+  };
   const selectCandidateToRemove = (rnbId: string) => {
     dispatch(
       Actions.edition.setCandidates(formatCandidates(rnbId, candidatesToMerge)),
@@ -58,12 +62,12 @@ export default function MergePanel() {
     setIsLoading(true);
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/merge/`;
 
-    const data: { [key: string]: any } = {
+    let data: { [key: string]: any } = {
+      comment: commentValue,
       rnb_ids: candidatesToMerge,
       status: 'constructed',
       merge_existing_addresses: true,
     };
-
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),
@@ -79,6 +83,7 @@ export default function MergePanel() {
         dispatch(Actions.map.selectBuilding(data.rnb_id));
         toasterSuccess(dispatch, `Les bâtiments ont été fusionnés avec succès`);
         setNewBuilding(data);
+        setCommentValue('');
       }
       setIsLoading(false);
     } catch (err: any) {
@@ -147,6 +152,21 @@ export default function MergePanel() {
                   )}
                   {isActive ? (
                     <div className={styles.mergePanel__summary}>
+                      <div>
+                        <div className={styles.mergePanel__descText}>
+                          <label htmlFor="comment">
+                            Commentaire (optionnel)
+                          </label>
+                        </div>
+                        <textarea
+                          value={commentValue}
+                          onChange={handleChange}
+                          id="comment"
+                          name="text"
+                          className={`fr-text--sm fr-input fr-mb-4v ${styles.mergePanel__textarea}`}
+                          placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la fusion ? Laissez un commentaire ici."
+                        />
+                      </div>
                       <span>
                         Vous avez choisi de fusionner{' '}
                         <span className={styles.mergePanel__summaryText}>

@@ -34,6 +34,7 @@ export default function CreationPanel() {
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     [],
   );
+  const [commentValue, setCommentValue] = useState('');
   const { fetch } = useRNBFetch();
 
   const cancelCreation = () => {
@@ -54,12 +55,12 @@ export default function CreationPanel() {
   const createBuilding = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/`;
 
-    const data: { [key: string]: any } = {
+    let data: { [key: string]: any } = {
       status: newStatus,
       addresses_cle_interop: localAddresses.map((a) => a.id),
       shape: geojsonToWKT(buildingNewShape!),
     };
-
+    if (commentValue.length) data = { ...data, comment: commentValue };
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),
@@ -82,7 +83,9 @@ export default function CreationPanel() {
       console.error(err);
     }
   };
-
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentValue(event.target.value);
+  };
   return (
     <>
       <RNBIDHeader>
@@ -125,6 +128,19 @@ export default function CreationPanel() {
               addresses={localAddresses}
               onChange={handleEditAddress}
             />
+            <div className={styles.panelSection}>
+              <div className={`fr-text--xs ${styles.sectionTitle}`}>
+                <label htmlFor="comment">Commentaire (optionnel)</label>
+              </div>
+              <textarea
+                value={commentValue}
+                onChange={handleChange}
+                id="comment"
+                name="text"
+                className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+                placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
+              />
+            </div>
           </>
         )}
       </PanelBody>
