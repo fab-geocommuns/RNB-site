@@ -24,11 +24,9 @@ import { Actions, RootState } from '@/stores/store';
 
 export default function ContributionForm() {
   const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
-
   const selectedBuilding = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
-
   const msgInput = useRef<HTMLInputElement>(null);
 
   const emptyMsgInput = () => {
@@ -156,7 +154,6 @@ export default function ContributionForm() {
         className="fr-input fr-text--sm fr-mb-2v"
         placeholder="Votre adresse email (optionnelle)"
       />
-
       <Button disabled={sending} size="small" type="submit">
         {sending && <span>Envoi en cours ...</span>}
         {!sending && <span>Envoyer mon signalement</span>}
