@@ -28,11 +28,20 @@ export default function Details({
             {getHistoryLongTitle(detailsInfo)}
           </h2>
         )}
-
-        <span className={`${styles.detailInfo} ${styles.user}`}>
-          Le {formatDate(detailsInfo.updated_at)} - par{' '}
-          {displayAuthor(detailsInfo)}
-        </span>
+        <div>
+          <span className={`${styles.detailInfo} ${styles.user}`}>
+            Le {formatDate(detailsInfo.updated_at)} -{' '}
+            <span className={`${styles.detailInfoUser}`}>
+              par {displayAuthor(detailsInfo)}
+            </span>{' '}
+            -{' '}
+            <span className={`${styles.detailInfoUser}`}>
+              <Link href={`/carte?q=${detailsInfo.rnb_id}`}>
+                Voir les détails du bâtiment
+              </Link>
+            </span>
+          </span>
+        </div>
 
         <div className={styles.detailBlock}>
           {detailsInfo.status && (

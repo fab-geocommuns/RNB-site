@@ -28,7 +28,7 @@ export function formatDate(dateString: string): string {
       month: '2-digit',
       year: 'numeric',
     }) +
-    ' - ' +
+    ' à ' +
     date.toLocaleTimeString('fr-FR', {
       hour: '2-digit',
       minute: '2-digit',
