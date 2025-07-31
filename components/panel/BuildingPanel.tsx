@@ -22,11 +22,12 @@ import va from '@vercel/analytics';
 import React, { useEffect, useState } from 'react';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
-import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
+
+import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
 
 // Images
 import copyIcon from '@/public/icons/file-copy-line.svg';
@@ -41,7 +42,6 @@ interface BuildingPanelProps {
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   const [copied, setCopied] = useState(false);
-  const { is } = useRNBAuthentication();
 
   // Store
   const dispatch: AppDispatch = useDispatch();
@@ -115,8 +115,15 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   return (
     <div>
       <div className={panelStyles.section}>
+        {!bdg.is_active && (
+          <CallOut
+            colorVariant="yellow-tournesol"
+            className={panelStyles.callout}
+          >
+            <span>Cet Identifiant RNB a été désactivé.</span>
+          </CallOut>
+        )}
         <h2 className={panelStyles.sectionTitle}>Identifiant RNB</h2>
-
         <div className={styles.rnbidShell}>
           <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
@@ -171,14 +178,12 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </div>
       </div>
 
-      {!is(RNBGroup.CONTRIBUTORS) && (
-        <div className={panelStyles.section}>
-          <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
-            Améliorez le RNB
-          </h2>
-          <ContributionForm />
-        </div>
-      )}
+      <div className={panelStyles.section}>
+        <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
+          Améliorez le RNB
+        </h2>
+        <ContributionForm />
+      </div>
       <div className={panelStyles.section}>
         <DeployableBlock
           title="Correspondances BD Topo & BDNB"
