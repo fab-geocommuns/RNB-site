@@ -358,7 +358,7 @@ function SplitBuildingSummaryStep({
 
           <div className="fr-mb-3v">
             {childrenB.map((child, index) => (
-              <div key={index} className={styles.resumeSplit}>
+              <div key={index} className={styles.splitSummary}>
                 <strong>Enfant {index + 1} :</strong>
                 <BuildingInfo building={child} />
               </div>

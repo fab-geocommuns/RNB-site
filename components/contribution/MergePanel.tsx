@@ -68,7 +68,6 @@ export default function MergePanel() {
       status: 'constructed',
       merge_existing_addresses: true,
     };
-    if (commentValue.length) data = { ...data, comment: commentValue };
     try {
       const response = await fetch(url, {
         body: JSON.stringify(data),
