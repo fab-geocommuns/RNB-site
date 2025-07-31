@@ -321,6 +321,7 @@ export default function EditionPanel() {
           className={operation === 'split' ? styles.buttonSelected : ''}
           size="small"
           priority="tertiary no outline"
+          data-testid="split-action-button"
         >
           <div className={styles.action}>
             <img
