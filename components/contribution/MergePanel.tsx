@@ -21,10 +21,12 @@ export default function MergePanel() {
   const candidatesToMerge = useSelector(
     (state: RootState) => state.edition.merge.candidates,
   );
+  const newBuilding = useSelector(
+    (state: RootState) => state.edition.merge.newBuilding,
+  );
   const isActive = candidatesToMerge.length > 1;
   const { fetch } = useRNBFetch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [newBuilding, setNewBuilding] = useState<SelectedBuilding | null>(null);
   const [commentValue, setCommentValue] = useState('');
   const [candidatesWithAddresses, setCandidatesWithAddresses] = useState<
     (SelectedBuilding | undefined)[] | null
@@ -47,7 +49,7 @@ export default function MergePanel() {
     dispatch(Actions.edition.setOperation(null));
   };
   const newMerge = () => {
-    setNewBuilding(null);
+    dispatch(Actions.edition.setNewBuilding(null));
     dispatch(Actions.edition.setOperation('merge'));
   };
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -55,7 +57,9 @@ export default function MergePanel() {
   };
   const selectCandidateToRemove = (rnbId: string) => {
     dispatch(
-      Actions.edition.setCandidates(formatCandidates(rnbId, candidatesToMerge)),
+      Actions.edition.setCandidates(
+        formatCandidates(rnbId, candidatesToMerge).candidates,
+      ),
     );
   };
   const handleSubmit = async () => {
@@ -82,7 +86,7 @@ export default function MergePanel() {
         const data = await response.json();
         dispatch(Actions.map.selectBuilding(data.rnb_id));
         toasterSuccess(dispatch, `Les bâtiments ont été fusionnés avec succès`);
-        setNewBuilding(data);
+        dispatch(Actions.edition.setNewBuilding(data));
         setCommentValue('');
       }
       setIsLoading(false);
