@@ -7,6 +7,8 @@ import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
 import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
+import ImageNext from 'next/image';
+import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
 
 // Styles
 import { fr } from '@codegouvfr/react-dsfr';
@@ -25,6 +27,13 @@ import { RNBGroup, useRNBAuthentication } from '@/utils/use-rnb-authentication';
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
+
+// Images
+import copyIcon from '@/public/icons/file-copy-line.svg';
+import checkIcon from '@/public/icons/check-line.svg';
+import bdgInfoIcon from '@/public/icons/map-pin-2-line.svg';
+import bdgHistoryIcon from '@/public/icons/history-line.svg';
+import bdgEditIcon from '@/public/icons/pencil-line.svg';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -111,20 +120,42 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         <div className={styles.rnbidShell}>
           <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
-          <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
-            <div className={styles.rnbidShell__copy}>
-              {copied ? (
-                <span>
-                  Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                </span>
-              ) : (
-                <span>
-                  Copier <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                </span>
-              )}
-            </div>
-          </CopyToClipboard>
+          <Tooltip kind="hover" title="Copier l'identifiant RNB">
+            <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
+              <div className={styles.rnbidShell__copy}>
+                {copied ? (
+                  <ImageNext alt="Copié" src={checkIcon} />
+                ) : (
+                  <ImageNext alt="Copier l'identifiant RNB" src={copyIcon} />
+                )}
+              </div>
+            </CopyToClipboard>
+          </Tooltip>
         </div>
+        <ul className={styles.nav}>
+          <li className={styles.navItem}>
+            <span className={`${styles.navLink} ${styles.navLinkCurrent}`}>
+              <ImageNext alt="Informations" src={bdgInfoIcon} />
+              Informations
+            </span>
+          </li>
+
+          <li className={styles.navItem}>
+            <a
+              className={styles.navLink}
+              href={`/batiments/${bdg.rnb_id}/historique`}
+            >
+              <ImageNext alt="Historique" src={bdgHistoryIcon} />
+              Historique
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a className={styles.navLink} href={`/edition?q=${bdg.rnb_id}`}>
+              <ImageNext alt="Modifier" src={bdgEditIcon} />
+              Modifier
+            </a>
+          </li>
+        </ul>
       </div>
 
       <div className={panelStyles.section}>
