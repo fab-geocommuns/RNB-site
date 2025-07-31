@@ -25,6 +25,8 @@ import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
+import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
+
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
 }
@@ -104,8 +106,15 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
   return (
     <div>
       <div className={panelStyles.section}>
+        {!bdg.is_active && (
+          <CallOut
+            colorVariant="yellow-tournesol"
+            className={panelStyles.callout}
+          >
+            <span>Cet Identifiant RNB a été désactivé.</span>
+          </CallOut>
+        )}
         <h2 className={panelStyles.sectionTitle}>Identifiant RNB</h2>
-
         <div className={styles.rnbidShell}>
           <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
 
