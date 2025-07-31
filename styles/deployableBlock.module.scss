@@ -1,14 +1,12 @@
 @import 'vars.scss';
 
-.blue {
-  .sectionTitle {
-    color: #0063cb;
-  }
-}
 .sectionTitle {
-  font-size: 0.9em;
+  font-size: 0.7em;
   line-height: 1.3em;
   margin-bottom: 0.2rem;
+  opacity: 0.9;
+  color: black;
+  text-transform: uppercase;
 }
 .sectionToggler {
   text-decoration: none;
@@ -17,7 +15,8 @@
 }
 .sectionTogglerIcon {
   margin-right: 0.4rem;
-  color: black;
+  color: #0078f3;
+  font-size: 1.3em;
   display: inline-block;
   transition: transform 0.3s;
 }

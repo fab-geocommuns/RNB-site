@@ -2,27 +2,86 @@
   margin-bottom: 4px;
 }
 .rnbidShell {
-  background: var(--background-alt-blue-france);
-}
-.rnbidShell__copy {
-  background: var(--background-contrast-blue-france);
-  background-color: #bccdff;
-  color: #273961;
-  font-size: 0.9em;
-  padding: 0.3rem;
-  text-align: center;
-}
-.rnbidShell__copy i {
-  opacity: 0.8;
-}
-.rnbidShell__copy:hover {
-  background: #83a9ff;
-  color: #171d2e;
-  cursor: pointer;
+  //margin-top: 0.7rem;
+  display: flex;
+  align-items: center;
 }
 .rnbidShell__id {
-  padding: 1.3rem 1rem;
-  font-size: 1.2em;
-  text-align: center;
-  font-weight: 500;
+  color: #0078f3;
+  font-size: 1.6em;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.rnbidShell__copy {
+  background: #e7edff;
+  min-height: 27px;
+  min-width: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1337px;
+  margin-left: 10px;
+  img {
+    width: 17px;
+    height: 17px;
+    filter: brightness(0) saturate(100%) invert(34%) sepia(88%) saturate(1698%)
+      hue-rotate(222deg) brightness(92%) contrast(91%);
+  }
+}
+
+.rnbidShell__copy:hover {
+  background: #dde5ff;
+  cursor: pointer;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+
+  .navItem {
+    //padding: 10px 5px;
+    margin: 0;
+    font-size: 0.85em;
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  .navLink {
+    background: none;
+    padding: 4px 10px;
+    font-weight: 500;
+    color: lighten(#0a3683, 5%);
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+
+    img {
+      width: 16px;
+      height: 16px;
+      margin-right: 3px;
+      filter: brightness(0) saturate(100%) invert(34%) sepia(88%)
+        saturate(1698%) hue-rotate(222deg) brightness(92%) contrast(91%);
+    }
+    &:hover {
+      background: lighten(#e7edff, 2%);
+    }
+  }
+
+  .navLinkCurrent {
+    opacity: 1;
+    background: #e7edff;
+
+    img {
+      filter: brightness(0) saturate(100%) invert(34%) sepia(88%)
+        saturate(1698%) hue-rotate(222deg) brightness(92%) contrast(91%);
+    }
+    &:hover {
+      background: #e7edff;
+      cursor: default;
+    }
+  }
 }

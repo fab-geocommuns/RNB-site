@@ -128,10 +128,12 @@
 }
 
 .sectionTitle {
-  font-size: 0.9em;
+  font-size: 0.7em;
   line-height: 1.3em;
-  color: #0063cb;
+  color: black;
+  opacity: 0.9;
   margin-bottom: 0.2rem;
+  text-transform: uppercase;
 }
 .sectionToggler {
   text-decoration: none;
@@ -141,7 +143,7 @@
 
 .sectionTogglerIcon {
   margin-right: 0.4rem;
-  color: black;
+  color: #0078f3;
   display: inline-block;
   transition: transform 0.3s;
 }

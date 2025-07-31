@@ -1,7 +1,3 @@
-type Props = {
-  rnbId: string;
-};
-
 import styles from '@/styles/contribution/editPanel.module.scss';
 
 export default function RNBIDheader({
