@@ -53,7 +53,7 @@ export default function BuildingInfo({
             </div>
           ) : (
             <span className={styles.mergePanel__addressText}>
-              <i>Aucune adresse disponible</i>
+              <i>Aucune adresse</i>
             </span>
           )}
         </div>
