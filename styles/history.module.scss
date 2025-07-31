@@ -191,7 +191,10 @@
 .detailInfo {
   display: flex;
 }
-
+.detailInfoUser {
+  margin-right: 0.3rem;
+  margin-left: 0.3rem;
+}
 .detailLabel {
   text-align: end;
   width: 14rem;

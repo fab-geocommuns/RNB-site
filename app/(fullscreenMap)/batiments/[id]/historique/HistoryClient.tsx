@@ -5,10 +5,10 @@ import Timeline from '@/components/history/Timeline';
 import Details from '@/components/history/Details';
 import { ApiHistoryItem } from './page';
 
-interface HistoryClientProps {
+type HistoryClientProps = {
   buildingData: ApiHistoryItem[];
   id: string;
-}
+};
 
 export default function HistoryClient({
   buildingData,
