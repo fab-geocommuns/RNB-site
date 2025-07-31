@@ -80,14 +80,12 @@ async function fetchBuildingHistory(
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${id}/history/`,
     );
-    console.log(response);
     if (!response.ok) {
       throw new Error('Failed to fetch building history');
     }
     const apiData: ApiHistoryItem[] = await response.json();
     return apiData;
   } catch (error) {
-    console.log(error);
     console.error('Error fetching building history:', error);
     return null;
   }
@@ -96,7 +94,6 @@ async function fetchBuildingHistory(
 export default async function BuildingHistoryDetail({ params }: PageProps) {
   const { id } = await params;
   const buildingData = await fetchBuildingHistory(id);
-  console.log(buildingData);
   if (!buildingData) notFound();
   return <HistoryClient buildingData={buildingData} id={id} />;
 }
