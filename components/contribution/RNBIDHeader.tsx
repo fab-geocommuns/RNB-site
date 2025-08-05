@@ -21,6 +21,7 @@ export default function RNBIDheader({ rnbId }: { rnbId: string }) {
   };
   return (
     <div>
+      <h2 className={styles.sectionTitle}>Identifiant RNB</h2>
       <div className={styles.rnbidShell}>
         <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
         <Tooltip kind="hover" title="Copier l'identifiant RNB">

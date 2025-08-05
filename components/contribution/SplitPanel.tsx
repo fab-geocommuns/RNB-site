@@ -1,6 +1,5 @@
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
-import { BuildingStatusMap } from '@/stores/contribution/contribution-types';
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import styles from '@/styles/contribution/editPanel.module.scss';
@@ -129,21 +128,23 @@ function SplitBuildingInitialStep({
   function footerPanel() {
     return (
       <>
-        <Button
-          onClick={() => cancelSplit(dispatch)}
-          priority="tertiary no outline"
-        >
-          Annuler
-        </Button>
-        <Button
-          onClick={() =>
-            nextStep(selectedChildIndex, splitChildrenCount, dispatch)
-          }
-          disabled={splitCandidateId === null}
-          priority="secondary"
-        >
-          Suivant
-        </Button>
+        <div className={styles.footer}>
+          <Button
+            onClick={() => cancelSplit(dispatch)}
+            priority="tertiary no outline"
+          >
+            Annuler
+          </Button>
+          <Button
+            onClick={() =>
+              nextStep(selectedChildIndex, splitChildrenCount, dispatch)
+            }
+            disabled={splitCandidateId === null}
+            priority="secondary"
+          >
+            Suivant
+          </Button>
+        </div>
       </>
     );
   }
@@ -279,47 +280,49 @@ function SplitBuildingChildInfosStep({
   function footerPanel() {
     return (
       <>
-        <Button
-          onClick={() => cancelSplit(dispatch)}
-          priority="tertiary no outline"
-        >
-          Annuler
-        </Button>
-        <Button
-          onClick={() => previousStep(selectedChildIndex, dispatch)}
-          priority="secondary"
-        >
-          Précédent
-        </Button>
-        {selectedChildIndex < splitChildrenCount && (
+        <div className={styles.footer}>
           <Button
-            onClick={() =>
-              nextStep(selectedChildIndex, splitChildrenCount, dispatch)
-            }
-            disabled={currentChildHasNoShape}
+            onClick={() => cancelSplit(dispatch)}
+            priority="tertiary no outline"
+          >
+            Annuler
+          </Button>
+          <Button
+            onClick={() => previousStep(selectedChildIndex, dispatch)}
             priority="secondary"
-            title={
-              currentChildHasNoShape
-                ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                : ''
-            }
           >
-            Suivant
+            Précédent
           </Button>
-        )}
-        {selectedChildIndex === splitChildrenCount && (
-          <Button
-            onClick={handleSubmit}
-            disabled={currentChildHasNoShape}
-            title={
-              currentChildHasNoShape
-                ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                : `Scinder le bâtiment en ${splitChildrenCount}`
-            }
-          >
-            Scinder
-          </Button>
-        )}
+          {selectedChildIndex < splitChildrenCount && (
+            <Button
+              onClick={() =>
+                nextStep(selectedChildIndex, splitChildrenCount, dispatch)
+              }
+              disabled={currentChildHasNoShape}
+              priority="secondary"
+              title={
+                currentChildHasNoShape
+                  ? 'Veuillez tracer une géométrie pour ce bâtiment'
+                  : ''
+              }
+            >
+              Suivant
+            </Button>
+          )}
+          {selectedChildIndex === splitChildrenCount && (
+            <Button
+              onClick={handleSubmit}
+              disabled={currentChildHasNoShape}
+              title={
+                currentChildHasNoShape
+                  ? 'Veuillez tracer une géométrie pour ce bâtiment'
+                  : `Scinder le bâtiment en ${splitChildrenCount}`
+              }
+            >
+              Scinder
+            </Button>
+          )}
+        </div>
       </>
     );
   }
@@ -389,14 +392,16 @@ function SplitBuildingSummaryStep({
           <div className={`fr-text--xs ${styles.sectionTitle}`}>
             Résumé de la scission
           </div>
-          <div className="fr-mb-3v">
-            <strong>Bâtiment à scinder :</strong> {splitCandidateId}
-          </div>
-          <div className="fr-mb-3v">
-            {splitChildrenCount} Nouveaux bâtiments créés
+          <div className={styles.parentWrapper}>
+            <div>
+              <strong>Bâtiment à scinder :</strong> {splitCandidateId}
+            </div>
+            <div className={styles.text}>
+              {splitChildrenCount} Nouveaux bâtiments créés
+            </div>
           </div>
 
-          <div className="fr-mb-3v">
+          <div className={styles.splitWrapper}>
             {childrenB.map((child, index) => (
               <div key={index} className={styles.splitSummary}>
                 <strong>Enfant {index + 1} :</strong>
@@ -436,29 +441,31 @@ function SplitBuildingSummaryStep({
   function footerPanel() {
     return (
       <>
-        <Button
-          onClick={() => cancelSplit(dispatch)}
-          priority="tertiary no outline"
-        >
-          Annuler
-        </Button>
-        <Button
-          onClick={() => previousStep(selectedChildIndex, dispatch)}
-          priority="secondary"
-        >
-          Précédent
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          disabled={currentChildHasNoShape}
-          title={
-            currentChildHasNoShape
-              ? 'Veuillez tracer une géométrie pour tous les bâtiments'
-              : `Scinder le bâtiment en ${splitChildrenCount} bâtiments`
-          }
-        >
-          Scinder
-        </Button>
+        <div className={styles.footer}>
+          <Button
+            onClick={() => cancelSplit(dispatch)}
+            priority="tertiary no outline"
+          >
+            Annuler
+          </Button>
+          <Button
+            onClick={() => previousStep(selectedChildIndex, dispatch)}
+            priority="secondary"
+          >
+            Précédent
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={currentChildHasNoShape}
+            title={
+              currentChildHasNoShape
+                ? 'Veuillez tracer une géométrie pour tous les bâtiments'
+                : `Scinder le bâtiment en ${splitChildrenCount} bâtiments`
+            }
+          >
+            Scinder
+          </Button>
+        </div>
       </>
     );
   }

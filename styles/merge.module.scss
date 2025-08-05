@@ -1,17 +1,8 @@
 $title-color: #1a3b68;
-$spacing: 12px;
-$actions-height: 60px;
+$spacing: 0.75rem;
+$actions-height: 3.75rem;
 $panel-padding: 1.5 * $spacing;
 
-.mergePanel_body {
-  padding: $panel-padding $panel-padding 0 $panel-padding;
-  flex-grow: 1;
-  flex-shrink: 1;
-  overflow: auto;
-  padding-bottom: 85px;
-  display: flex;
-  flex-direction: column;
-}
 .mergePanel__loader {
   margin: auto;
   display: flex;
@@ -19,48 +10,52 @@ $panel-padding: 1.5 * $spacing;
   align-items: center;
   justify-content: center;
   span {
-    font-size: 14px;
-    margin-top: 20px;
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
   }
+}
+.mergePanel__wrapper {
+  padding-bottom: 4.375rem;
 }
 .mergePanel__descWrapper {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   background: var(--background-default-grey);
-  padding: 12px;
-  margin-bottom: 20px;
-  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.25rem;
   border: 1px solid var(--border-open-blue-france);
 }
 .mergePanel__descText {
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
 }
 .mergePanel__textarea {
-    height: 150px;
-    border: 1px solid var(--background-contrast-grey-active);
+  height: 9.375rem;
+  border: 0.0625rem solid var(--background-contrast-grey-active);
 }
 .mergePanel__textNoBuilding {
   font-weight: 700;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 250px;
+  height: 15.625rem;
 }
 .mergePanel__descSubText {
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.2;
 }
 .mergePanel__infoWrapper {
-  border-bottom: 1px solid var(--border-open-blue-france);
-  padding-top: 10px;
-  padding-bottom: 20px;
+  border-bottom: 0.0625rem solid var(--border-open-blue-france);
+  padding-top: 0.625rem;
+  padding-bottom: 1.25rem;
 }
+
 .mergePanel__rnbIdWrapper {
   display: flex;
   color: var(--background-action-high-grey-active);
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 .mergePanel__rnbId {
   display: flex;
@@ -70,7 +65,7 @@ $panel-padding: 1.5 * $spacing;
   width: 100%;
 }
 .mergePanel__addressesWrapper {
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
   display: flex;
   flex-direction: column;
 }
@@ -79,15 +74,20 @@ $panel-padding: 1.5 * $spacing;
   flex-direction: column;
 }
 .mergePanel__addressText {
-  line-height: 1.2;
+  font-size: 0.9rem;
+  line-height: 1.3rem;
 }
 .mergePanel__label {
+  font-size: 0.7rem;
+  line-height: 1.3rem;
+  color: black;
+  margin-bottom: 0.2rem;
   font-weight: 700;
-  line-height: 2;
+  text-transform: uppercase;
 }
 .mergePanel__summary {
-  margin-top: 20px;
-  font-size: 14px;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
 }
 .mergePanel__summaryText {
   font-weight: 700;
@@ -95,22 +95,22 @@ $panel-padding: 1.5 * $spacing;
 .mergePanel__card {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
+  font-size: 0.875rem;
   span {
     line-height: 1.2;
   }
 }
 .mergePanel__cardText {
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
 }
 .mergePanel__summaryHeaderWrapper {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 .mergePanel__summaryTitle {
   font-size: 0.8rem;
-  line-height: 1em;
+  line-height: 1rem;
   margin: 0;
   text-transform: uppercase;
   flex: 1 0 0;
@@ -119,18 +119,18 @@ $panel-padding: 1.5 * $spacing;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 5px;
+  margin-top: 0.3125rem;
 }
 .mergePanel__summaryMerged {
-  padding: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin: 5px;
+  padding: 0.625rem;
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
+  margin: 0.3125rem;
   background-color: var(--background-contrast-grey);
   width: fit-content;
 }
 .mergePanel__rnbIdMerged {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--text-default-grey);
 }
 .mergePanel__newBuildingWrapper {
@@ -138,7 +138,7 @@ $panel-padding: 1.5 * $spacing;
 }
 .footer {
   padding: $spacing $spacing $spacing 2 * $spacing;
-  box-shadow: 0 0px 4px var(--background-contrast-grey-active);
+  box-shadow: 0 0rem 0.25rem var(--background-contrast-grey-active);
   position: absolute;
   bottom: 0;
   width: 100%;

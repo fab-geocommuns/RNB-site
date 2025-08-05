@@ -5,22 +5,22 @@
 }
 .rnbidShell__id {
   color: #0078f3;
-  font-size: 1.6em;
+  font-size: 1.6rem;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 0.0625rem;
 }
 .rnbidShell__copy {
   background: #e7edff;
-  min-height: 27px;
-  min-width: 27px;
+  min-height: 1.6875rem;
+  min-width: 1.6875rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1337px;
-  margin-left: 10px;
+  border-radius: 83.5625rem;
+  margin-left: 0.625rem;
   img {
-    width: 17px;
-    height: 17px;
+    width: 1.0625rem;
+    height: 1.0625rem;
     filter: brightness(0) saturate(100%) invert(34%) sepia(88%) saturate(1698%)
       hue-rotate(222deg) brightness(92%) contrast(91%);
   }
@@ -29,4 +29,12 @@
 .rnbidShell__copy:hover {
   background: #dde5ff;
   cursor: pointer;
+}
+.sectionTitle {
+  font-size: 0.7rem;
+  line-height: 1.3rem;
+  color: black;
+  opacity: 0.9;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
 }

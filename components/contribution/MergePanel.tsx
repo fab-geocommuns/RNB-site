@@ -100,7 +100,7 @@ export default function MergePanel() {
     return (
       <>
         {newBuilding?.rnb_id ? (
-          <div className={styles.mergePanel_body}>
+          <div>
             <MergeSummary
               newBuilding={newBuilding}
               buildingsMerged={candidatesWithAddresses}
@@ -110,7 +110,7 @@ export default function MergePanel() {
             </div>
           </div>
         ) : (
-          <div className={styles.mergePanel_body}>
+          <div className={styles.mergePanel__wrapper}>
             {!isLoading && (
               <div className={styles.mergePanel__descWrapper}>
                 <span className={styles.mergePanel__descText}>
@@ -156,7 +156,10 @@ export default function MergePanel() {
                       <div className={styles.mergePanel__summary}>
                         <div>
                           <div className={styles.mergePanel__descText}>
-                            <label htmlFor="comment">
+                            <label
+                              htmlFor="comment"
+                              className={styles.mergePanel__label}
+                            >
                               Commentaire (optionnel)
                             </label>
                           </div>

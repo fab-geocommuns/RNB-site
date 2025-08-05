@@ -87,7 +87,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             <span>Cet Identifiant RNB a été désactivé.</span>
           </CallOut>
         )}
-        <h2 className={panelStyles.sectionTitle}>Identifiant RNB</h2>
         <div className={styles.rnbidShell}>
           <RNBIDHeader rnbId={bdg?.rnb_id} />
         </div>

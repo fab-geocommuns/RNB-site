@@ -10,6 +10,7 @@ import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
 import MergePanel from './MergePanel';
 import GenericPanel from '@/components/panel/GenericPanel';
+import EditionButton from '@/components/contribution/EditionButton';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
@@ -35,7 +36,6 @@ import Toaster, {
 import SplitPanel from './SplitPanel';
 
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
-import { Operation } from '@/stores/edition/edition-slice';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -250,94 +250,27 @@ export default function EditionPanel() {
       ? (selectedItem as SelectedBuilding)
       : null;
 
-  const toggleOperation = (operationName: Operation) => () => {
-    if (operation === operationName) {
-      dispatch(Actions.edition.setOperation(null));
-    } else {
-      dispatch(Actions.edition.setOperation(operationName));
-    }
-  };
-
-  const toggleCreateBuilding = toggleOperation('create');
-  const toggleSplitBuilding = toggleOperation('split');
-  const toggleMergeBuilding = toggleOperation('merge');
-
   return (
     <>
       <div className={styles.actions}>
-        <Button
-          onClick={toggleCreateBuilding}
-          className={operation === 'create' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'create'
-                  ? createSelectedBuildingImage.src
-                  : createBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'create' ? styles.actionSelected : ''}
-            >
-              créer
-            </small>
-          </div>
-        </Button>
-        <Button
-          onClick={toggleMergeBuilding}
-          className={operation === 'merge' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'merge'
-                  ? mergeSelectedBuildingImage.src
-                  : mergeBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'merge' ? styles.actionSelected : ''}
-            >
-              fusionner
-            </small>
-          </div>
-        </Button>
-        <Button
-          onClick={toggleSplitBuilding}
-          className={operation === 'split' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-          data-testid="split-action-button"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'split'
-                  ? splitSelectedBuildingImage.src
-                  : splitBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'split' ? styles.actionSelected : ''}
-            >
-              scinder
-            </small>
-          </div>
-        </Button>
+        <EditionButton
+          operationType="create"
+          operationText="créer"
+          selectedImageSrc={createSelectedBuildingImage.src}
+          imageSrc={createBuildingImage.src}
+        ></EditionButton>
+        <EditionButton
+          operationType="merge"
+          operationText="fusionner"
+          selectedImageSrc={mergeSelectedBuildingImage.src}
+          imageSrc={mergeBuildingImage.src}
+        ></EditionButton>
+        <EditionButton
+          operationType="split"
+          operationText="scinder"
+          selectedImageSrc={splitSelectedBuildingImage.src}
+          imageSrc={splitBuildingImage.src}
+        ></EditionButton>
       </div>
 
       {operation && (
