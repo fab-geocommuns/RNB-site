@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingStatus from './BuildingStatus';
 import BuildingInfo from './BuildingInfo';
-import RNBIDHeader from './RNBIDHeader';
+import GenericPanel from '@/components/panel/GenericPanel';
 import {
   throwErrorMessageForHumans,
   toasterError,
@@ -21,10 +21,6 @@ import {
 import { BuildingAddressType } from './types';
 
 const INITIAL_STEP = 0;
-
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
 
 export default function SplitPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -91,15 +87,9 @@ function SplitBuildingInitialStep({
   const setChildrenNumber = (n: string) => {
     dispatch(Actions.edition.setSplitChildrenNumber(parseInt(n)));
   };
-
-  return (
-    <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">Étape 1 - Sélection du bâtiment</h1>
-      </RNBIDHeader>
-
-      <PanelBody>
+  function bodyPanel() {
+    return (
+      <>
         <div className={`${styles.panelSection} ${styles.noPad}`}>
           {splitCandidateId && (
             <>
@@ -133,8 +123,12 @@ function SplitBuildingInitialStep({
             <>Sélectionnez un bâtiment à scinder sur la carte.</>
           )}
         </div>
-      </PanelBody>
-      <div className={styles.footer}>
+      </>
+    );
+  }
+  function footerPanel() {
+    return (
+      <>
         <Button
           onClick={() => cancelSplit(dispatch)}
           priority="tertiary no outline"
@@ -150,7 +144,23 @@ function SplitBuildingInitialStep({
         >
           Suivant
         </Button>
-      </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <GenericPanel
+        title="Scinder un bâtiment"
+        triggerClose={() => cancelSplit(dispatch)}
+        contentBody={bodyPanel()}
+        contentFooter={footerPanel()}
+        contentHeader={
+          <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+            Étape 1 - Sélection du bâtiment
+          </h1>
+        }
+        data-testid="edition-panel"
+      ></GenericPanel>
     </>
   );
 }
@@ -220,18 +230,9 @@ function SplitBuildingChildInfosStep({
       fetch,
     );
   };
-
-  return (
-    <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">
-          Étape {selectedChildIndex + 2}/{splitChildrenCount + 2} - Infos
-          bâtiment {selectedChildIndex + 1}
-        </h1>
-      </RNBIDHeader>
-
-      <PanelBody>
+  function bodyPanel() {
+    return (
+      <>
         <BuildingStatus
           status={childrenB[selectedChildIndex].status}
           onChange={(status) => setStatus(status)}
@@ -262,8 +263,22 @@ function SplitBuildingChildInfosStep({
             </>
           )}
         </div>
-      </PanelBody>
-      <div className={styles.footer}>
+      </>
+    );
+  }
+  function contentHeader() {
+    return (
+      <>
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape {selectedChildIndex + 2}/{splitChildrenCount + 2} - Infos
+          bâtiment {selectedChildIndex + 1}
+        </h1>
+      </>
+    );
+  }
+  function footerPanel() {
+    return (
+      <>
         <Button
           onClick={() => cancelSplit(dispatch)}
           priority="tertiary no outline"
@@ -305,7 +320,19 @@ function SplitBuildingChildInfosStep({
             Scinder
           </Button>
         )}
-      </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <GenericPanel
+        title="Scinder un bâtiment"
+        triggerClose={() => cancelSplit(dispatch)}
+        contentBody={bodyPanel()}
+        contentFooter={footerPanel()}
+        contentHeader={contentHeader()}
+        data-testid="edition-panel"
+      ></GenericPanel>
     </>
   );
 }
@@ -355,18 +382,9 @@ function SplitBuildingSummaryStep({
       fetch,
     );
   };
-
-  return (
-    <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">
-          Étape {splitChildrenCount + 2}/{splitChildrenCount + 2} -
-          Récapitulatif
-        </h1>
-      </RNBIDHeader>
-
-      <PanelBody>
+  function bodyPanel() {
+    return (
+      <>
         <div className={`${styles.panelSection}`}>
           <div className={`fr-text--xs ${styles.sectionTitle}`}>
             Résumé de la scission
@@ -412,9 +430,12 @@ function SplitBuildingSummaryStep({
             placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la scission ? Laissez un commentaire ici."
           />
         </div>
-      </PanelBody>
-
-      <div className={styles.footer}>
+      </>
+    );
+  }
+  function footerPanel() {
+    return (
+      <>
         <Button
           onClick={() => cancelSplit(dispatch)}
           priority="tertiary no outline"
@@ -438,7 +459,29 @@ function SplitBuildingSummaryStep({
         >
           Scinder
         </Button>
-      </div>
+      </>
+    );
+  }
+  function contentHeader() {
+    return (
+      <>
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape {splitChildrenCount + 2}/{splitChildrenCount + 2} -
+          Récapitulatif
+        </h1>
+      </>
+    );
+  }
+  return (
+    <>
+      <GenericPanel
+        title="Scinder un bâtiment"
+        triggerClose={() => cancelSplit(dispatch)}
+        contentBody={bodyPanel()}
+        contentFooter={footerPanel()}
+        contentHeader={contentHeader()}
+        data-testid="edition-panel"
+      ></GenericPanel>
     </>
   );
 }

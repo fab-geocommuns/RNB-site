@@ -9,6 +9,7 @@ import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
 import MergePanel from './MergePanel';
+import GenericPanel from '@/components/panel/GenericPanel';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
@@ -35,9 +36,6 @@ import SplitPanel from './SplitPanel';
 
 import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
 import { Operation } from '@/stores/edition/edition-slice';
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -158,14 +156,10 @@ function EditSelectedBuildingPanelContent({
     await dispatch(Actions.map.selectBuilding(rnbId));
     dispatch(Actions.map.reloadBuildings());
   };
-
-  return (
-    <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Identifiant RNB</span>
-        <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
-      </RNBIDHeader>
-      <PanelBody>
+  function bodyPanel() {
+    return (
+      <>
+        <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
         {isLoading ? (
           <div className={styles.editLoader}>
             <Loader />
@@ -209,35 +203,38 @@ function EditSelectedBuildingPanelContent({
             onToggle={toggleBuildingActivation}
           />
         )}
-      </PanelBody>
-      <div className={styles.footer}>
-        <Button
-          onClick={handleSubmit}
-          disabled={!isActive || !anyChanges || isLoading}
-        >
-          Valider les modifications
-        </Button>
-        {anyChanges && (
-          <Button onClick={cancelUpdate} priority="tertiary no outline">
-            Annuler
+      </>
+    );
+  }
+  function footerPanel() {
+    return (
+      <>
+        <div className={styles.footer}>
+          <Button
+            onClick={handleSubmit}
+            disabled={!isActive || !anyChanges || isLoading}
+          >
+            Valider les modifications
           </Button>
-        )}
-      </div>
-    </>
-  );
-}
-
-function PanelWrapper({
-  children,
-  testId,
-}: {
-  children: React.ReactNode;
-  testId?: string;
-}) {
+          {anyChanges && (
+            <Button onClick={cancelUpdate} priority="tertiary no outline">
+              Annuler
+            </Button>
+          )}
+        </div>
+      </>
+    );
+  }
   return (
-    <div className={styles.shell} data-testid={testId}>
-      <div className={styles.content}>{children}</div>
-    </div>
+    <>
+      <GenericPanel
+        title="Modifier"
+        triggerClose={cancelUpdate}
+        contentBody={bodyPanel()}
+        contentFooter={footerPanel()}
+        data-testid="visu-panel"
+      ></GenericPanel>
+    </>
   );
 }
 
@@ -344,7 +341,7 @@ export default function EditionPanel() {
       </div>
 
       {operation && (
-        <PanelWrapper testId="edition-panel">
+        <div data-testid="edition-panel">
           {operation == 'update' && selectedBuilding && (
             <EditSelectedBuildingPanelContent
               selectedBuilding={selectedBuilding}
@@ -353,7 +350,7 @@ export default function EditionPanel() {
           {operation == 'create' && <CreationPanel />}
           {operation == 'split' && <SplitPanel />}
           {operation == 'merge' && <MergePanel />}
-        </PanelWrapper>
+        </div>
       )}
 
       <Toaster></Toaster>

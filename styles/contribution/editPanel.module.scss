@@ -4,7 +4,6 @@ $input-height: 52px;
 $spacing: 12px;
 $actions-top: 2 * $spacing + $input-height;
 $actions-height: 60px;
-$shell-top: $actions-top + $spacing + $actions-height;
 $panel-padding: 1.5 * $spacing;
 
 .actions {
@@ -46,20 +45,9 @@ $panel-padding: 1.5 * $spacing;
   }
 }
 
-.shell {
-  position: absolute;
-
-  top: $shell-top;
-  right: auto;
-  bottom: $spacing;
-  left: $spacing;
-  z-index: 100;
-  width: 400px;
-  overflow: hidden;
-  border-radius: 4px;
-  border: 1px solid var(--background-contrast-blue-france-active);
+.stepTitle {
+  color: var(--text-action-high-blue-france);
 }
-
 .content {
   background-color: var(--background-alt-blue-france);
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
@@ -74,28 +62,24 @@ $panel-padding: 1.5 * $spacing;
   right: 0;
   left: 0;
   top: 0;
+}
+.panelSection {
+  background: var(--background-default-grey);
+  padding: $spacing;
+  margin-bottom: $spacing;
+  border-radius: 4px;
+  border: 1px solid var(--border-open-blue-france);
+  position: relative;
+}
 
-  .panelSection {
-    background: var(--background-default-grey);
-    padding: $spacing;
-    margin-bottom: $spacing;
-    border-radius: 4px;
-    border: 1px solid var(--border-open-blue-france);
-    position: relative;
-    padding-top: 36px;
-
-    .sectionTitle {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      text-transform: uppercase;
-      color: var(--text-mention-grey);
-    }
-  }
-
-  .noPad {
-    padding-top: $spacing;
-  }
+.noPad {
+  padding-top: $spacing;
+  font-size: 14px;
+}
+.sectionTitle {
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 2;
 }
 
 .header {
@@ -105,13 +89,6 @@ $panel-padding: 1.5 * $spacing;
   background-color: var(--background-alt-blue-france-hover);
   box-shadow: 0 0 5px var(--background-action-high-grey-active);
   z-index: 100;
-}
-
-.body {
-  padding: $panel-padding $panel-padding 0 $panel-padding;
-  flex-grow: 1;
-  flex-shrink: 1;
-  overflow: auto;
 }
 
 .footer {

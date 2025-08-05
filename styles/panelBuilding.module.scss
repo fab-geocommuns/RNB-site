@@ -1,38 +1,6 @@
 .title {
   margin-bottom: 4px;
 }
-.rnbidShell {
-  //margin-top: 0.7rem;
-  display: flex;
-  align-items: center;
-}
-.rnbidShell__id {
-  color: #0078f3;
-  font-size: 1.6em;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-.rnbidShell__copy {
-  background: #e7edff;
-  min-height: 27px;
-  min-width: 27px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1337px;
-  margin-left: 10px;
-  img {
-    width: 17px;
-    height: 17px;
-    filter: brightness(0) saturate(100%) invert(34%) sepia(88%) saturate(1698%)
-      hue-rotate(222deg) brightness(92%) contrast(91%);
-  }
-}
-
-.rnbidShell__copy:hover {
-  background: #dde5ff;
-  cursor: pointer;
-}
 
 .nav {
   display: flex;

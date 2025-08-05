@@ -9,16 +9,13 @@ import BuildingAddresses from './BuildingAddresses';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
+import GenericPanel from '@/components/panel/GenericPanel';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
-
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -86,18 +83,9 @@ export default function CreationPanel() {
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentValue(event.target.value);
   };
-  return (
-    <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Créer un nouveau bâtiment </span>
-        {step == 1 && (
-          <h1 className="fr-text--lg fr-m-0">étape 1 - Géométrie</h1>
-        )}
-        {step == 2 && (
-          <h1 className="fr-text--lg fr-m-0">étape 2 - informations</h1>
-        )}
-      </RNBIDHeader>
-      <PanelBody>
+  function bodyPanel() {
+    return (
+      <>
         {step === 1 && (
           <div className={`${styles.panelSection} ${styles.noPad}`}>
             {mapCoordinates && mapCoordinates.zoom < 18 ? (
@@ -111,7 +99,7 @@ export default function CreationPanel() {
             ) : (
               <>
                 <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
+                <div>Un double-clic termine le tracé.</div>
               </>
             )}
           </div>
@@ -143,15 +131,43 @@ export default function CreationPanel() {
             </div>
           </>
         )}
-      </PanelBody>
-      <div className={styles.footer}>
-        <Button onClick={cancelCreation} priority="tertiary no outline">
-          Annuler
-        </Button>
-        {step === 2 && (
-          <Button onClick={createBuilding}>Créer le bâtiment</Button>
-        )}
-      </div>
+      </>
+    );
+  }
+  function footerPanel() {
+    return (
+      <>
+        <div className={styles.footer}>
+          <Button onClick={cancelCreation} priority="tertiary no outline">
+            Annuler
+          </Button>
+          {step === 2 && (
+            <Button onClick={createBuilding}>Créer le bâtiment</Button>
+          )}
+        </div>
+      </>
+    );
+  }
+  function contentHeader() {
+    return (
+      <>
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          {step == 1 && 'Étape 1 - Géométrie'}
+          {step == 2 && 'Étape 2 - Informations'}
+        </h1>
+      </>
+    );
+  }
+  return (
+    <>
+      <GenericPanel
+        title="Créer un bâtiment"
+        triggerClose={cancelCreation}
+        contentBody={bodyPanel()}
+        contentFooter={footerPanel()}
+        contentHeader={contentHeader()}
+        data-testid="edition-panel"
+      ></GenericPanel>
     </>
   );
 }
