@@ -29,10 +29,16 @@ test.describe('Edition', () => {
 
   test.describe('Scission', () => {
     test('doit pouvoir scinder un bâtiment', async ({
+      browserName,
       editionPage,
       httpMocker,
       mapController,
     }) => {
+      test.skip(
+        browserName === 'firefox',
+        'Pas de support de WebGL2 sur Firefox headless',
+      );
+
       const targetBuilding = '6NFTV4Z6DP92';
       await editionPage.goToBuilding(targetBuilding);
       await expect(editionPage.panel).toBeVisible();
@@ -107,10 +113,15 @@ test.describe('Edition', () => {
     });
 
     test('doit pouvoir afficher une erreur de validation sur un des enfants', async ({
+      browserName,
       editionPage,
       httpMocker,
       mapController,
     }) => {
+      test.skip(
+        browserName === 'firefox',
+        'Pas de support de WebGL2 sur Firefox headless',
+      );
       const targetBuilding = '6NFTV4Z6DP92';
       await editionPage.goToBuilding(targetBuilding);
       await expect(editionPage.panel).toBeVisible();

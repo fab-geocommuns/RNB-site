@@ -52,9 +52,9 @@ export class EditionPage extends RNBPage {
         lat: point[1],
         lng: point[0],
       });
-      await this.page.mouse.move(x, y, { steps: 10 });
+      await this.page.mouse.move(x, y, { steps: 2 });
       await this.page.mouse.down();
-      await this.page.mouse.move(x, y, { steps: 10 });
+      await this.page.mouse.move(x, y, { steps: 2 });
       await this.page.mouse.up();
     }
   }
