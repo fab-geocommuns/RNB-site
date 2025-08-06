@@ -19,7 +19,6 @@ import { Loader } from '@/components/Loader';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
-useMapEditBuildingShape;
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
 
 import splitBuildingImage from '@/public/images/map/edition/split.svg';
@@ -34,8 +33,6 @@ import Toaster, {
   toasterSuccess,
 } from './toaster';
 import SplitPanel from './SplitPanel';
-
-import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
