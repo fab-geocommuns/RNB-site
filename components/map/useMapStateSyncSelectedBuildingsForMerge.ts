@@ -67,10 +67,12 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
           e.point.y,
           0,
         );
-        if (operation === 'merge' && newBuilding?.rnb_id) {
-          if (featureOnCursor === undefined) {
-            dispatch(Actions.edition.setOperation(null));
-          }
+        if (
+          featureOnCursor === undefined &&
+          operation === 'merge' &&
+          newBuilding?.rnb_id
+        ) {
+          dispatch(Actions.edition.setOperation(null));
         }
       };
       map.on('click', handleClickEvent);
