@@ -387,11 +387,11 @@ function SplitBuildingSummaryStep({
   function bodyPanel() {
     return (
       <>
-        <div className={`${styles.panelSection}`}>
-          <div className={`fr-text--xs ${styles.sectionTitle}`}>
-            Résumé de la scission
-          </div>
-          <div className={styles.parentWrapper}>
+        <div>
+          <div className={styles.panelSection}>
+            <div className={`fr-text--xs ${styles.sectionTitle}`}>
+              Résumé de la scission
+            </div>
             <div>
               <strong>Bâtiment à scinder :</strong> {splitCandidateId}
             </div>
@@ -403,7 +403,9 @@ function SplitBuildingSummaryStep({
           <div className={styles.splitWrapper}>
             {childrenB.map((child, index) => (
               <div key={index} className={styles.splitSummary}>
-                <strong>Enfant {index + 1} :</strong>
+                <strong className={`fr-text--lg fr-m-0 ${styles.childTitle}`}>
+                  Enfant {index + 1} :
+                </strong>
                 <BuildingInfo building={child} />
               </div>
             ))}
