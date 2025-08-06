@@ -218,8 +218,7 @@ export const selectBuildingsAndSetMergeCandidates =
     if (!getState().edition.merge.newBuilding?.rnb_id) {
       dispatch(
         Actions.edition.setCandidates(
-          formatCandidates(rnbId, getState().edition.merge.candidates)
-            .candidates,
+          addOrRemoveCandidate(rnbId, getState().edition.merge.candidates),
         ),
       );
     }
@@ -290,16 +289,13 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   },
 });
 
-export function formatCandidates(candidate: string, candidates: string[]) {
+export function addOrRemoveCandidate(
+  candidate: string,
+  candidates: string[],
+): string[] {
   const itemExist = candidates.some((item: string) => item === candidate);
-  if (itemExist) {
-    return {
-      candidates: candidates.filter((item: string) => item !== candidate),
-    };
-  } else
-    return {
-      candidates: [...candidates, candidate],
-    };
+  if (itemExist) return candidates.filter((item: string) => item !== candidate);
+  else return [...candidates, candidate];
 }
 
 export const editionActions = editionSlice.actions;

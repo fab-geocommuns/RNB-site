@@ -3,7 +3,7 @@ import { Actions, RootState, AppDispatch } from '@/stores/store';
 import { useEffect, useState } from 'react';
 import { fetchBuilding } from '@/utils/requests';
 import { SelectedBuilding } from '@/stores/map/map-slice';
-import { formatCandidates } from '@/stores/edition/edition-slice';
+import { addOrRemoveCandidate } from '@/stores/edition/edition-slice';
 import RNBIDHeader from './RNBIDHeader';
 import MergeSummary from './MergeSummary';
 import BuildingInfo from './BuildingInfo';
@@ -58,7 +58,7 @@ export default function MergePanel() {
   const selectCandidateToRemove = (rnbId: string) => {
     dispatch(
       Actions.edition.setCandidates(
-        formatCandidates(rnbId, candidatesToMerge).candidates,
+        addOrRemoveCandidate(rnbId, candidatesToMerge),
       ),
     );
   };

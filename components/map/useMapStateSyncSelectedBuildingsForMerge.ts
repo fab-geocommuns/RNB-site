@@ -67,8 +67,10 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
           e.point.y,
           0,
         );
-        if (featureOnCursor === undefined) {
-          dispatch(Actions.edition.setOperation(null));
+        if (operation === 'merge' && newBuilding?.rnb_id) {
+          if (featureOnCursor === undefined) {
+            dispatch(Actions.edition.setOperation(null));
+          }
         }
       };
       map.on('click', handleClickEvent);
@@ -77,8 +79,11 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
         removeFeatureStateInLayers(sources, map);
       }
       prevOperationRef.current = operation;
+      return () => {
+        map.off('click', handleClickEvent);
+      };
     }
-  }, [operation]);
+  }, [operation, candidatesToMerge, newBuilding]);
 };
 
 function setMapLayer(
