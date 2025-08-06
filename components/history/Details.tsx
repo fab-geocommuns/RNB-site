@@ -86,8 +86,10 @@ export default function Details({
               </div>
               <div className={styles.latLonWrapper}>
                 <div className={styles.latLon}>
-                  <span>lat: {detailsInfo.point.coordinates[1]}</span>
-                  <span>long: {detailsInfo.point.coordinates[0]}</span>
+                  <span>
+                    Coordonnées: {detailsInfo.point.coordinates[1]},{' '}
+                    {detailsInfo.point.coordinates[0]}
+                  </span>
                 </div>
                 <CopyToClipboard
                   onCopy={() => handleCopy()}

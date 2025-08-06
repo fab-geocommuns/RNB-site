@@ -37,6 +37,7 @@ export default function TimelineHistory({
       <div className={styles.timeline}>
         {timelineInfo.map((history: ApiHistoryItem, index: number) => (
           <TimelineItem
+            key={index}
             history={history}
             index={index}
             selectedIndex={selectedIndex}
