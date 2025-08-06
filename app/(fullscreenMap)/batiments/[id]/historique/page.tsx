@@ -11,7 +11,7 @@ interface PageProps {
 export interface ApiHistoryItem {
   rnb_id: string;
   is_active: boolean;
-  shape: any;
+  shape: GeoJSON.Geometry | null;
   status: string;
   point: {
     coordinates: number[];
@@ -25,13 +25,24 @@ export interface ApiHistoryItem {
       first_name: string;
       last_name: string;
       organizations_names: string | null;
-    };
+    } | null;
     origin: {
       type: string;
       id: number;
-      details: any;
+      details: {
+        description?: string;
+        imported_database?: string;
+      };
     };
-    details: any;
+    details: {
+      updated_fields: string[];
+      merge_parents?: string[];
+      merge_child?: string;
+      merge_role?: string;
+      split_role?: string;
+      split_children?: string[];
+      split_parent?: string;
+    } | null;
   };
   ext_ids: Array<{
     id: string;

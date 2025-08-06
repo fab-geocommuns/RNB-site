@@ -9,6 +9,8 @@ import adsStyles from '@/styles/panelADS.module.scss';
 import ImageNext from 'next/image';
 import { getADSOperationIcons, getOperationIcon } from '@/logic/ads';
 
+import { formatDate } from '@/utils/date';
+
 interface ADSPanelProps {
   ads: SelectedADS;
 }
@@ -29,15 +31,6 @@ export default function ADSPanel({ ads }: ADSPanelProps) {
     }
   };
 
-  const formattedDecidedAt = () => {
-    const date = new Date(ads.decided_at);
-    return date.toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    });
-  };
-
   return (
     <>
       <div className={panelStyles.section}>
@@ -45,7 +38,7 @@ export default function ADSPanel({ ads }: ADSPanelProps) {
         <div className={panelStyles.sectionBody}>
           N° de dossier : {ads.file_number}
           <br />
-          Date d&apos;acceptation : {formattedDecidedAt()}
+          Date d&apos;acceptation : {formatDate(ads.decided_at)}
         </div>
       </div>
       <div className={panelStyles.section}>
