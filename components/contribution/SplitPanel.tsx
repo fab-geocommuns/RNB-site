@@ -22,7 +22,6 @@ import { BuildingAddressType } from './types';
 const INITIAL_STEP = 0;
 
 export default function SplitPanel() {
-  const dispatch: AppDispatch = useDispatch();
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
