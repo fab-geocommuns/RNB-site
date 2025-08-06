@@ -8,7 +8,7 @@ import MergeSummary from './MergeSummary';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import { Loader } from '@/components/Loader';
-import styles from '@/styles/merge.module.scss';
+import styles from '@/styles/contribution/mergePanel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import {
@@ -100,30 +100,25 @@ export default function MergePanel() {
     return (
       <>
         {newBuilding?.rnb_id ? (
-          <div>
-            <MergeSummary
-              newBuilding={newBuilding}
-              buildingsMerged={candidatesWithAddresses}
-            />
-            <div className={styles.footer}>
-              <Button onClick={newMerge}>Nouvelle fusion</Button>
-            </div>
-          </div>
+          <MergeSummary
+            newBuilding={newBuilding}
+            buildingsMerged={candidatesWithAddresses}
+          />
         ) : (
-          <div className={styles.mergePanel__wrapper}>
+          <div className={styles.mergePanelWrapper}>
             {!isLoading && (
-              <div className={styles.mergePanel__descWrapper}>
-                <span className={styles.mergePanel__descText}>
+              <div className={styles.mergePanelDescWrapper}>
+                <span className={styles.mergePanelDescText}>
                   Sélectionner les bâtiments à fusionner
                 </span>
-                <span className={styles.mergePanel__descSubText}>
+                <span className={styles.mergePanelDescSubText}>
                   Sélectionnez sur la carte les bâtiments attenants qui doivent
                   être fusionnés
                 </span>
               </div>
             )}
             {isLoading ? (
-              <div className={styles.mergePanel__loader}>
+              <div className={styles.mergePanelLoader}>
                 <Loader />
                 <span>Chargement en cours</span>
               </div>
@@ -153,12 +148,12 @@ export default function MergePanel() {
                         ),
                     )}
                     {isActive ? (
-                      <div className={styles.mergePanel__summary}>
+                      <div className={styles.mergePanelSummary}>
                         <div>
-                          <div className={styles.mergePanel__descText}>
+                          <div className={styles.mergePanelDescText}>
                             <label
                               htmlFor="comment"
-                              className={styles.mergePanel__label}
+                              className={styles.mergePanelLabel}
                             >
                               Commentaire (optionnel)
                             </label>
@@ -168,22 +163,22 @@ export default function MergePanel() {
                             onChange={handleChange}
                             id="comment"
                             name="text"
-                            className={`fr-text--sm fr-input fr-mb-4v ${styles.mergePanel__textarea}`}
+                            className={`fr-text--sm fr-input fr-mb-4v ${styles.mergePanelTextarea}`}
                             placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la fusion ? Laissez un commentaire ici."
                           />
                         </div>
                         <span>
                           Vous avez choisi de fusionner{' '}
-                          <span className={styles.mergePanel__summaryText}>
+                          <span className={styles.mergePanelSummaryText}>
                             {candidatesWithAddresses.length} bâtiments en 1
                           </span>
                         </span>
                       </div>
                     ) : (
                       <div
-                        className={`${styles.mergePanel__card} kg-card kg-callout-card kg-callout-card-yellow`}
+                        className={`${styles.mergePanelCard} kg-card kg-callout-card kg-callout-card-yellow`}
                       >
-                        <span className={styles.mergePanel__cardText}>
+                        <span className={styles.mergePanelCardText}>
                           Il manque au moins un bâtiment à votre sélection
                         </span>
                         <span>
@@ -194,7 +189,7 @@ export default function MergePanel() {
                     )}
                   </div>
                 ) : (
-                  <div className={styles.mergePanel__textNoBuilding}>
+                  <div className={styles.mergePanelTextNoBuilding}>
                     <span>Aucun bâtiment sélectionné</span>
                   </div>
                 )}
@@ -208,22 +203,26 @@ export default function MergePanel() {
   function footerPanel() {
     return (
       <>
-        <div className={styles.footer}>
-          <Button onClick={cancelMerge} priority="tertiary no outline">
-            Annuler
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={isLoading || (candidatesWithAddresses?.length ?? 0) < 2}
-            title={
-              (candidatesWithAddresses?.length ?? 0) > 1
-                ? `Fusionner ${candidatesWithAddresses?.length} bâtiments en un seul`
-                : 'Sélectionnez au moins 2 bâtiments à fusionner'
-            }
-          >
-            Valider la fusion
-          </Button>
-        </div>
+        {newBuilding?.rnb_id ? (
+          <Button onClick={newMerge}>Nouvelle fusion</Button>
+        ) : (
+          <>
+            <Button onClick={cancelMerge} priority="tertiary no outline">
+              Annuler
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={isLoading || (candidatesWithAddresses?.length ?? 0) < 2}
+              title={
+                (candidatesWithAddresses?.length ?? 0) > 1
+                  ? `Fusionner ${candidatesWithAddresses?.length} bâtiments en un seul`
+                  : 'Sélectionnez au moins 2 bâtiments à fusionner'
+              }
+            >
+              Valider la fusion
+            </Button>
+          </>
+        )}
       </>
     );
   }

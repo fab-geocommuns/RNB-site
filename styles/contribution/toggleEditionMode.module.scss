@@ -1,0 +1,12 @@
+.editToggle {
+  padding-right: 3rem !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  div {
+    label::before {
+      margin-left: 0 !important;
+    }
+  }
+}

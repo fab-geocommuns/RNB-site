@@ -127,23 +127,21 @@ function SplitBuildingInitialStep({
   function footerPanel() {
     return (
       <>
-        <div className={styles.footer}>
-          <Button
-            onClick={() => cancelSplit(dispatch)}
-            priority="tertiary no outline"
-          >
-            Annuler
-          </Button>
-          <Button
-            onClick={() =>
-              nextStep(selectedChildIndex, splitChildrenCount, dispatch)
-            }
-            disabled={splitCandidateId === null}
-            priority="secondary"
-          >
-            Suivant
-          </Button>
-        </div>
+        <Button
+          onClick={() => cancelSplit(dispatch)}
+          priority="tertiary no outline"
+        >
+          Annuler
+        </Button>
+        <Button
+          onClick={() =>
+            nextStep(selectedChildIndex, splitChildrenCount, dispatch)
+          }
+          disabled={splitCandidateId === null}
+          priority="secondary"
+        >
+          Suivant
+        </Button>
       </>
     );
   }
@@ -279,49 +277,47 @@ function SplitBuildingChildInfosStep({
   function footerPanel() {
     return (
       <>
-        <div className={styles.footer}>
+        <Button
+          onClick={() => cancelSplit(dispatch)}
+          priority="tertiary no outline"
+        >
+          Annuler
+        </Button>
+        <Button
+          onClick={() => previousStep(selectedChildIndex, dispatch)}
+          priority="secondary"
+        >
+          Précédent
+        </Button>
+        {selectedChildIndex < splitChildrenCount && (
           <Button
-            onClick={() => cancelSplit(dispatch)}
-            priority="tertiary no outline"
-          >
-            Annuler
-          </Button>
-          <Button
-            onClick={() => previousStep(selectedChildIndex, dispatch)}
+            onClick={() =>
+              nextStep(selectedChildIndex, splitChildrenCount, dispatch)
+            }
+            disabled={currentChildHasNoShape}
             priority="secondary"
+            title={
+              currentChildHasNoShape
+                ? 'Veuillez tracer une géométrie pour ce bâtiment'
+                : ''
+            }
           >
-            Précédent
+            Suivant
           </Button>
-          {selectedChildIndex < splitChildrenCount && (
-            <Button
-              onClick={() =>
-                nextStep(selectedChildIndex, splitChildrenCount, dispatch)
-              }
-              disabled={currentChildHasNoShape}
-              priority="secondary"
-              title={
-                currentChildHasNoShape
-                  ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                  : ''
-              }
-            >
-              Suivant
-            </Button>
-          )}
-          {selectedChildIndex === splitChildrenCount && (
-            <Button
-              onClick={handleSubmit}
-              disabled={currentChildHasNoShape}
-              title={
-                currentChildHasNoShape
-                  ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                  : `Scinder le bâtiment en ${splitChildrenCount}`
-              }
-            >
-              Scinder
-            </Button>
-          )}
-        </div>
+        )}
+        {selectedChildIndex === splitChildrenCount && (
+          <Button
+            onClick={handleSubmit}
+            disabled={currentChildHasNoShape}
+            title={
+              currentChildHasNoShape
+                ? 'Veuillez tracer une géométrie pour ce bâtiment'
+                : `Scinder le bâtiment en ${splitChildrenCount}`
+            }
+          >
+            Scinder
+          </Button>
+        )}
       </>
     );
   }
@@ -403,7 +399,9 @@ function SplitBuildingSummaryStep({
           <div className={styles.splitWrapper}>
             {childrenB.map((child, index) => (
               <div key={index} className={styles.splitSummary}>
-                <strong className={`fr-text--lg fr-m-0 ${styles.childTitle}`}>
+                <strong
+                  className={`fr-text--lg fr-m-0 ${styles.splitChildTitle}`}
+                >
                   Enfant {index + 1} :
                 </strong>
                 <BuildingInfo building={child} />
@@ -442,31 +440,29 @@ function SplitBuildingSummaryStep({
   function footerPanel() {
     return (
       <>
-        <div className={styles.footer}>
-          <Button
-            onClick={() => cancelSplit(dispatch)}
-            priority="tertiary no outline"
-          >
-            Annuler
-          </Button>
-          <Button
-            onClick={() => previousStep(selectedChildIndex, dispatch)}
-            priority="secondary"
-          >
-            Précédent
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={currentChildHasNoShape}
-            title={
-              currentChildHasNoShape
-                ? 'Veuillez tracer une géométrie pour tous les bâtiments'
-                : `Scinder le bâtiment en ${splitChildrenCount} bâtiments`
-            }
-          >
-            Scinder
-          </Button>
-        </div>
+        <Button
+          onClick={() => cancelSplit(dispatch)}
+          priority="tertiary no outline"
+        >
+          Annuler
+        </Button>
+        <Button
+          onClick={() => previousStep(selectedChildIndex, dispatch)}
+          priority="secondary"
+        >
+          Précédent
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          disabled={currentChildHasNoShape}
+          title={
+            currentChildHasNoShape
+              ? 'Veuillez tracer une géométrie pour tous les bâtiments'
+              : `Scinder le bâtiment en ${splitChildrenCount} bâtiments`
+          }
+        >
+          Scinder
+        </Button>
       </>
     );
   }

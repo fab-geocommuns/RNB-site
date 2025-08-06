@@ -1,0 +1,7 @@
+@import './panel-mixins.scss';
+.sectionTitle {
+  @include sectionTitle;
+}
+.panelSection {
+  @include panelSection;
+}

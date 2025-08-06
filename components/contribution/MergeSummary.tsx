@@ -1,7 +1,6 @@
-import { BuildingStatusMap } from '@/stores/contribution/contribution-types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import BuildingInfo from './BuildingInfo';
-import styles from '@/styles/merge.module.scss';
+import styles from '@/styles/contribution/mergePanel.module.scss';
 
 interface MergeSummaryProps {
   newBuilding: SelectedBuilding;
@@ -16,20 +15,20 @@ export default function MergeSummary({
     <>
       <div>
         {buildingsMerged && buildingsMerged.length > 0 && (
-          <div className={styles.mergePanel__summaryHeaderWrapper}>
-            <h3 className={styles.mergePanel__summaryTitle}>
+          <div className={styles.mergePanelSummaryHeaderWrapper}>
+            <h3 className={styles.mergePanelSummaryTitle}>
               Bâtiments fusionnés (ID-RNB)
             </h3>
-            <div className={styles.mergePanel__summaryHeader}>
+            <div className={styles.mergePanelSummaryHeader}>
               {buildingsMerged.map(
                 (building: SelectedBuilding | undefined) =>
                   building && (
                     <div
                       key={building.rnb_id}
-                      className={styles.mergePanel__summaryMerged}
+                      className={styles.mergePanelSummaryMerged}
                     >
                       <span
-                        className={`${styles.mergePanel__rnbId} ${styles.mergePanel__rnbIdMerged}`}
+                        className={`${styles.mergePanelRnbId} ${styles.mergePanelRnbIdMerged}`}
                       >
                         {building.rnb_id}
                       </span>
@@ -40,9 +39,9 @@ export default function MergeSummary({
           </div>
         )}
         <div
-          className={`${styles.mergePanel__descWrapper} ${styles.mergePanel__newBuildingWrapper}`}
+          className={`${styles.mergePanelDescWrapper} ${styles.mergePanelNewBuildingWrapper}`}
         >
-          <h3 className={styles.mergePanel__summaryTitle}>
+          <h3 className={styles.mergePanelSummaryTitle}>
             Nouveau bâtiment créé:
           </h3>
           <BuildingInfo key={newBuilding.rnb_id} building={newBuilding} />

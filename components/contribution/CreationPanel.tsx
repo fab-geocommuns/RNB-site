@@ -1,4 +1,3 @@
-import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useState } from 'react';
@@ -137,14 +136,12 @@ export default function CreationPanel() {
   function footerPanel() {
     return (
       <>
-        <div className={styles.footer}>
-          <Button onClick={cancelCreation} priority="tertiary no outline">
-            Annuler
-          </Button>
-          {step === 2 && (
-            <Button onClick={createBuilding}>Créer le bâtiment</Button>
-          )}
-        </div>
+        <Button onClick={cancelCreation} priority="tertiary no outline">
+          Annuler
+        </Button>
+        {step === 2 && (
+          <Button onClick={createBuilding}>Créer le bâtiment</Button>
+        )}
       </>
     );
   }

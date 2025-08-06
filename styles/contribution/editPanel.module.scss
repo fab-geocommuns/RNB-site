@@ -1,4 +1,5 @@
 @import '../vars.scss';
+@import './panel-mixins.scss';
 
 $input-height: 3.25rem;
 $spacing: 0.75rem;
@@ -6,6 +7,7 @@ $actions-top: 2 * $spacing + $input-height;
 $actions-height: 3.75rem;
 $panel-padding: 1.5 * $spacing;
 
+// EDITIONPANEL
 .actions {
   position: absolute;
   background-color: transparent;
@@ -14,9 +16,7 @@ $panel-padding: 1.5 * $spacing;
   height: $actions-height;
   right: auto;
   z-index: 100;
-  display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: left;
   border-radius: 0.25rem;
 
@@ -31,7 +31,6 @@ $panel-padding: 1.5 * $spacing;
       background-color: var(--text-action-high-blue-france);
     }
   }
-
   .action {
     display: flex;
     flex-direction: column;
@@ -41,103 +40,6 @@ $panel-padding: 1.5 * $spacing;
     padding-top: 0.375rem;
     .actionSelected {
       color: white;
-    }
-  }
-}
-
-.stepTitle {
-  color: var(--text-action-high-blue-france);
-}
-.content {
-  background-color: var(--background-alt-blue-france);
-  box-shadow: 0 0 0 0.125rem rgba(0, 0, 0, 0.1);
-
-  border-radius: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
-}
-.panelSection {
-  background: var(--background-default-grey);
-  padding: $spacing;
-  margin-bottom: $spacing;
-  border-radius: 0.25rem;
-  border: 0.0625rem solid var(--border-open-blue-france);
-  position: relative;
-}
-
-.noPad {
-  padding-top: $spacing;
-  font-size: 0.875rem;
-}
-.sectionTitle {
-  text-transform: uppercase;
-  font-weight: 700;
-  line-height: 2;
-}
-
-.header {
-  border-radius: 0.25rem 0.25rem 0 0;
-  text-transform: uppercase;
-  padding: 0.375rem 0.75rem 0.375rem 1.125rem;
-  background-color: var(--background-alt-blue-france-hover);
-  box-shadow: 0 0 0.3125rem var(--background-action-high-grey-active);
-  z-index: 100;
-}
-
-.footer {
-  padding: $spacing $spacing $spacing 2 * $spacing;
-  box-shadow: 0 0rem 0.25rem var(--background-contrast-grey-active);
-  z-index: 90;
-  flex-shrink: 1;
-  flex-grow: 0;
-  width: 100%;
-  background: var(--background-alt-blue-france);
-  display: flex;
-  justify-content: space-between;
-}
-
-.noticeContainer {
-  pointer-events: none;
-  background-color: transparent;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  .notice {
-    opacity: 0;
-    transform: translateY(100%);
-    transition: none;
-  }
-
-  .noticeVisible {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-      opacity 0.4s ease,
-      transform 0.5s ease;
-    pointer-events: auto;
-  }
-}
-
-.editToggle {
-  padding-right: 3rem !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  div {
-    label::before {
-      margin-left: 0 !important;
     }
   }
 }
@@ -154,31 +56,23 @@ $panel-padding: 1.5 * $spacing;
   }
 }
 .textarea {
-  height: 9.375rem;
-  border: 0.0625rem solid var(--background-contrast-grey-active);
-}
-.parentWrapper {
-  background-color: #f4f6ff;
-  padding: 1rem;
-}
-.splitWrapper {
-  margin-top: 2rem;
-}
-.splitSummary {
-  margin-bottom: 1.25rem;
-  &:last-child {
-    margin-bottom: 0;
-    .editPanel__infoWrapper {
-      border-bottom: none;
-      padding-bottom: 0.625rem;
-    }
-  }
+  @include textarea;
 }
 .text {
-  font-size: 0.9rem;
-  line-height: 1.3rem;
+  @include text;
 }
-.childTitle {
-  color: #0063cb;
-  text-transform: uppercase;
+////////////////////////
+
+// CREATIONPANEL
+.panelSection {
+  @include panelSection;
+}
+// CREATIONPANEL
+.noPad {
+  @include noPad;
+}
+
+// CREATIONPANEL
+.sectionTitle {
+  @include sectionTitle;
 }

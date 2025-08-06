@@ -1,0 +1,17 @@
+@import './panel-mixins.scss';
+
+.panelSection {
+  @include panelSection;
+}
+.noPad {
+  @include noPad;
+}
+.sectionTitle {
+  @include sectionTitle;
+}
+.textarea {
+  @include textarea;
+}
+.text {
+  @include text;
+}

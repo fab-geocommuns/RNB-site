@@ -5,7 +5,7 @@ import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 
 import Button from '@codegouvfr/react-dsfr/Button';
 
-import styles from '@/styles/contribution/editPanel.module.scss';
+import styles from '@/styles/contribution/building.module.scss';
 import editPolygonIcon from '@/public/images/map/edition/edit_polygon.svg';
 import editPolygonDisabledIcon from '@/public/images/map/edition/edit_polygon_disabled.svg';
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';

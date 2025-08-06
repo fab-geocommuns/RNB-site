@@ -1,0 +1,27 @@
+// SCSS Mixins
+@mixin panelSection {
+  background: var(--background-default-grey);
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--border-open-blue-france);
+  position: relative;
+}
+@mixin noPad {
+  padding-top: 0.75rem;
+  font-size: 0.875rem;
+}
+@mixin sectionTitle {
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 2;
+  margin-bottom: 0.8rem;
+}
+@mixin textarea {
+  height: 9.375rem;
+  border: 0.0625rem solid var(--background-contrast-grey-active);
+}
+@mixin text {
+  font-size: 0.9rem;
+  line-height: 1.3rem;
+}
