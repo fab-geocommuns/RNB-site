@@ -95,6 +95,7 @@ export const editionSlice = createSlice({
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
       state.merge.candidates = [];
+      state.merge.newBuilding = null;
       state.split.selectedChildIndex = null;
       state.split.children = createEmptySplitChildren(2);
       state.split.location = null;
