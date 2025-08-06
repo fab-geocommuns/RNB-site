@@ -1,12 +1,15 @@
 import styles from '@/styles/history.module.scss';
+import { formatDate, formatTime } from '@/utils/date';
 import changedImage from '@/public/images/history/changed.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
-import { formatDate } from '@/components/history/Timeline';
+import CopyToClipboard from '@/components/util/CopyToClipboard';
 import VisuMapReact from '@/components/map/VisuMapReact';
+import { fr } from '@codegouvfr/react-dsfr';
 import {
   BuildingStatusMap,
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
+import { useState } from 'react';
 
 import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
 import Link from 'next/link';
@@ -18,6 +21,13 @@ export default function Details({
   detailsInfo: ApiHistoryItem;
   responsivePanelIsOpen: boolean;
 }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
   return (
     <section
       className={`${styles.detailSection} ${responsivePanelIsOpen ? styles.detailSectionOpen : styles.detailSectionClosed}`}
@@ -28,11 +38,15 @@ export default function Details({
             {getHistoryLongTitle(detailsInfo)}
           </h2>
         )}
-
-        <span className={`${styles.detailInfo} ${styles.user}`}>
-          Le {formatDate(detailsInfo.updated_at)} - par{' '}
-          {displayAuthor(detailsInfo)}
-        </span>
+        <div>
+          <span className={`${styles.detailInfo} ${styles.user}`}>
+            Le {formatDate(detailsInfo.updated_at)} à{' '}
+            {formatTime(detailsInfo.updated_at)} -{' '}
+            <span className={`${styles.detailInfoUser}`}>
+              par {displayAuthor(detailsInfo)}
+            </span>
+          </span>
+        </div>
 
         <div className={styles.detailBlock}>
           {detailsInfo.status && (
@@ -69,6 +83,31 @@ export default function Details({
                 <a href={formatPanoramaxLink(detailsInfo)} target="_blank">
                   Consulter le site Panoramax
                 </a>
+              </div>
+              <div className={styles.latLonWrapper}>
+                <div className={styles.latLon}>
+                  <span>
+                    Coordonnées: {detailsInfo.point.coordinates[1]},{' '}
+                    {detailsInfo.point.coordinates[0]}
+                  </span>
+                </div>
+                <CopyToClipboard
+                  onCopy={() => handleCopy()}
+                  text={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
+                >
+                  <div className={styles.buttonCopy}>
+                    {copied ? (
+                      <span>
+                        Copié <i className={fr.cx('fr-icon-success-line')}></i>
+                      </span>
+                    ) : (
+                      <span>
+                        Copier{' '}
+                        <i className={fr.cx('fr-icon-clipboard-line')}></i>
+                      </span>
+                    )}
+                  </div>
+                </CopyToClipboard>
               </div>
             </div>
           )}
@@ -249,7 +288,7 @@ export default function Details({
                     <span>Parents de la fusion :</span>
                   </div>
                   <span>
-                    {detailsInfo.event?.details?.merge_parents.map(
+                    {detailsInfo.event?.details?.merge_parents?.map(
                       (parentId: string, i: number) => (
                         <span key={i}>
                           <Link
@@ -260,7 +299,8 @@ export default function Details({
                           </Link>
                           {parentId === detailsInfo.rnb_id && ' (ce bâtiment)'}
                           {i <
-                            detailsInfo.event?.details?.merge_parents.length -
+                            (detailsInfo.event?.details?.merge_parents
+                              ?.length ?? 0) -
                               1 && ', '}
                         </span>
                       ),
@@ -314,7 +354,7 @@ export default function Details({
                     <span>Enfants de la scission :</span>
                   </div>
                   <span>
-                    {detailsInfo.event?.details?.split_children.map(
+                    {detailsInfo.event?.details?.split_children?.map(
                       (childId: string, i: number) => (
                         <span key={i}>
                           <Link
@@ -325,7 +365,8 @@ export default function Details({
                           </Link>
                           {childId === detailsInfo.rnb_id && ' (ce bâtiment)'}
                           {i <
-                            detailsInfo.event?.details?.split_children.length -
+                            (detailsInfo.event?.details?.split_children
+                              ?.length ?? 0) -
                               1 && ', '}
                         </span>
                       ),
@@ -352,8 +393,10 @@ export default function Details({
 }
 
 function roleEvent(infos: ApiHistoryItem): string | null {
-  if (infos.event.type === 'merge') return infos.event.details.merge_role;
-  if (infos.event.type === 'split') return infos.event.details.split_role;
+  if (infos?.event?.details?.merge_role && infos.event.type === 'merge')
+    return infos.event.details.merge_role;
+  if (infos?.event?.details?.split_role && infos.event.type === 'split')
+    return infos.event.details.split_role;
   return null;
 }
 

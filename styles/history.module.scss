@@ -173,6 +173,12 @@
   color: blue;
   font-size: 0.8rem;
 }
+.latLon {
+  display: flex;
+  flex-direction: column;
+  margin-left: 14.5rem;
+  font-size: 0.8rem;
+}
 .detailsSubtitle {
   margin-bottom: 0;
   font-size: 1.6rem;
@@ -191,7 +197,10 @@
 .detailInfo {
   display: flex;
 }
-
+.detailInfoUser {
+  margin-right: 0.3rem;
+  margin-left: 0.3rem;
+}
 .detailLabel {
   text-align: end;
   width: 14rem;
@@ -229,9 +238,37 @@
   border-radius: 50%;
   margin-right: 0.5rem;
 }
+.latLonWrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.buttonCopy {
+  background: var(--background-contrast-blue-france);
+  background-color: #bccdff;
+  color: #273961;
+  width: 6rem;
+  font-size: 0.8rem;
+  padding: 0.3rem;
+  border-radius: 0.1rem;
+  text-align: center;
+  height: fit-content;
+  margin-left: 2rem;
+}
+.buttonCopy i {
+  opacity: 0.8;
+}
+.buttonCopy:hover {
+  background: #83a9ff;
+  color: #171d2e;
+  cursor: pointer;
+}
 @media (max-width: 48rem) {
   .detailMap {
     width: 100%;
+  }
+  .sidebarH1 {
+    margin-bottom: 1.5rem;
   }
   .container {
     position: fixed;
@@ -242,6 +279,10 @@
   .detailInfo,
   .detailAddresses {
     flex-direction: column;
+  }
+  .detailInfoUser {
+    margin-right: 0;
+    margin-left: 0;
   }
   .detailBlockInfo,
   .detailAddresses {
@@ -293,7 +334,7 @@
   .sidebar {
     position: fixed;
     top: 0;
-    margin-top: 10rem;
+    margin-top: 9rem;
     border-right: none;
     border-bottom: 0.0625rem solid #ddd;
   }

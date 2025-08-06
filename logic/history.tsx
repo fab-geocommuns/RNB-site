@@ -9,14 +9,14 @@ export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
     if (historyItem.event?.details?.merge_role === 'parent') {
       return (
         'Désactivation suite à la fusion de ' +
-        historyItem.event?.details?.merge_parents.length +
+        historyItem.event?.details?.merge_parents?.length +
         ' bâtiments'
       );
     }
     if (historyItem.event?.details?.merge_role === 'child') {
       return (
         'Création suite à la fusion de ' +
-        historyItem.event?.details?.merge_parents.length +
+        historyItem.event?.details?.merge_parents?.length +
         ' bâtiments'
       );
     }
@@ -25,7 +25,7 @@ export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
     if (historyItem.event?.details?.split_role === 'parent') {
       return (
         'Désactivation suite à scission en ' +
-        historyItem.event?.details?.split_children.length +
+        historyItem.event?.details?.split_children?.length +
         ' bâtiments'
       );
     }
@@ -51,7 +51,7 @@ export function getHistoryShortTitle(historyItem: ApiHistoryItem): string {
   }
   if (historyItem.event?.type === 'split') {
     if (historyItem.event?.details?.split_role === 'parent') {
-      return 'Scindé en ' + historyItem.event?.details?.split_children.length;
+      return 'Scindé en ' + historyItem.event?.details?.split_children?.length;
     }
     if (historyItem.event?.details?.split_role === 'child') {
       return 'Créé suite à scission';
