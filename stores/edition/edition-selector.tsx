@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { SplitChild } from './edition-slice';
 import { RootState } from '../store';
-import { geojsonToWKT } from '@terraformer/wkt';
+import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 
 export const selectSplitChildren = (state: RootState) =>
   state.edition.split.children;
@@ -16,7 +16,7 @@ export const selectSplitChildrenForAPI = createSelector(
       };
 
       if (child.shape) {
-        data['shape'] = geojsonToWKT(child.shape);
+        data['shape'] = geojsonToReducedPrecisionWKT(child.shape);
       }
 
       return data;

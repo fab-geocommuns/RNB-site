@@ -8,7 +8,7 @@ import BuildingStatus from './BuildingStatus';
 import BuildingAddresses from './BuildingAddresses';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { geojsonToWKT } from '@terraformer/wkt';
+import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import {
   throwErrorMessageForHumans,
@@ -58,7 +58,7 @@ export default function CreationPanel() {
     let data: { [key: string]: any } = {
       status: newStatus,
       addresses_cle_interop: localAddresses.map((a) => a.id),
-      shape: geojsonToWKT(buildingNewShape!),
+      shape: geojsonToReducedPrecisionWKT(buildingNewShape!),
     };
     if (commentValue.length) data = { ...data, comment: commentValue };
     try {

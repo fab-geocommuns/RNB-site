@@ -471,7 +471,7 @@ const handleSplitSubmit = async (
       method: 'POST',
     });
     if (!response.ok) {
-      await throwErrorMessageForHumans(response);
+      await handleErrorResponse(response, dispatch);
     } else {
       // force the map to reload the building, to immediatly show the modifications made
       dispatch(Actions.map.reloadBuildings());
