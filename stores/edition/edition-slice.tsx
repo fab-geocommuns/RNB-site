@@ -9,6 +9,7 @@ import {
 import { Actions, AppDispatch, RootState } from '../store';
 import { BuildingStatusType } from '../contribution/contribution-types';
 import { BuildingAddressType } from '@/components/contribution/types';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -19,6 +20,7 @@ export type ToasterInfos = {
 
 export type MergeInfos = {
   candidates: string[];
+  newBuilding: SelectedBuilding | null;
 };
 
 export type SplitInfos = {
@@ -72,6 +74,7 @@ const initialState: EditionStore = {
   },
   merge: {
     candidates: [],
+    newBuilding: null,
   },
   split: {
     splitCandidateId: null,
@@ -92,18 +95,17 @@ export const editionSlice = createSlice({
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
       state.merge.candidates = [];
+      state.merge.newBuilding = null;
       state.split.selectedChildIndex = null;
       state.split.children = createEmptySplitChildren(2);
       state.split.location = null;
       state.split.splitCandidateId = null;
     },
-    setCandidates(
-      state,
-      action: PayloadAction<{
-        candidates: string[];
-      }>,
-    ) {
-      state.merge = action.payload;
+    setCandidates(state, action: PayloadAction<string[]>) {
+      state.merge.candidates = action.payload;
+    },
+    setNewBuilding(state, action: PayloadAction<SelectedBuilding | null>) {
+      state.merge.newBuilding = action.payload;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
@@ -213,11 +215,13 @@ export const selectBuildingsAndSetMergeCandidates =
   (rnbId: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(Actions.map.unselectItem());
-    dispatch(
-      Actions.edition.setCandidates(
-        formatCandidates(rnbId, getState().edition.merge.candidates),
-      ),
-    );
+    if (!getState().edition.merge.newBuilding?.rnb_id) {
+      dispatch(
+        Actions.edition.setCandidates(
+          addOrRemoveCandidate(rnbId, getState().edition.merge.candidates),
+        ),
+      );
+    }
   };
 
 export const selectBuildingAndSetOperationUpdate =
@@ -285,16 +289,13 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   },
 });
 
-export function formatCandidates(candidate: string, candidates: string[]) {
+export function addOrRemoveCandidate(
+  candidate: string,
+  candidates: string[],
+): string[] {
   const itemExist = candidates.some((item: string) => item === candidate);
-  if (itemExist) {
-    return {
-      candidates: candidates.filter((item: string) => item !== candidate),
-    };
-  } else
-    return {
-      candidates: [...candidates, candidate],
-    };
+  if (itemExist) return candidates.filter((item: string) => item !== candidate);
+  else return [...candidates, candidate];
 }
 
 export const editionActions = editionSlice.actions;
