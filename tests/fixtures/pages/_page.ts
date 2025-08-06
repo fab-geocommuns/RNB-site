@@ -31,6 +31,7 @@ export abstract class RNBPage {
   }
 
   async login() {
+    await this.page.waitForLoadState('networkidle');
     await this.page.goto('/login');
     await this.loginForm
       .getByLabel('Email')

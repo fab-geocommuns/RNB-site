@@ -11,7 +11,7 @@ import CreationPanel from './CreationPanel';
 import MergePanel from './MergePanel';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { geojsonToWKT } from '@terraformer/wkt';
+import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import { BuildingAddressType } from './types';
 import { Loader } from '@/components/Loader';
 import Button from '@codegouvfr/react-dsfr/Button';
@@ -104,7 +104,7 @@ function EditSelectedBuildingPanelContent({
     if (commentValue.length) data = { ...data, comment: commentValue };
     if (buildingNewShape) {
       // send the data in WKT format
-      data['shape'] = geojsonToWKT(buildingNewShape);
+      data['shape'] = geojsonToReducedPrecisionWKT(buildingNewShape);
     }
     try {
       const response = await fetch(url, {
@@ -321,6 +321,7 @@ export default function EditionPanel() {
           className={operation === 'split' ? styles.buttonSelected : ''}
           size="small"
           priority="tertiary no outline"
+          data-testid="split-action-button"
         >
           <div className={styles.action}>
             <img
