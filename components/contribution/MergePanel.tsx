@@ -101,23 +101,27 @@ export default function MergePanel() {
       <GenericPanel
         title="Fusionner des bâtiments"
         onClose={cancelMerge}
-        body={BodyPanel({
-          newBuilding,
-          candidatesWithAddresses,
-          isLoading,
-          isActive,
-          commentValue,
-          selectCandidateToRemove,
-          handleChange,
-        })}
-        footer={FooterPanel({
-          newBuilding,
-          isLoading,
-          candidatesWithAddresses,
-          newMerge,
-          cancelMerge,
-          handleSubmit,
-        })}
+        body={
+          <BodyPanel
+            newBuilding={newBuilding}
+            candidatesWithAddresses={candidatesWithAddresses}
+            isLoading={isLoading}
+            isActive={isActive}
+            commentValue={commentValue}
+            selectCandidateToRemove={selectCandidateToRemove}
+            handleChange={handleChange}
+          />
+        }
+        footer={
+          <FooterPanel
+            newBuilding={newBuilding}
+            isLoading={isLoading}
+            candidatesWithAddresses={candidatesWithAddresses}
+            newMerge={newMerge}
+            cancelMerge={cancelMerge}
+            handleSubmit={handleSubmit}
+          />
+        }
         testId="edition-panel"
       ></GenericPanel>
     </>

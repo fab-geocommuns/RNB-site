@@ -91,17 +91,21 @@ function SplitBuildingInitialStep({
       <GenericPanel
         title="Scinder un bâtiment"
         onClose={() => cancelSplit(dispatch)}
-        body={BodyPanelInitialStep({
-          splitCandidateId,
-          splitChildrenCount,
-          setChildrenNumber,
-        })}
-        footer={FooterPanelInitialStep({
-          selectedChildIndex,
-          splitChildrenCount,
-          splitCandidateId,
-          dispatch,
-        })}
+        body={
+          <BodyPanelInitialStep
+            splitCandidateId={splitCandidateId}
+            splitChildrenCount={splitChildrenCount}
+            setChildrenNumber={setChildrenNumber}
+          />
+        }
+        footer={
+          <FooterPanelInitialStep
+            selectedChildIndex={selectedChildIndex}
+            splitChildrenCount={splitChildrenCount}
+            splitCandidateId={splitCandidateId}
+            dispatch={dispatch}
+          />
+        }
         header={
           <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
             Étape 1 - Sélection du bâtiment
@@ -260,25 +264,31 @@ function SplitBuildingChildInfosStep({
       <GenericPanel
         title="Scinder un bâtiment"
         onClose={() => cancelSplit(dispatch)}
-        body={BodyPanelInfosStep({
-          childrenB,
-          selectedChildIndex,
-          location,
-          currentChildHasNoShape,
-          setStatus,
-          setAddresses,
-        })}
-        footer={FooterPanelInfosStep({
-          selectedChildIndex,
-          splitChildrenCount,
-          currentChildHasNoShape,
-          handleSubmit,
-          dispatch,
-        })}
-        header={ContentHeaderInfosStep({
-          selectedChildIndex,
-          splitChildrenCount,
-        })}
+        body={
+          <BodyPanelInfosStep
+            childrenB={childrenB}
+            selectedChildIndex={selectedChildIndex}
+            location={location}
+            currentChildHasNoShape={currentChildHasNoShape}
+            setStatus={setStatus}
+            setAddresses={setAddresses}
+          />
+        }
+        footer={
+          <FooterPanelInfosStep
+            selectedChildIndex={selectedChildIndex}
+            splitChildrenCount={splitChildrenCount}
+            currentChildHasNoShape={currentChildHasNoShape}
+            handleSubmit={handleSubmit}
+            dispatch={dispatch}
+          />
+        }
+        header={
+          <ContentHeaderInfosStep
+            selectedChildIndex={selectedChildIndex}
+            splitChildrenCount={splitChildrenCount}
+          />
+        }
         testId="edition-panel"
       ></GenericPanel>
     </>
@@ -459,22 +469,28 @@ function SplitBuildingSummaryStep({
       <GenericPanel
         title="Scinder un bâtiment"
         onClose={() => cancelSplit(dispatch)}
-        body={BodyPanelSummaryStep({
-          splitCandidateId,
-          splitChildrenCount,
-          childrenB,
-          currentChildHasNoShape,
-          commentValue,
-          handleChange,
-        })}
-        footer={FooterPanelSummaryStep({
-          selectedChildIndex,
-          currentChildHasNoShape,
-          splitChildrenCount,
-          handleSubmit,
-          dispatch,
-        })}
-        header={ContentHeaderSummaryStep({ splitChildrenCount })}
+        body={
+          <BodyPanelSummaryStep
+            splitCandidateId={splitCandidateId}
+            splitChildrenCount={splitChildrenCount}
+            childrenB={childrenB}
+            currentChildHasNoShape={currentChildHasNoShape}
+            commentValue={commentValue}
+            handleChange={handleChange}
+          />
+        }
+        footer={
+          <FooterPanelSummaryStep
+            selectedChildIndex={selectedChildIndex}
+            currentChildHasNoShape={currentChildHasNoShape}
+            splitChildrenCount={splitChildrenCount}
+            handleSubmit={handleSubmit}
+            dispatch={dispatch}
+          />
+        }
+        header={
+          <ContentHeaderSummaryStep splitChildrenCount={splitChildrenCount} />
+        }
         testId="edition-panel"
       ></GenericPanel>
     </>

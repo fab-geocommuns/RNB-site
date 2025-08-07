@@ -87,18 +87,26 @@ export default function CreationPanel() {
       <GenericPanel
         title="Créer un bâtiment"
         onClose={cancelCreation}
-        body={BodyPanel({
-          step,
-          mapCoordinates,
-          newStatus,
-          localAddresses,
-          commentValue,
-          setNewStatus,
-          handleEditAddress,
-          handleChange,
-        })}
-        footer={FooterPanel({ step, createBuilding, cancelCreation })}
-        header={ContentHeader({ step })}
+        body={
+          <BodyPanel
+            step={step}
+            mapCoordinates={mapCoordinates}
+            newStatus={newStatus}
+            localAddresses={localAddresses}
+            commentValue={commentValue}
+            setNewStatus={setNewStatus}
+            handleEditAddress={handleEditAddress}
+            handleChange={handleChange}
+          />
+        }
+        footer={
+          <FooterPanel
+            step={step}
+            createBuilding={createBuilding}
+            cancelCreation={cancelCreation}
+          />
+        }
+        header={<ContentHeader step={step} />}
         testId="edition-panel"
       ></GenericPanel>
     </>

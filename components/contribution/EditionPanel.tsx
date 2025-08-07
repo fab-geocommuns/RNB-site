@@ -160,27 +160,31 @@ function EditSelectedBuildingPanelContent({
       <GenericPanel
         title="Modifier"
         onClose={cancelUpdate}
-        body={BodyPanel({
-          rnbId,
-          isLoading,
-          isActive,
-          newStatus,
-          selectedBuilding,
-          localAddresses,
-          shapeInteractionMode,
-          commentValue,
-          setNewStatus,
-          handleEditAddress,
-          handleChange,
-          toggleBuildingActivation,
-        })}
-        footer={FooterPanel({
-          isActive,
-          anyChanges,
-          isLoading,
-          handleSubmit,
-          cancelUpdate,
-        })}
+        body={
+          <BodyPanel
+            rnbId={rnbId}
+            isLoading={isLoading}
+            isActive={isActive}
+            newStatus={newStatus}
+            selectedBuilding={selectedBuilding}
+            localAddresses={localAddresses}
+            shapeInteractionMode={shapeInteractionMode}
+            commentValue={commentValue}
+            setNewStatus={setNewStatus}
+            handleEditAddress={handleEditAddress}
+            handleChange={handleChange}
+            toggleBuildingActivation={toggleBuildingActivation}
+          />
+        }
+        footer={
+          <FooterPanel
+            isActive={isActive}
+            anyChanges={anyChanges}
+            isLoading={isLoading}
+            handleSubmit={handleSubmit}
+            cancelUpdate={cancelUpdate}
+          />
+        }
         testId="edition-panel"
       ></GenericPanel>
     </>
