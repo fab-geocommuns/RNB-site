@@ -33,11 +33,11 @@ $title-color: #414e71;
 }
 
 .head {
-  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #f4f6ff;
+  padding: 10px;
   padding-left: 15px;
   padding-right: 7px;
 }
@@ -63,7 +63,7 @@ $title-color: #414e71;
 .body {
   flex-grow: 1;
   overflow-y: auto;
-  max-height: calc(100% - 134px);
+  max-height: 100%;
   padding: 20px 15px 20px 15px;
 }
 .footer {
