@@ -12,6 +12,7 @@ import MergePanel from './MergePanel';
 import GenericPanel from '@/components/panel/GenericPanel';
 import EditionButton from '@/components/contribution/EditionButton';
 import BuildingActivationToggle from './BuildingActivationToggle';
+import PanelTabs from '@/components/panel/PanelTabs';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import { BuildingAddressType } from './types';
@@ -214,7 +215,10 @@ function BodyPanel({
 }) {
   return (
     <>
-      <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
+      <div className={styles.headSection}>
+        <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
+        <PanelTabs rnbId={rnbId}></PanelTabs>
+      </div>
       {isLoading ? (
         <div className={styles.editLoader}>
           <Loader />

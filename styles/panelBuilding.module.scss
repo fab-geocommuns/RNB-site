@@ -42,6 +42,7 @@
   .navLinkCurrent {
     opacity: 1;
     background: #e7edff;
+    pointer-events: none;
 
     img {
       filter: brightness(0) saturate(100%) invert(34%) sepia(88%)
