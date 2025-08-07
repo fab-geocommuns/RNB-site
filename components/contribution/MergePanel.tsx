@@ -165,11 +165,11 @@ function bodyPanel(
                     {candidatesWithAddresses.map(
                       (candidate) =>
                         candidate && (
-                          <div className={styles.buildingSummary}>
-                            <BuildingInfo
-                              key={candidate.rnb_id}
-                              building={candidate}
-                            >
+                          <div
+                            key={candidate.rnb_id}
+                            className={styles.buildingSummary}
+                          >
+                            <BuildingInfo building={candidate}>
                               <button
                                 onClick={() =>
                                   selectCandidateToRemove(candidate.rnb_id)
