@@ -101,7 +101,7 @@ export default function MergePanel() {
       <GenericPanel
         title="Fusionner des bâtiments"
         onClose={cancelMerge}
-        body={bodyPanel(
+        body={BodyPanel({
           newBuilding,
           candidatesWithAddresses,
           isLoading,
@@ -109,29 +109,37 @@ export default function MergePanel() {
           commentValue,
           selectCandidateToRemove,
           handleChange,
-        )}
-        footer={footerPanel(
+        })}
+        footer={FooterPanel({
           newBuilding,
           isLoading,
           candidatesWithAddresses,
           newMerge,
           cancelMerge,
           handleSubmit,
-        )}
+        })}
         data-testid="edition-panel"
       ></GenericPanel>
     </>
   );
 }
-function bodyPanel(
-  newBuilding: SelectedBuilding | null,
-  candidatesWithAddresses: (SelectedBuilding | undefined)[] | null,
-  isLoading: boolean,
-  isActive: boolean,
-  commentValue: string,
-  selectCandidateToRemove: (candidate: string) => void,
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
-) {
+function BodyPanel({
+  newBuilding,
+  candidatesWithAddresses,
+  isLoading,
+  isActive,
+  commentValue,
+  selectCandidateToRemove,
+  handleChange,
+}: {
+  newBuilding: SelectedBuilding | null;
+  candidatesWithAddresses: (SelectedBuilding | undefined)[] | null;
+  isLoading: boolean;
+  isActive: boolean;
+  commentValue: string;
+  selectCandidateToRemove: (candidate: string) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
   return (
     <>
       {newBuilding?.rnb_id ? (
@@ -239,14 +247,21 @@ function bodyPanel(
     </>
   );
 }
-function footerPanel(
-  newBuilding: SelectedBuilding | null,
-  isLoading: boolean,
-  candidatesWithAddresses: (SelectedBuilding | undefined)[] | null,
-  newMerge: () => void,
-  cancelMerge: () => void,
-  handleSubmit: () => void,
-) {
+function FooterPanel({
+  newBuilding,
+  isLoading,
+  candidatesWithAddresses,
+  newMerge,
+  cancelMerge,
+  handleSubmit,
+}: {
+  newBuilding: SelectedBuilding | null;
+  isLoading: boolean;
+  candidatesWithAddresses: (SelectedBuilding | undefined)[] | null;
+  newMerge: () => void;
+  cancelMerge: () => void;
+  handleSubmit: () => void;
+}) {
   return (
     <>
       {newBuilding?.rnb_id ? (

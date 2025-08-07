@@ -159,7 +159,7 @@ function EditSelectedBuildingPanelContent({
       <GenericPanel
         title="Modifier"
         onClose={cancelUpdate}
-        body={bodyPanel(
+        body={BodyPanel({
           rnbId,
           isLoading,
           isActive,
@@ -172,33 +172,46 @@ function EditSelectedBuildingPanelContent({
           handleEditAddress,
           handleChange,
           toggleBuildingActivation,
-        )}
-        footer={footerPanel(
+        })}
+        footer={FooterPanel({
           isActive,
           anyChanges,
           isLoading,
           handleSubmit,
           cancelUpdate,
-        )}
+        })}
         data-testid="visu-panel"
       ></GenericPanel>
     </>
   );
 }
-function bodyPanel(
-  rnbId: string,
-  isLoading: boolean,
-  isActive: boolean,
-  newStatus: BuildingStatusType,
-  selectedBuilding: SelectedBuilding,
-  localAddresses: BuildingAddressType[],
-  shapeInteractionMode: ShapeInteractionMode,
-  commentValue: string,
-  setNewStatus: (status: BuildingStatusType) => void,
-  handleEditAddress: (addresses: BuildingAddressType[]) => void,
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
-  toggleBuildingActivation: (isActive: boolean) => void,
-) {
+function BodyPanel({
+  rnbId,
+  isLoading,
+  isActive,
+  newStatus,
+  selectedBuilding,
+  localAddresses,
+  shapeInteractionMode,
+  commentValue,
+  setNewStatus,
+  handleEditAddress,
+  handleChange,
+  toggleBuildingActivation,
+}: {
+  rnbId: string;
+  isLoading: boolean;
+  isActive: boolean;
+  newStatus: BuildingStatusType;
+  selectedBuilding: SelectedBuilding;
+  localAddresses: BuildingAddressType[];
+  shapeInteractionMode: ShapeInteractionMode;
+  commentValue: string;
+  setNewStatus: (status: BuildingStatusType) => void;
+  handleEditAddress: (addresses: BuildingAddressType[]) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  toggleBuildingActivation: (isActive: boolean) => void;
+}) {
   return (
     <>
       <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
@@ -248,13 +261,19 @@ function bodyPanel(
     </>
   );
 }
-function footerPanel(
-  isActive: boolean,
-  anyChanges: boolean,
-  isLoading: boolean,
-  handleSubmit: () => void,
-  cancelUpdate: () => void,
-) {
+function FooterPanel({
+  isActive,
+  anyChanges,
+  isLoading,
+  handleSubmit,
+  cancelUpdate,
+}: {
+  isActive: boolean;
+  anyChanges: boolean;
+  isLoading: boolean;
+  handleSubmit: () => void;
+  cancelUpdate: () => void;
+}) {
   return (
     <>
       <div className={styles.footer}>

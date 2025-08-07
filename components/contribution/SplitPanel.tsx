@@ -91,17 +91,17 @@ function SplitBuildingInitialStep({
       <GenericPanel
         title="Scinder un bâtiment"
         onClose={() => cancelSplit(dispatch)}
-        body={bodyPanelInitialStep(
+        body={BodyPanelInitialStep({
           splitCandidateId,
           splitChildrenCount,
           setChildrenNumber,
-        )}
-        footer={footerPanelInitialStep(
+        })}
+        footer={FooterPanelInitialStep({
           selectedChildIndex,
           splitChildrenCount,
           splitCandidateId,
           dispatch,
-        )}
+        })}
         header={
           <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
             Étape 1 - Sélection du bâtiment
@@ -112,12 +112,17 @@ function SplitBuildingInitialStep({
     </>
   );
 }
-function footerPanelInitialStep(
-  selectedChildIndex: number | null,
-  splitChildrenCount: number,
-  splitCandidateId: string | null,
-  dispatch: AppDispatch,
-) {
+function FooterPanelInitialStep({
+  selectedChildIndex,
+  splitChildrenCount,
+  splitCandidateId,
+  dispatch,
+}: {
+  selectedChildIndex: number | null;
+  splitChildrenCount: number;
+  splitCandidateId: string | null;
+  dispatch: AppDispatch;
+}) {
   return (
     <>
       <Button
@@ -138,11 +143,15 @@ function footerPanelInitialStep(
     </>
   );
 }
-function bodyPanelInitialStep(
-  splitCandidateId: string | null,
-  splitChildrenCount: number,
-  setChildrenNumber: (n: string) => void,
-) {
+function BodyPanelInitialStep({
+  splitCandidateId,
+  splitChildrenCount,
+  setChildrenNumber,
+}: {
+  splitCandidateId: string | null;
+  splitChildrenCount: number;
+  setChildrenNumber: (n: string) => void;
+}) {
   return (
     <>
       <div className={`${styles.panelSection} ${styles.noPad}`}>
@@ -251,35 +260,45 @@ function SplitBuildingChildInfosStep({
       <GenericPanel
         title="Scinder un bâtiment"
         onClose={() => cancelSplit(dispatch)}
-        body={bodyPanelInfosStep(
+        body={BodyPanelInfosStep({
           childrenB,
           selectedChildIndex,
           location,
           currentChildHasNoShape,
           setStatus,
           setAddresses,
-        )}
-        footer={footerPanelInfosStep(
+        })}
+        footer={FooterPanelInfosStep({
           selectedChildIndex,
           splitChildrenCount,
           currentChildHasNoShape,
           handleSubmit,
           dispatch,
-        )}
-        header={contentHeaderInfosStep(selectedChildIndex, splitChildrenCount)}
+        })}
+        header={ContentHeaderInfosStep({
+          selectedChildIndex,
+          splitChildrenCount,
+        })}
         data-testid="edition-panel"
       ></GenericPanel>
     </>
   );
 }
-function bodyPanelInfosStep(
-  childrenB: SplitChild[],
-  selectedChildIndex: number,
-  location: [number, number] | null,
-  currentChildHasNoShape: boolean,
-  setStatus: (status: BuildingStatusType) => void,
-  setAddresses: (addresses: BuildingAddressType[]) => void,
-) {
+function BodyPanelInfosStep({
+  childrenB,
+  selectedChildIndex,
+  location,
+  currentChildHasNoShape,
+  setStatus,
+  setAddresses,
+}: {
+  childrenB: SplitChild[];
+  selectedChildIndex: number;
+  location: [number, number] | null;
+  currentChildHasNoShape: boolean;
+  setStatus: (status: BuildingStatusType) => void;
+  setAddresses: (addresses: BuildingAddressType[]) => void;
+}) {
   return (
     <>
       <BuildingStatus
@@ -315,10 +334,13 @@ function bodyPanelInfosStep(
     </>
   );
 }
-function contentHeaderInfosStep(
-  selectedChildIndex: number,
-  splitChildrenCount: number,
-) {
+function ContentHeaderInfosStep({
+  selectedChildIndex,
+  splitChildrenCount,
+}: {
+  selectedChildIndex: number;
+  splitChildrenCount: number;
+}) {
   return (
     <>
       <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
@@ -328,13 +350,19 @@ function contentHeaderInfosStep(
     </>
   );
 }
-function footerPanelInfosStep(
-  selectedChildIndex: number,
-  splitChildrenCount: number,
-  currentChildHasNoShape: boolean,
-  handleSubmit: () => void,
-  dispatch: AppDispatch,
-) {
+function FooterPanelInfosStep({
+  selectedChildIndex,
+  splitChildrenCount,
+  currentChildHasNoShape,
+  handleSubmit,
+  dispatch,
+}: {
+  selectedChildIndex: number;
+  splitChildrenCount: number;
+  currentChildHasNoShape: boolean;
+  handleSubmit: () => void;
+  dispatch: AppDispatch;
+}) {
   return (
     <>
       <Button
@@ -431,35 +459,42 @@ function SplitBuildingSummaryStep({
       <GenericPanel
         title="Scinder un bâtiment"
         onClose={() => cancelSplit(dispatch)}
-        body={bodyPanelSummaryStep(
+        body={BodyPanelSummaryStep({
           splitCandidateId,
           splitChildrenCount,
           childrenB,
           currentChildHasNoShape,
           commentValue,
           handleChange,
-        )}
-        footer={footerPanelSummaryStep(
+        })}
+        footer={FooterPanelSummaryStep({
           selectedChildIndex,
           currentChildHasNoShape,
           splitChildrenCount,
           handleSubmit,
           dispatch,
-        )}
-        header={contentHeaderSummaryStep(splitChildrenCount)}
+        })}
+        header={ContentHeaderSummaryStep({ splitChildrenCount })}
         data-testid="edition-panel"
       ></GenericPanel>
     </>
   );
 }
-function bodyPanelSummaryStep(
-  splitCandidateId: string,
-  splitChildrenCount: number,
-  childrenB: SplitChild[],
-  currentChildHasNoShape: boolean,
-  commentValue: string,
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
-) {
+function BodyPanelSummaryStep({
+  splitCandidateId,
+  splitChildrenCount,
+  childrenB,
+  currentChildHasNoShape,
+  commentValue,
+  handleChange,
+}: {
+  splitCandidateId: string;
+  splitChildrenCount: number;
+  childrenB: SplitChild[];
+  currentChildHasNoShape: boolean;
+  commentValue: string;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
   return (
     <>
       <div>
@@ -515,13 +550,19 @@ function bodyPanelSummaryStep(
     </>
   );
 }
-function footerPanelSummaryStep(
-  selectedChildIndex: number,
-  currentChildHasNoShape: boolean,
-  splitChildrenCount: number,
-  handleSubmit: () => void,
-  dispatch: AppDispatch,
-) {
+function FooterPanelSummaryStep({
+  selectedChildIndex,
+  currentChildHasNoShape,
+  splitChildrenCount,
+  handleSubmit,
+  dispatch,
+}: {
+  selectedChildIndex: number;
+  currentChildHasNoShape: boolean;
+  splitChildrenCount: number;
+  handleSubmit: () => void;
+  dispatch: AppDispatch;
+}) {
   return (
     <>
       <Button
@@ -550,7 +591,11 @@ function footerPanelSummaryStep(
     </>
   );
 }
-function contentHeaderSummaryStep(splitChildrenCount: number) {
+function ContentHeaderSummaryStep({
+  splitChildrenCount,
+}: {
+  splitChildrenCount: number;
+}) {
   return (
     <>
       <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>

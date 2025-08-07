@@ -23,14 +23,8 @@ export default function VisuPanel() {
   );
   const dispatch: AppDispatch = useDispatch();
   const title = () => {
-    if (selectedItem?._type === 'building') {
-      return 'Bâtiment';
-    }
-
-    if (selectedItem?._type === 'ads') {
-      return 'Autorisation du droit des sols';
-    }
-
+    if (selectedItem?._type === 'building') return 'Bâtiment';
+    if (selectedItem?._type === 'ads') return 'Autorisation du droit des sols';
     return null;
   };
 
@@ -44,7 +38,7 @@ export default function VisuPanel() {
           operation="visualisation"
           title={title()}
           onClose={close}
-          body={bodyPanel(selectedItem)}
+          body={BodyPanel({ selectedItem })}
           data-testid="visu-panel"
         ></GenericPanel>
       </>
@@ -53,7 +47,7 @@ export default function VisuPanel() {
     return <></>;
   }
 }
-function bodyPanel(selectedItem: SelectedItem): React.ReactNode {
+function BodyPanel({ selectedItem }: { selectedItem: SelectedItem }) {
   return (
     <>
       {selectedItem?._type === 'building' && (

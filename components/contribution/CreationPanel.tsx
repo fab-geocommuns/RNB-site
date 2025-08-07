@@ -87,7 +87,7 @@ export default function CreationPanel() {
       <GenericPanel
         title="Créer un bâtiment"
         onClose={cancelCreation}
-        body={bodyPanel(
+        body={BodyPanel({
           step,
           mapCoordinates,
           newStatus,
@@ -96,19 +96,23 @@ export default function CreationPanel() {
           setNewStatus,
           handleEditAddress,
           handleChange,
-        )}
-        footer={footerPanel(step, createBuilding, cancelCreation)}
-        header={contentHeader(step)}
+        })}
+        footer={FooterPanel({ step, createBuilding, cancelCreation })}
+        header={ContentHeader({ step })}
         data-testid="edition-panel"
       ></GenericPanel>
     </>
   );
 }
-function footerPanel(
-  step: number,
-  createBuilding: () => void,
-  cancelCreation: () => void,
-) {
+function FooterPanel({
+  step,
+  createBuilding,
+  cancelCreation,
+}: {
+  step: number;
+  createBuilding: () => void;
+  cancelCreation: () => void;
+}) {
   return (
     <>
       <Button onClick={cancelCreation} priority="tertiary no outline">
@@ -120,7 +124,7 @@ function footerPanel(
     </>
   );
 }
-function contentHeader(step: number) {
+function ContentHeader({ step }: { step: number }) {
   return (
     <>
       <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
@@ -130,16 +134,25 @@ function contentHeader(step: number) {
     </>
   );
 }
-function bodyPanel(
-  step: number,
-  mapCoordinates: { zoom: number; lat: number; lng: number } | undefined,
-  newStatus: BuildingStatusType,
-  localAddresses: BuildingAddressType[],
-  commentValue: string,
-  setNewStatus: (status: BuildingStatusType) => void,
-  handleEditAddress: (addresses: BuildingAddressType[]) => void,
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
-) {
+function BodyPanel({
+  step,
+  mapCoordinates,
+  newStatus,
+  localAddresses,
+  commentValue,
+  setNewStatus,
+  handleEditAddress,
+  handleChange,
+}: {
+  step: number;
+  mapCoordinates: { zoom: number; lat: number; lng: number } | undefined;
+  newStatus: BuildingStatusType;
+  localAddresses: BuildingAddressType[];
+  commentValue: string;
+  setNewStatus: (status: BuildingStatusType) => void;
+  handleEditAddress: (addresses: BuildingAddressType[]) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
   return (
     <>
       {step === 1 && (
