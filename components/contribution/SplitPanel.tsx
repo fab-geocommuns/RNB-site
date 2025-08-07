@@ -107,7 +107,7 @@ function SplitBuildingInitialStep({
             Étape 1 - Sélection du bâtiment
           </h1>
         }
-        data-testid="edition-panel"
+        testId="edition-panel"
       ></GenericPanel>
     </>
   );
@@ -279,7 +279,7 @@ function SplitBuildingChildInfosStep({
           selectedChildIndex,
           splitChildrenCount,
         })}
-        data-testid="edition-panel"
+        testId="edition-panel"
       ></GenericPanel>
     </>
   );
@@ -475,7 +475,7 @@ function SplitBuildingSummaryStep({
           dispatch,
         })}
         header={ContentHeaderSummaryStep({ splitChildrenCount })}
-        data-testid="edition-panel"
+        testId="edition-panel"
       ></GenericPanel>
     </>
   );

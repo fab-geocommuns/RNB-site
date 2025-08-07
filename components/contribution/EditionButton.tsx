@@ -8,12 +8,14 @@ interface ButtonProps {
   operationType: Operation;
   selectedImageSrc: string;
   imageSrc: string;
+  testId: string;
 }
 export default function EditionButton({
   operationText,
   operationType,
   selectedImageSrc,
   imageSrc,
+  testId,
 }: ButtonProps) {
   const dispatch: AppDispatch = useDispatch();
   const operation = useSelector((state: RootState) => state.edition.operation);
@@ -31,6 +33,7 @@ export default function EditionButton({
         className={operation === operationType ? styles.buttonSelected : ''}
         size="small"
         priority="tertiary no outline"
+        data-testid={testId}
       >
         <div className={styles.action}>
           <img

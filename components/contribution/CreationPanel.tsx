@@ -99,7 +99,7 @@ export default function CreationPanel() {
         })}
         footer={FooterPanel({ step, createBuilding, cancelCreation })}
         header={ContentHeader({ step })}
-        data-testid="edition-panel"
+        testId="edition-panel"
       ></GenericPanel>
     </>
   );

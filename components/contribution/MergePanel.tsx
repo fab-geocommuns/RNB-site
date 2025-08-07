@@ -118,7 +118,7 @@ export default function MergePanel() {
           cancelMerge,
           handleSubmit,
         })}
-        data-testid="edition-panel"
+        testId="edition-panel"
       ></GenericPanel>
     </>
   );

@@ -8,6 +8,7 @@ interface PanelProps {
   header?: React.ReactNode;
   body: React.ReactNode;
   footer?: React.ReactNode;
+  testId?: string;
   onClose: () => void;
 }
 
@@ -17,11 +18,13 @@ export default function GenericPanel({
   header,
   body,
   footer,
+  testId,
   onClose,
 }: PanelProps) {
   return (
     <div
       className={`${styles.shell} ${operation === 'visualisation' ? styles.visualisationShell : ''}`}
+      data-testid={testId}
     >
       <div className={styles.container}>
         <div className={styles.head}>

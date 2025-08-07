@@ -180,7 +180,7 @@ function EditSelectedBuildingPanelContent({
           handleSubmit,
           cancelUpdate,
         })}
-        data-testid="visu-panel"
+        testId="edition-panel"
       ></GenericPanel>
     </>
   );
@@ -312,23 +312,26 @@ export default function EditionPanel() {
           operationText="créer"
           selectedImageSrc={createSelectedBuildingImage.src}
           imageSrc={createBuildingImage.src}
+          testId="create-action-button"
         ></EditionButton>
         <EditionButton
           operationType="merge"
           operationText="fusionner"
           selectedImageSrc={mergeSelectedBuildingImage.src}
           imageSrc={mergeBuildingImage.src}
+          testId="merge-action-button"
         ></EditionButton>
         <EditionButton
           operationType="split"
           operationText="scinder"
           selectedImageSrc={splitSelectedBuildingImage.src}
           imageSrc={splitBuildingImage.src}
+          testId="split-action-button"
         ></EditionButton>
       </div>
 
       {operation && (
-        <div data-testid="edition-panel">
+        <div>
           {operation == 'update' && selectedBuilding && (
             <EditSelectedBuildingPanelContent
               selectedBuilding={selectedBuilding}
