@@ -44,7 +44,7 @@ export default function VisuPanel() {
           operation="visualisation"
           title={title()}
           onClose={close}
-          contentBody={bodyPanel(selectedItem)}
+          body={bodyPanel(selectedItem)}
           data-testid="visu-panel"
         ></GenericPanel>
       </>
