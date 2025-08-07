@@ -20,4 +20,7 @@
   color: #0063cb;
   font-weight: 700;
 }
+.stepTitle {
+  color: var(--text-action-high-blue-france);
+}
 @include childsSplitAndMerge;
