@@ -7,6 +7,7 @@ import ContributionForm from '@/components/ContributionForm';
 import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 import RNBIDHeader from '@/components/contribution/RNBIDHeader';
+import PanelTabs from '@/components/panel/PanelTabs';
 
 // Styles
 import styles from '@/styles/panelBuilding.module.scss';
@@ -90,30 +91,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         <div className={styles.rnbidShell}>
           <RNBIDHeader rnbId={bdg?.rnb_id} />
         </div>
-        <ul className={styles.nav}>
-          <li className={styles.navItem}>
-            <span className={`${styles.navLink} ${styles.navLinkCurrent}`}>
-              <ImageNext alt="Informations" src={bdgInfoIcon} />
-              Informations
-            </span>
-          </li>
-
-          <li className={styles.navItem}>
-            <a
-              className={styles.navLink}
-              href={`/batiments/${bdg.rnb_id}/historique`}
-            >
-              <ImageNext alt="Historique" src={bdgHistoryIcon} />
-              Historique
-            </a>
-          </li>
-          <li className={styles.navItem}>
-            <a className={styles.navLink} href={`/edition?q=${bdg.rnb_id}`}>
-              <ImageNext alt="Modifier" src={bdgEditIcon} />
-              Modifier
-            </a>
-          </li>
-        </ul>
+        <PanelTabs rnbId={bdg?.rnb_id}></PanelTabs>
       </div>
 
       <div className={panelStyles.section}>
