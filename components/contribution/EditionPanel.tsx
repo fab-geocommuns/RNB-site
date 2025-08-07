@@ -27,6 +27,7 @@ import splitSelectedBuildingImage from '@/public/images/map/edition/split_select
 import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
@@ -153,88 +154,125 @@ function EditSelectedBuildingPanelContent({
     await dispatch(Actions.map.selectBuilding(rnbId));
     dispatch(Actions.map.reloadBuildings());
   };
-  function bodyPanel() {
-    return (
-      <>
-        <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
-        {isLoading ? (
-          <div className={styles.editLoader}>
-            <Loader />
-            <span>Chargement en cours</span>
-          </div>
-        ) : (
-          isActive && (
-            <>
-              <BuildingStatus
-                status={newStatus}
-                onChange={setNewStatus}
-              ></BuildingStatus>
-              <BuildingAddresses
-                buildingPoint={selectedBuilding.point.coordinates}
-                addresses={localAddresses}
-                onChange={handleEditAddress}
-              />
-              <BuildingShape
-                shapeInteractionMode={shapeInteractionMode}
-                selectedBuilding={selectedBuilding}
-              ></BuildingShape>
-              <div className={`${styles.panelSection}`}>
-                <div className={`fr-text--xs ${styles.sectionTitle}`}>
-                  <label htmlFor="comment">Commentaire</label>
-                </div>
-                <textarea
-                  value={commentValue}
-                  onChange={handleChange}
-                  id="comment"
-                  name="text"
-                  className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                  placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
-                />
-              </div>
-            </>
-          )
-        )}
-        {!isLoading && (
-          <BuildingActivationToggle
-            isActive={isActive}
-            onToggle={toggleBuildingActivation}
-          />
-        )}
-      </>
-    );
-  }
-  function footerPanel() {
-    return (
-      <>
-        <div className={styles.footer}>
-          <Button
-            onClick={handleSubmit}
-            disabled={!isActive || !anyChanges || isLoading}
-          >
-            Valider les modifications
-          </Button>
-          {anyChanges && (
-            <Button onClick={cancelUpdate} priority="tertiary no outline">
-              Annuler
-            </Button>
-          )}
-        </div>
-      </>
-    );
-  }
   return (
     <>
       <GenericPanel
         title="Modifier"
-        triggerClose={cancelUpdate}
-        contentBody={bodyPanel()}
-        contentFooter={footerPanel()}
+        onClose={cancelUpdate}
+        body={bodyPanel(
+          rnbId,
+          isLoading,
+          isActive,
+          newStatus,
+          selectedBuilding,
+          localAddresses,
+          shapeInteractionMode,
+          commentValue,
+          setNewStatus,
+          handleEditAddress,
+          handleChange,
+          toggleBuildingActivation,
+        )}
+        footer={footerPanel(
+          isActive,
+          anyChanges,
+          isLoading,
+          handleSubmit,
+          cancelUpdate,
+        )}
         data-testid="visu-panel"
       ></GenericPanel>
     </>
   );
 }
-
+function bodyPanel(
+  rnbId: string,
+  isLoading: boolean,
+  isActive: boolean,
+  newStatus: BuildingStatusType,
+  selectedBuilding: SelectedBuilding,
+  localAddresses: BuildingAddressType[],
+  shapeInteractionMode: ShapeInteractionMode,
+  commentValue: string,
+  setNewStatus: (status: BuildingStatusType) => void,
+  handleEditAddress: (addresses: BuildingAddressType[]) => void,
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
+  toggleBuildingActivation: (isActive: boolean) => void,
+) {
+  return (
+    <>
+      <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
+      {isLoading ? (
+        <div className={styles.editLoader}>
+          <Loader />
+          <span>Chargement en cours</span>
+        </div>
+      ) : (
+        isActive && (
+          <>
+            <BuildingStatus
+              status={newStatus}
+              onChange={setNewStatus}
+            ></BuildingStatus>
+            <BuildingAddresses
+              buildingPoint={selectedBuilding.point.coordinates}
+              addresses={localAddresses}
+              onChange={handleEditAddress}
+            />
+            <BuildingShape
+              shapeInteractionMode={shapeInteractionMode}
+              selectedBuilding={selectedBuilding}
+            ></BuildingShape>
+            <div className={`${styles.panelSection}`}>
+              <div className={`fr-text--xs ${styles.sectionTitle}`}>
+                <label htmlFor="comment">Commentaire</label>
+              </div>
+              <textarea
+                value={commentValue}
+                onChange={handleChange}
+                id="comment"
+                name="text"
+                className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+                placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
+              />
+            </div>
+          </>
+        )
+      )}
+      {!isLoading && (
+        <BuildingActivationToggle
+          isActive={isActive}
+          onToggle={toggleBuildingActivation}
+        />
+      )}
+    </>
+  );
+}
+function footerPanel(
+  isActive: boolean,
+  anyChanges: boolean,
+  isLoading: boolean,
+  handleSubmit: () => void,
+  cancelUpdate: () => void,
+) {
+  return (
+    <>
+      <div className={styles.footer}>
+        <Button
+          onClick={handleSubmit}
+          disabled={!isActive || !anyChanges || isLoading}
+        >
+          Valider les modifications
+        </Button>
+        {anyChanges && (
+          <Button onClick={cancelUpdate} priority="tertiary no outline">
+            Annuler
+          </Button>
+        )}
+      </div>
+    </>
+  );
+}
 export default function EditionPanel() {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,

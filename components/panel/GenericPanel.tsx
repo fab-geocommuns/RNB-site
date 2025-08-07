@@ -1,34 +1,40 @@
 import styles from '@/styles/genericPanel.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores/store';
 
 interface PanelProps {
+  operation?: string | null;
   title: string | null;
-  contentHeader?: React.ReactNode;
-  contentBody: React.ReactNode;
-  contentFooter?: React.ReactNode;
-  triggerClose: () => void;
+  header?: React.ReactNode;
+  body: React.ReactNode;
+  footer?: React.ReactNode;
+  onClose: () => void;
 }
 
 export default function GenericPanel({
+  operation,
   title,
-  contentHeader,
-  contentBody,
-  contentFooter,
-  triggerClose,
+  header,
+  body,
+  footer,
+  onClose,
 }: PanelProps) {
   return (
-    <div className={styles.shell}>
+    <div
+      className={`${styles.shell} ${operation === 'visualisation' ? styles.visualisationShell : ''}`}
+    >
       <div className={styles.container}>
         <div className={styles.head}>
           <div>
             <h2 className={styles.subtitle}>{title}</h2>
-            {contentHeader}
+            {header}
           </div>
-          <a href="#" onClick={triggerClose} className={styles.closeLink}>
+          <a href="#" onClick={onClose} className={styles.closeLink}>
             <i className="fr-icon-close-line" />
           </a>
         </div>
-        <div className={styles.body}>{contentBody}</div>
-        <div className={styles.footer}>{contentFooter}</div>
+        <div className={styles.body}>{body}</div>
+        {footer && <div className={styles.footer}>{footer}</div>}
       </div>
     </div>
   );

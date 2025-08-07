@@ -7,7 +7,6 @@ $actions-top: 2 * $spacing + $input-height;
 $actions-height: 3.75rem;
 $panel-padding: 1.5 * $spacing;
 
-// EDITIONPANEL
 .actions {
   position: absolute;
   background-color: transparent;
@@ -55,24 +54,21 @@ $panel-padding: 1.5 * $spacing;
     margin-top: 1.25rem;
   }
 }
+.stepTitle {
+  color: var(--text-action-high-blue-france);
+}
 .textarea {
   @include textarea;
 }
 .text {
   @include text;
 }
-////////////////////////
-
-// CREATIONPANEL
 .panelSection {
   @include panelSection;
 }
-// CREATIONPANEL
 .noPad {
   @include noPad;
 }
-
-// CREATIONPANEL
 .sectionTitle {
   @include sectionTitle;
 }

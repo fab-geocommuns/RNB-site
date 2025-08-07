@@ -15,3 +15,9 @@
 .text {
   @include text;
 }
+.splitChildTitle {
+  text-transform: uppercase;
+  color: #0063cb;
+  font-weight: 700;
+}
+@include childsSplitAndMerge;

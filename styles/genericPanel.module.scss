@@ -16,11 +16,13 @@ $title-color: #414e71;
     width: 400px;
     right: auto;
     left: 12px;
-    top: 70px;
+    top: 155px;
     bottom: 10px;
   }
 }
-
+.visualisationShell {
+  top: 70px;
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -61,7 +63,7 @@ $title-color: #414e71;
 .body {
   flex-grow: 1;
   overflow-y: auto;
-  max-height: calc(100% - 40px);
+  max-height: calc(100% - 134px);
   padding: 20px 15px 20px 15px;
 }
 .footer {

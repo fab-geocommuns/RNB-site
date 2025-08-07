@@ -82,89 +82,110 @@ export default function CreationPanel() {
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentValue(event.target.value);
   };
-  function bodyPanel() {
-    return (
-      <>
-        {step === 1 && (
-          <div className={`${styles.panelSection} ${styles.noPad}`}>
-            {mapCoordinates && mapCoordinates.zoom < 18 ? (
-              <div style={{ display: 'flex' }}>
-                <span className="fr-pr-2v">
-                  <i className="fr-icon-feedback-line"></i>
-                </span>
-                Zoomez sur la carte pour pouvoir tracer le bâtiment avec
-                précision
-              </div>
-            ) : (
-              <>
-                <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                <div>Un double-clic termine le tracé.</div>
-              </>
-            )}
-          </div>
-        )}
-        {step === 2 && (
-          <>
-            <BuildingStatus
-              status={newStatus}
-              onChange={setNewStatus}
-            ></BuildingStatus>
-
-            <BuildingAddresses
-              buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
-              addresses={localAddresses}
-              onChange={handleEditAddress}
-            />
-            <div className={styles.panelSection}>
-              <div className={`fr-text--xs ${styles.sectionTitle}`}>
-                <label htmlFor="comment">Commentaire (optionnel)</label>
-              </div>
-              <textarea
-                value={commentValue}
-                onChange={handleChange}
-                id="comment"
-                name="text"
-                className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
-              />
-            </div>
-          </>
-        )}
-      </>
-    );
-  }
-  function footerPanel() {
-    return (
-      <>
-        <Button onClick={cancelCreation} priority="tertiary no outline">
-          Annuler
-        </Button>
-        {step === 2 && (
-          <Button onClick={createBuilding}>Créer le bâtiment</Button>
-        )}
-      </>
-    );
-  }
-  function contentHeader() {
-    return (
-      <>
-        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
-          {step == 1 && 'Étape 1 - Géométrie'}
-          {step == 2 && 'Étape 2 - Informations'}
-        </h1>
-      </>
-    );
-  }
   return (
     <>
       <GenericPanel
         title="Créer un bâtiment"
-        triggerClose={cancelCreation}
-        contentBody={bodyPanel()}
-        contentFooter={footerPanel()}
-        contentHeader={contentHeader()}
+        onClose={cancelCreation}
+        body={bodyPanel(
+          step,
+          mapCoordinates,
+          newStatus,
+          localAddresses,
+          commentValue,
+          setNewStatus,
+          handleEditAddress,
+          handleChange,
+        )}
+        footer={footerPanel(step, createBuilding, cancelCreation)}
+        header={contentHeader(step)}
         data-testid="edition-panel"
       ></GenericPanel>
+    </>
+  );
+}
+function footerPanel(
+  step: number,
+  createBuilding: () => void,
+  cancelCreation: () => void,
+) {
+  return (
+    <>
+      <Button onClick={cancelCreation} priority="tertiary no outline">
+        Annuler
+      </Button>
+      {step === 2 && (
+        <Button onClick={createBuilding}>Créer le bâtiment</Button>
+      )}
+    </>
+  );
+}
+function contentHeader(step: number) {
+  return (
+    <>
+      <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+        {step == 1 && 'Étape 1 - Géométrie'}
+        {step == 2 && 'Étape 2 - Informations'}
+      </h1>
+    </>
+  );
+}
+function bodyPanel(
+  step: number,
+  mapCoordinates: { zoom: number; lat: number; lng: number } | undefined,
+  newStatus: BuildingStatusType,
+  localAddresses: BuildingAddressType[],
+  commentValue: string,
+  setNewStatus: (status: BuildingStatusType) => void,
+  handleEditAddress: (addresses: BuildingAddressType[]) => void,
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
+) {
+  return (
+    <>
+      {step === 1 && (
+        <div className={`${styles.panelSection} ${styles.noPad}`}>
+          {mapCoordinates && mapCoordinates.zoom < 18 ? (
+            <div style={{ display: 'flex' }}>
+              <span className="fr-pr-2v">
+                <i className="fr-icon-feedback-line"></i>
+              </span>
+              Zoomez sur la carte pour pouvoir tracer le bâtiment avec précision
+            </div>
+          ) : (
+            <>
+              <div>Tracez la géométrie du bâtiment sur la carte.</div>
+              <div>Un double-clic termine le tracé.</div>
+            </>
+          )}
+        </div>
+      )}
+      {step === 2 && (
+        <>
+          <BuildingStatus
+            status={newStatus}
+            onChange={setNewStatus}
+          ></BuildingStatus>
+
+          <BuildingAddresses
+            buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
+            addresses={localAddresses}
+            onChange={handleEditAddress}
+          />
+          <div className={styles.panelSection}>
+            <div className={`fr-text--xs ${styles.sectionTitle}`}>
+              <label htmlFor="comment">Commentaire (optionnel)</label>
+            </div>
+            <textarea
+              value={commentValue}
+              onChange={handleChange}
+              id="comment"
+              name="text"
+              className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+              placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }

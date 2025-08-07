@@ -25,3 +25,20 @@
   font-size: 0.9rem;
   line-height: 1.3rem;
 }
+@mixin childsSplitAndMerge {
+  .buildingWrapper {
+    border: 0.0625rem solid var(--border-open-blue-france);
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    .buildingSummary {
+      padding-top: 1rem;
+      border-bottom: 0.0625rem solid var(--border-open-blue-france);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}

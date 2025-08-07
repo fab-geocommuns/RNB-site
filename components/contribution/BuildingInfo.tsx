@@ -17,9 +17,7 @@ export default function BuildingInfo({
 }: BuildingInfoProps) {
   return (
     <>
-      <div
-        className={`${styles.mergePanelInfoWrapper} ${stylesEdit.editPanel__infoWrapper}`}
-      >
+      <div className={styles.mergePanelInfoWrapper}>
         {(building as SelectedBuilding)?.rnb_id && (
           <div className={styles.mergePanelRnbIdWrapper}>
             <div className={styles.mergePanelRnbId}>

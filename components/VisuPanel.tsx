@@ -14,6 +14,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
 import GenericPanel from '@/components/panel/GenericPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
+import { SelectedItem } from '@/stores/map/map-slice';
 
 export default function VisuPanel() {
   // Store
@@ -21,7 +22,6 @@ export default function VisuPanel() {
     (state: RootState) => state.map.selectedItem,
   );
   const dispatch: AppDispatch = useDispatch();
-
   const title = () => {
     if (selectedItem?._type === 'building') {
       return 'Bâtiment';
@@ -37,23 +37,14 @@ export default function VisuPanel() {
   const close = () => {
     dispatch(Actions.map.unselectItem());
   };
-  function bodyPanel() {
-    return (
-      <>
-        {selectedItem?._type === 'building' && (
-          <BuildingPanel bdg={selectedItem} />
-        )}
-        {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
-      </>
-    );
-  }
   if (selectedItem) {
     return (
       <>
         <GenericPanel
+          operation="visualisation"
           title={title()}
-          triggerClose={close}
-          contentBody={bodyPanel()}
+          onClose={close}
+          contentBody={bodyPanel(selectedItem)}
           data-testid="visu-panel"
         ></GenericPanel>
       </>
@@ -61,4 +52,14 @@ export default function VisuPanel() {
   } else {
     return <></>;
   }
+}
+function bodyPanel(selectedItem: SelectedItem): React.ReactNode {
+  return (
+    <>
+      {selectedItem?._type === 'building' && (
+        <BuildingPanel bdg={selectedItem} />
+      )}
+      {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
+    </>
+  );
 }
