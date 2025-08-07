@@ -22,7 +22,7 @@ export default function BuildingAddress({
 }: BuildingAddressProps) {
   const label = getAddressDisplayLabel(address);
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', lineHeight: '1.3' }}>
       <small>{label}</small>
       {onRemove && (
         // @ts-ignore
