@@ -1,10 +1,10 @@
 @import '../vars.scss';
+@import './panel-mixins.scss';
 
-$input-height: 52px;
-$spacing: 12px;
+$input-height: 3.25rem;
+$spacing: 0.75rem;
 $actions-top: 2 * $spacing + $input-height;
-$actions-height: 60px;
-$shell-top: $actions-top + $spacing + $actions-height;
+$actions-height: 3.75rem;
 $panel-padding: 1.5 * $spacing;
 
 .actions {
@@ -15,15 +15,13 @@ $panel-padding: 1.5 * $spacing;
   height: $actions-height;
   right: auto;
   z-index: 100;
-  display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: left;
-  border-radius: 4px;
+  border-radius: 0.25rem;
 
   button {
     background-color: white;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     margin-right: $spacing;
   }
   .buttonSelected {
@@ -32,135 +30,15 @@ $panel-padding: 1.5 * $spacing;
       background-color: var(--text-action-high-blue-france);
     }
   }
-
   .action {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-transform: uppercase;
-    border-radius: 4px;
-    padding-top: 6px;
+    border-radius: 0.25rem;
+    padding-top: 0.375rem;
     .actionSelected {
       color: white;
-    }
-  }
-}
-
-.shell {
-  position: absolute;
-
-  top: $shell-top;
-  right: auto;
-  bottom: $spacing;
-  left: $spacing;
-  z-index: 100;
-  width: 400px;
-  overflow: hidden;
-  border-radius: 4px;
-  border: 1px solid var(--background-contrast-blue-france-active);
-}
-
-.content {
-  background-color: var(--background-alt-blue-france);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
-
-  .panelSection {
-    background: var(--background-default-grey);
-    padding: $spacing;
-    margin-bottom: $spacing;
-    border-radius: 4px;
-    border: 1px solid var(--border-open-blue-france);
-    position: relative;
-    padding-top: 36px;
-
-    .sectionTitle {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      text-transform: uppercase;
-      color: var(--text-mention-grey);
-    }
-  }
-
-  .noPad {
-    padding-top: $spacing;
-  }
-}
-
-.header {
-  border-radius: 4px 4px 0 0;
-  text-transform: uppercase;
-  padding: 6px 12px 6px 18px;
-  background-color: var(--background-alt-blue-france-hover);
-  box-shadow: 0 0 5px var(--background-action-high-grey-active);
-  z-index: 100;
-}
-
-.body {
-  padding: $panel-padding $panel-padding 0 $panel-padding;
-  flex-grow: 1;
-  flex-shrink: 1;
-  overflow: auto;
-}
-
-.footer {
-  padding: $spacing $spacing $spacing 2 * $spacing;
-  box-shadow: 0 0px 4px var(--background-contrast-grey-active);
-  z-index: 90;
-  flex-shrink: 1;
-  flex-grow: 0;
-  width: 100%;
-  background: var(--background-alt-blue-france);
-  display: flex;
-  justify-content: space-between;
-}
-
-.noticeContainer {
-  pointer-events: none;
-  background-color: transparent;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  .notice {
-    opacity: 0;
-    transform: translateY(100%);
-    transition: none;
-  }
-
-  .noticeVisible {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-      opacity 0.4s ease,
-      transform 0.5s ease;
-    pointer-events: auto;
-  }
-}
-
-.editToggle {
-  padding-right: 48px !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  div {
-    label::before {
-      margin-left: 0 !important;
     }
   }
 }
@@ -172,17 +50,28 @@ $panel-padding: 1.5 * $spacing;
   justify-content: center;
   height: 100%;
   span {
-    font-size: 14px;
-    margin-top: 20px;
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
   }
+}
+.headSection {
+  margin-bottom: 1.5rem;
+}
+.stepTitle {
+  color: var(--text-action-high-blue-france);
 }
 .textarea {
-  height: 150px;
-  border: 1px solid var(--background-contrast-grey-active);
+  @include textarea;
 }
-.splitSummary {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
+.text {
+  @include text;
+}
+.panelSection {
+  @include panelSection;
+}
+.noPad {
+  @include noPad;
+}
+.sectionTitle {
+  @include sectionTitle;
 }

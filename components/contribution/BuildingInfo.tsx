@@ -1,9 +1,10 @@
-import styles from '@/styles/merge.module.scss';
+import styles from '@/styles/contribution/mergePanel.module.scss';
+import stylesEdit from '@/styles/contribution/editPanel.module.scss';
 import { BuildingStatusMap } from '@/stores/contribution/contribution-types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { ReactNode } from 'react';
-import { isNewAddress, BuildingAddressType } from './types';
+import { isNewAddress } from './types';
 
 interface BuildingInfoProps {
   building: SelectedBuilding | SplitChild;
@@ -16,10 +17,10 @@ export default function BuildingInfo({
 }: BuildingInfoProps) {
   return (
     <>
-      <div className={styles.mergePanel__infoWrapper}>
+      <div className={styles.mergePanelInfoWrapper}>
         {(building as SelectedBuilding)?.rnb_id && (
-          <div className={styles.mergePanel__rnbIdWrapper}>
-            <div className={styles.mergePanel__rnbId}>
+          <div className={styles.mergePanelRnbIdWrapper}>
+            <div className={styles.mergePanelRnbId}>
               <span className="fr-text--lg fr-m-0">
                 {(building as SelectedBuilding).rnb_id}
               </span>
@@ -27,22 +28,22 @@ export default function BuildingInfo({
             </div>
           </div>
         )}
-        <div className={styles.mergePanel__addressesWrapper}>
-          <span className={styles.mergePanel__label}>Statut du bâtiment</span>
-          <div className="fr-badge fr-badge--success fr-badge--no-icon">
-            <span>{BuildingStatusMap[building.status]}</span>
-          </div>
+        <div className={styles.mergePanelAddressesWrapper}>
+          <span className={styles.mergePanelLabel}>Statut du bâtiment</span>
+          <span className={stylesEdit.text}>
+            {BuildingStatusMap[building.status]}
+          </span>
         </div>
-        <div className={styles.mergePanel__addressesWrapper}>
-          <span className={styles.mergePanel__label}>
+        <div className={styles.mergePanelAddressesWrapper}>
+          <span className={styles.mergePanelLabel}>
             {building?.addresses?.length > 1 ? 'Adresses' : 'Adresse'}
           </span>
           {building?.addresses?.length ? (
             <div>
               {building.addresses.map((addresse, i) => (
                 <div key={i}>
-                  <div className={styles.mergePanel__addressWrapper}>
-                    <span className={styles.mergePanel__addressText}>
+                  <div className={styles.mergePanelAddressWrapper}>
+                    <span className={styles.mergePanelAddressText}>
                       {isNewAddress(addresse)
                         ? addresse.label
                         : `${addresse.street_number}${addresse.street_rep} ${addresse.street}, ${addresse.city_zipcode} ${addresse.city_name}`}
@@ -52,8 +53,8 @@ export default function BuildingInfo({
               ))}
             </div>
           ) : (
-            <span className={styles.mergePanel__addressText}>
-              <i>Aucune adresse</i>
+            <span className={styles.mergePanelAddressText}>
+              <i>Aucune adresse disponible</i>
             </span>
           )}
         </div>

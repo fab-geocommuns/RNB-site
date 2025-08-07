@@ -1,4 +1,3 @@
-import RNBIDHeader from './RNBIDHeader';
 import styles from '@/styles/contribution/editPanel.module.scss';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useState } from 'react';
@@ -9,16 +8,13 @@ import BuildingAddresses from './BuildingAddresses';
 import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
+import GenericPanel from '@/components/panel/GenericPanel';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
-
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -88,70 +84,129 @@ export default function CreationPanel() {
   };
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Créer un nouveau bâtiment </span>
-        {step == 1 && (
-          <h1 className="fr-text--lg fr-m-0">étape 1 - Géométrie</h1>
-        )}
-        {step == 2 && (
-          <h1 className="fr-text--lg fr-m-0">étape 2 - informations</h1>
-        )}
-      </RNBIDHeader>
-      <PanelBody>
-        {step === 1 && (
-          <div className={`${styles.panelSection} ${styles.noPad}`}>
-            {mapCoordinates && mapCoordinates.zoom < 18 ? (
-              <div style={{ display: 'flex' }}>
-                <span className="fr-pr-2v">
-                  <i className="fr-icon-feedback-line"></i>
-                </span>
-                Zoomez sur la carte pour pouvoir tracer le bâtiment avec
-                précision
-              </div>
-            ) : (
-              <>
-                <div>Tracez la géométrie du bâtiment sur la carte.</div>
-                <div className="fr-pt-3v">Un double-clic termine le tracé.</div>
-              </>
-            )}
-          </div>
-        )}
-        {step === 2 && (
-          <>
-            <BuildingStatus
-              status={newStatus}
-              onChange={setNewStatus}
-            ></BuildingStatus>
-
-            <BuildingAddresses
-              buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
-              addresses={localAddresses}
-              onChange={handleEditAddress}
-            />
-            <div className={styles.panelSection}>
-              <div className={`fr-text--xs ${styles.sectionTitle}`}>
-                <label htmlFor="comment">Commentaire (optionnel)</label>
-              </div>
-              <textarea
-                value={commentValue}
-                onChange={handleChange}
-                id="comment"
-                name="text"
-                className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
-              />
+      <GenericPanel
+        title="Créer un bâtiment"
+        onClose={cancelCreation}
+        body={
+          <BodyPanel
+            step={step}
+            mapCoordinates={mapCoordinates}
+            newStatus={newStatus}
+            localAddresses={localAddresses}
+            commentValue={commentValue}
+            setNewStatus={setNewStatus}
+            handleEditAddress={handleEditAddress}
+            handleChange={handleChange}
+          />
+        }
+        footer={
+          <FooterPanel
+            step={step}
+            createBuilding={createBuilding}
+            cancelCreation={cancelCreation}
+          />
+        }
+        header={<ContentHeader step={step} />}
+        testId="edition-panel"
+      ></GenericPanel>
+    </>
+  );
+}
+function FooterPanel({
+  step,
+  createBuilding,
+  cancelCreation,
+}: {
+  step: number;
+  createBuilding: () => void;
+  cancelCreation: () => void;
+}) {
+  return (
+    <>
+      <Button onClick={cancelCreation} priority="tertiary no outline">
+        Annuler
+      </Button>
+      {step === 2 && (
+        <Button onClick={createBuilding}>Créer le bâtiment</Button>
+      )}
+    </>
+  );
+}
+function ContentHeader({ step }: { step: number }) {
+  return (
+    <>
+      <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+        {step == 1 && 'Étape 1 - Géométrie'}
+        {step == 2 && 'Étape 2 - Informations'}
+      </h1>
+    </>
+  );
+}
+function BodyPanel({
+  step,
+  mapCoordinates,
+  newStatus,
+  localAddresses,
+  commentValue,
+  setNewStatus,
+  handleEditAddress,
+  handleChange,
+}: {
+  step: number;
+  mapCoordinates: { zoom: number; lat: number; lng: number } | undefined;
+  newStatus: BuildingStatusType;
+  localAddresses: BuildingAddressType[];
+  commentValue: string;
+  setNewStatus: (status: BuildingStatusType) => void;
+  handleEditAddress: (addresses: BuildingAddressType[]) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
+  return (
+    <>
+      {step === 1 && (
+        <div className={`${styles.panelSection} ${styles.noPad}`}>
+          {mapCoordinates && mapCoordinates.zoom < 18 ? (
+            <div style={{ display: 'flex' }}>
+              <span className="fr-pr-2v">
+                <i className="fr-icon-feedback-line"></i>
+              </span>
+              Zoomez sur la carte pour pouvoir tracer le bâtiment avec précision
             </div>
-          </>
-        )}
-      </PanelBody>
-      <div className={styles.footer}>
-        <Button onClick={cancelCreation} priority="tertiary no outline">
-          Annuler
-        </Button>
-        {step === 2 && (
-          <Button onClick={createBuilding}>Créer le bâtiment</Button>
-        )}
-      </div>
+          ) : (
+            <>
+              <div>Tracez la géométrie du bâtiment sur la carte.</div>
+              <div>Un double-clic termine le tracé.</div>
+            </>
+          )}
+        </div>
+      )}
+      {step === 2 && (
+        <>
+          <BuildingStatus
+            status={newStatus}
+            onChange={setNewStatus}
+          ></BuildingStatus>
+
+          <BuildingAddresses
+            buildingPoint={[mapCoordinates!.lng, mapCoordinates!.lat]}
+            addresses={localAddresses}
+            onChange={handleEditAddress}
+          />
+          <div className={styles.panelSection}>
+            <div className={`fr-text--xs ${styles.sectionTitle}`}>
+              <label htmlFor="comment">Commentaire (optionnel)</label>
+            </div>
+            <textarea
+              value={commentValue}
+              onChange={handleChange}
+              id="comment"
+              name="text"
+              className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+              placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }

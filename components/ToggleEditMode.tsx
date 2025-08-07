@@ -1,6 +1,6 @@
 import { ToggleSwitch } from '@codegouvfr/react-dsfr/ToggleSwitch';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import styles from '@/styles/contribution/editPanel.module.scss';
+import styles from '@/styles/contribution/toggleEditionMode.module.scss';
 
 export default function ToogleEditMode() {
   const pathname = usePathname();

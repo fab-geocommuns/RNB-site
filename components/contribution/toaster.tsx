@@ -1,6 +1,6 @@
 import Notice from '@codegouvfr/react-dsfr/Notice';
-import styles from '@/styles/contribution/editPanel.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
+import styles from '@/styles/contribution/toaster.module.scss';
+import { useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState, store } from '@/stores/store';
 import { useEffect, useState } from 'react';
 

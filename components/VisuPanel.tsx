@@ -12,9 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 // Comps
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import BuildingPanel from '@/components/panel/BuildingPanel';
+import GenericPanel from '@/components/panel/GenericPanel';
 import ADSPanel from '@/components/panel/ADSPanel';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import { SelectedBuilding } from '@/stores/map/map-slice';
+import { SelectedItem } from '@/stores/map/map-slice';
 
 export default function VisuPanel() {
   // Store
@@ -22,48 +22,38 @@ export default function VisuPanel() {
     (state: RootState) => state.map.selectedItem,
   );
   const dispatch: AppDispatch = useDispatch();
-  const [comment, setComment] = useState('');
-  const { fetch } = useRNBFetch();
-
   const title = () => {
-    if (selectedItem?._type === 'building') {
-      return 'Bâtiment';
-    }
-
-    if (selectedItem?._type === 'ads') {
-      return 'Autorisation du droit des sols';
-    }
-
+    if (selectedItem?._type === 'building') return 'Bâtiment';
+    if (selectedItem?._type === 'ads') return 'Autorisation du droit des sols';
     return null;
   };
 
   const close = () => {
     dispatch(Actions.map.unselectItem());
   };
-
   if (selectedItem) {
     return (
       <>
-        <div className={styles.shell} data-testid="visu-panel">
-          <div className={styles.content}>
-            <div className={styles.head}>
-              <h1 className={styles.title}>{title()}</h1>
-              <a href="#" onClick={close} className={styles.closeLink}>
-                <i className="fr-icon-close-line" />
-              </a>
-            </div>
-
-            <div className={styles.body}>
-              {selectedItem?._type === 'building' && (
-                <BuildingPanel bdg={selectedItem} />
-              )}
-              {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
-            </div>
-          </div>
-        </div>
+        <GenericPanel
+          operation="visualisation"
+          title={title()}
+          onClose={close}
+          body={<BodyPanel selectedItem={selectedItem} />}
+          testId="visu-panel"
+        ></GenericPanel>
       </>
     );
   } else {
     return <></>;
   }
+}
+function BodyPanel({ selectedItem }: { selectedItem: SelectedItem }) {
+  return (
+    <>
+      {selectedItem?._type === 'building' && (
+        <BuildingPanel bdg={selectedItem} />
+      )}
+      {selectedItem?._type === 'ads' && <ADSPanel ads={selectedItem} />}
+    </>
+  );
 }

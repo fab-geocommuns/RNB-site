@@ -1,0 +1,136 @@
+@import './panel-mixins.scss';
+$title-color: #1a3b68;
+$spacing: 0.75rem;
+$actions-height: 3.75rem;
+$panel-padding: 1.5 * $spacing;
+
+.mergePanelLoader {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  span {
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
+  }
+}
+.mergePanelDescWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  background: var(--background-default-grey);
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--border-open-blue-france);
+}
+.mergePanelDescText {
+  font-weight: 700;
+  margin-bottom: 0.625rem;
+}
+.mergePanelTextarea {
+  height: 9.375rem;
+  border: 0.0625rem solid var(--background-contrast-grey-active);
+}
+.mergePanelTextNoBuilding {
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15.625rem;
+}
+.mergePanelDescSubText {
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+.mergePanelInfoWrapper {
+  padding-top: 0.625rem;
+  padding-bottom: 1rem;
+}
+
+.mergePanelRnbIdWrapper {
+  display: flex;
+  color: var(--background-action-high-grey-active);
+  margin-bottom: 1.25rem;
+}
+.mergePanelRnbId {
+  display: flex;
+  justify-content: space-between;
+  color: #0063cb;
+  font-weight: 700;
+  width: 100%;
+}
+.mergePanelAddressesWrapper {
+  margin-bottom: 0.625rem;
+  display: flex;
+  flex-direction: column;
+}
+.mergePanelAddressWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.mergePanelAddressText {
+  font-size: 0.9rem;
+  line-height: 1.3rem;
+}
+.mergePanelLabel {
+  font-size: 0.7rem;
+  line-height: 1.3rem;
+  color: black;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.mergePanelSummary {
+  font-size: 0.875rem;
+}
+.mergePanelSummaryText {
+  font-weight: 700;
+}
+.mergePanelCard {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  span {
+    line-height: 1.2;
+  }
+}
+.mergePanelCardText {
+  font-weight: 700;
+  margin-bottom: 0.625rem;
+}
+.mergePanelSummaryHeaderWrapper {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.mergePanelSummaryTitle {
+  font-size: 0.8rem;
+  line-height: 1rem;
+  margin: 0;
+  text-transform: uppercase;
+  flex: 1 0 0;
+}
+.mergePanelSummaryHeader {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.3125rem;
+}
+.mergePanelSummaryMerged {
+  padding: 0.625rem;
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
+  margin: 0.3125rem;
+  background-color: var(--background-contrast-grey);
+  width: fit-content;
+}
+.mergePanelRnbIdMerged {
+  font-size: 0.875rem;
+  color: var(--text-default-grey);
+}
+.mergePanelNewBuildingWrapper {
+  background-color: #e6feda;
+}
+.mergeBuildingInfo {
+  border-bottom: 0.0625rem solid var(--border-open-blue-france);
+}
+@include childsSplitAndMerge;

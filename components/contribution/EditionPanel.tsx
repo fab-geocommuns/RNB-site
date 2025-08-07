@@ -9,7 +9,10 @@ import BuildingAddresses from './BuildingAddresses';
 import BuildingShape from './BuildingShape';
 import CreationPanel from './CreationPanel';
 import MergePanel from './MergePanel';
+import GenericPanel from '@/components/panel/GenericPanel';
+import EditionButton from '@/components/contribution/EditionButton';
 import BuildingActivationToggle from './BuildingActivationToggle';
+import PanelTabs from '@/components/panel/PanelTabs';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import { BuildingAddressType } from './types';
@@ -17,7 +20,6 @@ import { Loader } from '@/components/Loader';
 import Button from '@codegouvfr/react-dsfr/Button';
 
 import createBuildingImage from '@/public/images/map/edition/create.svg';
-useMapEditBuildingShape;
 import createSelectedBuildingImage from '@/public/images/map/edition/create_selected.svg';
 
 import splitBuildingImage from '@/public/images/map/edition/split.svg';
@@ -26,18 +28,13 @@ import splitSelectedBuildingImage from '@/public/images/map/edition/split_select
 import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
+import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import Toaster, {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
 import SplitPanel from './SplitPanel';
-
-import { useMapEditBuildingShape } from '../map/useMapEditBuildingShape';
-import { Operation } from '@/stores/edition/edition-slice';
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -158,58 +155,135 @@ function EditSelectedBuildingPanelContent({
     await dispatch(Actions.map.selectBuilding(rnbId));
     dispatch(Actions.map.reloadBuildings());
   };
-
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Identifiant RNB</span>
-        <h1 className="fr-text--lg fr-m-0">{rnbId}</h1>
-      </RNBIDHeader>
-      <PanelBody>
-        {isLoading ? (
-          <div className={styles.editLoader}>
-            <Loader />
-            <span>Chargement en cours</span>
-          </div>
-        ) : (
-          isActive && (
-            <>
-              <BuildingStatus
-                status={newStatus}
-                onChange={setNewStatus}
-              ></BuildingStatus>
-              <BuildingAddresses
-                buildingPoint={selectedBuilding.point.coordinates}
-                addresses={localAddresses}
-                onChange={handleEditAddress}
-              />
-              <BuildingShape
-                shapeInteractionMode={shapeInteractionMode}
-                selectedBuilding={selectedBuilding}
-              ></BuildingShape>
-              <div className={`${styles.panelSection}`}>
-                <div className={`fr-text--xs ${styles.sectionTitle}`}>
-                  <label htmlFor="comment">Commentaire</label>
-                </div>
-                <textarea
-                  value={commentValue}
-                  onChange={handleChange}
-                  id="comment"
-                  name="text"
-                  className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                  placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
-                />
-              </div>
-            </>
-          )
-        )}
-        {!isLoading && (
-          <BuildingActivationToggle
+      <GenericPanel
+        title="Modifier"
+        onClose={cancelUpdate}
+        body={
+          <BodyPanel
+            rnbId={rnbId}
+            isLoading={isLoading}
             isActive={isActive}
-            onToggle={toggleBuildingActivation}
+            newStatus={newStatus}
+            selectedBuilding={selectedBuilding}
+            localAddresses={localAddresses}
+            shapeInteractionMode={shapeInteractionMode}
+            commentValue={commentValue}
+            setNewStatus={setNewStatus}
+            handleEditAddress={handleEditAddress}
+            handleChange={handleChange}
+            toggleBuildingActivation={toggleBuildingActivation}
           />
-        )}
-      </PanelBody>
+        }
+        footer={
+          <FooterPanel
+            isActive={isActive}
+            anyChanges={anyChanges}
+            isLoading={isLoading}
+            handleSubmit={handleSubmit}
+            cancelUpdate={cancelUpdate}
+          />
+        }
+        testId="edition-panel"
+      ></GenericPanel>
+    </>
+  );
+}
+function BodyPanel({
+  rnbId,
+  isLoading,
+  isActive,
+  newStatus,
+  selectedBuilding,
+  localAddresses,
+  shapeInteractionMode,
+  commentValue,
+  setNewStatus,
+  handleEditAddress,
+  handleChange,
+  toggleBuildingActivation,
+}: {
+  rnbId: string;
+  isLoading: boolean;
+  isActive: boolean;
+  newStatus: BuildingStatusType;
+  selectedBuilding: SelectedBuilding;
+  localAddresses: BuildingAddressType[];
+  shapeInteractionMode: ShapeInteractionMode;
+  commentValue: string;
+  setNewStatus: (status: BuildingStatusType) => void;
+  handleEditAddress: (addresses: BuildingAddressType[]) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  toggleBuildingActivation: (isActive: boolean) => void;
+}) {
+  return (
+    <>
+      <div className={styles.headSection}>
+        <RNBIDHeader rnbId={rnbId}></RNBIDHeader>
+        <PanelTabs rnbId={rnbId}></PanelTabs>
+      </div>
+      {isLoading ? (
+        <div className={styles.editLoader}>
+          <Loader />
+          <span>Chargement en cours</span>
+        </div>
+      ) : (
+        isActive && (
+          <>
+            <BuildingStatus
+              status={newStatus}
+              onChange={setNewStatus}
+            ></BuildingStatus>
+            <BuildingAddresses
+              buildingPoint={selectedBuilding.point.coordinates}
+              addresses={localAddresses}
+              onChange={handleEditAddress}
+            />
+            <BuildingShape
+              shapeInteractionMode={shapeInteractionMode}
+              selectedBuilding={selectedBuilding}
+            ></BuildingShape>
+            <div className={`${styles.panelSection}`}>
+              <div className={`fr-text--xs ${styles.sectionTitle}`}>
+                <label htmlFor="comment">Commentaire</label>
+              </div>
+              <textarea
+                value={commentValue}
+                onChange={handleChange}
+                id="comment"
+                name="text"
+                className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+                placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
+              />
+            </div>
+          </>
+        )
+      )}
+      {!isLoading && (
+        <BuildingActivationToggle
+          isActive={isActive}
+          onToggle={toggleBuildingActivation}
+        />
+      )}
+    </>
+  );
+}
+function FooterPanel({
+  isActive,
+  anyChanges,
+  isLoading,
+  handleSubmit,
+  cancelUpdate,
+}: {
+  isActive: boolean;
+  anyChanges: boolean;
+  isLoading: boolean;
+  handleSubmit: () => void;
+  cancelUpdate: () => void;
+}) {
+  return (
+    <>
       <div className={styles.footer}>
         <Button
           onClick={handleSubmit}
@@ -226,21 +300,6 @@ function EditSelectedBuildingPanelContent({
     </>
   );
 }
-
-function PanelWrapper({
-  children,
-  testId,
-}: {
-  children: React.ReactNode;
-  testId?: string;
-}) {
-  return (
-    <div className={styles.shell} data-testid={testId}>
-      <div className={styles.content}>{children}</div>
-    </div>
-  );
-}
-
 export default function EditionPanel() {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
@@ -253,98 +312,34 @@ export default function EditionPanel() {
       ? (selectedItem as SelectedBuilding)
       : null;
 
-  const toggleOperation = (operationName: Operation) => () => {
-    if (operation === operationName) {
-      dispatch(Actions.edition.setOperation(null));
-    } else {
-      dispatch(Actions.edition.setOperation(operationName));
-    }
-  };
-
-  const toggleCreateBuilding = toggleOperation('create');
-  const toggleSplitBuilding = toggleOperation('split');
-  const toggleMergeBuilding = toggleOperation('merge');
-
   return (
     <>
       <div className={styles.actions}>
-        <Button
-          onClick={toggleCreateBuilding}
-          className={operation === 'create' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'create'
-                  ? createSelectedBuildingImage.src
-                  : createBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'create' ? styles.actionSelected : ''}
-            >
-              créer
-            </small>
-          </div>
-        </Button>
-        <Button
-          onClick={toggleMergeBuilding}
-          className={operation === 'merge' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'merge'
-                  ? mergeSelectedBuildingImage.src
-                  : mergeBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'merge' ? styles.actionSelected : ''}
-            >
-              fusionner
-            </small>
-          </div>
-        </Button>
-        <Button
-          onClick={toggleSplitBuilding}
-          className={operation === 'split' ? styles.buttonSelected : ''}
-          size="small"
-          priority="tertiary no outline"
-          data-testid="split-action-button"
-        >
-          <div className={styles.action}>
-            <img
-              src={
-                operation === 'split'
-                  ? splitSelectedBuildingImage.src
-                  : splitBuildingImage.src
-              }
-              alt=""
-              height="32"
-              width="32"
-            />
-            <small
-              className={operation === 'split' ? styles.actionSelected : ''}
-            >
-              scinder
-            </small>
-          </div>
-        </Button>
+        <EditionButton
+          operationType="create"
+          operationText="créer"
+          selectedImageSrc={createSelectedBuildingImage.src}
+          imageSrc={createBuildingImage.src}
+          testId="create-action-button"
+        ></EditionButton>
+        <EditionButton
+          operationType="merge"
+          operationText="fusionner"
+          selectedImageSrc={mergeSelectedBuildingImage.src}
+          imageSrc={mergeBuildingImage.src}
+          testId="merge-action-button"
+        ></EditionButton>
+        <EditionButton
+          operationType="split"
+          operationText="scinder"
+          selectedImageSrc={splitSelectedBuildingImage.src}
+          imageSrc={splitBuildingImage.src}
+          testId="split-action-button"
+        ></EditionButton>
       </div>
 
       {operation && (
-        <PanelWrapper testId="edition-panel">
+        <div>
           {operation == 'update' && selectedBuilding && (
             <EditSelectedBuildingPanelContent
               selectedBuilding={selectedBuilding}
@@ -353,7 +348,7 @@ export default function EditionPanel() {
           {operation == 'create' && <CreationPanel />}
           {operation == 'split' && <SplitPanel />}
           {operation == 'merge' && <MergePanel />}
-        </PanelWrapper>
+        </div>
       )}
 
       <Toaster></Toaster>

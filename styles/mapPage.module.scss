@@ -50,7 +50,16 @@
   font-weight: 600;
   margin-bottom: 0.2rem;
 }
-
+.loaderWrapper {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  span {
+    margin-bottom: 1rem;
+  }
+}
 @keyframes shake {
   0% {
     margin-left: 0rem;

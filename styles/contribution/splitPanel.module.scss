@@ -1,0 +1,26 @@
+@import './panel-mixins.scss';
+
+.panelSection {
+  @include panelSection;
+}
+.noPad {
+  @include noPad;
+}
+.sectionTitle {
+  @include sectionTitle;
+}
+.textarea {
+  @include textarea;
+}
+.text {
+  @include text;
+}
+.splitChildTitle {
+  text-transform: uppercase;
+  color: #0063cb;
+  font-weight: 700;
+}
+.stepTitle {
+  color: var(--text-action-high-blue-france);
+}
+@include childsSplitAndMerge;

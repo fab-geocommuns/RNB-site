@@ -5,7 +5,7 @@ import AddressInput from '@/components/address/AddressInput';
 import { AddressSuggestion } from '@/components/address/AddressAutocomplete';
 import { NewAddress, BuildingAddressType } from './types';
 import { distance } from '@turf/turf';
-import styles from '@/styles/contribution/editPanel.module.scss';
+import styles from '@/styles/contribution/building.module.scss';
 
 function AddressCreator({
   onSubmit,

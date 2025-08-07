@@ -1,5 +1,5 @@
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
-import styles from '@/styles/contribution/editPanel.module.scss';
+import styles from '@/styles/contribution/building.module.scss';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 
 export default function BuildingStatus({

@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { fetchBuilding } from '@/utils/requests';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { addOrRemoveCandidate } from '@/stores/edition/edition-slice';
-import RNBIDHeader from './RNBIDHeader';
 import MergeSummary from './MergeSummary';
 import BuildingInfo from './BuildingInfo';
+import GenericPanel from '@/components/panel/GenericPanel';
 import { Loader } from '@/components/Loader';
-import styles from '@/styles/merge.module.scss';
+import styles from '@/styles/contribution/mergePanel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import Toaster, {
+import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
@@ -98,34 +98,74 @@ export default function MergePanel() {
   };
   return (
     <>
-      <RNBIDHeader>
-        <h1 className="fr-text--lg fr-m-0">Fusionner des bâtiments</h1>
-      </RNBIDHeader>
-      {newBuilding?.rnb_id ? (
-        <div className={styles.mergePanel_body}>
-          <MergeSummary
+      <GenericPanel
+        title="Fusionner des bâtiments"
+        onClose={cancelMerge}
+        body={
+          <BodyPanel
             newBuilding={newBuilding}
-            buildingsMerged={candidatesWithAddresses}
+            candidatesWithAddresses={candidatesWithAddresses}
+            isLoading={isLoading}
+            isActive={isActive}
+            commentValue={commentValue}
+            selectCandidateToRemove={selectCandidateToRemove}
+            handleChange={handleChange}
           />
-          <div className={styles.footer}>
-            <Button onClick={newMerge}>Nouvelle fusion</Button>
-          </div>
-        </div>
+        }
+        footer={
+          <FooterPanel
+            newBuilding={newBuilding}
+            isLoading={isLoading}
+            candidatesWithAddresses={candidatesWithAddresses}
+            newMerge={newMerge}
+            cancelMerge={cancelMerge}
+            handleSubmit={handleSubmit}
+          />
+        }
+        testId="edition-panel"
+      ></GenericPanel>
+    </>
+  );
+}
+function BodyPanel({
+  newBuilding,
+  candidatesWithAddresses,
+  isLoading,
+  isActive,
+  commentValue,
+  selectCandidateToRemove,
+  handleChange,
+}: {
+  newBuilding: SelectedBuilding | null;
+  candidatesWithAddresses: (SelectedBuilding | undefined)[] | null;
+  isLoading: boolean;
+  isActive: boolean;
+  commentValue: string;
+  selectCandidateToRemove: (candidate: string) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
+  return (
+    <>
+      {newBuilding?.rnb_id ? (
+        <MergeSummary
+          newBuilding={newBuilding}
+          buildingsMerged={candidatesWithAddresses}
+        />
       ) : (
-        <div className={styles.mergePanel_body}>
+        <div>
           {!isLoading && (
-            <div className={styles.mergePanel__descWrapper}>
-              <span className={styles.mergePanel__descText}>
+            <div className={styles.mergePanelDescWrapper}>
+              <span className={styles.mergePanelDescText}>
                 Sélectionner les bâtiments à fusionner
               </span>
-              <span className={styles.mergePanel__descSubText}>
+              <span className={styles.mergePanelDescSubText}>
                 Sélectionnez sur la carte les bâtiments attenants qui doivent
                 être fusionnés
               </span>
             </div>
           )}
           {isLoading ? (
-            <div className={styles.mergePanel__loader}>
+            <div className={styles.mergePanelLoader}>
               <Loader />
               <span>Chargement en cours</span>
             </div>
@@ -133,32 +173,39 @@ export default function MergePanel() {
             <div>
               {candidatesWithAddresses?.length ? (
                 <div>
-                  {candidatesWithAddresses.map(
-                    (candidate) =>
-                      candidate && (
-                        <BuildingInfo
-                          key={candidate.rnb_id}
-                          building={candidate}
-                        >
-                          <button
-                            onClick={() =>
-                              selectCandidateToRemove(candidate.rnb_id)
-                            }
-                            title="Supprime le bâtiment de la liste des bâtiments à fusionner"
+                  <div className={styles.buildingWrapper}>
+                    {candidatesWithAddresses.map(
+                      (candidate) =>
+                        candidate && (
+                          <div
+                            key={candidate.rnb_id}
+                            className={styles.buildingSummary}
                           >
-                            <span
-                              className="fr-icon-close-circle-fill"
-                              aria-hidden="true"
-                            ></span>
-                          </button>
-                        </BuildingInfo>
-                      ),
-                  )}
+                            <BuildingInfo building={candidate}>
+                              <button
+                                onClick={() =>
+                                  selectCandidateToRemove(candidate.rnb_id)
+                                }
+                                title="Supprime le bâtiment de la liste des bâtiments à fusionner"
+                              >
+                                <span
+                                  className="fr-icon-close-circle-fill"
+                                  aria-hidden="true"
+                                ></span>
+                              </button>
+                            </BuildingInfo>
+                          </div>
+                        ),
+                    )}
+                  </div>
                   {isActive ? (
-                    <div className={styles.mergePanel__summary}>
-                      <div>
-                        <div className={styles.mergePanel__descText}>
-                          <label htmlFor="comment">
+                    <div className={styles.mergePanelSummary}>
+                      <div className={styles.mergePanelDescWrapper}>
+                        <div className={styles.mergePanelDescText}>
+                          <label
+                            htmlFor="comment"
+                            className={styles.mergePanelLabel}
+                          >
                             Commentaire (optionnel)
                           </label>
                         </div>
@@ -167,22 +214,22 @@ export default function MergePanel() {
                           onChange={handleChange}
                           id="comment"
                           name="text"
-                          className={`fr-text--sm fr-input fr-mb-4v ${styles.mergePanel__textarea}`}
+                          className={`fr-text--sm fr-input fr-mb-4v ${styles.mergePanelTextarea}`}
                           placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la fusion ? Laissez un commentaire ici."
                         />
                       </div>
                       <span>
                         Vous avez choisi de fusionner{' '}
-                        <span className={styles.mergePanel__summaryText}>
+                        <span className={styles.mergePanelSummaryText}>
                           {candidatesWithAddresses.length} bâtiments en 1
                         </span>
                       </span>
                     </div>
                   ) : (
                     <div
-                      className={`${styles.mergePanel__card} kg-card kg-callout-card kg-callout-card-yellow`}
+                      className={`${styles.mergePanelCard} kg-card kg-callout-card kg-callout-card-yellow`}
                     >
-                      <span className={styles.mergePanel__cardText}>
+                      <span className={styles.mergePanelCardText}>
                         Il manque au moins un bâtiment à votre sélection
                       </span>
                       <span>
@@ -193,29 +240,53 @@ export default function MergePanel() {
                   )}
                 </div>
               ) : (
-                <div className={styles.mergePanel__textNoBuilding}>
+                <div className={styles.mergePanelTextNoBuilding}>
                   <span>Aucun bâtiment sélectionné</span>
                 </div>
               )}
             </div>
           )}
-          <div className={styles.footer}>
-            <Button onClick={cancelMerge} priority="tertiary no outline">
-              Annuler
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={isLoading || (candidatesWithAddresses?.length ?? 0) < 2}
-              title={
-                (candidatesWithAddresses?.length ?? 0) > 1
-                  ? `Fusionner ${candidatesWithAddresses?.length} bâtiments en un seul`
-                  : 'Sélectionnez au moins 2 bâtiments à fusionner'
-              }
-            >
-              Valider la fusion
-            </Button>
-          </div>
         </div>
+      )}
+    </>
+  );
+}
+function FooterPanel({
+  newBuilding,
+  isLoading,
+  candidatesWithAddresses,
+  newMerge,
+  cancelMerge,
+  handleSubmit,
+}: {
+  newBuilding: SelectedBuilding | null;
+  isLoading: boolean;
+  candidatesWithAddresses: (SelectedBuilding | undefined)[] | null;
+  newMerge: () => void;
+  cancelMerge: () => void;
+  handleSubmit: () => void;
+}) {
+  return (
+    <>
+      {newBuilding?.rnb_id ? (
+        <Button onClick={newMerge}>Nouvelle fusion</Button>
+      ) : (
+        <>
+          <Button onClick={cancelMerge} priority="tertiary no outline">
+            Annuler
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={isLoading || (candidatesWithAddresses?.length ?? 0) < 2}
+            title={
+              (candidatesWithAddresses?.length ?? 0) > 1
+                ? `Fusionner ${candidatesWithAddresses?.length} bâtiments en un seul`
+                : 'Sélectionnez au moins 2 bâtiments à fusionner'
+            }
+          >
+            Valider la fusion
+          </Button>
+        </>
       )}
     </>
   );

@@ -1,9 +1,8 @@
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
-import { BuildingStatusMap } from '@/stores/contribution/contribution-types';
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
-import styles from '@/styles/contribution/editPanel.module.scss';
+import styles from '@/styles/contribution/splitPanel.module.scss';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
@@ -12,22 +11,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingStatus from './BuildingStatus';
 import BuildingInfo from './BuildingInfo';
-import RNBIDHeader from './RNBIDHeader';
+import GenericPanel from '@/components/panel/GenericPanel';
 import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
 import { BuildingAddressType } from './types';
+import App from 'next/app';
 
 const INITIAL_STEP = 0;
 
-function PanelBody({ children }: { children: React.ReactNode }) {
-  return <div className={styles.body}>{children}</div>;
-}
-
 export default function SplitPanel() {
-  const dispatch: AppDispatch = useDispatch();
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
@@ -91,70 +86,114 @@ function SplitBuildingInitialStep({
   const setChildrenNumber = (n: string) => {
     dispatch(Actions.edition.setSplitChildrenNumber(parseInt(n)));
   };
-
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">Étape 1 - Sélection du bâtiment</h1>
-      </RNBIDHeader>
+      <GenericPanel
+        title="Scinder un bâtiment"
+        onClose={() => cancelSplit(dispatch)}
+        body={
+          <BodyPanelInitialStep
+            splitCandidateId={splitCandidateId}
+            splitChildrenCount={splitChildrenCount}
+            setChildrenNumber={setChildrenNumber}
+          />
+        }
+        footer={
+          <FooterPanelInitialStep
+            selectedChildIndex={selectedChildIndex}
+            splitChildrenCount={splitChildrenCount}
+            splitCandidateId={splitCandidateId}
+            dispatch={dispatch}
+          />
+        }
+        header={
+          <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+            Étape 1 - Sélection du bâtiment
+          </h1>
+        }
+        testId="edition-panel"
+      ></GenericPanel>
+    </>
+  );
+}
+function FooterPanelInitialStep({
+  selectedChildIndex,
+  splitChildrenCount,
+  splitCandidateId,
+  dispatch,
+}: {
+  selectedChildIndex: number | null;
+  splitChildrenCount: number;
+  splitCandidateId: string | null;
+  dispatch: AppDispatch;
+}) {
+  return (
+    <>
+      <Button
+        onClick={() => cancelSplit(dispatch)}
+        priority="tertiary no outline"
+      >
+        Annuler
+      </Button>
+      <Button
+        onClick={() =>
+          nextStep(selectedChildIndex, splitChildrenCount, dispatch)
+        }
+        disabled={splitCandidateId === null}
+        priority="secondary"
+      >
+        Suivant
+      </Button>
+    </>
+  );
+}
+function BodyPanelInitialStep({
+  splitCandidateId,
+  splitChildrenCount,
+  setChildrenNumber,
+}: {
+  splitCandidateId: string | null;
+  splitChildrenCount: number;
+  setChildrenNumber: (n: string) => void;
+}) {
+  return (
+    <>
+      <div className={`${styles.panelSection} ${styles.noPad}`}>
+        {splitCandidateId && (
+          <>
+            <div className="fr-pb-3v">
+              En combien de bâtiments souhaitez-vous scinder {splitCandidateId}{' '}
+              ?
+            </div>
+            <Select
+              nativeSelectProps={{
+                value: splitChildrenCount?.toString(),
+                onChange: (event) => {
+                  setChildrenNumber(event.target.value);
+                },
+              }}
+              label=""
+              options={[
+                { value: '2', label: 2 },
+                { value: '3', label: 3 },
+                { value: '4', label: 4 },
+                { value: '5', label: 5 },
+                { value: '6', label: 6 },
+                { value: '7', label: 7 },
+                { value: '8', label: 8 },
+                { value: '9', label: 9 },
+              ]}
+            />
+          </>
+        )}
 
-      <PanelBody>
-        <div className={`${styles.panelSection} ${styles.noPad}`}>
-          {splitCandidateId && (
-            <>
-              <div className="fr-pb-3v">
-                En combien de bâtiments souhaitez-vous scinder{' '}
-                {splitCandidateId} ?
-              </div>
-              <Select
-                nativeSelectProps={{
-                  value: splitChildrenCount?.toString(),
-                  onChange: (event) => {
-                    setChildrenNumber(event.target.value);
-                  },
-                }}
-                label=""
-                options={[
-                  { value: '2', label: 2 },
-                  { value: '3', label: 3 },
-                  { value: '4', label: 4 },
-                  { value: '5', label: 5 },
-                  { value: '6', label: 6 },
-                  { value: '7', label: 7 },
-                  { value: '8', label: 8 },
-                  { value: '9', label: 9 },
-                ]}
-              />
-            </>
-          )}
-
-          {splitCandidateId === null && (
-            <>Sélectionnez un bâtiment à scinder sur la carte.</>
-          )}
-        </div>
-      </PanelBody>
-      <div className={styles.footer}>
-        <Button
-          onClick={() => cancelSplit(dispatch)}
-          priority="tertiary no outline"
-        >
-          Annuler
-        </Button>
-        <Button
-          onClick={() =>
-            nextStep(selectedChildIndex, splitChildrenCount, dispatch)
-          }
-          disabled={splitCandidateId === null}
-          priority="secondary"
-        >
-          Suivant
-        </Button>
+        {splitCandidateId === null && (
+          <>Sélectionnez un bâtiment à scinder sur la carte.</>
+        )}
       </div>
     </>
   );
 }
-
 const cancelSplit = (dispatch: AppDispatch) => {
   dispatch(Actions.edition.setOperation(null));
 };
@@ -220,96 +259,166 @@ function SplitBuildingChildInfosStep({
       fetch,
     );
   };
-
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">
-          Étape {selectedChildIndex + 2}/{splitChildrenCount + 2} - Infos
-          bâtiment {selectedChildIndex + 1}
-        </h1>
-      </RNBIDHeader>
-
-      <PanelBody>
-        <BuildingStatus
-          status={childrenB[selectedChildIndex].status}
-          onChange={(status) => setStatus(status)}
-        ></BuildingStatus>
-        <BuildingAddresses
-          buildingPoint={location!}
-          addresses={childrenB[selectedChildIndex].addresses}
-          onChange={(addresses: BuildingAddressType[]) => {
-            setAddresses(addresses);
-          }}
-        />
-        <div className={`${styles.panelSection} ${styles.noPad}`}>
-          {currentChildHasNoShape && (
-            <div style={{ display: 'flex' }}>
-              <span className="fr-pr-2v">
-                <i className="fr-icon-feedback-line" aria-hidden="true"></i>
-              </span>
-              Tracez la géométrie du bâtiment sur la carte. Un double-clic
-              termine le tracé.
-            </div>
-          )}
-          {!currentChildHasNoShape && (
-            <>
-              <span className="fr-pr-2v">
-                <i className="fr-icon-chat-check-line" aria-hidden="true"></i>
-              </span>
-              Géométrie tracée
-            </>
-          )}
-        </div>
-      </PanelBody>
-      <div className={styles.footer}>
-        <Button
-          onClick={() => cancelSplit(dispatch)}
-          priority="tertiary no outline"
-        >
-          Annuler
-        </Button>
-        <Button
-          onClick={() => previousStep(selectedChildIndex, dispatch)}
-          priority="secondary"
-        >
-          Précédent
-        </Button>
-        {selectedChildIndex < splitChildrenCount && (
-          <Button
-            onClick={() =>
-              nextStep(selectedChildIndex, splitChildrenCount, dispatch)
-            }
-            disabled={currentChildHasNoShape}
-            priority="secondary"
-            title={
-              currentChildHasNoShape
-                ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                : ''
-            }
-          >
-            Suivant
-          </Button>
+      <GenericPanel
+        title="Scinder un bâtiment"
+        onClose={() => cancelSplit(dispatch)}
+        body={
+          <BodyPanelInfosStep
+            childrenB={childrenB}
+            selectedChildIndex={selectedChildIndex}
+            location={location}
+            currentChildHasNoShape={currentChildHasNoShape}
+            setStatus={setStatus}
+            setAddresses={setAddresses}
+          />
+        }
+        footer={
+          <FooterPanelInfosStep
+            selectedChildIndex={selectedChildIndex}
+            splitChildrenCount={splitChildrenCount}
+            currentChildHasNoShape={currentChildHasNoShape}
+            handleSubmit={handleSubmit}
+            dispatch={dispatch}
+          />
+        }
+        header={
+          <ContentHeaderInfosStep
+            selectedChildIndex={selectedChildIndex}
+            splitChildrenCount={splitChildrenCount}
+          />
+        }
+        testId="edition-panel"
+      ></GenericPanel>
+    </>
+  );
+}
+function BodyPanelInfosStep({
+  childrenB,
+  selectedChildIndex,
+  location,
+  currentChildHasNoShape,
+  setStatus,
+  setAddresses,
+}: {
+  childrenB: SplitChild[];
+  selectedChildIndex: number;
+  location: [number, number] | null;
+  currentChildHasNoShape: boolean;
+  setStatus: (status: BuildingStatusType) => void;
+  setAddresses: (addresses: BuildingAddressType[]) => void;
+}) {
+  return (
+    <>
+      <BuildingStatus
+        status={childrenB[selectedChildIndex].status}
+        onChange={(status) => setStatus(status)}
+      ></BuildingStatus>
+      <BuildingAddresses
+        buildingPoint={location!}
+        addresses={childrenB[selectedChildIndex].addresses}
+        onChange={(addresses: BuildingAddressType[]) => {
+          setAddresses(addresses);
+        }}
+      />
+      <div className={`${styles.panelSection} ${styles.noPad}`}>
+        {currentChildHasNoShape && (
+          <div style={{ display: 'flex' }}>
+            <span className="fr-pr-2v">
+              <i className="fr-icon-feedback-line" aria-hidden="true"></i>
+            </span>
+            Tracez la géométrie du bâtiment sur la carte. Un double-clic termine
+            le tracé.
+          </div>
         )}
-        {selectedChildIndex === splitChildrenCount && (
-          <Button
-            onClick={handleSubmit}
-            disabled={currentChildHasNoShape}
-            title={
-              currentChildHasNoShape
-                ? 'Veuillez tracer une géométrie pour ce bâtiment'
-                : `Scinder le bâtiment en ${splitChildrenCount}`
-            }
-          >
-            Scinder
-          </Button>
+        {!currentChildHasNoShape && (
+          <>
+            <span className="fr-pr-2v">
+              <i className="fr-icon-chat-check-line" aria-hidden="true"></i>
+            </span>
+            Géométrie tracée
+          </>
         )}
       </div>
     </>
   );
 }
-
+function ContentHeaderInfosStep({
+  selectedChildIndex,
+  splitChildrenCount,
+}: {
+  selectedChildIndex: number;
+  splitChildrenCount: number;
+}) {
+  return (
+    <>
+      <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+        Étape {selectedChildIndex + 2}/{splitChildrenCount + 2} - Infos bâtiment{' '}
+        {selectedChildIndex + 1}
+      </h1>
+    </>
+  );
+}
+function FooterPanelInfosStep({
+  selectedChildIndex,
+  splitChildrenCount,
+  currentChildHasNoShape,
+  handleSubmit,
+  dispatch,
+}: {
+  selectedChildIndex: number;
+  splitChildrenCount: number;
+  currentChildHasNoShape: boolean;
+  handleSubmit: () => void;
+  dispatch: AppDispatch;
+}) {
+  return (
+    <>
+      <Button
+        onClick={() => cancelSplit(dispatch)}
+        priority="tertiary no outline"
+      >
+        Annuler
+      </Button>
+      <Button
+        onClick={() => previousStep(selectedChildIndex, dispatch)}
+        priority="secondary"
+      >
+        Précédent
+      </Button>
+      {selectedChildIndex < splitChildrenCount && (
+        <Button
+          onClick={() =>
+            nextStep(selectedChildIndex, splitChildrenCount, dispatch)
+          }
+          disabled={currentChildHasNoShape}
+          priority="secondary"
+          title={
+            currentChildHasNoShape
+              ? 'Veuillez tracer une géométrie pour ce bâtiment'
+              : ''
+          }
+        >
+          Suivant
+        </Button>
+      )}
+      {selectedChildIndex === splitChildrenCount && (
+        <Button
+          onClick={handleSubmit}
+          disabled={currentChildHasNoShape}
+          title={
+            currentChildHasNoShape
+              ? 'Veuillez tracer une géométrie pour ce bâtiment'
+              : `Scinder le bâtiment en ${splitChildrenCount}`
+          }
+        >
+          Scinder
+        </Button>
+      )}
+    </>
+  );
+}
 const nextStep = (
   selectedChildIndex: number | null,
   splitChildrenCount: number,
@@ -355,94 +464,162 @@ function SplitBuildingSummaryStep({
       fetch,
     );
   };
-
   return (
     <>
-      <RNBIDHeader>
-        <span className="fr-text--xs">Scinder un bâtiment</span>
-        <h1 className="fr-text--lg fr-m-0">
-          Étape {splitChildrenCount + 2}/{splitChildrenCount + 2} -
-          Récapitulatif
-        </h1>
-      </RNBIDHeader>
-
-      <PanelBody>
-        <div className={`${styles.panelSection}`}>
+      <GenericPanel
+        title="Scinder un bâtiment"
+        onClose={() => cancelSplit(dispatch)}
+        body={
+          <BodyPanelSummaryStep
+            splitCandidateId={splitCandidateId}
+            splitChildrenCount={splitChildrenCount}
+            childrenB={childrenB}
+            currentChildHasNoShape={currentChildHasNoShape}
+            commentValue={commentValue}
+            handleChange={handleChange}
+          />
+        }
+        footer={
+          <FooterPanelSummaryStep
+            selectedChildIndex={selectedChildIndex}
+            currentChildHasNoShape={currentChildHasNoShape}
+            splitChildrenCount={splitChildrenCount}
+            handleSubmit={handleSubmit}
+            dispatch={dispatch}
+          />
+        }
+        header={
+          <ContentHeaderSummaryStep splitChildrenCount={splitChildrenCount} />
+        }
+        testId="edition-panel"
+      ></GenericPanel>
+    </>
+  );
+}
+function BodyPanelSummaryStep({
+  splitCandidateId,
+  splitChildrenCount,
+  childrenB,
+  currentChildHasNoShape,
+  commentValue,
+  handleChange,
+}: {
+  splitCandidateId: string;
+  splitChildrenCount: number;
+  childrenB: SplitChild[];
+  currentChildHasNoShape: boolean;
+  commentValue: string;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
+  return (
+    <>
+      <div>
+        <div className={styles.panelSection}>
           <div className={`fr-text--xs ${styles.sectionTitle}`}>
             Résumé de la scission
           </div>
-          <div className="fr-mb-3v">
+          <div>
             <strong>Bâtiment à scinder :</strong> {splitCandidateId}
           </div>
-          <div className="fr-mb-3v">
+          <div className={styles.text}>
             {splitChildrenCount} Nouveaux bâtiments créés
           </div>
+        </div>
 
-          <div className="fr-mb-3v">
-            {childrenB.map((child, index) => (
-              <div key={index} className={styles.splitSummary}>
-                <strong>Enfant {index + 1} :</strong>
-                <BuildingInfo building={child} />
-              </div>
-            ))}
-          </div>
-
-          {currentChildHasNoShape && (
-            <div style={{ display: 'flex' }} className="fr-mb-3v">
-              <span className="fr-pr-2v">
-                <i className="fr-icon-warning-line" aria-hidden="true"></i>
-              </span>
-              <span style={{ color: '#ce0500' }}>
-                Attention : Certains bâtiments n&apos;ont pas de géométrie
-                tracée
-              </span>
+        <div className={styles.buildingWrapper}>
+          {childrenB.map((child, index) => (
+            <div key={index} className={styles.buildingSummary}>
+              <strong
+                className={`fr-text--lg fr-m-0 ${styles.splitChildTitle}`}
+              >
+                Enfant {index + 1} :
+              </strong>
+              <BuildingInfo building={child} />
             </div>
-          )}
+          ))}
         </div>
-        <div className={`${styles.panelSection}`}>
-          <div className={`fr-text--xs ${styles.sectionTitle}`}>
-            <label htmlFor="comment-summary">Commentaire (optionnel)</label>
-          </div>
-          <textarea
-            value={commentValue}
-            onChange={handleChange}
-            id="comment-summary"
-            name="text"
-            className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-            placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la scission ? Laissez un commentaire ici."
-          />
-        </div>
-      </PanelBody>
 
-      <div className={styles.footer}>
-        <Button
-          onClick={() => cancelSplit(dispatch)}
-          priority="tertiary no outline"
-        >
-          Annuler
-        </Button>
-        <Button
-          onClick={() => previousStep(selectedChildIndex, dispatch)}
-          priority="secondary"
-        >
-          Précédent
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          disabled={currentChildHasNoShape}
-          title={
-            currentChildHasNoShape
-              ? 'Veuillez tracer une géométrie pour tous les bâtiments'
-              : `Scinder le bâtiment en ${splitChildrenCount} bâtiments`
-          }
-        >
-          Scinder
-        </Button>
+        {currentChildHasNoShape && (
+          <div style={{ display: 'flex' }} className="fr-mb-3v">
+            <span className="fr-pr-2v">
+              <i className="fr-icon-warning-line" aria-hidden="true"></i>
+            </span>
+            <span style={{ color: '#ce0500' }}>
+              Attention : Certains bâtiments n&apos;ont pas de géométrie tracée
+            </span>
+          </div>
+        )}
+      </div>
+      <div className={`${styles.panelSection}`}>
+        <div className={`fr-text--xs ${styles.sectionTitle}`}>
+          <label htmlFor="comment-summary">Commentaire (optionnel)</label>
+        </div>
+        <textarea
+          value={commentValue}
+          onChange={handleChange}
+          id="comment-summary"
+          name="text"
+          className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+          placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ou de la scission ? Laissez un commentaire ici."
+        />
       </div>
     </>
   );
 }
-
+function FooterPanelSummaryStep({
+  selectedChildIndex,
+  currentChildHasNoShape,
+  splitChildrenCount,
+  handleSubmit,
+  dispatch,
+}: {
+  selectedChildIndex: number;
+  currentChildHasNoShape: boolean;
+  splitChildrenCount: number;
+  handleSubmit: () => void;
+  dispatch: AppDispatch;
+}) {
+  return (
+    <>
+      <Button
+        onClick={() => cancelSplit(dispatch)}
+        priority="tertiary no outline"
+      >
+        Annuler
+      </Button>
+      <Button
+        onClick={() => previousStep(selectedChildIndex, dispatch)}
+        priority="secondary"
+      >
+        Précédent
+      </Button>
+      <Button
+        onClick={handleSubmit}
+        disabled={currentChildHasNoShape}
+        title={
+          currentChildHasNoShape
+            ? 'Veuillez tracer une géométrie pour tous les bâtiments'
+            : `Scinder le bâtiment en ${splitChildrenCount} bâtiments`
+        }
+      >
+        Scinder
+      </Button>
+    </>
+  );
+}
+function ContentHeaderSummaryStep({
+  splitChildrenCount,
+}: {
+  splitChildrenCount: number;
+}) {
+  return (
+    <>
+      <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+        Étape {splitChildrenCount + 2}/{splitChildrenCount + 2} - Récapitulatif
+      </h1>
+    </>
+  );
+}
 const previousStep = (selectedChildIndex: number, dispatch: AppDispatch) => {
   const i = selectedChildIndex || 0;
   if (i === 0) {

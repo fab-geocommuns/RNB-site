@@ -1,0 +1,79 @@
+@import 'vars.scss';
+$title-color: #414e71;
+
+.shell {
+  // The .shell is the invisible container
+  position: absolute;
+
+  top: 90px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+
+  @media (min-width: $bp-md) {
+    max-width: 400px;
+    width: 400px;
+    right: auto;
+    left: 12px;
+    top: 155px;
+    bottom: 10px;
+  }
+}
+.visualisationShell {
+  top: 70px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f6ff;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 7px;
+}
+.subtitle {
+  color: $title-color;
+  font-size: 0.8rem;
+  line-height: 1em;
+  margin: 0;
+  text-transform: uppercase;
+  flex: 1 0 0;
+}
+.closeLink {
+  margin-left: 1rem;
+  color: $title-color;
+  opacity: 0.8;
+  background: none;
+  text-decoration: none;
+  i::before {
+    width: 25px;
+    height: 25px;
+  }
+}
+.body {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 100%;
+  padding: 20px 15px 20px 15px;
+}
+.footer {
+  padding: 0.75rem 0.75rem 0.75rem 2 * 0.75rem;
+  box-shadow: 0 0rem 0.25rem var(--background-contrast-grey-active);
+  z-index: 90;
+  flex-shrink: 1;
+  flex-grow: 0;
+  width: 100%;
+  background: var(--background-alt-blue-france);
+  display: flex;
+  justify-content: space-between;
+}

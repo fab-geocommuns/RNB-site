@@ -189,7 +189,7 @@ export default function Details({
                     {detailsInfo.addresses.map((addresse, i) => (
                       <div className="fr-mb-3v" key={i}>
                         <div>
-                          <span className={styles.mergePanel__addressText}>
+                          <span className={styles.mergePanelAddressText}>
                             {addresse.street_number}
                             {addresse.street_rep} {addresse.street}{' '}
                             {addresse.city_zipcode} {addresse.city_name}

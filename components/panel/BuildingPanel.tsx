@@ -3,15 +3,13 @@
 import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
-import CopyToClipboard from '@/components/util/CopyToClipboard';
 import ContributionForm from '@/components/ContributionForm';
 import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
-import ImageNext from 'next/image';
-import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
+import RNBIDHeader from '@/components/contribution/RNBIDHeader';
+import PanelTabs from '@/components/panel/PanelTabs';
 
 // Styles
-import { fr } from '@codegouvfr/react-dsfr';
 import styles from '@/styles/panelBuilding.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
 
@@ -19,7 +17,8 @@ import panelStyles from '@/styles/panel.module.scss';
 import va from '@vercel/analytics';
 
 // Hooks
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import ImageNext from 'next/image';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 
@@ -30,8 +29,6 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
 
 // Images
-import copyIcon from '@/public/icons/file-copy-line.svg';
-import checkIcon from '@/public/icons/check-line.svg';
 import bdgInfoIcon from '@/public/icons/map-pin-2-line.svg';
 import bdgHistoryIcon from '@/public/icons/history-line.svg';
 import bdgEditIcon from '@/public/icons/pencil-line.svg';
@@ -41,8 +38,6 @@ interface BuildingPanelProps {
 }
 
 export default function BuildingPanel({ bdg }: BuildingPanelProps) {
-  const [copied, setCopied] = useState(false);
-
   // Store
   const dispatch: AppDispatch = useDispatch();
   const mapLayers = useSelector((state: RootState) => state.map.layers);
@@ -51,41 +46,11 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
     return bdgApiUrl(bdg!.rnb_id);
   };
 
-  function addSpace(rnb_id: string) {
-    if (rnb_id) {
-      return rnb_id.split('').map((char, i) => {
-        let classes = '';
-        if (i == 4 || i == 8) {
-          classes = styles['small-left-padding'];
-        }
-        return (
-          <span key={'rnb-id-char' + i} className={classes}>
-            {char}
-          </span>
-        );
-      });
-    } else {
-      return null;
-    }
-  }
-
   const coverRatioDisplay = (ratio: number) => {
     // % with two decimals
     const percentage = (ratio * 100).toFixed(2);
 
     return `${percentage}%`;
-  };
-
-  const easyRnbId = () => {
-    return addSpace(bdg!.rnb_id);
-  };
-
-  const handleCopy = () => {
-    va.track('rnbid-copied', { rnb_id: bdg!.rnb_id });
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
   };
 
   const relevantPlots = (): Plot[] => {
@@ -123,46 +88,10 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             <span>Cet Identifiant RNB a été désactivé.</span>
           </CallOut>
         )}
-        <h2 className={panelStyles.sectionTitle}>Identifiant RNB</h2>
         <div className={styles.rnbidShell}>
-          <div className={styles.rnbidShell__id}>{easyRnbId()}</div>
-
-          <Tooltip kind="hover" title="Copier l'identifiant RNB">
-            <CopyToClipboard onCopy={() => handleCopy()} text={bdg?.rnb_id}>
-              <div className={styles.rnbidShell__copy}>
-                {copied ? (
-                  <ImageNext alt="Copié" src={checkIcon} />
-                ) : (
-                  <ImageNext alt="Copier l'identifiant RNB" src={copyIcon} />
-                )}
-              </div>
-            </CopyToClipboard>
-          </Tooltip>
+          <RNBIDHeader rnbId={bdg?.rnb_id} />
         </div>
-        <ul className={styles.nav}>
-          <li className={styles.navItem}>
-            <span className={`${styles.navLink} ${styles.navLinkCurrent}`}>
-              <ImageNext alt="Informations" src={bdgInfoIcon} />
-              Informations
-            </span>
-          </li>
-
-          <li className={styles.navItem}>
-            <a
-              className={styles.navLink}
-              href={`/batiments/${bdg.rnb_id}/historique`}
-            >
-              <ImageNext alt="Historique" src={bdgHistoryIcon} />
-              Historique
-            </a>
-          </li>
-          <li className={styles.navItem}>
-            <a className={styles.navLink} href={`/edition?q=${bdg.rnb_id}`}>
-              <ImageNext alt="Modifier" src={bdgEditIcon} />
-              Modifier
-            </a>
-          </li>
-        </ul>
+        <PanelTabs rnbId={bdg?.rnb_id}></PanelTabs>
       </div>
 
       <div className={panelStyles.section}>

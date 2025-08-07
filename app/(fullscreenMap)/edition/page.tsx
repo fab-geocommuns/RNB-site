@@ -5,7 +5,7 @@ import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import EditMapSummerScore from '@/components/summerGames/editMapSummerScore';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
-
+import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
@@ -19,7 +19,14 @@ export default function Page() {
   );
 
   if (!user) {
-    return <>Chargement en cours</>;
+    return (
+      <>
+        <div className={styles.loaderWrapper}>
+          <span>Chargement en cours</span>
+          <Loader></Loader>
+        </div>
+      </>
+    );
   }
 
   return (
