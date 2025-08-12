@@ -310,7 +310,7 @@
 .searchContainer {
   margin-top: 2rem;
   background-color: white;
-  padding: 24px 80px;
+  padding: 24px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -347,6 +347,7 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 32px;
+  //padding-bottom: 16px;
   flex-direction: row;
   @media (max-width: $bp-md) {
     gap: 8px;
@@ -357,12 +358,12 @@
 .featuredDatabases__item {
   border-radius: 5px;
   border: 1px solid #d9d9d9;
-  width: 52px;
-  height: 52px;
+  flex: 1 1 0;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 16px;
 }
 
 .featuredDatabases__item__logo {
