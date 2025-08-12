@@ -5,11 +5,13 @@ import {
   createSlice,
   ListenerEffectAPI,
   PayloadAction,
+  createAsyncThunk,
 } from '@reduxjs/toolkit';
 import { Actions, AppDispatch, RootState } from '../store';
 import { BuildingStatusType } from '../contribution/contribution-types';
 import { BuildingAddressType } from '@/components/contribution/types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
+import { fetchBuilding } from '@/utils/requests';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -17,9 +19,10 @@ export type ToasterInfos = {
   state: null | 'success' | 'error';
   message: string;
 };
+export type MergeCandidate = { rnb_id: string; data: SelectedBuilding };
 
 export type MergeInfos = {
-  candidates: string[];
+  candidates: MergeCandidate[];
   newBuilding: SelectedBuilding | null;
 };
 
@@ -53,6 +56,7 @@ export type EditionStore = {
   // data shared by all operations
   operation: Operation;
   toasterInfos: ToasterInfos;
+  isLoading: boolean;
 
   updateCreate: {
     shapeInteractionMode: ShapeInteractionMode;
@@ -68,6 +72,7 @@ export type EditionStore = {
 const initialState: EditionStore = {
   operation: null,
   toasterInfos: { state: null, message: '' },
+  isLoading: false,
   updateCreate: {
     shapeInteractionMode: null,
     buildingNewShape: null,
@@ -101,14 +106,23 @@ export const editionSlice = createSlice({
       state.split.location = null;
       state.split.splitCandidateId = null;
     },
-    setCandidates(state, action: PayloadAction<string[]>) {
+    setCandidates(state, action: PayloadAction<MergeCandidate[]>) {
       state.merge.candidates = action.payload;
+    },
+    setRemoveCandidate(state, action: PayloadAction<string>) {
+      const candidates: MergeCandidate[] = state.merge.candidates.filter(
+        (item: MergeCandidate) => item.rnb_id !== action.payload,
+      );
+      state.merge.candidates = candidates;
     },
     setNewBuilding(state, action: PayloadAction<SelectedBuilding | null>) {
       state.merge.newBuilding = action.payload;
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
+    },
+    setIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
     },
     setShapeInteractionMode(
       state,
@@ -209,6 +223,23 @@ export const editionSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addOrRemoveCandidate.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addOrRemoveCandidate.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.merge.candidates = action.payload;
+      })
+      .addCase(addOrRemoveCandidate.rejected, (state, action) => {
+        state.isLoading = false;
+        state.toasterInfos = {
+          state: 'error',
+          message: 'Impossible de récupérer les informations de ce bâtiment',
+        };
+      });
+  },
 });
 
 export const selectBuildingsAndSetMergeCandidates =
@@ -216,11 +247,7 @@ export const selectBuildingsAndSetMergeCandidates =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(Actions.map.unselectItem());
     if (!getState().edition.merge.newBuilding?.rnb_id) {
-      dispatch(
-        Actions.edition.setCandidates(
-          addOrRemoveCandidate(rnbId, getState().edition.merge.candidates),
-        ),
-      );
+      dispatch(addOrRemoveCandidate(rnbId));
     }
   };
 
@@ -289,14 +316,35 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   },
 });
 
-export function addOrRemoveCandidate(
-  candidate: string,
-  candidates: string[],
-): string[] {
-  const itemExist = candidates.some((item: string) => item === candidate);
-  if (itemExist) return candidates.filter((item: string) => item !== candidate);
-  else return [...candidates, candidate];
-}
+export const addOrRemoveCandidate = createAsyncThunk<
+  any,
+  string,
+  { state: RootState }
+>(
+  'edition/addOrRemoveCandidate',
+  async (candidate_rnb_id: string, { getState }) => {
+    let candidates = getState().edition.merge.candidates;
+    const itemExist = candidates.some(
+      (item: MergeCandidate) => item.rnb_id === candidate_rnb_id,
+    );
+    if (itemExist) {
+      // remove candidate
+      return candidates.filter(
+        (item: MergeCandidate) => item.rnb_id !== candidate_rnb_id,
+      );
+    } else {
+      // add candidate
+      const building = await fetchBuilding(candidate_rnb_id);
+      if (building) {
+        candidates = [
+          ...candidates,
+          { rnb_id: candidate_rnb_id, data: building },
+        ];
+      }
+      return candidates;
+    }
+  },
+);
 
 export const editionActions = editionSlice.actions;
 export const editionReducer = editionSlice.reducer;
