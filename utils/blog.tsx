@@ -1,28 +1,41 @@
 import { cache } from 'react';
 
-// @ts-ignore
 import GhostContentAPI from '@tryghost/content-api';
+
+export const getUseCases = cache(async (page = 1) => {
+  const api = getClient();
+
+  return api.posts
+    .browse({
+      filter: 'tag:casusage',
+      page: page,
+      limit: 10,
+      include: ['tags', 'authors'],
+    })
+    .then((posts) => {
+      return posts;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
 
 export const getPosts = cache(async (page = 1) => {
   const api = getClient();
 
-  return (
-    api.posts
-      .browse({
-        filter: 'tag:blog',
-        page: page,
-        limit: 10,
-        include: 'tags,authors',
-      })
-      // @ts-ignore
-      .then((posts) => {
-        return posts;
-      })
-      // @ts-ignore
-      .catch((err) => {
-        console.error(err);
-      })
-  );
+  return api.posts
+    .browse({
+      filter: 'tag:blog',
+      page: page,
+      limit: 10,
+      include: ['tags', 'authors'],
+    })
+    .then((posts) => {
+      return posts;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 export function formattedDate(isoDateStr: string) {
@@ -36,7 +49,11 @@ export function formattedDate(isoDateStr: string) {
 export const getPost = cache(async (slug: string) => {
   const api = getClient();
 
-  return api.posts.read({ slug: slug, include: 'tags' });
+  return api.posts.read({
+    slug: slug,
+    // @ts-ignore
+    include: 'tags',
+  });
 });
 
 export const getBreakingNews = cache(async () => {
@@ -46,9 +63,9 @@ export const getBreakingNews = cache(async () => {
 
 function getClient() {
   return new GhostContentAPI({
-    url: process.env.NEXT_GHOST_API_URL,
-    key: process.env.NEXT_GHOST_API_KEY,
-    version: process.env.NEXT_GHOST_API_VERSION,
+    url: process.env.NEXT_GHOST_API_URL!,
+    key: process.env.NEXT_GHOST_API_KEY!,
+    version: process.env.NEXT_GHOST_API_VERSION!,
     makeRequest: async ({ url, method, params, headers }: any) => {
       // The Ghost client tries to use Axios to fetch pages, which throws an error in a Next.js 14 app
       // See: https://forum.ghost.org/t/tryghost-content-api-is-not-working-on-next-v14/47470
