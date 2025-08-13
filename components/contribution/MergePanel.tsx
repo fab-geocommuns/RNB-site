@@ -1,9 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Actions, RootState, AppDispatch } from '@/stores/store';
-import { useEffect, useState } from 'react';
-import { fetchBuilding } from '@/utils/requests';
+import { useState } from 'react';
 import { SelectedBuilding } from '@/stores/map/map-slice';
-import { addOrRemoveCandidate } from '@/stores/edition/edition-slice';
+import { MergeCandidate } from '@/stores/edition/edition-slice';
 import MergeSummary from './MergeSummary';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
@@ -18,57 +17,48 @@ import {
 } from './toaster';
 export default function MergePanel() {
   const dispatch: AppDispatch = useDispatch();
-  const candidatesToMerge = useSelector(
-    (state: RootState) => state.edition.merge.candidates,
+  const candidatesIdToMerge = useSelector((state: RootState) =>
+    state.edition.merge.candidates.map(
+      (candidate: MergeCandidate) => candidate.rnbId,
+    ),
   );
   const newBuilding = useSelector(
     (state: RootState) => state.edition.merge.newBuilding,
   );
-  const isActive = candidatesToMerge.length > 1;
+  const isActive = candidatesIdToMerge.length > 1;
   const { fetch } = useRNBFetch();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isLoading = useSelector((state: RootState) => state.edition.isLoading);
   const [commentValue, setCommentValue] = useState('');
-  const [candidatesWithAddresses, setCandidatesWithAddresses] = useState<
-    (SelectedBuilding | undefined)[] | null
-  >(null);
+  const candidatesWithAddresses = useSelector((state: RootState) =>
+    state.edition.merge.candidates.map(
+      (candidate: MergeCandidate) => candidate.data,
+    ),
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const responses = await Promise.all(
-        candidatesToMerge.map((candidate) => fetchBuilding(candidate)),
-      );
-      setCandidatesWithAddresses(responses);
-      setIsLoading(false);
-    };
-    if (candidatesToMerge.length) {
-      fetchData();
-    } else setCandidatesWithAddresses(null);
-  }, [candidatesToMerge]);
   const cancelMerge = () => {
     dispatch(Actions.edition.setOperation(null));
   };
+
   const newMerge = () => {
     dispatch(Actions.edition.setNewBuilding(null));
     dispatch(Actions.edition.setOperation('merge'));
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentValue(event.target.value);
   };
+
   const selectCandidateToRemove = (rnbId: string) => {
-    dispatch(
-      Actions.edition.setCandidates(
-        addOrRemoveCandidate(rnbId, candidatesToMerge),
-      ),
-    );
+    dispatch(Actions.edition.setRemoveCandidate(rnbId));
   };
+
   const handleSubmit = async () => {
-    setIsLoading(true);
+    dispatch(Actions.edition.setIsLoading(true));
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/merge/`;
 
     let data: { [key: string]: any } = {
       comment: commentValue,
-      rnb_ids: candidatesToMerge,
+      rnb_ids: candidatesIdToMerge,
       status: 'constructed',
       merge_existing_addresses: true,
     };
@@ -89,10 +79,11 @@ export default function MergePanel() {
         dispatch(Actions.edition.setNewBuilding(data));
         setCommentValue('');
       }
-      setIsLoading(false);
+      dispatch(Actions.edition.setIsLoading(false));
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la fusion');
-      setIsLoading(false);
+      dispatch(Actions.edition.setIsLoading(false));
+
       console.error(err);
     }
   };
