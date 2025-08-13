@@ -18,7 +18,7 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
 ) => {
   const dispatch: AppDispatch = useDispatch();
   const candidatesToMerge = useSelector((state: RootState) =>
-    state.edition.merge.candidates.map((candidate) => candidate.rnb_id),
+    state.edition.merge.candidates.map((candidate) => candidate.rnbId),
   );
   const newBuilding = useSelector(
     (state: RootState) => state.edition.merge.newBuilding,

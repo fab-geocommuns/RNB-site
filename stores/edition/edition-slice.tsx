@@ -19,7 +19,7 @@ export type ToasterInfos = {
   state: null | 'success' | 'error';
   message: string;
 };
-export type MergeCandidate = { rnb_id: string; data: SelectedBuilding };
+export type MergeCandidate = { rnbId: string; data: SelectedBuilding };
 
 export type MergeInfos = {
   candidates: MergeCandidate[];
@@ -111,7 +111,7 @@ export const editionSlice = createSlice({
     },
     setRemoveCandidate(state, action: PayloadAction<string>) {
       const candidates: MergeCandidate[] = state.merge.candidates.filter(
-        (item: MergeCandidate) => item.rnb_id !== action.payload,
+        (item: MergeCandidate) => item.rnbId !== action.payload,
       );
       state.merge.candidates = candidates;
     },
@@ -322,24 +322,21 @@ export const addOrRemoveCandidate = createAsyncThunk<
   { state: RootState }
 >(
   'edition/addOrRemoveCandidate',
-  async (candidate_rnb_id: string, { getState }) => {
+  async (candidateRnbId: string, { getState }) => {
     let candidates = getState().edition.merge.candidates;
     const itemExist = candidates.some(
-      (item: MergeCandidate) => item.rnb_id === candidate_rnb_id,
+      (item: MergeCandidate) => item.rnbId === candidateRnbId,
     );
     if (itemExist) {
       // remove candidate
       return candidates.filter(
-        (item: MergeCandidate) => item.rnb_id !== candidate_rnb_id,
+        (item: MergeCandidate) => item.rnbId !== candidateRnbId,
       );
     } else {
       // add candidate
-      const building = await fetchBuilding(candidate_rnb_id);
+      const building = await fetchBuilding(candidateRnbId);
       if (building) {
-        candidates = [
-          ...candidates,
-          { rnb_id: candidate_rnb_id, data: building },
-        ];
+        candidates = [...candidates, { rnbId: candidateRnbId, data: building }];
       }
       return candidates;
     }

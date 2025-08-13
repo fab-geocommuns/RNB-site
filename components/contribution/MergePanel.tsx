@@ -19,7 +19,7 @@ export default function MergePanel() {
   const dispatch: AppDispatch = useDispatch();
   const candidatesIdToMerge = useSelector((state: RootState) =>
     state.edition.merge.candidates.map(
-      (candidate: MergeCandidate) => candidate.rnb_id,
+      (candidate: MergeCandidate) => candidate.rnbId,
     ),
   );
   const newBuilding = useSelector(
