@@ -403,19 +403,6 @@ function FooterPanelInfosStep({
           Suivant
         </Button>
       )}
-      {selectedChildIndex === splitChildrenCount && (
-        <Button
-          onClick={handleSubmit}
-          disabled={currentChildHasNoShape}
-          title={
-            currentChildHasNoShape
-              ? 'Veuillez tracer une géométrie pour ce bâtiment'
-              : `Scinder le bâtiment en ${splitChildrenCount}`
-          }
-        >
-          Scinder
-        </Button>
-      )}
     </>
   );
 }
@@ -579,6 +566,8 @@ function FooterPanelSummaryStep({
   handleSubmit: () => void;
   dispatch: AppDispatch;
 }) {
+  const isLoading = useSelector((state: RootState) => state.edition.isLoading);
+
   return (
     <>
       <Button
@@ -595,7 +584,7 @@ function FooterPanelSummaryStep({
       </Button>
       <Button
         onClick={handleSubmit}
-        disabled={currentChildHasNoShape}
+        disabled={currentChildHasNoShape || isLoading}
         title={
           currentChildHasNoShape
             ? 'Veuillez tracer une géométrie pour tous les bâtiments'
@@ -637,6 +626,7 @@ const handleSplitSubmit = async (
   dispatch: AppDispatch,
   fetch: any,
 ) => {
+  dispatch(Actions.edition.setIsLoading(true));
   const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
   let data: { [key: string]: any } = {
     created_buildings: splitChildrenForAPI,
@@ -660,4 +650,5 @@ const handleSplitSubmit = async (
     toasterError(dispatch, err.message || 'Erreur lors de la scission');
     console.error(err);
   }
+  dispatch(Actions.edition.setIsLoading(false));
 };

@@ -49,6 +49,7 @@ export default function CreationPanel() {
   };
 
   const createBuilding = async () => {
+    dispatch(Actions.edition.setIsLoading(true));
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/`;
 
     let data: { [key: string]: any } = {
@@ -78,6 +79,7 @@ export default function CreationPanel() {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
       console.error(err);
     }
+    dispatch(Actions.edition.setIsLoading(false));
   };
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentValue(event.target.value);
@@ -121,13 +123,17 @@ function FooterPanel({
   createBuilding: () => void;
   cancelCreation: () => void;
 }) {
+  const isLoading = useSelector((state: RootState) => state.edition.isLoading);
+
   return (
     <>
       <Button onClick={cancelCreation} priority="tertiary no outline">
         Annuler
       </Button>
       {step === 2 && (
-        <Button onClick={createBuilding}>Créer le bâtiment</Button>
+        <Button onClick={createBuilding} disabled={isLoading}>
+          Créer le bâtiment
+        </Button>
       )}
     </>
   );

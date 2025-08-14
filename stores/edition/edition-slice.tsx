@@ -105,6 +105,7 @@ export const editionSlice = createSlice({
       state.split.children = createEmptySplitChildren(2);
       state.split.location = null;
       state.split.splitCandidateId = null;
+      state.isLoading = false;
     },
     setCandidates(state, action: PayloadAction<MergeCandidate[]>) {
       state.merge.candidates = action.payload;
