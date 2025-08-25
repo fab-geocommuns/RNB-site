@@ -347,7 +347,6 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 32px;
-  //padding-bottom: 16px;
   flex-direction: row;
   @media (max-width: $bp-md) {
     gap: 8px;
