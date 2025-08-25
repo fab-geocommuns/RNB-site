@@ -37,7 +37,7 @@ export default async function Home() {
             </div>
           </>
         )}
-        {/*<SummerGame
+        <SummerGame
           title={
             <>
               <span>🧑‍🔬 🤝 🗺️ 👩‍🔬 </span>
@@ -46,7 +46,7 @@ export default async function Home() {
           }
           limit={5}
           showRankingLink={true}
-        />*/}
+        />
         <UseCases />
         {availableDatabases && <Databases databases={availableDatabases} />}
         <ToolsAndServices />
