@@ -27,7 +27,7 @@ export default function ToolsAndServices() {
                   <span style={{ lineHeight: '1.8rem' }}>
                     <Link href="">→ Carte des bâtiments</Link>
                     <br />
-                    <Link href="">→ Outil d'édition</Link>
+                    <Link href="">→ Outil d&apos;édition</Link>
                     <br />
                     <Link href="">→ Définition et standard</Link>
                   </span>
@@ -50,7 +50,7 @@ export default function ToolsAndServices() {
                   <span style={{ lineHeight: '1.8rem' }}>
                     <Link href="">→ Documentation de nos APIs</Link>
                     <br />
-                    <Link href="">→ Guide d'édition</Link>
+                    <Link href="">→ Guide d&apos;édition</Link>
                     <br />
                     <Link href="">→ Jeux de données</Link>
                   </span>

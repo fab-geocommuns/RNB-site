@@ -26,7 +26,6 @@ function Illustration() {
 }
 
 export default function Hero() {
-  console.log(mapImageSource);
   return (
     <div
       className={fr.cx('fr-mb-6v')}
@@ -39,8 +38,8 @@ export default function Hero() {
             <p>
               Le Référentiel national des bâtiments (RNB) est un{' '}
               <b>service public numérique</b> qui{' '}
-              <b>répertorie l'ensemble des bâtiments du territoire</b> et leur
-              associe un <b>identifiant unique</b>.
+              <b>répertorie l&apos;ensemble des bâtiments du territoire</b> et
+              leur associe un <b>identifiant unique</b>.
             </p>
             <p>
               Cet <b>ID-RNB</b> est facilement transmissible par une personne ou
