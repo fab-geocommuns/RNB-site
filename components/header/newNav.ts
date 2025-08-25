@@ -1,15 +1,17 @@
+import { newsletterModal } from '@/components/home/NewsletterModal';
+
 export default function newNav(pathName: string) {
   return [
     {
       linkProps: {
-        href: '#',
+        href: '/',
         target: '_self',
       },
       text: 'Accueil',
     },
     {
       linkProps: {
-        href: '#',
+        href: '/cas-d-usage',
         target: '_self',
       },
       text: "Cas d'usage",
@@ -24,25 +26,29 @@ export default function newNav(pathName: string) {
             links: [
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments',
+                  target: '_self',
                 },
                 text: 'API Bâtiments',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments',
+                  target: '_self',
                 },
                 text: 'Sélécteur de bâtiments',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles',
+                  target: '_self',
                 },
                 text: 'Tuiles vectorielles',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://www.data.gouv.fr/datasets/referentiel-national-des-batiments/',
+                  target: '_self',
                 },
                 text: 'Exports nationaux et départementaux',
               },
@@ -53,19 +59,22 @@ export default function newNav(pathName: string) {
             links: [
               {
                 linkProps: {
-                  href: '#',
+                  href: '/carte',
+                  target: '_self',
                 },
                 text: 'Carte des bâtiments',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: '/definition',
+                  target: '_self',
                 },
                 text: 'Définition et standard',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: '/outils-services/rapprochement',
+                  target: '_self',
                 },
                 text: 'Bases contenant des ID-RNBs',
               },
@@ -76,19 +85,22 @@ export default function newNav(pathName: string) {
             links: [
               {
                 linkProps: {
-                  href: '#',
+                  href: '/edition',
+                  target: '_self',
                 },
                 text: "Outil d'édition",
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb',
+                  target: '_self',
                 },
                 text: "API d'édition",
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb',
+                  target: '_self',
                 },
                 text: "Guides d'éditions",
               },
@@ -107,31 +119,34 @@ export default function newNav(pathName: string) {
             links: [
               {
                 linkProps: {
-                  href: '#',
+                  href: '/doc',
                 },
                 text: 'Documentation technique',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: '/definition',
                 },
                 text: 'Définition et standard',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb',
+                  target: '_self',
                 },
                 text: "Guide d'édition",
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://rnb-fr.gitbook.io/documentation/lexique-du-rnb',
+                  target: '_self',
                 },
                 text: 'Lexique',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: '/faq',
+                  target: '_self',
                 },
                 text: 'FAQ',
               },
@@ -142,13 +157,17 @@ export default function newNav(pathName: string) {
             links: [
               {
                 linkProps: {
-                  href: '#',
+                  href: '/blog',
                 },
                 text: 'Dernières informations',
               },
               {
                 linkProps: {
                   href: '#',
+                  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    newsletterModal.open();
+                  },
                 },
                 text: "S'abonner à la newsletter",
               },
@@ -159,19 +178,27 @@ export default function newNav(pathName: string) {
             links: [
               {
                 linkProps: {
-                  href: '#',
+                  href: '/a-propos',
                 },
                 text: 'Présentation',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: '/stats',
                 },
                 text: 'Statistiques',
               },
               {
                 linkProps: {
-                  href: '#',
+                  href: 'https://stats.uptimerobot.com/n0w4LilK0r',
+                  target: '_self',
+                },
+                text: 'Statut du service',
+              },
+              {
+                linkProps: {
+                  href: 'https://rnb-fr.gitbook.io/documentation/a-propos/mentions-legales-et-politique-de-confidentialite',
+                  target: '_self',
                 },
                 text: 'Mentions légales',
               },

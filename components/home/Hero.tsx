@@ -51,7 +51,7 @@ export default function Hero() {
             </p>
             <p>
               {' '}
-              <Button>Voir la carte des bâtiments</Button>{' '}
+              <Button>Consulter la carte des bâtiments</Button>{' '}
               <Button priority="tertiary no outline">En savoir plus</Button>
             </p>
           </div>
