@@ -8,6 +8,8 @@ import Governance from '@/components/home/Governance';
 import { getBreakingNews } from '@/utils/blog';
 
 import { getDatabases } from '@/utils/databases';
+import NewsletterModal from '@/components/home/NewsletterModal';
+
 export const revalidate = 10;
 
 export default async function Home() {
@@ -50,6 +52,7 @@ export default async function Home() {
         <ToolsAndServices />
         <Governance />
       </div>
+      <NewsletterModal />
     </>
   );
 }
