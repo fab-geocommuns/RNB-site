@@ -5,7 +5,7 @@ import Databases from '@/components/home/Databases';
 import ToolsAndServices from '@/components/home/ToolsAndServices';
 import Governance from '@/components/home/Governance';
 
-import { getBreakingNews } from '@/utils/blog';
+import { getBreakingNews, getUseCases } from '@/utils/blog';
 
 import { getDatabases } from '@/utils/databases';
 import NewsletterModal from '@/components/home/NewsletterModal';
@@ -14,6 +14,7 @@ export const revalidate = 10;
 
 export default async function Home() {
   const breakingNews = await getBreakingNews();
+  const useCases = await getUseCases();
   let availableDatabases = null;
   try {
     availableDatabases = await getDatabases();
@@ -31,7 +32,7 @@ export default async function Home() {
             <div className="fr-grid-row">
               <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
                 <div
-                  dangerouslySetInnerHTML={{ __html: breakingNews.html }}
+                  dangerouslySetInnerHTML={{ __html: breakingNews.html || '' }}
                 ></div>
               </div>
             </div>
@@ -47,7 +48,7 @@ export default async function Home() {
           limit={5}
           showRankingLink={true}
         />
-        <UseCases />
+        {!!useCases && <UseCases useCases={useCases} />}
         {availableDatabases && <Databases databases={availableDatabases} />}
         <ToolsAndServices />
         <Governance />
