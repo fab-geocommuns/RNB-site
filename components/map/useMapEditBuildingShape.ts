@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Actions, RootState } from '@/stores/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
@@ -11,6 +11,7 @@ import { selectSplitShapeIdForCurrentChild } from '@/stores/edition/edition-sele
 // @ts-ignore
 import DrawAssistedRectangle from '@geostarters/mapbox-gl-draw-rectangle-assisted-mode/dist/DrawAssistedRectangle.js';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { toasterSuccess } from '../contribution/toaster';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -44,7 +45,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const currentSplitShapeId = useSelector(selectSplitShapeIdForCurrentChild);
 
   const prevOperationRef = useRef<string | null>(null);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
   const draw_polygon = MapboxDraw.modes.draw_polygon;
 
@@ -67,6 +68,13 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   useHotkeys('shift+r', () => {
     const targetMode =
       drawMode === 'draw_polygon' ? 'draw_rectangle' : 'draw_polygon';
+
+    if (targetMode === 'draw_rectangle') {
+      toasterSuccess(dispatch, `mode rectangle activé`);
+    } else if (targetMode === 'draw_polygon') {
+      toasterSuccess(dispatch, `mode polygone activé`);
+    }
+
     setDrawMode(targetMode);
 
     if (
