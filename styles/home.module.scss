@@ -369,3 +369,15 @@
   width: 100%;
   height: auto;
 }
+
+.card-use-case {
+  text-align: center;
+
+  a {
+    background-image: none;
+  }
+
+  .fr-card__content {
+    border-bottom: 3px solid var(--text-action-high-blue-france);
+  }
+}

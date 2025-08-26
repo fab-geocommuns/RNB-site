@@ -1,5 +1,9 @@
 import { PostsOrPages } from '@tryghost/content-api';
 import Card from '@codegouvfr/react-dsfr/Card';
+import Tile from '@codegouvfr/react-dsfr/Tile';
+
+// Styles
+import styles from '@/styles/home.module.scss';
 
 type Props = {
   useCases: PostsOrPages;
@@ -22,9 +26,12 @@ export default function UseCases({ useCases }: Props) {
             {featuredUseCase.map((useCase) => (
               <div className="fr-col-12 fr-col-md-4 " key={useCase.id}>
                 <Card
+                  background
+                  border
+                  enlargeLink
+                  className={styles['card-use-case']}
                   imageUrl={useCase.feature_image || ''}
                   imageAlt={useCase.feature_image_alt || ''}
-                  desc={useCase.excerpt}
                   linkProps={{ href: '/cas/' + useCase.slug }}
                   title={useCase.title}
                 />

@@ -15,6 +15,7 @@ export const revalidate = 10;
 export default async function Home() {
   const breakingNews = await getBreakingNews();
   const useCases = await getUseCases();
+  const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
   let availableDatabases = null;
   try {
     availableDatabases = await getDatabases();
@@ -38,16 +39,18 @@ export default async function Home() {
             </div>
           </>
         )}
-        <SummerGame
-          title={
-            <>
-              <span>🧑‍🔬 🤝 🗺️ 👩‍🔬 </span>
-              L&apos;expérience collaborative de l&apos;été
-            </>
-          }
-          limit={5}
-          showRankingLink={true}
-        />
+        {showSummerGame && (
+          <SummerGame
+            title={
+              <>
+                <span>🧑‍🔬 🤝 🗺️ 👩‍🔬 </span>
+                L&apos;expérience collaborative de l&apos;été
+              </>
+            }
+            limit={5}
+            showRankingLink={true}
+          />
+        )}
         {!!useCases && <UseCases useCases={useCases} />}
         {availableDatabases && <Databases databases={availableDatabases} />}
         <ToolsAndServices />
