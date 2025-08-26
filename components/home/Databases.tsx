@@ -40,17 +40,17 @@ export default function Databases({ databases }: Props) {
       <div className={styles.dbsShell}>
         <div className="section__titleblock">
           <h2 className="section__title">
-            Croisez et enrichissez vos données bâtimentaires
+            Enrichissez vos données bâtimentaires
           </h2>
           <p className="section__subtitle">
-            Accédez à plus de {attributeCount} attributs accessibles dans{' '}
-            {databaseCount} bases répertoriées
+            Croisez facilement les données de plus de {databaseCount} bases
+            intégrant les ID-RNBs
           </p>
         </div>
         <div className={styles.searchContainer}>
           <FeaturedDatabases dbs={featuredDatabases} />
           <Link href="/outils-services/rapprochement">
-            Voir l&apos;ensemble des bases contenant des ID-RNB
+            Voir l&apos;ensemble des bases contenant des ID-RNBs{' '}
           </Link>
         </div>
       </div>
