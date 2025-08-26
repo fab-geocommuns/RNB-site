@@ -11,6 +11,7 @@ import {
 } from '@/components/map/useMapLayers';
 import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
+import { toasterSuccess } from '@/components/contribution/toaster';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -33,6 +34,10 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
       ? state.map.selectedItem.rnb_id
       : null,
   );
+  const buildingNewShape = useSelector(
+    (state: RootState) => state.edition.updateCreate.buildingNewShape,
+  );
+  const clickOutCount = useRef(0);
 
   // Initialisation des événements
   useEffect(() => {
@@ -61,7 +66,20 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
 
         if (operation === 'update' || operation === null) {
           if (shapeInteractionMode !== 'drawing') {
-            if (featureOnCursor && rnbIdClickedOn !== selectedBuildingRnbId) {
+            if (buildingNewShape !== null) {
+              // avoid loosing ongoing shape edition on click out
+              clickOutCount.current = clickOutCount.current + 1;
+              if (clickOutCount.current > 2) {
+                clickOutCount.current = 0;
+                toasterSuccess(
+                  dispatch,
+                  `Pour sélectionner un autre bâtiment, annulez la modification en cours`,
+                );
+              }
+            } else if (
+              featureOnCursor &&
+              rnbIdClickedOn !== selectedBuildingRnbId
+            ) {
               // What did we click on?
               if (
                 [
@@ -166,7 +184,14 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         map.off('mousemove', handleMouseMove);
       };
     }
-  }, [dispatch, map, shapeInteractionMode, operation, selectedBuildingRnbId]);
+  }, [
+    dispatch,
+    map,
+    shapeInteractionMode,
+    operation,
+    selectedBuildingRnbId,
+    buildingNewShape,
+  ]);
 
   // split candidate highlighting
   useEffect(() => {
