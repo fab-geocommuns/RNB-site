@@ -7,7 +7,7 @@ export const getUseCases = cache(async (page = 1) => {
 
   return api.posts
     .browse({
-      filter: 'tag:open-data',
+      filter: 'tag:casusage',
       page: page,
       limit: 10,
       include: ['tags', 'authors'],
