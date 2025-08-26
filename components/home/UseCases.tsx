@@ -63,11 +63,14 @@ export default function UseCases({ useCases }: Props) {
             </p>
           </div>
 
+          <div className="fr-pb-6w">
+            <LogoCarousel />
+          </div>
+
           <div className="fr-grid-row fr-grid-row--gutters">
             {featuredUseCase.map((useCase) => (
               <div className="fr-col-12 fr-col-md-4 " key={useCase.id}>
                 <Tile
-                  className={styles['card-use-case']}
                   imageUrl={useCase.feature_image || ''}
                   imageAlt={useCase.feature_image_alt || ''}
                   linkProps={{ href: '/cas/' + useCase.slug }}
@@ -77,8 +80,6 @@ export default function UseCases({ useCases }: Props) {
               </div>
             ))}
           </div>
-
-          <LogoCarousel />
         </div>
       </div>
     </div>
