@@ -12,22 +12,45 @@ type Props = {
   useCases: PostsOrPages;
 };
 
-export default function UseCases({ useCases }: Props) {
-  const featuredUseCase = useCases.slice(0, 3);
+function LogoCarousel() {
   const logos = [
     {
       src: nantes.src,
+      scale: 0.9,
     },
     {
       src: echirolles.src,
+      scale: 1.1,
     },
     {
       src: smh.src,
+      scale: 1.2,
     },
     {
       src: auditDpe.src,
+      scale: 0.8,
     },
   ];
+  return (
+    <div className={styles['logo-carousel']} style={{ maxWidth: 800 }}>
+      <div className={styles['logo-carousel__track']}>
+        {[...logos, ...logos, ...logos].map((logo, index) => (
+          <div key={index} className={styles['logo-carousel__item']}>
+            <img
+              src={logo.src}
+              alt={'logo'}
+              className={styles['logo-carousel__logo']}
+              style={{ transform: `scale(${logo.scale})` }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function UseCases({ useCases }: Props) {
+  const featuredUseCase = useCases.slice(0, 3);
   return (
     <div className="section">
       <div className="fr-grid-row fr-grid-row--gutters">
@@ -35,7 +58,8 @@ export default function UseCases({ useCases }: Props) {
           <div className="section__titleblock">
             <h2 className="section__title">Cas d&apos;usage</h2>
             <p className="section__subtitle">
-              Exemples d&apos;utilisation du RNB
+              Ils utilisent le RNB pour conduire leurs politiques publiques et
+              territoriales
             </p>
           </div>
 
@@ -54,20 +78,7 @@ export default function UseCases({ useCases }: Props) {
             ))}
           </div>
 
-          {/* Logo Carousel */}
-          <div className={styles['logo-carousel']} style={{ maxWidth: 800 }}>
-            <div className={styles['logo-carousel__track']}>
-              {[...logos, ...logos, ...logos].map((logo, index) => (
-                <div key={index} className={styles['logo-carousel__item']}>
-                  <img
-                    src={logo.src}
-                    alt={'logo'}
-                    className={styles['logo-carousel__logo']}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <LogoCarousel />
         </div>
       </div>
     </div>
