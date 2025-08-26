@@ -102,19 +102,22 @@ export default function Hero() {
       <div className={fr.cx('fr-container')}>
         <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
           <div className={fr.cx('fr-col-6', 'fr-pt-18v', 'fr-pb-18v')}>
-            <h1>Bienvenue au Référentiel National des Bâtiments</h1>
+            <h1>Bienvenue sur le Référentiel National des Bâtiments</h1>
             <p>
-              Le Référentiel national des bâtiments (RNB) est un{' '}
+              Le Référentiel National des Bâtiments (RNB) est un{' '}
               <b>service public numérique</b> qui{' '}
               <b>répertorie l&apos;ensemble des bâtiments du territoire</b> et
-              leur associe un <b>identifiant unique</b>.
+              leur associe un <b>identifiant unique et pérenne</b>.
             </p>
             <p>
-              Cet <b>ID-RNB</b> est facilement transmissible par une personne ou
-              un logiciel et permet de{' '}
-              <b>croiser facilement les jeux de données bâtimentaires</b>, pour
-              les administrations publiques, les collectivités et les acteurs
-              privés.
+              Une fois attribué au bâtiment, cet identifiant pivot, appelé{' '}
+              <b>ID-RNB</b>, permet de{' '}
+              <b>
+                simplifier le croisement et les échanges de données
+                bâtimentaires
+              </b>{' '}
+              entre les administrations publiques, les collectivités et les
+              acteurs privés.
             </p>
             <p>
               {' '}
