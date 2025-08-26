@@ -109,7 +109,7 @@ export default async function Home() {
             <div className="fr-grid-row">
               <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
                 <div
-                  dangerouslySetInnerHTML={{ __html: breakingNews.html }}
+                  dangerouslySetInnerHTML={{ __html: breakingNews.html || '' }}
                 ></div>
               </div>
             </div>
