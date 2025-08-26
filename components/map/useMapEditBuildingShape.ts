@@ -47,7 +47,9 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
   // prevent the direct_select mode to switch to simple_select on click out
   // https://github.com/mapbox/mapbox-gl-draw/blob/78a5db85ec5e86159e2439316ed56128ba6eb5d9/src/modes/direct_select.js#L105
+  // @ts-ignore
   direct_select.clickNoTarget = function () {};
+  // @ts-ignore
   direct_select.clickInactive = function () {};
 
   // add the draw plugin to the map
