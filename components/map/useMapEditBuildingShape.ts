@@ -43,6 +43,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const prevOperationRef = useRef<string | null>(null);
   const dispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
+  const direct_select = MapboxDraw.modes.direct_select;
+
+  // prevent the direct_select mode to switch to simple_select on click out
+  // https://github.com/mapbox/mapbox-gl-draw/blob/78a5db85ec5e86159e2439316ed56128ba6eb5d9/src/modes/direct_select.js#L105
+  direct_select.clickNoTarget = function () {};
+  direct_select.clickInactive = function () {};
 
   // add the draw plugin to the map
   useEffect(() => {
