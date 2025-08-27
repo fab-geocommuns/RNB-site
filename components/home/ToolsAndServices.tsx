@@ -2,15 +2,14 @@
 // Other illustrations
 import rapprochementIllu from '@/public/images/rapprochement.png';
 import apiIllu from '@/public/images/api.png';
-
-import Link from 'next/link';
+import adsIllu from '@/public/images/ads.png';
 import { useState } from 'react';
-import Image from 'next/image';
 import styles from '@/styles/home.module.scss';
+import Card from '@codegouvfr/react-dsfr/Card';
 
 interface TabContent {
   image: string;
-  description: string;
+  description: React.ReactNode;
   links: {
     title: string;
     link: string;
@@ -20,6 +19,7 @@ interface TabContent {
 interface Tab {
   title: string;
   content: TabContent;
+  icon: React.ReactNode;
 }
 
 interface TabBoxProps {
@@ -31,7 +31,6 @@ function TabBox({ tabs }: TabBoxProps) {
 
   return (
     <div className={styles.tabBox}>
-      {/* Tab Navigation */}
       <div className={styles.tabNavigation}>
         {tabs.map((tab, index) => (
           <button
@@ -39,38 +38,34 @@ function TabBox({ tabs }: TabBoxProps) {
             className={`${styles.tabButton} ${index === activeTab ? styles.active : ''}`}
             onClick={() => setActiveTab(index)}
           >
-            {tab.title}
+            {tab.icon} {tab.title}
           </button>
         ))}
       </div>
 
-      {/* Tab Content */}
-      <div className={styles.tabContent}>
-        <div className={styles.contentGrid}>
-          <div className={styles.contentLeft}>
-            <p className={styles.contentDescription}>
-              {tabs[activeTab].content.description}
-            </p>
-            <ul className={styles.contentLinks}>
-              {tabs[activeTab].content.links.map((link, index) => (
-                <li key={index}>
-                  <Link href={link.link || '#'} className={styles.contentLink}>
-                    {link.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className={styles.contentRight}>
-            <Image
-              src={tabs[activeTab].content.image}
-              alt={tabs[activeTab].title}
-              fill
-              className={styles.contentImage}
-            />
-          </div>
-        </div>
-      </div>
+      <Card
+        title={null}
+        desc={tabs[activeTab].content.description}
+        horizontal={true}
+        className={styles.tabContent}
+        footer={
+          <ul className="fr-links-group">
+            {tabs[activeTab].content.links.map((link, index) => (
+              <li key={index}>
+                <a
+                  className="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                  href={link.link}
+                >
+                  {link.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        }
+        size="large"
+        imageUrl={tabs[activeTab].content.image}
+        imageAlt={tabs[activeTab].title}
+      />
     </div>
   );
 }
@@ -78,45 +73,100 @@ function TabBox({ tabs }: TabBoxProps) {
 export default function ToolsAndServices() {
   const toolBox = [
     {
-      title: 'Intégrer',
+      title: 'Consulter',
+      icon: '📖',
       content: {
         image: rapprochementIllu.src,
-        description:
-          'Intégrez le RNB dans votre site web ou application mobile',
+        description: (
+          <>
+            <p>
+              Consultez les données du RNB, directement sur ce site, ou via nos
+              APIs de lecture librement accessibles.
+            </p>
+            <p>
+              Nous mettons également à disposition une définition du bâtiment
+              qui établi une base de dialogue entre les différents acteurs du
+              bâtiment.
+            </p>
+          </>
+        ),
         links: [
           {
-            title: 'Outils intéractifs',
-            link: '',
+            title: 'Carte des bâtiments',
+            link: '#',
           },
           {
-            title: 'API et jeux de données',
-            link: '',
+            title: 'Documentation de nos APIs',
+            link: '#',
+          },
+          {
+            title: 'Définition et standard',
+            link: '#',
           },
         ],
       },
     },
     {
-      title: 'Consulter',
+      title: 'Intégrer',
+      icon: '🔌',
       content: {
         image: apiIllu.src,
-        description: 'Consultez les données du RNB',
+        description: (
+          <>
+            <p>
+              Vous produisez ou exploitez des données sur le bâtiment ? Nous
+              mettons à disposition des APIs pour intégrer le RNB dans votre
+              flux, directement sur votre application ou via un processus de
+              traitement.
+            </p>
+          </>
+        ),
         links: [
           {
-            title: 'Documentation de nos APIs',
-            link: '',
+            title: 'API et jeux de données',
+            link: '#',
+          },
+          {
+            title: 'Selecteur de bâtiments',
+            link: '#',
+          },
+          {
+            title: 'Définition et standard',
+            link: '#',
           },
         ],
       },
     },
     {
       title: 'Alimenter',
+      icon: '🔄',
       content: {
-        image: rapprochementIllu.src,
-        description: 'Alimentez le RNB avec vos données',
+        image: adsIllu.src,
+        description: (
+          <>
+            <p>
+              Vous avez une connaissance précise du parc bâtimentaire sur votre
+              périmètre, ou vous souhaitez améliorer le Référentiel National des
+              Bâtiments ?
+            </p>
+            <p>
+              Vous pouvez nous aider à alimenter le RNB via notre outil
+              d&apos;édition en ligne ou via nos API en écriture.
+            </p>
+          </>
+        ),
         links: [
           {
-            title: 'Outils intéractifs',
-            link: '',
+            title: "Outil d'édition en ligne",
+            link: '#',
+          },
+          {
+            title: 'API en écriture',
+            link: '#',
+          },
+          {
+            title: 'Définition et standard',
+            link: '#',
           },
         ],
       },

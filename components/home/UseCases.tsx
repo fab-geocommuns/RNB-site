@@ -71,8 +71,6 @@ export default function UseCases({ useCases }: Props) {
             {featuredUseCase.map((useCase) => (
               <div className="fr-col-12 fr-col-md-4 " key={useCase.id}>
                 <Tile
-                  imageUrl={useCase.feature_image || ''}
-                  imageAlt={useCase.feature_image_alt || ''}
                   linkProps={{ href: '/cas/' + useCase.slug }}
                   title={useCase.title}
                   desc={useCase.excerpt}
