@@ -1,18 +1,22 @@
 // Styles
 import styles from '@/styles/summerGames.module.scss';
 
+import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
+
 type RankTableProps = {
   title: string;
   ranks: any[];
 };
 
+const bigScoreLimit = 10000;
+
 const formatCount = (count: number) => {
-  if (count >= 10000) {
+  if (count >= bigScoreLimit) {
     const rounded = Math.round(count / 100) / 10;
     return rounded.toString().replace('.', ',') + 'K';
   }
-  return count;
-  //return count.toLocaleString('fr-FR');
+  //return count;
+  return count.toLocaleString('fr-FR');
 };
 
 export default function RankTable({ title, ranks }: RankTableProps) {
@@ -26,7 +30,12 @@ export default function RankTable({ title, ranks }: RankTableProps) {
             <div className={styles.rankMedalShell}>{index + 1} •</div>
             <div className={styles.rankNameShell}>{rank.name}</div>
             <div className={styles.rankCountShell}>
-              {formatCount(rank.count)}
+              {rank.count >= bigScoreLimit && (
+                <Tooltip kind="hover" title={rank.count}>
+                  {formatCount(rank.count)}
+                </Tooltip>
+              )}
+              {rank.count < bigScoreLimit && <>{formatCount(rank.count)}</>}
             </div>
           </div>
         ))}
