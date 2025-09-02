@@ -37,6 +37,7 @@ test.describe("Page d'accueil", () => {
     page,
     mapLocator,
     browserName,
+    mapController,
   }) => {
     await expect(homePage.searchMapField).toBeVisible();
     await homePage.searchMapField.scrollIntoViewIfNeeded();
@@ -47,6 +48,7 @@ test.describe("Page d'accueil", () => {
     await page.waitForURL('**/carte*');
 
     if (browserName !== 'firefox') {
+      await mapController('mainMap').waitToMapStable();
       const ign = mapLocator('filter["==", ["get", "rnb_id"], "CDVXSAKG94Q5"]');
       await expect(ign).toBeVisibleOnMap();
     }
@@ -57,6 +59,7 @@ test.describe("Page d'accueil", () => {
     page,
     mapLocator,
     browserName,
+    mapController,
   }) => {
     await expect(homePage.searchMapField).toBeVisible();
     await homePage.searchMapField.scrollIntoViewIfNeeded();
@@ -68,6 +71,7 @@ test.describe("Page d'accueil", () => {
     await page.waitForURL('**/carte*');
 
     if (browserName !== 'firefox') {
+      await mapController('mainMap').waitToMapStable();
       const ign = mapLocator('filter["==", ["get", "rnb_id"], "CDVXSAKG94Q5"]');
       await expect(ign).toBeVisibleOnMap();
     }
