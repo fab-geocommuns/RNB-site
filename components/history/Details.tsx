@@ -2,9 +2,9 @@ import styles from '@/styles/history.module.scss';
 import { formatDate, formatTime } from '@/utils/date';
 import changedImage from '@/public/images/history/changed.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
-import CopyToClipboard from '@/components/util/CopyToClipboard';
+import CopyInlineBtn from '@/components/util/CopyInlineBtn';
 import VisuMapReact from '@/components/map/VisuMapReact';
-import { fr } from '@codegouvfr/react-dsfr';
+
 import {
   BuildingStatusMap,
   BuildingStatusType,
@@ -91,23 +91,10 @@ export default function Details({
                     {detailsInfo.point.coordinates[0]}
                   </span>
                 </div>
-                <CopyToClipboard
-                  onCopy={() => handleCopy()}
-                  text={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
-                >
-                  <div className={styles.buttonCopy}>
-                    {copied ? (
-                      <span>
-                        Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                      </span>
-                    ) : (
-                      <span>
-                        Copier{' '}
-                        <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                      </span>
-                    )}
-                  </div>
-                </CopyToClipboard>
+                <CopyInlineBtn
+                  tooltipText="Copier les coordonnées"
+                  strToCopy={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
+                />
               </div>
             </div>
           )}

@@ -1,4 +1,4 @@
-import styles from '@/styles/contribution/copyInlineBtn.module.scss';
+import styles from '@/styles/copyInlineBtn.module.scss';
 
 import React, { useState } from 'react';
 import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
