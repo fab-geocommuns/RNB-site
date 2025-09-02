@@ -13,6 +13,14 @@ import {
 import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
 import Link from 'next/link';
 
+function ChangedIcon() {
+  return (
+    <div className={styles.changedWrapper}>
+      <img src={changedImage.src} alt="Modifié" width="12" height="12" />
+    </div>
+  );
+}
+
 export default function Details({
   detailsInfo,
   responsivePanelIsOpen,
@@ -49,16 +57,7 @@ export default function Details({
                     Statut physique :
                     {detailsInfo.event?.details?.updated_fields?.includes(
                       'status',
-                    ) && (
-                      <div className={styles.changedWrapper}>
-                        <img
-                          src={changedImage.src}
-                          alt="Modifié"
-                          width="12"
-                          height="12"
-                        />
-                      </div>
-                    )}
+                    ) && <ChangedIcon />}
                   </span>
                 </div>
                 <span>
@@ -85,16 +84,7 @@ export default function Details({
                   État :
                   {detailsInfo.event?.details?.updated_fields?.includes(
                     'is_active',
-                  ) && (
-                    <div className={styles.changedWrapper}>
-                      <img
-                        src={changedImage.src}
-                        alt="Modifié"
-                        width="12"
-                        height="12"
-                      />
-                    </div>
-                  )}
+                  ) && <ChangedIcon />}
                 </span>
               </div>
               <span>{detailsInfo.is_active ? 'Activé' : 'Désactivé'}</span>
@@ -108,16 +98,7 @@ export default function Details({
                 Géométrie :
                 {detailsInfo.event?.details?.updated_fields?.includes(
                   'shape',
-                ) && (
-                  <div className={styles.changedWrapper}>
-                    <img
-                      src={changedImage.src}
-                      alt="Modifié"
-                      width="12"
-                      height="12"
-                    />
-                  </div>
-                )}
+                ) && <ChangedIcon />}
               </span>
             </span>
             {detailsInfo.point && detailsInfo.shape && (
@@ -155,16 +136,7 @@ export default function Details({
                     Adresses :
                     {detailsInfo.event?.details?.updated_fields?.includes(
                       'addresses',
-                    ) && (
-                      <div className={styles.changedWrapper}>
-                        <img
-                          src={changedImage.src}
-                          alt="Modifié"
-                          width="12"
-                          height="12"
-                        />
-                      </div>
-                    )}
+                    ) && <ChangedIcon />}
                   </span>
                 </span>
                 {detailsInfo?.addresses?.length ? (
@@ -203,16 +175,7 @@ export default function Details({
                 Identifiants externes :
                 {detailsInfo.event?.details?.updated_fields?.includes(
                   'ext_ids',
-                ) && (
-                  <div className={styles.changedWrapper}>
-                    <img
-                      src={changedImage.src}
-                      alt="Modifié"
-                      width="12"
-                      height="12"
-                    />
-                  </div>
-                )}
+                ) && <ChangedIcon />}
               </span>
             </span>
             <div className={styles.detailAddressItems}>
