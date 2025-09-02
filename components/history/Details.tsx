@@ -9,7 +9,6 @@ import {
   BuildingStatusMap,
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
-import { useState } from 'react';
 
 import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
 import Link from 'next/link';
@@ -21,13 +20,6 @@ export default function Details({
   detailsInfo: ApiHistoryItem;
   responsivePanelIsOpen: boolean;
 }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
   return (
     <section
       className={`${styles.detailSection} ${responsivePanelIsOpen ? styles.detailSectionOpen : styles.detailSectionClosed}`}
@@ -84,18 +76,6 @@ export default function Details({
                   Consulter le site Panoramax
                 </a>
               </div>
-              <div className={styles.latLonWrapper}>
-                <div className={styles.latLon}>
-                  <span>
-                    Coordonnées: {detailsInfo.point.coordinates[1]},{' '}
-                    {detailsInfo.point.coordinates[0]}
-                  </span>
-                </div>
-                <CopyInlineBtn
-                  tooltipText="Copier les coordonnées"
-                  strToCopy={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
-                />
-              </div>
             </div>
           )}
           <div className={styles.detailBlockInfo}>
@@ -141,12 +121,28 @@ export default function Details({
               </span>
             </span>
             {detailsInfo.point && detailsInfo.shape && (
-              <div className={styles.detailMap}>
-                <VisuMapReact
-                  point={detailsInfo.point}
-                  shape={detailsInfo.shape}
-                />
-              </div>
+              <>
+                <div>
+                  <div className={styles.detailMap}>
+                    <VisuMapReact
+                      point={detailsInfo.point}
+                      shape={detailsInfo.shape}
+                    />
+                  </div>
+                  <div className={styles.latLonWrapper}>
+                    <div className={styles.latLon}>
+                      <span>
+                        Coordonnées : {detailsInfo.point.coordinates[1]},{' '}
+                        {detailsInfo.point.coordinates[0]}
+                      </span>
+                    </div>
+                    <CopyInlineBtn
+                      tooltipText="Copier les coordonnées"
+                      strToCopy={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
+                    />
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </div>
