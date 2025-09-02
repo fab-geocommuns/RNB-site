@@ -4,6 +4,7 @@ import changedImage from '@/public/images/history/changed.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
 import CopyInlineBtn from '@/components/util/CopyInlineBtn';
 import VisuMapReact from '@/components/map/VisuMapReact';
+import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
 
 import {
   BuildingStatusMap,
@@ -16,7 +17,12 @@ import Link from 'next/link';
 function ChangedIcon() {
   return (
     <div className={styles.changedWrapper}>
-      <img src={changedImage.src} alt="Modifié" width="12" height="12" />
+      <Tooltip
+        kind="hover"
+        title="Ce champs a changé depuis la version précédente"
+      >
+        <img src={changedImage.src} alt="Modifié" width="12" height="12" />
+      </Tooltip>
     </div>
   );
 }
