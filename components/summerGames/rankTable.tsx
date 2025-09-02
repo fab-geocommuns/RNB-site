@@ -15,7 +15,6 @@ const formatCount = (count: number) => {
     const rounded = Math.round(count / 100) / 10;
     return rounded.toString().replace('.', ',') + 'K';
   }
-  //return count;
   return count.toLocaleString('fr-FR');
 };
 
