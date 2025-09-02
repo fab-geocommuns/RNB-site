@@ -2,17 +2,30 @@ import styles from '@/styles/history.module.scss';
 import { formatDate, formatTime } from '@/utils/date';
 import changedImage from '@/public/images/history/changed.svg';
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
-import CopyToClipboard from '@/components/util/CopyToClipboard';
+import CopyInlineBtn from '@/components/util/CopyInlineBtn';
 import VisuMapReact from '@/components/map/VisuMapReact';
-import { fr } from '@codegouvfr/react-dsfr';
+import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
+
 import {
   BuildingStatusMap,
   BuildingStatusType,
 } from '@/stores/contribution/contribution-types';
-import { useState } from 'react';
 
 import { getHistoryLongTitle, displayAuthor } from '@/logic/history';
 import Link from 'next/link';
+
+function ChangedIcon() {
+  return (
+    <div className={styles.changedWrapper}>
+      <Tooltip
+        kind="hover"
+        title="Ce champs a changé depuis la version précédente"
+      >
+        <img src={changedImage.src} alt="Modifié" width="12" height="12" />
+      </Tooltip>
+    </div>
+  );
+}
 
 export default function Details({
   detailsInfo,
@@ -21,13 +34,6 @@ export default function Details({
   detailsInfo: ApiHistoryItem;
   responsivePanelIsOpen: boolean;
 }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
   return (
     <section
       className={`${styles.detailSection} ${responsivePanelIsOpen ? styles.detailSectionOpen : styles.detailSectionClosed}`}
@@ -57,16 +63,7 @@ export default function Details({
                     Statut physique :
                     {detailsInfo.event?.details?.updated_fields?.includes(
                       'status',
-                    ) && (
-                      <div className={styles.changedWrapper}>
-                        <img
-                          src={changedImage.src}
-                          alt="Modifié"
-                          width="12"
-                          height="12"
-                        />
-                      </div>
-                    )}
+                    ) && <ChangedIcon />}
                   </span>
                 </div>
                 <span>
@@ -84,31 +81,6 @@ export default function Details({
                   Consulter le site Panoramax
                 </a>
               </div>
-              <div className={styles.latLonWrapper}>
-                <div className={styles.latLon}>
-                  <span>
-                    Coordonnées: {detailsInfo.point.coordinates[1]},{' '}
-                    {detailsInfo.point.coordinates[0]}
-                  </span>
-                </div>
-                <CopyToClipboard
-                  onCopy={() => handleCopy()}
-                  text={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
-                >
-                  <div className={styles.buttonCopy}>
-                    {copied ? (
-                      <span>
-                        Copié <i className={fr.cx('fr-icon-success-line')}></i>
-                      </span>
-                    ) : (
-                      <span>
-                        Copier{' '}
-                        <i className={fr.cx('fr-icon-clipboard-line')}></i>
-                      </span>
-                    )}
-                  </div>
-                </CopyToClipboard>
-              </div>
             </div>
           )}
           <div className={styles.detailBlockInfo}>
@@ -118,16 +90,7 @@ export default function Details({
                   État :
                   {detailsInfo.event?.details?.updated_fields?.includes(
                     'is_active',
-                  ) && (
-                    <div className={styles.changedWrapper}>
-                      <img
-                        src={changedImage.src}
-                        alt="Modifié"
-                        width="12"
-                        height="12"
-                      />
-                    </div>
-                  )}
+                  ) && <ChangedIcon />}
                 </span>
               </div>
               <span>{detailsInfo.is_active ? 'Activé' : 'Désactivé'}</span>
@@ -141,25 +104,32 @@ export default function Details({
                 Géométrie :
                 {detailsInfo.event?.details?.updated_fields?.includes(
                   'shape',
-                ) && (
-                  <div className={styles.changedWrapper}>
-                    <img
-                      src={changedImage.src}
-                      alt="Modifié"
-                      width="12"
-                      height="12"
-                    />
-                  </div>
-                )}
+                ) && <ChangedIcon />}
               </span>
             </span>
             {detailsInfo.point && detailsInfo.shape && (
-              <div className={styles.detailMap}>
-                <VisuMapReact
-                  point={detailsInfo.point}
-                  shape={detailsInfo.shape}
-                />
-              </div>
+              <>
+                <div>
+                  <div className={styles.detailMap}>
+                    <VisuMapReact
+                      point={detailsInfo.point}
+                      shape={detailsInfo.shape}
+                    />
+                  </div>
+                  <div className={styles.latLonWrapper}>
+                    <div className={styles.latLon}>
+                      <span>
+                        Coordonnées : {detailsInfo.point.coordinates[1]},{' '}
+                        {detailsInfo.point.coordinates[0]}
+                      </span>
+                    </div>
+                    <CopyInlineBtn
+                      tooltipText="Copier les coordonnées"
+                      strToCopy={`${detailsInfo.point.coordinates[1]},${detailsInfo.point.coordinates[0]}`}
+                    />
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -172,16 +142,7 @@ export default function Details({
                     Adresses :
                     {detailsInfo.event?.details?.updated_fields?.includes(
                       'addresses',
-                    ) && (
-                      <div className={styles.changedWrapper}>
-                        <img
-                          src={changedImage.src}
-                          alt="Modifié"
-                          width="12"
-                          height="12"
-                        />
-                      </div>
-                    )}
+                    ) && <ChangedIcon />}
                   </span>
                 </span>
                 {detailsInfo?.addresses?.length ? (
@@ -220,16 +181,7 @@ export default function Details({
                 Identifiants externes :
                 {detailsInfo.event?.details?.updated_fields?.includes(
                   'ext_ids',
-                ) && (
-                  <div className={styles.changedWrapper}>
-                    <img
-                      src={changedImage.src}
-                      alt="Modifié"
-                      width="12"
-                      height="12"
-                    />
-                  </div>
-                )}
+                ) && <ChangedIcon />}
               </span>
             </span>
             <div className={styles.detailAddressItems}>
