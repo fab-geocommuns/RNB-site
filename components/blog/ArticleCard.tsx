@@ -3,10 +3,14 @@ import TagsList from '@/components/blog/TagsList';
 
 // Lib
 import { formattedDate } from '@/utils/blog';
+import { PostOrPage } from '@tryghost/content-api';
 
-// @ts-ignore
-export default function ArticleCard({ post }) {
-  const dateStr = formattedDate(post.published_at);
+type Props = {
+  post: PostOrPage;
+};
+
+export default function ArticleCard({ post }: Props) {
+  const dateStr = formattedDate(post.published_at!);
 
   return (
     <>
@@ -34,7 +38,7 @@ export default function ArticleCard({ post }) {
           <div className="fr-card__img">
             <img
               className="fr-responsive-img"
-              src={post.feature_image}
+              src={post.feature_image!}
               data-fr-js-ratio="true"
             />
           </div>

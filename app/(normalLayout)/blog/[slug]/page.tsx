@@ -46,7 +46,7 @@ export async function generateMetadata(
       siteName: 'Référentiel National des Bâtiments',
       images: [
         {
-          url: post.feature_image,
+          url: post.feature_image || '',
         },
       ],
     },
@@ -60,10 +60,10 @@ export default async function Page({
 }) {
   const { slug } = await params;
   const post = await getData(slug);
-  const dateStr = formattedDate(post.published_at);
+  const dateStr = formattedDate(post.published_at || '');
 
   // find all code pre blocks in the html and replace them with highlighted code
-  const postBody = post.html.replace(
+  const postBody = post.html!.replace(
     /<pre><code class="language-(.*?)">([\s\S]*?)<\/code><\/pre>/g,
     // @ts-ignore
     (match, lang, code) => {
@@ -90,7 +90,10 @@ export default async function Page({
             <p className="fr-text--lead">{post.excerpt}</p>
 
             <div className="fr-mb-16v">
-              <img className={styles.featureImg} src={post.feature_image} />
+              <img
+                className={styles.featureImg}
+                src={post.feature_image || ''}
+              />
             </div>
 
             <div
