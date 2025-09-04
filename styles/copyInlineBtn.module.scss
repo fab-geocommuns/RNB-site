@@ -1,0 +1,21 @@
+.copyBtn {
+  background: #e7edff;
+  min-height: 1.6875rem;
+  min-width: 1.6875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 83.5625rem;
+  margin-left: 0.625rem;
+  img {
+    width: 1.0625rem;
+    height: 1.0625rem;
+    filter: brightness(0) saturate(100%) invert(34%) sepia(88%) saturate(1698%)
+      hue-rotate(222deg) brightness(92%) contrast(91%);
+  }
+}
+
+.copyBtn:hover {
+  background: #dde5ff;
+  cursor: pointer;
+}

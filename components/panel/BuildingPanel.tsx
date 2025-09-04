@@ -18,7 +18,6 @@ import va from '@vercel/analytics';
 
 // Hooks
 import React, { useEffect } from 'react';
-import ImageNext from 'next/image';
 import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
 import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 
@@ -27,11 +26,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
-
-// Images
-import bdgInfoIcon from '@/public/icons/map-pin-2-line.svg';
-import bdgHistoryIcon from '@/public/icons/history-line.svg';
-import bdgEditIcon from '@/public/icons/pencil-line.svg';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
