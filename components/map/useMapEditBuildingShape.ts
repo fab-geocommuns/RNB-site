@@ -65,6 +65,10 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
   const [drawMode, setDrawMode] = useState('draw_polygon');
   // shift+r switches from a drawing mode to another
+  // this implementation of the rectangle is hacky
+  // if the feature pleases our users, we should probably move the drawMode info
+  // to the store. This will be cleaner in case we want to add more draw modes
+  // for example a snap drawing mode
   useHotkeys('shift+r', () => {
     const targetMode =
       drawMode === 'draw_polygon' ? 'draw_rectangle' : 'draw_polygon';
