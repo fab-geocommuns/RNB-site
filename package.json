@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@codegouvfr/react-dsfr": "^1.21.1",
+    "@geostarters/mapbox-gl-draw-rectangle-assisted-mode": "^3.0.4",
     "@mapbox/mapbox-gl-draw": "^1.5.0",
     "@mapgrab/map-interface": "^1.0.0",
     "@mapgrab/playwright": "^0.0.3",
@@ -41,6 +42,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-fuzzy-highlighter": "^1.1.1",
+    "react-hotkeys-hook": "^5.1.0",
     "react-map-gl": "^8.0.4",
     "react-redux": "^9.2.0",
     "typescript": "5.5.4",

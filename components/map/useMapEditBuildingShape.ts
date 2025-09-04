@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { Actions, RootState } from '@/stores/store';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
@@ -8,6 +8,10 @@ import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import { selectSplitShapeIdForCurrentChild } from '@/stores/edition/edition-selector';
+// @ts-ignore
+import DrawAssistedRectangle from '@geostarters/mapbox-gl-draw-rectangle-assisted-mode/dist/DrawAssistedRectangle.js';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { toasterSuccess } from '../contribution/toaster';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -41,10 +45,52 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const currentSplitShapeId = useSelector(selectSplitShapeIdForCurrentChild);
 
   const prevOperationRef = useRef<string | null>(null);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
+  const draw_polygon = MapboxDraw.modes.draw_polygon;
 
-  // add the draw plugin to the map
+  // customization of draw_polygon mode
+  // avoids leaving the draw_polygon mode when escape key is pressed during the drawing
+  draw_polygon.onKeyUp = function (state, e) {
+    // escape key
+    if (e.keyCode === 27) {
+      // @ts-ignore
+      this.deleteFeature([state.polygon.id], { silent: true });
+      this.changeMode('draw_polygon');
+      // enter key
+    } else if (e.keyCode === 13) {
+      this.changeMode('simple_select', { featureIds: [state.polygon.id] });
+    }
+  };
+
+  const [drawMode, setDrawMode] = useState('draw_polygon');
+  // shift+r switches from a drawing mode to another
+  // this implementation of the rectangle is hacky
+  // if the feature pleases our users, we should probably move the drawMode info
+  // to the store. This will be cleaner in case we want to add more draw modes
+  // for example a snap drawing mode
+  useHotkeys('shift+r', () => {
+    const targetMode =
+      drawMode === 'draw_polygon' ? 'draw_rectangle' : 'draw_polygon';
+
+    if (targetMode === 'draw_rectangle') {
+      toasterSuccess(dispatch, `mode rectangle activé`);
+    } else if (targetMode === 'draw_polygon') {
+      toasterSuccess(dispatch, `mode polygone activé`);
+    }
+
+    setDrawMode(targetMode);
+
+    if (
+      drawRef.current?.getMode() === 'draw_polygon' ||
+      drawRef.current?.getMode() === 'draw_rectangle'
+    ) {
+      // @ts-ignore
+      drawRef.current?.changeMode(targetMode);
+    }
+  });
+
+  // Add the draw plugin to the map
   useEffect(() => {
     if (map && !drawRef.current) {
       const draw = new MapboxDraw({
@@ -57,7 +103,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         modes: {
           simple_select: MapboxDraw.modes.simple_select,
           direct_select: MapboxDraw.modes.direct_select,
-          draw_polygon: MapboxDraw.modes.draw_polygon,
+          draw_polygon: draw_polygon,
+          draw_rectangle: DrawAssistedRectangle,
         },
         defaultMode: 'simple_select',
       });
@@ -198,7 +245,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           }
           break;
         case 'drawing':
-          drawRef.current.changeMode('draw_polygon');
+          drawRef.current.changeMode(drawMode);
           break;
         case null:
           drawRef.current.changeMode('simple_select');
