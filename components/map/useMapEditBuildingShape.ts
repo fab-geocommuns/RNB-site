@@ -47,6 +47,14 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const prevOperationRef = useRef<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
+  const direct_select = MapboxDraw.modes.direct_select;
+
+  // prevent the direct_select mode to switch to simple_select on click out
+  // https://github.com/mapbox/mapbox-gl-draw/blob/78a5db85ec5e86159e2439316ed56128ba6eb5d9/src/modes/direct_select.js#L105
+  // @ts-ignore
+  direct_select.clickNoTarget = function () {};
+  // @ts-ignore
+  direct_select.clickInactive = function () {};
   const draw_polygon = MapboxDraw.modes.draw_polygon;
 
   // customization of draw_polygon mode
