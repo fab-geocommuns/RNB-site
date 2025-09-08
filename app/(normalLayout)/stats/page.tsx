@@ -9,47 +9,6 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 export default function Page() {
-  // initialize the stats
-  const [stats, setStats] = useState({
-    building_counts: null,
-    api_calls_since_2024_count: null,
-    reports_count: null,
-    data_gouv_publication_count: null,
-  });
-  const [loading, setLoading] = useState(true);
-
-  const endpointUrl = process.env.NEXT_PUBLIC_API_BASE + '/stats';
-
-  useEffect(() => {
-    // make a request to the API to get the stats when the page is loaded
-    fetch(endpointUrl)
-      .then((response) => response.json())
-      .then((stats) => {
-        setStats(stats);
-        setLoading(false);
-      });
-  }, []);
-
-  // @ts-ignore
-  const stat_display = function (key) {
-    let card;
-    if (loading) {
-      card = '...';
-    } else {
-      // @ts-ignore
-      if (stats[key] == null) {
-        card = '?';
-      } else {
-        // @ts-ignore
-        card = stats[key].toLocaleString('fr-FR');
-      }
-    }
-    return card;
-  };
-
-  // @ts-ignore
-  let more_than_one_dataset = stats.data_gouv_publication_count > 1;
-
   return (
     <div className={'fr-container'}>
       <div className="fr-grid-row">
@@ -57,62 +16,35 @@ export default function Page() {
           <h1>Statistiques</h1>
 
           <div className="fr-grid-row fr-grid-row--gutters">
-            <div className="fr-col-12 fr-col-md-6">
-              <div className={styles['stat-card'] + ' fr-p-6v'}>
-                <h2>{stat_display('api_calls_since_2024_count')}</h2>
-                <div>Appels à l&apos;API depuis janvier 2024</div>
-                <div className="fr-pt-3w">
-                  <a
-                    href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments"
-                    className="fr-link"
-                  >
-                    Voir la doc
-                  </a>
-                </div>
-              </div>
-            </div>
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/752eb314-8a49-4de1-ac6f-b39812fb451f"
+              className="fr-col-12 fr-col-md-6"
+              height="400"
+            ></iframe>
 
-            <div className="fr-col-12 fr-col-md-6">
-              <div className={styles['stat-card'] + ' fr-p-6v'}>
-                <h2>{stat_display('building_counts')}</h2>
-                <div>Bâtiments référencés</div>
-                <div className="fr-pt-3w">
-                  <Link href="/carte" className="fr-link">
-                    Voir la carte
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/3a96df17-127c-4aef-be75-a3b7cdb53eb6"
+              className="fr-col-12 fr-col-md-6"
+              height="400"
+            ></iframe>
 
-            <div className="fr-col-12 fr-col-md-6">
-              <div className={styles['stat-card'] + ' fr-p-6v'}>
-                <h2>{stat_display('data_gouv_publication_count')}</h2>
-                <div>
-                  Jeu{more_than_one_dataset ? 'x' : ''} de données utilisant les
-                  identifiants RNB
-                </div>
-                <div className="fr-pt-3w">
-                  <Link
-                    href="/outils-services/rapprochement"
-                    className="fr-link"
-                  >
-                    Les parcourir
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/8da126c9-c3c3-41b7-9a95-93e5c35e26c2"
+              className="fr-col-12 fr-col-md-6"
+              height="600"
+            ></iframe>
 
-            <div className="fr-col-12 fr-col-md-6">
-              <div className={styles['stat-card'] + ' fr-p-6v'}>
-                <h2>{stat_display('reports_count')}</h2>
-                <div>Signalements d&apos;erreur reçus</div>
-                <div className="fr-pt-3w">
-                  <Link href="/carte" className="fr-link">
-                    Faire un signalement
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/c636a619-5a38-424c-b29f-13bf1757c698"
+              className="fr-col-12 fr-col-md-6"
+              height="600"
+            ></iframe>
+
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/120caec8-b03c-46f3-b3d0-6f7bd61286eb"
+              className="fr-col-12 fr-col-md-6"
+              height="600"
+            ></iframe>
           </div>
         </div>
       </div>
