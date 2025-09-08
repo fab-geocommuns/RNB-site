@@ -79,15 +79,7 @@ export default function ToolsAndServices() {
         image: rapprochementIllu.src,
         description: (
           <>
-            <p>
-              Consultez les données du RNB, directement sur ce site, ou via nos
-              APIs de lecture librement accessibles.
-            </p>
-            <p>
-              Nous mettons également à disposition une définition du bâtiment
-              qui établi une base de dialogue entre les différents acteurs du
-              bâtiment.
-            </p>
+            <p>Consultez les données libres et ouvertes du RNB.</p>
           </>
         ),
         links: [
@@ -114,10 +106,9 @@ export default function ToolsAndServices() {
         description: (
           <>
             <p>
-              Vous produisez ou exploitez des données sur le bâtiment ? Nous
-              mettons à disposition des APIs pour intégrer le RNB dans votre
-              flux, directement sur votre application ou via un processus de
-              traitement.
+              Vous produisez ou exploitez des données bâtimentaires ? Intégrez
+              le RNB dans votre flux, directement sur votre application ou via
+              un processus de traitement.
             </p>
           </>
         ),
@@ -145,23 +136,19 @@ export default function ToolsAndServices() {
         description: (
           <>
             <p>
-              Vous avez une connaissance précise du parc bâtimentaire sur votre
-              périmètre, ou vous souhaitez améliorer le Référentiel National des
-              Bâtiments ?
-            </p>
-            <p>
-              Vous pouvez nous aider à alimenter le RNB via notre outil
-              d&apos;édition en ligne ou via nos API en écriture.
+              Partagez la connaissance de votre territoire et bénéficiez en
+              retour des améliorations apportées par la communauté pour une
+              donnée bâtimentaire la plus proche du terrain !
             </p>
           </>
         ),
         links: [
           {
-            title: "Outil d'édition en ligne",
+            title: "API d'édition",
             link: '#',
           },
           {
-            title: 'API en écriture',
+            title: 'Carte interactive',
             link: '#',
           },
           {
@@ -177,7 +164,7 @@ export default function ToolsAndServices() {
       <div className="section__titleblock">
         <h2 className="section__title">Outils et services</h2>
         <p className="section__subtitle">
-          Découvrez les outils et services disponibles pour utiliser le RNB
+          Utilisez le RNB au sein de vos outils et bases de données
         </p>
       </div>
 
