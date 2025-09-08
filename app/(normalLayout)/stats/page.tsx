@@ -39,6 +39,12 @@ export default function Page() {
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
+
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/120caec8-b03c-46f3-b3d0-6f7bd61286eb"
+              className="fr-col-12 fr-col-md-6"
+              height="600"
+            ></iframe>
           </div>
         </div>
       </div>
