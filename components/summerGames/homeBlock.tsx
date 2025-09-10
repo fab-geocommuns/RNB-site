@@ -42,7 +42,7 @@ export default function SummerGame({
             <div className={`section__subtitle ${styles.instruction}`}>
               <p>
                 L&apos;expérience collaborative a pris fin le 10 septembre 2025,
-                avec un score de 131237 points ! Grâce à vos contributions, nous
+                avec un score de 131361 points ! Grâce à vos contributions, nous
                 allons pouvoir proposer les règles de gouvernance de la donnée
                 du RNB d&apos;ici 2026. RDV le 16 octobre au prochain{' '}
                 <a href="https://cnig.gouv.fr/gt-bati-a25939.html">
