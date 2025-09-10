@@ -15,11 +15,13 @@ export default function SummerGame({
   limit,
   showRankingLink,
   withScoreDetails = false,
+  withEndFlag = false,
 }: {
   title: React.ReactNode | string;
   limit: number;
   showRankingLink?: boolean;
   withScoreDetails?: boolean;
+  withEndFlag?: boolean;
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
 
@@ -31,20 +33,29 @@ export default function SummerGame({
           <div className={styles.shell}>
             <div className={`section__titleblock ${styles.titleblock}`}>
               <h2 className="section__title">{title}</h2>
-
-              <div className={`section__subtitle ${styles.instruction}`}>
-                <p>
-                  Comment faire vivre un référentiel collaboratif ? <br />
-                  Comment améliorer le lien bâtiment adresse ?<br />
-                  Quels acteurs souhaitent alimenter le RNB ?
-                </p>
-                <p>
-                  Du 10 juillet au 10 septembre, le RNB organise une expérience
-                  et s&apos;ouvre largement à l&apos;édition collaborative.
-                  Faites monter le score de qualité du RNB, de votre ville et de
-                  votre département.
-                </p>
-              </div>
+              {withEndFlag && (
+                <div className={styles.endFlagShell}>
+                  <span className={styles.endFlag}>Terminée</span>
+                </div>
+              )}
+            </div>
+            <div className={`section__subtitle ${styles.instruction}`}>
+              <p>
+                L&apos;expérience collaborative a pris fin le 10 septembre 2025,
+                avec un score de 131361 points ! Grâce à vos contributions, nous
+                allons pouvoir proposer les règles de gouvernance de la donnée
+                du RNB d&apos;ici 2026. RDV le 16 octobre au prochain{' '}
+                <a href="https://cnig.gouv.fr/gt-bati-a25939.html">
+                  GT Bâti du CNIG
+                </a>{' '}
+                pour celles et ceux qui souhaitent participer à la réflexion.
+              </p>
+              <p className={styles.highlight}>
+                Bonne nouvelle : face à l&apos;engouement pour l&apos;édition
+                collaborative et à la qualité de vos contributions, nous
+                laissons les outils d&apos;éditions ouverts à la communauté
+                durant les travaux du GT Bâti CNIG.
+              </p>
             </div>
 
             {withScoreDetails && (

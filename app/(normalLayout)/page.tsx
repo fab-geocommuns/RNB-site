@@ -155,6 +155,7 @@ export default async function Home() {
           }
           limit={5}
           showRankingLink={true}
+          withEndFlag={true}
         />
 
         <div className="section section__big">
