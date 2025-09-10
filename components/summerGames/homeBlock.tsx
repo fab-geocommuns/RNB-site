@@ -41,15 +41,20 @@ export default function SummerGame({
             </div>
             <div className={`section__subtitle ${styles.instruction}`}>
               <p>
-                L'expérience est terminée depuis le 10 septembre. À cette date,
-                le score global est de 131237 points. Les données récoltées vont
-                nous permettre de vous proposer les règles de participation au
-                RNB à la fin de l'année.
+                L&apos;expérience collaborative a pris fin le 10 septembre 2025,
+                avec un score de 131237 points ! Grâce à vos contributions, nous
+                allons pouvoir proposer les règles de gouvernance de la donnée
+                du RNB d&apos;ici 2026. RDV le 16 octobre au prochain{' '}
+                <a href="https://cnig.gouv.fr/gt-bati-a25939.html">
+                  GT Bâti du CNIG
+                </a>{' '}
+                pour celles et ceux qui souhaitent participer à la réflexion.
               </p>
               <p className={styles.highlight}>
-                La grande qualité de vos contributions nous permet de laisser
-                les éditions ouvertes jusqu'à ce que les règles de participation
-                soient établies.
+                Bonne nouvelle : face à l&apos;engouement pour l&apos;édition
+                collaborative et à la qualité de vos contributions, nous
+                laissons les outils d&apos;éditions ouverts à la communauté
+                durant les travaux du GT Bâti CNIG.
               </p>
             </div>
 
