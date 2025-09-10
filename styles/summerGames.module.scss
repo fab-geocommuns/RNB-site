@@ -1,6 +1,6 @@
 @import 'vars.scss';
 
-$title-color: white;
+$title-color: #f2f4f9;
 
 $title-color-hover: #25589f;
 
@@ -17,6 +17,7 @@ $accent-color-light: #ffea00;
 }
 
 .shell {
+  position: relative;
   padding: 100px 1rem 70px;
   background-image: url('/images/summerGames/summergame2025.png');
   background-size: cover;
@@ -28,10 +29,11 @@ $accent-color-light: #ffea00;
 }
 
 .titleblock {
+  margin-bottom: 4rem;
   h2 {
     font-size: 4em;
     line-height: 1em;
-    margin-bottom: 4rem;
+
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
     color: white;
     font-family: SummerGameTitle, sans-serif;
@@ -68,23 +70,24 @@ $accent-color-light: #ffea00;
       }
     }
   }
+}
 
-  .instruction {
-    color: $title-color;
-    opacity: 0.95;
-    margin-bottom: 4.5rem;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+.instruction {
+  color: $title-color;
+  opacity: 1;
+  margin-bottom: 4.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 500;
 
-    p {
-      font-size: 1em;
-      line-height: 1.3em;
-    }
-    @media screen and (max-width: 640px) {
-      margin-bottom: 20px;
-      text-align: initial;
-    }
+  p {
+    font-size: 1em;
+    line-height: 1.3em;
+  }
+  @media screen and (max-width: 640px) {
+    margin-bottom: 20px;
+    text-align: initial;
   }
 }
 
@@ -504,4 +507,23 @@ body .mapSummerScoreInside {
   color: white;
   font-family: SummerGameTitle, sans-serif;
   font-weight: 500;
+}
+.highlight {
+  color: $accent-color-light;
+  font-weight: 900;
+}
+
+.endFlag {
+  padding: 5px 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-transform: uppercase;
+  color: rgba(37, 35, 11, 0.9);
+  font-weight: bold;
+  background-color: $accent-color-light;
+  border-radius: 8px;
+}
+.endFlagShell {
+  text-align: center;
 }

@@ -15,11 +15,13 @@ export default function SummerGame({
   limit,
   showRankingLink,
   withScoreDetails = false,
+  withEndFlag = false,
 }: {
   title: React.ReactNode | string;
   limit: number;
   showRankingLink?: boolean;
   withScoreDetails?: boolean;
+  withEndFlag?: boolean;
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
 
@@ -31,20 +33,24 @@ export default function SummerGame({
           <div className={styles.shell}>
             <div className={`section__titleblock ${styles.titleblock}`}>
               <h2 className="section__title">{title}</h2>
-
-              <div className={`section__subtitle ${styles.instruction}`}>
-                <p>
-                  Comment faire vivre un référentiel collaboratif ? <br />
-                  Comment améliorer le lien bâtiment adresse ?<br />
-                  Quels acteurs souhaitent alimenter le RNB ?
-                </p>
-                <p>
-                  Du 10 juillet au 10 septembre, le RNB organise une expérience
-                  et s&apos;ouvre largement à l&apos;édition collaborative.
-                  Faites monter le score de qualité du RNB, de votre ville et de
-                  votre département.
-                </p>
-              </div>
+              {withEndFlag && (
+                <div className={styles.endFlagShell}>
+                  <span className={styles.endFlag}>Terminée</span>
+                </div>
+              )}
+            </div>
+            <div className={`section__subtitle ${styles.instruction}`}>
+              <p>
+                L'expérience est terminée depuis le 10 septembre. À cette date,
+                le score global est de 131237 points. Les données récoltées vont
+                nous permettre de vous proposer les règles de participation au
+                RNB à la fin de l'année.
+              </p>
+              <p className={styles.highlight}>
+                La grande qualité de vos contributions nous permet de laisser
+                les éditions ouvertes jusqu'à ce que les règles de participation
+                soient établies.
+              </p>
             </div>
 
             {withScoreDetails && (

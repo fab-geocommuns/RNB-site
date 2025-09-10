@@ -6,7 +6,7 @@ export default function Page() {
       <div className="fr-grid-row">
         <div className="fr-col-12 fr-col-md-12 fr-py-12v">
           <SummerGame
-            title="Le classement de l'été"
+            title="Le classement des éditions"
             limit={100}
             showRankingLink={false}
             withScoreDetails={true}
