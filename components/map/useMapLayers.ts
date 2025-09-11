@@ -45,6 +45,17 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
 
+////////////////////////////////////
+////////////////////////////////////
+// BAN Adresses
+
+// BAN source
+export const SRC_BAN = 'ban';
+export const SRC_BAN_URL = `https://plateforme.adresse.data.gouv.fr/tiles/ban/{z}/{x}/{y}.pbf`;
+
+// BAN layer
+export const LAYER_BAN = 'ban_points';
+
 ///////////////////////////////////
 ///////////////////////////////////
 // ADS
@@ -65,6 +76,7 @@ export const SRC_PLOTS = 'plotstiles';
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
 import { MapBackgroundLayer, MapBuildingsLayer } from '@/stores/map/map-slice';
+import exp from 'constants';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -142,6 +154,8 @@ export const useMapLayers = ({
     try {
       installBuildings(map);
       await installADS(map);
+
+      await installBAN(map);
 
       if (layers.extraLayers.includes('plots')) {
         installPlots(map);
@@ -491,6 +505,56 @@ export const useMapLayers = ({
     if (map.getSource(SRC_BDGS_SHAPES)) {
       map.removeSource(SRC_BDGS_SHAPES);
     }
+  };
+
+  const installBAN = async (map: maplibregl.Map) => {
+    if (map.getLayer(LAYER_BAN)) map.removeLayer(LAYER_BAN);
+    if (map.getSource(SRC_BAN)) map.removeSource(SRC_BAN);
+
+    map.addSource(SRC_BAN, {
+      type: 'vector',
+      tiles: [SRC_BAN_URL],
+      minzoom: 10,
+      maxzoom: 14,
+      promoteId: 'id',
+    });
+
+    map.addLayer({
+      id: LAYER_BAN,
+      source: SRC_BAN,
+      'source-layer': 'adresses',
+      type: 'circle',
+      paint: {
+        'circle-radius': 3,
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 1,
+        'circle-color': '#ff5724',
+      },
+    });
+
+    map.addLayer({
+      id: 'adresse-label',
+      source: SRC_BAN,
+      'source-layer': 'adresses',
+      type: 'symbol',
+      minzoom: 10,
+      paint: {
+        'text-color': '#ff5724',
+      },
+      layout: {
+        'text-font': ['Noto Sans Bold'],
+        'text-size': 13,
+        'text-field': [
+          'case',
+          ['has', 'suffixe'],
+          ['format', ['get', 'numero'], {}, ' ', {}, ['get', 'suffixe'], {}],
+          ['get', 'numero'],
+        ],
+        'text-ignore-placement': false,
+        'text-variable-anchor': ['bottom'],
+        'text-radial-offset': 1,
+      },
+    });
   };
 
   ///////////////////////////////////
