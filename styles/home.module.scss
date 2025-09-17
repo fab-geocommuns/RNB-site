@@ -310,7 +310,7 @@
 .searchContainer {
   margin-top: 2rem;
   background-color: white;
-  padding: 24px 80px;
+  padding: 24px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -357,15 +357,150 @@
 .featuredDatabases__item {
   border-radius: 5px;
   border: 1px solid #d9d9d9;
-  width: 52px;
-  height: 52px;
+  flex: 1 1 0;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 16px;
 }
 
 .featuredDatabases__item__logo {
   width: 100%;
   height: auto;
+}
+
+.card-use-case {
+  text-align: center;
+
+  a {
+    background-image: none;
+  }
+
+  .fr-card__content {
+    border-bottom: 3px solid var(--text-action-high-blue-france);
+  }
+}
+
+.logo-carousel {
+  margin: 3rem auto 0;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+}
+
+.logo-carousel__track {
+  display: flex;
+  animation: scroll 30s linear infinite;
+  width: fit-content;
+}
+
+.logo-carousel__item {
+  flex-shrink: 0;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-carousel__logo {
+  height: 92px;
+  width: auto;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+// TabBox Component Styles
+.tabBox {
+  background: white;
+  padding: 1rem 0 0 0;
+  overflow: hidden;
+}
+
+.tabNavigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  padding-bottom: 1rem;
+  background: transparent;
+}
+
+.tabButton {
+  background: none;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: #1a4da0;
+  border-radius: 0.4375rem;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-right: 0.75rem;
+  transition: all 0.2s ease;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background: #eef3ff;
+  }
+
+  &.active {
+    opacity: 1;
+    background: #e7edff;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.tabContent {
+  flex-direction: row-reverse;
+  min-height: 378px;
 }

@@ -44,7 +44,7 @@ export default function AddressSearchHome() {
                 <input
                   className="fr-input"
                   name="q"
-                  placeholder="Un identifiant RNB : 1GA7PBYM1QDY ou une adresse : 42, rue des architectes, Nantes"
+                  placeholder="Rechercher un identifiant RNB ou une adresse"
                   {...inputProps}
                 />
                 <button
