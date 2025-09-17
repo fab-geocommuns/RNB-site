@@ -29,10 +29,6 @@ function FeaturedDatabases({ dbs }: { dbs: DiffusionDatabase[] }) {
 
 export default function Databases({ databases }: Props) {
   const databaseCount = databases.length;
-  const attributeCount = databases.reduce(
-    (acc, db) => acc + db.attributes.length,
-    0,
-  );
   const featuredDatabases = databases.filter((db) => db.is_featured);
 
   return (
@@ -43,8 +39,8 @@ export default function Databases({ databases }: Props) {
             Enrichissez vos données bâtimentaires
           </h2>
           <p className="section__subtitle">
-            Croisez facilement les données de plus de {databaseCount} bases
-            intégrant les ID-RNBs
+            Croisez facilement les données de {databaseCount} bases intégrant
+            les ID-RNBs
           </p>
         </div>
         <div className={styles.searchContainer}>
