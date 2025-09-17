@@ -106,13 +106,15 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   useEffect(() => {
     switch (mapLayers.background) {
       case 'vectorIgnStandard':
-        setBtnImage(backgroundPlanIGN);
+        setBtnImage(backgroundSatellite);
+
         break;
       case 'vectorOsm':
-        setBtnImage(backgroundPlanOSM);
+        setBtnImage(backgroundSatellite);
+
         break;
       default:
-        setBtnImage(backgroundSatellite);
+        setBtnImage(backgroundPlanIGN);
         break;
     }
   }, [mapLayers]);
