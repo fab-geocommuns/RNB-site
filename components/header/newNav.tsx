@@ -1,20 +1,34 @@
 import { newsletterModal } from '@/components/home/NewsletterModal';
+import linkedInIcon from '@/public/icons/linkedin-box-fill.svg';
+import mailIcon from '@/public/icons/mail-line.svg';
+import forumIcon from '@/public/icons/message-2-line.svg';
+import ImageNext from 'next/image';
+import styles from '@/styles/nav.module.scss';
+
+function ContactIcon({ src, alt }: { src: string; alt: string }) {
+  return <ImageNext src={src} alt={alt} className={styles.contactIcon} />;
+}
 
 function LinkedInLink() {
   return (
     <a
       title="Nous suivre sur LinkedIn"
       href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/"
+      className={styles.contactLink}
     >
-      <i className="ri-linkedin-box"></i>
+      <ContactIcon src={linkedInIcon} alt="LinkedIn" />
     </a>
   );
 }
 
 function MailLink() {
   return (
-    <a title="Nous écrire" href="mailto:contact@rnb.fr">
-      <i className="ri-mail"></i>
+    <a
+      title="Nous écrire"
+      href="mailto:contact@rnb.fr"
+      className={styles.contactLink}
+    >
+      <ContactIcon src={mailIcon} alt="Mail" />
     </a>
   );
 }
@@ -24,8 +38,9 @@ function ForumLink() {
     <a
       title="Nous contacter sur le forum des Géocommuns"
       href="https://forum.geocommuns.fr/c/rnb/11"
+      className={styles.contactLink}
     >
-      <i className="ri-chat-1"></i>
+      <ContactIcon src={forumIcon} alt="Forum" />
     </a>
   );
 }
@@ -33,7 +48,7 @@ function ForumLink() {
 function ContactUs() {
   return (
     <>
-      <LinkedInLink /> <MailLink /> <ForumLink />
+      Nous contacter : <LinkedInLink /> <MailLink /> <ForumLink />
     </>
   );
 }
