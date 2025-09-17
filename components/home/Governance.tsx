@@ -6,6 +6,7 @@ import logoIgn from '@/public/images/logos/ign.png';
 import logoDgaln from '@/public/images/logos/dgaln.png';
 import logoFnv from '@/public/images/logos/france-nation-verte.jpg';
 import logoDinum from '@/public/images/logos/dinum.png';
+import logoCnig from '@/public/images/logos/cnig.png';
 
 export default function Governance() {
   return (
@@ -66,6 +67,14 @@ export default function Governance() {
                 className={styles.sponsorBlock__logo}
                 src={logoDinum}
                 alt="Direction interministérielle du numérique"
+              />
+            </div>
+            <div className="fr-col-md-3 fr-col-6 text-center">
+              <ImageNext
+                height={80}
+                className={styles.sponsorBlock__logo}
+                src={logoCnig}
+                alt="Centre national d'information géographique"
               />
             </div>
           </div>
