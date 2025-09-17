@@ -502,5 +502,18 @@
 
 .tabContent {
   flex-direction: row-reverse;
-  min-height: 378px;
+  max-height: 272px;
+
+  [class~='fr-card__desc'] {
+    margin-top: 0;
+  }
+
+  [class~='fr-card__body'] {
+    justify-content: space-between;
+    height: inherit;
+  }
+
+  [class~='fr-card__content'] {
+    padding-bottom: 0;
+  }
 }
