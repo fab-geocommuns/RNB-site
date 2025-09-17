@@ -1,5 +1,5 @@
 import { PostsOrPages } from '@tryghost/content-api';
-import Tile from '@codegouvfr/react-dsfr/Tile';
+import Card from '@codegouvfr/react-dsfr/Card';
 import nantes from './logos/nantes.png';
 import echirolles from './logos/echirolles.png';
 import smh from './logos/smh.jpg';
@@ -70,10 +70,11 @@ export default function UseCases({ useCases }: Props) {
           <div className="fr-grid-row fr-grid-row--gutters">
             {featuredUseCase.map((useCase) => (
               <div className="fr-col-12 fr-col-md-4 " key={useCase.id}>
-                <Tile
+                <Card
                   linkProps={{ href: '/cas/' + useCase.slug }}
                   title={useCase.title}
                   desc={useCase.excerpt}
+                  enlargeLink
                 />
               </div>
             ))}

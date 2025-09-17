@@ -121,8 +121,15 @@ export default function Hero() {
             </p>
             <p>
               {' '}
-              <Button>Consulter la carte des bâtiments</Button>{' '}
-              <Button priority="tertiary no outline">En savoir plus</Button>
+              <Button linkProps={{ href: '/carte' }}>
+                Consulter la carte des bâtiments
+              </Button>{' '}
+              <Button
+                priority="tertiary no outline"
+                linkProps={{ href: '/a-propos' }}
+              >
+                En savoir plus
+              </Button>
             </p>
           </div>
           <div className={fr.cx('fr-col-6', 'fr-p-18v')}>
