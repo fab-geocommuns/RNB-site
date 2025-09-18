@@ -15,7 +15,6 @@ import smh from './logos/smh.jpg';
 import zlv from './logos/zlv.jpg';
 
 // Styles
-import ImageNext from 'next/image';
 import styles from '@/styles/home.module.scss';
 
 type Props = {
@@ -95,7 +94,7 @@ export default function UseCases({ useCases }: Props) {
             {featuredUseCase.map((useCase) => (
               <div className="fr-col-12 fr-col-md-4 " key={useCase.id}>
                 <Card
-                  linkProps={{ href: '/cas/' + useCase.slug }}
+                  linkProps={{ href: '/blog/' + useCase.slug }}
                   title={useCase.title}
                   desc={useCase.excerpt}
                   enlargeLink
