@@ -3,7 +3,11 @@
 import styles from '@/styles/newsletter.module.scss';
 import { useRef } from 'react';
 
-export default function NewsletterForm() {
+type Props = {
+  formId?: string;
+};
+
+export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
   const form = useRef(null);
   const feedback = useRef(null);
   const btn = useRef(null);
@@ -76,6 +80,7 @@ export default function NewsletterForm() {
     <>
       <form
         ref={form}
+        id={formId}
         className={styles.nl__form}
         onSubmit={handleSubmit}
         method="POST"

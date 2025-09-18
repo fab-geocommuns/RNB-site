@@ -3,9 +3,10 @@
 // Comps
 import { Header } from '@codegouvfr/react-dsfr/Header';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
-import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import Link from 'next/link';
+import newNav from '@/components/header/newNav';
+import oldNav from '@/components/header/oldNav';
 
 // Auth
 import { useSession } from 'next-auth/react';
@@ -17,6 +18,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import logo from '@/public/images/logo.png';
 import { useEffect, useState } from 'react';
 import EditRNBButton from './EditRNBButton';
+import NewsletterModal from './home/NewsletterModal';
 
 type Props = {
   withNavigation?: boolean;
@@ -37,64 +39,9 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   const [quickActions, setQuickActions] = useState([]);
   const [title, setTitle] = useState('Référentiel National des Bâtiments');
 
-  const nav = [
-    {
-      isActive: pathname === '/',
-      text: 'Accueil',
-      linkProps: {
-        href: '/',
-      },
-    },
-    {
-      isActive: pathname === '/carte',
-      text: 'Carte',
-      linkProps: {
-        href: '/carte',
-      },
-    },
-    {
-      isActive: pathname.startsWith('/outils-services'),
-      text: 'Outils & services',
-      linkProps: {
-        href: '/outils-services',
-      },
-    },
-    {
-      isActive: pathname === '/definition',
-      text: 'Définition & Standard',
-      linkProps: {
-        href: '/definition',
-      },
-    },
-    {
-      isActive: pathname.startsWith('/blog'),
-      text: "Cas d'usage",
-      linkProps: {
-        href: '/blog',
-      },
-    },
-    {
-      isActive: pathname.startsWith('/faq'),
-      text: 'Foire aux questions',
-      linkProps: {
-        href: '/faq',
-      },
-    },
-    {
-      isActive: pathname === '/a-propos',
-      text: 'À propos',
-      linkProps: {
-        href: '/a-propos',
-      },
-    },
-    {
-      isActive: pathname === '/contact',
-      text: 'Contact',
-      linkProps: {
-        href: '/contact',
-      },
-    },
-  ];
+  const nav = process.env.NEXT_PUBLIC_NEW_HOME_ENABLED
+    ? newNav(pathname)
+    : oldNav(pathname);
 
   useEffect(() => {
     setRedirectUrl(window.location.href);
@@ -193,6 +140,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   return (
     <>
+      <NewsletterModal />
       <explainModal.Component title="Participer au Référentiel National des Bâtiments">
         <p className="fr-mt-4w">
           Pour être constamment tenu à jour, le RNB est alimenté par de grandes

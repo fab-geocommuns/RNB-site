@@ -148,3 +148,17 @@ li code {
     display: none;
   }
 }
+
+h5.fr-mega-menu__category.fr-nav__link {
+  font-weight: 700;
+}
+
+#fr-header-main-navigation-menu-3-link-2-2 {
+  justify-content: flex-start;
+  gap: 12px;
+
+  &:hover {
+    cursor: inherit;
+    background: inherit;
+  }
+}
