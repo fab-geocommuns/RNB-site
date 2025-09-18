@@ -1,8 +1,6 @@
 // Components
 import styles from '@/styles/blog.module.scss';
 import CasList from '@/components/CasListe';
-import NewsletterForm from '@/components/NewsletterForm';
-import { LogoGrid } from '@/components/home/UseCases';
 
 export default async function Page() {
   return (
