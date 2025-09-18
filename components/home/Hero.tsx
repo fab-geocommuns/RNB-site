@@ -122,7 +122,7 @@ export default function Hero() {
             <p>
               {' '}
               <Button linkProps={{ href: '/carte' }}>
-                Consulter la carte des bâtiments
+                Voir la carte des bâtiments
               </Button>{' '}
               <Button
                 priority="tertiary no outline"

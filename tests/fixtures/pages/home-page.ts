@@ -26,7 +26,7 @@ export class HomePage extends RNBPage {
     );
     this.dbsTitle = page
       .locator('h2')
-      .getByText('Croisez et enrichissez vos données bâtimentaires');
+      .getByText(/enrichissez vos données bâtimentaires/i);
     this.toolsTitle = page.locator('h2').getByText('Outils et services');
     this.useCasesTitle = page.locator('h2').getByText("Cas d'usage");
     this.faqButton = page.getByText('Consulter la Foire aux Questions');
