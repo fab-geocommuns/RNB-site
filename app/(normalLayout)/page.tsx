@@ -43,6 +43,9 @@ export default async function Home() {
   const bannerId = '32J5WGD2D3QE';
   const breakingNews = await getBreakingNews();
   let availableDatabases = null;
+
+  console.log('Test pipeline');
+
   try {
     availableDatabases = await getDatabases();
   } catch (error) {
