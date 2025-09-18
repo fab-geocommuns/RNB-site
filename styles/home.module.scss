@@ -470,6 +470,12 @@
   background: transparent;
 }
 
+@media (max-width: $bp-md) {
+  .tabNavigation {
+    flex-direction: column;
+  }
+}
+
 .tabButton {
   background: none;
   padding: 0.75rem 1.5rem;
@@ -501,8 +507,10 @@
 }
 
 .tabContent {
-  flex-direction: row-reverse;
-  max-height: 272px;
+  @media (min-width: $bp-md) {
+    flex-direction: row-reverse;
+    max-height: 272px;
+  }
 
   [class~='fr-card__desc'] {
     margin-top: 0;

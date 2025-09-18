@@ -52,7 +52,7 @@ function LogoGrid() {
     <div className="fr-grid-row fr-grid-row--gutters">
       {logos.map((logo, index) => (
         <div
-          className="fr-col-12 fr-col-md-2"
+          className="fr-col-12 fr-col-md-2 fr-hidden fr-unhidden-md"
           key={index}
           style={{
             display: 'flex',

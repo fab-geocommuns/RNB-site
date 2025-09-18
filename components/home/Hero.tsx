@@ -51,7 +51,14 @@ export default function Hero() {
     >
       <div className={fr.cx('fr-container')}>
         <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-          <div className={fr.cx('fr-col-6', 'fr-pt-18v', 'fr-pb-18v')}>
+          <div
+            className={fr.cx(
+              'fr-col-12',
+              'fr-col-md-6',
+              'fr-pt-18v',
+              'fr-pb-18v',
+            )}
+          >
             <h1>Bienvenue sur le Référentiel National des Bâtiments</h1>
             <p>
               Le Référentiel National des Bâtiments (RNB) est un{' '}
@@ -82,7 +89,14 @@ export default function Hero() {
               </Button>
             </p>
           </div>
-          <div className={fr.cx('fr-col-6', 'fr-p-18v')}>
+          <div
+            className={fr.cx(
+              'fr-col-6',
+              'fr-p-18v',
+              'fr-hidden',
+              'fr-unhidden-md',
+            )}
+          >
             <Illustration>
               <AddressSearchHome />
             </Illustration>
