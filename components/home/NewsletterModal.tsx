@@ -20,7 +20,7 @@ export default function NewsletterModal() {
         </Link>
         .
       </p>
-      <NewsletterForm />
+      <NewsletterForm formId="newsletter-form-modal" />
     </newsletterModal.Component>
   );
 }
