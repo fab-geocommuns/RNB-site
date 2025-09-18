@@ -7,9 +7,15 @@ import { PostOrPage } from '@tryghost/content-api';
 
 type Props = {
   post: PostOrPage;
+  showTags?: boolean;
+  showDate?: boolean;
 };
 
-export default function ArticleCard({ post }: Props) {
+export default function ArticleCard({
+  post,
+  showTags = true,
+  showDate = true,
+}: Props) {
   const dateStr = formattedDate(post.published_at!);
 
   return (
@@ -24,12 +30,12 @@ export default function ArticleCard({ post }: Props) {
             </h3>
 
             <div className="fr-card__desc">
-              <div className="fr-mb-2v">{dateStr}</div>
+              {showDate && <div className="fr-mb-2v">{dateStr}</div>}
               <div>{post.excerpt}</div>
             </div>
 
             <div className="fr-card__start fr-mb-2v">
-              <TagsList tags={post.tags}></TagsList>
+              {showTags && <TagsList tags={post.tags}></TagsList>}
             </div>
             <div className="fr-card__end"></div>
           </div>
