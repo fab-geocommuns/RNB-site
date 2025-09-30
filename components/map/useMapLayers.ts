@@ -528,7 +528,7 @@ export const useMapLayers = ({
         'circle-radius': 3,
         'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 1,
-        'circle-color': '#ff5724',
+        'circle-color': '#000000',
       },
     });
 
@@ -539,11 +539,15 @@ export const useMapLayers = ({
       type: 'symbol',
       minzoom: 10,
       paint: {
-        'text-color': '#ff5724',
+        'text-color': '#000000',
+        'text-halo-color': '#ffffff',
+        'text-halo-width': 1,
+        //'text-halo-blur': 1,
       },
       layout: {
         'text-font': ['Noto Sans Bold'],
         'text-size': 13,
+
         'text-field': [
           'case',
           ['has', 'suffixe'],
@@ -603,8 +607,9 @@ export const useMapLayers = ({
         'text-allow-overlap': false,
       },
       paint: {
+        'text-color': '#ea580c',
         'text-halo-color': '#ffffff',
-        'text-halo-width': 2,
+        'text-halo-width': 1,
       },
     });
   }, []);
