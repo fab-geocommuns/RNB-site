@@ -508,6 +508,9 @@ export const useMapLayers = ({
   };
 
   const installBAN = async (map: maplibregl.Map) => {
+    const certifiedColor = '#026902';
+    const notCertifiedColor = '#777777';
+
     if (map.getLayer(LAYER_BAN)) map.removeLayer(LAYER_BAN);
     if (map.getSource(SRC_BAN)) map.removeSource(SRC_BAN);
 
@@ -528,7 +531,12 @@ export const useMapLayers = ({
         'circle-radius': 3,
         'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 1,
-        'circle-color': '#000000',
+        'circle-color': [
+          'case',
+          ['==', ['get', 'certifie'], true],
+          certifiedColor,
+          notCertifiedColor,
+        ],
       },
     });
 
@@ -539,7 +547,14 @@ export const useMapLayers = ({
       type: 'symbol',
       minzoom: 10,
       paint: {
-        'text-color': '#000000',
+        // change text color if 'certifie' is true
+        'text-color': [
+          'case',
+          ['==', ['get', 'certifie'], true],
+          certifiedColor,
+          notCertifiedColor,
+        ],
+
         'text-halo-color': '#ffffff',
         'text-halo-width': 1,
         //'text-halo-blur': 1,
