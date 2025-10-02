@@ -24,10 +24,7 @@ function Illustration({ children }: { children: React.ReactNode }) {
   ];
   return (
     <>
-      <div
-        className={styles.imageCarousel}
-        style={{ height: '100%', width: '100%' }}
-      >
+      <div className={styles.imageCarousel}>
         {images.map((image) => (
           <div
             className={styles.imageCarouselImage}
@@ -43,23 +40,31 @@ function Illustration({ children }: { children: React.ReactNode }) {
   );
 }
 
+const CTA = () => {
+  return (
+    <>
+      <Button linkProps={{ href: '/carte' }}>
+        Voir la carte des bâtiments
+      </Button>{' '}
+      <Button priority="tertiary no outline" linkProps={{ href: '/a-propos' }}>
+        En savoir plus
+      </Button>
+    </>
+  );
+};
+
 export default function Hero() {
   return (
     <div
-      className={fr.cx('fr-mb-6v')}
+      className={fr.cx('fr-mb-6v', 'fr-py-8v', 'fr-py-md-12v')}
       style={{ backgroundColor: 'var( --background-alt-blue-france)' }}
     >
       <div className={fr.cx('fr-container')}>
         <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-          <div
-            className={fr.cx(
-              'fr-col-12',
-              'fr-col-md-6',
-              'fr-pt-18v',
-              'fr-pb-18v',
-            )}
-          >
-            <h1>Bienvenue sur le Référentiel National des Bâtiments</h1>
+          <div className={fr.cx('fr-col-12', 'fr-col-md-6', 'fr-pr-md-8v')}>
+            <h1 className={fr.cx('fr-h2')}>
+              Bienvenue sur le Référentiel National des Bâtiments
+            </h1>
             <p>
               Le Référentiel National des Bâtiments (RNB) est un{' '}
               <b>service public numérique</b> qui{' '}
@@ -76,30 +81,24 @@ export default function Hero() {
               entre les administrations publiques, les collectivités et les
               acteurs privés.
             </p>
-            <p>
-              {' '}
-              <Button linkProps={{ href: '/carte' }}>
-                Voir la carte des bâtiments
-              </Button>{' '}
-              <Button
-                priority="tertiary no outline"
-                linkProps={{ href: '/a-propos' }}
-              >
-                En savoir plus
-              </Button>
+            <p className={fr.cx('fr-hidden', 'fr-unhidden-md')}>
+              <CTA />
             </p>
           </div>
-          <div
-            className={fr.cx(
-              'fr-col-6',
-              'fr-p-18v',
-              'fr-hidden',
-              'fr-unhidden-md',
-            )}
-          >
+          <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
             <Illustration>
               <AddressSearchHome />
             </Illustration>
+          </div>
+          <div
+            className={`${fr.cx(
+              'fr-col-12',
+              'fr-col-md-6',
+              'fr-hidden-md',
+              'fr-pt-8v',
+            )} ${styles.ctaMobile}`}
+          >
+            <CTA />
           </div>
         </div>
       </div>

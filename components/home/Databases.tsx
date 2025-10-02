@@ -1,7 +1,6 @@
 import { DiffusionDatabase } from '../diffusionDatabase.type';
 import styles from '@/styles/home.module.scss';
-import ImageNext from 'next/image';
-import Link from 'next/link';
+import { fr } from '@codegouvfr/react-dsfr';
 
 type Props = {
   databases: DiffusionDatabase[];
@@ -45,9 +44,14 @@ export default function Databases({ databases }: Props) {
         </div>
         <div className={styles.searchContainer}>
           <FeaturedDatabases dbs={featuredDatabases} />
-          <Link href="/outils-services/rapprochement">
-            Voir l&apos;ensemble des bases contenant des ID-RNBs{' '}
-          </Link>
+          <div className={styles.allDbsLink}>
+            <a
+              href="/outils-services/rapprochement"
+              className={fr.cx('fr-btn', 'fr-btn--tertiary')}
+            >
+              Voir l&apos;ensemble des bases contenant des ID-RNB
+            </a>
+          </div>
         </div>
       </div>
     </div>
