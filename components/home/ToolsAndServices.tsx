@@ -19,7 +19,6 @@ interface TabContent {
 interface Tab {
   title: string;
   content: TabContent;
-  icon: React.ReactNode;
 }
 
 interface TabBoxProps {
