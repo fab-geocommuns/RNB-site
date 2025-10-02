@@ -54,7 +54,8 @@ export const SRC_BAN = 'ban';
 export const SRC_BAN_URL = `https://plateforme.adresse.data.gouv.fr/tiles/ban/{z}/{x}/{y}.pbf`;
 
 // BAN layer
-export const LAYER_BAN = 'ban_points';
+export const LAYER_BAN_POINT = 'ban_points';
+export const LAYER_BAN_TXT = 'ban_txt';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -511,7 +512,8 @@ export const useMapLayers = ({
     const certifiedColor = '#026902';
     const notCertifiedColor = '#777777';
 
-    if (map.getLayer(LAYER_BAN)) map.removeLayer(LAYER_BAN);
+    if (map.getLayer(LAYER_BAN_POINT)) map.removeLayer(LAYER_BAN_POINT);
+    if (map.getLayer(LAYER_BAN_TXT)) map.removeLayer(LAYER_BAN_TXT);
     if (map.getSource(SRC_BAN)) map.removeSource(SRC_BAN);
 
     map.addSource(SRC_BAN, {
@@ -523,7 +525,7 @@ export const useMapLayers = ({
     });
 
     map.addLayer({
-      id: LAYER_BAN,
+      id: LAYER_BAN_POINT,
       source: SRC_BAN,
       'source-layer': 'adresses',
       type: 'circle',
@@ -541,7 +543,7 @@ export const useMapLayers = ({
     });
 
     map.addLayer({
-      id: 'adresse-label',
+      id: LAYER_BAN_TXT,
       source: SRC_BAN,
       'source-layer': 'adresses',
       type: 'symbol',
