@@ -112,28 +112,28 @@ export default function newNav(pathName: string) {
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: 'API Bâtiments',
               },
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: 'Sélécteur de bâtiments',
               },
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: 'Tuiles vectorielles',
               },
               {
                 linkProps: {
                   href: 'https://www.data.gouv.fr/datasets/referentiel-national-des-batiments/',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: 'Exports nationaux et départementaux',
               },
@@ -153,14 +153,14 @@ export default function newNav(pathName: string) {
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: "API d'édition",
               },
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: "Guides d'éditions",
               },
@@ -215,20 +215,21 @@ export default function newNav(pathName: string) {
               {
                 linkProps: {
                   href: '/doc',
+                  target: '_blank',
                 },
                 text: 'Documentation technique',
               },
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: "Guide d'édition",
               },
               {
                 linkProps: {
                   href: 'https://rnb-fr.gitbook.io/documentation/lexique-du-rnb',
-                  target: '_self',
+                  target: '_blank',
                 },
                 text: 'Lexique',
               },
