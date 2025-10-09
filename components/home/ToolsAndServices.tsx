@@ -98,7 +98,7 @@ export default function ToolsAndServices() {
             link: '/carte',
           },
           {
-            title: 'Documentation de nos APIs',
+            title: "Documentation de l'API",
             link: '/doc',
           },
           {
