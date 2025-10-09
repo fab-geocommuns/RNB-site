@@ -2,6 +2,24 @@ import { cache } from 'react';
 
 import GhostContentAPI from '@tryghost/content-api';
 
+export const getUseCases = cache(async (page = 1) => {
+  const api = getClient();
+
+  return api.posts
+    .browse({
+      filter: 'tag:casusage',
+      page: page,
+      limit: 10,
+      include: ['tags', 'authors'],
+    })
+    .then((posts) => {
+      return posts;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
 export const getPosts = cache(async (page = 1) => {
   const api = getClient();
 

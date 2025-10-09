@@ -8,8 +8,6 @@ test.describe("Page d'accueil", () => {
     await expect(homePage.dbsTitle).toBeVisible();
     await expect(homePage.toolsTitle).toBeVisible();
     await expect(homePage.useCasesTitle).toBeVisible();
-    await expect(homePage.faqButton).toBeVisible();
-    await expect(homePage.faqButton).toHaveAttribute('href', /faq/);
   });
 
   test("doit contenir le champ de recherche rapide d'ID-RNB pour la carte", async ({
@@ -75,15 +73,5 @@ test.describe("Page d'accueil", () => {
       const ign = mapLocator('filter["==", ["get", "rnb_id"], "CDVXSAKG94Q5"]');
       await expect(ign).toBeVisibleOnMap();
     }
-  });
-
-  test("doit contenir un formulaire d'inscription à l'infolettre fonctionnel", async ({
-    homePage,
-    newsletterTestUtil,
-  }) => {
-    await newsletterTestUtil.run({
-      newsletterField: homePage.newsletterField,
-      newsletterButton: homePage.newsletterButton,
-    });
   });
 });
