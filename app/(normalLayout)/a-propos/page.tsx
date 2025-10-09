@@ -87,7 +87,7 @@ export default function Page() {
             <a href="https://www.ign.fr/" target="_blank">
               IGN
             </a>
-            ) et le Fonds d'investissement « Numérique et Données » pour la
+            ) et le Fonds d&apos;investissement « Numérique et Données » pour la
             planification écologique (
             <a
               href="https://incubateur.anct.gouv.fr/offre/guichet-cohesion-territoires-FINDPE"
@@ -98,7 +98,7 @@ export default function Page() {
             ).
           </p>
           <p>
-            Le service est réalisé à la fabrique des géocommuns,
+            Le service est réalisé à la fabrique de la donnée territoriale,
             l&apos;incubateur de l&apos;IGN, appliquant la méthode du programme{' '}
             <a href="https://beta.gouv.fr/" target="_blank">
               beta.gouv
