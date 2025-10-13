@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 
 // url
-import { useSearchParams } from 'next/navigation';
+import { headers } from 'next/headers';
 
 // Components
 import LoginForm from '@/components/authentication/LoginForm';
@@ -27,12 +27,24 @@ export default async function LoginPage({
 
   // Check the redirectUrl is sage (no javascript url and no eval)
   const redirectUrl = (await searchParams).redirect as string | undefined;
+
+  const headersList = await headers();
+
   if (redirectUrl) {
-    const lowerRedirectUrl = redirectUrl.toLowerCase();
-    if (
-      lowerRedirectUrl.startsWith('javascript:') ||
-      lowerRedirectUrl.includes('eval(')
-    ) {
+    const requestHost = headersList.get('host');
+    const requestProtocol = headersList.get('x-forwarded-proto');
+    const requestUrlRoot = requestProtocol
+      ? `${requestProtocol}://${requestHost}`
+      : `http://${requestHost}`;
+
+    try {
+      const redirectUrlObj = new URL(redirectUrl, requestUrlRoot);
+      const requestUrlObj = new URL(requestUrlRoot);
+
+      if (redirectUrlObj.origin !== requestUrlObj.origin) {
+        throw new Error('Mauvaise origine');
+      }
+    } catch {
       redirect('/login');
     }
   }
