@@ -162,3 +162,8 @@ h5.fr-mega-menu__category.fr-nav__link {
     background: inherit;
   }
 }
+
+.target-blank-noIcon::after {
+  content: '';
+  display: none;
+}

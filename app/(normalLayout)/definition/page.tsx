@@ -37,11 +37,14 @@ export default async function Page() {
 
                   <p className={styles.bdgDefinition}>
                     Construction souterraine et/ou au-dessus du sol, ayant pour
-                    objectif d&apos;être permanente, pour abriter des humains ou
-                    des activités humaines. Un bâtiment possède a minima un
-                    accès depuis l’extérieur. Dans la mesure du possible, un
-                    bâtiment est distinct d’un autre dès lors qu’il est
-                    impossible de circuler entre eux.
+                    objectif d&apos;être permanente, pour{' '}
+                    <a href="#" target="_blank" className="target-blank-noIcon">
+                      abriter
+                    </a>{' '}
+                    des humains ou des activités humaines. Un bâtiment possède a
+                    minima un accès depuis l’extérieur. Dans la mesure du
+                    possible, un bâtiment est distinct d’un autre dès lors qu’il
+                    est impossible de circuler entre eux.
                   </p>
                   <div className={styles.bdgDefinitionContext}>
                     Cette définition est complétée par une{' '}

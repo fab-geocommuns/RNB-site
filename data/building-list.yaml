@@ -1,6 +1,6 @@
 - id: piscine
   title: Piscine
-  description: Piscine, y compris les piscines couvertes légères.
+  description: Piscine, y compris les piscines avec dôme.
   isBuilding: false
   image: piscine.png
 
@@ -16,7 +16,7 @@
 
 - id: kiosque
   title: Construction ouverte (kiosque, préau)
-  <a href="#abriter-activites-humaines">Voir les explications.</a>
+  description: <a href="#abriter-activites-humaines">Voir les explications.</a>
   isBuilding: false
   image: kiosque.png
 
@@ -30,18 +30,18 @@
   isBuilding: false
   image: abri-jardin.png
 
-  - id: monument
+- id: monument
   title: Monument
   isBuilding: false
-  image: monument.jpeg
+  image: monument.jpg
 
-  - id: box
+- id: box
   title: Box ou garages en rangée
   description: Chaque box est considéré comme un bâtiment, à l'image des maisons en rangée. <a href="#maisons-en-rangee">Voir les explications.</a>
   isBuilding: true
   image: maisons-en-rangee.jpeg
 
-    - id: balustrade
+- id: balustrade
   title: Appartements en balustrade
   description: Si elle est continue et dépourvue et séparation, on peut considérer que la balustrade fait partie du bâtiment et la traiter comme un couloir. Les appartements en questions sont alors des locaux faisant partie d’un même bâtiment.
   isBuilding: true
@@ -52,7 +52,7 @@
   isBuilding: false
   image: conteneur-chantier.png
 
-  - id: auvent
+- id: auvent
   title: Préau ou auvent attenant à un bâtiment, sans accès vers celui-ci
   description: Si elle n'est pas considérée comme abritante, la construction n'est pas un bâtiment, qu'elle soit attenante à un bâtiment ou non. Dans le cas contraire, c'est un bâtiment à part entière. <a href="#abriter-activites-humaines">Voir les explications.</a>
   isBuilding: false
@@ -264,7 +264,7 @@
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, on décompte bien deux bâtiments distincts. On peut si besoin rattacher la passerelle à l'un des deux bâtiments.
 
-  - id: abriter-activites-humaines
+- id: abriter-activites-humaines
   title: Abriter des humains et des activités humaines
   description: <a href="#abriter-activites-humaines">Voir les explications.</a>
   isBuilding: true
