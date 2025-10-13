@@ -26,7 +26,7 @@ export default async function LoginPage({
   }
 
   // Check the redirectUrl is sage (no javascript url and no eval)
-  const redirectUrl = searchParams.redirect as string | undefined;
+  const redirectUrl = (await searchParams).redirect as string | undefined;
   if (redirectUrl) {
     const lowerRedirectUrl = redirectUrl.toLowerCase();
     if (
