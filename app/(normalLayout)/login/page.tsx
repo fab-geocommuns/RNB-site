@@ -17,7 +17,7 @@ import summerStyles from '@/styles/summerGames.module.scss';
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();
