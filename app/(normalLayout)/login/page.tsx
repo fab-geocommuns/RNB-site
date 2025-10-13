@@ -2,6 +2,9 @@
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 
+// url
+import { useSearchParams } from 'next/navigation';
+
 // Components
 import LoginForm from '@/components/authentication/LoginForm';
 import CreateAccountForm from '@/components/authentication/CreateAccountForm';
@@ -11,11 +14,27 @@ import styles from '@/styles/login.module.scss';
 
 import summerStyles from '@/styles/summerGames.module.scss';
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();
   if (session) {
     redirect('/edition');
+  }
+
+  // Check the redirectUrl is sage (no javascript url and no eval)
+  const redirectUrl = searchParams.redirect as string | undefined;
+  if (redirectUrl) {
+    const lowerRedirectUrl = redirectUrl.toLowerCase();
+    if (
+      lowerRedirectUrl.startsWith('javascript:') ||
+      lowerRedirectUrl.includes('eval(')
+    ) {
+      redirect('/login');
+    }
   }
 
   const enableCreateAccount = process.env.ENABLE_CREATE_ACCOUNT === 'true';
