@@ -4,6 +4,7 @@ function cspMiddleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = `
     default-src 'self';
+    connect-src 'self' ${process.env.NEXT_PUBLIC_API_BASE};
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
     style-src 'self' 'nonce-${nonce}' 'unsafe-hashes' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='
       'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk=' 'sha256-WAZ6rwnC2Z9Xrf60XbMtlnD1h5BaaOqZ+PW5v9jfymI='

@@ -24,6 +24,7 @@ const nextConfig = {
       test: /\.woff2$/,
       type: 'asset/resource',
     });
+    config.devtool = 'source-map';
 
     return config;
   },
