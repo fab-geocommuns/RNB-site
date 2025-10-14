@@ -16,9 +16,11 @@ export class HomePage extends RNBPage {
   constructor(page: Page) {
     super(page, '/');
 
-    this.mapButton = page.locator('a', {
-      hasText: 'Voir la carte des bâtiments',
-    });
+    this.mapButton = page
+      .locator('a', {
+        hasText: 'Voir la carte des bâtiments',
+      })
+      .first();
     this.searchMapField = page.getByPlaceholder(/un identifiant RNB/i);
     this.searchMapButton = page.locator('.fr-search-bar button[type="submit"]');
     this.searchMapSuggestions = page.locator(
