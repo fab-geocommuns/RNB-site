@@ -1,21 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Taken from https://nextjs.org/docs/app/guides/content-security-policy
 function cspMiddleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const isDev = process.env.NODE_ENV === 'development';
+  const rnbApiOrigin = new URL(process.env.NEXT_PUBLIC_API_BASE!).origin;
+  const banApiOrigins = [
+    'https://api-adresse.data.gouv.fr/',
+    'https://plateforme.adresse.data.gouv.fr',
+  ];
+  const tileOrigins = [
+    'https://data.geopf.fr/',
+    'https://openmaptiles.geo.data.gouv.fr/',
+    'https://openmaptiles.github.io/',
+  ];
+  // We allow `unsafe-inline` for the style-src directive because of https://github.com/vercel/next.js/issues/57415
+  // When it's fixed, we can remove it.
   const cspHeader = `
     default-src 'self';
-    connect-src 'self' ${process.env.NEXT_PUBLIC_API_BASE};
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}' 'unsafe-hashes' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='
-      'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk=' 'sha256-WAZ6rwnC2Z9Xrf60XbMtlnD1h5BaaOqZ+PW5v9jfymI='
-      'sha256-FoUNlEHrNDTVkTimMpKi8wIm6igoDL2oP/AbwYOTeAw=' 'sha256-KseMfbs3WybcZK31WKv3c63lsuQ4MEatQ83ZsDEL3co='
-      'sha256-WAZ6rwnC2Z9Xrf60XbMtlnD1h5BaaOqZ+PW5v9jfymI=' 'sha256-FoUNlEHrNDTVkTimMpKi8wIm6igoDL2oP/AbwYOTeAw='
-      'sha256-KseMfbs3WybcZK31WKv3c63lsuQ4MEatQ83ZsDEL3co=' 'sha256-GTxJAW4D7o+eJBdpOtI9JCcZ1dFj2N8StTYaFAsCuFs='
-      'sha256-TjpYb/VnxOvLi32SI5hNoflWyYygI1iw1C4H67dkY48=' 'sha256-bMrzeHgL0qQ2X1jFVbb4P7ls6cMRmduYyYQa8Sv1Ls0='
-      'sha256-lCjMHqE3IiaDPTTvB8CpEJ4ZxskjAMgw2MktviNdmAY=' 'sha256-DnWtI7kdatSgQ2hv+DVXw5bchLlYKPlDZyc2eiXJGQs='
-      'sha256-DnWtI7kdatSgQ2hv+DVXw5bchLlYKPlDZyc2eiXJGQs=' 'sha256-vdK7no91CeKU8HsvKk4EtbHQg/gvc85CUyCNElQWznw='
-      'sha256-Q8DjrU83+xlZbNvxXXLRrrJ2lOWjc3ky9B68DQR11+U='
-      ;
+    connect-src 'self' ${rnbApiOrigin} ${banApiOrigins.join(' ')} ${tileOrigins.join(' ')};
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ''};
+    style-src 'self' 'unsafe-inline';
     media-src 'self' blob: data: https://rnb-open.s3.fr-par.scw.cloud/ https://referentiel-national-du-batiment.ghost.io/;
     img-src 'self' blob: data: https://rnb-open.s3.fr-par.scw.cloud/ https://referentiel-national-du-batiment.ghost.io/;
     font-src 'self';
