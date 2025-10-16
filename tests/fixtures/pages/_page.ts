@@ -16,7 +16,9 @@ export abstract class RNBPage {
     this.path = path;
 
     this.loginForm = page.getByTestId('login-form');
-    this.myAccountButton = page.getByTestId('my-account-button');
+    this.myAccountButton = page
+      .locator('a[data-testid="my-account-button"]')
+      .first();
   }
 
   async goto() {
@@ -31,7 +33,6 @@ export abstract class RNBPage {
   }
 
   async login() {
-    await this.page.waitForLoadState('networkidle');
     await this.page.goto('/login');
     await this.loginForm
       .getByLabel('Email')
@@ -40,7 +41,7 @@ export abstract class RNBPage {
       .getByLabel('Mot de passe')
       .fill(process.env.TEST_ACCOUNT_PASSWORD!);
     await this.loginForm.getByRole('button', { name: /se connecter/i }).click();
-    await this.page.waitForLoadState('networkidle');
+    await expect(this.myAccountButton).toBeVisible();
   }
 
   async isLoggedIn() {
