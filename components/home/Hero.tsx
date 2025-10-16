@@ -1,8 +1,8 @@
 import { fr } from '@codegouvfr/react-dsfr';
 import Button from '@codegouvfr/react-dsfr/Button';
-import mapImageSource from './map.png';
-import mapImageSource2 from './map1.png';
-import mapImageSource3 from './map2.png';
+import mapImageSource from './map.jpg';
+import mapImageSource2 from './map1.jpg';
+import mapImageSource3 from './map2.jpg';
 import AddressSearchHome from '../address/AddressSearchHome';
 import styles from '../../styles/home/hero.module.scss';
 
