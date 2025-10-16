@@ -35,7 +35,7 @@ export default async function LoginPage({
     const requestProtocol = headersList.get('x-forwarded-proto');
     const requestUrlRoot = requestProtocol
       ? `${requestProtocol}://${requestHost}`
-      : `http://${requestHost}`;
+      : `https://${requestHost}`;
 
     try {
       const redirectUrlObj = new URL(redirectUrl, requestUrlRoot);
