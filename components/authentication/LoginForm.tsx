@@ -7,6 +7,15 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 
+function isSafeRedirectUrl(url: string): boolean {
+  try {
+    const urlObj = new URL(url, window.location.origin);
+    return urlObj.origin === window.location.origin;
+  } catch (error) {
+    return false;
+  }
+}
+
 export default function LoginForm() {
   const [credentialsError, setCredentialsError] = useState(false);
 
@@ -17,7 +26,7 @@ export default function LoginForm() {
 
   let redirectUrl = '/edition';
   const redirect = params.get('redirect');
-  if (redirect) {
+  if (redirect && isSafeRedirectUrl(redirect)) {
     redirectUrl = redirect;
   }
 

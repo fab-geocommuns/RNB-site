@@ -300,17 +300,17 @@
     hsl(44deg 86% 81%) 85%,
     hsl(44deg 86% 80%) 100%
   );
-  padding: 64px;
+  padding: 24px 14px;
 
-  @media (max-width: $bp-md) {
-    padding: 12px;
+  @media (min-width: $bp-md) {
+    padding: 64px;
   }
 }
 
 .searchContainer {
   margin-top: 2rem;
   background-color: white;
-  padding: 24px 80px;
+  padding: 24px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -344,28 +344,200 @@
 }
 
 .featuredDatabases {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 32px;
-  flex-direction: row;
-  @media (max-width: $bp-md) {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  // create a grid of 4 cols and two rows
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 1rem;
 }
 
 .featuredDatabases__item {
   border-radius: 5px;
   border: 1px solid #d9d9d9;
-  width: 52px;
-  height: 52px;
+  flex: 1 1 0;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 14px;
 }
 
 .featuredDatabases__item__logo {
   width: 100%;
   height: auto;
+}
+
+.card-use-case {
+  text-align: center;
+
+  a {
+    background-image: none;
+  }
+
+  .fr-card__content {
+    border-bottom: 3px solid var(--text-action-high-blue-france);
+  }
+}
+
+.logo-carousel {
+  margin: 3rem auto 0;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+}
+
+.logo-carousel__track {
+  display: flex;
+  animation: scroll 30s linear infinite;
+  width: fit-content;
+}
+
+.logo-carousel__item {
+  flex-shrink: 0;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-carousel__logo {
+  height: 92px;
+  width: auto;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+// TabBox Component Styles
+.tabBox {
+  background: white;
+  padding: 1rem 0 0 0;
+  overflow: hidden;
+}
+
+.tabNavShell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1rem;
+}
+
+.tabNavigation {
+  background: #f5f7fc;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border-radius: 10px;
+
+  @media (min-width: $bp-md) {
+    width: auto;
+    display: inline-flex;
+  }
+}
+
+.tabButton {
+  background: none;
+  padding: 0.25rem 1rem;
+  font-weight: 500;
+  color: #1a4da0;
+  border-radius: 0.4375rem;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+
+  transition: all 0.2s ease;
+
+  @media (min-width: $bp-md) {
+    padding: 0.75rem 1.5rem;
+    margin-right: 0.5rem;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.active {
+    opacity: 1;
+    background: #e7edff;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+body .tabButton:hover {
+  background-color: #ffffff;
+}
+
+.tabContent {
+  @media (min-width: $bp-md) {
+    flex-direction: row-reverse;
+    max-height: 272px;
+  }
+
+  [class~='fr-card__desc'] {
+    margin-top: 0;
+  }
+
+  [class~='fr-card__body'] {
+    justify-content: space-between;
+    height: inherit;
+  }
+
+  [class~='fr-card__content'] {
+    padding-bottom: 0;
+  }
+  .card__end {
+    display: none;
+  }
+}
+
+.tools_desc {
+  font-size: 1.3em;
 }
