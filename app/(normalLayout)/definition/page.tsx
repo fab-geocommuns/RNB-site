@@ -38,7 +38,11 @@ export default async function Page() {
                   <p className={styles.bdgDefinition}>
                     Construction souterraine et/ou au-dessus du sol, ayant pour
                     objectif d&apos;être permanente, pour{' '}
-                    <a href="#" target="_blank" className="target-blank-noIcon">
+                    <a
+                      href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#abriter"
+                      target="_blank"
+                      className="target-blank-noIcon"
+                    >
                       abriter
                     </a>{' '}
                     des humains ou des activités humaines. Un bâtiment possède a

@@ -1,6 +1,6 @@
 - id: piscine
   title: Piscine
-  description: Piscine, y compris les piscines avec dôme.
+  description: Piscine, y compris les piscines avec abri ou hors-sol.
   isBuilding: false
   image: piscine.png
 
