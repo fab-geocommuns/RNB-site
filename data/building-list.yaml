@@ -19,11 +19,6 @@
   isBuilding: false
   image: kiosque.png
 
-- id: ruine
-  title: Ruine
-  isBuilding: false
-  image: ruine.png
-
 - id: abri-jardin
   title: Cabane ou abri de petite dimension
   isBuilding: false
