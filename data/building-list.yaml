@@ -16,6 +16,7 @@
 
 - id: kiosque
   title: Kiosque et abri ouvert
+  description: Un bâtiment est "abritant", au sens d’une protection des éléments extérieurs et intempéries. Pour qu'il remplisse cette condition, il faut pouvoir facilement distinguer un dedans et un dehors, grâce une ou plusieurs entrées.
   isBuilding: false
   image: kiosque.png
 
@@ -102,7 +103,7 @@
 
 - id: tunnel
   title: Tunnel, galerie
-  description: Un tunnels en tant qu'ouvrage d'art n'est pas à considérer comme un bâtiment.
+  description: Un tunnel, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment.
   isBuilding: false
   image: tunnel.png
 
@@ -155,7 +156,7 @@
   image: recreatif-culturel.png
 
 - id: ecole-universite-recherche
-  title: Ecole, université ou bâtiment dédié à la recherche
+  title: École, université ou bâtiment dédié à la recherche
   description: Ces types de bâtiments font partie des grands ensembles, <a href="#grand-ensemble">voir les explications.</a>
   isBuilding: true
   image: ecole-universite-recherche.png
@@ -185,8 +186,8 @@
   image: reservoir.png
 
 - id: poste-transformation-electrique
-  title: Poste de transformation électrique suffisamment grands
-  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  title: Poste de transformation électrique suffisamment grand
+  description: Les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: Transformateur_électrique_Guillerval.png
 
@@ -239,7 +240,7 @@
 
 - id: annexe-autonome
   title: Annexe contiguë/autonome
-  description: Les annexes autonomes sont des bâtiments, <a href="#annexe-autonome">Voir les explications.</a>
+  description: Les annexes autonomes sont des bâtiments, <a href="#annexe-autonome">voir les explications.</a>
   isBuilding: true
   image: annexe-autonome.jpeg
   distinctionBetweenSingleAndMultipleText: Une annexe est considérée comme un bâtiment autonome si on ne peut pas circuler entre les deux bâtiments depuis l’intérieur.
@@ -253,7 +254,7 @@
 
 - id: passerelle
   title: Bâtiments reliés par une passerelle
-  description: <a href="#passerelle">Voir les explications.</a> © Le bon marché, LVMH.
+  description: <a href="#passerelle">Voir les explications.</a> © Le Bon Marché, LVMH.
   isBuilding: true
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, on décompte bien deux bâtiments distincts. On peut si besoin rattacher la passerelle à l'un des deux bâtiments.
