@@ -521,6 +521,7 @@ export const useMapLayers = ({
       tiles: [SRC_BAN_URL],
       minzoom: 10,
       maxzoom: 14,
+
       promoteId: 'id',
     });
 
@@ -529,6 +530,7 @@ export const useMapLayers = ({
       source: SRC_BAN,
       'source-layer': 'adresses',
       type: 'circle',
+      minzoom: 16,
       paint: {
         'circle-radius': 3,
         'circle-stroke-color': '#ffffff',
@@ -547,7 +549,7 @@ export const useMapLayers = ({
       source: SRC_BAN,
       'source-layer': 'adresses',
       type: 'symbol',
-      minzoom: 10,
+      minzoom: 16,
       paint: {
         // change text color if 'certifie' is true
         'text-color': [
