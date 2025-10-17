@@ -2,6 +2,9 @@
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 
+// url
+import { headers } from 'next/headers';
+
 // Components
 import LoginForm from '@/components/authentication/LoginForm';
 import CreateAccountForm from '@/components/authentication/CreateAccountForm';
@@ -11,11 +14,39 @@ import styles from '@/styles/login.module.scss';
 
 import summerStyles from '@/styles/summerGames.module.scss';
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   // We don't want to allow users that are already logged in to access this page
   const session = await getServerSession();
   if (session) {
     redirect('/edition');
+  }
+
+  // Check the redirectUrl is sage (no javascript url and no eval)
+  const redirectUrl = (await searchParams).redirect as string | undefined;
+
+  const headersList = await headers();
+
+  if (redirectUrl) {
+    const requestHost = headersList.get('host');
+    const requestProtocol = headersList.get('x-forwarded-proto');
+    const requestUrlRoot = requestProtocol
+      ? `${requestProtocol}://${requestHost}`
+      : `https://${requestHost}`;
+
+    try {
+      const redirectUrlObj = new URL(redirectUrl, requestUrlRoot);
+      const requestUrlObj = new URL(requestUrlRoot);
+
+      if (redirectUrlObj.origin !== requestUrlObj.origin) {
+        throw new Error('Mauvaise origine');
+      }
+    } catch {
+      redirect('/login');
+    }
   }
 
   const enableCreateAccount = process.env.ENABLE_CREATE_ACCOUNT === 'true';

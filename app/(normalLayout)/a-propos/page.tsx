@@ -22,48 +22,48 @@ export default function Page() {
             À propos du Référentiel National des Bâtiments
           </h1>
 
-          <h2>
+          <h2 className="fr-h4">
             Problématique : le cloisonnement de l&apos;information bâtimentaire
           </h2>
           <p>
             Jusqu&apos;à présent, les données liées aux bâtiments sont détenues
-            par une multitude d’acteurs, travaillant en silos. Les
+            par une multitude d&apos;acteurs, travaillant en silos. Les
             administrations, les collectivités et de nombreux acteurs privés (ex
-            : fournisseurs d’énergie), œuvrent individuellement pour produire et
-            obtenir l&apos;information sans que celle-ci soit mise en commun.
+            : fournisseurs d&apos;énergie), œuvrent individuellement pour
+            produire et obtenir l&apos;information sans que celle-ci soit mise
+            en commun.
           </p>
           <p>
             Cette absence de base de données nationale de référence sur le
             bâtiment engendre des ralentissements et des coûts importants dans
-            la conduite d&apos;actions publiques et territoriales, pour répondre
-            aux enjeux de la transition écologique ou du logement notamment.
+            la conduite d&apos;actions publiques et territoriales.
           </p>
 
-          <h2>
-            Solution : le RNB, la plaque d&apos;immatriculation du bâtiment
+          <h2 className="fr-h4">
+            Solution : rendre efficace et commune l&apos;identification des
+            bâtiments et l&apos;échange d&apos;informations les concernant
           </h2>
           <p>
-            Le Référentiel national des bâtiments (RNB) est un service public
-            numérique, qui a pour vocation de créer une nouvelle donnée
-            nationale de référence du bâtiment, inexistante jusqu&apos;ici et
-            pourtant essentielle à la conduite de nombreuses politiques
-            publiques.{' '}
+            Le Référentiel National des Bâtiments (RNB) est un service public
+            numérique, qui répertorie l&apos;ensemble des bâtiments du
+            territoire et leur associe un identifiant unique et pérenne
           </p>
           <p>
-            Pour cela, il répertorie l&apos;ensemble des bâtiments du territoire
-            et leur associe un identifiant unique. Cette donnée pivot, composée
-            d’une suite de 12 caractères alphanumériques, permet d’être
-            facilement reproductible et transmissible par une personne ou un
-            logiciel.{' '}
+            Une fois attribué au bâtiment, cet identifiant pivot, appelé ID-RNB,
+            permet de simplifier le croisement et les échanges de données
+            bâtimentaires entre les administrations publiques, les collectivités
+            et les acteurs privés.
           </p>
           <p>
-            Une fois attribuée au bâtiment, cette véritable plaque
-            d&apos;immatriculation du bâtiment permet de simplifier le suivi et
-            le croisement de différents jeux de données bâtimentaires pour les
-            administrations publiques, les collectivités et les acteurs privés.
+            Le RNB unifie ainsi la connaissance portant sur chaque bâtiment,
+            tout en améliorant la qualité des données du bâtiment dont disposent
+            les différents acteurs, pour opérer le suivi et la gestion de leur
+            parc immobilier.
           </p>
 
-          <h2>Méthode : Co-construire ensemble ce nouveau géocommun</h2>
+          <h2 className="fr-h4">
+            Méthode : Co-construire ensemble ce nouveau géocommun
+          </h2>
           <p>
             Le financement du RNB est assuré conjointement par l&apos;Agence de
             la Transition Écologique (
@@ -87,10 +87,18 @@ export default function Page() {
             <a href="https://www.ign.fr/" target="_blank">
               IGN
             </a>
+            ) et le Fonds d&apos;investissement « Numérique et Données » pour la
+            planification écologique (
+            <a
+              href="https://incubateur.anct.gouv.fr/offre/guichet-cohesion-territoires-FINDPE"
+              target="_blank"
+            >
+              FINDPE
+            </a>
             ).
           </p>
           <p>
-            Le service est réalisé à la fabrique des géocommuns,
+            Le service est réalisé à la fabrique de la donnée territoriale,
             l&apos;incubateur de l&apos;IGN, appliquant la méthode du programme{' '}
             <a href="https://beta.gouv.fr/" target="_blank">
               beta.gouv
@@ -114,47 +122,61 @@ export default function Page() {
             Vous souhaitez contribuer ? Toutes les contributions sont les
             bienvenues pour construire ce géocommun, faciliter et réduire les
             coûts de maintenance et optimiser la qualité des données. Contactez
-            nous sur <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+            l&apos;équipe du RNB sur{' '}
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
           </p>
 
-          <div className="block block--paleGreen fr-mt-24v">
+          <div className="block block--yellow fr-mt-24v">
             <div className="fr-grid-row fr-grid-row--gutters ">
-              <div className="fr-col-12 fr-col-md-3">
-                <ImageNext
-                  className={styles.fnvLogo}
-                  src={logoFnv}
-                  alt="France Nation Verte"
-                />
-              </div>
-              <div className="fr-col-12 fr-col-md-9">
+              <div className="fr-col-12">
                 <p className="block__title">
                   <strong>
-                    Le RNB prioritaire pour la feuille de route Numérique et
-                    Données de France Nation Verte
+                    D’où proviennent les données du RNB ? Comment le RNB est mis
+                    à jour ?
                   </strong>
                 </p>
                 <p>
-                  L’année 2024 s’annonce importante pour le RNB sur le plan son
-                  déploiement et de sa diffusion au sein des “Systèmes
-                  d’information métiers et partenaires-clés (DPE, Autorisations
-                  Droits des Sols, SDIS, BD TOPO, etc).” Des jalons essentiels
-                  qui permettront, à terme, comme le précise les axes du groupe
-                  de travail “Mieux se Loger” de France Nation Verte de
-                  “consolider les analyses à la maille du logement et du
-                  bâtiment”.
+                  Les bâtiments présentés dans le RNB sont essentiellement issus
+                  d’une fusion de la 
+                  <a href="https://geoservices.ign.fr/bdtopo" target="_blank">
+                    BDTOPO
+                  </a>
+                  , éditée par l’IGN et de la 
+                  <a href="https://bdnb.io/" target="_blank">
+                    BDNB
+                  </a>
+                  , éditée par le CSTB. La mise à jour du RNB est aujourd’hui
+                  réalisée par :
                 </p>
-                <p>
-                  <small>
-                    Cf.{' '}
+                <ul>
+                  <li>
+                    les importations, lors de parution de nouveaux millésimes de
+                    la BDTOPO
+                  </li>
+
+                  <li>les imports des Bases Adresses Locales (BAL)</li>
+                  <li>
+                    les 
                     <a
-                      href="https://www.info.gouv.fr/france-nation-verte/a-proposfeuille-de-route-numerique-donnees"
-                      target="_blankl"
+                      href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#communaute-et-contributions"
+                      target="_blank"
                     >
-                      Cf. Feuille de route Numérique et Données pour la
-                      Planification écologique France Nation Verte
-                    </a>{' '}
-                    du 22 décembre 2023 - page 68
-                  </small>
+                      contributions
+                    </a>
+                     de la communauté, à savoir les éditions directes dans le
+                    RNB ; ainsi que par les signalements reçus par une personne
+                    suggérant une modification du contenu du RNB, sans la
+                    réaliser par elle-même.
+                  </li>
+                </ul>
+                <p>
+                  En savoir plus sur{' '}
+                  <a
+                    href="https://rnb-fr.gitbook.io/documentation/cycle-de-vie-de-la-donnee"
+                    target="_blank"
+                  >
+                    le cycle de vie de la donnée du RNB
+                  </a>
                 </p>
               </div>
             </div>
