@@ -8,10 +8,13 @@ import {
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
   SRC_BDGS_SHAPES,
+  LAYER_BAN_POINT,
+  LAYER_BAN_TXT,
 } from '@/components/map/useMapLayers';
 import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { toasterSuccess } from '@/components/contribution/toaster';
+import { displayBANPopup } from './BanLayerEvent';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -56,6 +59,14 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
           5,
         );
+
+        if (featureOnCursor) {
+          if (
+            [LAYER_BAN_POINT, LAYER_BAN_TXT].includes(featureOnCursor.layer.id)
+          ) {
+            displayBANPopup(map, featureCloseToCursor);
+          }
+        }
 
         const rnbIdClickedOn = featureOnCursor
           ? featureOnCursor.properties.rnb_id

@@ -156,10 +156,12 @@ export const useMapLayers = ({
       installBuildings(map);
       await installADS(map);
 
-      await installBAN(map);
-
       if (layers.extraLayers.includes('plots')) {
         installPlots(map);
+      }
+
+      if (layers.extraLayers.includes('addresses')) {
+        await installBAN(map);
       }
     } catch (e) {
       throw e;

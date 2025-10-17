@@ -6,8 +6,6 @@ export const displayBANPopup = (map: maplibregl.Map, addressFeature: any) => {
     certStr = 'Adresse BAN certifiée';
   }
 
-  console.log('addressFeature', addressFeature);
-
   new maplibregl.Popup()
     .setLngLat(addressFeature.geometry.coordinates)
     .setHTML(
