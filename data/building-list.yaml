@@ -25,7 +25,7 @@
   image: abri-jardin.png
 
 - id: monument
-  title: Monument
+  title: Monument sans accès intérieur
   isBuilding: false
   image: monument.jpg
 
