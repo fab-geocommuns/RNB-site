@@ -15,8 +15,7 @@
   image: toit-couvert.png
 
 - id: kiosque
-  title: Construction ouverte (kiosque, préau)
-  description: <a href="#abriter-activites-humaines">Voir les explications.</a>
+  title: Kiosque et abri ouvert
   isBuilding: false
   image: kiosque.png
 
@@ -43,9 +42,9 @@
 
 - id: balustrade
   title: Appartements en balustrade
-  description: Si elle est continue et dépourvue et séparation, on peut considérer que la balustrade fait partie du bâtiment et la traiter comme un couloir. Les appartements en questions sont alors des locaux faisant partie d’un même bâtiment.
+  description: Si elle est continue et dépourvue de séparation, on peut considérer que la balustrade fait partie du bâtiment et la traiter comme un couloir. Les appartements en questions sont alors des locaux faisant partie d’un même bâtiment.
   isBuilding: true
-  image: balustrade.jpeg
+  image: balustrade.jpg
 
 - id: conteneur-chantier
   title: Conteneur de chantier
@@ -53,10 +52,10 @@
   image: conteneur-chantier.png
 
 - id: auvent
-  title: Préau ou auvent attenant à un bâtiment, sans accès vers celui-ci
-  description: Si elle n'est pas considérée comme abritante, la construction n'est pas un bâtiment, qu'elle soit attenante à un bâtiment ou non. Dans le cas contraire, c'est un bâtiment à part entière. <a href="#abriter-activites-humaines">Voir les explications.</a>
+  title: Préau et auvent
+  description: La construction n'est pas un bâtiment, qu'elle soit attenante à un bâtiment ou non.
   isBuilding: false
-  image: auvent.jpeg
+  image: auvent.jpg
 
 - id: tente
   title: Tente
@@ -78,8 +77,8 @@
   isBuilding: false
   image: abri-deux-roues.png
 
-- id: petit-boitier-electrique
-  title: Petit boîtier de distribution électrique
+- id: petite-armoire-electrique
+  title: Petite armoire de distribution électrique
   isBuilding: false
   image: petit-boitier-electrique.png
 
@@ -174,19 +173,19 @@
 
 - id: batiment-agricole
   title: Bâtiment agricole (ex. étable, serre permanente, grange, écurie)
-  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  description: Les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: batiment-agricole.png
 
 - id: grande-eolienne
   title: Grande éolienne
-  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  description: Les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: eolienne.png
 
 - id: reservoir-silo-agricole
   title: Réservoir & silo agricole
-  description: En effet, les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
+  description: Les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
   image: reservoir.png
 
@@ -224,7 +223,7 @@
   image: tiny-house.png
 
 - id: kiosque-journaux
-  title: Kiosque journaux
+  title: Kiosque à journaux
   description: Les constructions dites légères, sans fondations, mais avec objectif de permanence, sont des bâtiments au sens du RNB.
   isBuilding: true
   image: kiosque-journaux.png
@@ -263,10 +262,3 @@
   isBuilding: true
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, on décompte bien deux bâtiments distincts. On peut si besoin rattacher la passerelle à l'un des deux bâtiments.
-
-- id: abriter-activites-humaines
-  title: Abriter des humains et des activités humaines
-  description: <a href="#abriter-activites-humaines">Voir les explications.</a>
-  isBuilding: true
-  image: kiosque.png
-  distinctionBetweenSingleAndMultipleText: Le terme « abriter » doit s’entendre au sens d’une protection des éléments extérieurs et intempéries. Pour qu’un bâtiment soit abritant, il faut pouvoir facilement distinguer un dedans et un dehors, grâce une ou plusieurs entrées.
