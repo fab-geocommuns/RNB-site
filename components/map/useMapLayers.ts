@@ -509,7 +509,7 @@ export const useMapLayers = ({
   };
 
   const installBAN = async (map: maplibregl.Map) => {
-    const certifiedColor = '#026902';
+    const certifiedColor = '#049c04';
     const notCertifiedColor = '#777777';
 
     if (map.getLayer(LAYER_BAN_POINT)) map.removeLayer(LAYER_BAN_POINT);

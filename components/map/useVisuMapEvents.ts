@@ -75,8 +75,6 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           e.point.y,
         );
 
-        console.log('featureCloseToCursor', featureCloseToCursor);
-
         handleFeatureHover(
           map!,
           previousHoveredFeatureId,

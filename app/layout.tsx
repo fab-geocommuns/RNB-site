@@ -4,7 +4,7 @@ import {
   DsfrHead,
 } from '../dsfr-bootstrap/server-only-index';
 import { DsfrProvider } from '../dsfr-bootstrap';
-import { defaultColorScheme } from '../dsfr-bootstrap/defaultColorScheme';
+
 import '@/styles/global.scss';
 
 // Auth

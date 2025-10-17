@@ -2,6 +2,7 @@
 
 // Styles
 import styles from '@/styles/mapPage.module.scss';
+import '@/styles/mapBanLayer.scss';
 
 // Hooks
 import { useEffect } from 'react';
