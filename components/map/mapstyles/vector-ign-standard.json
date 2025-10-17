@@ -28,7 +28,8 @@
     "plan_ign": {
       "type": "vector",
       "tiles": ["https://data.geopf.fr/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf"],
-      "maxzoom": 18
+      "maxzoom": 18,
+      "attribution": "<a target='_blank' href='https://geoservices.ign.fr/documentation/donnees/ortho/bdortho' /> © IGN </a>"
     },
     "admin_express": {
       "type": "vector",

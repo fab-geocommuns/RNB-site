@@ -60,7 +60,7 @@ export type MapBackgroundLayer =
   | 'vectorOsm'
   | 'vectorIgnStandard';
 export type MapBuildingsLayer = 'point' | 'polygon';
-export type MapExtraLayer = 'ads' | 'plots';
+export type MapExtraLayer = 'ads' | 'plots' | 'addresses';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {
