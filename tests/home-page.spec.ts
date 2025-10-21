@@ -74,4 +74,19 @@ test.describe("Page d'accueil", () => {
       await expect(ign).toBeVisibleOnMap();
     }
   });
+
+  test("empêche l'execution d'un script inline (CSP)", async ({ homePage }) => {
+    const msgPromise = homePage.page.waitForEvent('console');
+    await homePage.page.evaluate(() => {
+      const image = document.createElement('img');
+      image.src = 'https://placehold.co/600x400/EEE/31343C';
+      document.body.appendChild(image);
+    });
+    const message = (await msgPromise).text();
+    // Chrome: Refused to load the image 'https://placehold.co/600x400/EEE/31343C' because it violates the following Content Security Policy directive: "img-src 'self' blob: data: https://rnb-open.s3.fr-par.scw.cloud/ https://referentiel-national-du-batiment.ghost.io/
+    // Firefox: [JavaScript Error: \"Content-Security-Policy: The page’s settings blocked the loading of a resource (img-src) at https://placehold.co/600x400/EEE/31343C because it violates the following directive: “img-src 'self' blob: data: https://rnb-open.s3.fr-par.scw.cloud/ https://referentiel-national-du-batiment.ghost.io/”\" {file: \"debugger eval code line 291 > eval\" line: 3}]
+    expect(message).toMatch(/(Refused to load|blocked the loading)/i);
+    expect(message).toContain('https://placehold.co/600x400/EEE/31343C');
+    expect(message).toMatch(/Content.Security.Policy/i);
+  });
 });

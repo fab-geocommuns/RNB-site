@@ -109,6 +109,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         iconId: 'ri-arrow-down-circle-line',
         linkProps: {
           href: '/mon-compte',
+          'data-testid': 'my-account-button',
         },
         text: 'Mon compte',
       };
