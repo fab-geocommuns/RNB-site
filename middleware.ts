@@ -21,6 +21,7 @@ function cspMiddleware(request: NextRequest) {
     ...tileOrigins,
     sentryOrigin,
   ];
+  const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
   const mediaOrigins = [
     'https://rnb-open.s3.fr-par.scw.cloud/',
     'https://referentiel-national-du-batiment.ghost.io/',
@@ -29,6 +30,7 @@ function cspMiddleware(request: NextRequest) {
   // When it's fixed, we can remove it.
   const cspHeader = `
     default-src 'self';
+    frame-src 'self' ${frameOrigins.join(' ')};
     connect-src 'self' ${connectOrigins.join(' ')};
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ''};
     style-src 'self' 'unsafe-inline';
