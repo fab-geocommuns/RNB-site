@@ -15,11 +15,13 @@ function cspMiddleware(request: NextRequest) {
     'https://openmaptiles.github.io/',
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';
+  const newsletterOrigin = 'https://9468302f.sibforms.com/';
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
     ...tileOrigins,
     sentryOrigin,
+    newsletterOrigin,
   ];
   const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
   const mediaOrigins = [
