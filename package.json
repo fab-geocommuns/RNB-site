@@ -50,7 +50,7 @@
     "yaml": "^2.5.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.46.0",
+    "@playwright/test": "^1.56.1",
     "@types/mapbox__mapbox-gl-draw": "^1.4.8",
     "@types/terraformer__wkt": "^2.0.3",
     "husky": "^9.1.4",
