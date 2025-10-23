@@ -13,6 +13,7 @@ import backgroundSatellite from '@/public/images/map/switch-bckg-sat.jpg';
 import backgroundPlanIGN from '@/public/images/map/switch-bckg-plan-ign.png';
 import backgroundPlanOSM from '@/public/images/map/switch-bckg-plan-osm.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
+import extraAddresses from '@/public/images/map/switch-addresses.png';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
 
@@ -197,6 +198,13 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     label="Cadastre"
                     onClick={() => handleExtraLayerClick('plots')}
                     image={extraPlots}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('addresses')}
+                    isActive={mapLayers.extraLayers.includes('addresses')}
+                    label="Adresses"
+                    onClick={() => handleExtraLayerClick('addresses')}
+                    image={extraAddresses}
                   />
                 </ul>
               </div>

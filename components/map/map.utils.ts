@@ -4,6 +4,8 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_BDGS_POINT,
   LAYER_ADS_CIRCLE,
+  LAYER_BAN_POINT,
+  LAYER_BAN_TXT,
 } from '@/components/map/useMapLayers';
 import { distance } from '@turf/turf';
 
@@ -26,6 +28,8 @@ export const getNearestFeatureFromCursorWithBuffer = (
     LAYER_BDGS_SHAPE_POINT,
     LAYER_BDGS_POINT,
     LAYER_ADS_CIRCLE,
+    LAYER_BAN_POINT,
+    LAYER_BAN_TXT,
   ].filter((layer) => map.getLayer(layer));
 
   const bbox: [PointLike, PointLike] = [
