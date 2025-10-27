@@ -25,26 +25,32 @@ function LogoGrid() {
   const logos = [
     {
       src: amp.src,
+      alt: 'Métropole Aix-Marseille-Provence',
       scale: 1,
     },
     {
       src: smh.src,
+      alt: "Saint-Martin d'Hères",
       scale: 0.6,
     },
     {
       src: dataEs.src,
+      alt: 'Data ES',
       scale: 0.8,
     },
     {
       src: auditDpe.src,
+      alt: 'Audit DPE',
       scale: 1,
     },
     {
       src: datatourisme.src,
+      alt: 'Datatourisme',
       scale: 1,
     },
     {
       src: zlv.src,
+      alt: 'Zéro Logement Vacant',
       scale: 0.8,
     },
   ];
@@ -63,7 +69,7 @@ function LogoGrid() {
           <img
             className={styles.sponsorBlock__logo}
             src={logo.src}
-            alt={'logo'}
+            alt={logo.alt}
             style={{ transform: `scale(${logo.scale})` }}
           />
         </div>
