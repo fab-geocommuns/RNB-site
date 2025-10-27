@@ -10,7 +10,7 @@ export const displayBANPopup = (map: maplibregl.Map, addressFeature: any) => {
     .setLngLat(addressFeature.geometry.coordinates)
     .setHTML(
       `
-      <idv class="banPop">
+      <div class="banPop">
       <h6 class="banPopTitle">${certStr}</h6>
       <p class="banPopBody">${addressFeature.properties.numero || ''} ${addressFeature.properties.suffixe || ''}  ${addressFeature.properties.nomVoie || ''}<br />
       ${addressFeature.properties.nomCommune || ''}</p>
