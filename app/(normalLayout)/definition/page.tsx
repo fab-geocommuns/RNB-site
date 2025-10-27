@@ -8,6 +8,9 @@ import { parse } from 'yaml';
 import BuildingList from '@/app/(normalLayout)/definition/BuildingList';
 import { BuildingExample } from '@/app/(normalLayout)/definition/BuildingList.type';
 import BuildingDistinctions from '@/app/(normalLayout)/definition/BuildingDistinctions';
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle('Définition et Standard');
 
 async function fetchBuildingList() {
   const jsonDirectory = path.join(process.cwd(), 'data');

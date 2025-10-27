@@ -1,12 +1,7 @@
-'use client';
-
-// Styles
-import styles from '@/styles/stats.module.scss';
-import Link from 'next/link';
+import pageTitle from '@/utils/pageTitle';
 
 // Settings
-import { useState } from 'react';
-import { useEffect } from 'react';
+export const metadata = pageTitle('Statistiques');
 
 export default function Page() {
   return (

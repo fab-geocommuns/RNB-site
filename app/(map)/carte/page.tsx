@@ -17,8 +17,10 @@ import va from '@vercel/analytics';
 // Bus
 import Bus from '@/utils/Bus';
 import VisuMapSummerScore from '@/components/summerGames/visuMapSummerScore';
+import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
 
 export default function RNBMap() {
+  useClientSidePageTitle('Carte des bâtiments');
   // //////////////////////
   // Tracking address search
   // @ts-ignore
