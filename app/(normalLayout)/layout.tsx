@@ -92,22 +92,21 @@ export default function WithFooterLayout({
             links: [
               {
                 linkProps: {
-                  href: '/contact',
-                },
-                text: 'Nous écrire',
-              },
-
-              {
-                linkProps: {
                   href: 'https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/?originalSubdomain=fr',
                 },
                 text: 'LinkedIn',
               },
               {
                 linkProps: {
-                  href: 'https://matrix.to/#/#rnb:matrix.org',
+                  href: 'mailto:rnb@beta.gouv.fr',
                 },
-                text: 'Salons de discussion',
+                text: 'Nous écrire',
+              },
+              {
+                linkProps: {
+                  href: 'https://forum.geocommuns.fr/c/rnb/11',
+                },
+                text: 'Forum des Géocommuns',
               },
             ],
           },

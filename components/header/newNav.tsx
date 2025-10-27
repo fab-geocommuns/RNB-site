@@ -25,10 +25,10 @@ function MailLink() {
   return (
     <a
       title="Nous écrire"
-      href="mailto:contact@rnb.fr"
+      href="mailto:rnb@beta.gouv.fr"
       className={styles.contactLink}
     >
-      <ContactIcon src={mailIcon} alt="Mail" />
+      <ContactIcon src={mailIcon} alt="E-mail" />
     </a>
   );
 }
@@ -40,7 +40,7 @@ function ForumLink() {
       href="https://forum.geocommuns.fr/c/rnb/11"
       className={styles.contactLink}
     >
-      <ContactIcon src={forumIcon} alt="Forum" />
+      <ContactIcon src={forumIcon} alt="Forum des Géocommuns" />
     </a>
   );
 }
