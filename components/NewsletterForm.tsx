@@ -95,6 +95,7 @@ export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
             type="text"
             id="EMAIL"
             name="EMAIL"
+            aria-label="Adresse email"
             placeholder="Votre adresse email"
           />
           <input
