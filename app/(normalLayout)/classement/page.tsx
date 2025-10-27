@@ -1,4 +1,7 @@
+import pageTitle from '@/utils/pageTitle';
 import SummerGame from '@/components/summerGames/homeBlock';
+
+export const metadata = pageTitle('Classement');
 
 export default function Page() {
   return (
