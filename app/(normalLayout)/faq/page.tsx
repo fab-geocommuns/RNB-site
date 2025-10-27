@@ -9,6 +9,7 @@ import Summary from '@/components/faq/Summary';
 import BackToTop from '@/components/BackToTop';
 import AboutCol from '@/components/AboutCol';
 import { Highlight } from '@codegouvfr/react-dsfr/Highlight';
+import pageTitle from '@/utils/pageTitle';
 
 // Settings
 import settings from '@/logic/settings';
@@ -24,6 +25,8 @@ async function fetchFaqSections() {
 
   return data;
 }
+
+export const metadata = pageTitle('Foire aux questions');
 
 export default async function Page() {
   const sections = await fetchFaqSections();
