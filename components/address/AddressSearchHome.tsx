@@ -45,6 +45,7 @@ export default function AddressSearchHome() {
                   className="fr-input"
                   name="q"
                   placeholder="Rechercher un identifiant RNB ou une adresse"
+                  aria-label="Rechercher un identifiant RNB ou une adresse"
                   {...inputProps}
                 />
                 <button
