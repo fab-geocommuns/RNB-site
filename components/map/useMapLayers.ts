@@ -563,7 +563,6 @@ export const useMapLayers = ({
 
         'text-halo-color': '#ffffff',
         'text-halo-width': 1,
-        //'text-halo-blur': 1,
       },
       layout: {
         'text-font': ['Noto Sans Bold'],
