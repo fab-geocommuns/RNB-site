@@ -91,6 +91,7 @@ export default async function Page({
 
             <div className="fr-mb-16v">
               <img
+                alt=""
                 className={styles.featureImg}
                 src={post.feature_image || ''}
               />
