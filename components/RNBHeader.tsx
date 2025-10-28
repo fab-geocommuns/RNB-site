@@ -19,6 +19,7 @@ import logo from '@/public/images/logo.png';
 import { useEffect, useState } from 'react';
 import EditRNBButton from './EditRNBButton';
 import NewsletterModal from './home/NewsletterModal';
+import SkipLinks, { headerId } from './SkipLinks';
 
 type Props = {
   withNavigation?: boolean;
@@ -168,7 +169,9 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           </Link>
         </div>
       </explainModal.Component>
+      <SkipLinks />
       <Header
+        id={headerId}
         brandTop={
           <>
             République
