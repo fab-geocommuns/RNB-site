@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import Input from '@codegouvfr/react-dsfr/Input';
 
 function isSafeRedirectUrl(url: string): boolean {
   try {
@@ -94,39 +95,34 @@ export default function LoginForm() {
         method="post"
         data-testid="login-form"
       >
-        <div className="fr-input-group">
-          <label className="fr-label" htmlFor="email">
-            Email
-          </label>
-
-          <input
-            className="fr-input"
-            type="text"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => {
+        <Input
+          label="Email"
+          id="email"
+          nativeInputProps={{
+            name: 'email',
+            type: 'email',
+            required: true,
+            value: email,
+            onChange: (e) => {
               setEmail(e.target.value);
-            }}
-          />
-        </div>
+            },
+          }}
+        />
 
-        <div className="fr-input-group">
-          <label className="fr-label" htmlFor="password">
-            Mot de passe
-          </label>
-          <input
-            className="fr-input"
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e) => {
+        <Input
+          label="Mot de passe"
+          id="password"
+          nativeInputProps={{
+            name: 'password',
+            type: 'password',
+            required: true,
+            value: password,
+            onChange: (e) => {
               setPassword(e.target.value);
-            }}
-            autoFocus={prefilledEmail !== ''}
-          />
-        </div>
+            },
+            autoFocus: prefilledEmail !== '',
+          }}
+        />
 
         <div className="fr-mb-3w">
           <a
