@@ -26,6 +26,7 @@ export default function EditRNBButton({ modal }: any) {
           href="#"
           className={styles.infoBtn}
           onClick={(e) => explainBtnClickHandler(e)}
+          aria-label="Aide à l'édition du RNB"
         >
           <i className="fr-icon fr-icon-question-line"></i>
         </a>
