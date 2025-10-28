@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { Footer } from '@codegouvfr/react-dsfr/Footer';
 import RNBHeader from '@/components/RNBHeader';
 import { StartDsfrOnHydration } from '@codegouvfr/react-dsfr/next-app-router';
+import { mainContentId, footerId } from '@/components/SkipLinks';
 
 export const metadata: Metadata = {
   title: {
@@ -24,8 +25,9 @@ export default function WithFooterLayout({
     <>
       <RNBHeader />
       <StartDsfrOnHydration />
-      {children}
+      <div id={mainContentId}>{children}</div>
       <Footer
+        id={footerId}
         brandTop={
           <>
             République

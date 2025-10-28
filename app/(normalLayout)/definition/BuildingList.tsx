@@ -41,6 +41,7 @@ export default function BuildingList({ buildingList }: BuildingListProps) {
           <div className="fr-col-12 fr-col-lg-4">
             <Input
               nativeInputProps={{
+                'aria-label': 'Rechercher une construction',
                 placeholder: 'Rechercher une construction',
                 value: recherche,
                 onChange: (e) => setRecherche(e.target.value),
