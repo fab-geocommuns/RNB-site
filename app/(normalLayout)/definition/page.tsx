@@ -34,9 +34,9 @@ export default async function Page() {
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className="fr-col-12 fr-col-md-8">
                 <div className="block block--paleGreen block--fill">
-                  <h3 className="block__title">
+                  <h2 className="block__title">
                     Définition d&apos;un bâtiment
-                  </h3>
+                  </h2>
 
                   <p className={styles.bdgDefinition}>
                     Construction souterraine et/ou au-dessus du sol, ayant pour
