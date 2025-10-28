@@ -9,6 +9,7 @@ import AddressInput from '@/components/address/AddressInput';
 
 import styles from '@/styles/home.module.scss';
 import { queryIsRnbId } from './utils';
+import { homeSearchId } from '../SkipLinks';
 
 export default function AddressSearchHome() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function AddressSearchHome() {
             render={(inputProps: any) => (
               <>
                 <input
+                  id={homeSearchId}
                   className="fr-input"
                   name="q"
                   placeholder="Rechercher un identifiant RNB ou une adresse"
