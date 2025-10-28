@@ -7,7 +7,7 @@ type BuildingAdresseProps = {
 };
 
 function banLookupApiUrl(interopBanId: string) {
-  return process.env.NEXT_PUBLIC_API_BAN_URL + '/lookup/' + interopBanId;
+  return `https://plateforme.adresse.data.gouv.fr/lookup/${interopBanId}`;
 }
 function NewBANId({ interopBanId }: { interopBanId: string }) {
   const [newBanId, setNewBanId] = useState(null);
