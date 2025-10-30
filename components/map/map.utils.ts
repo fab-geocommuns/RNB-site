@@ -1,4 +1,4 @@
-import maplibregl, { MapGeoJSONFeature, Point, PointLike } from 'maplibre-gl';
+import maplibregl, { MapGeoJSONFeature, PointLike } from 'maplibre-gl';
 import {
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
@@ -105,7 +105,6 @@ export const getNearestFeatureFromCursorWithBuffer = (
       }
     });
   }
-
 
   return closestFeature;
 };
