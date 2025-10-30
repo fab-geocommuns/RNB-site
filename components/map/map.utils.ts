@@ -106,8 +106,6 @@ export const getNearestFeatureFromCursorWithBuffer = (
     });
   }
 
-  console.log('-- result');
-  console.log('closest feature:', closestFeature);
 
   return closestFeature;
 };
