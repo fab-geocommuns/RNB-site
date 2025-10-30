@@ -49,14 +49,12 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
       const handleClickEvent = (e: MapMouseEvent) => {
         const featureOnCursor = getNearestFeatureFromCursorWithBuffer(
           map,
-          e.point.x,
-          e.point.y,
+          e,
           0,
         );
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map,
-          e.point.x,
-          e.point.y,
+          e,
           5,
         );
 
@@ -145,8 +143,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
       const handleMouseMove = (e: MapMouseEvent) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map!,
-          e.point.x,
-          e.point.y,
+          e,
           0,
         );
 

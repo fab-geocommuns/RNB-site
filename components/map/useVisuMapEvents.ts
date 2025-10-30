@@ -68,17 +68,17 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
 
       /////////////
       const handleMouseMove = (e: MapMouseEvent) => {
-        // const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
-        //   map!,
-        //   e.point.x,
-        //   e.point.y,
-        // );
-        // handleFeatureHover(
-        //   map!,
-        //   previousHoveredFeatureId,
-        //   previousHoveredFeatureSource,
-        //   featureCloseToCursor,
-        // );
+        const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
+          map!,
+          e,
+          5,
+        );
+        handleFeatureHover(
+          map!,
+          previousHoveredFeatureId,
+          previousHoveredFeatureSource,
+          featureCloseToCursor,
+        );
       };
       // Évenement de déplacement du curseur: changement de pointeur si proche d'un bâtiment
       map.on('mousemove', handleMouseMove);
