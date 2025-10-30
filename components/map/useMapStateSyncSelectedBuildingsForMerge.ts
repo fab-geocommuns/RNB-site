@@ -63,8 +63,7 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
       const handleClickEvent = (e: MapMouseEvent) => {
         const featureOnCursor = getNearestFeatureFromCursorWithBuffer(
           map,
-          e.point.x,
-          e.point.y,
+          e,
           0,
         );
         if (
