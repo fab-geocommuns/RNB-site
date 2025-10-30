@@ -45,8 +45,8 @@ export const getNearestFeatureFromCursorWithBuffer = (
     const maxY = y + buffer;
 
     bbox = [
-      [minX, maxY],
-      [maxX, minY],
+      [minX, minY],
+      [maxX, maxY],
     ];
   }
 
