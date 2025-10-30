@@ -39,14 +39,14 @@ export const getNearestFeatureFromCursorWithBuffer = (
 
   let bbox: [PointLike, PointLike] | PointLike = [x, y];
   if (buffer > 0) {
-    const min_x = x - buffer;
-    const max_x = x + buffer;
-    const min_y = y - buffer;
-    const max_y = y + buffer;
+    const minX = x - buffer;
+    const maxX = x + buffer;
+    const minY = y - buffer;
+    const maxY = y + buffer;
 
     bbox = [
-      [min_x, max_y],
-      [max_x, min_y],
+      [minX, maxY],
+      [maxX, minY],
     ];
   }
 
