@@ -534,9 +534,9 @@ export const useMapLayers = ({
       type: 'circle',
       minzoom: 16,
       paint: {
-        'circle-radius': 3,
+        'circle-radius': 4,
         'circle-stroke-color': '#ffffff',
-        'circle-stroke-width': 1,
+        'circle-stroke-width': 2,
         'circle-color': [
           'case',
           ['==', ['get', 'certifie'], true],
@@ -562,11 +562,11 @@ export const useMapLayers = ({
         ],
 
         'text-halo-color': '#ffffff',
-        'text-halo-width': 1,
+        'text-halo-width': 2,
       },
       layout: {
         'text-font': ['Noto Sans Bold'],
-        'text-size': 13,
+        'text-size': 14,
 
         'text-field': [
           'case',
