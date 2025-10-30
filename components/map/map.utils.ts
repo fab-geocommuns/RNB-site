@@ -34,8 +34,7 @@ export const getNearestFeatureFromCursorWithBuffer = (
 
   // First, we need to draw a bbxox expressed in pixels,
   // relative to the map container
-  const x = event.point.x;
-  const y = event.point.y;
+  const { x, y } = event.point;
 
   let bbox: [PointLike, PointLike] | PointLike = [x, y];
   if (buffer > 0) {
