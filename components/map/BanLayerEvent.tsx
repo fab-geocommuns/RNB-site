@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl';
-import { escapeHtml } from '../map/misc';
+import { escapeHtml } from '../util/misc';
 
 export const displayBANPopup = (map: maplibregl.Map, addressFeature: any) => {
   let certStr = 'Adresse BAN non certifiée';

@@ -31,6 +31,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map,
           e,
+          10,
         );
 
         if (featureCloseToCursor) {
@@ -71,7 +72,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map!,
           e,
-          5,
+          10,
         );
         handleFeatureHover(
           map!,
