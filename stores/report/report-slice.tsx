@@ -1,22 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export type ReportStore = {
-  filtersDrawerVisible: boolean;
+  filtersDrawerOpen: boolean;
 };
 
 const initialState: ReportStore = {
-  filtersDrawerVisible: false,
+  filtersDrawerOpen: false,
 };
 
 export const reportSlice = createSlice({
   name: 'report',
   initialState,
   reducers: {
-    showFiltersDrawer(state) {
-      state.filtersDrawerVisible = true;
+    toggleFiltersDrawer(state) {
+      state.filtersDrawerOpen = !state.filtersDrawerOpen;
     },
-    hideFiltersDrawer(state) {
-      state.filtersDrawerVisible = false;
+    openFiltersDrawer(state) {
+      state.filtersDrawerOpen = true;
+    },
+    closeFiltersDrawer(state) {
+      state.filtersDrawerOpen = false;
     },
   },
 });
+
+export const reportReducer = reportSlice.reducer;
+export const reportActions = reportSlice.actions;

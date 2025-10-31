@@ -6,6 +6,9 @@ $title-color: #414e71;
   right: 12px;
   top: 20px;
   z-index: 100;
+
+  max-width: 300px;
+  width: 300px;
 }
 
 .shell {
@@ -66,6 +69,13 @@ $title-color: #414e71;
     width: 25px;
     height: 25px;
   }
+}
+.closeLinkIcon {
+  display: inline-block;
+  transition: transform 0.5s ease;
+}
+.closeLinkIconOpen {
+  transform: rotate(180deg);
 }
 .body {
   flex-grow: 1;

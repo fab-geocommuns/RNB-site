@@ -19,9 +19,16 @@ import va from '@vercel/analytics';
 // Bus
 import Bus from '@/utils/Bus';
 
+// Store
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
+
 export default function RNBMap() {
   // Feature flag
   const showReportPanels = true;
+
+  // Map layers from store
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   // //////////////////////
   // Tracking address search
@@ -61,7 +68,9 @@ export default function RNBMap() {
       <div className={styles.map}>
         <AddressSearchMap />
         <VisuPanel />
-        {showReportPanels && <ReportPanels />}
+        {showReportPanels && mapLayers.extraLayers.includes('reports') && (
+          <ReportPanels />
+        )}
         <div className={styles.map__mapShell}>
           <VisuMap />
         </div>
