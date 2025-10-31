@@ -3,7 +3,7 @@
 import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
-import EditMapSummerScore from '@/components/summerGames/editMapSummerScore';
+
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
@@ -35,10 +35,6 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
-        <EditMapSummerScore
-          updatedAt={editMapSummerScoreUpdatedAt || 0}
-          username={user.username}
-        />
 
         <div className={styles.map__mapShell}>
           <EditMap
