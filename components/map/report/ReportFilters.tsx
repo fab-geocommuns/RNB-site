@@ -14,15 +14,14 @@ export default function ReportFilters() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.head}>
+      <div
+        className={styles.head}
+        onClick={() => dispatch(Actions.report.toggleFiltersDrawer())}
+      >
         <div>
           <h2 className={styles.subtitle}>Filtrer les signalements</h2>
         </div>
-        <a
-          href="#"
-          onClick={() => dispatch(Actions.report.toggleFiltersDrawer())}
-          className={styles.closeLink}
-        >
+        <a href="#" className={styles.closeLink}>
           <i
             className={[
               'fr-icon-arrow-down-s-line',

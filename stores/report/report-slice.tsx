@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
+  detailsPanelOpen: boolean;
 };
 
 const initialState: ReportStore = {
-  filtersDrawerOpen: false,
+  filtersDrawerOpen: true,
+  detailsPanelOpen: false,
 };
 
 export const reportSlice = createSlice({
