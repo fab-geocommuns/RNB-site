@@ -14,11 +14,6 @@ import { RootState } from '@/stores/store';
 export default function Page() {
   const { user } = useRNBAuthentication({ require: true });
 
-  // Summer challenge
-  const editMapSummerScoreUpdatedAt = useSelector(
-    (state: RootState) => state.edition.editMapSummerScoreUpdatedAt,
-  );
-
   if (!user) {
     return (
       <>
