@@ -1,6 +1,13 @@
 @import 'vars.scss';
 $title-color: #414e71;
 
+.reportShell {
+  position: absolute;
+  right: 12px;
+  top: 20px;
+  z-index: 100;
+}
+
 .shell {
   // The .shell is the invisible container
   position: absolute;
