@@ -14,6 +14,7 @@ import backgroundPlanIGN from '@/public/images/map/switch-bckg-plan-ign.png';
 import backgroundPlanOSM from '@/public/images/map/switch-bckg-plan-osm.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
 import extraAddresses from '@/public/images/map/switch-addresses.png';
+import extraReports from '@/public/images/map/switch-reports.png';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
 
@@ -22,6 +23,9 @@ import layersIcon from '@/public/images/map/layer-group-solid.svg';
 // Components
 import ImageNext from 'next/image';
 import { StaticImageData } from 'next/image';
+
+// Feature flags
+const showReports = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
 
 // Types
 import {
@@ -192,6 +196,15 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
               <h2 className={styles.sectionTitle}>Extras</h2>
               <div className={styles.sectionBody}>
                 <ul className={styles.choicesList}>
+                  {showReports && (
+                    <LayerButton
+                      isAvailable={isAvailable('reports')}
+                      isActive={mapLayers.extraLayers.includes('reports')}
+                      label="Signalements"
+                      onClick={() => handleExtraLayerClick('reports')}
+                      image={extraReports}
+                    />
+                  )}
                   <LayerButton
                     isAvailable={isAvailable('plots')}
                     isActive={mapLayers.extraLayers.includes('plots')}

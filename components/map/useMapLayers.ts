@@ -171,7 +171,9 @@ export const useMapLayers = ({
         await installBAN(map);
       }
 
-      installReports(map);
+      if (layers.extraLayers.includes('reports')) {
+        installReports(map);
+      }
     } catch (e) {
       throw e;
     } finally {
