@@ -160,8 +160,6 @@ export const useMapLayers = ({
     installAllRunning.current = true;
 
     try {
-      installReports(map);
-
       installBuildings(map);
       await installADS(map);
 
@@ -172,6 +170,8 @@ export const useMapLayers = ({
       if (layers.extraLayers.includes('addresses')) {
         await installBAN(map);
       }
+
+      installReports(map);
     } catch (e) {
       throw e;
     } finally {
@@ -523,6 +523,19 @@ export const useMapLayers = ({
     map.addSource(SRC_REPORTS, {
       type: 'geojson',
       data: mockReportsGeojson(),
+    });
+
+    map.addLayer({
+      id: LAYER_REPORTS_POINT,
+      type: 'circle',
+      source: SRC_REPORTS,
+
+      paint: {
+        'circle-radius': 6,
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 2,
+        'circle-color': '#ff0000',
+      },
     });
   };
 
