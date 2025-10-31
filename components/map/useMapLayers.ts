@@ -13,6 +13,9 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, RootState } from '@/stores/store';
 
+// Reports mock
+import { mockReportsGeojson } from '@/components/map/report/mock';
+
 ///////////////////////////////////
 ///////////////////////////////////
 // BUILDINGS
@@ -42,6 +45,10 @@ export const LAYERS_BDGS_SHAPE_ALL = [
   LAYER_BDGS_SHAPE_FILL,
   LAYER_BDGS_SHAPE_POINT,
 ];
+
+// Reports
+export const SRC_REPORTS = 'reports';
+export const LAYER_REPORTS_POINT = 'reports_point';
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
 
@@ -153,6 +160,8 @@ export const useMapLayers = ({
     installAllRunning.current = true;
 
     try {
+      installReports(map);
+
       installBuildings(map);
       await installADS(map);
 
@@ -508,6 +517,13 @@ export const useMapLayers = ({
     if (map.getSource(SRC_BDGS_SHAPES)) {
       map.removeSource(SRC_BDGS_SHAPES);
     }
+  };
+
+  const installReports = async (map: maplibregl.Map) => {
+    map.addSource(SRC_REPORTS, {
+      type: 'geojson',
+      data: mockReportsGeojson(),
+    });
   };
 
   const installBAN = async (map: maplibregl.Map) => {

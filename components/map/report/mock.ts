@@ -1,4 +1,4 @@
-export const mockReportsTiles = async () => {
+export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
   return {
     type: 'FeatureCollection',
     features: [
