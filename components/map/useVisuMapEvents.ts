@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Actions, AppDispatch, RootState } from '@/stores/store';
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { Actions, AppDispatch } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
-import { MapMouseEvent, MapLibreEvent } from 'maplibre-gl';
+import { MapMouseEvent } from 'maplibre-gl';
 import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
@@ -11,6 +11,7 @@ import {
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
   LAYER_REPORTS_POINT,
+  SRC_REPORTS,
 } from '@/components/map/useMapLayers';
 import { displayBANPopup } from './BanLayerEvent';
 import { map } from 'yaml/dist/schema/common/map';
@@ -34,6 +35,8 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           e,
           10,
         );
+
+        console.log('Clicked feature:', featureCloseToCursor);
 
         if (featureCloseToCursor) {
           // What did we click on?
@@ -65,8 +68,8 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           }
 
           if (featureCloseToCursor.layer.id === LAYER_REPORTS_POINT) {
-            const reportId = featureCloseToCursor.properties.id;
-            dispatch(Actions.map.selectReport(reportId));
+            const reportId = featureCloseToCursor.id as string | null;
+            dispatch(Actions.report.selectReport(reportId));
           }
         }
       };
@@ -115,25 +118,33 @@ export const handleFeatureHover = (
     previousHoveredFeatureId.current &&
     previousHoveredFeatureSource.current
   ) {
-    map.setFeatureState(
-      {
-        source: previousHoveredFeatureSource.current,
-        id: previousHoveredFeatureId.current,
-        sourceLayer: 'default',
-      },
-      { hovered: false },
-    );
+    let prevFeatureToUpdate: maplibregl.FeatureIdentifier = {
+      source: previousHoveredFeatureSource.current,
+      id: previousHoveredFeatureId.current,
+      sourceLayer: 'default',
+    };
+    // -- Part to remove when using vector tiles for reports instead of geojson source
+    if (prevFeatureToUpdate.source === SRC_REPORTS) {
+      delete prevFeatureToUpdate.sourceLayer;
+    }
+    // -- End of part to remove
+
+    map.setFeatureState(prevFeatureToUpdate, { hovered: false });
   }
 
   if (featureCloseToCursor && drawingOperation === null) {
-    map.setFeatureState(
-      {
-        source: featureCloseToCursor.layer.source,
-        id: featureCloseToCursor?.id,
-        sourceLayer: 'default',
-      },
-      { hovered: true },
-    );
+    let hoveredFeatureToUpdate: maplibregl.FeatureIdentifier = {
+      source: featureCloseToCursor.layer.source,
+      id: featureCloseToCursor?.id,
+      sourceLayer: 'default',
+    };
+    // -- Part to remove when using vector tiles for reports instead of geojson source
+    if (hoveredFeatureToUpdate.source == SRC_REPORTS) {
+      delete hoveredFeatureToUpdate.sourceLayer;
+    }
+    // -- End of part to remove
+
+    map.setFeatureState(hoveredFeatureToUpdate, { hovered: true });
 
     previousHoveredFeatureId.current = featureCloseToCursor?.id as string;
     previousHoveredFeatureSource.current = featureCloseToCursor?.layer

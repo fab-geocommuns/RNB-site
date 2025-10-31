@@ -1,3 +1,16 @@
+export const mockFetchReportById = async (reportId: string) => {
+  console.log('Fetching report with ID:', reportId);
+
+  const geojson = mockReportsGeojson();
+  const feature = geojson.features.find((feature) => feature.id === reportId);
+
+  if (feature) {
+    return feature;
+  } else {
+    return null;
+  }
+};
+
 export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
   return {
     type: 'FeatureCollection',
@@ -136,15 +149,6 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
         },
         geometry: {
           coordinates: [-0.4881073915809395, 44.754913331125834],
-          type: 'Point',
-        },
-      },
-      {
-        type: 'Feature',
-        id: 4,
-        properties: {},
-        geometry: {
-          coordinates: [-0.4864854304908022, 44.75551055513924],
           type: 'Point',
         },
       },

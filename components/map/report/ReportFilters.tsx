@@ -1,14 +1,11 @@
 // Store
-import { useSelector, useDispatch } from 'react-redux';
-import { Actions, RootState } from '@/stores/store';
+import { useDispatch } from 'react-redux';
+import { Actions } from '@/stores/store';
 
 import styles from '@/styles/genericPanel.module.scss';
 
-export default function ReportFilters() {
+export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   // Store
-  const filtersDrawerOpen = useSelector(
-    (state: RootState) => state.report.filtersDrawerOpen,
-  );
 
   const dispatch = useDispatch();
 
@@ -26,14 +23,14 @@ export default function ReportFilters() {
             className={[
               'fr-icon-arrow-down-s-line',
               styles.closeLinkIcon,
-              filtersDrawerOpen ? styles.closeLinkIconOpen : '',
+              isOpen ? styles.closeLinkIconOpen : '',
             ]
               .filter(Boolean)
               .join(' ')}
           />
         </a>
       </div>
-      {filtersDrawerOpen && (
+      {isOpen && (
         <div className={styles.body}>
           15 897 signalements ouverts
           <br />2 catégories sélectionnées
