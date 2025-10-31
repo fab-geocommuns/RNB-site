@@ -11,6 +11,10 @@ export default function ReportFilters() {
           <i className="fr-icon-arrow-down-s-line" />
         </a>
       </div>
+      <div className={styles.body}>
+        15 897 signalements ouverts
+        <br />2 catégories sélectionnées
+      </div>
     </div>
   );
 }

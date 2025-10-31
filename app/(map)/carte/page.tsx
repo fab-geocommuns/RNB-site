@@ -20,6 +20,9 @@ import va from '@vercel/analytics';
 import Bus from '@/utils/Bus';
 
 export default function RNBMap() {
+  // Feature flag
+  const showReportPanels = true;
+
   // //////////////////////
   // Tracking address search
   // @ts-ignore
@@ -58,7 +61,7 @@ export default function RNBMap() {
       <div className={styles.map}>
         <AddressSearchMap />
         <VisuPanel />
-        <ReportPanels />
+        {showReportPanels && <ReportPanels />}
         <div className={styles.map__mapShell}>
           <VisuMap />
         </div>
