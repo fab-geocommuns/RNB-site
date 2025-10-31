@@ -16,7 +16,7 @@ export default function ReportFilters() {
     <div className={styles.container}>
       <div className={styles.head}>
         <div>
-          <h2 className={styles.subtitle}>Signalements</h2>
+          <h2 className={styles.subtitle}>Filtrer les signalements</h2>
         </div>
         <a
           href="#"
@@ -34,16 +34,12 @@ export default function ReportFilters() {
           />
         </a>
       </div>
-      <div className={styles.body}>
-        ({filtersDrawerOpen && <>Filtres ouverts</>}) (
-        {!filtersDrawerOpen && (
-          <>
-            15 897 signalements ouverts
-            <br />2 catégories sélectionnées
-          </>
-        )}
-        )
-      </div>
+      {filtersDrawerOpen && (
+        <div className={styles.body}>
+          15 897 signalements ouverts
+          <br />2 catégories sélectionnées
+        </div>
+      )}
     </div>
   );
 }
