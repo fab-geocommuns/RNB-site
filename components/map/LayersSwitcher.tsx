@@ -189,7 +189,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
             </div>
 
             <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Extras</h2>
+              <h2 className={styles.sectionTitle}>Données externes</h2>
               <div className={styles.sectionBody}>
                 <ul className={styles.choicesList}>
                   <LayerButton
@@ -202,7 +202,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                   <LayerButton
                     isAvailable={isAvailable('addresses')}
                     isActive={mapLayers.extraLayers.includes('addresses')}
-                    label="Adresses"
+                    label="Adresses BAN"
                     onClick={() => handleExtraLayerClick('addresses')}
                     image={extraAddresses}
                   />
