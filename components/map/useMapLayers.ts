@@ -45,6 +45,18 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
 
+////////////////////////////////////
+////////////////////////////////////
+// BAN Adresses
+
+// BAN source
+export const SRC_BAN = 'ban';
+export const SRC_BAN_URL = `https://plateforme.adresse.data.gouv.fr/tiles/ban/{z}/{x}/{y}.pbf`;
+
+// BAN layer
+export const LAYER_BAN_POINT = 'ban_points';
+export const LAYER_BAN_TXT = 'ban_txt';
+
 ///////////////////////////////////
 ///////////////////////////////////
 // ADS
@@ -65,6 +77,7 @@ export const SRC_PLOTS = 'plotstiles';
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
 import { MapBackgroundLayer, MapBuildingsLayer } from '@/stores/map/map-slice';
+import exp from 'constants';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -145,6 +158,10 @@ export const useMapLayers = ({
 
       if (layers.extraLayers.includes('plots')) {
         installPlots(map);
+      }
+
+      if (layers.extraLayers.includes('addresses')) {
+        await installBAN(map);
       }
     } catch (e) {
       throw e;
@@ -493,6 +510,77 @@ export const useMapLayers = ({
     }
   };
 
+  const installBAN = async (map: maplibregl.Map) => {
+    const certifiedColor = '#049c04';
+    const notCertifiedColor = '#777777';
+
+    if (map.getLayer(LAYER_BAN_POINT)) map.removeLayer(LAYER_BAN_POINT);
+    if (map.getLayer(LAYER_BAN_TXT)) map.removeLayer(LAYER_BAN_TXT);
+    if (map.getSource(SRC_BAN)) map.removeSource(SRC_BAN);
+
+    map.addSource(SRC_BAN, {
+      type: 'vector',
+      tiles: [SRC_BAN_URL],
+      minzoom: 10,
+      maxzoom: 14,
+
+      promoteId: 'id',
+    });
+
+    map.addLayer({
+      id: LAYER_BAN_POINT,
+      source: SRC_BAN,
+      'source-layer': 'adresses',
+      type: 'circle',
+      minzoom: 16,
+      paint: {
+        'circle-radius': 4,
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 2,
+        'circle-color': [
+          'case',
+          ['==', ['get', 'certifie'], true],
+          certifiedColor,
+          notCertifiedColor,
+        ],
+      },
+    });
+
+    map.addLayer({
+      id: LAYER_BAN_TXT,
+      source: SRC_BAN,
+      'source-layer': 'adresses',
+      type: 'symbol',
+      minzoom: 16,
+      paint: {
+        // change text color if 'certifie' is true
+        'text-color': [
+          'case',
+          ['==', ['get', 'certifie'], true],
+          certifiedColor,
+          notCertifiedColor,
+        ],
+
+        'text-halo-color': '#ffffff',
+        'text-halo-width': 2,
+      },
+      layout: {
+        'text-font': ['Noto Sans Bold'],
+        'text-size': 14,
+
+        'text-field': [
+          'case',
+          ['has', 'suffixe'],
+          ['format', ['get', 'numero'], {}, ' ', {}, ['get', 'suffixe'], {}],
+          ['get', 'numero'],
+        ],
+        'text-ignore-placement': false,
+        'text-variable-anchor': ['bottom'],
+        'text-radial-offset': 1,
+      },
+    });
+  };
+
   ///////////////////////////////////
   ///////////////////////////////////
   // Plots
@@ -539,8 +627,9 @@ export const useMapLayers = ({
         'text-allow-overlap': false,
       },
       paint: {
+        'text-color': '#ea580c',
         'text-halo-color': '#ffffff',
-        'text-halo-width': 2,
+        'text-halo-width': 1,
       },
     });
   }, []);

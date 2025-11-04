@@ -7,6 +7,7 @@ import EditMapSummerScore from '@/components/summerGames/editMapSummerScore';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
+import '@/styles/mapBanLayer.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 
