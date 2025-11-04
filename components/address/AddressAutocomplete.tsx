@@ -66,7 +66,7 @@ export default function AddressAutocomplete({
 
   // when a suggestion is chosen, this is set to true to prevent an extra call the the API
   const [suggestionChosen, setSuggestionChosen] = useState(false);
-  const apiUrl = 'https://api-adresse.data.gouv.fr/search/';
+  const apiUrl = 'https://data.geopf.fr/geocodage/search/';
 
   useEffect(() => {
     if (autocompleteActive) {
