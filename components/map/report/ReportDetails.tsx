@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
 import genericStyles from '@/styles/genericPanel.module.scss';
-import styles from '@/styles/reportDetails.module.scss';
+import styles from '@/styles/report/detailsPanel.module.scss';
 
 export default function ReportDetails({ report }: { report?: any }) {
   const dispatch: AppDispatch = useDispatch();
@@ -21,7 +21,7 @@ export default function ReportDetails({ report }: { report?: any }) {
           <i className="fr-icon-close-line" />
         </a>
       </div>
-      <div className={genericStyles.body}>{report.id}</div>
+      <div className={genericStyles.body}></div>
     </div>
   );
 }
