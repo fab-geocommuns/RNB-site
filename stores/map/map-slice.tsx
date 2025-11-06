@@ -91,7 +91,8 @@ const initialState: MapStore = {
   layers: {
     background: 'vectorIgnStandard',
     buildings: 'point',
-    extraLayers: ['ads'],
+    // for dev purpose : we always show reports
+    extraLayers: ['ads', 'reports'],
   },
 };
 
