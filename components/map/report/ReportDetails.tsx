@@ -5,6 +5,7 @@ import styles from '@/styles/report/detailsPanel.module.scss';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import ReportHead from '@/components/map/report/ReportHead';
+import ReportForm from '@/components/map/report/ReportForm';
 
 export default function ReportDetails({ report }: { report?: any }) {
   const dispatch: AppDispatch = useDispatch();
@@ -35,6 +36,7 @@ export default function ReportDetails({ report }: { report?: any }) {
           </div>
         ))}
       </div>
+      <ReportForm report={report} />
     </div>
   );
 }
