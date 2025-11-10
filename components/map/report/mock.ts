@@ -72,7 +72,7 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
         type: 'Feature',
         id: 2,
         properties: {
-          status: 'closed',
+          status: 'rejected',
           created_at: '2025-01-01T10:00:00Z',
           status_updated_at: '2025-01-02T14:30:00Z',
           tags: ['user_report'],
@@ -112,7 +112,7 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
         type: 'Feature',
         id: 3,
         properties: {
-          status: 'corrected',
+          status: 'fixed',
           created_at: '2025-01-01T10:00:00Z',
           status_updated_at: '2025-01-02T14:30:00Z',
           tags: ['arcep_bdg'],
