@@ -1,5 +1,7 @@
 import styles from '@/styles/report/message.module.scss';
 
+import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
+
 export default function ReportMessage({ message }: { message: any }) {
   const relativeTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -34,9 +36,16 @@ export default function ReportMessage({ message }: { message: any }) {
     <div className={styles.shell}>
       <div className={styles.metaInfos}>
         <span className={styles.author}>{message.author.name}</span>
-        <span className={styles.date}>{relativeTime(message.created_at)}</span>
+        <Tooltip
+          kind="hover"
+          title={new Date(message.created_at).toLocaleString()}
+        >
+          <span className={styles.date}>
+            {relativeTime(message.created_at)}
+          </span>
+        </Tooltip>
       </div>
-      <div>{message.text}</div>
+      <div className={styles.text}>{message.text}</div>
     </div>
   );
 }
