@@ -1,3 +1,5 @@
+import build from 'next/dist/build';
+
 export const mockFetchReportById = async (reportId: string) => {
   console.log('Fetching report with ID:', reportId);
 
@@ -20,6 +22,7 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
         id: 1,
         properties: {
           status: 'pending',
+          building: '4XPS5MDHHJ3M',
           created_at: '2024-03-01T10:00:00Z',
           status_updated_at: null,
           tags: ['authorized_construction'],
@@ -73,11 +76,13 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
         id: 2,
         properties: {
           status: 'rejected',
+          building: 'HNHGHRSPJFKY',
           created_at: '2025-01-01T10:00:00Z',
           status_updated_at: '2025-01-02T14:30:00Z',
           tags: ['user_report'],
           origin: {
             author: {
+              name: 'Anonyme',
               type: 'anonymous_user',
               id: null,
             },
@@ -87,6 +92,7 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
             {
               author: {
                 type: 'anonymous_user',
+                name: 'Visiteur anonyme',
                 id: null,
               },
               created_at: '2025-01-01T10:00:00Z',
@@ -113,6 +119,7 @@ export const mockReportsGeojson = (): GeoJSON.FeatureCollection => {
         id: 3,
         properties: {
           status: 'fixed',
+          building: '143XFVMSQ3FJ',
           created_at: '2025-01-01T10:00:00Z',
           status_updated_at: '2025-01-02T14:30:00Z',
           tags: ['arcep_bdg'],

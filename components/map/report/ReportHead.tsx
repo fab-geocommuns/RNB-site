@@ -11,6 +11,9 @@ export default function ReportHead({ report }: { report: any }) {
         message={report.properties.messages[0]}
         status={report.properties.status}
       />
+      <ul>
+        <li></li>
+      </ul>
     </div>
   );
 }
