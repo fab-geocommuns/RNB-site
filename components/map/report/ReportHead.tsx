@@ -16,6 +16,20 @@ export default function ReportHead({ report }: { report: any }) {
     isOpenedByDefault: false,
   });
 
+  const createdAtDate = report?.properties?.created_at
+    ? new Date(report.properties.created_at)
+    : null;
+  const formattedCreatedAt =
+    createdAtDate && !isNaN(createdAtDate.getTime())
+      ? new Intl.DateTimeFormat('fr-FR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }).format(createdAtDate)
+      : report.properties.created_at;
+
   const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
     dispatch(
@@ -35,7 +49,7 @@ export default function ReportHead({ report }: { report: any }) {
         <ul>
           <li>Numéro : {report.id}</li>
           <li>Etiquettes : {report.properties.tags.join(', ')}</li>
-          <li>Créé le : {report.properties.created_at}</li>
+          <li>Créé le : {formattedCreatedAt}</li>
         </ul>
       </detailsModal.Component>
       <div className={`${styles.head} ${hasAnswers ? styles.withAnswers : ''}`}>
