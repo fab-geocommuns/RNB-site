@@ -1,19 +1,68 @@
 import styles from '@/styles/report/reportHead.module.scss';
 
+import { useDispatch } from 'react-redux';
+import { Actions } from '@/stores/store';
+
 import ReportMessage from '@/components/map/report/ReportMessage';
+import { createModal } from '@codegouvfr/react-dsfr/Modal';
 
 export default function ReportHead({ report }: { report: any }) {
+  const dispatch = useDispatch();
+
   const hasAnswers = report.properties.messages.length > 1;
 
+  const detailsModal = createModal({
+    id: `report-details-${report.id}`,
+    isOpenedByDefault: false,
+  });
+
+  const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
+    e.preventDefault();
+    dispatch(
+      // @ts-ignore
+      Actions.map.selectBuilding(rnbId),
+    );
+  };
+
+  const handleShowDetailsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    detailsModal.open();
+  };
+
   return (
-    <div className={`${styles.head} ${hasAnswers ? styles.withAnswers : ''}`}>
-      <ReportMessage
-        message={report.properties.messages[0]}
-        status={report.properties.status}
-      />
-      <ul>
-        <li></li>
-      </ul>
-    </div>
+    <>
+      <detailsModal.Component title="Détails du signalement">
+        <ul>
+          <li>Numéro : {report.id}</li>
+          <li>Etiquettes : {report.properties.tags.join(', ')}</li>
+          <li>Créé le : {report.properties.created_at}</li>
+        </ul>
+      </detailsModal.Component>
+      <div className={`${styles.head} ${hasAnswers ? styles.withAnswers : ''}`}>
+        <ReportMessage
+          message={report.properties.messages[0]}
+          status={report.properties.status}
+        />
+        <ul className={styles.tools}>
+          <li>
+            <a href="#" onClick={(e) => handleShowDetailsClick(e)}>
+              Plus d'informations
+            </a>
+          </li>
+          {report.properties.building && (
+            <li>
+              <a
+                href="#"
+                onClick={(e) =>
+                  handleOpenBuidlingClick(e, report.properties.building)
+                }
+              >
+                Voir le bâtiment {report.properties.building}
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+    </>
   );
 }
