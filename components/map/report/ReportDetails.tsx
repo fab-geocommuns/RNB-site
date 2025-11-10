@@ -4,6 +4,7 @@ import genericStyles from '@/styles/genericPanel.module.scss';
 import styles from '@/styles/report/detailsPanel.module.scss';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
+import ReportHead from '@/components/map/report/ReportHead';
 
 export default function ReportDetails({ report }: { report?: any }) {
   const dispatch: AppDispatch = useDispatch();
@@ -13,7 +14,7 @@ export default function ReportDetails({ report }: { report?: any }) {
     dispatch(Actions.report.selectReport(null));
   };
 
-  console.log(report);
+  const answers = report?.properties.messages.slice(1);
 
   return (
     <div className={`${genericStyles.container} ${styles.detailsContainer}`}>
@@ -26,7 +27,9 @@ export default function ReportDetails({ report }: { report?: any }) {
         </a>
       </div>
       <div className={genericStyles.body}>
-        {report.properties.messages.map((message: any, index: number) => (
+        <ReportHead report={report} />
+
+        {answers?.map((message: any, index: number) => (
           <div key={index} className={styles.messageShell}>
             <ReportMessage message={message} />
           </div>
