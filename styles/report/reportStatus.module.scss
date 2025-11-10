@@ -1,10 +1,23 @@
 .reportStatus {
-  padding: 10px;
-  font-size: 0.85rem;
-  padding: 0.25rem 0.625rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  color: lighten(#0a3683, 5%);
   border-radius: 0.4375rem;
   display: inline-flex;
   align-items: center;
+  font-weight: 600;
+  gap: 0.25rem;
+
+  padding: 0.1rem 0.5rem;
+
+  i::before {
+    --icon-size: 15px;
+  }
+}
+.fixed {
+  color: #1f8d49;
+  background: #dffee6;
+}
+.rejected {
+  color: #e1000f;
+  background: #fee9e9;
 }

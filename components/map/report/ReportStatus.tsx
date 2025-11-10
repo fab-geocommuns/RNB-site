@@ -6,7 +6,7 @@ import type { ReportStatus, ReportLabel } from 'report';
 function statusLabel(status: ReportStatus): ReportLabel {
   switch (status) {
     case 'pending':
-      return 'En attente';
+      return 'Ouvert';
     case 'fixed':
       return 'Corrigé';
     case 'rejected':
@@ -22,7 +22,7 @@ export default function ReportStatus({ status }: { status: ReportStatus }) {
       {status == 'pending' && (
         <i className={fr.cx('fr-icon-question-line')}></i>
       )}
-      {statusLabel(status)}
+      <span>{statusLabel(status)}</span>
     </div>
   );
 }

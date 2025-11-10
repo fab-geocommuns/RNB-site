@@ -1,11 +1,16 @@
+import styles from '@/styles/report/reportHead.module.scss';
+
 import ReportMessage from '@/components/map/report/ReportMessage';
-import ReportStatus from '@/components/map/report/ReportStatus';
 
 export default function ReportHead({ report }: { report: any }) {
+  const hasAnswers = report.properties.messages.length > 1;
+
   return (
-    <>
-      <ReportStatus status={report.properties.status} />
-      <ReportMessage message={report.properties.messages[0]} />
-    </>
+    <div className={`${styles.head} ${hasAnswers ? styles.withAnswers : ''}`}>
+      <ReportMessage
+        message={report.properties.messages[0]}
+        status={report.properties.status}
+      />
+    </div>
   );
 }

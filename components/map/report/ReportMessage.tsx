@@ -1,8 +1,16 @@
 import styles from '@/styles/report/message.module.scss';
 
 import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
+import ReportStatus from '@/components/map/report/ReportStatus';
 
-export default function ReportMessage({ message }: { message: any }) {
+import type { ReportStatus as ReportStatusType } from 'report';
+
+type Props = {
+  message: any;
+  status: ReportStatusType | null;
+};
+
+export default function ReportMessage({ message, status }: Props) {
   const relativeTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -33,17 +41,20 @@ export default function ReportMessage({ message }: { message: any }) {
   };
 
   return (
-    <div className={styles.shell}>
+    <div className={`${styles.shell} ${status ? styles.withStatus : ''}`}>
       <div className={styles.metaInfos}>
-        <span className={styles.author}>{message.author.name}</span>
-        <Tooltip
-          kind="hover"
-          title={new Date(message.created_at).toLocaleString()}
-        >
-          <span className={styles.date}>
-            {relativeTime(message.created_at)}
-          </span>
-        </Tooltip>
+        <span>
+          <span className={styles.author}>{message.author.name}</span>
+          <Tooltip
+            kind="hover"
+            title={new Date(message.created_at).toLocaleString()}
+          >
+            <span className={styles.date}>
+              {relativeTime(message.created_at)}
+            </span>
+          </Tooltip>
+        </span>
+        {status && <ReportStatus status={status} />}
       </div>
       <div className={styles.text}>{message.text}</div>
     </div>
