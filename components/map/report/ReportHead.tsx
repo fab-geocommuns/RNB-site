@@ -9,8 +9,6 @@ import { createModal } from '@codegouvfr/react-dsfr/Modal';
 export default function ReportHead({ report }: { report: any }) {
   const dispatch = useDispatch();
 
-  const hasAnswers = report.properties.messages.length > 1;
-
   const detailsModal = createModal({
     id: `report-details-${report.id}`,
     isOpenedByDefault: false,
@@ -47,7 +45,7 @@ export default function ReportHead({ report }: { report: any }) {
           <li>Créé le {formattedCreatedAt}</li>
         </ul>
       </detailsModal.Component>
-      <div className={`${styles.head} ${hasAnswers ? styles.withAnswers : ''}`}>
+      <div className={styles.head}>
         <ReportMessage
           message={report.properties.messages[0]}
           status={report.properties.status}

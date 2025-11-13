@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
 import genericStyles from '@/styles/genericPanel.module.scss';
 import styles from '@/styles/report/detailsPanel.module.scss';
+import panelStyles from '@/styles/panel.module.scss';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import ReportHead from '@/components/map/report/ReportHead';
@@ -27,16 +28,25 @@ export default function ReportDetails({ report }: { report?: any }) {
           <i className="fr-icon-close-line" />
         </a>
       </div>
+
       <div className={genericStyles.body}>
-        <ReportHead report={report} />
+        <div className={panelStyles.section}>
+          <ReportHead report={report} />
+        </div>
 
-        {answers?.map((message: any, index: number) => (
-          <div key={index} className={styles.messageShell}>
-            <ReportMessage message={message} />
+        <div className={panelStyles.section}>
+          {answers?.map((message: any, index: number) => (
+            <div key={index} className={styles.messageShell}>
+              <ReportMessage message={message} />
+            </div>
+          ))}
+        </div>
+
+        {report.properties.status === 'pending' && (
+          <div className={panelStyles.section}>
+            <ReportForm report={report} />
           </div>
-        ))}
-
-        <ReportForm report={report} />
+        )}
       </div>
     </div>
   );

@@ -1,8 +1,20 @@
-.shell {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
 body .msgInput {
   min-height: 140px;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
+  margin-bottom: 20px;
+}
+.formTitle {
+  color: black;
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  display: block;
+}
+.actionShell {
+  legend {
+    display: none;
+  }
+  margin-bottom: 20px;
 }
