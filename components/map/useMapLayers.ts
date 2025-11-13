@@ -551,10 +551,20 @@ export const useMapLayers = ({
       source: SRC_REPORTS,
 
       paint: {
-        'circle-radius': 17,
-        'circle-stroke-color': '#ffffff',
+        'circle-radius': 15,
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
+          '#9f1239',
+          '#ffffff',
+        ],
         'circle-stroke-width': 2,
-        'circle-color': '#fecdd3',
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#9f1239',
+          '#fecdd3',
+        ],
       },
     });
 
@@ -564,12 +574,17 @@ export const useMapLayers = ({
       type: 'symbol',
       layout: {
         'icon-image': 'reportIcon',
-        'icon-size': 0.9,
+        'icon-size': 0.8,
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
       },
       paint: {
-        'icon-color': '#9f1239',
+        'icon-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#fecdd3',
+          '#9f1239',
+        ],
       },
     });
   };
