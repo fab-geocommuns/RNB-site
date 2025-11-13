@@ -16,6 +16,9 @@ import { Actions, RootState } from '@/stores/store';
 // Reports mock
 import { mockReportsGeojson } from '@/components/map/report/mock';
 
+// Images
+import reportIcon from '@/components/map/report/report.png';
+
 ///////////////////////////////////
 ///////////////////////////////////
 // BUILDINGS
@@ -49,6 +52,7 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 // Reports
 export const SRC_REPORTS = 'reports';
 export const LAYER_REPORTS_POINT = 'reports_point';
+export const LAYER_REPORTS_ICON = 'reports_icon';
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
 
@@ -521,7 +525,19 @@ export const useMapLayers = ({
     }
   };
 
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // Reports
+
   const installReports = async (map: maplibregl.Map) => {
+    if (map.getLayer(LAYER_REPORTS_POINT)) map.removeLayer(LAYER_REPORTS_POINT);
+    if (map.getSource(SRC_REPORTS)) map.removeSource(SRC_REPORTS);
+
+    // add the icon if necessary
+    if (!map.hasImage('reportIcon')) {
+      const reportIconImg = await map.loadImage(reportIcon.src);
+    }
+
     map.addSource(SRC_REPORTS, {
       type: 'geojson',
       data: mockReportsGeojson(),
@@ -539,7 +555,23 @@ export const useMapLayers = ({
         'circle-color': '#ff0000',
       },
     });
+
+    map.addLayer({
+      id: LAYER_REPORTS_ICON,
+      source: SRC_REPORTS,
+      type: 'symbol',
+      layout: {
+        'icon-image': 'reportIcon',
+        'icon-size': 0.1,
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+      },
+    });
   };
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // Addresses
 
   const installBAN = async (map: maplibregl.Map) => {
     const certifiedColor = '#049c04';
