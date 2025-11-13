@@ -17,7 +17,7 @@ import { Actions, RootState } from '@/stores/store';
 import { mockReportsGeojson } from '@/components/map/report/mock';
 
 // Images
-import reportIcon from '@/components/map/report/report.png';
+import reportIcon from '@/public/images/map/report.png';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -51,7 +51,7 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 
 // Reports
 export const SRC_REPORTS = 'reports';
-export const LAYER_REPORTS_POINT = 'reports_point';
+export const LAYER_REPORTS_CIRCLE = 'reports_circle';
 export const LAYER_REPORTS_ICON = 'reports_icon';
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
@@ -530,12 +530,14 @@ export const useMapLayers = ({
   // Reports
 
   const installReports = async (map: maplibregl.Map) => {
-    if (map.getLayer(LAYER_REPORTS_POINT)) map.removeLayer(LAYER_REPORTS_POINT);
+    if (map.getLayer(LAYER_REPORTS_CIRCLE))
+      map.removeLayer(LAYER_REPORTS_CIRCLE);
     if (map.getSource(SRC_REPORTS)) map.removeSource(SRC_REPORTS);
 
     // add the icon if necessary
     if (!map.hasImage('reportIcon')) {
       const reportIconImg = await map.loadImage(reportIcon.src);
+      map.addImage('reportIcon', reportIconImg.data, { sdf: true });
     }
 
     map.addSource(SRC_REPORTS, {
@@ -544,15 +546,15 @@ export const useMapLayers = ({
     });
 
     map.addLayer({
-      id: LAYER_REPORTS_POINT,
+      id: LAYER_REPORTS_CIRCLE,
       type: 'circle',
       source: SRC_REPORTS,
 
       paint: {
-        'circle-radius': 6,
+        'circle-radius': 17,
         'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 2,
-        'circle-color': '#ff0000',
+        'circle-color': '#fecdd3',
       },
     });
 
@@ -562,9 +564,12 @@ export const useMapLayers = ({
       type: 'symbol',
       layout: {
         'icon-image': 'reportIcon',
-        'icon-size': 0.1,
+        'icon-size': 0.9,
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
+      },
+      paint: {
+        'icon-color': '#9f1239',
       },
     });
   };

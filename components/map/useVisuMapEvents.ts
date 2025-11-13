@@ -10,7 +10,7 @@ import {
   LAYER_ADS_CIRCLE,
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
-  LAYER_REPORTS_POINT,
+  LAYER_REPORTS_CIRCLE,
   SRC_REPORTS,
 } from '@/components/map/useMapLayers';
 import { displayBANPopup } from './BanLayerEvent';
@@ -67,7 +67,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
             displayBANPopup(map, featureCloseToCursor);
           }
 
-          if (featureCloseToCursor.layer.id === LAYER_REPORTS_POINT) {
+          if (featureCloseToCursor.layer.id === LAYER_REPORTS_CIRCLE) {
             const reportId = featureCloseToCursor.id as string | null;
             dispatch(Actions.report.selectReport(reportId));
           }
