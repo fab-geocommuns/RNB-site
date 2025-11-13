@@ -50,7 +50,7 @@ export default function ReportForm({ report }: { report?: any }) {
           segments={[
             {
               label: 'Commenter',
-              iconId: 'fr-icon-chat-2-line',
+              iconId: 'fr-icon-check-line',
               nativeInputProps: {
                 defaultChecked: true,
                 value: 'comment',
