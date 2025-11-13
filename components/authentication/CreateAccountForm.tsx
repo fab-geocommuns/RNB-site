@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Alert from '@codegouvfr/react-dsfr/Alert';
+import { PrivateCaptcha } from '@private-captcha/private-captcha-react';
 
 type CreateAccountErrors = {
   email: string[];
@@ -29,6 +30,7 @@ export default function CreateAccountForm() {
   const [createAccountErrors, setCreateAccountErrors] = useState(noErrors());
   const [genericError, setGenericError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
 
   const clearError = (field: keyof CreateAccountErrors) => {
     setCreateAccountErrors({
@@ -91,6 +93,7 @@ export default function CreateAccountForm() {
             password: values.password,
             last_name: values.lastName,
             first_name: values.firstName,
+            captcha_solution: captchaSolution,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -219,7 +222,17 @@ export default function CreateAccountForm() {
           onChange: (e) => clearError('confirmPassword'),
         }}
       />
-      <button className="fr-btn fr-mt-2w" type="submit">
+      <PrivateCaptcha
+        siteKey={process.env.NEXT_PUBLIC_PRIVATE_CAPTCHA_SITEKEY!}
+        onFinish={(e) => setCaptchaSolution(e.widget.solution())}
+        styles="font-size: 0.85rem; width: 100%;"
+        lang="fr"
+      />
+      <button
+        disabled={!captchaSolution}
+        className="fr-btn fr-mt-2w"
+        type="submit"
+      >
         Créer un compte
       </button>
     </form>
