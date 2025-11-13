@@ -35,8 +35,9 @@ export default function ReportDetails({ report }: { report?: any }) {
             <ReportMessage message={message} />
           </div>
         ))}
+
+        <ReportForm report={report} />
       </div>
-      <ReportForm report={report} />
     </div>
   );
 }

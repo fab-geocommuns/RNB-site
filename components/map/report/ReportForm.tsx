@@ -6,6 +6,11 @@ export default function ReportForm({ report }: { report?: any }) {
     return null;
   }
 
+  const resize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  };
+
   return (
     <div className={styles.shell}>
       <form method="post" action="/api/report/respond">
@@ -13,10 +18,11 @@ export default function ReportForm({ report }: { report?: any }) {
         <div>
           <label htmlFor="message">Votre message</label>
           <textarea
-            className="fr-input"
+            className={`fr-input fr-text--sm ${styles.msgInput}`}
             id="message"
             name="message"
             required
+            onChange={resize}
           ></textarea>
         </div>
         <SegmentedControl
