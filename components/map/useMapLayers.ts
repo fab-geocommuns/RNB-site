@@ -532,6 +532,7 @@ export const useMapLayers = ({
   const installReports = async (map: maplibregl.Map) => {
     if (map.getLayer(LAYER_REPORTS_CIRCLE))
       map.removeLayer(LAYER_REPORTS_CIRCLE);
+    if (map.getLayer(LAYER_REPORTS_ICON)) map.removeLayer(LAYER_REPORTS_ICON);
     if (map.getSource(SRC_REPORTS)) map.removeSource(SRC_REPORTS);
 
     // add the icon if necessary
