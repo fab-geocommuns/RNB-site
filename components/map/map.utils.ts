@@ -7,6 +7,7 @@ import {
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
+  LAYER_REPORTS_ICON,
 } from '@/components/map/useMapLayers';
 import { distance } from '@turf/turf';
 import { MapMouseEvent } from 'maplibre-gl';
@@ -32,6 +33,7 @@ export const getNearestFeatureFromCursorWithBuffer = (
     LAYER_BDGS_POINT,
     LAYER_ADS_CIRCLE,
     LAYER_REPORTS_CIRCLE,
+    LAYER_REPORTS_ICON,
   ].filter((layer) => map.getLayer(layer));
 
   // First, we need to draw a bbxox expressed in pixels,
