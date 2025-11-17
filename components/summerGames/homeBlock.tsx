@@ -44,11 +44,7 @@ export default function SummerGame({
                 L&apos;expérience collaborative a pris fin le 10 septembre 2025,
                 avec un score de 131361 points ! Grâce à vos contributions, nous
                 allons pouvoir proposer les règles de gouvernance de la donnée
-                du RNB d&apos;ici 2026. RDV le 16 octobre au prochain{' '}
-                <a href="https://cnig.gouv.fr/gt-bati-a25939.html">
-                  GT Bâti du CNIG
-                </a>{' '}
-                pour celles et ceux qui souhaitent participer à la réflexion.
+                du RNB d&apos;ici 2026 dans le cadre du GT Bâti CNIG.
               </p>
               <p className={styles.highlight}>
                 Bonne nouvelle : face à l&apos;engouement pour l&apos;édition
