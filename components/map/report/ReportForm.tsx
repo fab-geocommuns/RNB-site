@@ -5,8 +5,10 @@ import styles from '@/styles/report/form.module.scss';
 import { SegmentedControl } from '@codegouvfr/react-dsfr/SegmentedControl';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
-import Toaster, {
+import {
   throwErrorMessageForHumans,
+  toasterError,
+  toasterSuccess,
 } from '@/components/contribution/toaster';
 
 export default function ReportForm({ report }: { report?: any }) {
@@ -42,6 +44,17 @@ export default function ReportForm({ report }: { report?: any }) {
     }
   };
 
+  const getSuccessMessage = () => {
+    switch (action) {
+      case 'fix':
+        return 'Le signalement a été marqué comme traité.';
+      case 'reject':
+        return 'Le signalement a été rejeté.';
+      default:
+        return 'Votre commentaire a bien été ajouté.';
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -65,11 +78,16 @@ export default function ReportForm({ report }: { report?: any }) {
         setMessage('');
 
         dispatch(Actions.report.setSelectedReport(updatedReport));
+        toasterSuccess(dispatch, getSuccessMessage());
       } else {
         await throwErrorMessageForHumans(response);
       }
     } catch (err: any) {
-      console.error('Error submitting report form:', err);
+      toasterError(
+        dispatch,
+        err.message || "Erreur lors de l'envoi du message",
+      );
+      console.error(err);
     }
   };
 
@@ -130,7 +148,6 @@ export default function ReportForm({ report }: { report?: any }) {
           </Button>
         </div>
       </form>
-      <Toaster></Toaster>
     </>
   );
 }

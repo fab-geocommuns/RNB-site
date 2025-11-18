@@ -8,6 +8,8 @@ import ReportMessage from '@/components/map/report/ReportMessage';
 import ReportHead from '@/components/map/report/ReportHead';
 import ReportForm from '@/components/map/report/ReportForm';
 
+import Toaster from '@/components/contribution/toaster';
+
 export default function ReportDetails({ report }: { report?: any }) {
   const dispatch: AppDispatch = useDispatch();
 
@@ -19,35 +21,38 @@ export default function ReportDetails({ report }: { report?: any }) {
   const answers = report?.messages.slice(1);
 
   return (
-    <div className={`${genericStyles.container} ${styles.detailsContainer}`}>
-      <div className={genericStyles.head}>
-        <div>
-          <h2 className={genericStyles.subtitle}>Signalement</h2>
-        </div>
-        <a href="#" onClick={onClose} className={genericStyles.closeLink}>
-          <i className="fr-icon-close-line" />
-        </a>
-      </div>
-
-      <div className={genericStyles.body}>
-        <div className={panelStyles.section}>
-          <ReportHead report={report} />
-        </div>
-
-        <div className={panelStyles.section}>
-          {answers?.map((message: any, index: number) => (
-            <div key={index} className={styles.messageShell}>
-              <ReportMessage message={message} />
-            </div>
-          ))}
-        </div>
-
-        {report.status === 'pending' && (
-          <div className={panelStyles.section}>
-            <ReportForm report={report} />
+    <>
+      <div className={`${genericStyles.container} ${styles.detailsContainer}`}>
+        <div className={genericStyles.head}>
+          <div>
+            <h2 className={genericStyles.subtitle}>Signalement</h2>
           </div>
-        )}
+          <a href="#" onClick={onClose} className={genericStyles.closeLink}>
+            <i className="fr-icon-close-line" />
+          </a>
+        </div>
+
+        <div className={genericStyles.body}>
+          <div className={panelStyles.section}>
+            <ReportHead report={report} />
+          </div>
+
+          <div className={panelStyles.section}>
+            {answers?.map((message: any, index: number) => (
+              <div key={index} className={styles.messageShell}>
+                <ReportMessage message={message} />
+              </div>
+            ))}
+          </div>
+
+          {report.status === 'pending' && (
+            <div className={panelStyles.section}>
+              <ReportForm report={report} />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <Toaster></Toaster>
+    </>
   );
 }

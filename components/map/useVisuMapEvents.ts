@@ -12,7 +12,6 @@ import {
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
   LAYER_REPORTS_ICON,
-  SRC_REPORTS,
 } from '@/components/map/useMapLayers';
 import { displayBANPopup } from './BanLayerEvent';
 
