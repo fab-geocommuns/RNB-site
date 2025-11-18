@@ -16,6 +16,7 @@ export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
       map.setFeatureState(
         {
           source: SRC_REPORTS,
+          sourceLayer: 'default',
           id: reportId,
         },
         { in_panel: false },
@@ -28,6 +29,7 @@ export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
       map.setFeatureState(
         {
           source: SRC_REPORTS,
+          sourceLayer: 'default',
           id: reportId,
         },
         { in_panel: true },
