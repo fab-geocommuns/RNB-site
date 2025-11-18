@@ -532,6 +532,12 @@ export const useMapLayers = ({
   ///////////////////////////////////
   // Reports
 
+  const getDefaultReportFilter = () => {
+    const defaultReportFilter: any = ['any', ['==', 'status', 'pending']];
+
+    return defaultReportFilter;
+  };
+
   const installReports = async (map: maplibregl.Map) => {
     if (map.getLayer(LAYER_REPORTS_CIRCLE))
       map.removeLayer(LAYER_REPORTS_CIRCLE);
@@ -555,6 +561,7 @@ export const useMapLayers = ({
       type: 'circle',
       source: SRC_REPORTS,
       'source-layer': 'default',
+      filter: getDefaultReportFilter(),
       paint: {
         'circle-radius': 15,
         'circle-stroke-color': [
@@ -578,6 +585,7 @@ export const useMapLayers = ({
       source: SRC_REPORTS,
       'source-layer': 'default',
       type: 'symbol',
+      filter: getDefaultReportFilter(),
       layout: {
         'icon-image': 'reportIcon',
         'icon-size': 0.8,
