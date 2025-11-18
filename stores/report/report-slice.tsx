@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { mockFetchReportById } from '@/components/map/report/mock';
+
+import { fetchReport } from '@/utils/requests';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
@@ -40,9 +41,10 @@ export const reportSlice = createSlice({
 
 export const selectReport = createAsyncThunk(
   'report/selectReport',
-  async (reportId: string | null, { dispatch }) => {
+  async (reportId: number | null, { dispatch }) => {
     if (reportId) {
-      const report = await mockFetchReportById(reportId);
+      const report = await fetchReport(Number(reportId));
+
       console.log('Fetched report:', report);
       return report;
     }

@@ -13,3 +13,11 @@ export async function fetchBuilding(rnbId: string) {
     return selectedBuilding;
   }
 }
+
+export async function fetchReport(reportId: number) {
+  const url = `${process.env.NEXT_PUBLIC_API_BASE}/reports/${reportId}/?from=site`;
+  const rnbResponse = await fetch(url);
+  if (rnbResponse.ok) {
+    return await rnbResponse.json();
+  }
+}

@@ -13,9 +13,6 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, RootState } from '@/stores/store';
 
-// Reports mock
-import { mockReportsGeojson } from '@/components/map/report/mock';
-
 // Images
 import reportIcon from '@/public/images/map/report.png';
 
