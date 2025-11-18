@@ -49,10 +49,14 @@ export const LAYERS_BDGS_SHAPE_ALL = [
   LAYER_BDGS_SHAPE_POINT,
 ];
 
+////////////////////////////////////
+////////////////////////////////////
 // Reports
 export const SRC_REPORTS = 'reports';
 export const LAYER_REPORTS_CIRCLE = 'reports_circle';
 export const LAYER_REPORTS_ICON = 'reports_icon';
+
+export const SRC_REPORTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/reports/tiles/{x}/{y}/{z}.pbf`;
 
 const CONTRIBUTIONS_COLOR = '#f767ef';
 
@@ -80,6 +84,8 @@ export const SRC_ADS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/permis/tiles/{x}
 export const LAYER_ADS_CIRCLE = 'adscircle';
 export const LAYER_ADS_ICON = 'adsicon';
 
+////////////////////////////////////
+////////////////////////////////////
 // Plots
 export const LAYER_PLOTS_SHAPE = 'plots_shape';
 export const LAYER_PLOTS_TXT = 'plots_txt';
@@ -542,8 +548,8 @@ export const useMapLayers = ({
     }
 
     map.addSource(SRC_REPORTS, {
-      type: 'geojson',
-      data: mockReportsGeojson(),
+      type: 'vector',
+      tiles: [SRC_REPORTS_URL + '#' + Math.random()],
     });
 
     map.addLayer({

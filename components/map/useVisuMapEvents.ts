@@ -128,9 +128,9 @@ export const handleFeatureHover = (
       sourceLayer: 'default',
     };
     // -- Part to remove when using vector tiles for reports instead of geojson source
-    if (prevFeatureToUpdate.source === SRC_REPORTS) {
-      delete prevFeatureToUpdate.sourceLayer;
-    }
+    // if (prevFeatureToUpdate.source === SRC_REPORTS) {
+    //   delete prevFeatureToUpdate.sourceLayer;
+    // }
     // -- End of part to remove
 
     map.setFeatureState(prevFeatureToUpdate, { hovered: false });
@@ -143,9 +143,9 @@ export const handleFeatureHover = (
       sourceLayer: 'default',
     };
     // -- Part to remove when using vector tiles for reports instead of geojson source
-    if (hoveredFeatureToUpdate.source == SRC_REPORTS) {
-      delete hoveredFeatureToUpdate.sourceLayer;
-    }
+    // if (hoveredFeatureToUpdate.source == SRC_REPORTS) {
+    //   delete hoveredFeatureToUpdate.sourceLayer;
+    // }
     // -- End of part to remove
 
     map.setFeatureState(hoveredFeatureToUpdate, { hovered: true });
