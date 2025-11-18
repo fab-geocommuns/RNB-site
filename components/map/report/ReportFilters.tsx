@@ -2,7 +2,8 @@
 import { useDispatch } from 'react-redux';
 import { Actions } from '@/stores/store';
 
-import styles from '@/styles/genericPanel.module.scss';
+import panelStyles from '@/styles/genericPanel.module.scss';
+import filterStyles from '@/styles/reportFilters.module.scss';
 
 export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   // Store
@@ -10,20 +11,20 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   const dispatch = useDispatch();
 
   return (
-    <div className={styles.container}>
+    <div className={`${panelStyles.container} ${filterStyles.shell}`}>
       <div
-        className={styles.head}
+        className={panelStyles.head}
         onClick={() => dispatch(Actions.report.toggleFiltersDrawer())}
       >
         <div>
-          <h2 className={styles.subtitle}>Filtrer les signalements</h2>
+          <h2 className={panelStyles.subtitle}>Filtrer les signalements</h2>
         </div>
-        <a href="#" className={styles.closeLink}>
+        <a href="#" className={panelStyles.closeLink}>
           <i
             className={[
               'fr-icon-arrow-down-s-line',
-              styles.closeLinkIcon,
-              isOpen ? styles.closeLinkIconOpen : '',
+              panelStyles.closeLinkIcon,
+              isOpen ? panelStyles.closeLinkIconOpen : '',
             ]
               .filter(Boolean)
               .join(' ')}
@@ -31,7 +32,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
         </a>
       </div>
       {isOpen && (
-        <div className={styles.body}>
+        <div className={panelStyles.body}>
           15 897 signalements ouverts
           <br />2 catégories sélectionnées
         </div>
