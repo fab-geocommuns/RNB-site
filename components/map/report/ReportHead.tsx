@@ -14,7 +14,7 @@ export default function ReportHead({ report }: { report: any }) {
     isOpenedByDefault: false,
   });
 
-  const createdAtDate = new Date(report.properties.created_at);
+  const createdAtDate = new Date(report.created_at);
   const formattedCreatedAt =
     createdAtDate.toLocaleDateString('fr-FR') +
     ' à ' +
@@ -41,30 +41,25 @@ export default function ReportHead({ report }: { report: any }) {
       <detailsModal.Component title="Détails du signalement">
         <ul>
           <li>Numéro : {report.id}</li>
-          <li>Etiquettes : {report.properties.tags.join(', ')}</li>
+          <li>Etiquettes : {report.tags.join(', ')}</li>
           <li>Créé le {formattedCreatedAt}</li>
         </ul>
       </detailsModal.Component>
       <div className={styles.head}>
-        <ReportMessage
-          message={report.properties.messages[0]}
-          status={report.properties.status}
-        />
+        <ReportMessage message={report.messages[0]} status={report.status} />
         <ul className={styles.tools}>
           <li>
             <a href="#" onClick={(e) => handleShowDetailsClick(e)}>
               Plus d'informations
             </a>
           </li>
-          {report.properties.building && (
+          {report.rnb_id && (
             <li>
               <a
                 href="#"
-                onClick={(e) =>
-                  handleOpenBuidlingClick(e, report.properties.building)
-                }
+                onClick={(e) => handleOpenBuidlingClick(e, report.rnb_id)}
               >
-                Voir le bâtiment {report.properties.building}
+                Voir le bâtiment {report.rnb_id}
               </a>
             </li>
           )}

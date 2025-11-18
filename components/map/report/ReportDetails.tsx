@@ -16,7 +16,7 @@ export default function ReportDetails({ report }: { report?: any }) {
     dispatch(Actions.report.selectReport(null));
   };
 
-  const answers = report?.properties.messages.slice(1);
+  const answers = report?.messages.slice(1);
 
   return (
     <div className={`${genericStyles.container} ${styles.detailsContainer}`}>
@@ -42,7 +42,7 @@ export default function ReportDetails({ report }: { report?: any }) {
           ))}
         </div>
 
-        {report.properties.status === 'pending' && (
+        {report.status === 'pending' && (
           <div className={panelStyles.section}>
             <ReportForm report={report} />
           </div>

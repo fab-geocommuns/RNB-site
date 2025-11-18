@@ -7,7 +7,7 @@ import type { ReportStatus as ReportStatusType } from 'report';
 
 type Props = {
   message: any;
-  status: ReportStatusType | null;
+  status: ReportStatusType | undefined;
 };
 
 export default function ReportMessage({ message, status }: Props) {
@@ -44,7 +44,11 @@ export default function ReportMessage({ message, status }: Props) {
     <div className={`${styles.shell} ${status ? styles.withStatus : ''}`}>
       <div className={styles.metaInfos}>
         <span>
-          <span className={styles.author}>{message.author.name}</span>
+          <span className={styles.author}>
+            {message.author.username
+              ? message.author.username
+              : message.author.display_name}
+          </span>
           <Tooltip
             kind="hover"
             title={new Date(message.created_at).toLocaleString()}
