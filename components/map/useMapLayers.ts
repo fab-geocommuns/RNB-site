@@ -550,13 +550,14 @@ export const useMapLayers = ({
     map.addSource(SRC_REPORTS, {
       type: 'vector',
       tiles: [SRC_REPORTS_URL + '#' + Math.random()],
+      promoteId: 'id',
     });
 
     map.addLayer({
       id: LAYER_REPORTS_CIRCLE,
       type: 'circle',
       source: SRC_REPORTS,
-
+      'source-layer': 'default',
       paint: {
         'circle-radius': 15,
         'circle-stroke-color': [
@@ -578,6 +579,7 @@ export const useMapLayers = ({
     map.addLayer({
       id: LAYER_REPORTS_ICON,
       source: SRC_REPORTS,
+      'source-layer': 'default',
       type: 'symbol',
       layout: {
         'icon-image': 'reportIcon',
