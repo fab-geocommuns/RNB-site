@@ -36,8 +36,6 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           10,
         );
 
-        console.log('Clicked feature:', featureCloseToCursor);
-
         if (featureCloseToCursor) {
           // What did we click on?
 
