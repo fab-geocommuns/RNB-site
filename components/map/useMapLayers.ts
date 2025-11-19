@@ -4,7 +4,10 @@ import vectorIgnStandard from '@/components/map/mapstyles/vector-ign-standard.js
 import satellite from '@/components/map/mapstyles/satellite.json';
 
 // Maplibre styles
-import maplibregl, { StyleSpecification } from 'maplibre-gl';
+import maplibregl, {
+  FilterSpecification,
+  StyleSpecification,
+} from 'maplibre-gl';
 
 // React things
 import { useCallback, useEffect, useRef } from 'react';
@@ -532,20 +535,6 @@ export const useMapLayers = ({
   ///////////////////////////////////
   // Reports
 
-  const getDefaultReportFilter = () => {
-    const defaultReportFilter = [
-      'all',
-      ['==', 'pending', ['get', 'status']],
-      // [
-      //   'any',
-      //   ['in', '6001', ['get', 'tag_ids']],
-      //   ['in', '6002', ['get', 'tag_ids']]
-      // ]
-    ];
-
-    return defaultReportFilter;
-  };
-
   const installReports = async (map: maplibregl.Map) => {
     if (map.getLayer(LAYER_REPORTS_CIRCLE))
       map.removeLayer(LAYER_REPORTS_CIRCLE);
@@ -776,4 +765,18 @@ export const useMapLayers = ({
   }, [reloadBuildings]);
 
   const adsOperationsIcons = getADSOperationIcons();
+};
+
+export const getDefaultReportFilter = () => {
+  const defaultReportFilter: FilterSpecification = [
+    'all',
+    ['==', 'pending', ['get', 'status']],
+    // [
+    //   'any',
+    //   ['in', '6001', ['get', 'tag_ids']],
+    //   ['in', '6002', ['get', 'tag_ids']]
+    // ]
+  ];
+
+  return defaultReportFilter;
 };
