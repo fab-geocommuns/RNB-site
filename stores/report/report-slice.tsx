@@ -5,11 +5,15 @@ import { fetchReport } from '@/utils/requests';
 export type ReportStore = {
   filtersDrawerOpen: boolean;
   selectedReport: GeoJSON.Feature | null;
+  lastReportUpdate: number;
+  displayedTags: 'all' | number[];
 };
 
 const initialState: ReportStore = {
   filtersDrawerOpen: true,
   selectedReport: null,
+  lastReportUpdate: Date.now(),
+  displayedTags: 'all',
 };
 
 export const reportSlice = createSlice({
@@ -24,6 +28,12 @@ export const reportSlice = createSlice({
     },
     setSelectedReport(state, action) {
       state.selectedReport = action.payload;
+    },
+    setLastReportUpdate(state) {
+      state.lastReportUpdate = Date.now();
+    },
+    setDisplayedTags(state, action) {
+      state.displayedTags = action.payload;
     },
   },
   extraReducers: (builder) => {

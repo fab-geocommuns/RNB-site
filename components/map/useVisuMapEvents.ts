@@ -70,6 +70,7 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
             )
           ) {
             const reportId = featureCloseToCursor.id as number | null;
+            console.log('repor', featureCloseToCursor);
             dispatch(Actions.report.selectReport(reportId));
           }
         }

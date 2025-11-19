@@ -78,6 +78,7 @@ export default function ReportForm({ report }: { report?: any }) {
         setMessage('');
 
         dispatch(Actions.report.setSelectedReport(updatedReport));
+        dispatch(Actions.report.setLastReportUpdate());
         toasterSuccess(dispatch, getSuccessMessage());
       } else {
         await throwErrorMessageForHumans(response);

@@ -1,5 +1,5 @@
 // Store
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Actions } from '@/stores/store';
 import { useEffect, useState } from 'react';
 
@@ -23,6 +23,10 @@ interface ReportStats {
 export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   const dispatch = useDispatch();
   const [stats, setStats] = useState<ReportStats | null>(null);
+  const lastReportUpdate = useSelector(
+    (state: any) => state.report.lastReportUpdate,
+  );
+  const displayedTags = useSelector((state: any) => state.report.displayedTags);
 
   useEffect(() => {
     async function fetchStats() {
@@ -42,11 +46,38 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
     if (isOpen) {
       fetchStats();
     }
-  }, [isOpen]);
+  }, [isOpen, lastReportUpdate]);
 
   const getProgressBarWidth = () => {
     if (!stats || stats.total_report_count === 0) return '0%';
     return `${(stats.closed_report_count / stats.total_report_count) * 100}%`;
+  };
+
+  const isTagSelected = (tagId: number) => {
+    if (displayedTags === 'all') return true;
+    return displayedTags.includes(tagId);
+  };
+
+  const handleTagToggle = (tagId: number) => {
+    if (!stats) return;
+
+    const allTagIds = stats.tag_stats.map((t) => t.tag_id);
+    let newTags: number[] = [];
+
+    if (displayedTags === 'all') {
+      // If currently 'all', unchecking one means we select all others
+      newTags = allTagIds.filter((id) => id !== tagId);
+    } else {
+      if (displayedTags.includes(tagId)) {
+        // Uncheck
+        newTags = displayedTags.filter((id: number) => id !== tagId);
+      } else {
+        // Check
+        newTags = [...displayedTags, tagId];
+      }
+    }
+
+    dispatch(Actions.report.setDisplayedTags(newTags));
   };
 
   return (
@@ -94,10 +125,30 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                   tag.total_report_count - tag.closed_report_count;
                 return (
                   <div key={tag.tag_id} className={filterStyles.tagItem}>
-                    <span className={filterStyles.tagName}>{tag.tag_name}</span>
-                    <span className={filterStyles.tagCount}>
-                      {openCount} ouverts
-                    </span>
+                    <div className="fr-checkbox-group fr-checkbox-group--sm">
+                      <input
+                        type="checkbox"
+                        id={`tag-${tag.tag_id}`}
+                        name={`tag-${tag.tag_id}`}
+                        checked={isTagSelected(tag.tag_id)}
+                        onChange={() => handleTagToggle(tag.tag_id)}
+                      />
+                      <label
+                        className="fr-label"
+                        htmlFor={`tag-${tag.tag_id}`}
+                        style={{ width: '100%' }}
+                      >
+                        <span className={filterStyles.tagName}>
+                          {tag.tag_name}
+                        </span>
+                        <span
+                          className={filterStyles.tagCount}
+                          style={{ float: 'right' }}
+                        >
+                          {openCount} ouverts
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 );
               })}

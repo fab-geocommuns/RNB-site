@@ -533,7 +533,15 @@ export const useMapLayers = ({
   // Reports
 
   const getDefaultReportFilter = () => {
-    const defaultReportFilter: any = ['any', ['==', 'status', 'pending']];
+    const defaultReportFilter = [
+      'all',
+      ['==', 'pending', ['get', 'status']],
+      // [
+      //   'any',
+      //   ['in', '6001', ['get', 'tag_ids']],
+      //   ['in', '6002', ['get', 'tag_ids']]
+      // ]
+    ];
 
     return defaultReportFilter;
   };
