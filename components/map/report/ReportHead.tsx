@@ -50,7 +50,7 @@ export default function ReportHead({ report }: { report: any }) {
         <ul className={styles.tools}>
           <li>
             <a href="#" onClick={(e) => handleShowDetailsClick(e)}>
-              Plus d'informations
+              Plus d&apos;informations
             </a>
           </li>
           {report.rnb_id && (

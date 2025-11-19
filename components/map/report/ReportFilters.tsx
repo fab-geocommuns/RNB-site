@@ -1,9 +1,10 @@
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions } from '@/stores/store';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import panelStyles from '@/styles/genericPanel.module.scss';
+import genericStyles from '@/styles/genericPanel.module.scss';
+import panelStyles from '@/styles/panel.module.scss';
 import filterStyles from '@/styles/report/reportFilters.module.scss';
 
 interface TagStat {
@@ -23,11 +24,16 @@ interface ReportStats {
 export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   const dispatch = useDispatch();
   const [stats, setStats] = useState<ReportStats | null>(null);
+  const [isGlowing, setIsGlowing] = useState(false);
+  const prevClosedCountRef = useRef<number | null>(null);
+
   const lastReportUpdate = useSelector(
     (state: any) => state.report.lastReportUpdate,
   );
   const displayedTags = useSelector((state: any) => state.report.displayedTags);
 
+  // We update the stats every 5 seconds or when a report has been closed (lastReportUpdate)
+  // If the stats have changed, we make the indicator glow
   useEffect(() => {
     async function fetchStats() {
       try {
@@ -37,16 +43,25 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
         if (response.ok) {
           const data = await response.json();
           setStats(data);
+
+          if (prevClosedCountRef.current !== null) {
+            if (data.closed_report_count !== prevClosedCountRef.current) {
+              setIsGlowing(true);
+              setTimeout(() => setIsGlowing(false), 3000);
+            }
+          }
+          prevClosedCountRef.current = data.closed_report_count;
         }
       } catch (error) {
         console.error('Failed to fetch report stats:', error);
       }
     }
 
-    if (isOpen) {
-      fetchStats();
-    }
-  }, [isOpen, lastReportUpdate]);
+    fetchStats();
+    const intervalId = setInterval(fetchStats, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [lastReportUpdate]);
 
   const getProgressBarWidth = () => {
     if (!stats || stats.total_report_count === 0) return '0%';
@@ -82,21 +97,26 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
 
   return (
     <div
-      className={`${panelStyles.container} ${filterStyles.shell} ${isOpen ? filterStyles.open : ''}`}
+      className={`${genericStyles.container} ${filterStyles.shell} ${isOpen ? filterStyles.open : ''}`}
     >
       <div
-        className={`${panelStyles.head} ${filterStyles.head}`}
+        className={`${genericStyles.head} ${filterStyles.head}`}
         onClick={() => dispatch(Actions.report.toggleFiltersDrawer())}
       >
-        <div>
-          <h2 className={panelStyles.subtitle}>Suivi des signalements</h2>
+        <div className={filterStyles.titleShell}>
+          <h2 className={genericStyles.subtitle}>Suivi des signalements</h2>
+          <div
+            className={`${filterStyles.activityIndicator} ${
+              isGlowing ? filterStyles.active : ''
+            }`}
+          />
         </div>
-        <a href="#" className={panelStyles.closeLink}>
+        <a href="#" className={genericStyles.closeLink}>
           <i
             className={[
               'fr-icon-arrow-down-s-line',
-              panelStyles.closeLinkIcon,
-              isOpen ? panelStyles.closeLinkIconOpen : '',
+              genericStyles.closeLinkIcon,
+              isOpen ? genericStyles.closeLinkIconOpen : '',
             ]
               .filter(Boolean)
               .join(' ')}
@@ -105,33 +125,39 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
       </div>
 
       {isOpen && stats && (
-        <div className={panelStyles.body}>
-          <p className={filterStyles.infoText}>
-            Les signalements pointent d’éventuelles erreurs du RNB.
-          </p>
-          <div className={filterStyles.statsContainer}>
-            <div className={filterStyles.progressSection}>
-              <div className={filterStyles.progressLabel}>
-                <span>
-                  {stats.total_report_count - stats.closed_report_count}{' '}
-                  signalements restants
-                </span>
-              </div>
-              <div className={filterStyles.progressBarContainer}>
-                <div
-                  className={filterStyles.progressBarFill}
-                  style={{ width: getProgressBarWidth() }}
-                />
-              </div>
+        <div className={genericStyles.body}>
+          <div className={panelStyles.section}>
+            <div className={filterStyles.subtitle}>
+              {stats.total_report_count - stats.closed_report_count}{' '}
+              signalements restants
             </div>
 
-            <div className={filterStyles.tagsList}>
+            <div className={filterStyles.progressBarContainer}>
+              <div
+                className={filterStyles.progressBarFill}
+                style={{ width: getProgressBarWidth() }}
+              />
+            </div>
+
+            <div className={filterStyles.infoText}>
+              Les signalements sont des indices permettant aux contributeurs
+              d&apos;améliorer le RNB.
+            </div>
+          </div>
+          <div className={genericStyles.section}>
+            <div className={filterStyles.subtitle}>
+              Filtrer les signalements
+            </div>
+
+            <div
+              className={`${filterStyles.tagsList} fr-checkbox-group fr-checkbox-group--sm`}
+            >
               {stats.tag_stats.map((tag) => {
                 const openCount =
                   tag.total_report_count - tag.closed_report_count;
                 return (
                   <div key={tag.tag_id} className={filterStyles.tagItem}>
-                    <div className="fr-checkbox-group fr-checkbox-group--sm">
+                    <div>
                       <input
                         type="checkbox"
                         id={`tag-${tag.tag_id}`}
@@ -140,19 +166,18 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                         onChange={() => handleTagToggle(tag.tag_id)}
                       />
                       <label
-                        className="fr-label"
+                        className={filterStyles.tagLabel}
                         htmlFor={`tag-${tag.tag_id}`}
-                        style={{ width: '100%' }}
                       >
-                        <span className={filterStyles.tagName}>
-                          {tag.tag_name}
-                        </span>
-                        <span
-                          className={filterStyles.tagCount}
-                          style={{ float: 'right' }}
-                        >
-                          {openCount} ouverts
-                        </span>
+                        <div>
+                          <div className={filterStyles.tagName}>
+                            {tag.tag_name}
+                          </div>
+                          <div className={filterStyles.tagCount}>
+                            {openCount} signalement{openCount > 1 ? 's' : ''}{' '}
+                            ouvert{openCount > 1 ? 's' : ''}
+                          </div>
+                        </div>
                       </label>
                     </div>
                   </div>

@@ -7,7 +7,7 @@ import type { ReportStatus as ReportStatusType } from 'report';
 
 type Props = {
   message: any;
-  status: ReportStatusType | undefined;
+  status?: ReportStatusType | undefined;
 };
 
 export default function ReportMessage({ message, status }: Props) {
