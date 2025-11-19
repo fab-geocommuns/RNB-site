@@ -25,7 +25,7 @@ import { RootState } from '@/stores/store';
 
 export default function RNBMap() {
   // Feature flag
-  const showReportPanels = true;
+  const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
 
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
