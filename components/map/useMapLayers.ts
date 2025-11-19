@@ -58,8 +58,6 @@ export const LAYER_REPORTS_ICON = 'reports_icon';
 
 export const SRC_REPORTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/reports/tiles/{x}/{y}/{z}.pbf`;
 
-const CONTRIBUTIONS_COLOR = '#f767ef';
-
 ////////////////////////////////////
 ////////////////////////////////////
 // BAN Adresses
@@ -94,7 +92,6 @@ export const SRC_PLOTS = 'plotstiles';
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
 import { MapBackgroundLayer, MapBuildingsLayer } from '@/stores/map/map-slice';
-import exp from 'constants';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -363,8 +360,6 @@ export const useMapLayers = ({
             'case',
             ['boolean', ['feature-state', 'in_panel'], false],
             '#31e060',
-            ['>', ['get', 'contributions'], 0],
-            CONTRIBUTIONS_COLOR,
             '#00000033',
           ],
           'line-width': [
@@ -390,21 +385,12 @@ export const useMapLayers = ({
           6,
           5,
         ],
-        'circle-stroke-color': [
-          'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
-          '#ffffff',
-          ['>', ['get', 'contributions'], 0],
-          '#fef4f4',
-          '#ffffff',
-        ],
+        'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 3,
         'circle-color': [
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
@@ -430,8 +416,6 @@ export const useMapLayers = ({
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'fill-opacity': 0.08,
@@ -452,8 +436,6 @@ export const useMapLayers = ({
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#87d443',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'line-width': 2.1,
@@ -487,8 +469,6 @@ export const useMapLayers = ({
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
@@ -771,11 +751,6 @@ export const getDefaultReportFilter = () => {
   const defaultReportFilter: FilterSpecification = [
     'all',
     ['==', 'pending', ['get', 'status']],
-    // [
-    //   'any',
-    //   ['in', '6001', ['get', 'tag_ids']],
-    //   ['in', '6002', ['get', 'tag_ids']]
-    // ]
   ];
 
   return defaultReportFilter;

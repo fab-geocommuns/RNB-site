@@ -81,9 +81,11 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   };
 
   return (
-    <div className={`${panelStyles.container} ${filterStyles.shell}`}>
+    <div
+      className={`${panelStyles.container} ${filterStyles.shell} ${isOpen ? filterStyles.open : ''}`}
+    >
       <div
-        className={panelStyles.head}
+        className={`${panelStyles.head} ${filterStyles.head}`}
         onClick={() => dispatch(Actions.report.toggleFiltersDrawer())}
       >
         <div>
@@ -101,14 +103,18 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
           />
         </a>
       </div>
+
       {isOpen && stats && (
         <div className={panelStyles.body}>
+          <p className={filterStyles.infoText}>
+            Les signalements pointent d’éventuelles erreurs du RNB.
+          </p>
           <div className={filterStyles.statsContainer}>
             <div className={filterStyles.progressSection}>
               <div className={filterStyles.progressLabel}>
-                <span>Avancement global</span>
                 <span>
-                  {stats.closed_report_count} / {stats.total_report_count}
+                  {stats.total_report_count - stats.closed_report_count}{' '}
+                  signalements restants
                 </span>
               </div>
               <div className={filterStyles.progressBarContainer}>
