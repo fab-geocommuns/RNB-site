@@ -15,7 +15,7 @@ export default function ReportPanels() {
 
   return (
     <div className={styles.reportShell}>
-      {/* <ReportFilters isOpen={filtersDrawerOpen} /> */}
+      <ReportFilters isOpen={filtersDrawerOpen} />
       {selectedReport && <ReportDetails report={selectedReport} />}
     </div>
   );
