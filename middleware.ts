@@ -16,12 +16,14 @@ function cspMiddleware(request: NextRequest) {
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';
   const newsletterOrigin = 'https://9468302f.sibforms.com/';
+  const captchaOrigin = 'https://api.privatecaptcha.com/';
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
     ...tileOrigins,
     sentryOrigin,
     newsletterOrigin,
+    captchaOrigin,
   ];
   const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
   const mediaOrigins = [
