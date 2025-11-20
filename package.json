@@ -39,7 +39,7 @@
     "lodash.debounce": "^4.0.8",
     "maplibre-gl": "^5.3.1",
     "next": "15.5.3",
-    "next-auth": "^4.24.7",
+    "next-auth": "^4.24.12",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-fuzzy-highlighter": "^1.1.1",
@@ -50,7 +50,7 @@
     "yaml": "^2.5.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.46.0",
+    "@playwright/test": "^1.56.1",
     "@types/mapbox__mapbox-gl-draw": "^1.4.8",
     "@types/terraformer__wkt": "^2.0.3",
     "husky": "^9.1.4",
