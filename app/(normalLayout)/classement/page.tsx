@@ -9,7 +9,8 @@ export default function Page() {
             title="Le classement des éditions"
             limit={100}
             showRankingLink={false}
-            withScoreDetails={true}
+            withRankingTable={true}
+            size="large"
           />
         </div>
       </div>

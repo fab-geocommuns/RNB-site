@@ -533,3 +533,25 @@ body .mapSummerScoreInside {
 .endFlagShell {
   text-align: center;
 }
+
+.small {
+  .shell {
+    padding: 50px 1rem;
+  }
+
+  .titleblock {
+    margin-bottom: 1rem;
+  }
+
+  .instruction {
+    margin-bottom: 1rem;
+  }
+
+  .barShell {
+    margin-bottom: 30px;
+  }
+
+  .buttonsShell {
+    margin-top: 30px;
+  }
+}
