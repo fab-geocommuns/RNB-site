@@ -10,6 +10,8 @@ import {
   SRC_BDGS_SHAPES,
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
+  LAYER_REPORTS_CIRCLE,
+  LAYER_REPORTS_ICON,
 } from '@/components/map/useMapLayers';
 import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
@@ -58,11 +60,22 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           5,
         );
 
+        // This part below, about BAN and reports, is a duplicate of the one in useVisuMapEvents
+        // We should probably refactor it to avoid code duplication
         if (featureOnCursor) {
           if (
             [LAYER_BAN_POINT, LAYER_BAN_TXT].includes(featureOnCursor.layer.id)
           ) {
             displayBANPopup(map, featureCloseToCursor);
+          }
+
+          if (
+            [LAYER_REPORTS_CIRCLE, LAYER_REPORTS_ICON].includes(
+              featureOnCursor.layer.id,
+            )
+          ) {
+            const reportId = featureOnCursor.id as number | null;
+            dispatch(Actions.report.selectReport(reportId));
           }
         }
 

@@ -1,0 +1,34 @@
+.shell {
+  margin-bottom: 1rem;
+}
+
+.metaInfos {
+  font-size: 1em;
+  line-height: 1.3em;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.withStatus {
+  .metaInfos {
+    margin-bottom: 15px;
+  }
+}
+
+.author {
+  color: black;
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 0.9em;
+}
+.date {
+  color: #666;
+  font-size: 0.8em;
+}
+
+.text {
+  font-size: 0.9em;
+  line-height: 1.3em;
+}

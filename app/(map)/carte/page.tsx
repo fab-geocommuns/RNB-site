@@ -11,15 +11,25 @@ import { useEffect } from 'react';
 import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
+import ReportPanels from '@/components/map/report/ReportPanels';
 
 // Analytics
 import va from '@vercel/analytics';
 
 // Bus
 import Bus from '@/utils/Bus';
-import VisuMapSummerScore from '@/components/summerGames/visuMapSummerScore';
+
+// Store
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 export default function RNBMap() {
+  // Feature flag
+  const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
+
+  // Map layers from store
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
+
   // //////////////////////
   // Tracking address search
   // @ts-ignore
@@ -58,8 +68,9 @@ export default function RNBMap() {
       <div className={styles.map}>
         <AddressSearchMap />
         <VisuPanel />
-        <VisuMapSummerScore />
-
+        {showReportPanels && mapLayers.extraLayers.includes('reports') && (
+          <ReportPanels />
+        )}
         <div className={styles.map__mapShell}>
           <VisuMap />
         </div>

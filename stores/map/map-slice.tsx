@@ -60,7 +60,7 @@ export type MapBackgroundLayer =
   | 'vectorOsm'
   | 'vectorIgnStandard';
 export type MapBuildingsLayer = 'point' | 'polygon';
-export type MapExtraLayer = 'ads' | 'plots' | 'addresses';
+export type MapExtraLayer = 'ads' | 'plots' | 'addresses' | 'reports';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {
@@ -91,7 +91,8 @@ const initialState: MapStore = {
   layers: {
     background: 'vectorIgnStandard',
     buildings: 'point',
-    extraLayers: ['ads'],
+    // for dev purpose : we always show reports
+    extraLayers: ['ads', 'reports'],
   },
 };
 

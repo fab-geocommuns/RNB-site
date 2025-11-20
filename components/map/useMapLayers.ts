@@ -4,7 +4,10 @@ import vectorIgnStandard from '@/components/map/mapstyles/vector-ign-standard.js
 import satellite from '@/components/map/mapstyles/satellite.json';
 
 // Maplibre styles
-import maplibregl, { StyleSpecification } from 'maplibre-gl';
+import maplibregl, {
+  FilterSpecification,
+  StyleSpecification,
+} from 'maplibre-gl';
 
 // React things
 import { useCallback, useEffect, useRef } from 'react';
@@ -12,6 +15,9 @@ import { useCallback, useEffect, useRef } from 'react';
 // Store
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, RootState } from '@/stores/store';
+
+// Images
+import reportIcon from '@/public/images/map/report.png';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -43,7 +49,14 @@ export const LAYERS_BDGS_SHAPE_ALL = [
   LAYER_BDGS_SHAPE_POINT,
 ];
 
-const CONTRIBUTIONS_COLOR = '#f767ef';
+////////////////////////////////////
+////////////////////////////////////
+// Reports
+export const SRC_REPORTS = 'reports';
+export const LAYER_REPORTS_CIRCLE = 'reports_circle';
+export const LAYER_REPORTS_ICON = 'reports_icon';
+
+export const SRC_REPORTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/reports/tiles/{x}/{y}/{z}.pbf`;
 
 ////////////////////////////////////
 ////////////////////////////////////
@@ -69,6 +82,8 @@ export const SRC_ADS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/permis/tiles/{x}
 export const LAYER_ADS_CIRCLE = 'adscircle';
 export const LAYER_ADS_ICON = 'adsicon';
 
+////////////////////////////////////
+////////////////////////////////////
 // Plots
 export const LAYER_PLOTS_SHAPE = 'plots_shape';
 export const LAYER_PLOTS_TXT = 'plots_txt';
@@ -77,7 +92,6 @@ export const SRC_PLOTS = 'plotstiles';
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
 import { MapBackgroundLayer, MapBuildingsLayer } from '@/stores/map/map-slice';
-import exp from 'constants';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -162,6 +176,10 @@ export const useMapLayers = ({
 
       if (layers.extraLayers.includes('addresses')) {
         await installBAN(map);
+      }
+
+      if (layers.extraLayers.includes('reports')) {
+        installReports(map);
       }
     } catch (e) {
       throw e;
@@ -342,8 +360,6 @@ export const useMapLayers = ({
             'case',
             ['boolean', ['feature-state', 'in_panel'], false],
             '#31e060',
-            ['>', ['get', 'contributions'], 0],
-            CONTRIBUTIONS_COLOR,
             '#00000033',
           ],
           'line-width': [
@@ -369,21 +385,12 @@ export const useMapLayers = ({
           6,
           5,
         ],
-        'circle-stroke-color': [
-          'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
-          '#ffffff',
-          ['>', ['get', 'contributions'], 0],
-          '#fef4f4',
-          '#ffffff',
-        ],
+        'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 3,
         'circle-color': [
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
@@ -409,8 +416,6 @@ export const useMapLayers = ({
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'fill-opacity': 0.08,
@@ -431,8 +436,6 @@ export const useMapLayers = ({
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#87d443',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
         'line-width': 2.1,
@@ -466,8 +469,6 @@ export const useMapLayers = ({
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
           '#31e060',
-          ['>', ['get', 'contributions'], 0],
-          CONTRIBUTIONS_COLOR,
           '#1452e3',
         ],
       },
@@ -509,6 +510,79 @@ export const useMapLayers = ({
       map.removeSource(SRC_BDGS_SHAPES);
     }
   };
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // Reports
+
+  const installReports = async (map: maplibregl.Map) => {
+    if (map.getLayer(LAYER_REPORTS_CIRCLE))
+      map.removeLayer(LAYER_REPORTS_CIRCLE);
+    if (map.getLayer(LAYER_REPORTS_ICON)) map.removeLayer(LAYER_REPORTS_ICON);
+    if (map.getSource(SRC_REPORTS)) map.removeSource(SRC_REPORTS);
+
+    // add the icon if necessary
+    if (!map.hasImage('reportIcon')) {
+      const reportIconImg = await map.loadImage(reportIcon.src);
+      map.addImage('reportIcon', reportIconImg.data, { sdf: true });
+    }
+
+    map.addSource(SRC_REPORTS, {
+      type: 'vector',
+      tiles: [SRC_REPORTS_URL + '#' + Math.random()],
+      promoteId: 'id',
+    });
+
+    map.addLayer({
+      id: LAYER_REPORTS_CIRCLE,
+      type: 'circle',
+      source: SRC_REPORTS,
+      'source-layer': 'default',
+      filter: getDefaultReportFilter(),
+      paint: {
+        'circle-radius': 15,
+        'circle-stroke-color': [
+          'case',
+          ['boolean', ['==', ['feature-state', 'hovered'], true]],
+          '#9f1239',
+          '#ffffff',
+        ],
+        'circle-stroke-width': 2,
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#9f1239',
+          '#fecdd3',
+        ],
+      },
+    });
+
+    map.addLayer({
+      id: LAYER_REPORTS_ICON,
+      source: SRC_REPORTS,
+      'source-layer': 'default',
+      type: 'symbol',
+      filter: getDefaultReportFilter(),
+      layout: {
+        'icon-image': 'reportIcon',
+        'icon-size': 0.8,
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true,
+      },
+      paint: {
+        'icon-color': [
+          'case',
+          ['boolean', ['feature-state', 'in_panel'], false],
+          '#fecdd3',
+          '#9f1239',
+        ],
+      },
+    });
+  };
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  // Addresses
 
   const installBAN = async (map: maplibregl.Map) => {
     const certifiedColor = '#049c04';
@@ -671,4 +745,13 @@ export const useMapLayers = ({
   }, [reloadBuildings]);
 
   const adsOperationsIcons = getADSOperationIcons();
+};
+
+export const getDefaultReportFilter = () => {
+  const defaultReportFilter: FilterSpecification = [
+    'all',
+    ['==', 'pending', ['get', 'status']],
+  ];
+
+  return defaultReportFilter;
 };
