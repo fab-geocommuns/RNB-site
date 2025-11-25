@@ -7,6 +7,11 @@ import genericStyles from '@/styles/genericPanel.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
 import filterStyles from '@/styles/report/reportFilters.module.scss';
 
+import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
+
+import reportIcon from '@/public/images/map/report.png';
+import Image from 'next/image';
+
 interface TagStat {
   tag_id: number;
   tag_slug: string;
@@ -104,12 +109,29 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
         onClick={() => dispatch(Actions.report.toggleFiltersDrawer())}
       >
         <div className={filterStyles.titleShell}>
-          <h2 className={genericStyles.subtitle}>Suivi des signalements</h2>
-          <div
-            className={`${filterStyles.activityIndicator} ${
-              isGlowing ? filterStyles.active : ''
-            }`}
+          <Image
+            src={reportIcon}
+            alt="Suivi des signalements"
+            className={filterStyles.headIcon}
           />
+          <h2
+            className={`${genericStyles.subtitle} ${filterStyles.headSubtitle}`}
+          >
+            Suivi des signalements
+          </h2>
+          <div>
+            <Tooltip
+              className={filterStyles.activityTooltip}
+              kind="hover"
+              title="Suivi des signalements : s'allume quand vous ou un autre utilisateur ferme un signalement"
+            >
+              <div
+                className={`${filterStyles.activityIndicator} ${
+                  isGlowing ? filterStyles.active : ''
+                }`}
+              />
+            </Tooltip>
+          </div>
         </div>
         <a href="#" className={genericStyles.closeLink}>
           <i
@@ -127,17 +149,21 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
       {isOpen && stats && (
         <div className={genericStyles.body}>
           <div className={panelStyles.section}>
-            <div className={filterStyles.subtitle}>
-              {stats.total_report_count - stats.closed_report_count}{' '}
-              signalements restants
+            <div className={filterStyles.totalShell}>
+              <span className={filterStyles.totalCount}>
+                {stats.total_report_count - stats.closed_report_count}
+              </span>{' '}
+              <span className={filterStyles.totalLabel}>
+                signalements ouverts
+              </span>
             </div>
 
-            <div className={filterStyles.progressBarContainer}>
+            {/* <div className={filterStyles.progressBarContainer}>
               <div
                 className={filterStyles.progressBarFill}
                 style={{ width: getProgressBarWidth() }}
               />
-            </div>
+            </div> */}
 
             <div className={filterStyles.infoText}>
               Les signalements sont des indices permettant aux contributeurs
@@ -171,7 +197,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                       >
                         <div>
                           <div className={filterStyles.tagName}>
-                            {tag.tag_name}
+                            {tag.tag_name} {tag.tag_id}
                           </div>
                           <div className={filterStyles.tagCount}>
                             {openCount} signalement{openCount > 1 ? 's' : ''}{' '}

@@ -23,9 +23,11 @@ export default function ReportDetails({ report }: { report?: any }) {
   return (
     <>
       <div className={`${genericStyles.container} ${styles.detailsContainer}`}>
-        <div className={genericStyles.head}>
+        <div className={`${genericStyles.head} ${styles.head}`}>
           <div>
-            <h2 className={genericStyles.subtitle}>Signalement</h2>
+            <h2 className={`${genericStyles.subtitle} ${styles.headSubtitle}`}>
+              Signalement
+            </h2>
           </div>
           <a href="#" onClick={onClose} className={genericStyles.closeLink}>
             <i className="fr-icon-close-line" />

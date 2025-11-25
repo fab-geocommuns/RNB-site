@@ -5,6 +5,7 @@ import {
   SRC_REPORTS,
   LAYER_REPORTS_CIRCLE,
   LAYER_REPORTS_ICON,
+  LAYER_REPORTS_SMALL_CIRCLES,
   getDefaultReportFilter,
 } from '../useMapLayers';
 import { FilterSpecification } from 'maplibre-gl';
@@ -65,7 +66,8 @@ export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
   useEffect(() => {
     if (
       map?.getLayer(LAYER_REPORTS_CIRCLE) &&
-      map?.getLayer(LAYER_REPORTS_ICON)
+      map?.getLayer(LAYER_REPORTS_ICON) &&
+      map?.getLayer(LAYER_REPORTS_SMALL_CIRCLES)
     ) {
       let filter = getDefaultReportFilter();
 
@@ -82,6 +84,7 @@ export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
 
       map?.setFilter(LAYER_REPORTS_CIRCLE, filter);
       map?.setFilter(LAYER_REPORTS_ICON, filter);
+      map?.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filter);
     }
   }, [displayedTags]);
 };

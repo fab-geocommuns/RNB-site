@@ -1,3 +1,5 @@
+@import '@/styles/report/reportVars.scss';
+
 .shell {
   margin-bottom: 12px;
 }
@@ -5,9 +7,40 @@
 .head {
   cursor: pointer;
 
+  background-color: $light-color;
+  color: $dark-color;
+
   &:hover {
-    background-color: #e8edff;
+    background-color: $light-color;
   }
+}
+
+.headSubtitle {
+  color: $dark-color;
+}
+
+.headIcon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  // Go to https://codepen.io/sosuke/pen/Pjoqqp to get the right filter for $dark-color
+  filter: invert(31%) sepia(64%) saturate(1904%) hue-rotate(5deg)
+    brightness(97%) contrast(107%);
+}
+
+.totalCount {
+  font-weight: 500;
+  font-size: 1.8em;
+  display: block;
+  //color: $dark-color;
+}
+
+.totalLabel {
+  font-weight: 500;
+}
+
+.totalShell {
+  margin-bottom: 12px;
 }
 
 .infoText {
@@ -25,7 +58,7 @@
   font-size: 0.8em;
   font-weight: 500;
   text-transform: uppercase;
-  color: black;
+
   margin-bottom: 12px;
 }
 
@@ -75,15 +108,18 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #e5e7eb;
-  /* Default grey */
+  background-color: #f9edec;
   margin-left: 12px;
   transition: background-color 0.3s ease;
   flex-shrink: 0;
 
+  &:hover {
+    background-color: #fcddda;
+  }
+
   &.active {
     background-color: #10b981;
-    /* Green for activity */
+
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
     animation: pulse-green 2s infinite;
   }

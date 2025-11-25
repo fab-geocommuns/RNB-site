@@ -55,6 +55,7 @@ export const LAYERS_BDGS_SHAPE_ALL = [
 export const SRC_REPORTS = 'reports';
 export const LAYER_REPORTS_CIRCLE = 'reports_circle';
 export const LAYER_REPORTS_ICON = 'reports_icon';
+export const LAYER_REPORTS_SMALL_CIRCLES = 'report_small_circles';
 
 export const SRC_REPORTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/reports/tiles/{x}/{y}/{z}.pbf`;
 
@@ -516,6 +517,11 @@ export const useMapLayers = ({
   // Reports
 
   const installReports = async (map: maplibregl.Map) => {
+    const darkColor = '#d64d00';
+    const lightColor = '#fcf5f4';
+
+    const zoomThreshold = 13;
+
     if (map.getLayer(LAYER_REPORTS_CIRCLE))
       map.removeLayer(LAYER_REPORTS_CIRCLE);
     if (map.getLayer(LAYER_REPORTS_ICON)) map.removeLayer(LAYER_REPORTS_ICON);
@@ -534,25 +540,43 @@ export const useMapLayers = ({
     });
 
     map.addLayer({
+      id: 'report_small_circles',
+      source: SRC_REPORTS,
+      'source-layer': 'default',
+      filter: getDefaultReportFilter(),
+      maxzoom: zoomThreshold,
+      type: 'circle',
+      paint: {
+        'circle-radius': 4,
+        'circle-color': darkColor,
+
+        'circle-stroke-color': lightColor,
+        'circle-stroke-width': 3,
+        'circle-stroke-opacity': 1,
+      },
+    });
+
+    map.addLayer({
       id: LAYER_REPORTS_CIRCLE,
       type: 'circle',
       source: SRC_REPORTS,
       'source-layer': 'default',
       filter: getDefaultReportFilter(),
+      minzoom: zoomThreshold,
       paint: {
         'circle-radius': 15,
         'circle-stroke-color': [
           'case',
           ['boolean', ['==', ['feature-state', 'hovered'], true]],
-          '#9f1239',
+          darkColor,
           '#ffffff',
         ],
         'circle-stroke-width': 2,
         'circle-color': [
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
-          '#9f1239',
-          '#fecdd3',
+          darkColor,
+          lightColor,
         ],
       },
     });
@@ -563,6 +587,8 @@ export const useMapLayers = ({
       'source-layer': 'default',
       type: 'symbol',
       filter: getDefaultReportFilter(),
+      minzoom: zoomThreshold,
+
       layout: {
         'icon-image': 'reportIcon',
         'icon-size': 0.8,
@@ -573,8 +599,8 @@ export const useMapLayers = ({
         'icon-color': [
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
-          '#fecdd3',
-          '#9f1239',
+          lightColor,
+          darkColor,
         ],
       },
     });
