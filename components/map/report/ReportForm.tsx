@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Actions, AppDispatch } from '@/stores/store';
 import styles from '@/styles/report/form.module.scss';
-import { SegmentedControl } from '@codegouvfr/react-dsfr/SegmentedControl';
+import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useRNBFetch } from '@/utils/use-rnb-fetch';
 import {
@@ -26,10 +26,6 @@ export default function ReportForm({ report }: { report?: any }) {
   const resize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
-  };
-
-  const handleActionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAction(e.target.value);
   };
 
   // Change the submut button label based on selected action
@@ -110,34 +106,34 @@ export default function ReportForm({ report }: { report?: any }) {
           ></textarea>
         </div>
         <div className={styles.actionShell}>
-          <SegmentedControl
-            small={true}
+          <RadioButtons
             name="action"
             legend="Votre action"
-            segments={[
+            small={true}
+            className={styles.actionInput}
+            options={[
               {
                 label: 'Commenter',
-                //iconId: 'fr-icon-check-line',
+                hintText: 'Laisser un simple message',
                 nativeInputProps: {
-                  defaultChecked: true,
-                  value: 'comment',
-                  onChange: handleActionChange,
+                  checked: action === 'comment',
+                  onChange: () => setAction('comment'),
                 },
               },
               {
-                label: 'Traiter',
-                //iconId: 'fr-icon-check-line',
+                label: 'Marquer comme traité',
+                hintText: 'Fermer le signalement car il est déjà corrigé',
                 nativeInputProps: {
-                  value: 'fix',
-                  onChange: handleActionChange,
+                  checked: action === 'fix',
+                  onChange: () => setAction('fix'),
                 },
               },
               {
                 label: 'Rejeter',
-                //iconId: 'fr-icon-error-line',
+                hintText: 'Fermer le signalement car il est non pertinent',
                 nativeInputProps: {
-                  value: 'reject',
-                  onChange: handleActionChange,
+                  checked: action === 'reject',
+                  onChange: () => setAction('reject'),
                 },
               },
             ]}
