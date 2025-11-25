@@ -25,11 +25,6 @@ export default function ReportHead({ report }: { report: any }) {
 
   const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
-    // dispatch(
-    //   // @ts-ignore
-    //   Actions.map.selectBuilding(rnbId),
-
-    // );
     dispatch(
       // @ts-ignore
       selectBuildingAndSetOperationUpdate(rnbId),

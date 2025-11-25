@@ -78,8 +78,15 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
       map?.getLayer(LAYER_REPORTS_ICON) &&
       map?.getLayer(LAYER_REPORTS_SMALL_CIRCLES)
     ) {
-      let filter = getDefaultReportFilter();
+      let filters = ['any'] as any;
 
+      // First possibility: the report is selected
+      if (selectedReportId) {
+        filters.push(['==', ['get', 'id'], selectedReportId]);
+      }
+
+      // Second possibility: this is a pending report with the right tag
+      let catFilter = ['all', ['==', ['get', 'status'], 'pending']];
       if (displayedTags !== 'all') {
         let tagFilters = ['any'] as any;
 
@@ -88,12 +95,14 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
           tagFilters.push(singleTagFilter);
         });
 
-        filter.push(tagFilters);
+        catFilter.push(tagFilters);
       }
 
-      map?.setFilter(LAYER_REPORTS_CIRCLE, filter);
-      map?.setFilter(LAYER_REPORTS_ICON, filter);
-      map?.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filter);
+      filters.push(catFilter);
+
+      map?.setFilter(LAYER_REPORTS_CIRCLE, filters);
+      map?.setFilter(LAYER_REPORTS_ICON, filters);
+      map?.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filters);
     }
-  }, [displayedTags]);
+  }, [displayedTags, selectedReportId]);
 };

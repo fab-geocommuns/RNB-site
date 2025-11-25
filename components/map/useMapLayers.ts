@@ -546,7 +546,7 @@ export const useMapLayers = ({
     });
 
     map.addLayer({
-      id: 'report_small_circles',
+      id: LAYER_REPORTS_SMALL_CIRCLES,
       source: SRC_REPORTS,
       'source-layer': 'default',
       filter: getDefaultReportFilter(),
@@ -785,8 +785,9 @@ export const useMapLayers = ({
 
 export const getDefaultReportFilter = () => {
   const defaultReportFilter: FilterSpecification = [
-    'all',
-    ['==', 'pending', ['get', 'status']],
+    '==',
+    'pending',
+    ['get', 'status'],
   ];
 
   return defaultReportFilter;
