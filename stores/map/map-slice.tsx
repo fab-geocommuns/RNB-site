@@ -91,8 +91,7 @@ const initialState: MapStore = {
   layers: {
     background: 'vectorIgnStandard',
     buildings: 'point',
-    // for dev purpose : we always show reports
-    extraLayers: ['ads', 'reports'],
+    extraLayers: [],
   },
 };
 
@@ -113,6 +112,10 @@ export const mapSlice = createSlice({
       } else {
         state.layers.extraLayers.splice(index, 1);
       }
+    },
+    setLayersExtra(state, action) {
+      console.log(action.payload);
+      state.layers.extraLayers = action.payload;
     },
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {

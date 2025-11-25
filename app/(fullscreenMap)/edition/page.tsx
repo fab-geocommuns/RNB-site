@@ -44,6 +44,7 @@ export default function Page() {
           <EditMap
             defaultBackgroundLayer="satellite"
             defaultBuildingLayer="polygon"
+            defaultExtraLayers={['reports']}
             disabledLayers={['point']}
           />
         </div>

@@ -92,7 +92,11 @@ export const SRC_PLOTS = 'plotstiles';
 
 // Icons
 import { getADSOperationIcons } from '@/logic/ads';
-import { MapBackgroundLayer, MapBuildingsLayer } from '@/stores/map/map-slice';
+import {
+  MapBackgroundLayer,
+  MapBuildingsLayer,
+  MapExtraLayer,
+} from '@/stores/map/map-slice';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -147,11 +151,13 @@ export const useMapLayers = ({
   map,
   defaultBackgroundLayer,
   defaultBuildingLayer,
+  defaultExtraLayers,
   selectedBuildingisGreen,
 }: {
   map?: maplibregl.Map;
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
+  defaultExtraLayers?: MapExtraLayer[] | null;
   selectedBuildingisGreen?: Boolean;
 }) => {
   // Get the layers from the store
@@ -760,9 +766,13 @@ export const useMapLayers = ({
   useEffect(() => {
     if (defaultBackgroundLayer)
       dispatch(Actions.map.setLayersBackground(defaultBackgroundLayer));
+
     if (defaultBuildingLayer)
       dispatch(Actions.map.setLayersBuildings(defaultBuildingLayer));
-  }, [defaultBackgroundLayer, defaultBuildingLayer]);
+
+    if (defaultExtraLayers)
+      dispatch(Actions.map.setLayersExtra(defaultExtraLayers));
+  }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
 
   useEffect(() => {
     if (map) {

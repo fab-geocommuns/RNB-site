@@ -14,24 +14,28 @@ import {
   MapLayer,
   MapBackgroundLayer,
   MapBuildingsLayer,
+  MapExtraLayer,
 } from '@/stores/map/map-slice';
 
 type Props = {
   disabledLayers?: MapLayer[];
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
+  defaultExtraLayers?: MapExtraLayer[];
 };
 
 export default function VisuMap({
   disabledLayers,
   defaultBackgroundLayer,
   defaultBuildingLayer,
+  defaultExtraLayers,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
   useMapLayers({
     map,
     defaultBackgroundLayer,
     defaultBuildingLayer,
+    defaultExtraLayers,
     selectedBuildingisGreen: true,
   });
   useMapControls(map);

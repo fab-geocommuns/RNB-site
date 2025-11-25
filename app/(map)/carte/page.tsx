@@ -72,7 +72,7 @@ export default function RNBMap() {
           <ReportPanels />
         )}
         <div className={styles.map__mapShell}>
-          <VisuMap />
+          <VisuMap defaultExtraLayers={['ads']} />
         </div>
       </div>
     </>

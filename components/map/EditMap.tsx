@@ -12,6 +12,7 @@ import {
   MapLayer,
   MapBackgroundLayer,
   MapBuildingsLayer,
+  MapExtraLayer,
 } from '@/stores/map/map-slice';
 import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
 import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
@@ -22,12 +23,14 @@ type Props = {
   disabledLayers?: MapLayer[];
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
+  defaultExtraLayers?: MapExtraLayer[];
 };
 
 export default function EditMap({
   disabledLayers,
   defaultBackgroundLayer,
   defaultBuildingLayer,
+  defaultExtraLayers,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
 
@@ -35,6 +38,7 @@ export default function EditMap({
     map,
     defaultBackgroundLayer,
     defaultBuildingLayer,
+    defaultExtraLayers,
     selectedBuildingisGreen: true,
   });
 
