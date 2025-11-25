@@ -31,7 +31,10 @@ export default function ReportHead({ report }: { report: any }) {
     //   Actions.map.selectBuilding(rnbId),
 
     // );
-    dispatch(selectBuildingAndSetOperationUpdate(rnbId));
+    dispatch(
+      // @ts-ignore
+      selectBuildingAndSetOperationUpdate(rnbId),
+    );
   };
 
   const handleShowDetailsClick = (e: React.MouseEvent) => {
