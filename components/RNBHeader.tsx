@@ -6,7 +6,6 @@ import { Badge } from '@codegouvfr/react-dsfr/Badge';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import Link from 'next/link';
 import newNav from '@/components/header/newNav';
-import oldNav from '@/components/header/oldNav';
 
 // Auth
 import { useSession } from 'next-auth/react';
@@ -39,9 +38,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   const [quickActions, setQuickActions] = useState([]);
   const [title, setTitle] = useState('Référentiel National des Bâtiments');
 
-  const nav = process.env.NEXT_PUBLIC_NEW_HOME_ENABLED
-    ? newNav(pathname)
-    : oldNav(pathname);
+  const nav = newNav(pathname);
 
   useEffect(() => {
     setRedirectUrl(window.location.href);
