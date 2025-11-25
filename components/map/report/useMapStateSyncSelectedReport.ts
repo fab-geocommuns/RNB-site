@@ -68,6 +68,7 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
 
   useEffect(() => {
     if (map?.getSource(SRC_REPORTS)) {
+      // @ts-ignore
       map.getSource(SRC_REPORTS).setSourceProperty(() => {});
     }
   }, [lastReportUpdate]);
