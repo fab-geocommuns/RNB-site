@@ -114,7 +114,6 @@ export const mapSlice = createSlice({
       }
     },
     setLayersExtra(state, action) {
-      console.log(action.payload);
       state.layers.extraLayers = action.payload;
     },
     setAddressSearchQuery(state, action) {
