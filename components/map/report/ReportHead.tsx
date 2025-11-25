@@ -5,6 +5,7 @@ import { Actions } from '@/stores/store';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
+import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 
 export default function ReportHead({ report }: { report: any }) {
   const dispatch = useDispatch();
@@ -25,10 +26,12 @@ export default function ReportHead({ report }: { report: any }) {
 
   const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
-    dispatch(
-      // @ts-ignore
-      Actions.map.selectBuilding(rnbId),
-    );
+    // dispatch(
+    //   // @ts-ignore
+    //   Actions.map.selectBuilding(rnbId),
+
+    // );
+    dispatch(selectBuildingAndSetOperationUpdate(rnbId));
   };
 
   const handleShowDetailsClick = (e: React.MouseEvent) => {
