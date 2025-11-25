@@ -9,7 +9,7 @@ import { useVisuMapEvents } from '@/components/map/useVisuMapEvents';
 import { useMapSyncCoordinates } from '@/components/map/useMapSyncCoordinates';
 import { useMapStateSync } from '@/components/map/useMapStateSync';
 import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
-import { useMapStateSyncSelectedReport } from '@/components/map/report/useMapStateSyncSelectedReport';
+import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncSelectedReport';
 import {
   MapLayer,
   MapBackgroundLayer,
@@ -43,7 +43,7 @@ export default function VisuMap({
   useVisuMapEvents(map);
   useMapStateSync(map);
   useMapStateSyncSelectedBuilding(map);
-  useMapStateSyncSelectedReport(map);
+  useMapStateSyncReport(map);
 
   return mapContainer;
 }

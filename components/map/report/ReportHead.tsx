@@ -1,7 +1,6 @@
 import styles from '@/styles/report/reportHead.module.scss';
 
 import { useDispatch } from 'react-redux';
-import { Actions } from '@/stores/store';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';

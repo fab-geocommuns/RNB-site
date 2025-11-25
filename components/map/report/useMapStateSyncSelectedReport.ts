@@ -8,9 +8,8 @@ import {
   LAYER_REPORTS_SMALL_CIRCLES,
   getDefaultReportFilter,
 } from '../useMapLayers';
-import { FilterSpecification } from 'maplibre-gl';
 
-export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
+export const useMapStateSyncReport = (map?: maplibregl.Map) => {
   const selectedReportId = useSelector(
     (state: RootState) => (state.report.selectedReport?.id as number) ?? null,
   );
@@ -19,6 +18,10 @@ export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
   >(null);
 
   const displayedTags = useSelector((state: any) => state.report.displayedTags);
+
+  const lastReportUpdate = useSelector(
+    (state: RootState) => state.report.lastReportUpdate,
+  );
 
   const unselectReport = (reportId: number) => {
     if (map?.getSource(SRC_REPORTS)) {
@@ -62,6 +65,12 @@ export const useMapStateSyncSelectedReport = (map?: maplibregl.Map) => {
       setPreviousSelectedReportId(selectedReportId);
     }
   }, [selectedReportId]);
+
+  useEffect(() => {
+    if (map?.getSource(SRC_REPORTS)) {
+      map.getSource(SRC_REPORTS).setSourceProperty(() => {});
+    }
+  }, [lastReportUpdate]);
 
   useEffect(() => {
     if (
