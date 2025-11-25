@@ -193,7 +193,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
             </div>
 
             <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Données externes</h2>
+              <h2 className={styles.sectionTitle}>Extra</h2>
               <div className={styles.sectionBody}>
                 <ul className={styles.choicesList}>
                   {showReports && (
