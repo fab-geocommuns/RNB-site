@@ -2,6 +2,7 @@
   "name": "batid-ads",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.23.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +10,7 @@
     "lint": "next lint",
     "e2e": "npx playwright test",
     "e2e-ui": "npx playwright test --ui",
+    "preinstall": "npx only-allow pnpm",
     "predev": "only-include-used-icons",
     "prebuild": "only-include-used-icons",
     "prepare": "husky"

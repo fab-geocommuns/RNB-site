@@ -16,7 +16,7 @@ jobs:
           node-version: 20.x
 
       - name: Installation des dépendances NPM
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Installation des navigateurs Playwright
         run: npx playwright install --with-deps
