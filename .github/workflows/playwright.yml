@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Récupération du code
-        uses: actions/checkout@v4
+        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
 
       - name: Installation de Node.JS 20.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@633bb92bc0aabcae06e8ea93b85aecddd374c402
         with:
           node-version: 20.x
 
@@ -22,7 +22,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Obtenir l'URL de preview Vercel
-        uses: zentered/vercel-preview-url@v1.1.9
+        uses: zentered/vercel-preview-url@e5fb141da2e3d62692b38e6c7c17477aad214165
         id: vercel_preview_url
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -31,7 +31,7 @@ jobs:
           vercel_project_id: 'prj_AGcOI1rKi80YLDCPDpwEnNHyJ1wc'
 
       - name: Attente du déploiement de la preview
-        uses: UnlyEd/github-action-await-vercel@v1
+        uses: UnlyEd/github-action-await-vercel@3d536f03d951e603b21701814ba211dcbbafaf93
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -48,14 +48,14 @@ jobs:
           TEST_ACCOUNT_PASSWORD: ${{ secrets.TEST_ACCOUNT_PASSWORD }}
 
       - name: Ajout du commentaire dans la PR
-        uses: daun/playwright-report-summary@v3
+        uses: daun/playwright-report-summary@be9e270edd5ad86038604d3caa84a819a6ff6fed
         if: always()
         with:
           report-file: test-results.json
           comment-title: 'Résultats des tests E2E Playwright'
 
       - name: Mise à disposition des résultats
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
         if: always()
         with:
           name: Résultats
