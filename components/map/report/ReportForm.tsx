@@ -37,8 +37,10 @@ export default function ReportForm({ report }: { report?: any }) {
         return 'Marquer comme traité';
       case 'reject':
         return 'Rejeter le signalement';
-      default:
+      case 'comment':
         return 'Ajouter un commentaire';
+      default:
+        throw new Error('Invalid action on report form: ' + action);
     }
   };
 
@@ -48,8 +50,10 @@ export default function ReportForm({ report }: { report?: any }) {
         return 'Le signalement a été marqué comme traité.';
       case 'reject':
         return 'Le signalement a été rejeté.';
-      default:
+      case 'comment':
         return 'Votre commentaire a bien été ajouté.';
+      default:
+        throw new Error('Invalid action on report form: ' + action);
     }
   };
 
