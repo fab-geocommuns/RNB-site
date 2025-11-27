@@ -6,7 +6,6 @@ import {
   LAYER_REPORTS_CIRCLE,
   LAYER_REPORTS_ICON,
   LAYER_REPORTS_SMALL_CIRCLES,
-  getDefaultReportFilter,
 } from '../useMapLayers';
 
 export const useMapStateSyncReport = (map?: maplibregl.Map) => {
