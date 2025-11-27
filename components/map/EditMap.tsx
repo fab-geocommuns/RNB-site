@@ -17,7 +17,7 @@ import {
 import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
 import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
 import { useMapStateSyncSelectedBuildingsForMerge } from '@/components/map/useMapStateSyncSelectedBuildingsForMerge';
-import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncSelectedReport';
+import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
 
 type Props = {
   disabledLayers?: MapLayer[];
