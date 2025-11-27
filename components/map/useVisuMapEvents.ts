@@ -70,7 +70,6 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
             )
           ) {
             const reportId = featureCloseToCursor.id as number | null;
-            console.log('repor', featureCloseToCursor);
             dispatch(Actions.report.selectReport(reportId));
           }
         }
@@ -125,11 +124,6 @@ export const handleFeatureHover = (
       id: previousHoveredFeatureId.current,
       sourceLayer: 'default',
     };
-    // -- Part to remove when using vector tiles for reports instead of geojson source
-    // if (prevFeatureToUpdate.source === SRC_REPORTS) {
-    //   delete prevFeatureToUpdate.sourceLayer;
-    // }
-    // -- End of part to remove
 
     map.setFeatureState(prevFeatureToUpdate, { hovered: false });
   }
@@ -140,11 +134,6 @@ export const handleFeatureHover = (
       id: featureCloseToCursor?.id,
       sourceLayer: 'default',
     };
-    // -- Part to remove when using vector tiles for reports instead of geojson source
-    // if (hoveredFeatureToUpdate.source == SRC_REPORTS) {
-    //   delete hoveredFeatureToUpdate.sourceLayer;
-    // }
-    // -- End of part to remove
 
     map.setFeatureState(hoveredFeatureToUpdate, { hovered: true });
 
