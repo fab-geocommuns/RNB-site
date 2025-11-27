@@ -22,6 +22,10 @@ import Bus from '@/utils/Bus';
 // Store
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import { useMemo } from 'react';
+
+// Types
+import { MapExtraLayer } from '@/stores/map/map-slice';
 
 export default function RNBMap() {
   // Feature flag
@@ -29,6 +33,8 @@ export default function RNBMap() {
 
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
+
+  const defaultExtraLayers = useMemo(() => ['ads'] as MapExtraLayer[], []);
 
   // //////////////////////
   // Tracking address search
@@ -72,7 +78,7 @@ export default function RNBMap() {
           <ReportPanels />
         )}
         <div className={styles.map__mapShell}>
-          <VisuMap defaultExtraLayers={['ads']} />
+          <VisuMap defaultExtraLayers={defaultExtraLayers} />
         </div>
       </div>
     </>

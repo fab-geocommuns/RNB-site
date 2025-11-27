@@ -11,6 +11,8 @@ import '@/styles/mapBanLayer.scss';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import { useMemo } from 'react';
+import { MapExtraLayer } from '@/stores/map/map-slice';
 
 export default function Page() {
   // Feature flag
@@ -20,6 +22,8 @@ export default function Page() {
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const { user } = useRNBAuthentication({ require: true });
+
+  const defaultExtraLayers = useMemo(() => ['reports'] as MapExtraLayer[], []);
 
   if (!user) {
     return (
@@ -44,7 +48,7 @@ export default function Page() {
           <EditMap
             defaultBackgroundLayer="satellite"
             defaultBuildingLayer="polygon"
-            defaultExtraLayers={['reports']}
+            defaultExtraLayers={defaultExtraLayers}
             disabledLayers={['point']}
           />
         </div>

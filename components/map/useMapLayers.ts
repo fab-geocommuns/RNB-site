@@ -772,7 +772,7 @@ export const useMapLayers = ({
 
     if (defaultExtraLayers)
       dispatch(Actions.map.setLayersExtra(defaultExtraLayers));
-  }, []);
+  }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
 
   useEffect(() => {
     if (map) {
