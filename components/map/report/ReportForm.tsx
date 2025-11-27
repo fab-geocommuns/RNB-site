@@ -47,11 +47,11 @@ export default function ReportForm({ report }: { report?: any }) {
   const getSuccessMessage = () => {
     switch (action) {
       case 'fix':
-        return 'Le signalement a été marqué comme traité.';
+        return 'Le signalement a été marqué comme traité';
       case 'reject':
-        return 'Le signalement a été rejeté.';
+        return 'Le signalement a été rejeté';
       case 'comment':
-        return 'Votre commentaire a bien été ajouté.';
+        return 'Votre commentaire a bien été ajouté';
       default:
         throw new Error('Invalid action on report form: ' + action);
     }
