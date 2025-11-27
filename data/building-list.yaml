@@ -269,5 +269,5 @@
   title: local non communicant ou encastré dans un batiment
   description: <a href="#local-encastre">Voir les explications.</a>
   isBuilding: false
-  image: local-encastre.jpeg
+  image: local-encastre.jpg
   distinctionBetweenSingleAndMultipleText: Un local, par exemple une boulangerie ou un salon de coiffure, encastré dans un immeuble mais ne communiquant pas avec le reste de celui-ci, n'est pas un bâtiment. Il est inclus dans le bâtiment dans lequel il est encastré.
