@@ -1,6 +1,6 @@
 - id: piscine
   title: Piscine
-  description: Piscine, y compris les piscines avec abri ou hors-sol.
+  description: Piscine, y compris avec petit abri ou hors-sol. Les bâtiments en dur accueillant une piscine (comme les piscines municipales par exemple) sont par contre des bâtiments.
   isBuilding: false
   image: piscine.png
 
@@ -20,6 +20,12 @@
   isBuilding: false
   image: kiosque.png
 
+- id: hangar
+  title: Hangar partiellement ouvert
+  description: Un bâtiment est "abritant", au sens d’une protection des éléments extérieurs et intempéries. Pour qu'il remplisse cette condition, il faut pouvoir facilement distinguer un dedans et un dehors, grâce une ou plusieurs entrées.
+  isBuilding: true
+  image: hangar.jpg
+  
 - id: abri-jardin
   title: Cabane ou abri de petite dimension
   isBuilding: false
@@ -85,7 +91,7 @@
 
 - id: pont
   title: Pont
-  description: Un pont, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment.
+  description: Un pont, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un pont) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: pont.png
 
@@ -97,13 +103,13 @@
 
 - id: barrage
   title: Barrage
-  description: Un barrage, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est effectivement possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. les locaux d’un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
+  description: Un barrage, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: barrage.png
 
 - id: tunnel
   title: Tunnel, galerie
-  description: Un tunnel, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment.
+  description: Un tunnel, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un tunnel) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: tunnel.png
 
@@ -253,8 +259,15 @@
   distinctionBetweenSingleAndMultipleText: Dans le cas de bâtiments reliés par une construction souterraine (par exemple un garage ou une cave commune), il y a autant de bâtiments à considérer que s’il n’y avait pas eu de garage souterrain. Dans le cas d’une barre d’immeuble avec plusieurs cages d’escalier non communicantes en dehors des cages et garages souterrains, on a bien autant de bâtiments que de cages d’escaliers (accès distinct depuis l’extérieur). Cette simplification permet notamment aux services d’urgences d'identifier rapidement le point d’accès à un lieu d’intervention.
 
 - id: passerelle
-  title: Bâtiments reliés par une passerelle
+  title: Passerelle ou couloir extérieur fermé
   description: <a href="#passerelle">Voir les explications.</a> © Le Bon Marché, LVMH.
   isBuilding: true
   image: passerelle-stephane-muratet-cc-lebonmarche.png
-  distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle, même si celle-ci rend la circulation possible entre les deux bâtiments, on décompte bien deux bâtiments distincts. On peut si besoin rattacher la passerelle à l'un des deux bâtiments.
+  distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle ou un couloir extérieur fermé, on décompte deux bâtiments distincts. On peut au besoin rattacher la passerelle ou le couloir à l'un des deux bâtiments.
+
+  id: local-encastre
+  title: local non communicant ou encastré dans un batiment
+  description: <a href="#local-encastre">Voir les explications.</a>
+  isBuilding: false
+  image: local-encastre.jpeg
+  distinctionBetweenSingleAndMultipleText: Un local, par exemple une boulangerie ou un salon de coiffure, encastré dans un immeuble mais ne communiquant pas avec le reste de celui-ci, n'est pas un bâtiment. Il est inclus dans le bâtiment dans lequel il est encastré.
