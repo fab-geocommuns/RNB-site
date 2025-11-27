@@ -11,11 +11,13 @@ import {
   toasterSuccess,
 } from '@/components/contribution/toaster';
 
+type FormAction = 'comment' | 'fix' | 'reject';
+
 export default function ReportForm({ report }: { report?: any }) {
   const { fetch } = useRNBFetch();
   const dispatch: AppDispatch = useDispatch();
 
-  const [action, setAction] = useState('comment');
+  const [action, setAction] = useState<FormAction>('comment');
   const [message, setMessage] = useState('');
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
