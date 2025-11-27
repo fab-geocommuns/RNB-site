@@ -265,7 +265,7 @@
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle ou un couloir extérieur fermé, on décompte deux bâtiments distincts. On peut au besoin rattacher la passerelle ou le couloir à l'un des deux bâtiments.
 
-  id: local-encastre
+- id: local-encastre
   title: local non communicant ou encastré dans un batiment
   description: <a href="#local-encastre">Voir les explications.</a>
   isBuilding: false
