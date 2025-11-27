@@ -265,9 +265,9 @@
   image: passerelle-stephane-muratet-cc-lebonmarche.png
   distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments reliés par une passerelle ou un couloir extérieur fermé, on décompte deux bâtiments distincts. On peut au besoin rattacher la passerelle ou le couloir à l'un des deux bâtiments.
 
-  id: batiment-superpose
-  title: Bâtiments superposés ou encastrés
-  description: <a href="#batiment-superpose">Voir les explications.</a>
+  id: local-encastre
+  title: local non communicant ou encastré dans un batiment
+  description: <a href="#local-encastre">Voir les explications.</a>
   isBuilding: false
-  image: superpose.jpeg
-  distinctionBetweenSingleAndMultipleText: Dans le cas de deux bâtiments superposés ou encastrés, on considère qu'il ne s'agit que d'un seul bâtiment. En effet, le RNB est un référentiel géographique en 2D, qui ne prend pas en compte l'altitude. Par exemple, lorsqu'un local est encastré au rez-de-chaussée d'un bâtiment sans communiquer avec le reste de celui-ci, on considère l'ensemble comme un unique bâtiment.
+  image: local-encastre.jpeg
+  distinctionBetweenSingleAndMultipleText: Un local, par exemple une boulangerie ou un salon de coiffure, encastré dans un immeuble mais ne communiquant pas avec le reste de celui-ci, n'est pas un bâtiment. Il est inclus dans le bâtiment dans lequel il est encastré.
