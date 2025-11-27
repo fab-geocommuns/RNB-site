@@ -23,6 +23,13 @@ export default function ReportHead({ report }: { report: any }) {
       minute: '2-digit',
     });
 
+  if (report.rnb_id) {
+    console.log(report.rnb_id);
+
+    // @ts-ignore
+    dispatch(selectBuildingAndSetOperationUpdate(report.rnb_id));
+  }
+
   const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
     dispatch(
