@@ -78,6 +78,8 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
       map?.getLayer(LAYER_REPORTS_ICON) &&
       map?.getLayer(LAYER_REPORTS_SMALL_CIRCLES)
     ) {
+      // We want to show only some reports given by vector tiles.
+      // We can either show the selected report, or the pending reports with the right tags.
       let filters = ['any'] as any;
 
       // First possibility: the report is selected
