@@ -4,8 +4,11 @@ import {
   LAYER_BDGS_SHAPE_POINT,
   LAYER_BDGS_POINT,
   LAYER_ADS_CIRCLE,
+  LAYER_BAN_POINT,
+  LAYER_BAN_TXT,
 } from '@/components/map/useMapLayers';
 import { distance } from '@turf/turf';
+import { MapMouseEvent } from 'maplibre-gl';
 
 /**
  * Récupère la feature la plus proche du curseur dans un rayon maximum spécifié en pixels.
@@ -17,21 +20,34 @@ import { distance } from '@turf/turf';
  */
 export const getNearestFeatureFromCursorWithBuffer = (
   map: maplibregl.Map,
-  x: number,
-  y: number,
-  buffer = 15,
+  event: MapMouseEvent,
+  buffer = 30, // buffer in pixels
 ): MapGeoJSONFeature | undefined => {
   const layersToSearchIn = [
+    LAYER_BAN_POINT,
+    LAYER_BAN_TXT,
     LAYER_BDGS_SHAPE_BORDER,
     LAYER_BDGS_SHAPE_POINT,
     LAYER_BDGS_POINT,
     LAYER_ADS_CIRCLE,
   ].filter((layer) => map.getLayer(layer));
 
-  const bbox: [PointLike, PointLike] = [
-    [x - buffer, y - buffer],
-    [x + buffer, y + buffer],
-  ];
+  // First, we need to draw a bbxox expressed in pixels,
+  // relative to the map container
+  const { x, y } = event.point;
+
+  let bbox: [PointLike, PointLike] | PointLike = [x, y];
+  if (buffer > 0) {
+    const minX = x - buffer;
+    const maxX = x + buffer;
+    const minY = y - buffer;
+    const maxY = y + buffer;
+
+    bbox = [
+      [minX, minY],
+      [maxX, maxY],
+    ];
+  }
 
   // Rechercher les features de la couche BUILDINGS_LAYER_POINT dans la zone de recherche
   const features = map.queryRenderedFeatures(bbox, {
@@ -43,11 +59,15 @@ export const getNearestFeatureFromCursorWithBuffer = (
   if (features.length > 0) {
     let minDistance = Infinity;
 
+    // we need the cursor position in lnglat to compare them to the features coordinates
+    const cursorLng = event.lngLat.lng;
+    const cursorLat = event.lngLat.lat;
+
     features.forEach((feature) => {
       if (feature.geometry.type == 'Point') {
-        const featureX = feature.geometry.coordinates[0];
-        const featureY = feature.geometry.coordinates[1];
-        let d = distance([x, y], [featureX, featureY]);
+        const pointLng = feature.geometry.coordinates[0];
+        const pointLat = feature.geometry.coordinates[1];
+        let d = distance([cursorLng, cursorLat], [pointLng, pointLat]);
 
         if (d < minDistance) {
           minDistance = d;
@@ -57,9 +77,9 @@ export const getNearestFeatureFromCursorWithBuffer = (
 
       if (feature.geometry.type == 'Polygon') {
         feature.geometry.coordinates[0].forEach((point) => {
-          const featureX = point[0];
-          const featureY = point[1];
-          let d = distance([x, y], [featureX, featureY]);
+          const vertexLng = point[0];
+          const vertexLat = point[1];
+          let d = distance([cursorLng, cursorLat], [vertexLng, vertexLat]);
 
           if (d < minDistance) {
             minDistance = d;
@@ -71,9 +91,9 @@ export const getNearestFeatureFromCursorWithBuffer = (
       if (feature.geometry.type == 'MultiPolygon') {
         feature.geometry.coordinates[0].forEach((polygon) => {
           polygon.forEach((point) => {
-            const featureX = point[0];
-            const featureY = point[1];
-            let d = distance([x, y], [featureX, featureY]);
+            const vertexLng = point[0];
+            const vertexLat = point[1];
+            let d = distance([cursorLng, cursorLat], [vertexLng, vertexLat]);
 
             if (d < minDistance) {
               minDistance = d;

@@ -12,6 +12,7 @@ function cspMiddleware(request: NextRequest) {
   const tileOrigins = [
     'https://data.geopf.fr/',
     'https://openmaptiles.geo.data.gouv.fr/',
+    'https://openmaptiles.data.gouv.fr/',
     'https://openmaptiles.github.io/',
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';

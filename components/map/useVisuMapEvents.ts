@@ -8,7 +8,11 @@ import {
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
   LAYER_ADS_CIRCLE,
+  LAYER_BAN_POINT,
+  LAYER_BAN_TXT,
 } from '@/components/map/useMapLayers';
+import { displayBANPopup } from './BanLayerEvent';
+import { map } from 'yaml/dist/schema/common/map';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -26,8 +30,8 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
       const handleClickEvent = (e: MapMouseEvent) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map,
-          e.point.x,
-          e.point.y,
+          e,
+          10,
         );
 
         if (featureCloseToCursor) {
@@ -50,6 +54,14 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
             const file_number = featureCloseToCursor.properties.file_number;
             dispatch(Actions.map.selectADS(file_number));
           }
+
+          if (
+            [LAYER_BAN_POINT, LAYER_BAN_TXT].includes(
+              featureCloseToCursor.layer.id,
+            )
+          ) {
+            displayBANPopup(map, featureCloseToCursor);
+          }
         }
       };
 
@@ -59,44 +71,15 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
       const handleMouseMove = (e: MapMouseEvent) => {
         const featureCloseToCursor = getNearestFeatureFromCursorWithBuffer(
           map!,
-          e.point.x,
-          e.point.y,
+          e,
+          10,
         );
-
-        if (featureCloseToCursor) {
-          map!.getCanvas().style.cursor = 'pointer';
-        } else {
-          map!.getCanvas().style.cursor = '';
-        }
-
-        if (
-          previousHoveredFeatureId.current &&
-          previousHoveredFeatureSource.current
-        ) {
-          map.setFeatureState(
-            {
-              source: previousHoveredFeatureSource.current,
-              id: previousHoveredFeatureId.current,
-              sourceLayer: 'default',
-            },
-            { hovered: false },
-          );
-        }
-
-        if (featureCloseToCursor) {
-          map.setFeatureState(
-            {
-              source: featureCloseToCursor.layer.source,
-              id: featureCloseToCursor?.id,
-              sourceLayer: 'default',
-            },
-            { hovered: true },
-          );
-
-          previousHoveredFeatureId.current = featureCloseToCursor?.id as string;
-          previousHoveredFeatureSource.current = featureCloseToCursor?.layer
-            .source as string;
-        }
+        handleFeatureHover(
+          map!,
+          previousHoveredFeatureId,
+          previousHoveredFeatureSource,
+          featureCloseToCursor,
+        );
       };
       // Évenement de déplacement du curseur: changement de pointeur si proche d'un bâtiment
       map.on('mousemove', handleMouseMove);
@@ -107,4 +90,47 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
       };
     }
   }, [dispatch, map]);
+};
+
+export const handleFeatureHover = (
+  map: maplibregl.Map,
+  previousHoveredFeatureId: React.MutableRefObject<string | undefined>,
+  previousHoveredFeatureSource: React.MutableRefObject<string | undefined>,
+  featureCloseToCursor: maplibregl.MapGeoJSONFeature | undefined,
+  drawingOperation: string | null = null,
+) => {
+  if (featureCloseToCursor) {
+    map!.getCanvas().style.cursor = 'pointer';
+  } else {
+    map!.getCanvas().style.cursor = '';
+  }
+
+  if (
+    previousHoveredFeatureId.current &&
+    previousHoveredFeatureSource.current
+  ) {
+    map.setFeatureState(
+      {
+        source: previousHoveredFeatureSource.current,
+        id: previousHoveredFeatureId.current,
+        sourceLayer: 'default',
+      },
+      { hovered: false },
+    );
+  }
+
+  if (featureCloseToCursor && drawingOperation === null) {
+    map.setFeatureState(
+      {
+        source: featureCloseToCursor.layer.source,
+        id: featureCloseToCursor?.id,
+        sourceLayer: 'default',
+      },
+      { hovered: true },
+    );
+
+    previousHoveredFeatureId.current = featureCloseToCursor?.id as string;
+    previousHoveredFeatureSource.current = featureCloseToCursor?.layer
+      .source as string;
+  }
 };
