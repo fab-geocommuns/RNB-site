@@ -6,12 +6,13 @@ function cspMiddleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV === 'development';
   const rnbApiOrigin = new URL(process.env.NEXT_PUBLIC_API_BASE!).origin;
   const banApiOrigins = [
-    'https://api-adresse.data.gouv.fr/',
+    'https://data.geopf.fr/',
     'https://plateforme.adresse.data.gouv.fr',
   ];
   const tileOrigins = [
     'https://data.geopf.fr/',
     'https://openmaptiles.geo.data.gouv.fr/',
+    'https://openmaptiles.data.gouv.fr/',
     'https://openmaptiles.github.io/',
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';
