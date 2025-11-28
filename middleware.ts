@@ -17,17 +17,26 @@ function cspMiddleware(request: NextRequest) {
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';
   const newsletterOrigin = 'https://9468302f.sibforms.com/';
+  const analyticsOrigins = [
+    'https://cdn.us.heap-api.com',
+    'https://c.us.heap-api.com',
+    'https://cdn.eu.heap-api.com',
+    'https://c.eu.heap-api.com',
+    'https://heapanalytics.com',
+  ];
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
     ...tileOrigins,
     sentryOrigin,
     newsletterOrigin,
+    ...analyticsOrigins,
   ];
   const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
   const mediaOrigins = [
     'https://rnb-open.s3.fr-par.scw.cloud/',
     'https://referentiel-national-du-batiment.ghost.io/',
+    ...analyticsOrigins,
   ];
   // We allow `unsafe-inline` for the style-src directive because of https://github.com/vercel/next.js/issues/57415
   // When it's fixed, we can remove it.
