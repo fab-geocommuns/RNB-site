@@ -68,11 +68,6 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
     return () => clearInterval(intervalId);
   }, [lastReportUpdate]);
 
-  const getProgressBarWidth = () => {
-    if (!stats || stats.total_report_count === 0) return '0%';
-    return `${(stats.closed_report_count / stats.total_report_count) * 100}%`;
-  };
-
   const isTagSelected = (tagId: number) => {
     if (displayedTags === 'all') return true;
     return displayedTags.includes(tagId);
@@ -157,13 +152,6 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                 signalements ouverts
               </span>
             </div>
-
-            {/* <div className={filterStyles.progressBarContainer}>
-              <div
-                className={filterStyles.progressBarFill}
-                style={{ width: getProgressBarWidth() }}
-              />
-            </div> */}
 
             <div className={filterStyles.infoText}>
               Les signalements sont des indices permettant aux contributeurs

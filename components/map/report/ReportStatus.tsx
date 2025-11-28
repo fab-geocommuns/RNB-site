@@ -1,7 +1,7 @@
 import styles from '@/styles/report/reportStatus.module.scss';
 import { fr } from '@codegouvfr/react-dsfr';
 
-import type { ReportStatus, ReportLabel } from 'report';
+import type { ReportStatus, ReportLabel } from '@/types/report';
 
 function statusLabel(status: ReportStatus): ReportLabel {
   switch (status) {

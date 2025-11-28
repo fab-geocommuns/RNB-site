@@ -3,7 +3,7 @@ import styles from '@/styles/report/message.module.scss';
 import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 import ReportStatus from '@/components/map/report/ReportStatus';
 
-import type { ReportStatus as ReportStatusType } from 'report';
+import type { ReportStatus as ReportStatusType } from '@/types/report';
 
 type Props = {
   message: any;

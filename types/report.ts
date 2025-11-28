@@ -1,4 +1,2 @@
-declare module 'report' {
-  type ReportStatus = 'pending' | 'fixed' | 'rejected';
-  type ReportLabel = 'Ouvert' | 'Corrigé' | 'Refusé';
-}
+export type ReportStatus = 'pending' | 'fixed' | 'rejected';
+export type ReportLabel = 'Ouvert' | 'Corrigé' | 'Refusé';
