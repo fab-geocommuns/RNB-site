@@ -1,9 +1,9 @@
 import styles from '@/styles/report/reportStatus.module.scss';
 import { fr } from '@codegouvfr/react-dsfr';
 
-import type { ReportStatus, ReportLabel } from '@/types/report';
+import type { ReportStatus } from '@/types/report';
 
-function statusLabel(status: ReportStatus): ReportLabel {
+function statusLabel(status: ReportStatus): string {
   switch (status) {
     case 'pending':
       return 'Ouvert';
