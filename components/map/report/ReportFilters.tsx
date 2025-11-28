@@ -40,6 +40,8 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   // We update the stats every 5 seconds or when a report has been closed (lastReportUpdate)
   // If the stats have changed, we make the indicator glow
   useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
     async function fetchStats() {
       try {
         const response = await fetch(
@@ -57,13 +59,14 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
           }
           prevClosedCountRef.current = data.closed_report_count;
         }
+
+        intervalId = setInterval(fetchStats, 5000);
       } catch (error) {
         console.error('Failed to fetch report stats:', error);
       }
     }
 
     fetchStats();
-    const intervalId = setInterval(fetchStats, 5000);
 
     return () => clearInterval(intervalId);
   }, [lastReportUpdate]);
