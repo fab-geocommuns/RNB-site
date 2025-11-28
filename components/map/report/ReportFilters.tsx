@@ -47,18 +47,20 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE}/reports/stats/`,
         );
-        if (response.ok) {
-          const data = await response.json();
-          setStats(data);
-
-          if (prevClosedCountRef.current !== null) {
-            if (data.closed_report_count !== prevClosedCountRef.current) {
-              setIsGlowing(true);
-              setTimeout(() => setIsGlowing(false), 3000);
-            }
-          }
-          prevClosedCountRef.current = data.closed_report_count;
+        if (!response.ok) {
+          throw new Error('Failed to fetch report stats');
         }
+
+        const data = await response.json();
+        setStats(data);
+
+        if (prevClosedCountRef.current !== null) {
+          if (data.closed_report_count !== prevClosedCountRef.current) {
+            setIsGlowing(true);
+            setTimeout(() => setIsGlowing(false), 3000);
+          }
+        }
+        prevClosedCountRef.current = data.closed_report_count;
 
         intervalId = setInterval(fetchStats, 5000);
       } catch (error) {
