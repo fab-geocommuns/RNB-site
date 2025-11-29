@@ -9,28 +9,33 @@ import { useVisuMapEvents } from '@/components/map/useVisuMapEvents';
 import { useMapSyncCoordinates } from '@/components/map/useMapSyncCoordinates';
 import { useMapStateSync } from '@/components/map/useMapStateSync';
 import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
+import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
 import {
   MapLayer,
   MapBackgroundLayer,
   MapBuildingsLayer,
+  MapExtraLayer,
 } from '@/stores/map/map-slice';
 
 type Props = {
   disabledLayers?: MapLayer[];
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
+  defaultExtraLayers?: MapExtraLayer[];
 };
 
 export default function VisuMap({
   disabledLayers,
   defaultBackgroundLayer,
   defaultBuildingLayer,
+  defaultExtraLayers,
 }: Props) {
   const { map, mapContainer } = useMap({ disabledLayers });
   useMapLayers({
     map,
     defaultBackgroundLayer,
     defaultBuildingLayer,
+    defaultExtraLayers,
     selectedBuildingisGreen: true,
   });
   useMapControls(map);
@@ -38,6 +43,7 @@ export default function VisuMap({
   useVisuMapEvents(map);
   useMapStateSync(map);
   useMapStateSyncSelectedBuilding(map);
+  useMapStateSyncReport(map);
 
   return mapContainer;
 }

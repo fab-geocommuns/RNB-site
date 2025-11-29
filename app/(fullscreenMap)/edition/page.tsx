@@ -3,21 +3,27 @@
 import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
-import EditMapSummerScore from '@/components/summerGames/editMapSummerScore';
+import ReportPanels from '@/components/map/report/ReportPanels';
 import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
 import '@/styles/mapBanLayer.scss';
+
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import { useMemo } from 'react';
+import { MapExtraLayer } from '@/stores/map/map-slice';
 
 export default function Page() {
+  // Feature flag
+  const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
+
+  // Map layers from store
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
+
   const { user } = useRNBAuthentication({ require: true });
 
-  // Summer challenge
-  const editMapSummerScoreUpdatedAt = useSelector(
-    (state: RootState) => state.edition.editMapSummerScoreUpdatedAt,
-  );
+  const defaultExtraLayers = useMemo(() => ['reports'] as MapExtraLayer[], []);
 
   if (!user) {
     return (
@@ -35,15 +41,14 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
-        <EditMapSummerScore
-          updatedAt={editMapSummerScoreUpdatedAt || 0}
-          username={user.username}
-        />
-
+        {showReportPanels && mapLayers.extraLayers.includes('reports') && (
+          <ReportPanels />
+        )}
         <div className={styles.map__mapShell}>
           <EditMap
             defaultBackgroundLayer="satellite"
             defaultBuildingLayer="polygon"
+            defaultExtraLayers={defaultExtraLayers}
             disabledLayers={['point']}
           />
         </div>
