@@ -14,22 +14,28 @@ export default function SummerGame({
   title,
   limit,
   showRankingLink,
-  withScoreDetails = false,
+  withRankingTable = false,
   withEndFlag = false,
+  size = 'small',
 }: {
   title: React.ReactNode | string;
   limit: number;
   showRankingLink?: boolean;
-  withScoreDetails?: boolean;
+  withRankingTable?: boolean;
   withEndFlag?: boolean;
+  size?: 'small' | 'large';
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
+  const displayCountInsteadOfScore =
+    process.env.NEXT_PUBLIC_DISPLAY_COUNT_INSTEAD_OF_SCORE === 'true';
 
   return (
     !loading &&
     summerGamesData && (
       <>
-        <div className={`section section_big ${styles.seriousShell}`}>
+        <div
+          className={`section ${size === 'small' && styles.small} ${styles.seriousShell}`}
+        >
           <div className={styles.shell}>
             <div className={`section__titleblock ${styles.titleblock}`}>
               <h2 className="section__title">{title}</h2>
@@ -40,132 +46,63 @@ export default function SummerGame({
               )}
             </div>
             <div className={`section__subtitle ${styles.instruction}`}>
-              <p>
-                L&apos;expérience collaborative a pris fin le 10 septembre 2025,
-                avec un score de 131361 points ! Grâce à vos contributions, nous
-                allons pouvoir proposer les règles de gouvernance de la donnée
-                du RNB d&apos;ici 2026 dans le cadre du GT Bâti CNIG.
-              </p>
               <p className={styles.highlight}>
                 Bonne nouvelle : face à l&apos;engouement pour l&apos;édition
                 collaborative et à la qualité de vos contributions, nous
                 laissons les outils d&apos;éditions ouverts à la communauté
-                durant les travaux du GT Bâti CNIG.
+                durant les travaux du{' '}
+                <a
+                  href="https://cnig.gouv.fr/gt-bati-a25939.html"
+                  target="_blank"
+                >
+                  GT Bâti CNIG
+                </a>
+                .
               </p>
             </div>
-
-            {withScoreDetails && (
-              <div className={styles.scoresDesc}>
-                <div className={styles.scoresRow}>
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>
-                      Corriger des adresses
-                    </div>
-                    <div className={styles.scoreReward}>
-                      3 <span className={styles.scoreRewardPoint}>points</span>
-                    </div>
-                  </div>
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>Créer un bâtiment</div>
-                    <div className={styles.scoreReward}>
-                      2 <span className={styles.scoreRewardPoint}>points</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>
-                      Désactiver un bâtiment
-                    </div>
-                    <div className={styles.scoreReward}>
-                      2 <span className={styles.scoreRewardPoint}>points</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>
-                      Corriger une géométrie
-                    </div>
-                    <div className={styles.scoreReward}>
-                      1 <span className={styles.scoreRewardPoint}>point</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.scoresRow}>
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>
-                      Scinder un bâtiment
-                    </div>
-                    <div className={styles.scoreReward}>
-                      1 <span className={styles.scoreRewardPoint}>point</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>
-                      Fusionner des bâtiments
-                    </div>
-                    <div className={styles.scoreReward}>
-                      1 <span className={styles.scoreRewardPoint}>point</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.score}>
-                    <div className={styles.scoreAction}>Corriger le statut</div>
-                    <div className={styles.scoreReward}>
-                      1 <span className={styles.scoreRewardPoint}>point</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className={styles.progressShell}>
               <div className={styles.barShell}>
                 <div className={styles.legend}>
                   <span className={styles.legend_subtitle}>
-                    Objectif collectif
+                    {displayCountInsteadOfScore
+                      ? 'Éditions dans le RNB'
+                      : 'Score global'}
                   </span>
                   <br />
-                  {summerGamesData.shared.goal} points
+                  <p>
+                    {summerGamesData.shared.absolute}{' '}
+                    {displayCountInsteadOfScore
+                      ? 'éditions réalisées par la communauté'
+                      : 'points'}
+                  </p>
                 </div>
+              </div>
 
-                <div className={styles.bar}>
-                  <div
-                    className={styles.progress}
-                    style={{
-                      width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
-                    }}
-                  >
-                    <span className={styles.progressTotal}>
-                      {summerGamesData.shared.absolute}
-                    </span>
+              {withRankingTable && (
+                <div className={styles.ranks}>
+                  <div className={styles.ranksTable}>
+                    <RankTable
+                      title="Classement des départements"
+                      ranks={summerGamesData.department}
+                    />
+                  </div>
+
+                  <div className={styles.ranksTable}>
+                    <RankTable
+                      title="Classement des villes"
+                      ranks={summerGamesData.city}
+                    />
+                  </div>
+
+                  <div className={styles.ranksTable}>
+                    <RankTable
+                      title="Classement des participants"
+                      ranks={summerGamesData.individual}
+                    />
                   </div>
                 </div>
-              </div>
-
-              <div className={styles.ranks}>
-                <div className={styles.ranksTable}>
-                  <RankTable
-                    title="Classement des départements"
-                    ranks={summerGamesData.department}
-                  />
-                </div>
-
-                <div className={styles.ranksTable}>
-                  <RankTable
-                    title="Classement des villes"
-                    ranks={summerGamesData.city}
-                  />
-                </div>
-
-                <div className={styles.ranksTable}>
-                  <RankTable
-                    title="Classement des participants"
-                    ranks={summerGamesData.individual}
-                  />
-                </div>
-              </div>
+              )}
             </div>
 
             <div className={styles.buttonsShell}>
@@ -184,7 +121,7 @@ export default function SummerGame({
                 Participer
               </Link>
               <Link
-                href="/blog/lancez-vous-dans-ledition-collaborative-du-rnb-cet-ete"
+                href="/blog/le-rnb-souvre-a-ledition-collaborative"
                 className={`${styles.btn}`}
               >
                 En savoir plus
