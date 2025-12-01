@@ -62,7 +62,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
         }
         prevClosedCountRef.current = data.closed_report_count;
 
-        intervalId = setInterval(fetchStats, 5000);
+        intervalId = setTimeout(fetchStats, 5000);
       } catch (error) {
         console.error('Failed to fetch report stats:', error);
       }
@@ -70,7 +70,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
 
     fetchStats();
 
-    return () => clearInterval(intervalId);
+    return () => clearTimeout(intervalId);
   }, [lastReportUpdate]);
 
   const isTagSelected = (tagId: number) => {
