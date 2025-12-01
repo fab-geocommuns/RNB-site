@@ -182,7 +182,9 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                         id={`tag-${tag.tag_id}`}
                         name={`tag-${tag.tag_id}`}
                         checked={isTagSelected(tag.tag_id)}
-                        onChange={() => handleTagToggle(tag.tag_id)}
+                        onChange={() => {
+                          console.log(tag.tag_id);
+                        }}
                       />
                       <label
                         className={filterStyles.tagLabel}
@@ -190,7 +192,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                       >
                         <div>
                           <div className={filterStyles.tagName}>
-                            {tag.tag_name}
+                            {tag.tag_name} {tag.tag_id}
                           </div>
                           <div className={filterStyles.tagCount}>
                             {openCount} signalement{openCount > 1 ? 's' : ''}{' '}
