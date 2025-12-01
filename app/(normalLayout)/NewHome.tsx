@@ -8,7 +8,6 @@ import Governance from '@/components/home/Governance';
 import { getBreakingNews, getUseCases } from '@/utils/blog';
 
 import { getDatabases } from '@/utils/databases';
-import pageTitle from '@/utils/pageTitle';
 
 export const revalidate = 10;
 
