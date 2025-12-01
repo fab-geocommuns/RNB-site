@@ -11,14 +11,17 @@ import styles from '@/styles/blog.module.scss';
 
 // SEO
 import { Metadata } from 'next';
+import pageTitle from '@/utils/pageTitle';
 
 export const revalidate = 10;
 
-export const metadata: Metadata = {
-  title: 'Actualités du Référentiel National des Bâtiments',
-  description:
-    'Suivez la construction et la diffusion du Référentiel National des Bâtiments.',
-};
+export const metadata = pageTitle(
+  'Actualités du Référentiel National des Bâtiments',
+  {
+    description:
+      'Suivez la construction et la diffusion du Référentiel National des Bâtiments.',
+  },
+);
 
 async function getData(page: number) {
   const posts = await getPosts(page);

@@ -8,6 +8,9 @@ import { parse } from 'yaml';
 import BuildingList from '@/app/(normalLayout)/definition/BuildingList';
 import { BuildingExample } from '@/app/(normalLayout)/definition/BuildingList.type';
 import BuildingDistinctions from '@/app/(normalLayout)/definition/BuildingDistinctions';
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle('Définition et Standard');
 
 async function fetchBuildingList() {
   const jsonDirectory = path.join(process.cwd(), 'data');
@@ -31,9 +34,9 @@ export default async function Page() {
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className="fr-col-12 fr-col-md-8">
                 <div className="block block--paleGreen block--fill">
-                  <h3 className="block__title">
+                  <h2 className="block__title">
                     Définition d&apos;un bâtiment
-                  </h3>
+                  </h2>
 
                   <p className={styles.bdgDefinition}>
                     Construction souterraine et/ou au-dessus du sol, ayant pour

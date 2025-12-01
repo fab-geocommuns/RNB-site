@@ -10,8 +10,10 @@ import styles from '@/styles/mapPage.module.scss';
 import '@/styles/mapBanLayer.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
 
 export default function Page() {
+  useClientSidePageTitle("Carte d'édition");
   const { user } = useRNBAuthentication({ require: true });
 
   // Summer challenge
