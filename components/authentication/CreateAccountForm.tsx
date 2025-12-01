@@ -2,11 +2,9 @@
 
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { PasswordInput } from '@codegouvfr/react-dsfr/blocks/PasswordInput';
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Alert from '@codegouvfr/react-dsfr/Alert';
-import { PrivateCaptcha } from '@private-captcha/private-captcha-react';
+import Captcha from './Captcha';
 
 type CreateAccountErrors = {
   email: string[];
@@ -222,19 +220,20 @@ export default function CreateAccountForm() {
           onChange: (e) => clearError('confirmPassword'),
         }}
       />
-      <PrivateCaptcha
-        siteKey={process.env.NEXT_PUBLIC_PRIVATE_CAPTCHA_SITEKEY!}
-        onFinish={(e) => setCaptchaSolution(e.widget.solution())}
-        styles="font-size: 0.85rem; width: 100%;"
-        lang="fr"
-      />
-      <button
-        disabled={!captchaSolution}
-        className="fr-btn fr-mt-2w"
-        type="submit"
-      >
-        Créer un compte
-      </button>
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <button
+          style={{ flex: '0 0 auto' }}
+          disabled={!captchaSolution}
+          className="fr-btn"
+          type="submit"
+        >
+          Créer un compte
+        </button>
+        <Captcha
+          style={{ flex: '1 0 0' }}
+          onSolved={(solution) => setCaptchaSolution(solution)}
+        />
+      </div>
     </form>
   );
 }
