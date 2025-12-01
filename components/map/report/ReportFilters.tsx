@@ -168,9 +168,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
               Filtrer les signalements
             </div>
 
-            <div
-              className={`${filterStyles.tagsList} fr-checkbox-group fr-checkbox-group--sm`}
-            >
+            <div className={`fr-checkbox-group fr-checkbox-group--sm`}>
               {stats.tag_stats.map((tag) => {
                 const openCount =
                   tag.total_report_count - tag.closed_report_count;
