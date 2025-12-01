@@ -10,10 +10,11 @@ import {
   toasterError,
   toasterSuccess,
 } from '@/components/contribution/toaster';
+import { Report } from '@/types/report';
 
 type FormAction = 'comment' | 'fix' | 'reject';
 
-export default function ReportForm({ report }: { report?: any }) {
+export default function ReportForm({ report }: { report: Report }) {
   const { fetch } = useRNBFetch();
   const dispatch: AppDispatch = useDispatch();
 

@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { fetchReport } from '@/utils/requests';
+import { Report } from '@/types/report';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
-  selectedReport: GeoJSON.Feature | null;
+  selectedReport: Report | null;
   lastReportUpdate: number;
   displayedTags: 'all' | number[];
 };

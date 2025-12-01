@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux';
 import ReportMessage from '@/components/map/report/ReportMessage';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
+import { Report } from '@/types/report';
 
-export default function ReportHead({ report }: { report: any }) {
+export default function ReportHead({ report }: { report: Report }) {
   const dispatch = useDispatch();
 
   const detailsModal = createModal({

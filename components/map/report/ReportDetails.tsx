@@ -9,8 +9,9 @@ import ReportHead from '@/components/map/report/ReportHead';
 import ReportForm from '@/components/map/report/ReportForm';
 
 import Toaster from '@/components/contribution/toaster';
+import { Report } from '@/types/report';
 
-export default function ReportDetails({ report }: { report?: any }) {
+export default function ReportDetails({ report }: { report?: Report }) {
   const dispatch: AppDispatch = useDispatch();
 
   const onClose = (e: React.MouseEvent<HTMLAnchorElement>) => {
