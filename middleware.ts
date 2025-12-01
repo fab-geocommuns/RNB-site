@@ -24,6 +24,7 @@ function cspMiddleware(request: NextRequest) {
     'https://c.eu.heap-api.com',
     'https://heapanalytics.com',
   ];
+  const captchaOrigin = 'https://api.privatecaptcha.com/';
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
@@ -31,6 +32,7 @@ function cspMiddleware(request: NextRequest) {
     sentryOrigin,
     newsletterOrigin,
     ...analyticsOrigins,
+    captchaOrigin,
   ];
   const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
   const mediaOrigins = [

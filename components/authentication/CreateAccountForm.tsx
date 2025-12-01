@@ -2,10 +2,9 @@
 
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { PasswordInput } from '@codegouvfr/react-dsfr/blocks/PasswordInput';
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Alert from '@codegouvfr/react-dsfr/Alert';
+import Captcha from './Captcha';
 
 type CreateAccountErrors = {
   email: string[];
@@ -29,6 +28,7 @@ export default function CreateAccountForm() {
   const [createAccountErrors, setCreateAccountErrors] = useState(noErrors());
   const [genericError, setGenericError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
 
   const clearError = (field: keyof CreateAccountErrors) => {
     setCreateAccountErrors({
@@ -91,6 +91,7 @@ export default function CreateAccountForm() {
             password: values.password,
             last_name: values.lastName,
             first_name: values.firstName,
+            captcha_solution: captchaSolution,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -218,9 +219,20 @@ export default function CreateAccountForm() {
           onChange: (e) => clearError('confirmPassword'),
         }}
       />
-      <button className="fr-btn fr-mt-2w" type="submit">
-        Créer un compte
-      </button>
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <button
+          style={{ flex: '0 0 auto' }}
+          disabled={!captchaSolution}
+          className="fr-btn"
+          type="submit"
+        >
+          Créer un compte
+        </button>
+        <Captcha
+          style={{ flex: '1 0 0' }}
+          onSolved={(solution) => setCaptchaSolution(solution)}
+        />
+      </div>
     </form>
   );
 }
