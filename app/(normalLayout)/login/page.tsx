@@ -15,7 +15,7 @@ import styles from '@/styles/login.module.scss';
 
 import summerStyles from '@/styles/summerGames.module.scss';
 
-export const metadata = pageTitle('Se connecter');
+export const metadata = pageTitle('Se connecter ou créer un compte');
 
 export default async function LoginPage({
   searchParams,
