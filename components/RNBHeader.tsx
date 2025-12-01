@@ -166,7 +166,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           </Link>
         </div>
       </explainModal.Component>
-      <SkipLinks />
+      <SkipLinks withNavigation={withNavigation} />
       <Header
         id={headerId}
         brandTop={
