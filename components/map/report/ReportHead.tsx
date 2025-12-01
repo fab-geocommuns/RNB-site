@@ -1,6 +1,7 @@
 import styles from '@/styles/report/reportHead.module.scss';
 
 import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
@@ -24,13 +25,6 @@ export default function ReportHead({ report }: { report: Report }) {
       minute: '2-digit',
     });
 
-  if (report.rnb_id) {
-    console.log(report.rnb_id);
-
-    // @ts-ignore
-    dispatch(selectBuildingAndSetOperationUpdate(report.rnb_id));
-  }
-
   const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
     dispatch(
@@ -43,6 +37,15 @@ export default function ReportHead({ report }: { report: Report }) {
     e.preventDefault();
     detailsModal.open();
   };
+
+  useEffect(() => {
+    if (report?.rnb_id) {
+      dispatch(
+        // @ts-ignore
+        selectBuildingAndSetOperationUpdate(report.rnb_id),
+      );
+    }
+  }, [report]);
 
   return (
     <>
