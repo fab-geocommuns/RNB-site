@@ -53,9 +53,9 @@ export default function Captcha({ onSolved, style }: Props) {
           title={
             <>
               Une erreur est survenue lors de la vérification du captcha et nous
-              n'avons pas pu vérifier que vous êtes un humain.
+              n&apos;avons pas pu vérifier que vous êtes un humain.
               <br />
-              Veuillez réessayer ou nous contacter à l'adresse e-mail
+              Veuillez réessayer ou nous contacter à l&apos;adresse e-mail
               rnb@beta.gouv.fr si le problème persiste.
             </>
           }
