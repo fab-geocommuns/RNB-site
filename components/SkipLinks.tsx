@@ -7,7 +7,11 @@ export const mainContentId = 'main-content';
 export const homeSearchId = 'home-search';
 export const footerId = 'footer';
 
-export default function SkipLinks() {
+export default function SkipLinks({
+  withNavigation = true,
+}: {
+  withNavigation?: boolean;
+}) {
   const pathname = usePathname();
   const isHome = pathname === '/';
   const links = [
@@ -15,11 +19,17 @@ export default function SkipLinks() {
       anchor: `#${mainContentId}`,
       label: 'Contenu principal',
     },
-    {
-      anchor: `#${footerId}`,
-      label: 'Pied de page',
-    },
   ];
+  if (withNavigation) {
+    links.push({
+      anchor: `#${headerId}-main-navigation`,
+      label: 'Menu principal',
+    });
+  }
+  links.push({
+    anchor: `#${footerId}`,
+    label: 'Pied de page',
+  });
 
   if (isHome) {
     links.push({
