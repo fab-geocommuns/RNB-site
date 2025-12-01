@@ -54,7 +54,7 @@ export const selectReport = createAsyncThunk(
   'report/selectReport',
   async (reportId: number | null, { dispatch }) => {
     if (reportId) {
-      return await fetchReport(Number(reportId));
+      return await fetchReport(reportId);
     }
   },
 );
