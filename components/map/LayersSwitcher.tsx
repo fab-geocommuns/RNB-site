@@ -10,6 +10,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import backgroundSatellite from '@/public/images/map/switch-bckg-sat.jpg';
+import backgroundSatellite2016_2020 from '@/public/images/map/switch-bckg-sat-2016-2020.jpg';
 import backgroundPlanIGN from '@/public/images/map/switch-bckg-plan-ign.png';
 import backgroundPlanOSM from '@/public/images/map/switch-bckg-plan-osm.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
@@ -165,6 +166,15 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     label="Satellite"
                     onClick={() => handleChangeBackgroundClick('satellite')}
                     image={backgroundSatellite}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('satellite_2016_2020')}
+                    isActive={mapLayers.background === 'satellite_2016_2020'}
+                    label="Satellite 2016-2020"
+                    onClick={() =>
+                      handleChangeBackgroundClick('satellite_2016_2020')
+                    }
+                    image={backgroundSatellite2016_2020}
                   />
                 </ul>
               </div>
