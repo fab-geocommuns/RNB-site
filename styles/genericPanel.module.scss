@@ -1,6 +1,15 @@
 @import 'vars.scss';
 $title-color: #414e71;
 
+.reportShell {
+  position: absolute;
+  right: 12px;
+  top: 20px;
+  z-index: 350;
+  max-width: 350px;
+  width: 350px;
+}
+
 .shell {
   // The .shell is the invisible container
   position: absolute;
@@ -59,6 +68,13 @@ $title-color: #414e71;
     width: 25px;
     height: 25px;
   }
+}
+.closeLinkIcon {
+  display: inline-block;
+  transition: transform 0.5s ease;
+}
+.closeLinkIconOpen {
+  transform: rotate(180deg);
 }
 .body {
   flex-grow: 1;

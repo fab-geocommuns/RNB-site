@@ -1,0 +1,13 @@
+@import '@/styles/report/reportVars.scss';
+
+.detailsContainer {
+  max-height: calc(100vh - 280px);
+}
+
+body .head {
+  background-color: $light-color;
+}
+
+.headSubtitle {
+  color: $dark-color;
+}
