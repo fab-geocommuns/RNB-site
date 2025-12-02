@@ -20,7 +20,8 @@ import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
 
 import layersIcon from '@/public/images/map/layer-group-solid.svg';
-
+import { useHotkeys } from 'react-hotkeys-hook';
+import { toasterSuccess } from '@/components/contribution/toaster';
 // Components
 import ImageNext from 'next/image';
 import { StaticImageData } from 'next/image';
@@ -51,6 +52,16 @@ function LayerButton({
   onClick,
   image,
 }: LayerButtonProps) {
+  const get_title = () => {
+    let image_label = label;
+    if (label === 'Satellite' || label === 'Satellite 2016-2020') {
+      image_label += ' (shift + s)';
+    }
+    // TODO: Use a Tooltip for better UX, but we need to update DSFR
+    return isAvailable
+      ? image_label
+      : `Le calque "${label}" n'est pas disponible en mode édition`;
+  };
   return (
     <li>
       <a
@@ -63,12 +74,7 @@ function LayerButton({
           e.preventDefault();
           onClick();
         }}
-        title={
-          // TODO: Use a Tooltip for better UX, but we need to update DSFR
-          isAvailable
-            ? label
-            : `Le calque "${label}" n'est pas disponible en mode édition`
-        }
+        title={get_title()}
       >
         <div className={styles.choiceImageShell}>
           <ImageNext src={image} alt={label} className={styles.choiceImage} />
@@ -95,6 +101,16 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   const handleChangeBackgroundClick = (background: MapBackgroundLayer) => {
     dispatch(Actions.map.setLayersBackground(background));
   };
+
+  useHotkeys('shift+s', () => {
+    if (mapLayers.background !== 'satellite') {
+      handleChangeBackgroundClick('satellite');
+      toasterSuccess(dispatch, 'Satellite');
+    } else {
+      handleChangeBackgroundClick('satellite_2016_2020');
+      toasterSuccess(dispatch, 'Satellite 2016-2020');
+    }
+  });
 
   const handleChangeBuildingLayer = (layer: MapBuildingsLayer) => {
     dispatch(Actions.map.setLayersBuildings(layer));
