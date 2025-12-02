@@ -31,7 +31,6 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   const [stats, setStats] = useState<ReportStats | null>(null);
 
   async function fetchStats() {
-    console.log('Fetching stats...');
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE}/reports/stats/`,
