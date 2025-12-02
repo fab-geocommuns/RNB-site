@@ -190,7 +190,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                       >
                         <div>
                           <div className={filterStyles.tagName}>
-                            {tag.tag_name} {tag.tag_id}
+                            {tag.tag_name}
                           </div>
                           <div className={filterStyles.tagCount}>
                             {openCount} signalement{openCount > 1 ? 's' : ''}{' '}
