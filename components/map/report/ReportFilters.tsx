@@ -181,7 +181,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
                         name={`tag-${tag.tag_id}`}
                         checked={isTagSelected(tag.tag_id)}
                         onChange={() => {
-                          console.log(tag.tag_id);
+                          handleTagToggle(tag.tag_id);
                         }}
                       />
                       <label
