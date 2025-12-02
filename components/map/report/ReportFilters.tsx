@@ -66,7 +66,6 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
       const interval = setInterval(() => {
         fetchStats();
       }, 5000);
-      return () => clearInterval(interval);
     }
   }, []);
 
