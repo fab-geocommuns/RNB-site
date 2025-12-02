@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Actions, AppDispatch, RootState } from '@/stores/store';
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { Actions, AppDispatch } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
-import { MapMouseEvent, MapLibreEvent } from 'maplibre-gl';
+import { MapMouseEvent } from 'maplibre-gl';
 import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
@@ -10,9 +10,10 @@ import {
   LAYER_ADS_CIRCLE,
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
+  LAYER_REPORTS_CIRCLE,
+  LAYER_REPORTS_ICON,
 } from '@/components/map/useMapLayers';
 import { displayBANPopup } from './BanLayerEvent';
-import { map } from 'yaml/dist/schema/common/map';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -62,6 +63,15 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
           ) {
             displayBANPopup(map, featureCloseToCursor);
           }
+
+          if (
+            [LAYER_REPORTS_CIRCLE, LAYER_REPORTS_ICON].includes(
+              featureCloseToCursor.layer.id,
+            )
+          ) {
+            const reportId = featureCloseToCursor.id as number | null;
+            dispatch(Actions.report.selectReport(reportId));
+          }
         }
       };
 
@@ -109,25 +119,23 @@ export const handleFeatureHover = (
     previousHoveredFeatureId.current &&
     previousHoveredFeatureSource.current
   ) {
-    map.setFeatureState(
-      {
-        source: previousHoveredFeatureSource.current,
-        id: previousHoveredFeatureId.current,
-        sourceLayer: 'default',
-      },
-      { hovered: false },
-    );
+    let prevFeatureToUpdate: maplibregl.FeatureIdentifier = {
+      source: previousHoveredFeatureSource.current,
+      id: previousHoveredFeatureId.current,
+      sourceLayer: 'default',
+    };
+
+    map.setFeatureState(prevFeatureToUpdate, { hovered: false });
   }
 
   if (featureCloseToCursor && drawingOperation === null) {
-    map.setFeatureState(
-      {
-        source: featureCloseToCursor.layer.source,
-        id: featureCloseToCursor?.id,
-        sourceLayer: 'default',
-      },
-      { hovered: true },
-    );
+    let hoveredFeatureToUpdate: maplibregl.FeatureIdentifier = {
+      source: featureCloseToCursor.layer.source,
+      id: featureCloseToCursor?.id,
+      sourceLayer: 'default',
+    };
+
+    map.setFeatureState(hoveredFeatureToUpdate, { hovered: true });
 
     previousHoveredFeatureId.current = featureCloseToCursor?.id as string;
     previousHoveredFeatureSource.current = featureCloseToCursor?.layer

@@ -61,7 +61,7 @@ export type MapBackgroundLayer =
   | 'vectorIgnStandard'
   | 'satellite_2016_2020';
 export type MapBuildingsLayer = 'point' | 'polygon';
-export type MapExtraLayer = 'ads' | 'plots' | 'addresses';
+export type MapExtraLayer = 'ads' | 'plots' | 'addresses' | 'reports';
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {
@@ -92,7 +92,7 @@ const initialState: MapStore = {
   layers: {
     background: 'vectorIgnStandard',
     buildings: 'point',
-    extraLayers: ['ads'],
+    extraLayers: [],
   },
 };
 
@@ -113,6 +113,9 @@ export const mapSlice = createSlice({
       } else {
         state.layers.extraLayers.splice(index, 1);
       }
+    },
+    setLayersExtra(state, action) {
+      state.layers.extraLayers = action.payload;
     },
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {

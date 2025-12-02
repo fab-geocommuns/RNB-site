@@ -1,0 +1,31 @@
+body .msgInput {
+  min-height: 100px;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
+  margin-bottom: 20px;
+}
+
+.formTitle {
+  color: black;
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.actionShell {
+  legend {
+    display: none;
+  }
+
+  margin-bottom: 20px;
+}
+
+body .actionInput {
+  label {
+    padding-bottom: 0 !important;
+    padding-top: 0.25rem !important;
+    font-size: 0.9em;
+  }
+}
