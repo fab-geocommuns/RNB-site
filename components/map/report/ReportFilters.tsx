@@ -68,15 +68,6 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
     }
   }, []);
 
-  // Activity indicator refresher
-  const [isGlowing, setIsGlowing] = useState(false);
-  useEffect(() => {
-    if (stats?.closed_report_count) {
-      setIsGlowing(true);
-      setTimeout(() => setIsGlowing(false), 3000);
-    }
-  }, [stats?.closed_report_count]);
-
   const isTagSelected = (tagId: number) => {
     if (displayedTags === 'all') return true;
     return displayedTags.includes(tagId);
