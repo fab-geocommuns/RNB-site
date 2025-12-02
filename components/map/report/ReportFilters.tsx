@@ -7,10 +7,10 @@ import genericStyles from '@/styles/genericPanel.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
 import filterStyles from '@/styles/report/reportFilters.module.scss';
 
-import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
-
 import reportIcon from '@/public/images/map/report.png';
 import Image from 'next/image';
+
+import ActivityIndicator from './ActivityIndicator';
 
 interface TagStat {
   tag_id: number;
@@ -29,49 +29,55 @@ interface ReportStats {
 export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
   const dispatch = useDispatch();
   const [stats, setStats] = useState<ReportStats | null>(null);
-  const [isGlowing, setIsGlowing] = useState(false);
-  const prevClosedCountRef = useRef<number | null>(null);
+
+  async function fetchStats() {
+    console.log('Fetching stats...');
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE}/reports/stats/`,
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch report stats');
+      }
+
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error('Failed to fetch report stats:', error);
+    }
+  }
 
   const lastReportUpdate = useSelector(
     (state: any) => state.report.lastReportUpdate,
   );
   const displayedTags = useSelector((state: any) => state.report.displayedTags);
 
-  // We update the stats every 5 seconds or when a report has been closed (lastReportUpdate)
-  // If the stats have changed, we make the indicator glow
+  // Fetch data on lastReportUpdate change
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    async function fetchStats() {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE}/reports/stats/`,
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch report stats');
-        }
-
-        const data = await response.json();
-        setStats(data);
-
-        if (prevClosedCountRef.current !== null) {
-          if (data.closed_report_count !== prevClosedCountRef.current) {
-            setIsGlowing(true);
-            setTimeout(() => setIsGlowing(false), 3000);
-          }
-        }
-        prevClosedCountRef.current = data.closed_report_count;
-
-        intervalId = setTimeout(fetchStats, 5000);
-      } catch (error) {
-        console.error('Failed to fetch report stats:', error);
-      }
-    }
-
     fetchStats();
-
-    return () => clearTimeout(intervalId);
   }, [lastReportUpdate]);
+
+  // Fetch data every 5 seconds
+  // We only want to start the interval once
+  const intervalStarted = useRef(false);
+  useEffect(() => {
+    if (!intervalStarted.current) {
+      intervalStarted.current = true;
+      const interval = setInterval(() => {
+        fetchStats();
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  // Activity indicator refresher
+  const [isGlowing, setIsGlowing] = useState(false);
+  useEffect(() => {
+    if (stats?.closed_report_count) {
+      setIsGlowing(true);
+      setTimeout(() => setIsGlowing(false), 3000);
+    }
+  }, [stats?.closed_report_count]);
 
   const isTagSelected = (tagId: number) => {
     if (displayedTags === 'all') return true;
@@ -120,17 +126,11 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
             Suivi des signalements
           </h2>
           <div>
-            <Tooltip
-              className={filterStyles.activityTooltip}
-              kind="hover"
-              title="Suivi des signalements : s'allume quand vous ou un autre utilisateur ferme un signalement"
-            >
-              <div
-                className={`${filterStyles.activityIndicator} ${
-                  isGlowing ? filterStyles.active : ''
-                }`}
+            {stats?.closed_report_count && (
+              <ActivityIndicator
+                closedReportCount={stats.closed_report_count}
               />
-            </Tooltip>
+            )}
           </div>
         </div>
         <a href="#" className={genericStyles.closeLink}>
