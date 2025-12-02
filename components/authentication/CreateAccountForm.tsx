@@ -26,7 +26,7 @@ const noErrors: () => CreateAccountErrors = () => ({
 
 export default function CreateAccountForm() {
   const [createAccountErrors, setCreateAccountErrors] = useState(noErrors());
-  const [genericError, setGenericError] = useState(false);
+  const [genericError, setGenericError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
 
@@ -70,7 +70,7 @@ export default function CreateAccountForm() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    setGenericError(false);
+    setGenericError(null);
     setSuccess(false);
 
     const { hasErrors, errors, values } = prevalidateForm(e.target);
@@ -102,6 +102,11 @@ export default function CreateAccountForm() {
       if (!response.ok) {
         const data = await response.json();
 
+        if (data.detail) {
+          setGenericError(data.detail);
+          return;
+        }
+
         setCreateAccountErrors({
           ...createAccountErrors,
           email: data.email || [],
@@ -120,7 +125,9 @@ export default function CreateAccountForm() {
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      setGenericError(true);
+      setGenericError(
+        'Une erreur est survenue lors de la création de votre compte',
+      );
       throw error;
     }
   };
@@ -148,16 +155,16 @@ export default function CreateAccountForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {genericError && (
+      {genericError ? (
         <div className="fr-mb-3w">
           <Alert
-            description="Une erreur est survenue lors de la création de votre compte"
+            description={genericError}
             severity="error"
             closable={false}
             small={true}
           />
         </div>
-      )}
+      ) : null}
       <Input
         label="Email"
         nativeInputProps={{
