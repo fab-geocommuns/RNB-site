@@ -18,7 +18,7 @@
   "dependencies": {
     "@codegouvfr/react-dsfr": "^1.21.1",
     "@geostarters/mapbox-gl-draw-rectangle-assisted-mode": "^3.0.4",
-    "@mapbox/mapbox-gl-draw": "^1.5.0",
+    "@mapbox/mapbox-gl-draw": "git@github.com:leonkenneth/mapbox-gl-draw.git#57b5711aee629083e14235f858e3c03c5c879b37",
     "@mapgrab/map-interface": "^1.0.0",
     "@mapgrab/playwright": "^0.0.3",
     "@reduxjs/toolkit": "^2.8.2",
@@ -40,7 +40,7 @@
     "highlight.js": "^11.10.0",
     "js-cookie": "^3.0.5",
     "lodash.debounce": "^4.0.8",
-    "maplibre-gl": "^5.3.1",
+    "maplibre-gl": "^5.13.0",
     "next": "15.5.7",
     "next-auth": "^4.24.12",
     "react": "19.1.2",
