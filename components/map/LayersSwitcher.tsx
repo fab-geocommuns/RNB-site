@@ -53,13 +53,13 @@ function LayerButton({
   image,
 }: LayerButtonProps) {
   const getTitle = () => {
-    let image_label = label;
+    let imageLabel = label;
     if (label === 'Satellite' || label === 'Satellite 2016-2020') {
-      image_label += ' (shift + s)';
+      imageLabel += ' (shift + s)';
     }
     // TODO: Use a Tooltip for better UX, but we need to update DSFR
     return isAvailable
-      ? image_label
+      ? imageLabel
       : `Le calque "${label}" n'est pas disponible en mode édition`;
   };
   return (
