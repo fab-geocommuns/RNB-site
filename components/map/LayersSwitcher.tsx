@@ -52,7 +52,7 @@ function LayerButton({
   onClick,
   image,
 }: LayerButtonProps) {
-  const get_title = () => {
+  const getTitle = () => {
     let image_label = label;
     if (label === 'Satellite' || label === 'Satellite 2016-2020') {
       image_label += ' (shift + s)';
@@ -74,7 +74,7 @@ function LayerButton({
           e.preventDefault();
           onClick();
         }}
-        title={get_title()}
+        title={getTitle()}
       >
         <div className={styles.choiceImageShell}>
           <ImageNext src={image} alt={label} className={styles.choiceImage} />
