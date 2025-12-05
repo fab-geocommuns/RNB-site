@@ -1,15 +1,20 @@
 import styles from '@/styles/report/reportHead.module.scss';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { Report } from '@/types/report';
+import { RootState } from '@/stores/store';
 
 export default function ReportHead({ report }: { report: Report }) {
   const dispatch = useDispatch();
+
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
 
   const detailsModal = createModal({
     id: `report-details-${report.id}`,
@@ -25,12 +30,25 @@ export default function ReportHead({ report }: { report: Report }) {
       minute: '2-digit',
     });
 
+  const showReportBuilding = () => {
+    if (!report.rnb_id) {
+      return;
+    }
+
+    const selectedRNBId =
+      selectedItem?._type == 'building' ? selectedItem.rnb_id : null;
+
+    if (selectedRNBId != report.rnb_id) {
+      dispatch(
+        // @ts-ignore
+        selectBuildingAndSetOperationUpdate(rnbId),
+      );
+    }
+  };
+
   const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
-    dispatch(
-      // @ts-ignore
-      selectBuildingAndSetOperationUpdate(rnbId),
-    );
+    showReportBuilding();
   };
 
   const handleShowDetailsClick = (e: React.MouseEvent) => {
@@ -39,12 +57,7 @@ export default function ReportHead({ report }: { report: Report }) {
   };
 
   useEffect(() => {
-    if (report?.rnb_id) {
-      dispatch(
-        // @ts-ignore
-        selectBuildingAndSetOperationUpdate(report.rnb_id),
-      );
-    }
+    showReportBuilding();
   }, [report]);
 
   return (
