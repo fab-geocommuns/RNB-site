@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
   SRC_BDGS_POINTS,
   SRC_BDGS_SHAPES,
@@ -17,8 +17,10 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
   map?: maplibregl.Map,
 ) => {
   const dispatch: AppDispatch = useDispatch();
-  const candidatesToMerge = useSelector((state: RootState) =>
-    state.edition.merge.candidates.map((candidate) => candidate.rnbId),
+  const candidatesToMerge = useSelector(
+    (state: RootState) =>
+      state.edition.merge.candidates.map((candidate) => candidate.rnbId),
+    shallowEqual,
   );
   const newBuilding = useSelector(
     (state: RootState) => state.edition.merge.newBuilding,
