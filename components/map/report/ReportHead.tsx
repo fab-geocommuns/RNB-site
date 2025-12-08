@@ -36,7 +36,7 @@ export default function ReportHead({ report }: { report: Report }) {
     }
 
     const selectedRNBId =
-      selectedItem?._type == 'building' ? selectedItem.rnb_id : null;
+      selectedItem?._type === 'building' ? selectedItem.rnb_id : null;
 
     // NB: selecting the building again would block the map panning
     // This (selectedRNBId != report.rnb_id) check fixes the issue but does not fix the root cause
@@ -48,7 +48,7 @@ export default function ReportHead({ report }: { report: Report }) {
     }
   };
 
-  const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
+  const handleOpenBuildingClick = (e: React.MouseEvent, rnbId: string) => {
     e.preventDefault();
     showReportBuilding();
   };
@@ -83,7 +83,7 @@ export default function ReportHead({ report }: { report: Report }) {
             <li>
               <a
                 href="#"
-                onClick={(e) => handleOpenBuidlingClick(e, report.rnb_id)}
+                onClick={(e) => handleOpenBuildingClick(e, report.rnb_id)}
               >
                 Voir le bâtiment {report.rnb_id}
               </a>
