@@ -48,7 +48,7 @@ export default function ReportHead({ report }: { report: Report }) {
     }
   };
 
-  const handleOpenBuildingClick = (e: React.MouseEvent, rnbId: string) => {
+  const handleOpenBuildingClick = (e: React.MouseEvent) => {
     e.preventDefault();
     showReportBuilding();
   };
@@ -81,10 +81,7 @@ export default function ReportHead({ report }: { report: Report }) {
           </li>
           {report.rnb_id && (
             <li>
-              <a
-                href="#"
-                onClick={(e) => handleOpenBuildingClick(e, report.rnb_id)}
-              >
+              <a href="#" onClick={handleOpenBuildingClick}>
                 Voir le bâtiment {report.rnb_id}
               </a>
             </li>
