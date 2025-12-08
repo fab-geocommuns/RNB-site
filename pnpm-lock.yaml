@@ -15,8 +15,8 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(@babel/core@7.28.0)
       '@mapbox/mapbox-gl-draw':
-        specifier: git@github.com:leonkenneth/mapbox-gl-draw.git#57b5711aee629083e14235f858e3c03c5c879b37
-        version: https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/57b5711aee629083e14235f858e3c03c5c879b37
+        specifier: git@github.com:leonkenneth/mapbox-gl-draw.git#5c5ea0c5f5bb945b5529b29c87113758492c5f28
+        version: https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/5c5ea0c5f5bb945b5529b29c87113758492c5f28
       '@mapgrab/map-interface':
         specifier: ^1.0.0
         version: 1.0.2(mapbox-gl@3.14.0)(maplibre-gl@5.14.0)
@@ -442,8 +442,8 @@ packages:
     resolution: {integrity: sha512-rY0o9A5ECsTQRVhv7tL/OyDpGAoUB4tTvLiW1DSzQGq4bvTPhNw1VpSNjDJc5GFZ2XuyOtSWSVN05qOtcD71qQ==}
     engines: {node: '>= 0.6'}
 
-  '@mapbox/mapbox-gl-draw@https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/57b5711aee629083e14235f858e3c03c5c879b37':
-    resolution: {tarball: https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/57b5711aee629083e14235f858e3c03c5c879b37}
+  '@mapbox/mapbox-gl-draw@https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/5c5ea0c5f5bb945b5529b29c87113758492c5f28':
+    resolution: {tarball: https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/5c5ea0c5f5bb945b5529b29c87113758492c5f28}
     version: 1.5.1
     engines: {node: ^18.0.0 || >=20.0.0}
 
@@ -4574,7 +4574,7 @@ snapshots:
 
   '@mapbox/jsonlint-lines-primitives@2.0.2': {}
 
-  '@mapbox/mapbox-gl-draw@https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/57b5711aee629083e14235f858e3c03c5c879b37':
+  '@mapbox/mapbox-gl-draw@https://codeload.github.com/leonkenneth/mapbox-gl-draw/tar.gz/5c5ea0c5f5bb945b5529b29c87113758492c5f28':
     dependencies:
       '@mapbox/geojson-area': 0.2.2
       '@mapbox/geojson-normalize': 0.0.1

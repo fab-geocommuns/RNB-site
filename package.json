@@ -18,7 +18,7 @@
   "dependencies": {
     "@codegouvfr/react-dsfr": "^1.21.1",
     "@geostarters/mapbox-gl-draw-rectangle-assisted-mode": "^3.0.4",
-    "@mapbox/mapbox-gl-draw": "git@github.com:leonkenneth/mapbox-gl-draw.git#57b5711aee629083e14235f858e3c03c5c879b37",
+    "@mapbox/mapbox-gl-draw": "git@github.com:leonkenneth/mapbox-gl-draw.git#5c5ea0c5f5bb945b5529b29c87113758492c5f28",
     "@mapgrab/map-interface": "^1.0.0",
     "@mapgrab/playwright": "^0.0.3",
     "@reduxjs/toolkit": "^2.8.2",
