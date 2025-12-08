@@ -39,8 +39,8 @@ export default function ReportHead({ report }: { report: Report }) {
       selectedItem?._type == 'building' ? selectedItem.rnb_id : null;
 
     // NB: selecting the building again would block the map panning
-    // This (selectedRNBId != report.rnb_id) check fixes the issue but does not fix the root cause
-    if (selectedRNBId != report.rnb_id) {
+    // This (selectedRNBId !== report.rnb_id) check fixes the issue but does not fix the root cause
+    if (selectedRNBId !== report.rnb_id) {
       dispatch(
         // @ts-ignore
         selectBuildingAndSetOperationUpdate(report.rnb_id),
