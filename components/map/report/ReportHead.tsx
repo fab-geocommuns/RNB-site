@@ -43,7 +43,7 @@ export default function ReportHead({ report }: { report: Report }) {
     if (selectedRNBId != report.rnb_id) {
       dispatch(
         // @ts-ignore
-        selectBuildingAndSetOperationUpdate(rnbId),
+        selectBuildingAndSetOperationUpdate(report.rnb_id),
       );
     }
   };
