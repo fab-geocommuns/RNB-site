@@ -47,7 +47,10 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     (state: RootState) => state.edition.updateCreate.buildingNewShape,
   );
   const clickOutCount = useRef(0);
-  const [quickAddressLink, setQuickAddressLink] = useState<object>({
+  const [quickAddressLink, setQuickAddressLink] = useState<{
+    ban: string | null;
+    rnb_id: string | null;
+  }>({
     ban: null,
     rnb_id: null,
   });
@@ -78,7 +81,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
       });
       resetQuickAddressLink();
     }
-  }, [quickAddressLink]);
+  }, [quickAddressLink, dispatch, fetch]);
 
   // Initialisation des événements
   useEffect(() => {
