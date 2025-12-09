@@ -165,7 +165,7 @@ export default function CreateAccountForm() {
           required: true,
           onChange: (e) => clearError('email'),
         }}
-        hintText="Ne sera pas visible publiquement sur le site"
+        hintText="Obligatoire mais ne sera pas visible publiquement sur le site"
         state={createAccountErrors.email.length > 0 ? 'error' : 'default'}
         stateRelatedMessage={createAccountErrors.email}
       />
@@ -176,6 +176,7 @@ export default function CreateAccountForm() {
           required: true,
           onChange: (e) => clearError('username'),
         }}
+        hintText="Obligatoire et visible publiquement sur le site"
         state={createAccountErrors.username.length > 0 ? 'error' : 'default'}
         stateRelatedMessage={createAccountErrors.username}
       />

@@ -25,6 +25,15 @@ import {
   expect as mapGrabExpect,
 } from '@mapgrab/playwright';
 
+async function addAutomationBypassHeader(page: Page) {
+  await page.route(new URL(process.env.BASE_URL!).origin + '/**/*', (route) => {
+    const headers = route.request().headers();
+    headers['x-vercel-protection-bypass'] =
+      process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
+    route.continue({ headers });
+  });
+}
+
 type PagesFixtures = {
   aboutPage: AboutPage;
   blogPage: BlogPage;
@@ -45,6 +54,7 @@ const createPageFixture =
     { page }: PlaywrightTestArgs & PlaywrightTestOptions,
     use: (page: T) => Promise<void>,
   ) => {
+    await addAutomationBypassHeader(page);
     const instance = new PageClass(page);
     await instance.goto();
     await use(instance);

@@ -1,6 +1,9 @@
 // Components
 import styles from '@/styles/blog.module.scss';
 import CasList from '@/components/CasListe';
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle("Cas d'usage");
 
 export default async function Page() {
   return (

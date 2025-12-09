@@ -1,2 +1,3 @@
 minimumReleaseAge: 2880 # 2 days
+minimumReleaseAgeExclude: ['react', 'react-dom', 'next', '@next/env']
 trustPolicy: no-downgrade

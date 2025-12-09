@@ -23,7 +23,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Installation des navigateurs Playwright
-        run: npx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
 
       - name: Obtenir l'URL de preview Vercel
         uses: zentered/vercel-preview-url@e5fb141da2e3d62692b38e6c7c17477aad214165
@@ -45,11 +45,12 @@ jobs:
           poll-interval: 1
 
       - name: Execution des tests Playwright
-        run: npx playwright test
+        run: pnpm exec playwright test
         env:
           BASE_URL: https://${{ steps.vercel_preview_url.outputs.preview_url }}
           TEST_ACCOUNT_EMAIL: ${{ secrets.TEST_ACCOUNT_EMAIL }}
           TEST_ACCOUNT_PASSWORD: ${{ secrets.TEST_ACCOUNT_PASSWORD }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Ajout du commentaire dans la PR
         uses: daun/playwright-report-summary@be9e270edd5ad86038604d3caa84a819a6ff6fed
