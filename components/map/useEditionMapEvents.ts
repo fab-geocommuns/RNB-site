@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
@@ -15,8 +15,12 @@ import {
 } from '@/components/map/useMapLayers';
 import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
-import { toasterSuccess } from '@/components/contribution/toaster';
+import {
+  toasterError,
+  toasterSuccess,
+} from '@/components/contribution/toaster';
 import { displayBANPopup } from './BanLayerEvent';
+import { useRNBFetch } from '@/utils/use-rnb-fetch';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -43,6 +47,38 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     (state: RootState) => state.edition.updateCreate.buildingNewShape,
   );
   const clickOutCount = useRef(0);
+  const [quickAddressLink, setQuickAddressLink] = useState<object>({
+    ban: null,
+    rnb_id: null,
+  });
+  const { fetch } = useRNBFetch();
+
+  const resetQuickAddressLink = () => {
+    setQuickAddressLink({ ban: null, rnb_id: null });
+  };
+
+  useEffect(() => {
+    if (quickAddressLink.ban && quickAddressLink.rnb_id) {
+      const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${quickAddressLink.rnb_id}/`;
+      let data: { [key: string]: any } = {
+        addresses_cle_interop: [quickAddressLink.ban],
+      };
+      fetch(url, {
+        body: JSON.stringify(data),
+        method: 'PATCH',
+      }).then((response) => {
+        if (!response.ok) {
+          toasterError(dispatch, `Erreur lors de la mise à jour de l'adresse`);
+        } else {
+          toasterSuccess(dispatch, `Adresse mise à jour ✉️`);
+          dispatch(
+            selectBuildingAndSetOperationUpdate(quickAddressLink.rnb_id),
+          );
+        }
+      });
+      resetQuickAddressLink();
+    }
+  }, [quickAddressLink]);
 
   // Initialisation des événements
   useEffect(() => {
@@ -59,6 +95,33 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           e,
           5,
         );
+
+        const rnbIdClickedOn = featureOnCursor
+          ? featureOnCursor.properties.rnb_id
+          : undefined;
+        const rnbIdClickedClose = featureCloseToCursor
+          ? featureCloseToCursor.properties.rnb_id
+          : undefined;
+
+        if (e.originalEvent.shiftKey) {
+          if (
+            [LAYER_BAN_POINT, LAYER_BAN_TXT].includes(featureOnCursor.layer.id)
+          ) {
+            setQuickAddressLink((prev) => ({
+              ...prev,
+              ban: featureOnCursor.id,
+            }));
+          } else if (rnbIdClickedOn) {
+            setQuickAddressLink((prev) => ({
+              ...prev,
+              rnb_id: rnbIdClickedClose,
+            }));
+          } else {
+            resetQuickAddressLink();
+          }
+        } else {
+          resetQuickAddressLink();
+        }
 
         // This part below, about BAN and reports, is a duplicate of the one in useVisuMapEvents
         // We should probably refactor it to avoid code duplication
@@ -78,13 +141,6 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
             dispatch(Actions.report.selectReport(reportId));
           }
         }
-
-        const rnbIdClickedOn = featureOnCursor
-          ? featureOnCursor.properties.rnb_id
-          : undefined;
-        const rnbIdClickedClose = featureCloseToCursor
-          ? featureCloseToCursor.properties.rnb_id
-          : undefined;
 
         if (operation === 'update' || operation === null) {
           if (shapeInteractionMode !== 'drawing') {
