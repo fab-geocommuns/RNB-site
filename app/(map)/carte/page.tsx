@@ -6,6 +6,7 @@ import '@/styles/mapBanLayer.scss';
 
 // Hooks
 import { useEffect } from 'react';
+import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
 
 // Components
 import VisuMap from '@/components/map/VisuMap';
@@ -28,6 +29,7 @@ import { useMemo } from 'react';
 import { MapExtraLayer } from '@/stores/map/map-slice';
 
 export default function RNBMap() {
+  useClientSidePageTitle('Carte des bâtiments');
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
 

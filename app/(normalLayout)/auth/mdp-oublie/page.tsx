@@ -4,6 +4,9 @@ import { redirect } from 'next/navigation';
 
 // Components
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle('Mot de passe oublié');
 
 export default async function ForgotPasswordPage({
   searchParams,
