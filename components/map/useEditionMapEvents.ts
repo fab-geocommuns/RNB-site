@@ -118,7 +118,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           } else if (rnbIdClickedOn) {
             setQuickAddressLink((prev) => ({
               ...prev,
-              rnb_id: rnbIdClickedClose,
+              rnbId: rnbIdClickedClose,
             }));
           } else {
             resetQuickAddressLink();
