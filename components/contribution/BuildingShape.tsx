@@ -47,6 +47,7 @@ export default function BuildingShape({
               disabled={selectedBuilding.shape.type === 'Point'}
             >
               <img
+                alt=""
                 src={
                   selectedBuilding.shape.type === 'Point'
                     ? editPolygonDisabledIcon.src
@@ -74,6 +75,7 @@ export default function BuildingShape({
               priority={`tertiary${shapeInteractionMode === 'drawing' ? '' : ' no outline'}`}
             >
               <img
+                alt=""
                 src={newPolygonIcon.src}
                 width="30"
                 title="Dessiner une nouvelle géométrie"

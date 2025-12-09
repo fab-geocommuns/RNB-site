@@ -8,11 +8,14 @@ import { headers } from 'next/headers';
 // Components
 import LoginForm from '@/components/authentication/LoginForm';
 import CreateAccountForm from '@/components/authentication/CreateAccountForm';
+import pageTitle from '@/utils/pageTitle';
 
 // Styles
 import styles from '@/styles/login.module.scss';
 
 import summerStyles from '@/styles/summerGames.module.scss';
+
+export const metadata = pageTitle('Se connecter ou créer un compte');
 
 export default async function LoginPage({
   searchParams,

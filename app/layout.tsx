@@ -4,7 +4,6 @@ import {
   DsfrHead,
 } from '../dsfr-bootstrap/server-only-index';
 import { DsfrProvider } from '../dsfr-bootstrap';
-
 import '@/styles/global.scss';
 
 // Auth
@@ -22,11 +21,6 @@ import { Providers } from '@/stores/provider';
 import { Alerts } from '@/components/Alerts';
 import { headers } from 'next/headers';
 import { connection } from 'next/server';
-
-export const metadata = {
-  title: 'Référentiel National des Bâtiments',
-  description: '...',
-};
 
 export default async function RootLayout({
   children,

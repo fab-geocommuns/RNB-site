@@ -13,8 +13,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
 import { MapExtraLayer } from '@/stores/map/map-slice';
+import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
 
 export default function Page() {
+  useClientSidePageTitle("Carte d'édition");
+
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
 

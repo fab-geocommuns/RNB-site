@@ -9,6 +9,9 @@ import { redirect } from 'next/navigation';
 import CopyButton from '@/components/CopyButton';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import Link from 'next/link';
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle('Mon compte');
 
 export default async function Page() {
   // We don't want to allow anonymous visitors to access this page
