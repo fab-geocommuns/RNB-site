@@ -49,20 +49,21 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const clickOutCount = useRef(0);
   const [quickAddressLink, setQuickAddressLink] = useState<{
     ban: string | null;
-    rnb_id: string | null;
+    rnbId: string | null;
   }>({
     ban: null,
-    rnb_id: null,
+    rnbId: null,
   });
   const { fetch } = useRNBFetch();
 
   const resetQuickAddressLink = () => {
-    setQuickAddressLink({ ban: null, rnb_id: null });
+    setQuickAddressLink({ ban: null, rnbId: null });
   };
 
   useEffect(() => {
-    if (quickAddressLink.ban && quickAddressLink.rnb_id) {
-      const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${quickAddressLink.rnb_id}/`;
+    if (quickAddressLink.ban && quickAddressLink.rnbId) {
+      const rnbId: string = quickAddressLink.rnbId;
+      const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${quickAddressLink.rnbId}/`;
       let data: { [key: string]: any } = {
         addresses_cle_interop: [quickAddressLink.ban],
       };
@@ -74,9 +75,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           toasterError(dispatch, `Erreur lors de la mise à jour de l'adresse`);
         } else {
           toasterSuccess(dispatch, `Adresse mise à jour ✉️`);
-          dispatch(
-            selectBuildingAndSetOperationUpdate(quickAddressLink.rnb_id),
-          );
+          dispatch(selectBuildingAndSetOperationUpdate(rnbId));
         }
       });
       resetQuickAddressLink();
@@ -108,11 +107,13 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
 
         if (e.originalEvent.shiftKey) {
           if (
+            featureOnCursor &&
             [LAYER_BAN_POINT, LAYER_BAN_TXT].includes(featureOnCursor.layer.id)
           ) {
+            const banId: string = featureOnCursor.id as string;
             setQuickAddressLink((prev) => ({
               ...prev,
-              ban: featureOnCursor.id,
+              ban: banId,
             }));
           } else if (rnbIdClickedOn) {
             setQuickAddressLink((prev) => ({
