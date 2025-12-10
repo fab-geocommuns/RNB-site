@@ -46,7 +46,7 @@ function cspMiddleware(request: NextRequest) {
     default-src 'self';
     frame-src 'self' ${frameOrigins.join(' ')};
     connect-src 'self' ${connectOrigins.join(' ')};
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ''};
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'wasm-unsafe-eval' ${isDev ? "'unsafe-eval'" : ''};
     style-src 'self' 'unsafe-inline';
     media-src 'self' blob: data: ${mediaOrigins.join(' ')};
     img-src 'self' blob: data: ${mediaOrigins.join(' ')};
