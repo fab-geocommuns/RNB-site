@@ -24,6 +24,7 @@ function cspMiddleware(request: NextRequest) {
     'https://c.eu.heap-api.com',
     'https://heapanalytics.com',
   ];
+  const captchaOrigin = 'https://api.privatecaptcha.com/';
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
@@ -31,6 +32,7 @@ function cspMiddleware(request: NextRequest) {
     sentryOrigin,
     newsletterOrigin,
     ...analyticsOrigins,
+    captchaOrigin,
   ];
   const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
   const mediaOrigins = [
@@ -44,7 +46,7 @@ function cspMiddleware(request: NextRequest) {
     default-src 'self';
     frame-src 'self' ${frameOrigins.join(' ')};
     connect-src 'self' ${connectOrigins.join(' ')};
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ''};
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'wasm-unsafe-eval' ${isDev ? "'unsafe-eval'" : ''};
     style-src 'self' 'unsafe-inline';
     media-src 'self' blob: data: ${mediaOrigins.join(' ')};
     img-src 'self' blob: data: ${mediaOrigins.join(' ')};
