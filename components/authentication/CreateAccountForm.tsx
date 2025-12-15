@@ -29,6 +29,7 @@ export default function CreateAccountForm() {
   const [genericError, setGenericError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
+  const isCaptchaEnabled = process.env.NEXT_PUBLIC_ENABLE_CAPTCHA === 'true';
 
   const clearError = (field: keyof CreateAccountErrors) => {
     setCreateAccountErrors({
@@ -230,16 +231,18 @@ export default function CreateAccountForm() {
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         <button
           style={{ flex: '0 0 auto' }}
-          disabled={!captchaSolution}
+          disabled={!captchaSolution && isCaptchaEnabled}
           className="fr-btn"
           type="submit"
         >
           Créer un compte
         </button>
-        <Captcha
-          style={{ flex: '1 0 0' }}
-          onSolved={(solution) => setCaptchaSolution(solution)}
-        />
+        {isCaptchaEnabled && (
+          <Captcha
+            style={{ flex: '1 0 0' }}
+            onSolved={(solution) => setCaptchaSolution(solution)}
+          />
+        )}
       </div>
     </form>
   );
