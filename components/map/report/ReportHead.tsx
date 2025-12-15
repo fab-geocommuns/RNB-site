@@ -1,15 +1,20 @@
 import styles from '@/styles/report/reportHead.module.scss';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 import ReportMessage from '@/components/map/report/ReportMessage';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { Report } from '@/types/report';
+import { RootState } from '@/stores/store';
 
 export default function ReportHead({ report }: { report: Report }) {
   const dispatch = useDispatch();
+
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
 
   const detailsModal = createModal({
     id: `report-details-${report.id}`,
@@ -25,12 +30,27 @@ export default function ReportHead({ report }: { report: Report }) {
       minute: '2-digit',
     });
 
-  const handleOpenBuidlingClick = (e: React.MouseEvent, rnbId: string) => {
+  const showReportBuilding = () => {
+    if (!report.rnb_id) {
+      return;
+    }
+
+    const selectedRNBId =
+      selectedItem?._type === 'building' ? selectedItem.rnb_id : null;
+
+    // NB: selecting the building again would block the map panning
+    // This (selectedRNBId !== report.rnb_id) check fixes the issue but does not fix the root cause
+    if (selectedRNBId !== report.rnb_id) {
+      dispatch(
+        // @ts-ignore
+        selectBuildingAndSetOperationUpdate(report.rnb_id),
+      );
+    }
+  };
+
+  const handleOpenBuildingClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    dispatch(
-      // @ts-ignore
-      selectBuildingAndSetOperationUpdate(rnbId),
-    );
+    showReportBuilding();
   };
 
   const handleShowDetailsClick = (e: React.MouseEvent) => {
@@ -39,12 +59,7 @@ export default function ReportHead({ report }: { report: Report }) {
   };
 
   useEffect(() => {
-    if (report?.rnb_id) {
-      dispatch(
-        // @ts-ignore
-        selectBuildingAndSetOperationUpdate(report.rnb_id),
-      );
-    }
+    showReportBuilding();
   }, [report]);
 
   return (
@@ -66,10 +81,7 @@ export default function ReportHead({ report }: { report: Report }) {
           </li>
           {report.rnb_id && (
             <li>
-              <a
-                href="#"
-                onClick={(e) => handleOpenBuidlingClick(e, report.rnb_id)}
-              >
+              <a href="#" onClick={handleOpenBuildingClick}>
                 Voir le bâtiment {report.rnb_id}
               </a>
             </li>
