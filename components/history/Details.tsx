@@ -19,7 +19,7 @@ function ChangedIcon() {
     <div className={styles.changedWrapper}>
       <Tooltip
         kind="hover"
-        title="Ce champs a changé depuis la version précédente"
+        title="Ce champ a changé depuis la version précédente"
       >
         <img src={changedImage.src} alt="Modifié" width="12" height="12" />
       </Tooltip>
