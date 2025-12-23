@@ -62,12 +62,14 @@ export default function AddressSearchMap() {
     // If the query is coordinates we bypass the address search as well and focus the area
     if (e.key === 'Enter' && queryIsCoordinates(query)) {
       const coordinates = query.split(',');
+      // zoom is optional but handled
+      const zoom = coordinates.length == 3 ? coordinates[2] : 20;
 
       dispatch(
         Actions.map.setMoveTo({
           lat: parseFloat(coordinates[0]),
           lng: parseFloat(coordinates[1]),
-          zoom: 20,
+          zoom: zoom,
         }),
       );
       return;
