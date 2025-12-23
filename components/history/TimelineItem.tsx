@@ -29,8 +29,8 @@ export default function TimelineItem({
         className={`${styles.timelineIcon} ${history.event.type === 'creation' ? styles.iconCreation : ''}`}
       >
         <img
+          alt={history.event.type}
           src={selectIcon(history.event.type)}
-          alt=""
           height="24"
           width="24"
         />

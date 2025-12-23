@@ -43,6 +43,7 @@ export default function ArticleCard({
         <div className="fr-card__header">
           <div className="fr-card__img">
             <img
+              alt=""
               className="fr-responsive-img"
               src={post.feature_image!}
               data-fr-js-ratio="true"

@@ -47,7 +47,7 @@ export default function Page() {
       <p>
         C’est pourquoi{' '}
         <span className="stab stab--blue">
-          nous travaillons actuellement à introduire un champs dédié au n°
+          nous travaillons actuellement à introduire un champ dédié au n°
           d’identifiant unique du bâtiment dans les DPE
         </span>{' '}
         et à terme de le rendre obligatoire.

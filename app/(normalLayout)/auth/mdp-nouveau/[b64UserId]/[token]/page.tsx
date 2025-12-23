@@ -4,6 +4,9 @@ import { redirect } from 'next/navigation';
 
 // Components
 import ChangePasswordForm from '@/components/ChangePasswordForm';
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle('Réinitialiser mon mot de passe');
 
 export default async function ResetPasswordPage({
   params,
