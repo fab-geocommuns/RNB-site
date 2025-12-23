@@ -2,10 +2,9 @@
 
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { PasswordInput } from '@codegouvfr/react-dsfr/blocks/PasswordInput';
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Alert from '@codegouvfr/react-dsfr/Alert';
+import Captcha from './Captcha';
 
 type CreateAccountErrors = {
   email: string[];
@@ -27,8 +26,10 @@ const noErrors: () => CreateAccountErrors = () => ({
 
 export default function CreateAccountForm() {
   const [createAccountErrors, setCreateAccountErrors] = useState(noErrors());
-  const [genericError, setGenericError] = useState(false);
+  const [genericError, setGenericError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
+  const isCaptchaEnabled = process.env.NEXT_PUBLIC_ENABLE_CAPTCHA === 'true';
 
   const clearError = (field: keyof CreateAccountErrors) => {
     setCreateAccountErrors({
@@ -70,7 +71,7 @@ export default function CreateAccountForm() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    setGenericError(false);
+    setGenericError(null);
     setSuccess(false);
 
     const { hasErrors, errors, values } = prevalidateForm(e.target);
@@ -91,6 +92,7 @@ export default function CreateAccountForm() {
             password: values.password,
             last_name: values.lastName,
             first_name: values.firstName,
+            captcha_solution: captchaSolution,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -100,6 +102,11 @@ export default function CreateAccountForm() {
 
       if (!response.ok) {
         const data = await response.json();
+
+        if (data.detail) {
+          setGenericError(data.detail);
+          return;
+        }
 
         setCreateAccountErrors({
           ...createAccountErrors,
@@ -119,7 +126,9 @@ export default function CreateAccountForm() {
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      setGenericError(true);
+      setGenericError(
+        'Une erreur est survenue lors de la création de votre compte',
+      );
       throw error;
     }
   };
@@ -147,16 +156,16 @@ export default function CreateAccountForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {genericError && (
+      {genericError ? (
         <div className="fr-mb-3w">
           <Alert
-            description="Une erreur est survenue lors de la création de votre compte"
+            description={genericError}
             severity="error"
             closable={false}
             small={true}
           />
         </div>
-      )}
+      ) : null}
       <Input
         label="Email"
         nativeInputProps={{
@@ -219,9 +228,22 @@ export default function CreateAccountForm() {
           onChange: (e) => clearError('confirmPassword'),
         }}
       />
-      <button className="fr-btn fr-mt-2w" type="submit">
-        Créer un compte
-      </button>
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <button
+          style={{ flex: '0 0 auto' }}
+          disabled={!captchaSolution && isCaptchaEnabled}
+          className="fr-btn"
+          type="submit"
+        >
+          Créer un compte
+        </button>
+        {isCaptchaEnabled && (
+          <Captcha
+            style={{ flex: '1 0 0' }}
+            onSolved={(solution) => setCaptchaSolution(solution)}
+          />
+        )}
+      </div>
     </form>
   );
 }

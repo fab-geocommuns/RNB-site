@@ -21,8 +21,9 @@
     "@mapbox/mapbox-gl-draw": "^1.5.0",
     "@mapgrab/map-interface": "^1.0.0",
     "@mapgrab/playwright": "^0.0.3",
+    "@private-captcha/private-captcha-react": "^0.0.4",
     "@reduxjs/toolkit": "^2.8.2",
-    "@sentry/nextjs": "^8.47.0",
+    "@sentry/nextjs": "^8.55.0",
     "@terraformer/wkt": "^2.2.1",
     "@tryghost/content-api": "^1.11.21",
     "@turf/turf": "^7.1.0",
@@ -41,10 +42,10 @@
     "js-cookie": "^3.0.5",
     "lodash.debounce": "^4.0.8",
     "maplibre-gl": "^5.3.1",
-    "next": "15.5.7",
+    "next": "15.5.9",
     "next-auth": "^4.24.12",
-    "react": "19.1.2",
-    "react-dom": "19.1.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "react-hotkeys-hook": "^5.1.0",
     "react-map-gl": "^8.0.4",
     "react-redux": "^9.2.0",
@@ -67,8 +68,11 @@
     ]
   },
   "overrides": {
-    "@types/react": "19.1.5",
-    "@types/react-dom": "19.1.5"
+    "@types/react": "19.2.3",
+    "@types/react-dom": "19.2.3",
+    "@private-captcha/private-captcha-react": {
+      "react": "19.2.3"
+    }
   },
   "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b"
 }
