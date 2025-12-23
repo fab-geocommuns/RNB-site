@@ -8,7 +8,6 @@ import ReportMessage from '@/components/map/report/ReportMessage';
 import ReportHead from '@/components/map/report/ReportHead';
 import ReportForm from '@/components/map/report/ReportForm';
 
-import Toaster from '@/components/contribution/toaster';
 import { Report } from '@/types/report';
 
 export default function ReportDetails({ report }: { report: Report }) {
@@ -55,7 +54,6 @@ export default function ReportDetails({ report }: { report: Report }) {
           )}
         </div>
       </div>
-      <Toaster></Toaster>
     </>
   );
 }
