@@ -9,7 +9,7 @@ import NewsletterForm from '@/components/NewsletterForm';
 import AddressSearchHome from '@/components/address/AddressSearchHome';
 import DatabaseSearchForm from '@/components/DatabaseSearchForm';
 import PivotIllustration from '@/components/PivotIllustration';
-import SummerGame from '@/components/summerGames/homeBlock';
+import SummerGame from '@/components/games/summerGames/homeBlock';
 
 // Banner
 import bannerPic from '@/public/images/homeBanner/bordeaux.jpg';
