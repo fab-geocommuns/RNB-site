@@ -1,0 +1,71 @@
+.container {
+  background-color: #fef5e8;
+  padding: 4rem 3rem;
+  border-radius: 8px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  text-align: center;
+  color: #564628;
+
+  font-size: 4rem;
+  font-weight: 400;
+  font-family: FeveFont, cursive;
+  margin: 0 25px;
+}
+
+.intro {
+  p {
+    font-size: 1.25em;
+    line-height: 1.3em;
+  }
+  text-align: center;
+  color: #685430;
+  margin-bottom: 4rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.1rem;
+  row-gap: 2.4rem;
+  list-style-type: none;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.department_name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 5px;
+  line-height: 1.2em;
+  color: #685430;
+  //font-family: FeveFont, cursive;
+}
+
+.found {
+  // Styles for found items
+}
+
+.not_found {
+  img {
+    filter: brightness(0) invert(0.6) sepia(0.9) saturate(2) hue-rotate(-15deg);
+    opacity: 0.6;
+  }
+}
