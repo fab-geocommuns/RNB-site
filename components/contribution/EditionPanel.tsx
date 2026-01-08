@@ -29,7 +29,7 @@ import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
-import Toaster, {
+import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
@@ -350,8 +350,6 @@ export default function EditionPanel() {
           {operation == 'merge' && <MergePanel />}
         </div>
       )}
-
-      <Toaster></Toaster>
     </>
   );
 }
