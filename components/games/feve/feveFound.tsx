@@ -1,12 +1,21 @@
 import styles from '@/styles/feveFound.module.scss';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
+import { useEffect } from 'react';
 
 const feveFoundModal = createModal({
   id: 'feve-found-modal',
-  isOpenedByDefault: true,
+  isOpenedByDefault: false,
 });
 
-export default function FeveFound() {
+export default function FeveFound({ showModal }: { showModal?: boolean }) {
+  if (!showModal) {
+    return null;
+  }
+
+  setTimeout(() => {
+    feveFoundModal.open();
+  }, 300);
+
   return (
     <>
       <feveFoundModal.Component title="Félicitations !" size="small">

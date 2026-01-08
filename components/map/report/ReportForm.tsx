@@ -154,7 +154,7 @@ export default function ReportForm({ report }: { report: Report }) {
           </Button>
         </div>
       </form>
-      <FeveFound />
+      <FeveFound showModal={true} />
     </>
   );
 }
