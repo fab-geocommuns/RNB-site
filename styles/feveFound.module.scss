@@ -59,6 +59,28 @@
   animation: fadeIn 0.5s ease-out forwards;
   animation-delay: 1s;
 }
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 1.5s;
+}
+
+.actionBtn {
+  color: white !important;
+  border: 1px solid white !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none !important;
+
+  &:hover {
+    color: black !important;
+    background-color: white !important;
+  }
+}
 
 .feveContainer {
   display: flex;

@@ -32,7 +32,7 @@ export default function FeveLeaderBoard() {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} id="feves">
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Les fèves du RNB</h1>
       </div>

@@ -47,11 +47,9 @@ export default function ReportDetails({ report }: { report: Report }) {
             ))}
           </div>
 
-          {report.status === 'pending' && (
-            <div className={panelStyles.section}>
-              <ReportForm report={report} />
-            </div>
-          )}
+          <div className={panelStyles.section}>
+            <ReportForm report={report} />
+          </div>
         </div>
       </div>
     </>

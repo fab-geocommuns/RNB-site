@@ -3,13 +3,22 @@ import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const feveFoundModal = createModal({
   id: 'feve-found-modal',
   isOpenedByDefault: false,
 });
 
-export default function FeveFound({ showModal }: { showModal?: boolean }) {
+export default function FeveFound({
+  showModal,
+  dptName,
+  dptCode,
+}: {
+  showModal?: boolean;
+  dptName?: string;
+  dptCode?: string;
+}) {
   const confettiCount = 200;
   const confettiDefaults = {
     colors: ['#B86949', '#E3A75B', '#472F4A'],
@@ -78,12 +87,34 @@ export default function FeveFound({ showModal }: { showModal?: boolean }) {
             }}
           >
             <Image
-              src={`/images/feves/feve-33.png`}
-              alt="Gironde"
-              width={300}
-              height={300}
+              src={`/images/feves/feve-${dptCode}.png`}
+              alt={dptName ? `Fève du département ${dptName}` : ''}
+              width={400}
+              height={400}
             />
-            <p className={styles.departmentName}>Gironde</p>
+            <p className={styles.departmentName}>{dptName}</p>
+            <div className={styles.actions}>
+              <Button
+                priority="secondary"
+                size="small"
+                linkProps={{
+                  href: '/#feves',
+                }}
+                className={styles.actionBtn}
+              >
+                Voir le tableau des fèves
+              </Button>
+              <Button
+                priority="secondary"
+                size="small"
+                linkProps={{
+                  href: '#',
+                }}
+                className={styles.actionBtn}
+              >
+                En savoir plus
+              </Button>
+            </div>
           </div>
         </div>
       </feveFoundModal.Component>
