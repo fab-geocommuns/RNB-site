@@ -34,10 +34,57 @@
   margin-right: auto;
 }
 
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btnParticipate {
+  background-color: #685430 !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: #514226 !important;
+  }
+}
+
+.found_by {
+  font-weight: 500;
+  margin-top: 0.3rem;
+  font-size: 0.8em;
+  color: #685430;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  i {
+    display: flex;
+    align-items: center;
+    margin-right: 3px;
+  }
+  i::before {
+    color: green;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.btnLearnMore {
+  background-color: transparent !important;
+  color: #685430 !important;
+  border: 1px solid #685430 !important;
+  box-shadow: none !important;
+
+  &:hover {
+    background-color: rgba(104, 84, 48, 0.1) !important;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 0.1rem;
+  gap: 0.8rem;
   row-gap: 2.4rem;
   list-style-type: none;
   padding: 0;
