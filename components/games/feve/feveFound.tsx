@@ -1,5 +1,6 @@
 import styles from '@/styles/feveFound.module.scss';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
+import Image from 'next/image';
 import { useEffect } from 'react';
 
 const feveFoundModal = createModal({
@@ -8,25 +9,41 @@ const feveFoundModal = createModal({
 });
 
 export default function FeveFound({ showModal }: { showModal?: boolean }) {
+  useEffect(() => {
+    if (showModal !== false) {
+      setTimeout(() => {
+        feveFoundModal.open();
+      }, 300);
+    }
+  }, [showModal]);
+
   if (!showModal) {
     return null;
   }
 
-  setTimeout(() => {
-    feveFoundModal.open();
-  }, 300);
-
   return (
     <>
-      <feveFoundModal.Component title="Félicitations !" size="small">
-        <div className={styles.container}>
-          <h2>Vous avez trouvé une fève !</h2>
-          <p>
-            Merci pour votre contribution au Référentiel National des Bâtiments.
-            Votre signalement aide à améliorer la qualité des données pour tous
-            les utilisateurs.
-          </p>
-          <p>Continuez à explorer et à signaler d'autres bâtiments !</p>
+      <feveFoundModal.Component
+        concealingBackdrop={false}
+        title="Vous avez trouvé la fève du département !"
+        className={styles.feveModal}
+      >
+        <div className={styles.feveContainer}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              src={`/images/feves/feve-33.png`}
+              alt="Gironde"
+              width={300}
+              height={300}
+            />
+            <p className={styles.departmentName}>Gironde</p>
+          </div>
         </div>
       </feveFoundModal.Component>
     </>
