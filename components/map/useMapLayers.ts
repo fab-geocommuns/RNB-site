@@ -15,7 +15,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions, RootState } from '@/stores/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import reportIcon from '@/public/images/map/report.png';
@@ -97,7 +97,6 @@ import {
   MapBackgroundLayer,
   MapBuildingsLayer,
   MapExtraLayer,
-  setLayersExtra,
 } from '@/stores/map/map-slice';
 import { setDisplayedReportFilters } from './report/useMapStateSyncReport';
 
@@ -172,7 +171,7 @@ export const useMapLayers = ({
   const reloadBuildings = useSelector(
     (state: RootState) => state.map.reloadBuildings,
   );
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const installAllRunning = useRef(false);
   const displayedReportTags = useSelector(
     (state: RootState) => state.report.displayedTags,
@@ -784,8 +783,9 @@ export const useMapLayers = ({
 
     if (defaultExtraLayers)
       dispatch(
-        // @ts-ignore
-        setLayersExtra(defaultExtraLayers as unknown as MapExtraLayer[]),
+        Actions.map.setExtraLayers(
+          defaultExtraLayers as unknown as MapExtraLayer[],
+        ),
       );
   }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
 

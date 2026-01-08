@@ -25,7 +25,6 @@ import { toasterSuccess } from '@/components/contribution/toaster';
 // Components
 import ImageNext from 'next/image';
 import { StaticImageData } from 'next/image';
-import { toggleExtraLayer } from '@/stores/map/map-slice';
 
 // Feature flags
 const showReports = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
@@ -118,7 +117,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   };
 
   const handleExtraLayerClick = (layer: MapExtraLayer) => {
-    dispatch(toggleExtraLayer(layer));
+    dispatch(Actions.map.toggleExtraLayer(layer));
   };
 
   const isAvailable = (layer: MapLayer) => !disabledLayers.includes(layer);

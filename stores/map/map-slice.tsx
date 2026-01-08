@@ -174,12 +174,11 @@ export const mapSlice = createSlice({
   },
 });
 
-export const setLayersExtra =
-  (extraLayers: MapExtraLayer[]) => (dispatch: any) => {
-    dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
-    setArrayQueryParam('extra_layers', extraLayers);
-  };
-export const toggleExtraLayer =
+const setExtraLayers = (extraLayers: MapExtraLayer[]) => (dispatch: any) => {
+  dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
+  setArrayQueryParam('extra_layers', extraLayers);
+};
+const toggleExtraLayer =
   (extraLayer: MapExtraLayer) => (dispatch: any, getState: () => RootState) => {
     const state = getState();
     const index = state.map.layers.extraLayers.indexOf(extraLayer);
@@ -189,7 +188,7 @@ export const toggleExtraLayer =
     } else {
       newExtraLayers.splice(index, 1);
     }
-    dispatch(setLayersExtra(newExtraLayers));
+    dispatch(setExtraLayers(newExtraLayers));
   };
 
 export const selectADS = createAsyncThunk(
@@ -237,6 +236,8 @@ export const mapActions = {
   unselectItem: () => selectBuilding(null),
   selectBuilding,
   selectADS,
+  setExtraLayers,
+  toggleExtraLayer,
 };
 
 export const mapReducer = mapSlice.reducer;

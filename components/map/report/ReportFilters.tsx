@@ -1,6 +1,6 @@
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions } from '@/stores/store';
+import { Actions, AppDispatch } from '@/stores/store';
 import { useEffect, useRef, useState } from 'react';
 
 import genericStyles from '@/styles/genericPanel.module.scss';
@@ -27,7 +27,7 @@ interface ReportStats {
 }
 
 export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [stats, setStats] = useState<ReportStats | null>(null);
   const [isGlowing, setIsGlowing] = useState(false);
   const prevClosedCountRef = useRef<number | null>(null);
@@ -97,7 +97,6 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
       }
     }
 
-    // @ts-ignore
     dispatch(Actions.report.setDisplayedTags(newTags));
   };
 

@@ -1,11 +1,6 @@
 // Types
 // Store
-import {
-  bdgApiUrl,
-  Plot,
-  SelectedBuilding,
-  toggleExtraLayer,
-} from '@/stores/map/map-slice';
+import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
 import ContributionForm from '@/components/ContributionForm';
@@ -67,7 +62,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
   const handlePlotBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    dispatch(toggleExtraLayer('plots'));
+    dispatch(Actions.map.toggleExtraLayer('plots'));
   };
 
   useEffect(() => {
