@@ -2,7 +2,7 @@
 
 // Styles
 import styles from '@/styles/feve.module.scss';
-import { useEffect, useState } from 'react';
+
 import { FeveData, useFeveData } from '@/utils/feve';
 import Image from 'next/image';
 import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
@@ -10,26 +10,7 @@ import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 export const revalidate = 10;
 
 export default function FeveLeaderBoard() {
-  const [loading, setLoading] = useState(true);
-  const [feveData, setFeveData] = useState<FeveData[]>();
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await useFeveData();
-        const sortedData = data.sort((a, b) =>
-          a.dpt_name.localeCompare(b.dpt_name),
-        );
-        setFeveData(sortedData);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-  }, []);
+  const { data, loading } = useFeveData();
 
   return (
     <div className={styles.container} id="feves">
@@ -46,7 +27,7 @@ export default function FeveLeaderBoard() {
         </p>
         <p>
           Pour fêter le lancement de cette fonctionnalité, nous avons caché{' '}
-          {feveData?.length || 0} fèves sur tout le territoire. Traitez des
+          {data?.length || 0} fèves sur tout le territoire. Traitez des
           signalements pour tenter de les retrouver !
         </p>
         <div className={styles.actions}>
@@ -58,33 +39,35 @@ export default function FeveLeaderBoard() {
           </a>
         </div>
       </div>
-      {!loading && feveData && (
+      {!loading && data && (
         <ul className={styles.grid}>
-          {feveData.map((dpt) => (
+          {data.map((dpt: FeveData) => (
             <li
-              key={dpt.dpt_code}
-              className={`${styles.item} ${dpt.feve_found_at ? styles.found : styles.not_found}`}
+              key={dpt.department_code}
+              className={`${styles.item} ${dpt.found_datetime ? styles.found : styles.not_found}`}
             >
               <Image
-                src={`/images/feves/feve-${dpt.dpt_code}.png`}
-                alt={dpt.dpt_name}
+                src={`/images/feves/feve-${dpt.department_code}.png`}
+                alt={dpt.department_name}
                 width={130}
                 height={130}
               />
 
-              <span className={styles.department_name}>{dpt.dpt_name}</span>
-              {dpt.feve_found_at ? (
+              <span className={styles.department_name}>
+                {dpt.department_name}
+              </span>
+              {dpt.found_datetime ? (
                 <Tooltip
                   title={`Fève trouvée le ${new Date(
-                    dpt.feve_found_at,
+                    dpt.found_datetime,
                   ).toLocaleDateString('fr-FR')} à ${new Date(
-                    dpt.feve_found_at,
-                  ).toLocaleTimeString('fr-FR')} par ${dpt.feve_found_by}`}
+                    dpt.found_datetime,
+                  ).toLocaleTimeString('fr-FR')} par ${dpt.found_by_username}`}
                 >
                   <span className={styles.found_date}>
                     <span className={styles.found_by}>
                       <i className="fr-icon-success-fill"></i>{' '}
-                      {dpt.feve_found_by}
+                      {dpt.found_by_username}
                     </span>
                   </span>
                 </Tooltip>
