@@ -97,6 +97,7 @@ import {
   MapBackgroundLayer,
   MapBuildingsLayer,
   MapExtraLayer,
+  setLayersExtra,
 } from '@/stores/map/map-slice';
 import { setDisplayedReportFilters } from './report/useMapStateSyncReport';
 
@@ -782,7 +783,9 @@ export const useMapLayers = ({
       dispatch(Actions.map.setLayersBuildings(defaultBuildingLayer));
 
     if (defaultExtraLayers)
-      dispatch(Actions.map.setLayersExtra(defaultExtraLayers));
+      dispatch(
+        setLayersExtra(defaultExtraLayers as unknown as MapExtraLayer[]),
+      );
   }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
 
   useEffect(() => {

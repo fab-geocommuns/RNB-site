@@ -3,6 +3,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { fetchBuilding } from '@/utils/requests';
+import { setArrayQueryParam } from '@/utils/arrayQueryParams';
+import { RootState } from '../store';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -115,15 +117,7 @@ export const mapSlice = createSlice({
     setLayersBuildings(state, action) {
       state.layers.buildings = action.payload;
     },
-    toggleExtraLayer(state, action) {
-      const index = state.layers.extraLayers.indexOf(action.payload);
-      if (index === -1) {
-        state.layers.extraLayers.push(action.payload);
-      } else {
-        state.layers.extraLayers.splice(index, 1);
-      }
-    },
-    setLayersExtra(state, action) {
+    setLayersExtraInStore(state, action) {
       state.layers.extraLayers = action.payload;
     },
     setAddressSearchQuery(state, action) {
@@ -179,6 +173,24 @@ export const mapSlice = createSlice({
     });
   },
 });
+
+export const setLayersExtra =
+  (extraLayers: MapExtraLayer[]) => (dispatch: any) => {
+    dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
+    setArrayQueryParam('extra_layers', extraLayers);
+  };
+export const toggleExtraLayer =
+  (extraLayer: MapExtraLayer) => (dispatch: any, getState: () => RootState) => {
+    const state = getState();
+    const index = state.map.layers.extraLayers.indexOf(extraLayer);
+    const newExtraLayers = [...state.map.layers.extraLayers];
+    if (index === -1) {
+      newExtraLayers.push(extraLayer);
+    } else {
+      newExtraLayers.splice(index, 1);
+    }
+    dispatch(setLayersExtra(newExtraLayers));
+  };
 
 export const selectADS = createAsyncThunk(
   'map/selectADS',
