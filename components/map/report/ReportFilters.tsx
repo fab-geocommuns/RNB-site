@@ -97,6 +97,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
       }
     }
 
+    // @ts-ignore
     dispatch(Actions.report.setDisplayedTags(newTags));
   };
 

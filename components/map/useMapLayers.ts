@@ -784,6 +784,7 @@ export const useMapLayers = ({
 
     if (defaultExtraLayers)
       dispatch(
+        // @ts-ignore
         setLayersExtra(defaultExtraLayers as unknown as MapExtraLayer[]),
       );
   }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
