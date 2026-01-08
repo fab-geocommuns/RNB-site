@@ -62,6 +62,15 @@ export type MapBackgroundLayer =
   | 'satellite_2016_2020';
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots' | 'addresses' | 'reports';
+const validExtraLayers: MapExtraLayer[] = [
+  'ads',
+  'plots',
+  'addresses',
+  'reports',
+];
+export function isValidExtraLayer(layer: MapExtraLayer): boolean {
+  return validExtraLayers.includes(layer);
+}
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {

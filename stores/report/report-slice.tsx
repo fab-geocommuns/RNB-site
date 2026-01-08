@@ -4,6 +4,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { fetchReport } from '@/utils/requests';
 import { Report } from '@/types/report';
+import {
+  getArrayQueryParam,
+  setArrayQueryParam,
+} from '@/utils/arrayQueryParams';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
@@ -13,20 +17,13 @@ export type ReportStore = {
 };
 
 function getDisplayedTagsFromUrl() {
-  // Check if we're in the browser (SSR-safe)
-  if (typeof window === 'undefined') {
-    return 'all';
-  }
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const reportTagsParams = searchParams.getAll('report_tags');
-  const tagIds = reportTagsParams
-    .map((id) => parseInt(id, 10))
-    .filter((id) => !isNaN(id));
-  if (tagIds.length === 0) {
-    return 'all';
-  }
-  return tagIds;
+  return (
+    getArrayQueryParam(
+      'report_tags',
+      (value) => parseInt(value, 10),
+      (value) => !isNaN(value),
+    ) || 'all'
+  );
 }
 
 const initialState: ReportStore = {
@@ -85,21 +82,11 @@ export const setDisplayedTags =
     dispatch(reportSlice.actions.setDisplayedTagsInStore(displayedTags));
 
     // Update URL as side-effect
-    const url = new URL(window.location.href);
-    const searchParams = url.searchParams;
-
-    // Remove existing report_tags params
-    searchParams.delete('report_tags');
-
-    // Add new report_tags params if not 'all'
     if (displayedTags !== 'all') {
-      displayedTags.forEach((tagId) => {
-        searchParams.append('report_tags', tagId.toString());
-      });
+      setArrayQueryParam('report_tags', displayedTags);
+    } else {
+      setArrayQueryParam('report_tags', []);
     }
-
-    // Update URL without reloading
-    window.history.replaceState({}, '', url.toString());
   };
 
 export const reportReducer = reportSlice.reducer;

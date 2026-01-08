@@ -12,8 +12,19 @@ import '@/styles/mapBanLayer.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
-import { MapExtraLayer } from '@/stores/map/map-slice';
+import { MapExtraLayer, isValidExtraLayer } from '@/stores/map/map-slice';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
+import { getArrayQueryParam } from '@/utils/arrayQueryParams';
+
+function getDefaultExtraLayers() {
+  return (
+    getArrayQueryParam<MapExtraLayer>(
+      'extra_layers',
+      (value) => value as MapExtraLayer,
+      isValidExtraLayer,
+    ) || ['reports']
+  );
+}
 
 export default function Page() {
   useClientSidePageTitle("Carte d'édition");
@@ -26,7 +37,7 @@ export default function Page() {
 
   const { user } = useRNBAuthentication({ require: true });
 
-  const defaultExtraLayers = useMemo(() => ['reports'] as MapExtraLayer[], []);
+  const defaultExtraLayers = useMemo(() => getDefaultExtraLayers(), []);
 
   if (!user) {
     return (
