@@ -2,7 +2,7 @@
   "name": "batid-ads",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.23.0",
+  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -33,6 +33,7 @@
     "@types/react-dom": "19.1.5",
     "@types/tryghost__content-api": "^1.3.17",
     "@vercel/analytics": "^1.3.1",
+    "canvas-confetti": "^1.9.4",
     "copy-to-clipboard": "^3.3.3",
     "eslint": "^8.57.0",
     "eslint-config-next": "15.3.2",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/mapbox__mapbox-gl-draw": "^1.4.8",
     "@types/terraformer__wkt": "^2.0.3",
     "dotenv": "^17.2.3",
@@ -73,6 +75,5 @@
     "@private-captcha/private-captcha-react": {
       "react": "19.2.3"
     }
-  },
-  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b"
+  }
 }

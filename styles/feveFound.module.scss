@@ -3,6 +3,8 @@
     background-color: transparent !important;
     box-shadow: none;
     overflow: hidden !important;
+    position: relative;
+    z-index: 1752;
   }
 
   :global(.fr-modal__header) {
