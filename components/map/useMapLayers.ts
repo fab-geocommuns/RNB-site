@@ -98,6 +98,7 @@ import {
   MapBuildingsLayer,
   MapExtraLayer,
 } from '@/stores/map/map-slice';
+import { setDisplayedReportFilters } from './report/useMapStateSyncReport';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -172,6 +173,9 @@ export const useMapLayers = ({
   );
   const dispatch = useDispatch();
   const installAllRunning = useRef(false);
+  const displayedReportTags = useSelector(
+    (state: RootState) => state.report.displayedTags,
+  );
 
   const installAll = async (map: maplibregl.Map) => {
     // We don't want concurrent calls running
@@ -615,6 +619,8 @@ export const useMapLayers = ({
         ],
       },
     });
+
+    setDisplayedReportFilters(map, displayedReportTags);
   };
 
   ///////////////////////////////////

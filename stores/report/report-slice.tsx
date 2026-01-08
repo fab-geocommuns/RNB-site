@@ -1,3 +1,5 @@
+'use client';
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { fetchReport } from '@/utils/requests';
@@ -10,11 +12,28 @@ export type ReportStore = {
   displayedTags: 'all' | number[];
 };
 
+function getDisplayedTagsFromUrl() {
+  // Check if we're in the browser (SSR-safe)
+  if (typeof window === 'undefined') {
+    return 'all';
+  }
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const reportTagsParams = searchParams.getAll('report_tags');
+  const tagIds = reportTagsParams
+    .map((id) => parseInt(id, 10))
+    .filter((id) => !isNaN(id));
+  if (tagIds.length === 0) {
+    return 'all';
+  }
+  return tagIds;
+}
+
 const initialState: ReportStore = {
   filtersDrawerOpen: true,
   selectedReport: null,
   lastReportUpdate: Date.now(),
-  displayedTags: 'all',
+  displayedTags: getDisplayedTagsFromUrl(),
 };
 
 export const reportSlice = createSlice({
@@ -33,7 +52,7 @@ export const reportSlice = createSlice({
     setLastReportUpdate(state) {
       state.lastReportUpdate = Date.now();
     },
-    setDisplayedTags(state, action) {
+    setDisplayedTagsInStore(state, action) {
       state.displayedTags = action.payload;
     },
   },
@@ -59,8 +78,33 @@ export const selectReport = createAsyncThunk(
   },
 );
 
+// Thunk to update displayedTags with URL persistence side-effect
+export const setDisplayedTags =
+  (displayedTags: 'all' | number[]) => (dispatch: any) => {
+    // Update state
+    dispatch(reportSlice.actions.setDisplayedTagsInStore(displayedTags));
+
+    // Update URL as side-effect
+    const url = new URL(window.location.href);
+    const searchParams = url.searchParams;
+
+    // Remove existing report_tags params
+    searchParams.delete('report_tags');
+
+    // Add new report_tags params if not 'all'
+    if (displayedTags !== 'all') {
+      displayedTags.forEach((tagId) => {
+        searchParams.append('report_tags', tagId.toString());
+      });
+    }
+
+    // Update URL without reloading
+    window.history.replaceState({}, '', url.toString());
+  };
+
 export const reportReducer = reportSlice.reducer;
 export const reportActions = {
   ...reportSlice.actions,
   selectReport,
+  setDisplayedTags,
 };
