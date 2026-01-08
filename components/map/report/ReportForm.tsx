@@ -12,6 +12,8 @@ import {
 } from '@/components/contribution/toaster';
 import { Report } from '@/types/report';
 
+import FeveFound from '@/components/games/feve/feveFound';
+
 type FormAction = 'comment' | 'fix' | 'reject';
 
 export default function ReportForm({ report }: { report: Report }) {
@@ -152,6 +154,7 @@ export default function ReportForm({ report }: { report: Report }) {
           </Button>
         </div>
       </form>
+      <FeveFound />
     </>
   );
 }
