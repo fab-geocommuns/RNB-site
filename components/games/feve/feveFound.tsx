@@ -86,12 +86,8 @@ export default function FeveFound({
               alignItems: 'center',
             }}
           >
-            <Image
-              src={`/images/feves/feve-${dptCode}.png`}
-              alt={dptName ? `Fève du département ${dptName}` : ''}
-              width={400}
-              height={400}
-            />
+            <img src={`/images/feves/w300/feve-${dptCode}.png`} />
+
             <p className={styles.departmentName}>{dptName}</p>
             <div className={styles.actions}>
               <Button

@@ -21,22 +21,28 @@ export default function FeveLeaderBoard() {
       <div className={styles.intro}>
         <p>
           <b>
-            Nouveau : les signalements permettent de trouver où améliorer le
+            Nouvelle : les signalements permettent de trouver où améliorer le
             référentiel.
           </b>
         </p>
         <p>
           Pour fêter le lancement de cette fonctionnalité, nous avons caché{' '}
-          {data?.length || 0} fèves sur tout le territoire. Traitez des
-          signalements pour tenter de les retrouver !
+          {data?.length || 0} fèves sur tout le territoire.
+        </p>
+        <p>
+          Venez éditer le RNB et traitez ses signalements pour tenter de les
+          retrouver !
         </p>
         <div className={styles.actions}>
-          <a className={`fr-btn ${styles.btnParticipate}`} href="#">
+          <a
+            className={`fr-btn ${styles.btnParticipate}`}
+            href="/edition?report_tags=6&extra_layers=reports&extra_layers=addresses"
+          >
             Participer
           </a>
-          <a className={`fr-btn ${styles.btnLearnMore}`} href="#">
+          {/* <a className={`fr-btn ${styles.btnLearnMore}`} href="#">
             En savoir plus
-          </a>
+          </a> */}
         </div>
       </div>
       {!loading && data && (
@@ -50,13 +56,6 @@ export default function FeveLeaderBoard() {
                 <img
                   src={`/images/feves/w150/feve-${dpt.department_code}.png`}
                 />
-                {/* <Image
-                  src={`/images/feves/w150/feve-${dpt.department_code}.png`}
-                  alt={dpt.department_name}
-                  width={0}
-                  height={0}
-                  style={{ width: '100%', height: 'auto' }}
-                /> */}
               </div>
 
               <span className={styles.department_name}>
