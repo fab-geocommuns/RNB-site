@@ -7,8 +7,6 @@ import genericStyles from '@/styles/genericPanel.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
 import filterStyles from '@/styles/report/reportFilters.module.scss';
 
-import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
-
 import reportIcon from '@/public/images/map/report.png';
 import Image from 'next/image';
 
@@ -120,17 +118,12 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
             Suivi des signalements
           </h2>
           <div>
-            <Tooltip
-              className={filterStyles.activityTooltip}
-              kind="hover"
+            <div
               title="Suivi des signalements : s'allume quand vous ou un autre utilisateur ferme un signalement"
-            >
-              <div
-                className={`${filterStyles.activityIndicator} ${
-                  isGlowing ? filterStyles.active : ''
-                }`}
-              />
-            </Tooltip>
+              className={`${filterStyles.activityIndicator} ${
+                isGlowing ? filterStyles.active : ''
+              }`}
+            />
           </div>
         </div>
         <a href="#" className={genericStyles.closeLink}>
