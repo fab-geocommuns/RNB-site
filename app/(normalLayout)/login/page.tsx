@@ -12,8 +12,7 @@ import pageTitle from '@/utils/pageTitle';
 
 // Styles
 import styles from '@/styles/login.module.scss';
-
-import summerStyles from '@/styles/summerGames.module.scss';
+import feveStyles from '@/styles/feve.module.scss';
 
 export const metadata = pageTitle('Se connecter ou créer un compte');
 
@@ -59,6 +58,18 @@ export default async function LoginPage({
       <main className="fr-pt-md-14v" role="main">
         <div className="fr-container fr-container--fluid fr-mb-md-14v">
           <div className="fr-grid-row fr-grid-row--gutters">
+            <div className="fr-col-12 fr-col-md-8 fr-col-offset-md-2">
+              <div className={feveStyles.loginContainer}>
+                <h2 className={feveStyles.loginTitle}>
+                  Participer aux fèves du RNB
+                </h2>
+                <p>
+                  Créez un compte RNB pour participer aux fèves du RNB, éditer
+                  le référentiel et traiter les signalements.
+                </p>
+              </div>
+            </div>
+
             <div className="fr-col-12 fr-col-md-6 fr-col-lg-6">
               <div
                 className={`fr-container ${styles.shell} fr-px-md-12v fr-py-10v fr-py-md-14v `}

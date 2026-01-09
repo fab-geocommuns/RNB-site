@@ -1,5 +1,22 @@
 @import 'vars.scss';
 
+.loginContainer {
+  padding: 2.5rem 2rem 2rem 2rem;
+  background-color: #fef5e8;
+  color: #564628;
+  border-radius: 8px;
+  p {
+    font-size: 1.1rem;
+    line-height: 1.3rem;
+    padding-bottom: 0;
+  }
+}
+.loginTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
 .container {
   background-color: #fef5e8;
   padding: 4rem 3rem;
