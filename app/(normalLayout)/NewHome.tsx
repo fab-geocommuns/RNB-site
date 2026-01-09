@@ -1,4 +1,3 @@
-import SummerGame from '@/components/games/summerGames/homeBlock';
 import FeveLeaderBoard from '@/components/games/feve/leaderBoard';
 import Hero from '@/components/home/Hero';
 import UseCases from '@/components/home/UseCases';

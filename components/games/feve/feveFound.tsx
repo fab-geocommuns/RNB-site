@@ -100,7 +100,7 @@ export default function FeveFound({
               >
                 Voir le tableau des fèves
               </Button>
-              <Button
+              {/* <Button
                 priority="secondary"
                 size="small"
                 linkProps={{
@@ -109,7 +109,7 @@ export default function FeveFound({
                 className={styles.actionBtn}
               >
                 En savoir plus
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
