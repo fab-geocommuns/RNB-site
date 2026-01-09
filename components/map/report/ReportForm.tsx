@@ -144,8 +144,12 @@ export default function ReportForm({ report }: { report: Report }) {
                     },
                   },
                   {
-                    label: 'Rejeter',
-                    hintText: 'Fermer le signalement car il est non pertinent',
+                    label: report.tags.includes('Les fèves du RNB')
+                      ? 'Adresse introuvable'
+                      : 'Rejeter',
+                    hintText: report.tags.includes('Les fèves du RNB')
+                      ? 'Adresse BAN inexistante'
+                      : 'Fermer le signalement car il est non pertinent',
                     nativeInputProps: {
                       checked: action === 'reject',
                       onChange: () => setAction('reject'),
