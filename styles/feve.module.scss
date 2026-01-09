@@ -1,0 +1,130 @@
+@import 'vars.scss';
+
+.container {
+  background-color: #fef5e8;
+  padding: 4rem 3rem;
+  border-radius: 8px;
+
+  @media (max-width: $bp-md) {
+    padding: 2rem 1rem;
+  }
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  text-align: center;
+  color: #564628;
+  font-size: 3.5rem;
+  font-weight: 500;
+  margin: 0 25px;
+
+  @media (max-width: $bp-md) {
+    font-size: 2rem;
+  }
+}
+
+.intro {
+  p {
+    font-size: 1.25em;
+    line-height: 1.3em;
+  }
+  text-align: center;
+  color: #685430;
+  margin-bottom: 4rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btnParticipate {
+  background-color: #685430 !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: #514226 !important;
+  }
+}
+
+.found_by {
+  font-weight: 500;
+  margin-top: 0.3rem;
+  font-size: 0.8em;
+  color: #685430;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  i {
+    display: flex;
+    align-items: center;
+    margin-right: 3px;
+  }
+  i::before {
+    color: green;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.btnLearnMore {
+  background-color: transparent !important;
+  color: #685430 !important;
+  border: 1px solid #685430 !important;
+  box-shadow: none !important;
+
+  &:hover {
+    background-color: rgba(104, 84, 48, 0.1) !important;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+  row-gap: 1.5rem;
+  list-style-type: none;
+  padding: 0;
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: none;
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: calc(40% - 0.5rem);
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.department_name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 5px;
+  line-height: 1.2em;
+  color: #685430;
+}
+
+.not_found {
+  img {
+    filter: brightness(0) invert(0.6) sepia(0.9) saturate(2) hue-rotate(-15deg);
+    opacity: 0.6;
+  }
+}

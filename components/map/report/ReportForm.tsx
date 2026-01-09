@@ -10,7 +10,9 @@ import {
   toasterError,
   toasterSuccess,
 } from '@/components/contribution/toaster';
-import { Report } from '@/types/report';
+import { Report, Feve } from '@/types/report';
+
+import FeveFound from '@/components/games/feve/feveFound';
 
 type FormAction = 'comment' | 'fix' | 'reject';
 
@@ -20,6 +22,8 @@ export default function ReportForm({ report }: { report: Report }) {
 
   const [action, setAction] = useState<FormAction>('comment');
   const [message, setMessage] = useState('');
+
+  const [foundFeve, setFoundFeve] = useState<Feve | null>(null);
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -83,6 +87,8 @@ export default function ReportForm({ report }: { report: Report }) {
         dispatch(Actions.report.setSelectedReport(updatedReport));
         dispatch(Actions.report.setLastReportUpdate());
         toasterSuccess(dispatch, getSuccessMessage());
+
+        setFoundFeve(updatedReport.feve);
       } else {
         await throwErrorMessageForHumans(response);
       }
@@ -97,61 +103,71 @@ export default function ReportForm({ report }: { report: Report }) {
 
   return (
     <>
-      <form method="post" action="" onSubmit={handleSubmit}>
-        <input type="hidden" name="reportId" value={report.id} />
-        <div>
-          <label htmlFor="message" className={styles.formTitle}>
-            Votre message
-          </label>
-          <textarea
-            className={`fr-input ${styles.msgInput}`}
-            id="message"
-            name="message"
-            value={message}
-            onChange={handleMessageChange}
-            required
-          ></textarea>
-        </div>
-        <div className={styles.actionShell}>
-          <RadioButtons
-            name="action"
-            legend="Votre action"
-            small={true}
-            className={styles.actionInput}
-            options={[
-              {
-                label: 'Commenter',
-                hintText: 'Laisser un simple message',
-                nativeInputProps: {
-                  checked: action === 'comment',
-                  onChange: () => setAction('comment'),
-                },
-              },
-              {
-                label: 'Marquer comme traité',
-                hintText: 'Fermer le signalement car il est déjà corrigé',
-                nativeInputProps: {
-                  checked: action === 'fix',
-                  onChange: () => setAction('fix'),
-                },
-              },
-              {
-                label: 'Rejeter',
-                hintText: 'Fermer le signalement car il est non pertinent',
-                nativeInputProps: {
-                  checked: action === 'reject',
-                  onChange: () => setAction('reject'),
-                },
-              },
-            ]}
-          />
-        </div>
-        <div>
-          <Button size="small" type="submit">
-            {getSubmitLabel()}
-          </Button>
-        </div>
-      </form>
+      {report.status === 'pending' && (
+        <>
+          <form method="post" action="" onSubmit={handleSubmit}>
+            <input type="hidden" name="reportId" value={report.id} />
+            <div>
+              <label htmlFor="message" className={styles.formTitle}>
+                Votre message
+              </label>
+              <textarea
+                className={`fr-input ${styles.msgInput}`}
+                id="message"
+                name="message"
+                value={message}
+                onChange={handleMessageChange}
+                required
+              ></textarea>
+            </div>
+            <div className={styles.actionShell}>
+              <RadioButtons
+                name="action"
+                legend="Votre action"
+                small={true}
+                className={styles.actionInput}
+                options={[
+                  {
+                    label: 'Commenter',
+                    hintText: 'Laisser un simple message',
+                    nativeInputProps: {
+                      checked: action === 'comment',
+                      onChange: () => setAction('comment'),
+                    },
+                  },
+                  {
+                    label: 'Marquer comme traité',
+                    hintText: 'Fermer le signalement car il est déjà corrigé',
+                    nativeInputProps: {
+                      checked: action === 'fix',
+                      onChange: () => setAction('fix'),
+                    },
+                  },
+                  {
+                    label: 'Rejeter',
+                    hintText: 'Fermer le signalement car il est non pertinent',
+                    nativeInputProps: {
+                      checked: action === 'reject',
+                      onChange: () => setAction('reject'),
+                    },
+                  },
+                ]}
+              />
+            </div>
+            <div>
+              <Button size="small" type="submit">
+                {getSubmitLabel()}
+              </Button>
+            </div>
+          </form>
+        </>
+      )}
+
+      <FeveFound
+        showModal={foundFeve != null}
+        dptName={foundFeve?.dpt_name}
+        dptCode={foundFeve?.dpt_code}
+      />
     </>
   );
 }

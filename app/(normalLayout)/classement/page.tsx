@@ -1,5 +1,5 @@
 import pageTitle from '@/utils/pageTitle';
-import SummerGame from '@/components/summerGames/homeBlock';
+import SummerGame from '@/components/games/summerGames/homeBlock';
 
 export const metadata = pageTitle('Classement');
 

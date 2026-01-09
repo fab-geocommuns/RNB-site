@@ -1,0 +1,89 @@
+.feveModal {
+  :global(.fr-modal__body) {
+    background-color: transparent !important;
+    box-shadow: none;
+    overflow: hidden !important;
+    position: relative;
+    z-index: 1752;
+  }
+
+  :global(.fr-modal__header) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  :global(.fr-modal__title) {
+    color: white !important;
+    font-size: 1.7em !important;
+    line-height: 1.2em;
+    text-align: center;
+    display: block !important;
+  }
+
+  :global(.fr-btn--close) {
+    color: white !important;
+    &:hover {
+      color: black !important;
+      background-color: white !important;
+    }
+  }
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(250px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.departmentName {
+  color: white;
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 1s;
+}
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 1.5s;
+}
+
+.actionBtn {
+  color: white !important;
+  border: 1px solid white !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none !important;
+
+  &:hover {
+    color: black !important;
+    background-color: white !important;
+  }
+}
+
+.feveContainer {
+  display: flex;
+  justify-content: center;
+  animation: slideUpFadeIn 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}

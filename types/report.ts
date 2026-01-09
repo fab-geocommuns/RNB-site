@@ -25,4 +25,10 @@ export interface Report {
   messages: ReportMessage[];
   author: ReportAuthor;
   tags: string[];
+  feve?: Feve;
+}
+
+export interface Feve {
+  dpt_code: string;
+  dpt_name: string;
 }
