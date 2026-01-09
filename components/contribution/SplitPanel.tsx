@@ -3,7 +3,7 @@ import { selectSplitChildrenForAPI } from '@/stores/edition/edition-selector';
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import styles from '@/styles/contribution/splitPanel.module.scss';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { Select } from '@codegouvfr/react-dsfr/SelectNext';
 import { useState } from 'react';

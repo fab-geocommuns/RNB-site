@@ -9,7 +9,7 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import GenericPanel from '@/components/panel/GenericPanel';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
 import {
   throwErrorMessageForHumans,
   toasterError,
