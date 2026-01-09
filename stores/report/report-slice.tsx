@@ -1,7 +1,13 @@
+'use client';
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { fetchReport } from '@/utils/requests';
 import { Report } from '@/types/report';
+import {
+  getArrayQueryParam,
+  setArrayQueryParam,
+} from '@/utils/arrayQueryParams';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
@@ -10,11 +16,21 @@ export type ReportStore = {
   displayedTags: 'all' | number[];
 };
 
+function getDisplayedTagsFromUrl() {
+  return (
+    getArrayQueryParam(
+      'report_tags',
+      (value) => parseInt(value, 10),
+      (value) => !isNaN(value),
+    ) || 'all'
+  );
+}
+
 const initialState: ReportStore = {
   filtersDrawerOpen: true,
   selectedReport: null,
   lastReportUpdate: Date.now(),
-  displayedTags: 'all',
+  displayedTags: getDisplayedTagsFromUrl(),
 };
 
 export const reportSlice = createSlice({
@@ -33,7 +49,7 @@ export const reportSlice = createSlice({
     setLastReportUpdate(state) {
       state.lastReportUpdate = Date.now();
     },
-    setDisplayedTags(state, action) {
+    setDisplayedTagsInStore(state, action) {
       state.displayedTags = action.payload;
     },
   },
@@ -59,8 +75,23 @@ export const selectReport = createAsyncThunk(
   },
 );
 
+// Thunk to update displayedTags with URL persistence side-effect
+export const setDisplayedTags =
+  (displayedTags: 'all' | number[]) => (dispatch: any) => {
+    // Update state
+    dispatch(reportSlice.actions.setDisplayedTagsInStore(displayedTags));
+
+    // Update URL as side-effect
+    if (displayedTags !== 'all') {
+      setArrayQueryParam('report_tags', displayedTags);
+    } else {
+      setArrayQueryParam('report_tags', []);
+    }
+  };
+
 export const reportReducer = reportSlice.reducer;
 export const reportActions = {
   ...reportSlice.actions,
   selectReport,
+  setDisplayedTags,
 };

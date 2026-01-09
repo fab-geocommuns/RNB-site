@@ -8,6 +8,46 @@ import {
   LAYER_REPORTS_SMALL_CIRCLES,
 } from '../useMapLayers';
 
+export function setDisplayedReportFilters(
+  map: maplibregl.Map,
+  displayedTags: 'all' | number[],
+  selectedReportId?: number,
+) {
+  const reportLayersSetup = [
+    LAYER_REPORTS_CIRCLE,
+    LAYER_REPORTS_ICON,
+    LAYER_REPORTS_SMALL_CIRCLES,
+  ].every((layer) => map?.getLayer(layer));
+  if (!reportLayersSetup) return;
+  // We want to show only some reports given by vector tiles.
+  // We can either show the selected report, or the pending reports with the right tags.
+  let filters = ['any'] as any;
+
+  // First possibility: a report is selected
+  if (selectedReportId) {
+    filters.push(['==', ['get', 'id'], selectedReportId]);
+  }
+
+  // Second possibility: we want to show pending reports with the right tags
+  let catFilter = ['all', ['==', ['get', 'status'], 'pending']];
+  if (displayedTags !== 'all') {
+    let tagFilters = ['any'] as any;
+
+    displayedTags.forEach((tagId: number) => {
+      const singleTagFilter = ['in', tagId.toString(), ['get', 'tag_ids']];
+      tagFilters.push(singleTagFilter);
+    });
+
+    catFilter.push(tagFilters);
+  }
+
+  filters.push(catFilter);
+
+  map?.setFilter(LAYER_REPORTS_CIRCLE, filters);
+  map?.setFilter(LAYER_REPORTS_ICON, filters);
+  map?.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filters);
+}
+
 export const useMapStateSyncReport = (map?: maplibregl.Map) => {
   const selectedReportId = useSelector(
     (state: RootState) => (state.report.selectedReport?.id as number) ?? null,
@@ -73,38 +113,7 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
   }, [lastReportUpdate]);
 
   useEffect(() => {
-    if (
-      map?.getLayer(LAYER_REPORTS_CIRCLE) &&
-      map?.getLayer(LAYER_REPORTS_ICON) &&
-      map?.getLayer(LAYER_REPORTS_SMALL_CIRCLES)
-    ) {
-      // We want to show only some reports given by vector tiles.
-      // We can either show the selected report, or the pending reports with the right tags.
-      let filters = ['any'] as any;
-
-      // First possibility: the report is selected
-      if (selectedReportId) {
-        filters.push(['==', ['get', 'id'], selectedReportId]);
-      }
-
-      // Second possibility: this is a pending report with the right tag
-      let catFilter = ['all', ['==', ['get', 'status'], 'pending']];
-      if (displayedTags !== 'all') {
-        let tagFilters = ['any'] as any;
-
-        displayedTags.forEach((tagId: number) => {
-          const singleTagFilter = ['in', tagId.toString(), ['get', 'tag_ids']];
-          tagFilters.push(singleTagFilter);
-        });
-
-        catFilter.push(tagFilters);
-      }
-
-      filters.push(catFilter);
-
-      map?.setFilter(LAYER_REPORTS_CIRCLE, filters);
-      map?.setFilter(LAYER_REPORTS_ICON, filters);
-      map?.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filters);
-    }
-  }, [displayedTags, selectedReportId]);
+    if (!map) return;
+    setDisplayedReportFilters(map, displayedTags, selectedReportId);
+  }, [map, displayedTags, selectedReportId]);
 };

@@ -15,7 +15,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions, RootState } from '@/stores/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import reportIcon from '@/public/images/map/report.png';
@@ -98,6 +98,7 @@ import {
   MapBuildingsLayer,
   MapExtraLayer,
 } from '@/stores/map/map-slice';
+import { setDisplayedReportFilters } from './report/useMapStateSyncReport';
 
 export const STYLES: Record<
   MapBackgroundLayer,
@@ -170,8 +171,11 @@ export const useMapLayers = ({
   const reloadBuildings = useSelector(
     (state: RootState) => state.map.reloadBuildings,
   );
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const installAllRunning = useRef(false);
+  const displayedReportTags = useSelector(
+    (state: RootState) => state.report.displayedTags,
+  );
 
   const installAll = async (map: maplibregl.Map) => {
     // We don't want concurrent calls running
@@ -615,6 +619,8 @@ export const useMapLayers = ({
         ],
       },
     });
+
+    setDisplayedReportFilters(map, displayedReportTags);
   };
 
   ///////////////////////////////////
@@ -776,7 +782,11 @@ export const useMapLayers = ({
       dispatch(Actions.map.setLayersBuildings(defaultBuildingLayer));
 
     if (defaultExtraLayers)
-      dispatch(Actions.map.setLayersExtra(defaultExtraLayers));
+      dispatch(
+        Actions.map.setExtraLayers(
+          defaultExtraLayers as unknown as MapExtraLayer[],
+        ),
+      );
   }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
 
   useEffect(() => {
