@@ -10,6 +10,8 @@ import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 export const revalidate = 10;
 
 export default function FeveLeaderBoard() {
+  const fevetagId = process.env.NEXT_PUBLIC_FEVE_TAG_ID || '4';
+
   const { data, loading } = useFeveData();
 
   return (
@@ -42,7 +44,7 @@ export default function FeveLeaderBoard() {
         <div className={styles.actions}>
           <a
             className={`fr-btn ${styles.btnParticipate}`}
-            href="/edition?report_tags=4&extra_layers=reports&extra_layers=addresses"
+            href={`/edition?report_tags=${fevetagId}&extra_layers=reports&extra_layers=addresses`}
           >
             Participer
           </a>
