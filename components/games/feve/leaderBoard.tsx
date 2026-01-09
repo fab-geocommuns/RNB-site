@@ -21,17 +21,14 @@ export default function FeveLeaderBoard() {
       <div className={styles.intro}>
         <p>
           <b>
-            Nouvelle fonctionnalité : les signalements permettent de trouver où améliorer le
-            référentiel.
+            Nouvelle fonctionnalité : les signalements permettent de trouver où
+            améliorer le référentiel.
           </b>
         </p>
         <p>
-          Pour fêter ce lancement nous avons caché{' '}
-          {data?.length || 0} fèves sur tout le territoire.
-        </p>
-        <p>
-          Venez éditer le RNB et traiter ces signalements pour tenter de les
-          retrouver !
+          Pour fêter ce lancement nous avons caché {data?.length || 0} fèves sur
+          tout le territoire. Venez éditer le RNB et traiter ces signalements
+          pour tenter de les retrouver !
         </p>
         <div className={styles.actions}>
           <a
