@@ -1,5 +1,5 @@
 'use client';
-import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/summerGames.module.scss';
 import ProgressBar from './ProgressBar';

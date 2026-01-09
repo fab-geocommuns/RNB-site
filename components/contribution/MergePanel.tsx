@@ -9,7 +9,7 @@ import GenericPanel from '@/components/panel/GenericPanel';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/contribution/mergePanel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
 import {
   throwErrorMessageForHumans,
   toasterError,
