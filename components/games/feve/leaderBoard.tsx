@@ -30,7 +30,7 @@ export default function FeveLeaderBoard() {
           {data?.length || 0} fèves sur tout le territoire.
         </p>
         <p>
-          Venez éditer le RNB et traitez ses signalements pour tenter de les
+          Venez éditer le RNB et traiter ces signalements pour tenter de les
           retrouver !
         </p>
         <div className={styles.actions}>
