@@ -4,7 +4,7 @@
 import styles from '@/styles/feve.module.scss';
 
 import { FeveData, useFeveData } from '@/utils/feve';
-import { contactEmail } from '@/logic/settings';
+import settings from '@/logic/settings';
 import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 
 export const revalidate = 10;
@@ -33,7 +33,10 @@ export default function FeveLeaderBoard() {
         <p>
           <small>
             Des questions ou commentaires à propos de ces signalements ?{' '}
-            <a href={`mailto:${contactEmail}`}>Ecrivez à l'équipe du RNB</a>.
+            <a href={`mailto:${settings.contactEmail}`}>
+              Ecrivez à l'équipe du RNB
+            </a>
+            .
           </small>
         </p>
         <div className={styles.actions}>
