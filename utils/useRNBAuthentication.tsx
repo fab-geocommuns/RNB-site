@@ -17,9 +17,8 @@ type AuthenticatedUser = {
 };
 
 type UseRNBAuthentication = {
-  status: RNBAuthenticationStatus;
   user: AuthenticatedUser | null;
-
+  isAuthenticated: boolean;
   is: (group: RNBGroup) => boolean;
 };
 
@@ -52,10 +51,7 @@ export const useRNBAuthentication = (options?: {
   }
 
   return {
-    status:
-      status === 'authenticated'
-        ? RNBAuthenticationStatus.AUTHENTICATED
-        : RNBAuthenticationStatus.DISCONNECTED,
+    isAuthenticated: status === 'authenticated',
     user,
     is: (group: RNBGroup) =>
       status === 'authenticated' && groups.includes(group),

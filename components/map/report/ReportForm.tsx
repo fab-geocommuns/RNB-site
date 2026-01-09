@@ -5,6 +5,7 @@ import styles from '@/styles/report/form.module.scss';
 import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useRNBFetch } from '@/utils/useRNBFetch';
+import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import {
   throwErrorMessageForHumans,
   toasterError,
@@ -18,6 +19,7 @@ type FormAction = 'comment' | 'fix' | 'reject';
 
 export default function ReportForm({ report }: { report: Report }) {
   const { fetch } = useRNBFetch();
+  const { isAuthenticated } = useRNBAuthentication();
   const dispatch: AppDispatch = useDispatch();
 
   const [action, setAction] = useState<FormAction>('comment');
@@ -121,6 +123,7 @@ export default function ReportForm({ report }: { report: Report }) {
               ></textarea>
             </div>
             <div className={styles.actionShell}>
+              {isAuthenticated && (
               <RadioButtons
                 name="action"
                 legend="Votre action"
@@ -157,12 +160,22 @@ export default function ReportForm({ report }: { report: Report }) {
                   },
                 ]}
               />
+              )}
             </div>
             <div>
               <Button size="small" type="submit">
                 {getSubmitLabel()}
               </Button>
             </div>
+        {!isAuthenticated && (
+          <div className="fr-mt-2v fr-mb-0">
+            ou{' '}
+            <a href="/login" className="fr-link">
+              connectez-vous
+            </a>{' '}
+            pour traiter ce signalement
+          </div>
+        )}
           </form>
         </>
       )}
