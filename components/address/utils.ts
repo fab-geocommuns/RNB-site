@@ -3,8 +3,8 @@ export const queryIsRnbId = (q: string) => {
 };
 
 export const queryIsCoordinates = (q: string) => {
-  // Format is `lat,lng,zoom`
+  // Format is `lat,lng` and optionally `,zoom`
   return q.match(
-    /^[0-9]{1,2}\.[0-9]{1,10},(-)?[0-9]{1,2}\.[0-9]{1,10},[0-9]{1,2}\.?[0-9]{0,10}$/,
+    /^-?[0-9]{1,2}\.[0-9]{1,16},\s?-?[0-9]{1,2}\.[0-9]{1,16}(?:,\s?[0-9]{1,2}\.?[0-9]{0,10})?$/,
   );
 };
