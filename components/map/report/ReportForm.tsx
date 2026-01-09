@@ -24,9 +24,8 @@ export default function ReportForm({ report }: { report: Report }) {
 
   const [action, setAction] = useState<FormAction>('comment');
   const [message, setMessage] = useState('');
-
   const [foundFeve, setFoundFeve] = useState<Feve | null>(null);
-
+  const [email, setEmail] = useState('');
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
     resize(e);
@@ -68,10 +67,14 @@ export default function ReportForm({ report }: { report: Report }) {
     e.preventDefault();
 
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/reports/${report.id}/reply/`;
-    const data: { message: string; action: string } = {
+    const data: { message: string; action: string; email?: string } = {
       message: message,
       action: action,
     };
+    const trimmedEmail = email.trim();
+    if (trimmedEmail.length > 0) {
+      data.email = trimmedEmail;
+    }
 
     try {
       const response = await fetch(url, {
@@ -121,6 +124,23 @@ export default function ReportForm({ report }: { report: Report }) {
                 onChange={handleMessageChange}
                 required
               ></textarea>
+          {!isAuthenticated && (
+            <>
+              <div className="fr-mb-1v">
+                <label className="fr-text--sm ">
+                  Suivez le traitement de votre signalement
+                </label>
+              </div>
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                name="email"
+                type="email"
+                className="fr-input fr-text--sm fr-mb-2v"
+                placeholder="Votre adresse email (optionnelle)"
+              />
+            </>
+          )}
             </div>
             <div className={styles.actionShell}>
               {isAuthenticated && (
@@ -167,15 +187,15 @@ export default function ReportForm({ report }: { report: Report }) {
                 {getSubmitLabel()}
               </Button>
             </div>
-        {!isAuthenticated && (
-          <div className="fr-mt-2v fr-mb-0">
-            ou{' '}
-            <a href="/login" className="fr-link">
-              connectez-vous
-            </a>{' '}
-            pour traiter ce signalement
-          </div>
-        )}
+            {!isAuthenticated && (
+              <div className="fr-mt-2v fr-mb-0">
+                ou{' '}
+                <a href="/login" className="fr-link">
+                  connectez-vous
+                </a>{' '}
+                pour traiter ce signalement
+              </div>
+            )}
           </form>
         </>
       )}
