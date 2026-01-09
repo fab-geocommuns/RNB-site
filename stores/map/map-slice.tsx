@@ -3,6 +3,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { fetchBuilding } from '@/utils/requests';
+import { setArrayQueryParam } from '@/utils/arrayQueryParams';
+import { RootState } from '../store';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -62,6 +64,15 @@ export type MapBackgroundLayer =
   | 'satellite_2016_2020';
 export type MapBuildingsLayer = 'point' | 'polygon';
 export type MapExtraLayer = 'ads' | 'plots' | 'addresses' | 'reports';
+const validExtraLayers: MapExtraLayer[] = [
+  'ads',
+  'plots',
+  'addresses',
+  'reports',
+];
+export function isValidExtraLayer(layer: MapExtraLayer): boolean {
+  return validExtraLayers.includes(layer);
+}
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
 
 export type MapStore = {
@@ -106,15 +117,7 @@ export const mapSlice = createSlice({
     setLayersBuildings(state, action) {
       state.layers.buildings = action.payload;
     },
-    toggleExtraLayer(state, action) {
-      const index = state.layers.extraLayers.indexOf(action.payload);
-      if (index === -1) {
-        state.layers.extraLayers.push(action.payload);
-      } else {
-        state.layers.extraLayers.splice(index, 1);
-      }
-    },
-    setLayersExtra(state, action) {
+    setLayersExtraInStore(state, action) {
       state.layers.extraLayers = action.payload;
     },
     setAddressSearchQuery(state, action) {
@@ -171,6 +174,23 @@ export const mapSlice = createSlice({
   },
 });
 
+const setExtraLayers = (extraLayers: MapExtraLayer[]) => (dispatch: any) => {
+  dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
+  setArrayQueryParam('extra_layers', extraLayers);
+};
+const toggleExtraLayer =
+  (extraLayer: MapExtraLayer) => (dispatch: any, getState: () => RootState) => {
+    const state = getState();
+    const index = state.map.layers.extraLayers.indexOf(extraLayer);
+    const newExtraLayers = [...state.map.layers.extraLayers];
+    if (index === -1) {
+      newExtraLayers.push(extraLayer);
+    } else {
+      newExtraLayers.splice(index, 1);
+    }
+    dispatch(setExtraLayers(newExtraLayers));
+  };
+
 export const selectADS = createAsyncThunk(
   'map/selectADS',
   async (fileNumber: string | null, { dispatch }) => {
@@ -216,6 +236,8 @@ export const mapActions = {
   unselectItem: () => selectBuilding(null),
   selectBuilding,
   selectADS,
+  setExtraLayers,
+  toggleExtraLayer,
 };
 
 export const mapReducer = mapSlice.reducer;

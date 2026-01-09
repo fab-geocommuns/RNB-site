@@ -27,6 +27,18 @@ import { useMemo } from 'react';
 
 // Types
 import { MapExtraLayer } from '@/stores/map/map-slice';
+import { getArrayQueryParam } from '@/utils/arrayQueryParams';
+import { isValidExtraLayer } from '@/stores/map/map-slice';
+
+function getDefaultExtraLayers() {
+  return (
+    getArrayQueryParam<MapExtraLayer>(
+      'extra_layers',
+      (value) => value as MapExtraLayer,
+      isValidExtraLayer,
+    ) || ['ads']
+  );
+}
 
 export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
@@ -36,7 +48,7 @@ export default function RNBMap() {
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
-  const defaultExtraLayers = useMemo(() => ['ads'] as MapExtraLayer[], []);
+  const defaultExtraLayers = useMemo(() => getDefaultExtraLayers(), []);
 
   // //////////////////////
   // Tracking address search
