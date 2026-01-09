@@ -33,7 +33,7 @@ export default function FeveLeaderBoard() {
         <div className={styles.actions}>
           <a
             className={`fr-btn ${styles.btnParticipate}`}
-            href="/edition?report_tags=6&extra_layers=reports&extra_layers=addresses"
+            href="/edition?report_tags=4&extra_layers=reports&extra_layers=addresses"
           >
             Participer
           </a>
