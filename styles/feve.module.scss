@@ -81,12 +81,20 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 0.8rem;
-  row-gap: 2.4rem;
+  row-gap: 1rem;
   list-style-type: none;
   padding: 0;
 }
+
+// .imageContainer {
+//   min-height: 150px;
+//   img {
+//     width: 90px;
+//     height: auto;
+//   }
+// }
 
 .item {
   display: flex;

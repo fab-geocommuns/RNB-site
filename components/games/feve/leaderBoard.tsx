@@ -46,12 +46,18 @@ export default function FeveLeaderBoard() {
               key={dpt.department_code}
               className={`${styles.item} ${dpt.found_datetime ? styles.found : styles.not_found}`}
             >
-              <Image
-                src={`/images/feves/feve-${dpt.department_code}.png`}
-                alt={dpt.department_name}
-                width={130}
-                height={130}
-              />
+              <div className={styles.imageContainer}>
+                <img
+                  src={`/images/feves/w150/feve-${dpt.department_code}.png`}
+                />
+                {/* <Image
+                  src={`/images/feves/w150/feve-${dpt.department_code}.png`}
+                  alt={dpt.department_name}
+                  width={0}
+                  height={0}
+                  style={{ width: '100%', height: 'auto' }}
+                /> */}
+              </div>
 
               <span className={styles.department_name}>
                 {dpt.department_name}
