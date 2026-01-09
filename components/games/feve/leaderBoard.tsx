@@ -4,7 +4,7 @@
 import styles from '@/styles/feve.module.scss';
 
 import { FeveData, useFeveData } from '@/utils/feve';
-import Image from 'next/image';
+import { contactEmail } from '@/logic/settings';
 import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
 
 export const revalidate = 10;
@@ -29,6 +29,12 @@ export default function FeveLeaderBoard() {
           Pour fêter ce lancement nous avons caché {data?.length || 0} fèves sur
           tout le territoire. Venez éditer le RNB et traiter ces signalements
           pour tenter de les retrouver !
+        </p>
+        <p>
+          <small>
+            Des questions ou commentaires à propos de ces signalements ?{' '}
+            <a href={`mailto:${contactEmail}`}>Ecrivez à l'équipe du RNB</a>.
+          </small>
         </p>
         <div className={styles.actions}>
           <a
