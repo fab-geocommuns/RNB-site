@@ -21,7 +21,7 @@ export default function FeveLeaderBoard() {
       <div className={styles.intro}>
         <p>
           <b>
-            Nouvelle : les signalements permettent de trouver où améliorer le
+            Nouvelle fonctionnalité : les signalements permettent de trouver où améliorer le
             référentiel.
           </b>
         </p>
