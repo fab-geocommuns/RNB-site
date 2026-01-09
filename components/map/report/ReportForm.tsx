@@ -4,7 +4,7 @@ import { Actions, AppDispatch } from '@/stores/store';
 import styles from '@/styles/report/form.module.scss';
 import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
 import {
   throwErrorMessageForHumans,
   toasterError,
