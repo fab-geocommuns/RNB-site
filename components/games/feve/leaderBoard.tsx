@@ -26,7 +26,7 @@ export default function FeveLeaderBoard() {
           </b>
         </p>
         <p>
-          Pour fêter le lancement de cette fonctionnalité, nous avons caché{' '}
+          Pour fêter ce lancement nous avons caché{' '}
           {data?.length || 0} fèves sur tout le territoire.
         </p>
         <p>
