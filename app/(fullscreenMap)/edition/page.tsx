@@ -14,7 +14,7 @@ import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
 import { MapExtraLayer, isValidExtraLayer } from '@/stores/map/map-slice';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
-import { getArrayQueryParam } from '@/utils/arrayQueryParams';
+import { getArrayQueryParam } from '@/utils/queryParams';
 
 function getDefaultExtraLayers() {
   return (
