@@ -14,6 +14,7 @@ import {
 import { Report, Feve } from '@/types/report';
 
 import FeveFound from '@/components/games/feve/feveFound';
+import { loginUrl } from '@/utils/useRNBAuthentication';
 
 type FormAction = 'comment' | 'fix' | 'reject';
 
@@ -185,7 +186,7 @@ export default function ReportForm({ report }: { report: Report }) {
             {!isAuthenticated && (
               <div className="fr-mt-2v fr-mb-0">
                 ou{' '}
-                <a href="/login" className="fr-link">
+                <a href={loginUrl()} className="fr-link">
                   connectez-vous
                 </a>{' '}
                 pour traiter ce signalement

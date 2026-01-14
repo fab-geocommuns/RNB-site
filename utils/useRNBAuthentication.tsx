@@ -22,6 +22,12 @@ type UseRNBAuthentication = {
   is: (group: RNBGroup) => boolean;
 };
 
+export function loginUrl(redirect?: string) {
+  const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  const redirectUrl = redirect || currentLocation;
+  return `/login?redirect=${encodeURIComponent(redirectUrl)}`;
+}
+
 export const useRNBAuthentication = (options?: {
   require: boolean;
 }): UseRNBAuthentication => {
@@ -38,8 +44,7 @@ export const useRNBAuthentication = (options?: {
       status !== 'loading' &&
       status !== 'authenticated'
     ) {
-      const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      window.location.href = `/login?redirect=${encodeURIComponent(currentLocation)}`;
+      window.location.href = loginUrl();
     }
   }, [status, options?.require]);
 
