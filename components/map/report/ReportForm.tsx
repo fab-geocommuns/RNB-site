@@ -124,62 +124,57 @@ export default function ReportForm({ report }: { report: Report }) {
                 onChange={handleMessageChange}
                 required
               ></textarea>
-          {!isAuthenticated && (
-            <>
-              <div className="fr-mb-1v">
-                <label className="fr-text--sm ">
-                  Suivez le traitement de votre signalement
-                </label>
-              </div>
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                name="email"
-                type="email"
-                className="fr-input fr-text--sm fr-mb-2v"
-                placeholder="Votre adresse email (optionnelle)"
-              />
-            </>
-          )}
+              {!isAuthenticated && (
+                <>
+                  <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    name="email"
+                    type="email"
+                    className="fr-input fr-text--sm fr-mb-2v"
+                    placeholder="Votre adresse email (optionnelle)"
+                  />
+                </>
+              )}
             </div>
             <div className={styles.actionShell}>
               {isAuthenticated && (
-              <RadioButtons
-                name="action"
-                legend="Votre action"
-                small={true}
-                className={styles.actionInput}
-                options={[
-                  {
-                    label: 'Commenter',
-                    hintText: 'Laisser un simple message',
-                    nativeInputProps: {
-                      checked: action === 'comment',
-                      onChange: () => setAction('comment'),
+                <RadioButtons
+                  name="action"
+                  legend="Votre action"
+                  small={true}
+                  className={styles.actionInput}
+                  options={[
+                    {
+                      label: 'Commenter',
+                      hintText: 'Laisser un simple message',
+                      nativeInputProps: {
+                        checked: action === 'comment',
+                        onChange: () => setAction('comment'),
+                      },
                     },
-                  },
-                  {
-                    label: 'Marquer comme traité',
-                    hintText: 'Fermer le signalement car il est déjà corrigé',
-                    nativeInputProps: {
-                      checked: action === 'fix',
-                      onChange: () => setAction('fix'),
+                    {
+                      label: 'Marquer comme traité',
+                      hintText: 'Fermer le signalement car il est déjà corrigé',
+                      nativeInputProps: {
+                        checked: action === 'fix',
+                        onChange: () => setAction('fix'),
+                      },
                     },
-                  },
-                  {
-                    label: report.tags.includes('Les fèves du RNB')
-                      ? 'Adresse introuvable'
-                      : 'Rejeter',
-                    hintText: report.tags.includes('Les fèves du RNB')
-                      ? 'Adresse BAN inexistante'
-                      : 'Fermer le signalement car il est non pertinent',
-                    nativeInputProps: {
-                      checked: action === 'reject',
-                      onChange: () => setAction('reject'),
+                    {
+                      label: report.tags.includes('Les fèves du RNB')
+                        ? 'Adresse introuvable'
+                        : 'Rejeter',
+                      hintText: report.tags.includes('Les fèves du RNB')
+                        ? 'Adresse BAN inexistante'
+                        : 'Fermer le signalement car il est non pertinent',
+                      nativeInputProps: {
+                        checked: action === 'reject',
+                        onChange: () => setAction('reject'),
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
               )}
             </div>
             <div>
