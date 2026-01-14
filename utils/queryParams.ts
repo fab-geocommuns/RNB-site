@@ -24,3 +24,17 @@ export function setArrayQueryParam<T>(key: string, value: T[]) {
 
   window.history.replaceState({}, '', url.toString());
 }
+
+export function setQueryParam(param: string, value: string | number) {
+  if (typeof window === 'undefined') return;
+  const url = new URL(window.location.href);
+  url.searchParams.set(param, value.toString());
+  window.history.replaceState({}, '', url);
+}
+
+export function removeQueryParam(param: string) {
+  if (typeof window === 'undefined') return;
+  const url = new URL(window.location.href);
+  url.searchParams.delete(param);
+  window.history.replaceState({}, '', url);
+}

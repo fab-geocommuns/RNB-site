@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useEffect } from 'react';
-import { useRNBFetch } from './use-rnb-fetch';
+import { useRNBFetch } from './useRNBFetch';
 
 function transformKeys(obj: any) {
   return Object.keys(obj).reduce((acc: any, key) => {
