@@ -43,15 +43,13 @@ export default function MyAccountLayout({
     },
   ];
 
-  if (hasFeves) {
-    menuItems.push({
-      text: 'Mes trophées',
-      isActive: pathname === '/mon-compte/mes-trophees',
-      linkProps: {
-        href: '/mon-compte/mes-trophees',
-      },
-    });
-  }
+  menuItems.push({
+    text: 'Mes trophées',
+    isActive: pathname === '/mon-compte/mes-trophees',
+    linkProps: {
+      href: '/mon-compte/mes-trophees',
+    },
+  });
 
   menuItems.push({
     text: 'Se déconnecter',

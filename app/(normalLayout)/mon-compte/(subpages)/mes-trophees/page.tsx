@@ -17,7 +17,11 @@ export default function MesFevesPage() {
   }
 
   if (!userFeves || userFeves.length === 0) {
-    redirect('/mon-compte/cles-api');
+    return (
+      <div className={styles.container}>
+        Vous n'avez pas encore gagné de trophée.
+      </div>
+    );
   }
 
   return (
