@@ -19,7 +19,7 @@ export default function MesFevesPage() {
   if (!userFeves || userFeves.length === 0) {
     return (
       <div className={styles.container}>
-        Vous n'avez pas encore gagné de trophée.
+        Vous n&apos;avez pas encore gagné de trophée.
       </div>
     );
   }
