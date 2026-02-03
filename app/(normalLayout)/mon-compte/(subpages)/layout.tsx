@@ -18,10 +18,6 @@ export default function MyAccountLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { data: session } = useSession();
-  const { data: userFeves } = useUserFeves(session?.username ?? undefined);
-
-  const hasFeves = userFeves && userFeves.length > 0;
 
   // @ts-ignore
   const handleSignout = (e) => {
