@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export interface FeveData {
   department_code: string;
@@ -41,4 +41,21 @@ export const useFeveData = () => {
     data,
     loading,
   };
+};
+
+export const useUserFeves = (username: string | undefined) => {
+  const { data, loading } = useFeveData();
+
+  const userFeves = useMemo(() => {
+    if (!data || !username) return [];
+    return data
+      .filter((feve: FeveData) => feve.found_by_username === username)
+      .sort(
+        (a: FeveData, b: FeveData) =>
+          new Date(b.found_datetime!).getTime() -
+          new Date(a.found_datetime!).getTime(),
+      );
+  }, [data, username]);
+
+  return { data: userFeves, loading };
 };
