@@ -1,4 +1,3 @@
-import FeveLeaderBoard from '@/components/games/feve/leaderBoard';
 import Hero from '@/components/home/Hero';
 import UseCases from '@/components/home/UseCases';
 import Databases from '@/components/home/Databases';
@@ -14,8 +13,6 @@ export const revalidate = 10;
 export default async function Home() {
   const breakingNews = await getBreakingNews();
   const useCases = await getUseCases();
-
-  const showFeve = process.env.NEXT_PUBLIC_SHOW_FEVE === 'true';
 
   let availableDatabases = null;
   try {
@@ -39,8 +36,6 @@ export default async function Home() {
             </div>
           </>
         )}
-        {showFeve && <FeveLeaderBoard />}
-
         {!!useCases && <UseCases useCases={useCases} />}
         {availableDatabases && <Databases databases={availableDatabases} />}
         <ToolsAndServices />
