@@ -17,11 +17,16 @@ type AuthenticatedUser = {
 };
 
 type UseRNBAuthentication = {
-  status: RNBAuthenticationStatus;
   user: AuthenticatedUser | null;
-
+  isAuthenticated: boolean;
   is: (group: RNBGroup) => boolean;
 };
+
+export function loginUrl(redirect?: string) {
+  const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  const redirectUrl = redirect || currentLocation;
+  return `/login?redirect=${encodeURIComponent(redirectUrl)}`;
+}
 
 export const useRNBAuthentication = (options?: {
   require: boolean;
@@ -39,8 +44,7 @@ export const useRNBAuthentication = (options?: {
       status !== 'loading' &&
       status !== 'authenticated'
     ) {
-      const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      window.location.href = `/login?redirect=${encodeURIComponent(currentLocation)}`;
+      window.location.href = loginUrl();
     }
   }, [status, options?.require]);
 
@@ -52,10 +56,7 @@ export const useRNBAuthentication = (options?: {
   }
 
   return {
-    status:
-      status === 'authenticated'
-        ? RNBAuthenticationStatus.AUTHENTICATED
-        : RNBAuthenticationStatus.DISCONNECTED,
+    isAuthenticated: status === 'authenticated',
     user,
     is: (group: RNBGroup) =>
       status === 'authenticated' && groups.includes(group),

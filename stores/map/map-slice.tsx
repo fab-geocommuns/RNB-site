@@ -3,7 +3,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { fetchBuilding } from '@/utils/requests';
-import { setArrayQueryParam } from '@/utils/arrayQueryParams';
+import {
+  setArrayQueryParam,
+  setQueryParam,
+  removeQueryParam,
+} from '@/utils/queryParams';
 import { RootState } from '../store';
 
 export type BuildingAddress = {
@@ -160,11 +164,9 @@ export const mapSlice = createSlice({
       if (!action.payload) state.selectedItem = undefined;
       else state.selectedItem = action.payload;
       if (action.payload) {
-        window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
+        setQueryParam('q', action.payload.rnb_id);
       } else {
-        let url = new URL(window.location.href);
-        url.searchParams.delete('q');
-        window.history.replaceState({}, '', url);
+        removeQueryParam('q');
       }
     });
 
