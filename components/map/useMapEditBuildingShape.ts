@@ -7,7 +7,6 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
-import { selectSplitShapeIdForCurrentChild } from '@/stores/edition/edition-selector';
 // @ts-ignore
 import DrawAssistedRectangle from '@geostarters/mapbox-gl-draw-rectangle-assisted-mode/dist/DrawAssistedRectangle.js';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -42,7 +41,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const operationIsUpdateCreateNull = ['create', 'update', null].includes(
     operation,
   );
-  const currentSplitShapeId = useSelector(selectSplitShapeIdForCurrentChild);
+  const cutStep = useSelector(
+    (state: RootState) => state.edition.split.cutStep,
+  );
+  const candidateShape = useSelector(
+    (state: RootState) => state.edition.split.candidateShape,
+  );
 
   const prevOperationRef = useRef<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
@@ -68,6 +72,18 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       // enter key
     } else if (e.keyCode === 13) {
       this.changeMode('simple_select', { featureIds: [state.polygon.id] });
+    }
+  };
+
+  const draw_line_string = MapboxDraw.modes.draw_line_string;
+
+  // customization of draw_line_string mode for split
+  draw_line_string.onKeyUp = function (state, e) {
+    // escape key - cancel current line and restart
+    if (e.keyCode === 27) {
+      // @ts-ignore
+      this.deleteFeature([state.line.id], { silent: true });
+      this.changeMode('draw_line_string');
     }
   };
 
@@ -112,6 +128,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
           simple_select: MapboxDraw.modes.simple_select,
           direct_select: MapboxDraw.modes.direct_select,
           draw_polygon: draw_polygon,
+          draw_line_string: draw_line_string,
           draw_rectangle: DrawAssistedRectangle,
         },
         defaultMode: 'simple_select',
@@ -145,18 +162,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       const handleBuildingShapeUpdate = (e: { features: Array<Feature> }) => {
         if (operationIsUpdateCreateNull) {
           dispatch(Actions.edition.setBuildingNewShape(e.features[0].geometry));
-        } else if (operation === 'split') {
-          dispatch(
-            Actions.edition.updateSplitBuildingShape({
-              shape: e.features[0].geometry,
-              shapeId: e.features[0].id,
-            }),
-          );
         }
+        // For split, we no longer handle draw.update — cut lines are immutable once drawn
       };
       drawRef.current && map.on('draw.update', handleBuildingShapeUpdate);
 
-      // actions when a polygon is created
+      // actions when a feature is created
       const handleBuildingShapeCreate = (e: { features: Array<Feature> }) => {
         if (operationIsUpdateCreateNull) {
           // delete all other drawings
@@ -175,14 +186,18 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
             });
           }
         } else if (operation === 'split') {
+          // The created feature is a LineString (cut line)
           dispatch(
-            Actions.edition.setSplitChildBuildingShape({
-              shape: e.features[0].geometry,
-              shapeId: e.features[0].id,
+            Actions.edition.addCutLine({
+              geometry: e.features[0].geometry,
+              featureId: e.features[0].id,
             }),
           );
+          // Stay in draw_line_string mode to allow drawing more cut lines
           setTimeout(() => {
-            dispatch(Actions.edition.setShapeInteractionMode('updating'));
+            if (drawRef.current) {
+              drawRef.current.changeMode('draw_line_string');
+            }
           });
         }
       };
@@ -193,11 +208,7 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       }: {
         features: Array<Feature>;
       }) => {
-        if (operation === 'split' && features.length === 1) {
-          // a click on a previously drawn shape selects the corresponding building in the panel
-          const featureId = features[0].id;
-          dispatch(Actions.edition.setCurrentChildFromShapeId(featureId));
-        }
+        // For split, selection change is not used anymore (cut lines are not selectable for child selection)
       };
       drawRef.current && map.on('draw.selectionchange', handleSelectionChange);
 
@@ -225,44 +236,37 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
     }
   }, [drawRef.current]);
 
-  // shapeInteractionMode is 'updating' and current operation is update, create or null
-  const handleShapeUpdateForOperationSplit = useCallback(() => {
-    if (drawRef.current) {
-      if (currentSplitShapeId) {
-        for (const draw of drawRef.current.getAll().features) {
-          if (draw.id === currentSplitShapeId) {
-            drawRef.current.changeMode('direct_select', {
-              featureId: currentSplitShapeId?.toString(),
-            });
-          }
-        }
-      }
-    }
-  }, [drawRef.current, currentSplitShapeId]);
-
   // activate the "draw mode"
   // can be a polygon modification or creation depending on the case
   useEffect(() => {
     if (drawRef.current) {
-      switch (shapeInteractionMode) {
-        case 'updating':
-          if (operationIsUpdateCreateNull) {
-            handleShapeUpdateForOperationUCN();
-          } else if (operation === 'split') {
-            handleShapeUpdateForOperationSplit();
-          }
-          break;
-        case 'drawing':
-          drawRef.current.changeMode(drawMode);
-          break;
-        case null:
+      if (operation === 'split') {
+        // For split: manage draw mode based on cutStep
+        if (cutStep === 'drawing' && candidateShape) {
+          drawRef.current.changeMode('draw_line_string');
+        } else {
           drawRef.current.changeMode('simple_select');
-          break;
-        default:
-          break;
+        }
+      } else {
+        // For update/create/null: use shapeInteractionMode
+        switch (shapeInteractionMode) {
+          case 'updating':
+            if (operationIsUpdateCreateNull) {
+              handleShapeUpdateForOperationUCN();
+            }
+            break;
+          case 'drawing':
+            drawRef.current.changeMode(drawMode);
+            break;
+          case null:
+            drawRef.current.changeMode('simple_select');
+            break;
+          default:
+            break;
+        }
       }
     }
-  }, [shapeInteractionMode, operation, currentSplitShapeId, dispatch]);
+  }, [shapeInteractionMode, operation, cutStep, candidateShape, dispatch]);
 
   useEffect(() => {
     if (map && operationIsUpdateCreateNull) {
@@ -324,10 +328,44 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   };
 
   useEffect(() => {
-    if (operation === null || operation === 'split') {
+    if (operation === null) {
       deleteFeatures(drawRef.current);
+      selectedBuildingRef.current = null;
+    }
+    if (operation === 'split') {
+      // Clean up any previously drawn features when entering split mode
+      if (drawRef.current) {
+        drawRef.current.deleteAll();
+      }
       selectedBuildingRef.current = null;
     }
     prevOperationRef.current = operation;
   }, [operation]);
+
+  // When cutLines are cleared or the last one removed, sync draw features
+  const cutLines = useSelector(
+    (state: RootState) => state.edition.split.cutLines,
+  );
+  const prevCutLinesLengthRef = useRef(0);
+
+  useEffect(() => {
+    if (operation === 'split' && drawRef.current) {
+      if (cutLines.length < prevCutLinesLengthRef.current) {
+        // Lines were removed — rebuild the draw features from state
+        drawRef.current.deleteAll();
+        for (const line of cutLines) {
+          drawRef.current.add({
+            type: 'Feature',
+            properties: {},
+            geometry: line.geometry,
+          });
+        }
+        // Re-enter draw mode
+        if (cutStep === 'drawing' && candidateShape) {
+          drawRef.current.changeMode('draw_line_string');
+        }
+      }
+      prevCutLinesLengthRef.current = cutLines.length;
+    }
+  }, [cutLines, operation, cutStep, candidateShape]);
 };

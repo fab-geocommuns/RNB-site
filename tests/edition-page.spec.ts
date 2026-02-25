@@ -48,45 +48,35 @@ test.describe('Edition', () => {
       await map.fitMapToBounds([2.421027, 48.844011, 2.428424, 48.84669]);
 
       await editionPage.startSplit();
-      await editionPage.clickNext();
 
-      await editionPage.drawShape(map, [
-        [2.423719541, 48.845236854],
-        [2.42375453, 48.845399805],
-        [2.424280374, 48.845348939],
-        [2.424247375, 48.845183219],
-        [2.423719541, 48.845236854],
+      // Wait for the cut step UI to appear (building shape is loading)
+      await expect(
+        editionPage.panel.getByText(/Découpe du bâtiment/i),
+      ).toBeVisible();
+
+      // Wait for the shape to be loaded
+      await expect(
+        editionPage.panel.getByText(/traits? de découpe/i),
+      ).toBeVisible();
+
+      // Draw a cut line across the building
+      await editionPage.drawCutLine(map, [
+        [2.424, 48.8449],
+        [2.424, 48.8456],
       ]);
 
-      await editionPage.clickNext();
-      await editionPage.drawShape(map, [
-        [2.424247375, 48.845183219],
-        [2.424280374, 48.845348939],
-        [2.425280374, 48.845248939],
-        [2.425247375, 48.845083219],
-        [2.424247375, 48.845183219],
-      ]);
-      await editionPage.clickNext();
+      // Validate the cut
+      await editionPage.validateCut();
 
+      // Navigate through child info steps
+      await editionPage.clickNext(); // child 1 → child 2
+      await editionPage.clickNext(); // child 2 → summary
+
+      // Mock the split API request (don't check exact body since shapes are computed by turf)
       await httpMocker.mockAPIRequest(
         'POST',
         `/buildings/${targetBuilding}/split/?from=site`,
-        {
-          created_buildings: [
-            {
-              status: 'constructed',
-              addresses_cle_interop: [],
-              shape:
-                'POLYGON ((2.4237216 48.8452383, 2.4237563 48.8453978, 2.4242824 48.8453477, 2.4242478 48.8451836, 2.4237216 48.8452383))',
-            },
-            {
-              status: 'constructed',
-              addresses_cle_interop: [],
-              shape:
-                'POLYGON ((2.4242478 48.8451836, 2.4242824 48.8453477, 2.4252794 48.8452474, 2.4252447 48.8450834, 2.4242478 48.8451836))',
-            },
-          ],
-        },
+        null,
         {
           status: 201,
           body: [
@@ -132,45 +122,33 @@ test.describe('Edition', () => {
       await map.fitMapToBounds([2.421027, 48.844011, 2.428424, 48.84669]);
 
       await editionPage.startSplit();
-      await editionPage.clickNext();
 
-      await editionPage.drawShape(map, [
-        [2.423719541, 48.845236854],
-        [2.42375453, 48.845399805],
-        [2.424280374, 48.845348939],
-        [2.424247375, 48.845183219],
-        [2.423719541, 48.845236854],
+      // Wait for the cut step UI
+      await expect(
+        editionPage.panel.getByText(/Découpe du bâtiment/i),
+      ).toBeVisible();
+
+      await expect(
+        editionPage.panel.getByText(/traits? de découpe/i),
+      ).toBeVisible();
+
+      // Draw a cut line across the building
+      await editionPage.drawCutLine(map, [
+        [2.424, 48.8449],
+        [2.424, 48.8456],
       ]);
 
-      await editionPage.clickNext();
-      await editionPage.drawShape(map, [
-        [2.424247375, 48.845183219],
-        [2.424280374, 48.845348939],
-        [2.425280374, 48.845248939],
-        [2.425247375, 48.845083219],
-        [2.424247375, 48.845183219],
-      ]);
-      await editionPage.clickNext();
+      // Validate the cut
+      await editionPage.validateCut();
+
+      // Navigate through child info steps
+      await editionPage.clickNext(); // child 1 → child 2
+      await editionPage.clickNext(); // child 2 → summary
 
       await httpMocker.mockAPIRequest(
         'POST',
         `/buildings/${targetBuilding}/split/?from=site`,
-        {
-          created_buildings: [
-            {
-              status: 'constructed',
-              addresses_cle_interop: [],
-              shape:
-                'POLYGON ((2.4237216 48.8452383, 2.4237563 48.8453978, 2.4242824 48.8453477, 2.4242478 48.8451836, 2.4237216 48.8452383))',
-            },
-            {
-              status: 'constructed',
-              addresses_cle_interop: [],
-              shape:
-                'POLYGON ((2.4242478 48.8451836, 2.4242824 48.8453477, 2.4252794 48.8452474, 2.4252447 48.8450834, 2.4242478 48.8451836))',
-            },
-          ],
-        },
+        null,
         {
           status: 400,
           body: {
