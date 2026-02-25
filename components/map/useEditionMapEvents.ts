@@ -17,6 +17,7 @@ import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-s
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { toasterSuccess } from '@/components/contribution/toaster';
 import { displayBANPopup } from './BanLayerEvent';
+import { fetchBuilding } from '@/utils/requests';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -137,6 +138,12 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                   location: [e.lngLat.lng, e.lngLat.lat],
                 }),
               );
+              // Fetch the precise shape from the API
+              fetchBuilding(rnb_id).then((building) => {
+                if (building?.shape) {
+                  dispatch(Actions.edition.setCandidateShape(building.shape));
+                }
+              });
             }
           }
         } else if (operation === 'merge') {

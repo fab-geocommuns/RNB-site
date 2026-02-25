@@ -37,6 +37,13 @@ export class EditionPage extends RNBPage {
     await nextButton.click();
   }
 
+  async validateCut() {
+    const validateButton = this.panel.getByRole('button', {
+      name: 'Valider la découpe',
+    });
+    await validateButton.click();
+  }
+
   async confirmSplit() {
     const confirmButton = this.panel.getByRole('button', { name: 'Scinder' });
     await confirmButton.click();
@@ -56,6 +63,31 @@ export class EditionPage extends RNBPage {
       await this.page.mouse.down();
       await this.page.mouse.move(x, y, { steps: 2 });
       await this.page.mouse.up();
+    }
+  }
+
+  async drawCutLine(
+    mapController: MapController,
+    points: Array<[number, number]>,
+  ) {
+    // Draw a line: click each point, then double-click the last point to finish
+    for (let i = 0; i < points.length; i++) {
+      const point = points[i];
+      // @ts-ignore
+      const { x, y } = await mapController.projectLngLatToScreenPoint({
+        lat: point[1],
+        lng: point[0],
+      });
+      await this.page.mouse.move(x, y, { steps: 2 });
+
+      if (i === points.length - 1) {
+        // Double-click the last point to finish the line
+        await this.page.mouse.dblclick(x, y);
+      } else {
+        await this.page.mouse.down();
+        await this.page.mouse.move(x, y, { steps: 2 });
+        await this.page.mouse.up();
+      }
     }
   }
 }
