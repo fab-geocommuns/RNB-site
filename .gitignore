@@ -46,3 +46,4 @@ env.local
 test-results.json
 # Sentry Config File
 .env.sentry-build-plugin
+.claude/
