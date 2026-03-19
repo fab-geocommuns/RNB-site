@@ -11,7 +11,7 @@ function getAddressDisplayLabel(address: BuildingAddressType) {
   if (isNewAddress(address)) {
     return address.label;
   } else {
-    return `${address.street_number}${address.street_rep} ${address.street}, ${address.city_zipcode} ${address.city_name}`;
+    return `${address.street_number}${address.street_rep ?? ''} ${address.street}, ${address.city_zipcode} ${address.city_name}`;
   }
 }
 
