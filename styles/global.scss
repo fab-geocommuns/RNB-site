@@ -157,15 +157,28 @@ h5.fr-mega-menu__category.fr-nav__link {
   gap: 12px;
 
   &:hover {
-    cursor: inherit;
     background: inherit;
   }
 }
 
-/* Fix Safari double-click on navigation items (#405) */
-.fr-nav__btn,
-.fr-nav__link {
+/* Fix Safari double-click on navigation items (#405)
+ * Safari treats the first click/tap as a hover event on elements that have
+ * hover-triggered visual changes, requiring a second click to navigate.
+ * - cursor: pointer signals to Safari that the element is clickable
+ * - touch-action: manipulation disables double-tap-to-zoom, allowing
+ *   single taps to fire click events immediately on touch devices
+ */
+.fr-nav .fr-nav__link,
+.fr-nav .fr-nav__btn {
   cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Also fix links inside mega-menus and sub-menus */
+.fr-mega-menu .fr-nav__link,
+.fr-menu .fr-nav__link {
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
 .target-blank-noIcon::after {
