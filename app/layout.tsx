@@ -32,7 +32,7 @@ export default async function RootLayout({
   await connection();
 
   return (
-    <html lang={lang} {...getHtmlAttributes({ lang })}>
+    <html lang={lang} {...getHtmlAttributes({ lang })} nonce={nonce || undefined}>
       <head>
         <DsfrHead />
 
