@@ -152,6 +152,14 @@ h5.fr-mega-menu__category.fr-nav__link {
   font-weight: 700;
 }
 
+/* Safari fix: without cursor:pointer, Safari requires two clicks on hover-only
+   interactive elements (first click activates hover, second triggers action).
+   Setting cursor:pointer signals to Safari that the element is immediately clickable. */
+.fr-nav__link,
+.fr-nav__btn {
+  cursor: pointer;
+}
+
 #fr-header-main-navigation-menu-3-link-2-2 {
   justify-content: flex-start;
   gap: 12px;
