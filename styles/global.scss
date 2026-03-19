@@ -162,6 +162,12 @@ h5.fr-mega-menu__category.fr-nav__link {
   }
 }
 
+/* Fix Safari double-click on navigation items (#405) */
+.fr-nav__btn,
+.fr-nav__link {
+  cursor: pointer;
+}
+
 .target-blank-noIcon::after {
   content: '';
   display: none;
