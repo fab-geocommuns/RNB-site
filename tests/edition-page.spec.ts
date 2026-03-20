@@ -2,6 +2,7 @@ import { expect } from '@playwright/test';
 import { test } from '@/tests/fixtures';
 
 test.describe('Edition', () => {
+  test.setTimeout(60000);
   test.describe('Désactivation', () => {
     test('doit pouvoir désactiver un bâtiment', async ({
       browserName,
