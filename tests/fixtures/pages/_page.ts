@@ -33,7 +33,6 @@ export abstract class RNBPage {
   }
 
   async login() {
-    await this.page.waitForLoadState('networkidle');
     if (!this.page.url().includes('/login')) {
       await this.page.goto('/login');
     }
@@ -44,7 +43,7 @@ export abstract class RNBPage {
       .getByLabel('Mot de passe')
       .fill(process.env.TEST_ACCOUNT_PASSWORD!);
     await this.loginForm.getByRole('button', { name: /se connecter/i }).click();
-    await this.page.waitForURL((url) => !url.pathname.includes('/login'));
+    await expect(this.myAccountButton).toBeVisible();
   }
 
   async isLoggedIn() {
