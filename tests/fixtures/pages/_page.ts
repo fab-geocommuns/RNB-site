@@ -36,6 +36,7 @@ export abstract class RNBPage {
     if (!this.page.url().includes('/login')) {
       await this.page.goto('/login');
     }
+    await this.page.waitForLoadState('domcontentloaded');
     await this.loginForm
       .getByLabel('Email')
       .fill(process.env.TEST_ACCOUNT_EMAIL!);
