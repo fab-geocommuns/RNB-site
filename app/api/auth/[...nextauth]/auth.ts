@@ -60,6 +60,42 @@ export const authOptions = {
         }
       },
     }),
+    CredentialsProvider({
+      id: 'proconnect',
+      name: 'ProConnect',
+      credentials: {
+        token: { type: 'text' },
+        username: { type: 'text' },
+      },
+      async authorize(credentials) {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE}/auth/users/me/`,
+            {
+              headers: {
+                Authorization: `Token ${credentials?.token}`,
+              },
+            },
+          );
+
+          if (!res.ok) {
+            return null;
+          }
+
+          const data = await res.json();
+
+          return {
+            id: String(data.id),
+            token: credentials?.token as string,
+            username: data.username,
+            groups: data.groups,
+          };
+        } catch (error) {
+          console.error('ProConnect auth error:', error);
+          return null;
+        }
+      },
+    }),
   ],
   pages: {
     signIn: '/login',
