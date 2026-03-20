@@ -1,0 +1,43 @@
+@import 'vars.scss';
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  row-gap: 1.5rem;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  @media (max-width: $bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.imageContainer {
+  cursor: pointer;
+
+  img {
+    max-width: 100px;
+    height: auto;
+  }
+}
+
+.departmentName {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  line-height: 1.2em;
+  color: #685430;
+}
