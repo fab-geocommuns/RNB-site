@@ -7,6 +7,10 @@ import * as Sentry from '@sentry/nextjs';
 Sentry.init({
   dsn: 'https://c2aa9d4f229e4165b410251d58c88e00@sentry.incubateur.net/149',
 
+  // Route browser requests through a Next.js rewrite to circumvent ad-blockers.
+  // Must match tunnelRoute in next.config.js
+  tunnel: '/monitoring',
+
   // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
 

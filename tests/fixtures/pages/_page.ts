@@ -33,7 +33,10 @@ export abstract class RNBPage {
   }
 
   async login() {
-    await this.page.goto('/login');
+    if (!this.page.url().includes('/login')) {
+      await this.page.goto('/login');
+    }
+    await this.page.waitForLoadState('domcontentloaded');
     await this.loginForm
       .getByLabel('Email')
       .fill(process.env.TEST_ACCOUNT_EMAIL!);
@@ -49,6 +52,11 @@ export abstract class RNBPage {
   }
 
   async loginIfNotLoggedIn() {
+    // Wait for either the account button (logged in) or the login form (redirected by auth)
+    await Promise.race([
+      this.myAccountButton.waitFor({ state: 'visible' }),
+      this.loginForm.waitFor({ state: 'visible' }),
+    ]);
     if (!(await this.isLoggedIn())) {
       await this.login();
     }
