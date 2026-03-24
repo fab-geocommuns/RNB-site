@@ -9,11 +9,9 @@ import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import Input from '@codegouvfr/react-dsfr/Input';
 
 import { isSafeRedirectUrl } from '@/utils/isSafeRedirectUrl';
-import { ProConnectButton } from '@codegouvfr/react-dsfr/ProConnectButton';
 
 export default function LoginForm() {
   const [credentialsError, setCredentialsError] = useState(false);
-  const [proConnectError, setProConnectError] = useState(false);
 
   const router = useRouter();
 
@@ -53,34 +51,6 @@ export default function LoginForm() {
     } else {
       setSuccessMessage('Connexion réussie');
       router.push(redirectUrl);
-    }
-  };
-
-  const handleProConnect = async () => {
-    setProConnectError(false);
-
-    const callbackUrl = new URL(
-      '/auth/proconnect/callback',
-      window.location.origin,
-    );
-    if (redirectUrl !== '/edition') {
-      callbackUrl.searchParams.set('redirect', redirectUrl);
-    }
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE}/auth/pro_connect/authorize/?redirect_uri=${encodeURIComponent(callbackUrl.toString())}`,
-      );
-
-      if (!res.ok) {
-        setProConnectError(true);
-        return;
-      }
-
-      const data = await res.json();
-      window.location.href = data.authorization_url;
-    } catch {
-      setProConnectError(true);
     }
   };
 
@@ -161,19 +131,6 @@ export default function LoginForm() {
           Se connecter
         </button>
       </form>
-      {proConnectError && (
-        <div className="fr-mt-3w">
-          <Alert
-            description="Impossible de contacter le service ProConnect. Veuillez réessayer."
-            severity="error"
-            small
-            closable={false}
-          />
-        </div>
-      )}
-      <div className="fr-mt-3w">
-        <ProConnectButton onClick={handleProConnect} />
-      </div>
     </>
   );
 }

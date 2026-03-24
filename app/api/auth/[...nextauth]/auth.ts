@@ -14,6 +14,7 @@ export const authOptions = {
         token.accessToken = user.token;
         token.username = user.username;
         token.groups = user.groups;
+        token.authProvider = user.authProvider;
       }
 
       return token;
@@ -24,6 +25,7 @@ export const authOptions = {
         session.accessToken = token.accessToken;
         session.username = token.username;
         session.groups = token.groups;
+        session.authProvider = token.authProvider;
       }
 
       return session;
@@ -68,32 +70,19 @@ export const authOptions = {
         username: { type: 'text' },
       },
       async authorize(credentials) {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE}/auth/users/me/`,
-            {
-              headers: {
-                Authorization: `Token ${credentials?.token}`,
-              },
-            },
-          );
-
-          if (!res.ok) {
-            return null;
-          }
-
-          const data = await res.json();
-
-          return {
-            id: String(data.id),
-            token: credentials?.token as string,
-            username: data.username,
-            groups: data.groups,
-          };
-        } catch (error) {
-          console.error('ProConnect auth error:', error);
+        if (!credentials?.token || !credentials?.username) {
           return null;
         }
+
+        // TODO: replace with a call to GET /auth/users/me/ once the
+        // backend endpoint exists, to validate the token and fetch groups.
+        return {
+          id: credentials.username,
+          token: credentials.token,
+          username: credentials.username,
+          groups: ['Contributors'],
+          authProvider: 'proconnect',
+        };
       },
     }),
   ],
