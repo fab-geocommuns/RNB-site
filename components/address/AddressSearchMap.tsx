@@ -132,10 +132,17 @@ export default function AddressSearchMap() {
   useEffect(() => {
     const q = params.get('q');
     const coords = params.get('coords');
+    const report = params.get('report');
     const coordinates =
       coords && queryIsCoordinates(coords) ? coords.split(',') : null;
     if (q !== null) search(q, coordinates);
     if (coordinates !== null) handleCoordinates(coordinates);
+    if (report !== null) {
+      const reportId = parseInt(report, 10);
+      if (!isNaN(reportId)) {
+        dispatch(Actions.report.selectReport(reportId));
+      }
+    }
   }, []);
 
   // @ts-ignore

@@ -57,7 +57,9 @@ export default function LoginForm() {
       setCredentialsError(true);
     } else {
       setSuccessMessage('Connexion réussie');
-      router.push(redirectUrl);
+      // FIXME: Investigate further why router.push does not preserve duplicate query parameters?
+      // Is it a known behavior or a bug on our end?
+      window.location.href = redirectUrl;
     }
   };
 
