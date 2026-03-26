@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import Link from 'next/link';
 import { isSafeRedirectUrl } from '@/utils/isSafeRedirectUrl';
+import { Loader } from '@/components/Loader';
 
 export default function ProConnectCallbackPage() {
   const params = useSearchParams();
@@ -88,7 +89,11 @@ export default function ProConnectCallbackPage() {
   return (
     <main className="fr-pt-md-14v" role="main">
       <div className="fr-container fr-container--fluid fr-mb-md-14v">
-        <p>Connexion en cours...</p>
+        <div>
+          <Loader inline />
+          &nbsp;
+          <b>Connexion via Pro Connect en cours ...</b>
+        </div>
       </div>
     </main>
   );

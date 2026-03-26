@@ -7,7 +7,10 @@ import ProFranceConnect from '@/components/authentication/ProFranceConnect';
 import ClassicSignInSignUp from '@/components/authentication/ClassicSignInSignUp';
 
 export default function AuthBlock() {
-  const [displayedClassicForm, setDisplayedClassicForm] = useState('login');
+  const searchParams = useSearchParams();
+  const displayParam = searchParams.get('display');
+  const initialForm = displayParam === 'signup' ? 'signup' : 'login';
+  const [displayedClassicForm, setDisplayedClassicForm] = useState(initialForm);
 
   const handleFormSwitcherClick = (
     e: React.MouseEvent<HTMLAnchorElement>,

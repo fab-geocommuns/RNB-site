@@ -2,12 +2,15 @@
 import { useState } from 'react';
 import { ProConnectButton } from '@codegouvfr/react-dsfr/ProConnectButton';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { Loader } from '@/components/Loader';
 
 export default function ProFranceConnect() {
   const [proConnectError, setProConnectError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleProConnect = async () => {
     setProConnectError(false);
+    setLoading(true);
 
     const callbackUrl = new URL(
       '/auth/proconnect/callback',
@@ -21,6 +24,7 @@ export default function ProFranceConnect() {
 
       if (!res.ok) {
         setProConnectError(true);
+        setLoading(false);
         return;
       }
 
@@ -28,6 +32,7 @@ export default function ProFranceConnect() {
       window.location.href = data.authorization_url;
     } catch {
       setProConnectError(true);
+      setLoading(false);
     }
   };
 
@@ -43,9 +48,20 @@ export default function ProFranceConnect() {
           />
         </div>
       )}
+
       <div className="fr-mt-3w">
         <ProConnectButton onClick={handleProConnect} />
       </div>
+
+      {loading && (
+        <div
+          className="fr-mt-3w"
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+        >
+          <Loader inline />
+          Connexion via ProConnect en cours ...
+        </div>
+      )}
     </>
   );
 }
