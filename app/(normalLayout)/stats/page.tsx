@@ -71,7 +71,7 @@ export default function Page() {
               height="600"
             ></iframe>
           </div>
-          <h2 className="fr-pt-10v">Cas d'usage : les DPE</h2>
+          <h2 className="fr-pt-10v">Cas d&apos;usage : les DPE</h2>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/6c9de2f4-5a5e-41f1-a42a-e9ae1dac2adf"
