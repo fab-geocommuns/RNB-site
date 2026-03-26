@@ -25,7 +25,7 @@ export default function Page() {
           <h2 className="fr-pt-10v">Diffusion</h2>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
-              src="https://rnb-api.beta.gouv.fr/metabase/public/question/c636a619-5a38-424c-b29f-13bf1757c698"
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/0e6f0fdc-5641-4a8b-9533-86836a58c4a9"
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
