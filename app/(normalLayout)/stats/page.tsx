@@ -53,7 +53,7 @@ export default function Page() {
               height="600"
             ></iframe>
             <iframe
-              src="https://rnb-api.beta.gouv.fr/metabase/public/question/120caec8-b03c-46f3-b3d0-6f7bd61286eb"
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/f34ddc0c-c07f-48ed-900a-41a6149106c6"
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
