@@ -87,13 +87,18 @@ export default async function LoginPage({
                 </p>
                 <ul>
                   <li>
-                    <a href="">Parcourir la carte des bâtiments</a>
+                    <a href="/carte">Parcourir la carte des bâtiments</a>
                   </li>
                   <li>
-                    <a href="">Télécharger le RNB</a>
+                    <a
+                      target="_blank"
+                      href="https://www.data.gouv.fr/datasets/referentiel-national-des-batiments"
+                    >
+                      Télécharger le RNB
+                    </a>
                   </li>
                   <li>
-                    <a href="">Accéder à la documentation technique</a>
+                    <a href="/doc">Accéder à la documentation technique</a>
                   </li>
                 </ul>
               </div>
