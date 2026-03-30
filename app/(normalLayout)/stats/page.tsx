@@ -32,13 +32,13 @@ export default function Page() {
           <div className="fr-pb-4v">
             Les identifiants du RNB ont vocation à être diffusés aussi largement
             que possible afin de faciliter l&apos;échange d&apos;information
-            entre bases bâtimentaires. Notre but : que la manière la plus
-            naturelle de désigner un bâtiment soit son ID-RNB. Nous diffusons
-            ces identifiants par deux canaux principaux : notre{' '}
+            entre bases bâtimentaires. Objectif : que la manière la plus
+            naturelle de désigner un bâtiment soit son ID-RNB. Ces identifiants
+            sont diffusés via deux canaux : l&apos;
             <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb">
               API
             </a>{' '}
-            et nos exports{' '}
+            et les exports{' '}
             <a href="https://www.data.gouv.fr/datasets/referentiel-national-des-batiments">
               data.gouv.fr
             </a>
@@ -64,10 +64,13 @@ export default function Page() {
           <h2 className="fr-pt-10v">Mise à jour du référentiel</h2>
           <div className="fr-pb-4v">
             Le RNB est un référentiel vivant, mis quotidiennement à jour par une
-            communauté de contributeurs et sur l&apos;ensemble du territoire.
-            Les mises à jour peuvent porter sur la création de bâtiments, sur
-            l&apos;enrichissement du lien bâtiment-adresse ou sur d&apos;autres
-            types d&apos;actions.
+            communauté de{' '}
+            <a href="https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart">
+              contributeurs
+            </a>{' '}
+            et sur l&apos;ensemble du territoire. Les mises à jour peuvent
+            porter sur la création de bâtiments, sur l&apos;enrichissement du
+            lien bâtiment-adresse ou sur d&apos;autres types d&apos;actions.
           </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
@@ -86,7 +89,7 @@ export default function Page() {
               height="600"
             ></iframe>
           </div>
-          <h2 className="fr-pt-10v">Intégration</h2>
+          {/* <h2 className="fr-pt-10v">Intégration</h2>
           <div className="fr-pb-4v">
             Les identifiants RNB se trouvent aujourd&apos;hui dans de nombreuses
             bases, en open-data ou non. Des outils intègrent également le RNB
@@ -104,7 +107,7 @@ export default function Page() {
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
-          </div>
+          </div> */}
           <h2 className="fr-pt-10v">Cas d&apos;usage : les DPE</h2>
           <div className="fr-pb-4v">
             Parmi les bases intégrant les ID-RNB, la base des DPE est
