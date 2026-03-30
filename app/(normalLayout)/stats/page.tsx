@@ -10,6 +10,12 @@ export default function Page() {
         <div className="fr-col-12 fr-py-12v">
           <h1>Statistiques</h1>
           <h2>Le référentiel</h2>
+          <div className="fr-pb-4v">
+            Le RNB référence l'ensemble des bâtiments situés en France et leur
+            attribue un identifiant unique appelé ID-RNB. Les bâtiments du RNB
+            peuvent être liés à une ou plusieurs adresses de la{' '}
+            <a href="https://adresse.data.gouv.fr/">BAN</a>.
+          </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/752eb314-8a49-4de1-ac6f-b39812fb451f"
@@ -23,6 +29,20 @@ export default function Page() {
             ></iframe>
           </div>
           <h2 className="fr-pt-10v">Diffusion</h2>
+          <div className="fr-pb-4v">
+            Les identifiants du RNB ont vocation à être diffusés aussi largement
+            que possible. Notre but : que la manière la plus naturelle de
+            désigner un bâtiment soit son ID-RNB. Nous diffusons ces
+            identifiants par deux canaux principaux : notre{' '}
+            <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb">
+              API
+            </a>{' '}
+            et nos exports{' '}
+            <a href="https://www.data.gouv.fr/datasets/referentiel-national-des-batiments">
+              data.gouv.fr
+            </a>
+            .
+          </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/0e6f0fdc-5641-4a8b-9533-86836a58c4a9"
@@ -38,14 +58,16 @@ export default function Page() {
                 width="100%"
                 height="280"
               ></iframe>
-              <iframe
-                src="https://rnb-api.beta.gouv.fr/metabase/public/question/ca332a09-78d1-492c-bba3-4971cf5ba5b8"
-                width="100%"
-                height="280"
-              ></iframe>
             </div>
           </div>
           <h2 className="fr-pt-10v">Mise à jour du référentiel</h2>
+          <div className="fr-pb-4v">
+            Le RNB est un référentiel vivant, mis quotidiennement à jour par une
+            communauté de contributeurs et sur l'ensemble du territoire. Les
+            mises à jour peuvent porter sur la création de bâtiments, sur
+            l'enrichissement du lien bâtiment-adresse ou sur d'autres types
+            d'actions.
+          </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/8da126c9-c3c3-41b7-9a95-93e5c35e26c2"
@@ -57,8 +79,19 @@ export default function Page() {
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/6dc7902a-f054-440e-94f7-17bc4525b4fc"
+              className="fr-col-12 fr-col-md-12"
+              height="600"
+            ></iframe>
           </div>
           <h2 className="fr-pt-10v">Intégration</h2>
+          <div className="fr-pb-4v">
+            Les identifiants RNB se trouvent aujourd'hui dans de nombreuses
+            bases, en open-data ou non. De nombreux outils intègrent également
+            le RNB pour permettre à leurs utilisateurs de travailler sans
+            ambiguité sur des données bâtimentaires.
+          </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/468dfc08-c5d8-4912-ad52-4c759ba1a748"
@@ -72,6 +105,13 @@ export default function Page() {
             ></iframe>
           </div>
           <h2 className="fr-pt-10v">Cas d&apos;usage : les DPE</h2>
+          <div className="fr-pb-4v">
+            La base des DPE est incontournable dans le domaine du bâti. Remplie
+            quotidiennement par des diagnostiqueurs, la{' '}
+            <a href="https://data.ademe.fr/datasets?topics=BR8GjsXga">base</a>{' '}
+            est publiée en open-data par l'ADEME et intègre d'ores et déjà les
+            ID-RNB.
+          </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/6c9de2f4-5a5e-41f1-a42a-e9ae1dac2adf"
