@@ -94,7 +94,7 @@ export default function Page() {
               </strong>
             </p>
             <p>Le RNB a pour objectifs principaux de :</p>
-            <p>
+            <div>
               <ul>
                 <li>
                   <strong>Standardiser</strong> l&apos;identification des
@@ -114,7 +114,7 @@ export default function Page() {
                   </strong>
                 </li>
               </ul>
-            </p>
+            </div>
 
             <h2 className="fr-h4 fr-pt-10v">
               Méthode : co-construire un géocommun et une future donnée de
@@ -219,22 +219,22 @@ export default function Page() {
                 <div className="fr-col-12">
                   <p className="block__title">
                     <strong>
-                      D'où proviennent les données du RNB ? Comment le RNB est
-                      mis à jour ?
+                      D&apos;où proviennent les données du RNB ? Comment le RNB
+                      est mis à jour ?
                     </strong>
                   </p>
                   <p>
                     Les bâtiments présentés dans le RNB sont essentiellement
-                    issus d'une fusion de la
+                    issus d&apos;une fusion de la{' '}
                     <a href="https://geoservices.ign.fr/bdtopo" target="_blank">
                       BDTOPO
                     </a>
-                    , éditée par l'IGN et de la
+                    , éditée par l&apos;IGN et de la{' '}
                     <a href="https://bdnb.io/" target="_blank">
                       BDNB
                     </a>
-                    , éditée par le CSTB. La mise à jour du RNB est aujourd'hui
-                    réalisée par :
+                    , éditée par le CSTB. La mise à jour du RNB est
+                    aujourd&apos;hui réalisée par :
                   </p>
                   <ul>
                     <li>
@@ -244,13 +244,13 @@ export default function Page() {
 
                     <li>les imports des Bases Adresses Locales (BAL)</li>
                     <li>
-                      les
+                      les{' '}
                       <a
                         href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#communaute-et-contributions"
                         target="_blank"
                       >
                         contributions
-                      </a>
+                      </a>{' '}
                       de la communauté, à savoir les éditions directes dans le
                       RNB ; ainsi que par les signalements reçus par une
                       personne suggérant une modification du contenu du RNB,
