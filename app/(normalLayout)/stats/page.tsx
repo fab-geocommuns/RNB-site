@@ -31,7 +31,8 @@ export default function Page() {
           <h2 className="fr-pt-10v">Diffusion</h2>
           <div className="fr-pb-4v">
             Les identifiants du RNB ont vocation à être diffusés aussi largement
-            que possible. Notre but : que la manière la plus naturelle de
+            que possible afin de faciliter l'échange d'information entre bases
+            bâtimentaires. Notre but : que la manière la plus naturelle de
             désigner un bâtiment soit son ID-RNB. Nous diffusons ces
             identifiants par deux canaux principaux : notre{' '}
             <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb">
@@ -88,9 +89,9 @@ export default function Page() {
           <h2 className="fr-pt-10v">Intégration</h2>
           <div className="fr-pb-4v">
             Les identifiants RNB se trouvent aujourd'hui dans de nombreuses
-            bases, en open-data ou non. De nombreux outils intègrent également
-            le RNB pour permettre à leurs utilisateurs de travailler sans
-            ambiguité sur des données bâtimentaires.
+            bases, en open-data ou non. Des outils intègrent également le RNB
+            pour permettre à leurs utilisateurs de travailler sans ambiguité sur
+            des données bâtimentaires.
           </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
@@ -106,8 +107,9 @@ export default function Page() {
           </div>
           <h2 className="fr-pt-10v">Cas d&apos;usage : les DPE</h2>
           <div className="fr-pb-4v">
-            La base des DPE est incontournable dans le domaine du bâti. Remplie
-            quotidiennement par des diagnostiqueurs, la{' '}
+            Parmi les bases intégrant les ID-RNB, la base des DPE est
+            incontournable dans le domaine du bâti. Remplie quotidiennement par
+            des diagnostiqueurs, la{' '}
             <a href="https://data.ademe.fr/datasets?topics=BR8GjsXga">base</a>{' '}
             est publiée en open-data par l'ADEME et intègre d'ores et déjà les
             ID-RNB.
