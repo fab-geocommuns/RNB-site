@@ -11,9 +11,9 @@ export default function Page() {
           <h1>Statistiques</h1>
           <h2>Le référentiel</h2>
           <div className="fr-pb-4v">
-            Le RNB référence l'ensemble des bâtiments situés en France et leur
-            attribue un identifiant unique appelé ID-RNB. Les bâtiments du RNB
-            peuvent être liés à une ou plusieurs adresses de la{' '}
+            Le RNB référence l&apos;ensemble des bâtiments situés en France et
+            leur attribue un identifiant unique appelé ID-RNB. Les bâtiments du
+            RNB peuvent être liés à une ou plusieurs adresses de la{' '}
             <a href="https://adresse.data.gouv.fr/">BAN</a>.
           </div>
           <div className="fr-grid-row fr-grid-row--gutters">
@@ -31,10 +31,10 @@ export default function Page() {
           <h2 className="fr-pt-10v">Diffusion</h2>
           <div className="fr-pb-4v">
             Les identifiants du RNB ont vocation à être diffusés aussi largement
-            que possible afin de faciliter l'échange d'information entre bases
-            bâtimentaires. Notre but : que la manière la plus naturelle de
-            désigner un bâtiment soit son ID-RNB. Nous diffusons ces
-            identifiants par deux canaux principaux : notre{' '}
+            que possible afin de faciliter l&apos;échange d&apos;information
+            entre bases bâtimentaires. Notre but : que la manière la plus
+            naturelle de désigner un bâtiment soit son ID-RNB. Nous diffusons
+            ces identifiants par deux canaux principaux : notre{' '}
             <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb">
               API
             </a>{' '}
@@ -64,10 +64,10 @@ export default function Page() {
           <h2 className="fr-pt-10v">Mise à jour du référentiel</h2>
           <div className="fr-pb-4v">
             Le RNB est un référentiel vivant, mis quotidiennement à jour par une
-            communauté de contributeurs et sur l'ensemble du territoire. Les
-            mises à jour peuvent porter sur la création de bâtiments, sur
-            l'enrichissement du lien bâtiment-adresse ou sur d'autres types
-            d'actions.
+            communauté de contributeurs et sur l&apos;ensemble du territoire.
+            Les mises à jour peuvent porter sur la création de bâtiments, sur
+            l&apos;enrichissement du lien bâtiment-adresse ou sur d&apos;autres
+            types d&apos;actions.
           </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
@@ -88,7 +88,7 @@ export default function Page() {
           </div>
           <h2 className="fr-pt-10v">Intégration</h2>
           <div className="fr-pb-4v">
-            Les identifiants RNB se trouvent aujourd'hui dans de nombreuses
+            Les identifiants RNB se trouvent aujourd&apos;hui dans de nombreuses
             bases, en open-data ou non. Des outils intègrent également le RNB
             pour permettre à leurs utilisateurs de travailler sans ambiguité sur
             des données bâtimentaires.
@@ -111,8 +111,8 @@ export default function Page() {
             incontournable dans le domaine du bâti. Remplie quotidiennement par
             des diagnostiqueurs, la{' '}
             <a href="https://data.ademe.fr/datasets?topics=BR8GjsXga">base</a>{' '}
-            est publiée en open-data par l'ADEME et intègre d'ores et déjà les
-            ID-RNB.
+            est publiée en open-data par l&apos;ADEME et intègre d&apos;ores et
+            déjà les ID-RNB.
           </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
