@@ -9,7 +9,12 @@ export default function Page() {
       <div className="fr-grid-row">
         <div className="fr-col-12 fr-py-12v">
           <h1>Statistiques</h1>
-          <h2 id="le-referentiel">Le référentiel</h2>
+          <h2 id="le-referentiel" className="heading-anchor">
+            Le référentiel
+            <a href="#le-referentiel" className="anchor-link">
+              #
+            </a>
+          </h2>
           <div className="fr-pb-4v">
             Le RNB référence l&apos;ensemble des bâtiments situés en France et
             leur attribue un identifiant unique appelé ID-RNB. Les bâtiments du
@@ -28,8 +33,11 @@ export default function Page() {
               height="300"
             ></iframe>
           </div>
-          <h2 id="diffusion" className="fr-pt-10v">
+          <h2 id="diffusion" className="fr-pt-10v heading-anchor">
             Diffusion
+            <a href="#diffusion" className="anchor-link">
+              #
+            </a>
           </h2>
           <div className="fr-pb-4v">
             Les identifiants du RNB ont vocation à être diffusés aussi largement
@@ -63,8 +71,11 @@ export default function Page() {
               ></iframe>
             </div>
           </div>
-          <h2 id="mise-a-jour" className="fr-pt-10v">
+          <h2 id="mise-a-jour" className="fr-pt-10v heading-anchor">
             Mise à jour du référentiel
+            <a href="#mise-a-jour" className="anchor-link">
+              #
+            </a>
           </h2>
           <div className="fr-pb-4v">
             Le RNB est un référentiel vivant, mis quotidiennement à jour par une
@@ -112,8 +123,11 @@ export default function Page() {
               height="600"
             ></iframe>
           </div> */}
-          <h2 id="cas-usage-dpe" className="fr-pt-10v">
+          <h2 id="cas-usage-dpe" className="fr-pt-10v heading-anchor">
             Cas d&apos;usage : les DPE
+            <a href="#cas-usage-dpe" className="anchor-link">
+              #
+            </a>
           </h2>
           <div className="fr-pb-4v">
             Parmi les bases intégrant les ID-RNB, la base des DPE est
