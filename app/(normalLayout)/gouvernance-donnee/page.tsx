@@ -137,7 +137,7 @@ export default function RulesPage() {
               </li>
               <li>
                 <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb">
-                  l'API d'édition
+                  l&apos;API d&apos;édition
                 </a>
               </li>
               <li>
@@ -149,39 +149,39 @@ export default function RulesPage() {
               </li>
             </ul>
 
-            <h4>Droits d'édition</h4>
+            <h4>Droits d&apos;édition</h4>
 
             <p>
-              Toute édition doit faire l’objet d’une authentification préalable
-              de l’éditeur.
+              Toute édition doit faire l&apos;objet d&apos;une authentification
+              préalable de l&apos;éditeur.
             </p>
             <p>
               Toute personne ou organisation peut devenir éditeur en créant son
               compte sur le site RNB.
             </p>
-            <h4>Seuil d'édition</h4>
+            <h4>Seuil d&apos;édition</h4>
             <p>
-              Chaque éditeur a un seuil d’édition, qui correspond à son nombre
-              maximum d’éditions autorisées. Par défaut, ce seuil est de 500
-              éditions.
+              Chaque éditeur a un seuil d&apos;édition, qui correspond à son
+              nombre maximum d&apos;éditions autorisées. Par défaut, ce seuil
+              est de 500 éditions.
             </p>
             <p>
               Pour augmenter ce seuil, une vérification manuelle de la qualité
-              des éditions est déclenchée par l’administrateur. Suite à cette
-              vérification, le seuil est augmenté au cas par cas selon le
-              résultat et les motivations de l’éditeur.
+              des éditions est déclenchée par l&apos;administrateur. Suite à
+              cette vérification, le seuil est augmenté au cas par cas selon le
+              résultat et les motivations de l&apos;éditeur.
             </p>
             <h4>Historisation</h4>
             <p>
               Toutes les modifications apportées aux bâtiments du RNB sont
-              historisées. Chaque ID-RNB dispose d'un historique retraçant les
-              modifications apportées, la date de ces modifications, l'éditeur
-              qui a effectué l'édition.
+              historisées. Chaque ID-RNB dispose d&apos;un historique retraçant
+              les modifications apportées, la date de ces modifications,
+              l&apos;éditeur qui a effectué l&apos;édition.
             </p>
             <p>
               Cette historisation garantit la traçabilité des ID-RNB et favorise
               la transparence du réfénretiel. Elle est accessible à toutes et
-              tous, dans la page "Historique de l'identifiant".
+              tous, dans la page &quot;Historique de l&apos;identifiant&quot;.
             </p>
 
             <h3>Signaler</h3>
@@ -237,17 +237,17 @@ export default function RulesPage() {
             </p>
             <p>
               Les imports automatiques de la BD Topo et de la BAN (faits par
-              l'administrateur) sont conçus pour ne pas défaire la contribution
-              d'un éditeur. Par exemple, dans le cas où un éditeur aurait
-              détaché une adresse d'un bâtiment, l'import de la BAN ne pourra
-              pas recréer ce lien.
+              l&apos;administrateur) sont conçus pour ne pas défaire la
+              contribution d&apos;un éditeur. Par exemple, dans le cas où un
+              éditeur aurait détaché une adresse d&apos;un bâtiment,
+              l&apos;import de la BAN ne pourra pas recréer ce lien.
             </p>
             <hr className="fr-my-4v" />
-            <h2>Détection d'anomalie</h2>
+            <h2>Détection d&apos;anomalie</h2>
             <p>
-              Des contrôles en amont d’actions d’édition préviennent
-              l’intégration d’erreurs. Certaines opérations non autorisées sont
-              bloquées avant d’être effectuées :
+              Des contrôles en amont d&apos;actions d&apos;édition préviennent
+              l&apos;intégration d&apos;erreurs. Certaines opérations non
+              autorisées sont bloquées avant d&apos;être effectuées :
             </p>
             <ul>
               <li>superposition de bâtiment</li>
@@ -256,28 +256,29 @@ export default function RulesPage() {
             </ul>
             <p>
               Les processus suivants de monitoring sont en place pour détecter
-              d’éventuelles anomalies :
+              d&apos;éventuelles anomalies :
             </p>
             <ul>
               <li>
-                un tableau de bord de suivi de l’activité sur le RNB (éditions,
-                signalements, création de compte) est alimenté en temps réel et
-                accessible à l’administrateur. Chaque matin, l’administrateur
-                contrôle le tableau de bord de suivi. Si une activité anormale
-                est constatée, celle-ci est immédiatement analysée
+                un tableau de bord de suivi de l&apos;activité sur le RNB
+                (éditions, signalements, création de compte) est alimenté en
+                temps réel et accessible à l&apos;administrateur. Chaque matin,
+                l&apos;administrateur contrôle le tableau de bord de suivi. Si
+                une activité anormale est constatée, celle-ci est immédiatement
+                analysée
               </li>
               <li>
                 un outil de suivi des éditions effectuées est alimenté en temps
-                réel et accessible à l’administrateur. Cet outil est utilisé
-                lors de la vérification quotidienne en cas de doute de qualité
-                des éditions.
+                réel et accessible à l&apos;administrateur. Cet outil est
+                utilisé lors de la vérification quotidienne en cas de doute de
+                qualité des éditions.
               </li>
               <li>
-                pour augmenter le seuil d’édition d’un éditeur, l’administrateur
-                contrôle un échantillon des éditions effectuées par ce compte
-                grâce à l’outil de suivi des éditions et l’historisation par
-                bâtiment, se renseigne sur les compétences bâti du compte
-                éditeur, et en valide la qualité
+                pour augmenter le seuil d&apos;édition d&apos;un éditeur,
+                l&apos;administrateur contrôle un échantillon des éditions
+                effectuées par ce compte grâce à l&apos;outil de suivi des
+                éditions et l&apos;historisation par bâtiment, se renseigne sur
+                les compétences bâti du compte éditeur, et en valide la qualité
               </li>
               <li>
                 un contrôle de qualité sur un échantillon de 500 éditions est
@@ -293,16 +294,17 @@ export default function RulesPage() {
             <p>Si une erreur est détectée : </p>
             <ul>
               <li>
-                si elle concerne un nombre d’éditeur restreint, l’administrateur
-                effectue un rollback des éditions faites par ces éditeurs. Il
-                est possible de faire un rollback par éditeur et sur une fenêtre
-                de temps donnée depuis les outils d'administration du RNB.
+                si elle concerne un nombre d&apos;éditeur restreint,
+                l&apos;administrateur effectue un rollback des éditions faites
+                par ces éditeurs. Il est possible de faire un rollback par
+                éditeur et sur une fenêtre de temps donnée depuis les outils
+                d&apos;administration du RNB.
               </li>
               <li>
-                si la base est compromise plus largement, l’administrateur
+                si la base est compromise plus largement, l&apos;administrateur
                 restaure une sauvegarde de la base, avec un risque de perte
-                d’information qui ont été intégrées dans le RNB entre la date du
-                lancement de la procédure et la date de la sauvegarde.
+                d&apos;information qui ont été intégrées dans le RNB entre la
+                date du lancement de la procédure et la date de la sauvegarde.
               </li>
             </ul>
           </div>
@@ -312,10 +314,10 @@ export default function RulesPage() {
                 <b>Pourquoi des règles de gouvernance ?</b>
               </p>
               <p className="fr-mb-0">
-                L'objectif de ces règles est de fédérer des parties prenantes
-                aux profils variés autour de règles communes et garantir que le
-                RNB reste un géocommun : c’est-à-dire une base ouverte, partagée
-                et co-construite.{' '}
+                L&apos;objectif de ces règles est de fédérer des parties
+                prenantes aux profils variés autour de règles communes et
+                garantir que le RNB reste un géocommun : c&apos;est-à-dire une
+                base ouverte, partagée et co-construite.{' '}
               </p>
             </div>
             <div className="block block--yellow">
