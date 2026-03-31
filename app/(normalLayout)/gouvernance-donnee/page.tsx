@@ -1,11 +1,18 @@
+import pageTitle from '@/utils/pageTitle';
+
+export const metadata = pageTitle('Règles de gouvernance de la donnée RNB');
+
 export default function RulesPage() {
   return (
     <>
       <div className="fr-container">
-        <div className="fr-grid-row fr-grid-row--gutters fr-py-12v">
-          <div className="fr-col-12 fr-col-md-8">
+        <div className="fr-grid-row fr-grid-row--gutters fr-pt-12v">
+          <div className="fr-col-12">
             <h1 className="text-blue">Gouvernance de la donnée RNB</h1>
-
+          </div>
+        </div>
+        <div className="fr-grid-row fr-grid-row--gutters fr-pb-12v">
+          <div className="fr-col-12 fr-col-md-7">
             <h2>Les rôles</h2>
 
             <p>
@@ -48,17 +55,23 @@ export default function RulesPage() {
             </p>
 
             <p>
-              le <a href="https://cnig.gouv.fr/gt-bati-a25939.html">GT Bâti</a>{' '}
+              Le{' '}
+              <a
+                target="_blank"
+                href="https://cnig.gouv.fr/gt-bati-a25939.html"
+              >
+                GT Bâti
+              </a>{' '}
               (groupe de travail “Bâtiment”) du CNIG assure la concertation avec
               les acteurs de la géo-donnée et du bâtiment et la coordination
               pour produire le standard du bâtiment en France.
             </p>
             <p>
-              la communauté du RNB (éditeur, contributeur et réutilisateur)
+              La communauté du RNB (éditeurs, contributeurs et réutilisateurs)
               participe aux diverses concertations pour assurer l’utilisabilité
               et l’utilité des règles.
             </p>
-
+            <hr className="fr-my-4v" />
             <h2>Les actions</h2>
             <h3>Consulter et réutiliser</h3>
             <p>
@@ -100,8 +113,8 @@ export default function RulesPage() {
             <h3>Éditer</h3>
             <p>
               L’action “éditer” est une forme de contribution dans laquelle le
-              ou la [contributeur·ice]() apporte directement une modification au
-              contenu du RNB en appliquant systématiquement la{' '}
+              contributeur apporte directement une modification au contenu du
+              RNB en appliquant systématiquement la{' '}
               <a href="https://rnb.beta.gouv.fr/definition">
                 définition du bâtiment
               </a>{' '}
@@ -177,19 +190,19 @@ export default function RulesPage() {
               <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#contribution-au-rnb-contribuer-au-rnb">
                 contribution
               </a>{' '}
-              dans laquelle le ou la
+              dans laquelle la ou le{' '}
               <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#contributeur-ice">
                 contributeur
               </a>{' '}
               propose une modification du contenu du RNB sans la réaliser
-              lui-même ou elle-même, en appliquant systématiquement la
+              lui-même ou elle-même, en appliquant systématiquement la{' '}
               <a href="https://rnb.beta.gouv.fr/definition">
                 définition du bâtiment
               </a>
-              . Le signalement peut ensuite être
+              . Le signalement peut ensuite être{' '}
               <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#traiter-un-signalement">
                 traité
-              </a>
+              </a>{' '}
               par une éditeur ou par l’administrateur.
             </p>
             <p>
@@ -208,6 +221,7 @@ export default function RulesPage() {
               Des signalements peuvent être soumis en masse par
               l’administrateur.
             </p>
+            <hr className="fr-my-4v" />
             <h2>Règles de mise à jour</h2>
             <p>
               La conception du RNB est pensée pour garantir 3 caractéristiques
@@ -223,11 +237,12 @@ export default function RulesPage() {
             </p>
             <p>
               Les imports automatiques de la BD Topo et de la BAN (faits par
-              l'administrateur) sont faits de telle manière à ne pas défaire la
-              contribution d'un éditeur. Par exemple, dans le cas où un éditeur
-              aurait détaché une adresse d'un bâtiment, l'import de la BAN ne
-              pourra pas recréer ce lien.
+              l'administrateur) sont conçus pour ne pas défaire la contribution
+              d'un éditeur. Par exemple, dans le cas où un éditeur aurait
+              détaché une adresse d'un bâtiment, l'import de la BAN ne pourra
+              pas recréer ce lien.
             </p>
+            <hr className="fr-my-4v" />
             <h2>Détection d'anomalie</h2>
             <p>
               Des contrôles en amont d’actions d’édition préviennent
@@ -269,6 +284,7 @@ export default function RulesPage() {
                 effectué tous les 6 mois
               </li>
             </ul>
+            <hr className="fr-my-4v" />
             <h2>Procédure de récupération</h2>
             <p>
               Une sauvegarde du RNB de production est faite toutes les semaines,
@@ -289,6 +305,57 @@ export default function RulesPage() {
                 lancement de la procédure et la date de la sauvegarde.
               </li>
             </ul>
+          </div>
+          <div className="fr-col-12 fr-col-md-4 fr-col-offset-md-1">
+            <div className="block block--paleGreen fr-mb-8v">
+              <p>
+                <b>Pourquoi des règles de gouvernance ?</b>
+              </p>
+              <p className="fr-mb-0">
+                L'objectif de ces règles est de fédérer des parties prenantes
+                aux profils variés autour de règles communes et garantir que le
+                RNB reste un géocommun : c’est-à-dire une base ouverte, partagée
+                et co-construite.{' '}
+              </p>
+            </div>
+            <div className="block block--yellow">
+              <p>
+                <b>
+                  Donnez votre avis pour faire évoluer les règles de gestion du
+                  RNB !
+                </b>
+              </p>
+
+              <p>
+                <b>Où ?</b>
+                <br />
+                Sur la discussion dédiée du forum Géocommuns
+              </p>
+              <p>
+                <b>Quand ?</b>
+                <br />
+                Du 31 mars au 22 avril 2026
+              </p>
+              <p>
+                <b>Qui ?</b> <br />
+                Toutes vos réflexions sont les bienvenues, que vous soyez
+                spécialiste de la geodata, partie prenante de l’ecosystème bâti
+                (gestionnaires de parc bâtimentaire, collectivités
+                territoriales, administrations publiques, bailleurs sociaux,
+                entreprises, opérateurs) ou de l’open data et des communs.
+              </p>
+
+              <p>
+                Vos contributions seront présentées et alimenteront la réflexion
+                sur la gouvernance de la donnée lors du GT Bâti qui aura lieu la
+                semaine du 27 avril 2026{' '}
+              </p>
+              <div>
+                <a href="#" className="fr-btn fr-btn--primary">
+                  Participer à la discussion
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
