@@ -6,65 +6,59 @@ export default function RulesPage() {
           <div className="fr-col-12 fr-col-md-8">
             <h1 className="text-blue">Gouvernance de la donnée RNB</h1>
 
-            <div>TODO : intro sur les règles</div>
-
             <h2>Les rôles</h2>
-            <ul>
-              <li>
-                Editeur : toute personne ou organisation qui{' '}
-                <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#editeur-ice">
-                  édite le RNB
-                </a>
-                , c’est-à-dire qui crée, modifie ou met à jour une donnée.
-              </li>
-              <li>
-                Contributeur : toute personne ou organisation qui participe à
-                améliorer la qualité de la donnée RNB, soit en effectuant des{' '}
-                <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#signalement-signaler">
-                  signalements
-                </a>{' '}
-                sur le RNB, c’est-à-dire des suggestions d’édition, soit en
-                étant édit.rice.eur.
-              </li>
-              <li>
-                Administrateur : l’entité RNB assure la disponibilité des
-                services, le respect d’application des règles de gouvernance et
-                l’alimentation du RNB avec des données socles.{' '}
-              </li>
-              <li>
-                Diffuseur : data.gouv.fr et l’entité RNB mettent à disposition
-                la donnée.
-              </li>
-              <li>
-                Réutilisateur : toute personne ou organisation qui consulte ou
-                exploite la donnée RNB.
-              </li>
-              <li>
-                Garant de la conformité : l’entité RNB veille au respect des
-                obligations réglementaires, notamment en matière de protection
-                des données personnelles (RGPD) et de sécurité.{' '}
-              </li>
-              <li>
-                Référent métier :
-                <ul>
-                  <li>
-                    le{' '}
-                    <a href="https://cnig.gouv.fr/gt-bati-a25939.html">
-                      GT Bâti
-                    </a>{' '}
-                    (groupe de travail “Bâtiment”) du CNIG assure la
-                    concertation avec les acteurs de la géo-donnée et du
-                    bâtiment et la coordination pour produire le standard du
-                    bâtiment en France.
-                  </li>
-                  <li>
-                    la communauté du RNB (éditeur, contributeur et
-                    réutilisateur) participe aux diverses concertations pour
-                    assurer l’utilisabilité et l’utilité des règles.
-                  </li>
-                </ul>
-              </li>
-            </ul>
+
+            <p>
+              <b>Editeur :</b> toute personne ou organisation qui{' '}
+              <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#editeur-ice">
+                édite le RNB
+              </a>
+              , c’est-à-dire qui crée, modifie ou met à jour un bâtiment.
+            </p>
+            <p>
+              <b>Contributeur :</b> toute personne ou organisation qui participe
+              à améliorer la qualité de la donnée RNB, soit en effectuant des{' '}
+              <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#signalement-signaler">
+                signalements
+              </a>{' '}
+              sur le RNB, c’est-à-dire des suggestions d’édition, soit en étant
+              éditeur.
+            </p>
+            <p>
+              <b>Administrateur :</b> l’entité RNB assure la disponibilité des
+              services, le respect d’application des règles de gouvernance et
+              l’alimentation du RNB avec des données socles.{' '}
+            </p>
+            <p>
+              <b>Diffuseur :</b> data.gouv.fr et l’entité RNB mettent à
+              disposition la donnée.
+            </p>
+            <p>
+              <b>Réutilisateur :</b> toute personne ou organisation qui consulte
+              ou exploite la donnée RNB.
+            </p>
+            <p>
+              <b>Garant de la conformité :</b> l’entité RNB veille au respect
+              des obligations réglementaires, notamment en matière de protection
+              des données personnelles (RGPD) et de sécurité.{' '}
+            </p>
+
+            <p>
+              <b>Référents métier :</b>
+            </p>
+
+            <p>
+              le <a href="https://cnig.gouv.fr/gt-bati-a25939.html">GT Bâti</a>{' '}
+              (groupe de travail “Bâtiment”) du CNIG assure la concertation avec
+              les acteurs de la géo-donnée et du bâtiment et la coordination
+              pour produire le standard du bâtiment en France.
+            </p>
+            <p>
+              la communauté du RNB (éditeur, contributeur et réutilisateur)
+              participe aux diverses concertations pour assurer l’utilisabilité
+              et l’utilité des règles.
+            </p>
+
             <h2>Les actions</h2>
             <h3>Consulter et réutiliser</h3>
             <p>
@@ -85,7 +79,7 @@ export default function RulesPage() {
               <li>
                 <a href="https://rnb.beta.gouv.fr/carte">
                   la carte des bâtiments
-                </a>
+                </a>{' '}
                 accessible sur le site du RNB, pour visualiser ou rechercher des
                 bâtiment,
               </li>
@@ -94,7 +88,7 @@ export default function RulesPage() {
                 <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/liste-des-api-et-outils-du-rnb">
                   API du RNB
                 </a>{' '}
-                pour consulter, lister, identifier ou exporter des données
+                pour consulter, lister, identifier des bâtiments
               </li>
               <li>
                 la plateforme{' '}
@@ -107,12 +101,194 @@ export default function RulesPage() {
             <p>
               L’action “éditer” est une forme de contribution dans laquelle le
               ou la [contributeur·ice]() apporte directement une modification au
-              contenu du RNB (la documentation RNB précise la liste des{' '}
+              contenu du RNB en appliquant systématiquement la{' '}
+              <a href="https://rnb.beta.gouv.fr/definition">
+                définition du bâtiment
+              </a>{' '}
+              (la documentation RNB précise la liste des{' '}
               <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#modification-du-contenu-du-rnb">
                 modifications possibles
               </a>
               ).
             </p>
+            <p>
+              L’édition est ouverte sur tout le territoire, via différents
+              outils :
+            </p>
+            <ul>
+              <li>
+                <a href="https://rnb.beta.gouv.fr/edition">
+                  la carte d’édition
+                </a>{' '}
+                accessible sur le site RNB,
+              </li>
+              <li>
+                <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb">
+                  l'API d'édition
+                </a>
+              </li>
+              <li>
+                un import de données effectué par l’administrateur (
+                <a href="https://rnb-fr.gitbook.io/documentation/cycle-de-vie-de-la-donnee">
+                  import de données nationales socles
+                </a>{' '}
+                comme la BDTOPO et la BAN).
+              </li>
+            </ul>
+
+            <h4>Droits d'édition</h4>
+
+            <p>
+              Toute édition doit faire l’objet d’une authentification préalable
+              de l’éditeur.
+            </p>
+            <p>
+              Toute personne ou organisation peut devenir éditeur en créant son
+              compte sur le site RNB.
+            </p>
+            <h4>Seuil d'édition</h4>
+            <p>
+              Chaque éditeur a un seuil d’édition, qui correspond à son nombre
+              maximum d’éditions autorisées. Par défaut, ce seuil est de 500
+              éditions.
+            </p>
+            <p>
+              Pour augmenter ce seuil, une vérification manuelle de la qualité
+              des éditions est déclenchée par l’administrateur. Suite à cette
+              vérification, le seuil est augmenté au cas par cas selon le
+              résultat et les motivations de l’éditeur.
+            </p>
+            <h4>Historisation</h4>
+            <p>
+              Toutes les modifications apportées aux bâtiments du RNB sont
+              historisées. Chaque ID-RNB dispose d'un historique retraçant les
+              modifications apportées, la date de ces modifications, l'éditeur
+              qui a effectué l'édition.
+            </p>
+            <p>
+              Cette historisation garantit la traçabilité des ID-RNB et favorise
+              la transparence du réfénretiel. Elle est accessible à toutes et
+              tous, dans la page "Historique de l'identifiant".
+            </p>
+
+            <h3>Signaler</h3>
+            <p>
+              L’action de signaler est une forme de{' '}
+              <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#contribution-au-rnb-contribuer-au-rnb">
+                contribution
+              </a>{' '}
+              dans laquelle le ou la
+              <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#contributeur-ice">
+                contributeur
+              </a>{' '}
+              propose une modification du contenu du RNB sans la réaliser
+              lui-même ou elle-même, en appliquant systématiquement la
+              <a href="https://rnb.beta.gouv.fr/definition">
+                définition du bâtiment
+              </a>
+              . Le signalement peut ensuite être
+              <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#traiter-un-signalement">
+                traité
+              </a>
+              par une éditeur ou par l’administrateur.
+            </p>
+            <p>
+              La création de signalement est ouverte à tous les réutilisateurs,
+              sans limite de volume, sur tout le territoire via{' '}
+              <a href="https://rnb.beta.gouv.fr/carte">
+                la carte des bâtiments
+              </a>{' '}
+              accessible sur le site du RNB.
+            </p>
+            <p>
+              Un signalement ne nécessite pas d’authentification. Un email peut
+              être renseigné dans le signalement de manière optionnelle.
+            </p>
+            <p>
+              Des signalements peuvent être soumis en masse par
+              l’administrateur.
+            </p>
+            <h2>Règles de mise à jour</h2>
+            <p>
+              La conception du RNB est pensée pour garantir 3 caractéristiques
+              clefs : l’unicité, la pérennité et la traçabilité des ID-RNB.
+            </p>
+            <p>
+              Les flux de données ainsi que leurs règles d’intégration sont
+              décrits dans le{' '}
+              <a href="https://rnb-fr.gitbook.io/documentation/cycle-de-vie-de-la-donnee">
+                cycle de vie de la donnée du RNB
+              </a>
+              .
+            </p>
+            <p>
+              Les imports automatiques de la BD Topo et de la BAN (faits par
+              l'administrateur) sont faits de telle manière à ne pas défaire la
+              contribution d'un éditeur. Par exemple, dans le cas où un éditeur
+              aurait détaché une adresse d'un bâtiment, l'import de la BAN ne
+              pourra pas recréer ce lien.
+            </p>
+            <h2>Détection d'anomalie</h2>
+            <p>
+              Des contrôles en amont d’actions d’édition préviennent
+              l’intégration d’erreurs. Certaines opérations non autorisées sont
+              bloquées avant d’être effectuées :
+            </p>
+            <ul>
+              <li>superposition de bâtiment</li>
+              <li>déplacement de bâtiment sur de grandes distances</li>
+              <li>création de bâtiments trop grands ou trop petits</li>
+            </ul>
+            <p>
+              Les processus suivants de monitoring sont en place pour détecter
+              d’éventuelles anomalies :
+            </p>
+            <ul>
+              <li>
+                un tableau de bord de suivi de l’activité sur le RNB (éditions,
+                signalements, création de compte) est alimenté en temps réel et
+                accessible à l’administrateur. Chaque matin, l’administrateur
+                contrôle le tableau de bord de suivi. Si une activité anormale
+                est constatée, celle-ci est immédiatement analysée
+              </li>
+              <li>
+                un outil de suivi des éditions effectuées est alimenté en temps
+                réel et accessible à l’administrateur. Cet outil est utilisé
+                lors de la vérification quotidienne en cas de doute de qualité
+                des éditions.
+              </li>
+              <li>
+                pour augmenter le seuil d’édition d’un éditeur, l’administrateur
+                contrôle un échantillon des éditions effectuées par ce compte
+                grâce à l’outil de suivi des éditions et l’historisation par
+                bâtiment, se renseigne sur les compétences bâti du compte
+                éditeur, et en valide la qualité
+              </li>
+              <li>
+                un contrôle de qualité sur un échantillon de 500 éditions est
+                effectué tous les 6 mois
+              </li>
+            </ul>
+            <h2>Procédure de récupération</h2>
+            <p>
+              Une sauvegarde du RNB de production est faite toutes les semaines,
+              la nuit du vendredi à samedi, et conservée 30 jours.
+            </p>
+            <p>Si une erreur est détectée : </p>
+            <ul>
+              <li>
+                si elle concerne un nombre d’éditeur restreint, l’administrateur
+                effectue un rollback des éditions faites par ces éditeurs. Il
+                est possible de faire un rollback par éditeur et sur une fenêtre
+                de temps donnée depuis les outils d'administration du RNB.
+              </li>
+              <li>
+                si la base est compromise plus largement, l’administrateur
+                restaure une sauvegarde de la base, avec un risque de perte
+                d’information qui ont été intégrées dans le RNB entre la date du
+                lancement de la procédure et la date de la sauvegarde.
+              </li>
+            </ul>
           </div>
         </div>
       </div>
