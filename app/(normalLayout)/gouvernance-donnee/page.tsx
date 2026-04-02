@@ -149,8 +149,9 @@ export default function RulesPage() {
               </li>
             </ul>
 
-            <h4>Droits d&apos;édition</h4>
-
+            <p>
+              <b>Droits d&apos;édition</b>
+            </p>
             <p>
               Toute édition doit faire l&apos;objet d&apos;une authentification
               préalable de l&apos;éditeur.
@@ -159,7 +160,10 @@ export default function RulesPage() {
               Toute personne ou organisation peut devenir éditeur en créant son
               compte sur le site RNB.
             </p>
-            <h4>Seuil d&apos;édition</h4>
+
+            <p>
+              <b>Seuil d&apos;édition</b>
+            </p>
             <p>
               Chaque éditeur a un seuil d&apos;édition, qui correspond à son
               nombre maximum d&apos;éditions autorisées. Par défaut, ce seuil
@@ -170,18 +174,6 @@ export default function RulesPage() {
               des éditions est déclenchée par l&apos;administrateur. Suite à
               cette vérification, le seuil est augmenté au cas par cas selon le
               résultat et les motivations de l&apos;éditeur.
-            </p>
-            <h4>Historisation</h4>
-            <p>
-              Toutes les modifications apportées aux bâtiments du RNB sont
-              historisées. Chaque ID-RNB dispose d&apos;un historique retraçant
-              les modifications apportées, la date de ces modifications,
-              l&apos;éditeur qui a effectué l&apos;édition.
-            </p>
-            <p>
-              Cette historisation garantit la traçabilité des ID-RNB et favorise
-              la transparence du réfénretiel. Elle est accessible à toutes et
-              tous, dans la page &quot;Historique de l&apos;identifiant&quot;.
             </p>
 
             <h3>Signaler</h3>
@@ -223,10 +215,12 @@ export default function RulesPage() {
             </p>
             <hr className="fr-my-4v" />
             <h2>Règles de mise à jour</h2>
+
             <p>
               La conception du RNB est pensée pour garantir 3 caractéristiques
               clefs : l’unicité, la pérennité et la traçabilité des ID-RNB.
             </p>
+
             <p>
               Les flux de données ainsi que leurs règles d’intégration sont
               décrits dans le{' '}
@@ -235,13 +229,28 @@ export default function RulesPage() {
               </a>
               .
             </p>
+
             <p>
-              Les imports automatiques de la BD Topo et de la BAN (faits par
-              l&apos;administrateur) sont conçus pour ne pas défaire la
-              contribution d&apos;un éditeur. Par exemple, dans le cas où un
-              éditeur aurait détaché une adresse d&apos;un bâtiment,
-              l&apos;import de la BAN ne pourra pas recréer ce lien.
+              Une seule règle de gestion de la concurrence entre éditions est
+              actuellement définie : un import de données, par exemple de la
+              BAN, de la BDTOPO ou de la BAL, (réalisable uniquement par
+              l’administrateur) ne peut pas défaire une édition. Par exemple,
+              dans le cas où un éditeur aurait supprimé un lien adresse -
+              bâtiment, l&apos;import de la BAN ne pourra pas recréer ce lien.
             </p>
+
+            <p>
+              Toutes les modifications apportées aux bâtiments du RNB sont
+              historisées. Chaque ID-RNB dispose d&apos;un historique retraçant
+              les modifications apportées, la date de ces modifications,
+              l&apos;éditeur qui a effectué l&apos;édition.
+            </p>
+            <p>
+              Cette historisation garantit la traçabilité des ID-RNB et favorise
+              la transparence du réfénretiel. Elle est accessible à toutes et
+              tous, dans la page &quot;Historique de l&apos;identifiant&quot;.
+            </p>
+
             <hr className="fr-my-4v" />
             <h2>Détection d&apos;anomalie</h2>
             <p>
@@ -313,18 +322,24 @@ export default function RulesPage() {
               <p>
                 <b>Pourquoi des règles de gouvernance ?</b>
               </p>
-              <p className="fr-mb-0">
+              <p>
                 L&apos;objectif de ces règles est de fédérer des parties
-                prenantes aux profils variés autour de règles communes et
-                garantir que le RNB reste un géocommun : c&apos;est-à-dire une
-                base ouverte, partagée et co-construite.{' '}
+                prenantes aux profils variés autour de règles communes et d'un
+                standard CNIG. Elle doivent garantir que le RNB reste un
+                géocommun : c&apos;est-à-dire une base ouverte, partagée et
+                co-construite.{' '}
+              </p>
+              <p className="fr-mb-0">
+                Pour ce faire, les règles de gouvernance de la donnée du RNB
+                assurent que le RNB est utilisable et utilisé, la pérennité dans
+                le temps du RNB, la qualité de la donnée RNB.
               </p>
             </div>
             <div className="block block--yellow">
               <p>
                 <b>
-                  Donnez votre avis pour faire évoluer les règles de gestion du
-                  RNB !
+                  Donnez votre avis pour faire évoluer les règles de gouvernance
+                  de la donnée !
                 </b>
               </p>
 
