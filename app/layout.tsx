@@ -44,6 +44,20 @@ heap.load("${settings.heapId}");
         </Script>
       </head>
       <body>
+        <div
+          style={{
+            backgroundColor: '#6feba7',
+            textAlign: 'center',
+            padding: '18px 12px',
+            fontSize: '16px',
+          }}
+        >
+          Gouvernance de la donnée RNB : découvrez les règles actuelles et
+          participez à leur évolution.{' '}
+          <a href="/gouvernance-donnee" style={{ fontWeight: 'bold' }}>
+            Donnez votre avis avant le 22 avril 2026 !
+          </a>
+        </div>
         <Suspense>
           <Providers>
             <RNBSessionProvider>
