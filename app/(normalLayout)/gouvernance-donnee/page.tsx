@@ -324,9 +324,9 @@ export default function RulesPage() {
               </p>
               <p>
                 L&apos;objectif de ces règles est de fédérer des parties
-                prenantes aux profils variés autour de règles communes et d'un
-                standard CNIG. Elle doivent garantir que le RNB reste un
-                géocommun : c&apos;est-à-dire une base ouverte, partagée et
+                prenantes aux profils variés autour de règles communes et
+                d&apos;un standard CNIG. Elle doivent garantir que le RNB reste
+                un géocommun : c&apos;est-à-dire une base ouverte, partagée et
                 co-construite.{' '}
               </p>
               <p className="fr-mb-0">
