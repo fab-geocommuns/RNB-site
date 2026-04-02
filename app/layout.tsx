@@ -46,10 +46,10 @@ heap.load("${settings.heapId}");
       <body>
         <div
           style={{
-            backgroundColor: '#e8edff',
+            backgroundColor: '#6feba7',
             textAlign: 'center',
-            padding: '10px 12px',
-            fontSize: '14px',
+            padding: '18px 12px',
+            fontSize: '16px',
           }}
         >
           Gouvernance de la donnée RNB : découvrez les règles actuelles et

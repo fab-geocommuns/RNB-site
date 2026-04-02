@@ -368,7 +368,10 @@ export default function RulesPage() {
                 semaine du 27 avril 2026{' '}
               </p>
               <div>
-                <a href="#" className="fr-btn fr-btn--primary">
+                <a
+                  href="https://forum.geocommuns.fr/t/appel-a-commentaire-jusquau-22-avril-regles-de-gouvernance-de-la-donnee-rnb/3123"
+                  className="fr-btn fr-btn--primary"
+                >
                   Participer à la discussion
                 </a>
               </div>
