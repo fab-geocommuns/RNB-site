@@ -8,14 +8,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import Input from '@codegouvfr/react-dsfr/Input';
 
-function isSafeRedirectUrl(url: string): boolean {
-  try {
-    const urlObj = new URL(url, window.location.origin);
-    return urlObj.origin === window.location.origin;
-  } catch (error) {
-    return false;
-  }
-}
+import { isSafeRedirectUrl } from '@/utils/isSafeRedirectUrl';
 
 export default function LoginForm() {
   const [credentialsError, setCredentialsError] = useState(false);

@@ -14,6 +14,7 @@ export const authOptions = {
         token.accessToken = user.token;
         token.username = user.username;
         token.groups = user.groups;
+        token.authProvider = user.authProvider;
       }
 
       return token;
@@ -24,6 +25,7 @@ export const authOptions = {
         session.accessToken = token.accessToken;
         session.username = token.username;
         session.groups = token.groups;
+        session.authProvider = token.authProvider;
       }
 
       return session;
@@ -58,6 +60,29 @@ export const authOptions = {
           console.error('Auth error:', error);
           return null;
         }
+      },
+    }),
+    CredentialsProvider({
+      id: 'proconnect',
+      name: 'ProConnect',
+      credentials: {
+        token: { type: 'text' },
+        username: { type: 'text' },
+      },
+      async authorize(credentials) {
+        if (!credentials?.token || !credentials?.username) {
+          return null;
+        }
+
+        // TODO: replace with a call to GET /auth/users/me/ once the
+        // backend endpoint exists, to validate the token and fetch groups.
+        return {
+          id: credentials.username,
+          token: credentials.token,
+          username: credentials.username,
+          groups: ['Contributors'],
+          authProvider: 'proconnect',
+        };
       },
     }),
   ],
