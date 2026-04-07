@@ -74,6 +74,8 @@
 .modal {
   background: white;
   position: absolute;
+  display: flex;
+  flex-direction: column;
 
   @media (min-width: $bp-md) {
     bottom: 30px;
@@ -85,6 +87,7 @@
   bottom: 12px;
   right: 12px;
   left: 12px;
+  top: 12px;
 
   z-index: 302;
 
@@ -138,6 +141,7 @@
     padding-left: $body-x-padding;
     padding-right: $body-x-padding;
     padding-top: 10px;
+    overflow-y: auto;
 
     .section {
       margin-bottom: 10px;
