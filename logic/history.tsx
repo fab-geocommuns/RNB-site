@@ -2,7 +2,11 @@ import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/
 
 export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
   if (historyItem.event?.type === 'creation') return 'Création';
+  if (historyItem.event?.type === 'revert_creation')
+    return 'Annulation de la création';
   if (historyItem.event?.type === 'update') return 'Mise à jour';
+  if (historyItem.event?.type === 'revert_update')
+    return "Annulation d'une mise à jour";
   if (historyItem.event?.type === 'deactivation') return 'Désactivation';
   if (historyItem.event?.type === 'reactivation') return 'Réactivation';
   if (historyItem.event?.type === 'merge') {
@@ -21,6 +25,8 @@ export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
       );
     }
   }
+  if (historyItem.event?.type === 'revert_merge')
+    return "Annulation d'une fusion";
   if (historyItem.event?.type === 'split') {
     if (historyItem.event?.details?.split_role === 'parent') {
       return (
@@ -33,12 +39,16 @@ export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
       return 'Création suite à une scission';
     }
   }
+  if (historyItem.event?.type === 'revert_split')
+    return "Annulation d'une scission";
   return historyItem.event?.type || 'Inconnu';
 }
 
 export function getHistoryShortTitle(historyItem: ApiHistoryItem): string {
   if (historyItem.event?.type === 'creation') return 'Créé';
+  if (historyItem.event?.type === 'revert_creation') return 'Création annulée';
   if (historyItem.event?.type === 'update') return 'Mis à jour';
+  if (historyItem.event?.type === 'revert_update') return 'Mise à jour annulée';
   if (historyItem.event?.type === 'deactivation') return 'Désactivé';
   if (historyItem.event?.type === 'reactivation') return 'Réactivé';
   if (historyItem.event?.type === 'merge') {
@@ -49,6 +59,7 @@ export function getHistoryShortTitle(historyItem: ApiHistoryItem): string {
       return 'Créé suite à fusion';
     }
   }
+  if (historyItem.event?.type === 'revert_merge') return 'Fusion annulée';
   if (historyItem.event?.type === 'split') {
     if (historyItem.event?.details?.split_role === 'parent') {
       return 'Scindé en ' + historyItem.event?.details?.split_children?.length;
@@ -57,6 +68,7 @@ export function getHistoryShortTitle(historyItem: ApiHistoryItem): string {
       return 'Créé suite à scission';
     }
   }
+  if (historyItem.event?.type === 'revert_split') return 'Scission annulée';
   return historyItem.event?.type || 'Inconnu';
 }
 
