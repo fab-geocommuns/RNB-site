@@ -166,3 +166,19 @@ h5.fr-mega-menu__category.fr-nav__link {
   content: '';
   display: none;
 }
+
+/* Anchor links on headings */
+.heading-anchor {
+  .anchor-link {
+    opacity: 0;
+    margin-left: 0.4em;
+    font-size: 0.85em;
+    text-decoration: none;
+    color: var(--grey-625-425);
+    transition: opacity 0.15s;
+  }
+
+  &:hover .anchor-link {
+    opacity: 1;
+  }
+}

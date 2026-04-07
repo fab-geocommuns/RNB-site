@@ -38,6 +38,7 @@ function cspMiddleware(request: NextRequest) {
   const mediaOrigins = [
     'https://rnb-open.s3.fr-par.scw.cloud/',
     'https://referentiel-national-du-batiment.ghost.io/',
+    'https://storage.ghost.io/',
     ...analyticsOrigins,
   ];
   // We allow `unsafe-inline` for the style-src directive because of https://github.com/vercel/next.js/issues/57415
