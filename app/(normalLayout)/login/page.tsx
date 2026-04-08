@@ -1,19 +1,9 @@
-// Session
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
-
-// url
 import { headers } from 'next/headers';
-
-// Components
-import LoginForm from '@/components/authentication/LoginForm';
-import CreateAccountForm from '@/components/authentication/CreateAccountForm';
 import pageTitle from '@/utils/pageTitle';
-
-// Styles
 import styles from '@/styles/login.module.scss';
-
-import summerStyles from '@/styles/summerGames.module.scss';
+import AuthBlock from '@/components/authentication/AuthBlock';
 
 export const metadata = pageTitle('Se connecter ou créer un compte');
 
@@ -52,33 +42,65 @@ export default async function LoginPage({
     }
   }
 
-  const enableCreateAccount = process.env.ENABLE_CREATE_ACCOUNT === 'true';
-
   return (
     <>
       <main className="fr-pt-md-14v" role="main">
         <div className="fr-container fr-container--fluid fr-mb-md-14v">
           <div className="fr-grid-row fr-grid-row--gutters">
-            <div className="fr-col-12 fr-col-md-6 fr-col-lg-6">
+            <div className="fr-col-12 fr-col-md-6">
               <div
                 className={`fr-container ${styles.shell} fr-px-md-12v fr-py-10v fr-py-md-14v `}
               >
-                <h2>Se connecter au RNB</h2>
-                <div>
-                  <LoginForm />
-                </div>
+                <AuthBlock />
               </div>
             </div>
-            <div className="fr-col-12 fr-col-md-6 fr-col-lg-6">
+            <div className="fr-col-12 fr-col-md-6">
               <div
-                className={`fr-container ${styles.shell} fr-px-md-12v fr-py-10v fr-py-md-14v `}
+                className={`fr-container fr-px-md-12v fr-py-10v fr-py-md-14v `}
               >
-                {enableCreateAccount && (
-                  <>
-                    <h3>Créer un compte RNB</h3>
-                    <CreateAccountForm />
-                  </>
-                )}
+                <h3>Le RNB est participatif</h3>
+                <p>
+                  <span className="stab stab--yellow">
+                    <b>
+                      Créer un compte vous permet de participer à l'amélioration
+                      du RNB.
+                    </b>
+                  </span>
+                </p>
+                <p>
+                  Vous pourrez directement éditer le référentiel, ajouter un
+                  bâtiment, corriger une adresse, désactiver les erreurs, ...
+                </p>
+                <p>
+                  Services de l'État, collectivités, citoyens, entreprises ou
+                  associations sont invités à apporter leur pierre au RNB.
+                </p>
+
+                <p>
+                  Le RNB est entièrement transparent. Chaque contribution est
+                  historisée, tracée et mise à disposition de tous.
+                </p>
+                <h6 className="fr-mt-12v">Consulter les données sans compte</h6>
+                <p>
+                  Accéder aux données du RNB est gratuit et ne nécessite pas de
+                  compte.
+                </p>
+                <ul>
+                  <li>
+                    <a href="/carte">Parcourir la carte des bâtiments</a>
+                  </li>
+                  <li>
+                    <a
+                      target="_blank"
+                      href="https://www.data.gouv.fr/datasets/referentiel-national-des-batiments"
+                    >
+                      Télécharger le RNB
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/doc">Accéder à la documentation technique</a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
