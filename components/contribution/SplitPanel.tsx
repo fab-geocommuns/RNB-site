@@ -6,7 +6,7 @@ import {
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import styles from '@/styles/contribution/splitPanel.module.scss';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
