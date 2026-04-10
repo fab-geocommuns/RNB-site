@@ -12,6 +12,7 @@ import { BuildingStatusType } from '../contribution/contribution-types';
 import { BuildingAddressType } from '@/components/contribution/types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { fetchBuilding } from '@/utils/requests';
+import { centroid } from '@turf/turf';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -26,30 +27,27 @@ export type MergeInfos = {
   newBuilding: SelectedBuilding | null;
 };
 
+export type CutLine = {
+  geometry: GeoJSON.Geometry;
+  featureId: string | number | undefined;
+};
+
 export type SplitInfos = {
   splitCandidateId: string | null;
   // where is the split candidate located ? Used for address search
   location: [number, number] | null;
   selectedChildIndex: number | null;
   children: SplitChild[];
+  // New fields for cut-based split
+  cutLines: CutLine[];
+  candidateShape: GeoJSON.Geometry | null;
+  cutStep: 'drawing' | 'done';
 };
 
 export type SplitChild = {
   status: BuildingStatusType;
   shape: GeoJSON.Geometry | null;
-  shapeId: string | null | undefined | number;
   addresses: BuildingAddressType[];
-};
-
-const createEmptySplitChildren = (n: number): SplitChild[] => {
-  return Array(n)
-    .fill({})
-    .map((_item) => ({
-      status: 'constructed',
-      shape: null,
-      shapeId: null,
-      addresses: [],
-    }));
 };
 
 export type EditionStore = {
@@ -85,7 +83,10 @@ const initialState: EditionStore = {
     splitCandidateId: null,
     location: null,
     selectedChildIndex: null,
-    children: createEmptySplitChildren(2),
+    children: [],
+    cutLines: [],
+    candidateShape: null,
+    cutStep: 'drawing',
   },
 
   // Summer challenge
@@ -102,9 +103,12 @@ export const editionSlice = createSlice({
       state.merge.candidates = [];
       state.merge.newBuilding = null;
       state.split.selectedChildIndex = null;
-      state.split.children = createEmptySplitChildren(2);
+      state.split.children = [];
       state.split.location = null;
       state.split.splitCandidateId = null;
+      state.split.cutLines = [];
+      state.split.candidateShape = null;
+      state.split.cutStep = 'drawing';
       state.isLoading = false;
     },
     setCandidates(state, action: PayloadAction<MergeCandidate[]>) {
@@ -150,23 +154,8 @@ export const editionSlice = createSlice({
       state.split.splitCandidateId = action.payload.rnb_id;
       state.split.location = action.payload.location;
     },
-    setSplitChildrenNumber(state, action: PayloadAction<number>) {
-      const n = action.payload;
-      state.split.children = createEmptySplitChildren(n);
-    },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
-      const selectedChildIndex = action.payload;
-      state.split.selectedChildIndex = selectedChildIndex;
-      if (
-        selectedChildIndex !== null &&
-        state.split.selectedChildIndex !== state.split.children.length
-      ) {
-        if (state.split.children[selectedChildIndex].shapeId) {
-          state.updateCreate.shapeInteractionMode = 'updating';
-        } else {
-          state.updateCreate.shapeInteractionMode = 'drawing';
-        }
-      }
+      state.split.selectedChildIndex = action.payload;
     },
     setSplitChildStatus(state, action: PayloadAction<BuildingStatusType>) {
       if (state.split.selectedChildIndex !== null) {
@@ -183,45 +172,65 @@ export const editionSlice = createSlice({
           action.payload;
       }
     },
-    setSplitChildBuildingShape(
+    // Cut-based split actions
+    setCandidateShape(state, action: PayloadAction<GeoJSON.Geometry>) {
+      state.split.candidateShape = action.payload;
+    },
+    addCutLine(
       state,
       action: PayloadAction<{
-        shape: GeoJSON.Geometry;
-        shapeId: string | undefined | number;
+        geometry: GeoJSON.Geometry;
+        featureId: string | number | undefined;
       }>,
     ) {
-      if (state.split.selectedChildIndex !== null) {
-        state.split.children[state.split.selectedChildIndex].shape =
-          action.payload.shape;
-        state.split.children[state.split.selectedChildIndex].shapeId =
-          action.payload.shapeId;
-      }
+      state.split.cutLines.push({
+        geometry: action.payload.geometry,
+        featureId: action.payload.featureId,
+      });
     },
-    updateSplitBuildingShape(
-      state,
-      action: PayloadAction<{
-        shape: GeoJSON.Geometry;
-        shapeId: string | undefined | number;
-      }>,
-    ) {
-      if (state.split.selectedChildIndex !== null) {
-        const childIndex = state.split.children.findIndex(
-          (child) => child.shapeId === action.payload.shapeId,
-        );
-        state.split.children[childIndex].shape = action.payload.shape;
-      }
-    },
-    setCurrentChildFromShapeId(
-      state,
-      action: PayloadAction<string | undefined | number>,
-    ) {
-      const shapeId = action.payload;
-      const childIndex = state.split.children.findIndex(
-        (child) => child.shapeId === shapeId,
+    removeCutLine(state, action: PayloadAction<string | number | undefined>) {
+      state.split.cutLines = state.split.cutLines.filter(
+        (line) => line.featureId !== action.payload,
       );
-      if (childIndex >= 0) {
-        state.split.selectedChildIndex = childIndex;
-      }
+    },
+    removeLastCutLine(state) {
+      state.split.cutLines.pop();
+    },
+    clearCutLines(state) {
+      state.split.cutLines = [];
+    },
+    setCutStep(state, action: PayloadAction<'drawing' | 'done'>) {
+      state.split.cutStep = action.payload;
+    },
+    validateCut(
+      state,
+      action: PayloadAction<GeoJSON.Feature<GeoJSON.Polygon>[]>,
+    ) {
+      // Sort children in reading order (top to bottom, left to right) based
+      // on their centroid, so the numbering displayed on the map feels
+      // natural to the user.
+      const items = action.payload.map((feature) => {
+        const [lon, lat] = centroid(feature).geometry.coordinates;
+        return { feature, lon, lat };
+      });
+      const lats = items.map((i) => i.lat);
+      const latRange = Math.max(...lats) - Math.min(...lats);
+      // Two centroids whose latitude difference is below this tolerance are
+      // considered to be on the same "row" and ordered left-to-right.
+      const rowTolerance = latRange * 0.3;
+      items.sort((a, b) => {
+        if (Math.abs(a.lat - b.lat) > rowTolerance) return b.lat - a.lat;
+        return a.lon - b.lon;
+      });
+
+      // Create children from the computed sub-polygons
+      state.split.children = items.map(({ feature }) => ({
+        status: 'constructed' as BuildingStatusType,
+        shape: feature.geometry,
+        addresses: [],
+      }));
+      state.split.cutStep = 'done';
+      state.split.selectedChildIndex = 0;
     },
   },
   extraReducers: (builder) => {
@@ -308,6 +317,13 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
               location: building.point.coordinates,
             }),
           );
+          // Fetch precise shape from API
+          const fetched = await fetchBuilding(building.rnb_id);
+          if (fetched?.shape) {
+            listenerApi.dispatch(
+              Actions.edition.setCandidateShape(fetched.shape),
+            );
+          }
         }
         // now we can safely unselect the building
         listenerApi.dispatch(Actions.map.unselectItem());
