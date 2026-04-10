@@ -77,6 +77,7 @@ const styles = [
       ['==', '$type', 'Point'],
       ['==', 'meta', 'vertex'],
       ['!=', 'mode', 'simple_select'],
+      ['!=', 'mode', 'draw_line_string'],
     ],
     paint: {
       'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 12, 8],
@@ -91,6 +92,7 @@ const styles = [
       ['==', '$type', 'Point'],
       ['==', 'meta', 'vertex'],
       ['!=', 'mode', 'simple_select'],
+      ['!=', 'mode', 'draw_line_string'],
     ],
     paint: {
       'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 8, 5],
@@ -103,7 +105,11 @@ const styles = [
   {
     id: 'gl-draw-midpoint',
     type: 'circle',
-    filter: ['all', ['==', 'meta', 'midpoint']],
+    filter: [
+      'all',
+      ['==', 'meta', 'midpoint'],
+      ['!=', 'mode', 'draw_line_string'],
+    ],
     paint: {
       'circle-radius': 7,
       'circle-color': green,
