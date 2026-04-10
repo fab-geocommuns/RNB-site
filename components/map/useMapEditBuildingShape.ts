@@ -329,6 +329,10 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
 
   useEffect(() => {
     if (operation === null) {
+      // If we were in split mode, remove any drawn cut lines as well
+      if (prevOperationRef.current === 'split' && drawRef.current) {
+        drawRef.current.deleteAll();
+      }
       deleteFeatures(drawRef.current);
       selectedBuildingRef.current = null;
     }
