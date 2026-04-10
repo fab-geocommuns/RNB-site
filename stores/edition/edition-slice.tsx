@@ -12,6 +12,7 @@ import { BuildingStatusType } from '../contribution/contribution-types';
 import { BuildingAddressType } from '@/components/contribution/types';
 import { SelectedBuilding } from '@/stores/map/map-slice';
 import { fetchBuilding } from '@/utils/requests';
+import { centroid } from '@turf/turf';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
@@ -205,8 +206,25 @@ export const editionSlice = createSlice({
       state,
       action: PayloadAction<GeoJSON.Feature<GeoJSON.Polygon>[]>,
     ) {
+      // Sort children in reading order (top to bottom, left to right) based
+      // on their centroid, so the numbering displayed on the map feels
+      // natural to the user.
+      const items = action.payload.map((feature) => {
+        const [lon, lat] = centroid(feature).geometry.coordinates;
+        return { feature, lon, lat };
+      });
+      const lats = items.map((i) => i.lat);
+      const latRange = Math.max(...lats) - Math.min(...lats);
+      // Two centroids whose latitude difference is below this tolerance are
+      // considered to be on the same "row" and ordered left-to-right.
+      const rowTolerance = latRange * 0.3;
+      items.sort((a, b) => {
+        if (Math.abs(a.lat - b.lat) > rowTolerance) return b.lat - a.lat;
+        return a.lon - b.lon;
+      });
+
       // Create children from the computed sub-polygons
-      state.split.children = action.payload.map((feature) => ({
+      state.split.children = items.map(({ feature }) => ({
         status: 'constructed' as BuildingStatusType,
         shape: feature.geometry,
         addresses: [],
