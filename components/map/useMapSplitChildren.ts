@@ -11,7 +11,7 @@ export const LAYER_SPLIT_CHILDREN_BORDER = 'split_children_border';
 export const LAYER_SPLIT_CHILDREN_LABEL = 'split_children_label';
 
 const SELECTED_COLOR = '#31e060';
-const UNSELECTED_COLOR = '#1452e3';
+const UNSELECTED_COLOR = '#6a14e3';
 
 /**
  * Display split children polygons on the map, highlighting the one
