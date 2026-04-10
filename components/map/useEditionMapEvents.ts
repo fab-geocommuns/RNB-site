@@ -217,6 +217,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     map,
     shapeInteractionMode,
     operation,
+    splitCandidateId,
     selectedBuildingRnbId,
     buildingNewShape,
   ]);

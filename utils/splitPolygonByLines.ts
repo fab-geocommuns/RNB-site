@@ -10,7 +10,7 @@ import {
   pointOnFeature,
   booleanPointInPolygon,
 } from '@turf/turf';
-import type { Feature, Polygon, LineString } from 'geojson';
+import type { Feature, Polygon, MultiPolygon, LineString } from 'geojson';
 
 /**
  * Split a polygon by a single line.
@@ -82,7 +82,11 @@ export function splitPolygonByLines(
   if (!polygonGeometry || lines.length === 0) return null;
 
   // Wrap the polygon geometry as a Feature
-  const coords = (polygonGeometry as Polygon).coordinates;
+  // Handle both Polygon and MultiPolygon geometries
+  const coords =
+    polygonGeometry.type === 'MultiPolygon'
+      ? (polygonGeometry as MultiPolygon).coordinates[0]
+      : (polygonGeometry as Polygon).coordinates;
   let currentPolygons: Feature<Polygon>[] = [turfPolygon(coords)];
 
   for (const lineGeom of lines) {
@@ -93,16 +97,21 @@ export function splitPolygonByLines(
     };
 
     const nextPolygons: Feature<Polygon>[] = [];
+    let lineDidSplit = false;
 
     for (const poly of currentPolygons) {
       const pieces = splitPolygonByLine(poly, line);
       if (pieces && pieces.length >= 2) {
         nextPolygons.push(...pieces);
+        lineDidSplit = true;
       } else {
         // Line didn't split this sub-polygon — keep it as-is
         nextPolygons.push(poly);
       }
     }
+
+    // If this line didn't split any sub-polygon, the cut is invalid
+    if (!lineDidSplit) return null;
 
     currentPolygons = nextPolygons;
   }
