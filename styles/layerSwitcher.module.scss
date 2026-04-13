@@ -71,6 +71,10 @@
   border-radius: 3px;
 }
 
+.modalWithReports {
+  margin-top: 65px;
+}
+
 .modal {
   background: white;
   position: absolute;
@@ -80,7 +84,7 @@
   @media (min-width: $bp-md) {
     bottom: 30px;
     right: 50px;
-    width: 300px;
+    width: 312px;
     left: auto;
   }
 
