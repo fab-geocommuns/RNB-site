@@ -302,8 +302,8 @@ export default function RulesPage() {
               hébergeurs.
             </p>
             <p>
-              Un "snapshot" quotidien de la base est également réalisé et
-              conservé 20 jours sur un site chez un hébergeur.
+              Un &quot;snapshot&quot; quotidien de la base est également réalisé
+              et conservé 20 jours sur un site chez un hébergeur.
             </p>
             <p>Si une erreur est détectée : </p>
             <ul>
