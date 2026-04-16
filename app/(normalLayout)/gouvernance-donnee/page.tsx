@@ -297,8 +297,13 @@ export default function RulesPage() {
             <hr className="fr-my-4v" />
             <h2>Procédure de récupération</h2>
             <p>
-              Une sauvegarde du RNB de production est faite toutes les semaines,
-              la nuit du vendredi à samedi, et conservée 30 jours.
+              Une sauvegarde du RNB est faite toutes les semaines, la nuit du
+              vendredi à samedi, et conservée 30 jours sur deux sites chez deux
+              hébergeurs.
+            </p>
+            <p>
+              Un &quot;snapshot&quot; quotidien de la base est également réalisé
+              et conservé 20 jours sur un site chez un hébergeur.
             </p>
             <p>Si une erreur est détectée : </p>
             <ul>
