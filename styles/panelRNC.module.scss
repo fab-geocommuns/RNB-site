@@ -1,0 +1,113 @@
+.trigger {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 200;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #1a73e8;
+  background: white;
+  color: #1a73e8;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: #1a73e8;
+    color: white;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 0 4.5rem 1rem;
+}
+
+.panel {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 395px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  gap: 8px;
+}
+
+.navBtn {
+  background: none;
+  border: 1px solid #1a73e8;
+  color: #1a73e8;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #1a73e8;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.badge {
+  display: inline-block;
+  background: #e8f0fd;
+  color: #1a56c4;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.content {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555;
+}
