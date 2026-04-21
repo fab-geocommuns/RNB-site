@@ -22,25 +22,15 @@ export default function AuthBlock() {
 
   return (
     <>
-      <h2 className={styles.titleShell}>Accès direct</h2>
+      <h2 className={styles.titleShell}>
+        {displayedClassicForm === 'login' ? 'Se connecter' : "S'inscrire"} avec
+        Pro Connect
+      </h2>
       <ProFranceConnect />
 
       <div className={styles.orSeparator}>ou</div>
 
-      <div className={styles.formSwitcherShell}>
-        <i className="fr-icon-refresh-fill" />
-        {displayedClassicForm == 'signup' && (
-          <a href="#" onClick={(e) => handleFormSwitcherClick(e, 'login')}>
-            Afficher le formulaire de connexion
-          </a>
-        )}
-
-        {displayedClassicForm == 'login' && (
-          <a href="#" onClick={(e) => handleFormSwitcherClick(e, 'signup')}>
-            Afficher le formulaire d'inscription
-          </a>
-        )}
-      </div>
+      <div className={styles.formSwitcherShell}></div>
       <div className={styles.titleShell}>
         <h2>
           {displayedClassicForm == 'login'
@@ -52,6 +42,20 @@ export default function AuthBlock() {
       <ClassicSignInSignUp
         displayedForm={displayedClassicForm as 'login' | 'signup'}
       />
+
+      <div className="fr-mt-12v">
+        <i className="fr-icon-refresh-fill" />
+        {displayedClassicForm == 'login' && (
+          <a href="#" onClick={(e) => handleFormSwitcherClick(e, 'signup')}>
+            Afficher le formulaire d'inscription
+          </a>
+        )}
+        {displayedClassicForm == 'signup' && (
+          <a href="#" onClick={(e) => handleFormSwitcherClick(e, 'login')}>
+            Afficher le formulaire de connexion
+          </a>
+        )}
+      </div>
     </>
   );
 }
