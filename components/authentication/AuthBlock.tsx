@@ -1,5 +1,3 @@
-'use client';
-
 import styles from '@/styles/login.module.scss';
 import ProFranceConnect from '@/components/authentication/ProFranceConnect';
 import ClassicSignInSignUp from '@/components/authentication/ClassicSignInSignUp';
