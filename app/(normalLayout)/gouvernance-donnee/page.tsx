@@ -361,7 +361,7 @@ export default function RulesPage() {
                   </a>
                 </b>
                 . Le 1er GT Bâti dédié à la réflexion sur les règles de
-                gouvernance de la donnée RNB a lieu le 27 avril 2026."
+                gouvernance de la donnée RNB a lieu le 27 avril 2026.
               </p>
               <p>
                 <b>
