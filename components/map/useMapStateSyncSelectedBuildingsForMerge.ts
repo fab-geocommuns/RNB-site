@@ -33,28 +33,30 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
   useEffect(() => {
     const prevSelected = prevSelectedRef.current;
     const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
-    if (map && candidatesToMerge) {
-      if (candidatesToMerge.length === 0 && prevSelected.length) {
-        setFeatureStateInLayers(sources, map, prevSelected[0], false);
-      }
-      candidatesToMerge.map((candidate) => {
-        let inPanel = true;
-        let id = candidate;
-        if (candidatesToMerge.length < prevSelected.length) {
-          const filterIdToRemove = prevSelected.filter(
-            (item) =>
-              !candidatesToMerge.some((candidate) => candidate === item),
-          );
-          inPanel = false;
-          id = filterIdToRemove[0];
+    if (operation == 'merge') {
+      if (map && candidatesToMerge) {
+        if (candidatesToMerge.length === 0 && prevSelected.length) {
+          setFeatureStateInLayers(sources, map, prevSelected[0], false);
         }
-        setFeatureStateInLayers(sources, map, id, inPanel);
-      });
+        candidatesToMerge.map((candidate) => {
+          let inPanel = true;
+          let id = candidate;
+          if (candidatesToMerge.length < prevSelected.length) {
+            const filterIdToRemove = prevSelected.filter(
+              (item) =>
+                !candidatesToMerge.some((candidate) => candidate === item),
+            );
+            inPanel = false;
+            id = filterIdToRemove[0];
+          }
+          setFeatureStateInLayers(sources, map, id, inPanel);
+        });
+      }
+      if (map && !selectedItem && !candidatesToMerge.length) {
+        removeFeatureStateInLayers(sources, map);
+      }
+      prevSelectedRef.current = candidatesToMerge;
     }
-    if (map && !selectedItem && !candidatesToMerge.length) {
-      removeFeatureStateInLayers(sources, map);
-    }
-    prevSelectedRef.current = candidatesToMerge;
   }, [candidatesToMerge, operation]);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
       };
       map.on('click', handleClickEvent);
       const prevOperation = prevOperationRef.current;
-      if (operation !== prevOperation) {
+      if (operation !== 'merge' && prevOperation === 'merge') {
         removeFeatureStateInLayers(sources, map);
       }
       prevOperationRef.current = operation;
