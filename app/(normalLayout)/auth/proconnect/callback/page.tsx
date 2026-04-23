@@ -31,7 +31,9 @@ export default function ProConnectCallbackPage() {
     }
 
     if (errorParam) {
-      setError(errorDescription || errorParam);
+      setError(
+        "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.",
+      );
       return;
     }
 
