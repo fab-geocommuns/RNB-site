@@ -1,4 +1,44 @@
 .shell {
-  background: var(--background-alt-grey);
-  padding: 20px;
+  background: var(--background-alt-blue-france);
+  //padding: 20px;
+}
+
+.orSeparator {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.5rem;
+  text-transform: uppercase;
+  gap: 10px;
+
+  margin: 50px 0;
+
+  &::before,
+  &::after {
+    background-color: var(--border-plain-grey);
+    content: '';
+    display: inline-flex;
+    height: 2px;
+    width: 100%;
+  }
+}
+
+.titleShell {
+  margin-bottom: 30px;
+}
+
+.formSwitcherShell {
+  display: flex;
+  gap: 5px;
+  font-size: 1rem;
+  margin-bottom: 30px;
+
+  a,
+  i {
+    color: var(--background-action-high-blue-france);
+  }
 }
