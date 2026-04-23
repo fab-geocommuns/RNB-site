@@ -86,9 +86,6 @@ function SplitBuildingInitialStep() {
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
-  const candidateShape = useSelector(
-    (state: RootState) => state.edition.split.candidateShape,
-  );
 
   return (
     <GenericPanel
