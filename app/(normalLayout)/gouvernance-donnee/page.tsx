@@ -161,8 +161,8 @@ export default function RulesPage() {
               compte sur le site RNB.
             </p>
             <p>
-              La création de compte nécessite la validation d'un captcha et la
-              fourniture d'une adresse email vérifiée.
+              La création de compte nécessite la validation d&apos;un captcha et
+              la fourniture d&apos;une adresse email vérifiée.
             </p>
 
             <p>
