@@ -160,6 +160,10 @@ export default function RulesPage() {
               Toute personne ou organisation peut devenir éditeur en créant son
               compte sur le site RNB.
             </p>
+            <p>
+              La création de compte nécessite la validation d&apos;un captcha et
+              la fourniture d&apos;une adresse email vérifiée.
+            </p>
 
             <p>
               <b>Seuil d&apos;édition</b>
