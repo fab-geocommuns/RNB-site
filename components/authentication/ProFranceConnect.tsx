@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { ProConnectButton } from '@codegouvfr/react-dsfr/ProConnectButton';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import { Loader } from '@/components/Loader';
@@ -7,6 +8,7 @@ import { Loader } from '@/components/Loader';
 export default function ProFranceConnect() {
   const [proConnectError, setProConnectError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
 
   const handleProConnect = async () => {
     setProConnectError(false);
@@ -16,6 +18,11 @@ export default function ProFranceConnect() {
       '/auth/proconnect/callback',
       window.location.origin,
     );
+
+    const redirect = searchParams.get('redirect');
+    if (redirect) {
+      callbackUrl.searchParams.set('redirect', redirect);
+    }
 
     try {
       const res = await fetch(
