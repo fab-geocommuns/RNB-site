@@ -244,6 +244,12 @@ export default function CreateAccountForm() {
           />
         )}
       </div>
+      <p className="fr-mt-3w">
+        Vous avez déjà un compte RNB ?{' '}
+        <a href="/connexion" className="fr-link">
+          Connectez-vous
+        </a>
+      </p>
     </form>
   );
 }

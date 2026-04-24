@@ -131,6 +131,12 @@ export default function LoginForm() {
           Se connecter
         </button>
       </form>
+      <p className="fr-mt-3w">
+        Vous n&apos;avez pas de compte RNB ?{' '}
+        <a href="/inscription" className="fr-link">
+          Inscrivez-vous
+        </a>
+      </p>
     </>
   );
 }
