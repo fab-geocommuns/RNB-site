@@ -346,24 +346,33 @@ export default function RulesPage() {
             </div>
             <div className="block block--yellow">
               <p>
-                <b>
-                  Donnez votre avis pour faire évoluer les règles de gouvernance
-                  de la donnée !
-                </b>
+                <b>Les règles de gouvernance de la donnée sont effectives</b>
               </p>
 
               <p>
-                <b>Où ?</b>
-                <br />
-                Sur la discussion dédiée du forum Géocommuns
+                Elles sont actuellement soumises au GT Bâti du CNIG pour
+                identifier d&apos;éventuelles adaptations nécessaires avant
+                l&apos;étape de validation du standard Bâti.
               </p>
               <p>
-                <b>Quand ?</b>
-                <br />
-                Du 31 mars au 22 avril 2026
+                <b>
+                  Suivez la réflexion du GT Bâti{' '}
+                  <a
+                    href="https://cnig.gouv.fr/gt-bati-a25939.html"
+                    target="_blank"
+                  >
+                    ici
+                  </a>
+                </b>
+                . Le 1er GT Bâti dédié à la réflexion sur les règles de
+                gouvernance de la donnée RNB a lieu le 27 avril 2026.
               </p>
               <p>
-                <b>Qui ?</b> <br />
+                <b>
+                  Vous souhaitez partager un retour ou une question sur les
+                  règles ?{' '}
+                </b>{' '}
+                <br />
                 Toutes vos réflexions sont les bienvenues, que vous soyez
                 spécialiste de la geodata, partie prenante de l’ecosystème bâti
                 (gestionnaires de parc bâtimentaire, collectivités
@@ -371,17 +380,12 @@ export default function RulesPage() {
                 entreprises, opérateurs) ou de l’open data et des communs.
               </p>
 
-              <p>
-                Vos contributions seront présentées et alimenteront la réflexion
-                sur la gouvernance de la donnée lors du GT Bâti qui aura lieu la
-                semaine du 27 avril 2026{' '}
-              </p>
               <div>
                 <a
                   href="https://forum.geocommuns.fr/t/appel-a-commentaire-jusquau-22-avril-regles-de-gouvernance-de-la-donnee-rnb/3123"
                   className="fr-btn fr-btn--primary"
                 >
-                  Participer à la discussion
+                  Echanger avec la communauté
                 </a>
               </div>
             </div>
