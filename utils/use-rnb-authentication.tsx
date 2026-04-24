@@ -40,7 +40,7 @@ export const useRNBAuthentication = (options?: {
       status !== 'authenticated'
     ) {
       const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      window.location.href = `/login?redirect=${encodeURIComponent(currentLocation)}`;
+      window.location.href = `/connexion?redirect=${encodeURIComponent(currentLocation)}`;
     }
   }, [status, options?.require]);
 

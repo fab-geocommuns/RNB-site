@@ -78,7 +78,7 @@ export default function ProConnectCallbackPage() {
               closable={false}
             />
             <div className="fr-mt-3w">
-              <Link href="/login" className="fr-link">
+              <Link href="/connexion" className="fr-link">
                 Retour à la page de connexion
               </Link>
             </div>

@@ -44,7 +44,7 @@ export default function LoginBtn() {
     );
   } else {
     return (
-      <Link href="/login" className="fr-btn fr-btn--secondary">
+      <Link href="/connexion" className="fr-btn fr-btn--secondary">
         Se connecter
       </Link>
     );

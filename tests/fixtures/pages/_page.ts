@@ -33,7 +33,7 @@ export abstract class RNBPage {
   }
 
   async login() {
-    await this.page.goto('/login');
+    await this.page.goto('/connexion');
     await this.loginForm
       .getByLabel('Email')
       .fill(process.env.TEST_ACCOUNT_EMAIL!);

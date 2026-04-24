@@ -116,7 +116,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       let loginQA = {
         iconId: 'fr-icon-account-circle-line',
         linkProps: {
-          href: '/login?display=login&redirect=' + redirectUrl,
+          href: '/connexion?redirect=' + redirectUrl,
         },
         text: 'Se connecter',
       };
@@ -125,7 +125,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       let registerQA = {
         iconId: 'fr-icon-add-circle-fill',
         linkProps: {
-          href: '/login?display=signup',
+          href: '/inscription',
         },
         text: "S'inscrire",
       };
@@ -158,7 +158,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           historisée, tracée et mise à disposition de tous.
         </p>
         <div className="fr-btns-group fr-btns-group--inline-md">
-          <Link href="/login" className="fr-btn fr-btn--primary">
+          <Link href="/inscription" className="fr-btn fr-btn--primary">
             S&apos;inscrire
           </Link>
           <Link href="/guide" className="fr-btn fr-btn--tertiary">
