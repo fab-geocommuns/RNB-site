@@ -41,6 +41,7 @@ export type SplitInfos = {
   // New fields for cut-based split
   cutLines: CutLine[];
   candidateShape: GeoJSON.Geometry | null;
+  candidateAddresses: BuildingAddressType[];
   cutStep: 'drawing' | 'done';
 };
 
@@ -86,6 +87,7 @@ const initialState: EditionStore = {
     children: [],
     cutLines: [],
     candidateShape: null,
+    candidateAddresses: [],
     cutStep: 'drawing',
   },
 
@@ -108,6 +110,7 @@ export const editionSlice = createSlice({
       state.split.splitCandidateId = null;
       state.split.cutLines = [];
       state.split.candidateShape = null;
+      state.split.candidateAddresses = [];
       state.split.cutStep = 'drawing';
       state.isLoading = false;
     },
@@ -176,6 +179,9 @@ export const editionSlice = createSlice({
     setCandidateShape(state, action: PayloadAction<GeoJSON.Geometry>) {
       state.split.candidateShape = action.payload;
     },
+    setCandidateAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
+      state.split.candidateAddresses = action.payload;
+    },
     addCutLine(
       state,
       action: PayloadAction<{
@@ -223,11 +229,13 @@ export const editionSlice = createSlice({
         return a.lon - b.lon;
       });
 
-      // Create children from the computed sub-polygons
+      // Create children from the computed sub-polygons. By default each
+      // child inherits the parent building's addresses so the user can simply
+      // remove what doesn't apply rather than re-entering them.
       state.split.children = items.map(({ feature }) => ({
         status: 'constructed' as BuildingStatusType,
         shape: feature.geometry,
-        addresses: [],
+        addresses: [...state.split.candidateAddresses],
       }));
       state.split.cutStep = 'done';
       state.split.selectedChildIndex = 0;
@@ -322,6 +330,11 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
           if (fetched?.shape) {
             listenerApi.dispatch(
               Actions.edition.setCandidateShape(fetched.shape),
+            );
+          }
+          if (fetched?.addresses) {
+            listenerApi.dispatch(
+              Actions.edition.setCandidateAddresses(fetched.addresses),
             );
           }
         }

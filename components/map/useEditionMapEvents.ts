@@ -143,6 +143,11 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                 if (building?.shape) {
                   dispatch(Actions.edition.setCandidateShape(building.shape));
                 }
+                if (building?.addresses) {
+                  dispatch(
+                    Actions.edition.setCandidateAddresses(building.addresses),
+                  );
+                }
               });
             }
           }
