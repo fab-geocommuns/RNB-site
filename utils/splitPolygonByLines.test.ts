@@ -72,4 +72,45 @@ describe('splitPolygonByLines', () => {
     const sumArea = result!.reduce((acc, p) => acc + area(p), 0);
     expect(sumArea).toBeCloseTo(totalArea, 5);
   });
+
+  it('does not produce pieces outside the original polygon with a tangled multi-segment cut', () => {
+    const polygon: Polygon = {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-0.567081, 44.8324741],
+          [-0.566101, 44.8324677],
+          [-0.5661246, 44.8318941],
+          [-0.5670633, 44.8318685],
+          [-0.567081, 44.8324741],
+        ],
+      ],
+    };
+
+    const tangledCut: LineString = {
+      type: 'LineString',
+      coordinates: [
+        [-0.5668559773100696, 44.83252641481019],
+        [-0.5671894566903006, 44.83226575319969],
+        [-0.5666076933923705, 44.832550582052306],
+        [-0.56721623240756, 44.832093128967216],
+        [-0.5664153950633022, 44.832550582052306],
+        [-0.5672040616272227, 44.831796214078565],
+        [-0.566242569983018, 44.832548855820704],
+        [-0.5669143970553137, 44.831777225283645],
+        [-0.5659821152849531, 44.832447008086916],
+        [-0.5665322345536481, 44.83176341524725],
+        [-0.5659796811283968, 44.832062056550626],
+        [-0.5663034238847899, 44.831789309062856],
+      ],
+    };
+
+    const result = splitPolygonByLines(polygon, [tangledCut]);
+
+    expect(result).not.toBeNull();
+
+    const totalArea = area(polygon);
+    const sumArea = result!.reduce((acc, p) => acc + area(p), 0);
+    expect(sumArea).toBeCloseTo(totalArea, 3);
+  });
 });

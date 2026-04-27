@@ -5,8 +5,8 @@ import {
   lineIntersect,
   truncate,
   polygonize,
-  pointOnFeature,
-  booleanPointInPolygon,
+  intersect,
+  area,
 } from '@turf/turf';
 import type {
   Feature,
@@ -119,10 +119,16 @@ function splitPolygonByLine(
   // Reconstruct polygons from the line segments
   const polygonized = polygonize(allPieces);
 
-  // Keep only polygons that fall inside the original polygon
+  // Keep only polygons that are (almost entirely) inside the original polygon.
+  // Using point-in-polygon checks is unreliable when the candidate sits flush
+  // against the original boundary — boundary points get counted as "inside".
+  // Comparing intersection area to candidate area is robust to that case.
   const result = polygonized.features.filter((candidate) => {
-    const pt = pointOnFeature(candidate);
-    return booleanPointInPolygon(pt, polygon);
+    const inter = intersect(featureCollection([candidate, polygon]));
+    if (!inter) return false;
+    const candidateArea = area(candidate);
+    if (candidateArea === 0) return false;
+    return area(inter) / candidateArea > 0.999;
   });
 
   if (result.length < 2) {
