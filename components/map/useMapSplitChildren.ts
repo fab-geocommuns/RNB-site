@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import maplibregl from 'maplibre-gl';
 import { RootState } from '@/stores/store';
-import { pointOnFeature } from '@turf/turf';
-import type { Feature, Polygon } from 'geojson';
+import polylabel from 'polylabel';
+import type { Polygon } from 'geojson';
 
 export const SRC_SPLIT_CHILDREN = 'split_children';
 export const LAYER_SPLIT_CHILDREN_FILL = 'split_children_fill';
@@ -38,12 +38,11 @@ export const useMapSplitChildren = (map?: maplibregl.Map) => {
       type: 'FeatureCollection',
       features: shouldDisplay
         ? children.flatMap((child, index) => {
-            const polygonFeature: Feature<Polygon> = {
-              type: 'Feature',
-              properties: {},
-              geometry: child.shape as Polygon,
-            };
-            const labelPoint = pointOnFeature(polygonFeature);
+            const polygon = child.shape as Polygon;
+            // polylabel finds the "pole of inaccessibility": the interior
+            // point furthest from any edge. Better than centroid/pointOnFeature
+            // for concave shapes where a centroid can fall outside or near a border.
+            const [lon, lat] = polylabel(polygon.coordinates, 1e-6);
             return [
               {
                 type: 'Feature',
@@ -62,7 +61,10 @@ export const useMapSplitChildren = (map?: maplibregl.Map) => {
                   kind: 'label',
                   label: String(index + 1),
                 },
-                geometry: labelPoint.geometry,
+                geometry: {
+                  type: 'Point',
+                  coordinates: [lon, lat],
+                },
               } as GeoJSON.Feature,
             ];
           })
