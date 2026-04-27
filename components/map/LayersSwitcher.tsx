@@ -125,6 +125,17 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   // Switch background image
   const [btnImage, setBtnImage] = useState(backgroundPlanIGN);
 
+  const filtersDrawerOpen = useSelector(
+    (state: RootState) => state.report.filtersDrawerOpen,
+  );
+
+  const setOpenAndCloseReports = (boolean: boolean) => {
+    setOpen(boolean);
+    if (filtersDrawerOpen) {
+      dispatch(Actions.report.toggleFiltersDrawer());
+    }
+  };
+
   useEffect(() => {
     switch (mapLayers.background) {
       case 'vectorIgnStandard':
@@ -143,8 +154,10 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
 
   return (
     <>
-      {open ? (
-        <div className={styles.modal}>
+      {open && !filtersDrawerOpen ? (
+        <div
+          className={`${styles.modal} ${mapLayers.extraLayers.includes('reports') ? styles.modalWithReports : ''}`}
+        >
           <div className={styles.head}>
             <div className={styles.title}>Calques</div>
             <a
@@ -251,7 +264,10 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
           </div>
         </div>
       ) : (
-        <div className={styles.btn} onClick={(e) => setOpen(true)}>
+        <div
+          className={styles.btn}
+          onClick={(e) => setOpenAndCloseReports(true)}
+        >
           <div className={styles.btnIcon}>
             <ImageNext
               src={layersIcon}
