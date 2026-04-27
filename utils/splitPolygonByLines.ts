@@ -3,14 +3,81 @@ import {
   featureCollection,
   polygonToLine,
   lineIntersect,
-  lineSplit,
   truncate,
-  combine,
   polygonize,
   pointOnFeature,
   booleanPointInPolygon,
 } from '@turf/turf';
-import type { Feature, Polygon, MultiPolygon, LineString } from 'geojson';
+import type {
+  Feature,
+  Polygon,
+  MultiPolygon,
+  LineString,
+  Point,
+  Position,
+} from 'geojson';
+
+/**
+ * Split a LineString at the given points. Each point is projected onto the
+ * closest segment; points that don't lie on any segment (within SPLIT_TOL)
+ * are ignored.
+ *
+ * Replaces @turf/line-split, which truncates the splitter to precision 7
+ * internally and silently misses cuts on segments with a near-zero-width bbox.
+ */
+function splitLineByPoints(
+  line: Feature<LineString>,
+  points: Feature<Point>[],
+): Feature<LineString>[] {
+  const SPLIT_TOL = 1e-9;
+  const coords = line.geometry.coordinates;
+
+  type Cut = { segIdx: number; t: number; pt: Position };
+  const cuts: Cut[] = [];
+
+  for (let i = 0; i < coords.length - 1; i++) {
+    const a = coords[i];
+    const b = coords[i + 1];
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const lenSq = dx * dx + dy * dy;
+    if (lenSq === 0) continue;
+
+    for (const ptFeat of points) {
+      const p = ptFeat.geometry.coordinates;
+      const t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / lenSq;
+      if (t <= SPLIT_TOL || t >= 1 - SPLIT_TOL) continue;
+      const projX = a[0] + t * dx;
+      const projY = a[1] + t * dy;
+      const distSq = (p[0] - projX) ** 2 + (p[1] - projY) ** 2;
+      if (distSq > SPLIT_TOL * SPLIT_TOL) continue;
+      cuts.push({ segIdx: i, t, pt: p });
+    }
+  }
+
+  cuts.sort((a, b) => a.segIdx - b.segIdx || a.t - b.t);
+
+  const segments: Position[][] = [];
+  let current: Position[] = [coords[0]];
+  let cutIdx = 0;
+
+  for (let i = 0; i < coords.length - 1; i++) {
+    while (cutIdx < cuts.length && cuts[cutIdx].segIdx === i) {
+      current.push(cuts[cutIdx].pt);
+      segments.push(current);
+      current = [cuts[cutIdx].pt];
+      cutIdx++;
+    }
+    current.push(coords[i + 1]);
+  }
+  segments.push(current);
+
+  return segments.map((s) => ({
+    type: 'Feature',
+    properties: {},
+    geometry: { type: 'LineString', coordinates: s },
+  }));
+}
 
 /**
  * Split a polygon by a single line.
@@ -42,18 +109,12 @@ function splitPolygonByLine(
     return null; // Line must enter and exit the polygon
   }
 
-  // Combine intersections into a MultiPoint for splitting
-  const intersectCombined = combine(intersects).features[0];
-
   // Split both lines at the intersection points
-  const outerPieces = lineSplit(outerLine, intersectCombined);
-  const cutPieces = lineSplit(truncatedLine, intersectCombined);
+  const outerPieces = splitLineByPoints(outerLine, intersects.features);
+  const cutPieces = splitLineByPoints(truncatedLine, intersects.features);
 
   // Combine all line segments
-  const allPieces = featureCollection([
-    ...outerPieces.features,
-    ...cutPieces.features,
-  ]);
+  const allPieces = featureCollection([...outerPieces, ...cutPieces]);
 
   // Reconstruct polygons from the line segments
   const polygonized = polygonize(allPieces);
@@ -81,6 +142,8 @@ export function splitPolygonByLines(
 ): Feature<Polygon>[] | null {
   if (!polygonGeometry || lines.length === 0) return null;
 
+  console.log(polygonGeometry);
+  console.log(lines);
   // Wrap the polygon geometry as a Feature
   // Handle both Polygon and MultiPolygon geometries
   const coords =
