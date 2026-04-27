@@ -148,8 +148,6 @@ export function splitPolygonByLines(
 ): Feature<Polygon>[] | null {
   if (!polygonGeometry || lines.length === 0) return null;
 
-  console.log(polygonGeometry);
-  console.log(lines);
   // Wrap the polygon geometry as a Feature
   // Handle both Polygon and MultiPolygon geometries
   const coords =
