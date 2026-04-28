@@ -1,0 +1,59 @@
+.trigger {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: calc(var(--ground) + 760);
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #1a73e8;
+  background: white;
+  color: #1a73e8;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: lighten(#e7edff, 2%);
+  }
+}
+
+.content {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555;
+
+  h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 1rem 0 4px;
+    color: #222;
+  }
+
+  p {
+    margin: 0 0 13px;
+  }
+
+  ul {
+    margin: 4px 0 8px 1rem;
+    padding: 0;
+    li {
+      margin-bottom: 4px;
+    }
+  }
+
+  a {
+    color: #1a73e8;
+    text-decoration: underline;
+  }
+
+  img {
+    width: 100%;
+    margin: 8px 0;
+    display: block;
+  }
+}

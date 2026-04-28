@@ -13,6 +13,10 @@ import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
+import HelpRNCPanel from '@/components/HelpRNCPanel';
+
+// @ts-ignore
+import Cookies from 'js-cookie';
 
 // Analytics
 import va from '@vercel/analytics';
@@ -29,6 +33,7 @@ import { useMemo } from 'react';
 import { MapExtraLayer } from '@/stores/map/map-slice';
 import { getArrayQueryParam } from '@/utils/queryParams';
 import { isValidExtraLayer } from '@/stores/map/map-slice';
+import useQueryParamState from '@/utils/useQueryParamState';
 
 function getDefaultExtraLayers() {
   return (
@@ -59,6 +64,17 @@ export default function RNBMap() {
       result_insee_code: address.insee_code,
     });
   };
+
+  const [from, setFrom] = useQueryParamState('from', '');
+  const cookieState = Cookies.get('state') === 'true';
+
+  useEffect(() => {
+    if (document.referrer.includes('registre-coproprietes.gouv.fr') && !from) {
+      setFrom('RNC');
+      Cookies.set('from', 'RNC', { expires: 365 });
+      Cookies.set('state', 'true', { expires: 365 });
+    }
+  }, [from, setFrom]);
 
   useEffect(() => {
     Bus.on('address:search', trackAddressSearch);
@@ -91,6 +107,8 @@ export default function RNBMap() {
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}
+        {from === 'RNC' && <HelpRNCPanel defaultOpen={cookieState} />}
+
         <div className={styles.map__mapShell}>
           <VisuMap defaultExtraLayers={defaultExtraLayers} />
         </div>
