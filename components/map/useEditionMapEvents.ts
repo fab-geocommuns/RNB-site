@@ -35,6 +35,9 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
+  const cutStep = useSelector(
+    (state: RootState) => state.edition.split.cutStep,
+  );
   const selectedBuildingRnbId = useSelector((state: RootState) =>
     state.map.selectedItem?._type === 'building'
       ? state.map.selectedItem.rnb_id
@@ -172,7 +175,11 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           0,
         );
 
-        if (shapeInteractionMode === 'drawing') {
+        if (
+          shapeInteractionMode === 'drawing' ||
+          // drawing step of the split operation
+          (operation === 'split' && cutStep === 'drawing' && splitCandidateId)
+        ) {
           map!.getCanvas().style.cursor = 'crosshair';
         } else if (featureCloseToCursor) {
           map!.getCanvas().style.cursor = 'pointer';
