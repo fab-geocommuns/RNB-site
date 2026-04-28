@@ -15,6 +15,9 @@ import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
 import HelpRNCPanel from '@/components/HelpRNCPanel';
 
+// @ts-ignore
+import Cookies from 'js-cookie';
+
 // Analytics
 import va from '@vercel/analytics';
 
@@ -63,15 +66,15 @@ export default function RNBMap() {
   };
 
   const [from, setFrom] = useQueryParamState('from', '');
+  const cookieState = Cookies.get('state') === 'true';
 
   useEffect(() => {
-    if (
-      document.referrer.includes('37833') ||
-      (document.referrer.includes('registre-coproprietes.gouv.fr') && !from)
-    ) {
+    if (document.referrer.includes('registre-coproprietes.gouv.fr') && !from) {
       setFrom('RNC');
+      Cookies.set('from', 'RNC', { expires: 365 });
+      Cookies.set('state', 'true', { expires: 365 });
     }
-  }, []);
+  }, [from, setFrom]);
 
   useEffect(() => {
     Bus.on('address:search', trackAddressSearch);
@@ -104,7 +107,7 @@ export default function RNBMap() {
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}
-        {from === 'RNC' && <HelpRNCPanel />}
+        {from === 'RNC' && <HelpRNCPanel defaultOpen={cookieState} />}
 
         <div className={styles.map__mapShell}>
           <VisuMap defaultExtraLayers={defaultExtraLayers} />

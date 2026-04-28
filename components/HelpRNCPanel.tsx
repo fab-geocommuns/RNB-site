@@ -1,6 +1,12 @@
 import { Stepper } from '@codegouvfr/react-dsfr/Stepper';
 import styles from '@/styles/panelRNC.module.scss';
 import { useState } from 'react';
+// @ts-ignore
+import Cookies from 'js-cookie';
+
+interface HelpRNCPanelProps {
+  defaultOpen: boolean;
+}
 
 const PAGES = [
   {
@@ -26,13 +32,14 @@ const PAGES = [
   },
 ];
 
-export default function HelpRNCPanel() {
-  const [isOpen, setIsOpen] = useState(true);
+export default function HelpRNCPanel({ defaultOpen }: HelpRNCPanelProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleClose = () => {
     setIsOpen(false);
     setCurrentPage(0);
+    Cookies.set('state', 'false', { expires: 365 });
   };
 
   const page = PAGES[currentPage];
@@ -43,7 +50,8 @@ export default function HelpRNCPanel() {
     <>
       <button
         aria-controls="modal-0"
-        data-fr-opened="true"
+        type="button"
+        data-fr-opened={isOpen ? 'true' : 'false'}
         className={styles.trigger}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Informations RNC"
@@ -55,7 +63,7 @@ export default function HelpRNCPanel() {
         id="modal-0"
         className="fr-modal"
         aria-labelledby="modal-0-title"
-        data-fr-concealing-backdrop="true"
+        data-fr-opened={isOpen ? 'true' : 'false'}
       >
         <div className="fr-container fr-container--fluid fr-container-md">
           <div className="fr-grid-row fr-grid-row--center">
@@ -66,6 +74,7 @@ export default function HelpRNCPanel() {
                     aria-controls="modal-0"
                     title="Fermer"
                     type="button"
+                    onClick={handleClose}
                     id="button-5"
                     className="fr-btn--close fr-btn"
                   >
@@ -100,9 +109,7 @@ export default function HelpRNCPanel() {
                       className="fr-btn"
                       aria-controls={isLast ? 'modal-0' : undefined}
                       onClick={() => {
-                        isLast
-                          ? setCurrentPage(0)
-                          : setCurrentPage((p) => p + 1);
+                        isLast ? handleClose() : setCurrentPage((p) => p + 1);
                       }}
                     >
                       {' '}
