@@ -24,8 +24,8 @@ importers:
         specifier: ^0.0.3
         version: 0.0.3(playwright@1.56.1)
       '@private-captcha/private-captcha-react':
-        specifier: ^0.0.4
-        version: 0.0.4(react@19.2.3)
+        specifier: 0.0.8
+        version: 0.0.8(react@19.2.3)
       '@reduxjs/toolkit':
         specifier: ^2.8.2
         version: 2.8.2(react-redux@9.2.0(@types/react@19.1.5)(react@19.2.3)(redux@5.0.1))(react@19.2.3)
@@ -914,11 +914,11 @@ packages:
   '@prisma/instrumentation@5.22.0':
     resolution: {integrity: sha512-LxccF392NN37ISGxIurUljZSh1YWnphO34V5a0+T7FVQG2u9bhAXRTJpgmQ3483woVhkraQZFF7cbRrpbw/F4Q==}
 
-  '@private-captcha/private-captcha-js-core@0.0.15':
-    resolution: {integrity: sha512-l232jfcTyo/g3pv4gun7+1vQ7e5+aj7GbvKpjMXQn5KR97Bfl9fVq1f0DoKNB90xRwz1vJexMYiG2UBYO7QdLA==}
+  '@private-captcha/private-captcha-js-core@0.0.24':
+    resolution: {integrity: sha512-iQTIqHrGyQwqY560P1gpbZk2tDRzbyp5FgWsfXfLRCKo0jKci6MzMTwGwJFj65l3Ec//Yb1Oh8dmbddnuwazNA==}
 
-  '@private-captcha/private-captcha-react@0.0.4':
-    resolution: {integrity: sha512-5MFXj6hLHZDFoz0O7ABqIn04sBQOQX1ORYIDXNVbVoJkkHVPgmvhZ8eRYwJPDcvntroF6kpqze4GgYHnI/NQBg==}
+  '@private-captcha/private-captcha-react@0.0.8':
+    resolution: {integrity: sha512-et+SwJn7gW6jp7HDkAb5tI3LnklZYnBg3hCBAu/cbaiY9jcTQgtkf1DAwnWxCtFPKH/ukr1RCemBDybCFaDkTA==}
     peerDependencies:
       react: ^18.0.0
 
@@ -5134,11 +5134,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@private-captcha/private-captcha-js-core@0.0.15': {}
+  '@private-captcha/private-captcha-js-core@0.0.24': {}
 
-  '@private-captcha/private-captcha-react@0.0.4(react@19.2.3)':
+  '@private-captcha/private-captcha-react@0.0.8(react@19.2.3)':
     dependencies:
-      '@private-captcha/private-captcha-js-core': 0.0.15
+      '@private-captcha/private-captcha-js-core': 0.0.24
       react: 19.2.3
 
   '@reduxjs/toolkit@2.8.2(react-redux@9.2.0(@types/react@19.1.5)(react@19.2.3)(redux@5.0.1))(react@19.2.3)':
