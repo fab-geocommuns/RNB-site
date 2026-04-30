@@ -17,6 +17,7 @@ import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-s
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { toasterSuccess } from '@/components/contribution/toaster';
 import { displayBANPopup } from './BanLayerEvent';
+import { fetchBuilding } from '@/utils/requests';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -33,6 +34,12 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const operation = useSelector((state: RootState) => state.edition.operation);
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
+  );
+  const selectedChildIndex = useSelector(
+    (state: RootState) => state.edition.split.selectedChildIndex,
+  );
+  const cutStep = useSelector(
+    (state: RootState) => state.edition.split.cutStep,
   );
   const selectedBuildingRnbId = useSelector((state: RootState) =>
     state.map.selectedItem?._type === 'building'
@@ -137,6 +144,17 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                   location: [e.lngLat.lng, e.lngLat.lat],
                 }),
               );
+              // Fetch the precise shape from the API
+              fetchBuilding(rnb_id).then((building) => {
+                if (building?.shape) {
+                  dispatch(Actions.edition.setCandidateShape(building.shape));
+                }
+                if (building?.addresses) {
+                  dispatch(
+                    Actions.edition.setCandidateAddresses(building.addresses),
+                  );
+                }
+              });
             }
           }
         } else if (operation === 'merge') {
@@ -160,7 +178,14 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           0,
         );
 
-        if (shapeInteractionMode === 'drawing') {
+        if (
+          shapeInteractionMode === 'drawing' ||
+          // drawing step of the split operation
+          (operation === 'split' &&
+            cutStep === 'drawing' &&
+            splitCandidateId &&
+            selectedChildIndex === null)
+        ) {
           map!.getCanvas().style.cursor = 'crosshair';
         } else if (featureCloseToCursor) {
           map!.getCanvas().style.cursor = 'pointer';
@@ -210,8 +235,10 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     map,
     shapeInteractionMode,
     operation,
+    splitCandidateId,
     selectedBuildingRnbId,
     buildingNewShape,
+    selectedChildIndex,
   ]);
 
   // split candidate highlighting

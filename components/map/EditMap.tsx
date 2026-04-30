@@ -15,6 +15,7 @@ import {
   MapExtraLayer,
 } from '@/stores/map/map-slice';
 import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
+import { useMapSplitChildren } from '@/components/map/useMapSplitChildren';
 import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
 import { useMapStateSyncSelectedBuildingsForMerge } from '@/components/map/useMapStateSyncSelectedBuildingsForMerge';
 import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
@@ -47,6 +48,7 @@ export default function EditMap({
   useEditionMapEvents(map);
   useMapStateSync(map);
   useMapEditBuildingShape(map);
+  useMapSplitChildren(map);
   useMapStateSyncSelectedBuilding(map);
   useMapStateSyncSelectedBuildingsForMerge(map);
   useMapStateSyncReport(map);
