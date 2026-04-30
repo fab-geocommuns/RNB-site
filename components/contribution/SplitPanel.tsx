@@ -395,7 +395,7 @@ function SplitBuildingSummaryStep({
                 <strong>Bâtiment à scinder :</strong> {splitCandidateId}
               </div>
               <div className={styles.text}>
-                {splitChildrenCount} Nouveaux bâtiments créés
+                {splitChildrenCount} nouveaux bâtiments créés
               </div>
             </div>
 
