@@ -332,8 +332,12 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
       deleteFeatures(drawRef.current);
       selectedBuildingRef.current = null;
     }
-    if (drawRef.current) {
+    if (
+      drawRef.current &&
+      (operation === 'split' || prevOperationRef.current === 'split')
+    ) {
       drawRef.current.deleteAll();
+      selectedBuildingRef.current = null;
     }
     prevOperationRef.current = operation;
   }, [operation]);

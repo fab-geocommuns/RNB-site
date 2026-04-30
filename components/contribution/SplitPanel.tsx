@@ -465,6 +465,7 @@ function SplitBuildingSummaryStep({
 
 const cancelSplit = (dispatch: AppDispatch) => {
   dispatch(Actions.edition.setOperation(null));
+  dispatch(Actions.edition.reset());
 };
 
 const ordinal = (n: number): string => {
