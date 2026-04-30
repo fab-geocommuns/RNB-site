@@ -166,6 +166,9 @@ export const editionSlice = createSlice({
           action.payload;
       }
     },
+    resetSplitChildren(state) {
+      state.split.children = [];
+    },
     setSplitChildAddresses(
       state,
       action: PayloadAction<BuildingAddressType[]>,

@@ -145,10 +145,12 @@ function SplitBuildingCutStep({
 
   const handleClearAll = () => {
     dispatch(Actions.edition.clearCutLines());
+    dispatch(Actions.edition.resetSplitChildren());
   };
 
   const handleRemoveLast = () => {
     dispatch(Actions.edition.removeLastCutLine());
+    dispatch(Actions.edition.resetSplitChildren());
   };
 
   return (
