@@ -73,6 +73,40 @@ describe('splitPolygonByLines', () => {
     expect(sumArea).toBeCloseTo(totalArea, 5);
   });
 
+  it('splits a polygon into 4 pieces with two crossing cuts', () => {
+    const polygon: Polygon = {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-0.5675542, 44.8307446],
+          [-0.5670046, 44.8307304],
+          [-0.5670394, 44.8300529],
+          [-0.5674617, 44.8300638],
+          [-0.5675542, 44.8307446],
+        ],
+      ],
+    };
+
+    const crossingCut: LineString = {
+      type: 'LineString',
+      coordinates: [
+        [-0.567299621428333, 44.83091762939142],
+        [-0.5672539616077756, 44.8297666025301],
+        [-0.5682750812300128, 44.830446623735526],
+        [-0.5663988776952351, 44.83041424195531],
+      ],
+    };
+
+    const result = splitPolygonByLines(polygon, [crossingCut]);
+
+    expect(result).not.toBeNull();
+    expect(result).toHaveLength(4);
+
+    const totalArea = area(polygon);
+    const sumArea = result!.reduce((acc, p) => acc + area(p), 0);
+    expect(sumArea).toBeCloseTo(totalArea, 2);
+  });
+
   it('does not produce pieces outside the original polygon with a tangled multi-segment cut', () => {
     const polygon: Polygon = {
       type: 'Polygon',

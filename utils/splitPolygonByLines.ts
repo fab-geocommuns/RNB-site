@@ -109,9 +109,17 @@ function splitPolygonByLine(
     return null; // Line must enter and exit the polygon
   }
 
+  // Also find points where the cut line crosses itself — polygonize requires
+  // a properly noded graph, so any internal crossings of the cut line must
+  // become explicit vertices.
+  const selfIntersects = lineIntersect(truncatedLine, truncatedLine);
+
   // Split both lines at the intersection points
   const outerPieces = splitLineByPoints(outerLine, intersects.features);
-  const cutPieces = splitLineByPoints(truncatedLine, intersects.features);
+  const cutPieces = splitLineByPoints(truncatedLine, [
+    ...intersects.features,
+    ...selfIntersects.features,
+  ]);
 
   // Combine all line segments
   const allPieces = featureCollection([...outerPieces, ...cutPieces]);
@@ -148,6 +156,8 @@ export function splitPolygonByLines(
 ): Feature<Polygon>[] | null {
   if (!polygonGeometry || lines.length === 0) return null;
 
+  console.log(polygonGeometry);
+  console.log(lines);
   // Wrap the polygon geometry as a Feature
   // Handle both Polygon and MultiPolygon geometries
   const coords =
