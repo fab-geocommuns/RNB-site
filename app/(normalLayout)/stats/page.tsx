@@ -83,10 +83,23 @@ export default function Page() {
             <a href="https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart">
               contributeurs
             </a>{' '}
-            et sur l&apos;ensemble du territoire. Les mises à jour peuvent
-            porter sur la création de bâtiments, sur l&apos;enrichissement du
-            lien bâtiment-adresse ou sur d&apos;autres types d&apos;actions.
+            et l&apos;import régulier de bases de données nationales. Les mises
+            à jour peuvent porter sur la création de bâtiments, sur
+            l&apos;enrichissement du lien bâtiment-adresse ou sur d&apos;autres
+            types d&apos;actions.
           </div>
+
+          <h3>Mise à jour : sources</h3>
+          <div className="fr-grid-row fr-grid-row--gutters fr-mb-6v">
+            <iframe
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/26709a95-83f0-47ad-819b-9108ca66aea0"
+              className="fr-col-12 fr-col-md-12"
+              height="600"
+            ></iframe>
+          </div>
+
+          <h3>Mise à jour : focus éditions</h3>
+
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/8da126c9-c3c3-41b7-9a95-93e5c35e26c2"
