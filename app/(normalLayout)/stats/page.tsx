@@ -83,8 +83,8 @@ export default function Page() {
             <a href="https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart">
               contributeurs
             </a>{' '}
-            et l'import régulier de bases de données nationales. Les mises à
-            jour peuvent porter sur la création de bâtiments, sur
+            et l&apos;import régulier de bases de données nationales. Les mises
+            à jour peuvent porter sur la création de bâtiments, sur
             l&apos;enrichissement du lien bâtiment-adresse ou sur d&apos;autres
             types d&apos;actions.
           </div>
