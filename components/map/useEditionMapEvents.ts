@@ -35,6 +35,9 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
+  const selectedChildIndex = useSelector(
+    (state: RootState) => state.edition.split.selectedChildIndex,
+  );
   const cutStep = useSelector(
     (state: RootState) => state.edition.split.cutStep,
   );
@@ -178,7 +181,10 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
         if (
           shapeInteractionMode === 'drawing' ||
           // drawing step of the split operation
-          (operation === 'split' && cutStep === 'drawing' && splitCandidateId)
+          (operation === 'split' &&
+            cutStep === 'drawing' &&
+            splitCandidateId &&
+            selectedChildIndex === null)
         ) {
           map!.getCanvas().style.cursor = 'crosshair';
         } else if (featureCloseToCursor) {
@@ -232,6 +238,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     splitCandidateId,
     selectedBuildingRnbId,
     buildingNewShape,
+    selectedChildIndex,
   ]);
 
   // split candidate highlighting
