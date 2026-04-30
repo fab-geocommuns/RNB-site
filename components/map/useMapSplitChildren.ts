@@ -20,6 +20,7 @@ const UNSELECTED_COLOR = '#6a14e3';
  */
 export const useMapSplitChildren = (map?: maplibregl.Map) => {
   const operation = useSelector((state: RootState) => state.edition.operation);
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
   const children = useSelector(
     (state: RootState) => state.edition.split.children,
   );
@@ -158,5 +159,5 @@ export const useMapSplitChildren = (map?: maplibregl.Map) => {
         map.removeLayer(LAYER_SPLIT_CHILDREN_FILL);
       map.removeSource(SRC_SPLIT_CHILDREN);
     }
-  }, [map, operation, children, selectedChildIndex]);
+  }, [map, operation, children, selectedChildIndex, mapLayers]);
 };
