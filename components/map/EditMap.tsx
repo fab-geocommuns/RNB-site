@@ -19,6 +19,7 @@ import { useMapSplitChildren } from '@/components/map/useMapSplitChildren';
 import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
 import { useMapStateSyncSelectedBuildingsForMerge } from '@/components/map/useMapStateSyncSelectedBuildingsForMerge';
 import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
+import { useMapPointer } from '@/components/map/useMapPointer';
 
 type Props = {
   disabledLayers?: MapLayer[];
@@ -52,5 +53,6 @@ export default function EditMap({
   useMapStateSyncSelectedBuilding(map);
   useMapStateSyncSelectedBuildingsForMerge(map);
   useMapStateSyncReport(map);
+  useMapPointer(map);
   return mapContainer;
 }
