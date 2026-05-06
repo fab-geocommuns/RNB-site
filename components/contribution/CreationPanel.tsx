@@ -15,6 +15,7 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
+import MapPointerClaim from '../map/MapPointerClaim';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -170,21 +171,25 @@ function BodyPanel({
   return (
     <>
       {step === 1 && (
-        <div className={`${styles.panelSection} ${styles.noPad}`}>
-          {mapCoordinates && mapCoordinates.zoom < 18 ? (
-            <div style={{ display: 'flex' }}>
-              <span className="fr-pr-2v">
-                <i className="fr-icon-feedback-line"></i>
-              </span>
-              Zoomez sur la carte pour pouvoir tracer le bâtiment avec précision
-            </div>
-          ) : (
-            <>
-              <div>Tracez la géométrie du bâtiment sur la carte.</div>
-              <div>Un double-clic termine le tracé.</div>
-            </>
-          )}
-        </div>
+        <>
+          <MapPointerClaim cursor="crosshair" />
+          <div className={`${styles.panelSection} ${styles.noPad}`}>
+            {mapCoordinates && mapCoordinates.zoom < 18 ? (
+              <div style={{ display: 'flex' }}>
+                <span className="fr-pr-2v">
+                  <i className="fr-icon-feedback-line"></i>
+                </span>
+                Zoomez sur la carte pour pouvoir tracer le bâtiment avec
+                précision
+              </div>
+            ) : (
+              <>
+                <div>Tracez la géométrie du bâtiment sur la carte.</div>
+                <div>Un double-clic termine le tracé.</div>
+              </>
+            )}
+          </div>
+        </>
       )}
       {step === 2 && (
         <>
