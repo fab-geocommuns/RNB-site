@@ -77,7 +77,7 @@ export const useMapStateSyncSelectedBuilding = (map?: maplibregl.Map) => {
           toggleHighlight(previousSelectedItem, selectedItem);
         }
       };
-      map.on('sourcedata', (e) => onSourceData(e));
+      map.on('sourcedata', onSourceData);
       toggleHighlight(previousSelectedItem, selectedItem);
 
       return () => {
