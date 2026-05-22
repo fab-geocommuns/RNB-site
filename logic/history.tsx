@@ -75,7 +75,13 @@ export function getHistoryShortTitle(historyItem: ApiHistoryItem): string {
 export function displayAuthor(historyItem: ApiHistoryItem): string | null {
   if (historyItem?.event?.origin?.type === 'import') return 'Équipe RNB';
   if (historyItem?.event?.origin?.type === 'data_fix') return 'Équipe RNB';
-  if (historyItem?.event?.author?.username)
-    return historyItem.event.author.username;
+  if (historyItem?.event?.author?.username) {
+    let display = historyItem.event.author.username;
+    if (historyItem.event.author.organization_name) {
+      display += ` (${historyItem.event.author.organization_name})`;
+    }
+    return display;
+  }
+
   return null;
 }
