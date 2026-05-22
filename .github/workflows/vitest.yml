@@ -1,0 +1,26 @@
+name: Vitest Unit Tests
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+
+      - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+        name: Install pnpm
+
+      - name: Install Node.js
+        uses: actions/setup-node@633bb92bc0aabcae06e8ea93b85aecddd374c402
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Installation des dépendances NPM
+        run: pnpm install --frozen-lockfile
+
+      - name: Execution des tests Vitest
+        run: pnpm exec vitest run
