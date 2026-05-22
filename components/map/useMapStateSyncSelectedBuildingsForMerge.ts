@@ -36,11 +36,6 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
     const cleanups: Array<() => void> = [];
     if (operation == 'merge') {
       if (map && candidatesToMerge) {
-        if (candidatesToMerge.length === 0 && prevSelected.length) {
-          cleanups.push(
-            setFeatureStateInLayers(sources, map, prevSelected[0], false),
-          );
-        }
         candidatesToMerge.map((candidate) => {
           let inPanel = true;
           let id = candidate;
@@ -119,8 +114,14 @@ function setMapLayer(
 }
 
 function removeFeatureStateInLayers(sources: string[], map: maplibregl.Map) {
+  // Le listener gère le cas où les sources ne sont pas encore chargées au moment de
+  // l'appel. Il s'auto-retire après le premier match pour ne pas re-fire à chaque
+  // chargement de tuile.
   const onSourceData = (e: any) => {
-    if (checkSource(e)) setMapLayer(sources, map, 'removeFeatureState');
+    if (checkSource(e)) {
+      setMapLayer(sources, map, 'removeFeatureState');
+      map.off('sourcedata', onSourceData);
+    }
   };
   map.on('sourcedata', onSourceData);
   setMapLayer(sources, map, 'removeFeatureState');
@@ -140,6 +141,7 @@ function setFeatureStateInLayers(
       setMapLayer(sources, map, 'setFeatureState', id, {
         in_panel: inPanel,
       });
+      map.off('sourcedata', onSourceData);
     }
   };
   map.on('sourcedata', onSourceData);
