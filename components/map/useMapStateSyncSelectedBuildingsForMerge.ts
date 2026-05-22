@@ -33,11 +33,9 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
   useEffect(() => {
     const prevSelected = prevSelectedRef.current;
     const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
+    const cleanups: Array<() => void> = [];
     if (operation == 'merge') {
       if (map && candidatesToMerge) {
-        if (candidatesToMerge.length === 0 && prevSelected.length) {
-          setFeatureStateInLayers(sources, map, prevSelected[0], false);
-        }
         candidatesToMerge.map((candidate) => {
           let inPanel = true;
           let id = candidate;
@@ -49,14 +47,17 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
             inPanel = false;
             id = filterIdToRemove[0];
           }
-          setFeatureStateInLayers(sources, map, id, inPanel);
+          cleanups.push(setFeatureStateInLayers(sources, map, id, inPanel));
         });
       }
       if (map && !selectedItem && !candidatesToMerge.length) {
-        removeFeatureStateInLayers(sources, map);
+        cleanups.push(removeFeatureStateInLayers(sources, map));
       }
       prevSelectedRef.current = candidatesToMerge;
     }
+    return () => {
+      cleanups.forEach((fn) => fn());
+    };
   }, [candidatesToMerge, operation]);
 
   useEffect(() => {
@@ -78,12 +79,14 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
       };
       map.on('click', handleClickEvent);
       const prevOperation = prevOperationRef.current;
+      let removeCleanup: (() => void) | undefined;
       if (operation !== 'merge' && prevOperation === 'merge') {
-        removeFeatureStateInLayers(sources, map);
+        removeCleanup = removeFeatureStateInLayers(sources, map);
       }
       prevOperationRef.current = operation;
       return () => {
         map.off('click', handleClickEvent);
+        removeCleanup?.();
       };
     }
   }, [operation, candidatesToMerge, newBuilding]);
@@ -111,10 +114,16 @@ function setMapLayer(
 }
 
 function removeFeatureStateInLayers(sources: string[], map: maplibregl.Map) {
+  // Le listener gère le cas où les sources ne sont pas encore chargées au moment de
+  // l'appel. Il s'auto-retire après le premier match pour ne pas re-fire à chaque
+  // chargement de tuile.
   const onSourceData = (e: any) => {
-    if (checkSource(e)) setMapLayer(sources, map, 'removeFeatureState');
+    if (checkSource(e)) {
+      setMapLayer(sources, map, 'removeFeatureState');
+      map.off('sourcedata', onSourceData);
+    }
   };
-  map.on('sourcedata', (e) => onSourceData(e));
+  map.on('sourcedata', onSourceData);
   setMapLayer(sources, map, 'removeFeatureState');
   return () => {
     map.off('sourcedata', onSourceData);
@@ -132,9 +141,10 @@ function setFeatureStateInLayers(
       setMapLayer(sources, map, 'setFeatureState', id, {
         in_panel: inPanel,
       });
+      map.off('sourcedata', onSourceData);
     }
   };
-  map.on('sourcedata', (e) => onSourceData(e));
+  map.on('sourcedata', onSourceData);
   setMapLayer(sources, map, 'setFeatureState', id, {
     in_panel: inPanel,
   });
