@@ -36,11 +36,6 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
     const cleanups: Array<() => void> = [];
     if (operation == 'merge') {
       if (map && candidatesToMerge) {
-        if (candidatesToMerge.length === 0 && prevSelected.length) {
-          cleanups.push(
-            setFeatureStateInLayers(sources, map, prevSelected[0], false),
-          );
-        }
         candidatesToMerge.map((candidate) => {
           let inPanel = true;
           let id = candidate;
