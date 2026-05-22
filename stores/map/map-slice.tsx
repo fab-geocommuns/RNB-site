@@ -8,7 +8,7 @@ import {
   setQueryParam,
   removeQueryParam,
 } from '@/utils/queryParams';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID

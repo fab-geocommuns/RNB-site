@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Actions, AppDispatch } from '@/stores/store';
-import { MapPointer } from '@/stores/map/map-slice';
+import { AppDispatch } from '@/stores/store';
+import { MapPointer, mapActions } from '@/stores/map/map-slice';
 
 type Props = {
   cursor: MapPointer;
@@ -11,9 +11,9 @@ export default function MapPointerClaim({ cursor }: Props) {
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Actions.map.setPointer(cursor));
+    dispatch(mapActions.setPointer(cursor));
     return () => {
-      dispatch(Actions.map.setPointer(''));
+      dispatch(mapActions.setPointer(''));
     };
   }, [cursor, dispatch]);
 
