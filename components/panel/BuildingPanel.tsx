@@ -1,6 +1,11 @@
 // Types
 // Store
-import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
+import {
+  bdgApiUrl,
+  Plot,
+  PublicUser,
+  SelectedBuilding,
+} from '@/stores/map/map-slice';
 
 // Comps
 import ContributionForm from '@/components/ContributionForm';
@@ -87,6 +92,36 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </div>
         <PanelTabs rnbId={bdg?.rnb_id}></PanelTabs>
       </div>
+
+      {bdg.marked_as_correct_by.length > 0 && (
+        <div className={panelStyles.section}>
+          <div className={panelStyles.markedAsCorrect}>
+            <div>
+              <h2 className={panelStyles.sectionTitle}>
+                Marqué comme correct par
+              </h2>
+              <div className={panelStyles.sectionBody}>
+                {bdg.marked_as_correct_by.map((user: PublicUser) => (
+                  <div key={user.id} className={panelStyles.user}>
+                    <i className="fr-icon-success-fill" aria-hidden="true"></i>
+                    <span>
+                      <span className={panelStyles.userName}>
+                        {' '}
+                        {user.display_name}
+                      </span>
+                      {user.organization_name && (
+                        <span className={panelStyles.userOrganization}>
+                          ({user.organization_name})
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>

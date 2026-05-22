@@ -130,6 +130,23 @@
   }
 }
 
+.markedAsCorrect {
+  i {
+    color: #68a532;
+
+    &::before {
+      width: 19px;
+      height: 19px;
+    }
+  }
+}
+
+.use {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .sectionTitle {
   font-size: 0.7em;
   line-height: 1.3em;

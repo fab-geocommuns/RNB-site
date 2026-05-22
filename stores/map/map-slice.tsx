@@ -21,6 +21,13 @@ export type BuildingAddress = {
   city_insee_code: string;
 };
 
+export type PublicUser = {
+  id: number;
+  display_name: string;
+  username: string;
+  organization_name: string;
+};
+
 export type Plot = {
   id: string;
   bdg_cover_ratio: number;
@@ -36,6 +43,7 @@ export interface SelectedBuilding {
   };
   shape: GeoJSON.Geometry;
   addresses: BuildingAddress[];
+  marked_as_correct_by: PublicUser[]; // List of user IDs who marked this building as correct
   ext_ids: any[];
   plots: Plot[] | null;
   is_active: boolean;
