@@ -14,6 +14,7 @@ import BuildingAddresses from './BuildingAddresses';
 import BuildingStatus from './BuildingStatus';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
+import MapPointerClaim from '@/components/map/MapPointerClaim';
 import {
   throwErrorMessageForHumans,
   toasterError,
@@ -174,6 +175,7 @@ function SplitBuildingCutStep({
 
           {candidateShape && (
             <>
+              <MapPointerClaim cursor="crosshair" />
               <div style={{ display: 'flex' }} className="fr-mb-3v">
                 <span className="fr-pr-2v">
                   <i className="fr-icon-feedback-line" aria-hidden="true"></i>

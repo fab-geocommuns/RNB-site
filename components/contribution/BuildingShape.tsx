@@ -9,6 +9,7 @@ import styles from '@/styles/contribution/building.module.scss';
 import editPolygonIcon from '@/public/images/map/edition/edit_polygon.svg';
 import editPolygonDisabledIcon from '@/public/images/map/edition/edit_polygon_disabled.svg';
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
+import MapPointerClaim from '@/components/map/MapPointerClaim';
 
 export default function BuildingShape({
   shapeInteractionMode,
@@ -87,11 +88,15 @@ export default function BuildingShape({
           </span>
           <div className="fr-text--xs fr-pt-1v">
             {shapeInteractionMode === 'drawing' && (
-              <span>
-                Redessinez la géométrie du bâtiment {selectedBuilding.rnb_id} en
-                cliquant sur la carte. Pour finaliser la géométrie, fermez le
-                polygone en <strong>recliquant sur le premier point.</strong>
-              </span>
+              <>
+                <MapPointerClaim cursor="crosshair" />
+                <span>
+                  Redessinez la géométrie du bâtiment {selectedBuilding.rnb_id}{' '}
+                  en cliquant sur la carte. Pour finaliser la géométrie, fermez
+                  le polygone en{' '}
+                  <strong>recliquant sur le premier point.</strong>
+                </span>
+              </>
             )}
           </div>
         </div>
