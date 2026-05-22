@@ -767,14 +767,6 @@ export const useMapLayers = ({
   }, [layers, map]);
 
   useEffect(() => {
-    if (map) {
-      onMapReady(map, () => {
-        installAll(map);
-      });
-    }
-  }, [map]);
-
-  useEffect(() => {
     if (defaultBackgroundLayer)
       dispatch(Actions.map.setLayersBackground(defaultBackgroundLayer));
 
