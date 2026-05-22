@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
@@ -25,6 +25,7 @@ import { fetchBuilding } from '@/utils/requests';
  */
 export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
+  const store = useStore<RootState>();
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
   const previousSplitCandidate = useRef<string | undefined>(undefined);
@@ -178,19 +179,11 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           0,
         );
 
-        if (
-          shapeInteractionMode === 'drawing' ||
-          // drawing step of the split operation
-          (operation === 'split' &&
-            cutStep === 'drawing' &&
-            splitCandidateId &&
-            selectedChildIndex === null)
-        ) {
-          map!.getCanvas().style.cursor = 'crosshair';
-        } else if (featureCloseToCursor) {
-          map!.getCanvas().style.cursor = 'pointer';
-        } else {
-          map!.getCanvas().style.cursor = '';
+        // Le survol ne change le curseur que si aucun composant n'a déclaré
+        // de claim via <MapPointerClaim />. Sinon, le claim métier l'emporte.
+        const claim = store.getState().map.pointer;
+        if (claim === '') {
+          map!.getCanvas().style.cursor = featureCloseToCursor ? 'pointer' : '';
         }
 
         if (

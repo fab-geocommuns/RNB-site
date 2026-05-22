@@ -30,17 +30,39 @@ const styles = [
       'line-width': 3,
     },
   },
-  // Cut lines (solid orange, used for split operation)
+  // Lines seen when polygons are drawed
   {
-    id: 'gl-draw-cut-lines',
+    id: 'gl-draw-lines',
     type: 'line',
-    filter: ['all', ['==', '$type', 'LineString']],
+    filter: [
+      'all',
+      ['==', '$type', 'LineString'],
+      ['!=', 'mode', 'draw_line_string'],
+    ],
     layout: {
       'line-cap': 'round',
       'line-join': 'round',
     },
     paint: {
-      'line-color': orange,
+      'line-color': green,
+      'line-width': 3,
+    },
+  },
+  // Cut lines (solid pink, used for split operation)
+  {
+    id: 'gl-draw-cut-lines',
+    type: 'line',
+    filter: [
+      'all',
+      ['==', '$type', 'LineString'],
+      ['==', 'mode', 'draw_line_string'],
+    ],
+    layout: {
+      'line-cap': 'round',
+      'line-join': 'round',
+    },
+    paint: {
+      'line-color': '#ff00e1',
       'line-width': 3,
     },
   },
