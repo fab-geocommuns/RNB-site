@@ -68,16 +68,19 @@ export const useMapStateSyncSelectedBuilding = (map?: maplibregl.Map) => {
       selectedItemHasChanged(previousSelectedItem, selectedItem)
     ) {
       // Si on arrive sur la page avec un bâtiment pré-sélectionné (q=rnbId), il se peut que ce useEffect soit exécuté avant le chargement de la source BUILDINGS_SOURCE.
-      // On ajoute donc cet événement pour palier à ce cas.
+      // Le listener s'auto-retire après le premier match : le feature-state est stocké
+      // par id de feature (pas par tuile), donc une fois posé il s'applique à toutes les
+      // tuiles chargées ensuite — pas besoin de re-fire sur chaque sourcedata.
       const onSourceData = (e: any) => {
         if (
           e.isSourceLoaded &&
           [SRC_BDGS_POINTS, SRC_BDGS_SHAPES].includes(e.sourceId)
         ) {
           toggleHighlight(previousSelectedItem, selectedItem);
+          map.off('sourcedata', onSourceData);
         }
       };
-      map.on('sourcedata', (e) => onSourceData(e));
+      map.on('sourcedata', onSourceData);
       toggleHighlight(previousSelectedItem, selectedItem);
 
       return () => {
