@@ -24,7 +24,7 @@ export interface ApiHistoryItem {
       username: string;
       first_name: string;
       last_name: string;
-      organizations_names: string | null;
+      organization_name: string | null;
     } | null;
     origin: {
       type: string;
