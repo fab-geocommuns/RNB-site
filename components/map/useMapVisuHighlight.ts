@@ -52,10 +52,7 @@ export const useMapVisuHighlight = (map?: maplibregl.Map) => {
       // 1. reset : tous les features de toutes les sources repassent à in_panel false
       for (const source of ALL_HIGHLIGHTABLE_SOURCES) {
         if (map.getSource(source)) {
-          map.removeFeatureState(
-            { source, sourceLayer: 'default' },
-            'in_panel',
-          );
+          map.removeFeatureState({ source, sourceLayer: 'default' });
         }
       }
 

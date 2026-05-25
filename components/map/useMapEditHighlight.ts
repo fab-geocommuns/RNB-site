@@ -88,14 +88,11 @@ export const useMapEditHighlight = (map?: maplibregl.Map) => {
     if (!map) return;
 
     const applyHighlight = () => {
-      // 1. reset : on efface uniquement la clé in_panel sur toutes les sources,
-      // en préservant les autres feature-states (ex: hovered).
+      // 1. reset : on efface l'état de tous les features de toutes les sources.
+      // Cela efface aussi `hovered`, mais il se reposera au prochain mousemove.
       for (const source of ALL_HIGHLIGHTABLE_SOURCES) {
         if (map.getSource(source)) {
-          map.removeFeatureState(
-            { source, sourceLayer: 'default' },
-            'in_panel',
-          );
+          map.removeFeatureState({ source, sourceLayer: 'default' });
         }
       }
 
