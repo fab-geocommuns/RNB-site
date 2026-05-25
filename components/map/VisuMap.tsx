@@ -5,7 +5,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useMap } from '@/components/map/useMap';
 import { useMapLayers } from '@/components/map/useMapLayers';
 import { useMapControls } from '@/components/map/useMapControls';
-import { useMapVisuHighlight } from '@/components/map/useMapVisuHighlight';
+import { useMapHighlightForVisu } from '@/components/map/useMapHighlightForVisu';
 import { useVisuMapEvents } from '@/components/map/useVisuMapEvents';
 import { useMapSyncCoordinates } from '@/components/map/useMapSyncCoordinates';
 import { useMapStateSync } from '@/components/map/useMapStateSync';
@@ -39,7 +39,7 @@ export default function VisuMap({
     selectedBuildingisGreen: true,
   });
   useMapControls(map);
-  useMapVisuHighlight(map);
+  useMapHighlightForVisu(map);
   useMapSyncCoordinates(map);
   useVisuMapEvents(map);
   useMapStateSync(map);

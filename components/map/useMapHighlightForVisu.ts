@@ -37,7 +37,7 @@ const getItemId = (item: SelectedItem): string | undefined => {
  *
  * @param map
  */
-export const useMapVisuHighlight = (map?: maplibregl.Map) => {
+export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );

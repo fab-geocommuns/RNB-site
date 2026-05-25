@@ -10,7 +10,7 @@ import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.util
  * dès qu'un nouveau bâtiment a été créé.
  *
  * Le highlight des candidats est désormais géré de façon centralisée par
- * useMapEditHighlight.
+ * useMapHighlightForEdition.
  * @param map
  */
 export const useMapStateSyncSelectedBuildingsForMerge = (

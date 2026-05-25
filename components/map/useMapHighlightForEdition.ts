@@ -61,7 +61,7 @@ const computeHighlightTargets = (params: {
  * merge et split.
  * @param map
  */
-export const useMapEditHighlight = (map?: maplibregl.Map) => {
+export const useMapHighlightForEdition = (map?: maplibregl.Map) => {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
