@@ -11,7 +11,7 @@ import { Operation } from '@/stores/edition/edition-slice';
 import maplibregl from 'maplibre-gl';
 
 const BUILDING_SOURCES = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
-// Toutes les sources susceptibles de porter un feature-state in_panel.
+// Toutes les sources susceptibles de porter un feature-state highlighted.
 const ALL_HIGHLIGHTABLE_SOURCES = [...BUILDING_SOURCES, SRC_ADS];
 
 // Une cible de highlight : un id de feature et les sources où le poser.
@@ -19,7 +19,7 @@ type HighlightTarget = { sources: string[]; id: string };
 
 /**
  * Calcule, à partir de l'état d'édition, l'ensemble complet des features à
- * mettre en `in_panel: true`. C'est l'unique source de vérité du highlight :
+ * mettre en `highlighted: true`. C'est l'unique source de vérité du highlight :
  * selon `operation`, on surligne la sélection, les candidats au merge ou le
  * candidat au split.
  */
@@ -56,7 +56,7 @@ const computeHighlightTargets = (params: {
 };
 
 /**
- * Gestion centralisée du highlight (`feature-state.in_panel`) des bâtiments sur
+ * Gestion centralisée du highlight (`feature-state.highlighted`) des bâtiments sur
  * la carte d'édition. Point unique pour les highlights de sélection, update,
  * merge et split.
  * @param map
@@ -96,13 +96,13 @@ export const useMapEditHighlight = (map?: maplibregl.Map) => {
         }
       }
 
-      // 2. highlight : on pose in_panel:true sur chaque cible.
+      // 2. highlight : on pose highlighted:true sur chaque cible.
       for (const target of targets) {
         for (const source of target.sources) {
           if (map.getSource(source)) {
             map.setFeatureState(
               { source, id: target.id, sourceLayer: 'default' },
-              { in_panel: true },
+              { highlighted: true },
             );
           }
         }

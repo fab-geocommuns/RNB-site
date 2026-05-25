@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 const BUILDING_SOURCES = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
 const ADS_SOURCES = [SRC_ADS];
 
-// Toutes les sources susceptibles de porter un feature-state in_panel.
+// Toutes les sources susceptibles de porter un feature-state highlighted.
 const ALL_HIGHLIGHTABLE_SOURCES = [...BUILDING_SOURCES, ...ADS_SOURCES];
 
 const getItemSources = (item: SelectedItem): string[] => {
@@ -31,8 +31,8 @@ const getItemId = (item: SelectedItem): string | undefined => {
  * Gestion du highlight d'un item (bâtiment ou ADS) sur la carte de visualisation.
  *
  * Approche déclarative : on n'a qu'un seul item sélectionné à la fois.
- * On remet donc tous les features à `in_panel: false` (removeFeatureState sur
- * chaque source) puis on passe le seul item sélectionné à `in_panel: true`.
+ * On remet donc tous les features à `highlighted: false` (removeFeatureState sur
+ * chaque source) puis on passe le seul item sélectionné à `highlighted: true`.
  * Pas besoin de tracker l'item précédent.
  *
  * @param map
@@ -49,7 +49,7 @@ export const useMapVisuHighlight = (map?: maplibregl.Map) => {
     if (!map) return;
 
     const applyHighlight = () => {
-      // 1. reset : tous les features de toutes les sources repassent à in_panel false
+      // 1. reset : tous les features de toutes les sources repassent à highlighted false
       for (const source of ALL_HIGHLIGHTABLE_SOURCES) {
         if (map.getSource(source)) {
           map.removeFeatureState({ source, sourceLayer: 'default' });
@@ -62,7 +62,7 @@ export const useMapVisuHighlight = (map?: maplibregl.Map) => {
           if (map.getSource(source)) {
             map.setFeatureState(
               { source, id: selectedId, sourceLayer: 'default' },
-              { in_panel: true },
+              { highlighted: true },
             );
           }
         }
