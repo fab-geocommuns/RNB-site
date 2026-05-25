@@ -13,9 +13,7 @@ import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.util
  * useMapHighlightForEdition.
  * @param map
  */
-export const useMapStateSyncSelectedBuildingsForMerge = (
-  map?: maplibregl.Map,
-) => {
+export const useMapMerge = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   const newBuilding = useSelector(
     (state: RootState) => state.edition.merge.newBuilding,
