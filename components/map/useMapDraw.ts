@@ -1,4 +1,4 @@
-import { useEffect, useRef, type MutableRefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
@@ -60,7 +60,7 @@ MapboxDraw.modes.draw_line_string.onKeyUp = function (state, e) {
  */
 export const useMapDraw = (
   map?: maplibregl.Map,
-): MutableRefObject<MapboxDraw | null> => {
+): RefObject<MapboxDraw | null> => {
   const drawRef = useRef<MapboxDraw | null>(null);
 
   useEffect(() => {
