@@ -24,6 +24,41 @@ MapboxDraw.constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
 // @ts-ignore
 MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib';
 
+// Customisation des modes de dessin. Ces objets sont partagés au niveau module
+// par MapboxDraw : on les patche une seule fois à l'import plutôt qu'à chaque
+// rendu du hook.
+
+// prevent the direct_select mode to switch to simple_select on click out
+// https://github.com/mapbox/mapbox-gl-draw/blob/78a5db85ec5e86159e2439316ed56128ba6eb5d9/src/modes/direct_select.js#L105
+// @ts-ignore
+MapboxDraw.modes.direct_select.clickNoTarget = function () {};
+// @ts-ignore
+MapboxDraw.modes.direct_select.clickInactive = function () {};
+
+// customization of draw_polygon mode
+// avoids leaving the draw_polygon mode when escape key is pressed during the drawing
+MapboxDraw.modes.draw_polygon.onKeyUp = function (state, e) {
+  // escape key
+  if (e.keyCode === 27) {
+    // @ts-ignore
+    this.deleteFeature([state.polygon.id], { silent: true });
+    this.changeMode('draw_polygon');
+    // enter key
+  } else if (e.keyCode === 13) {
+    this.changeMode('simple_select', { featureIds: [state.polygon.id] });
+  }
+};
+
+// customization of draw_line_string mode for split
+MapboxDraw.modes.draw_line_string.onKeyUp = function (state, e) {
+  // escape key - cancel current line and restart
+  if (e.keyCode === 27) {
+    // @ts-ignore
+    this.deleteFeature([state.line.id], { silent: true });
+    this.changeMode('draw_line_string');
+  }
+};
+
 /**
  *
  * @param map
@@ -51,41 +86,6 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
   const prevOperationRef = useRef<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const BUILDING_DRAW_SHAPE_FEATURE_ID = 'selected-building-shape';
-  const direct_select = MapboxDraw.modes.direct_select;
-
-  // prevent the direct_select mode to switch to simple_select on click out
-  // https://github.com/mapbox/mapbox-gl-draw/blob/78a5db85ec5e86159e2439316ed56128ba6eb5d9/src/modes/direct_select.js#L105
-  // @ts-ignore
-  direct_select.clickNoTarget = function () {};
-  // @ts-ignore
-  direct_select.clickInactive = function () {};
-  const draw_polygon = MapboxDraw.modes.draw_polygon;
-
-  // customization of draw_polygon mode
-  // avoids leaving the draw_polygon mode when escape key is pressed during the drawing
-  draw_polygon.onKeyUp = function (state, e) {
-    // escape key
-    if (e.keyCode === 27) {
-      // @ts-ignore
-      this.deleteFeature([state.polygon.id], { silent: true });
-      this.changeMode('draw_polygon');
-      // enter key
-    } else if (e.keyCode === 13) {
-      this.changeMode('simple_select', { featureIds: [state.polygon.id] });
-    }
-  };
-
-  const draw_line_string = MapboxDraw.modes.draw_line_string;
-
-  // customization of draw_line_string mode for split
-  draw_line_string.onKeyUp = function (state, e) {
-    // escape key - cancel current line and restart
-    if (e.keyCode === 27) {
-      // @ts-ignore
-      this.deleteFeature([state.line.id], { silent: true });
-      this.changeMode('draw_line_string');
-    }
-  };
 
   const [drawMode, setDrawMode] = useState('draw_polygon');
   // shift+r switches from a drawing mode to another
@@ -127,8 +127,8 @@ export const useMapEditBuildingShape = (map?: maplibregl.Map) => {
         modes: {
           simple_select: MapboxDraw.modes.simple_select,
           direct_select: MapboxDraw.modes.direct_select,
-          draw_polygon: draw_polygon,
-          draw_line_string: draw_line_string,
+          draw_polygon: MapboxDraw.modes.draw_polygon,
+          draw_line_string: MapboxDraw.modes.draw_line_string,
           draw_rectangle: DrawAssistedRectangle,
         },
         defaultMode: 'simple_select',
