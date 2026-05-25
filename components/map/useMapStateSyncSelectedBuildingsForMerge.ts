@@ -1,67 +1,28 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  SRC_BDGS_POINTS,
-  SRC_BDGS_SHAPES,
-} from '@/components/map/useMapLayers';
 import { RootState, AppDispatch, Actions } from '@/stores/store';
 import maplibregl from 'maplibre-gl';
 import { MapMouseEvent } from 'maplibre-gl';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 
 /**
- * Gestion de la synchronisation entre la selection d'un item et le store Redux
+ * En mode merge, un clic dans le vide (hors d'un bâtiment) sort du mode merge
+ * dès qu'un nouveau bâtiment a été créé.
+ *
+ * Le highlight des candidats est désormais géré de façon centralisée par
+ * useMapEditHighlight.
  * @param map
  */
 export const useMapStateSyncSelectedBuildingsForMerge = (
   map?: maplibregl.Map,
 ) => {
   const dispatch: AppDispatch = useDispatch();
-  const candidatesToMerge = useSelector((state: RootState) =>
-    state.edition.merge.candidates.map((candidate) => candidate.rnbId),
-  );
   const newBuilding = useSelector(
     (state: RootState) => state.edition.merge.newBuilding,
   );
-  const selectedItem = useSelector(
-    (state: RootState) => state.map.selectedItem,
-  );
   const operation = useSelector((state: RootState) => state.edition.operation);
-  const prevSelectedRef = useRef<string[]>([]);
-  const prevOperationRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const prevSelected = prevSelectedRef.current;
-    const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
-    const cleanups: Array<() => void> = [];
-    if (operation == 'merge') {
-      if (map && candidatesToMerge) {
-        candidatesToMerge.map((candidate) => {
-          let inPanel = true;
-          let id = candidate;
-          if (candidatesToMerge.length < prevSelected.length) {
-            const filterIdToRemove = prevSelected.filter(
-              (item) =>
-                !candidatesToMerge.some((candidate) => candidate === item),
-            );
-            inPanel = false;
-            id = filterIdToRemove[0];
-          }
-          cleanups.push(setFeatureStateInLayers(sources, map, id, inPanel));
-        });
-      }
-      if (map && !selectedItem && !candidatesToMerge.length) {
-        cleanups.push(removeFeatureStateInLayers(sources, map));
-      }
-      prevSelectedRef.current = candidatesToMerge;
-    }
-    return () => {
-      cleanups.forEach((fn) => fn());
-    };
-  }, [candidatesToMerge, operation]);
-
-  useEffect(() => {
-    const sources = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
     if (map) {
       const handleClickEvent = (e: MapMouseEvent) => {
         const featureOnCursor = getNearestFeatureFromCursorWithBuffer(
@@ -78,83 +39,9 @@ export const useMapStateSyncSelectedBuildingsForMerge = (
         }
       };
       map.on('click', handleClickEvent);
-      const prevOperation = prevOperationRef.current;
-      let removeCleanup: (() => void) | undefined;
-      if (operation !== 'merge' && prevOperation === 'merge') {
-        removeCleanup = removeFeatureStateInLayers(sources, map);
-      }
-      prevOperationRef.current = operation;
       return () => {
         map.off('click', handleClickEvent);
-        removeCleanup?.();
       };
     }
-  }, [operation, candidatesToMerge, newBuilding]);
+  }, [operation, newBuilding]);
 };
-
-function setMapLayer(
-  sources: string[],
-  map: maplibregl.Map,
-  method: 'setFeatureState' | 'removeFeatureState',
-  id?: string,
-  obj?: { in_panel: boolean },
-) {
-  for (const source of sources) {
-    if (map.getSource(source)) {
-      (map[method] as any)(
-        {
-          source,
-          id,
-          sourceLayer: 'default',
-        },
-        obj,
-      );
-    }
-  }
-}
-
-function removeFeatureStateInLayers(sources: string[], map: maplibregl.Map) {
-  // Le listener gère le cas où les sources ne sont pas encore chargées au moment de
-  // l'appel. Il s'auto-retire après le premier match pour ne pas re-fire à chaque
-  // chargement de tuile.
-  const onSourceData = (e: any) => {
-    if (checkSource(e)) {
-      setMapLayer(sources, map, 'removeFeatureState');
-      map.off('sourcedata', onSourceData);
-    }
-  };
-  map.on('sourcedata', onSourceData);
-  setMapLayer(sources, map, 'removeFeatureState');
-  return () => {
-    map.off('sourcedata', onSourceData);
-  };
-}
-
-function setFeatureStateInLayers(
-  sources: string[],
-  map: maplibregl.Map,
-  id: string,
-  inPanel: boolean,
-) {
-  const onSourceData = (e: any) => {
-    if (checkSource(e)) {
-      setMapLayer(sources, map, 'setFeatureState', id, {
-        in_panel: inPanel,
-      });
-      map.off('sourcedata', onSourceData);
-    }
-  };
-  map.on('sourcedata', onSourceData);
-  setMapLayer(sources, map, 'setFeatureState', id, {
-    in_panel: inPanel,
-  });
-  return () => {
-    map.off('sourcedata', onSourceData);
-  };
-}
-
-function checkSource(e: any) {
-  return (
-    e.isSourceLoaded && [SRC_BDGS_POINTS, SRC_BDGS_SHAPES].includes(e.sourceId)
-  );
-}

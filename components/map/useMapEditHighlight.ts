@@ -1,141 +1,134 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
+  SRC_ADS,
   SRC_BDGS_POINTS,
   SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
 import { RootState } from '@/stores/store';
-import maplibregl from 'maplibre-gl';
 import { SelectedItem } from '@/stores/map/map-slice';
+import { Operation } from '@/stores/edition/edition-slice';
+import maplibregl from 'maplibre-gl';
+
+const BUILDING_SOURCES = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
+// Toutes les sources susceptibles de porter un feature-state in_panel.
+const ALL_HIGHLIGHTABLE_SOURCES = [...BUILDING_SOURCES, SRC_ADS];
+
+// Une cible de highlight : un id de feature et les sources où le poser.
+type HighlightTarget = { sources: string[]; id: string };
 
 /**
- * Gestion de la synchronisation entre la selection d'un item et le store Redux
+ * Calcule, à partir de l'état d'édition, l'ensemble complet des features à
+ * mettre en `in_panel: true`. C'est l'unique source de vérité du highlight :
+ * selon `operation`, on surligne la sélection, les candidats au merge ou le
+ * candidat au split.
+ */
+const computeHighlightTargets = (params: {
+  operation: Operation;
+  selectedItem: SelectedItem | null | undefined;
+  mergeCandidates: string[];
+  splitCandidateId: string | null;
+}): HighlightTarget[] => {
+  const { operation, selectedItem, mergeCandidates, splitCandidateId } = params;
+
+  // En merge, seuls les candidats sont surlignés.
+  if (operation === 'merge') {
+    return mergeCandidates.map((id) => ({ sources: BUILDING_SOURCES, id }));
+  }
+
+  // En split, seul le candidat est surligné, et uniquement dans la source des
+  // shapes (les points ne représentent pas le bâtiment coupé).
+  if (operation === 'split') {
+    return splitCandidateId
+      ? [{ sources: [SRC_BDGS_SHAPES], id: splitCandidateId }]
+      : [];
+  }
+
+  // null | 'create' | 'update' : on surligne l'item sélectionné.
+  if (selectedItem?._type === 'building') {
+    return [{ sources: BUILDING_SOURCES, id: selectedItem.rnb_id }];
+  }
+  if (selectedItem?._type === 'ads') {
+    return [{ sources: [SRC_ADS], id: selectedItem.file_number }];
+  }
+
+  return [];
+};
+
+/**
+ * Gestion centralisée du highlight (`feature-state.in_panel`) des bâtiments sur
+ * la carte d'édition. Point unique pour les highlights de sélection, update,
+ * merge et split.
  * @param map
  */
-export const useMapStateSyncSelectedBuilding = (map?: maplibregl.Map) => {
-  // Selected item
+export const useMapEditHighlight = (map?: maplibregl.Map) => {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
-  const [previousSelectedItem, setPreviousSelectedItem] = useState<any>();
+  const operation = useSelector((state: RootState) => state.edition.operation);
+  const mergeCandidates = useSelector((state: RootState) =>
+    state.edition.merge.candidates.map((candidate) => candidate.rnbId),
+  );
+  const splitCandidateId = useSelector(
+    (state: RootState) => state.edition.split.splitCandidateId,
+  );
 
-  const getFeatureTypeSource = (item: SelectedItem) => {
-    if (item._type === 'building') {
-      return [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
-    }
+  const targets = computeHighlightTargets({
+    operation,
+    selectedItem,
+    mergeCandidates,
+    splitCandidateId,
+  });
 
-    if (item._type === 'ads') {
-      return ['ads'];
-    }
+  // Clé sérialisée : l'effet ne se redéclenche que si l'ensemble des highlights
+  // change réellement (mergeCandidates produit un nouveau tableau à chaque rendu).
+  const targetsKey = JSON.stringify(targets);
 
-    return [];
-  };
-
-  const getFeatureId = (item: SelectedItem) => {
-    if (item._type === 'building') {
-      return item.rnb_id;
-    }
-
-    if (item._type === 'ads') {
-      return item.file_number;
-    }
-  };
-
-  const selectedItemHasChanged = (
-    previousSelectedItem: SelectedItem,
-    selectedItem: SelectedItem,
-  ) => {
-    if (previousSelectedItem === undefined) return true;
-    if (previousSelectedItem._type !== selectedItem._type) return true;
-
-    if (
-      selectedItem._type === 'building' &&
-      previousSelectedItem._type === 'building'
-    ) {
-      return previousSelectedItem.rnb_id !== selectedItem.rnb_id;
-    }
-
-    if (selectedItem._type === 'ads' && previousSelectedItem._type === 'ads') {
-      return previousSelectedItem.file_number !== selectedItem.file_number;
-    }
-  };
-
-  // Initialisation de la synchronisation: selectedBuildingId
   useEffect(() => {
-    if (
-      map &&
-      selectedItem &&
-      selectedItemHasChanged(previousSelectedItem, selectedItem)
-    ) {
-      // Si on arrive sur la page avec un bâtiment pré-sélectionné (q=rnbId), il se peut que ce useEffect soit exécuté avant le chargement de la source BUILDINGS_SOURCE.
-      // Le listener s'auto-retire après le premier match : le feature-state est stocké
-      // par id de feature (pas par tuile), donc une fois posé il s'applique à toutes les
-      // tuiles chargées ensuite — pas besoin de re-fire sur chaque sourcedata.
-      const onSourceData = (e: any) => {
-        if (
-          e.isSourceLoaded &&
-          [SRC_BDGS_POINTS, SRC_BDGS_SHAPES].includes(e.sourceId)
-        ) {
-          toggleHighlight(previousSelectedItem, selectedItem);
-          map.off('sourcedata', onSourceData);
-        }
-      };
-      map.on('sourcedata', onSourceData);
-      toggleHighlight(previousSelectedItem, selectedItem);
+    if (!map) return;
 
-      return () => {
-        map.off('sourcedata', onSourceData);
-      };
-    }
-  }, [selectedItem]);
-
-  const toggleHighlight = (
-    previousSelectedItem: SelectedItem,
-    selectedItem: SelectedItem,
-  ) => {
-    // First, downlight the previous selected item
-    if (previousSelectedItem && map) {
-      const sources = getFeatureTypeSource(previousSelectedItem);
-      const id = getFeatureId(previousSelectedItem);
-
-      if (id) {
-        for (const source of sources) {
-          if (map.getSource(source)) {
-            map.setFeatureState(
-              {
-                source,
-                id,
-                sourceLayer: 'default',
-              },
-              { in_panel: false },
-            );
-          }
+    const applyHighlight = () => {
+      // 1. reset : on efface uniquement la clé in_panel sur toutes les sources,
+      // en préservant les autres feature-states (ex: hovered).
+      for (const source of ALL_HIGHLIGHTABLE_SOURCES) {
+        if (map.getSource(source)) {
+          map.removeFeatureState(
+            { source, sourceLayer: 'default' },
+            'in_panel',
+          );
         }
       }
-    }
 
-    // Then, highlight the current selected item
-
-    if (selectedItem && map) {
-      const sources = getFeatureTypeSource(selectedItem);
-      const id = getFeatureId(selectedItem);
-      if (id) {
-        for (const source of sources) {
+      // 2. highlight : on pose in_panel:true sur chaque cible.
+      for (const target of targets) {
+        for (const source of target.sources) {
           if (map.getSource(source)) {
             map.setFeatureState(
-              {
-                source,
-                id,
-                sourceLayer: 'default',
-              },
+              { source, id: target.id, sourceLayer: 'default' },
               { in_panel: true },
             );
           }
         }
       }
+    };
 
-      // Finally, set the previous selected item
-      setPreviousSelectedItem(selectedItem);
-    }
-  };
+    applyHighlight();
+
+    // Les sources peuvent ne pas être chargées (ex : arrivée avec ?q=rnbId).
+    // On ré-applique au premier chargement puis on se retire : le feature-state
+    // est stocké par id (pas par tuile), donc une seule pose suffit.
+    const onSourceData = (e: maplibregl.MapSourceDataEvent) => {
+      if (e.isSourceLoaded && ALL_HIGHLIGHTABLE_SOURCES.includes(e.sourceId)) {
+        applyHighlight();
+        map.off('sourcedata', onSourceData);
+      }
+    };
+    map.on('sourcedata', onSourceData);
+
+    return () => {
+      map.off('sourcedata', onSourceData);
+    };
+    // targets est dérivé de targetsKey ; on dépend de la clé sérialisée.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, targetsKey]);
 };
