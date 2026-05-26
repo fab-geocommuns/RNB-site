@@ -99,6 +99,7 @@ function formatFields(field: string): string {
   if (field === 'shape') return 'forme';
   if (field === 'addresses') return 'adresses';
   if (field === 'ext_ids') return 'identifiants externes';
+  if (field === 'marked_as_correct_by') return 'marqué comme correct';
   return field;
 }
 function addDashToFields(fields: string[]): string {
