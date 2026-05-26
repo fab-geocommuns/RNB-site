@@ -131,12 +131,26 @@
 }
 
 .markedAsCorrect {
-  i {
-    color: #68a532;
+  display: flex;
+  align-items: center;
+  background: #e6feda;
+  padding: 1rem 0.8rem 1rem 1rem;
+  border-radius: 4px;
+  color: #142117;
+  .sectionTitle {
+    color: #2a401a;
+  }
+}
 
+.markedAsCorrectIconShell {
+  margin-right: 0.8rem;
+  text-align: center;
+  i {
+    height: 20px;
     &::before {
-      width: 19px;
-      height: 19px;
+      color: #142117;
+      width: 25px;
+      height: 25px;
     }
   }
 }
