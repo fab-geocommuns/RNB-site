@@ -82,7 +82,9 @@ export default function Details({
                     </div>
                   ) : (
                     <span>
-                      <i>Ce bâtiment n'est pas encore marqué comme correct.</i>
+                      <i>
+                        Ce bâtiment n&apos;est pas encore marqué comme correct.
+                      </i>
                     </span>
                   )}
                 </span>
