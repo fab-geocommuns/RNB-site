@@ -13,6 +13,7 @@ import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 import RNBIDHeader from '@/components/contribution/RNBIDHeader';
 import PanelTabs from '@/components/panel/PanelTabs';
+import { Badge } from '@codegouvfr/react-dsfr/Badge';
 
 // Styles
 import styles from '@/styles/panelBuilding.module.scss';
@@ -96,19 +97,20 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
       {bdg.marked_as_correct_by.length > 0 && (
         <div className={panelStyles.section}>
           <div className={panelStyles.markedAsCorrect}>
+            <div className={panelStyles.markedAsCorrectIconShell}>
+              <i className="fr-icon-success-fill" aria-hidden="true"></i>
+            </div>
             <div>
               <h2 className={panelStyles.sectionTitle}>
-                Marqué comme correct par
+                Bâtiment marqué comme correct
               </h2>
               <div className={panelStyles.sectionBody}>
                 {bdg.marked_as_correct_by.map((user: PublicUser) => (
                   <div key={user.id} className={panelStyles.user}>
-                    <i className="fr-icon-success-fill" aria-hidden="true"></i>
                     <span>
                       <span className={panelStyles.userName}>
-                        {' '}
-                        {user.display_name}
-                      </span>
+                        par {user.display_name}
+                      </span>{' '}
                       {user.organization_name && (
                         <span className={panelStyles.userOrganization}>
                           ({user.organization_name})
