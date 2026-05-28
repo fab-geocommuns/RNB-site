@@ -7,7 +7,6 @@ import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
-  SRC_BDGS_SHAPES,
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
@@ -28,7 +27,6 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const store = useStore<RootState>();
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
-  const previousSplitCandidate = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
@@ -233,30 +231,4 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     buildingNewShape,
     selectedChildIndex,
   ]);
-
-  // split candidate highlighting
-  useEffect(() => {
-    if (map) {
-      if (previousSplitCandidate.current) {
-        map.removeFeatureState({
-          source: SRC_BDGS_SHAPES,
-          sourceLayer: 'default',
-          id: previousSplitCandidate.current,
-        });
-        previousSplitCandidate.current = undefined;
-      }
-
-      if (operation === 'split' && splitCandidateId) {
-        map.setFeatureState(
-          {
-            source: SRC_BDGS_SHAPES,
-            id: splitCandidateId,
-            sourceLayer: 'default',
-          },
-          { in_panel: true },
-        );
-        previousSplitCandidate.current = splitCandidateId;
-      }
-    }
-  }, [map, splitCandidateId, operation]);
 };

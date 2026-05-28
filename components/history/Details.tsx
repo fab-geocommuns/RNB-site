@@ -55,46 +55,82 @@ export default function Details({
         </div>
 
         <div className={styles.detailBlock}>
-          {detailsInfo.status && (
+          {detailsInfo.marked_as_correct_by && (
             <div className={styles.detailBlockInfo}>
               <div className={styles.detailInfo}>
                 <div className={styles.detailLabel}>
                   <span className={styles.label}>
-                    Statut physique :
+                    Marqué c. correct par :
                     {detailsInfo.event?.details?.updated_fields?.includes(
-                      'status',
+                      'marked_as_correct_by',
                     ) && <ChangedIcon />}
                   </span>
                 </div>
                 <span>
-                  {BuildingStatusMap[
-                    detailsInfo.status as BuildingStatusType
-                  ] || detailsInfo.status}
+                  {detailsInfo?.marked_as_correct_by?.length ? (
+                    <div className={styles.detailAddressItems}>
+                      {detailsInfo.marked_as_correct_by.map((user, i) => (
+                        <div className="fr-mb-1v" key={i}>
+                          <span className={styles.mergePanelAddressText}>
+                            {user.display_name || user.username}
+                            {user.organization_name
+                              ? ' (' + user.organization_name + ')'
+                              : ''}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span>
+                      <i>
+                        Ce bâtiment n&apos;est pas encore marqué comme correct.
+                      </i>
+                    </span>
+                  )}
                 </span>
-              </div>
-              <div className={styles.banLink}>
-                <a href={formatLinkGoBackIgn(detailsInfo)} target="_blank">
-                  Consulter le site Remonter le Temps de l&apos;IGN
-                </a>
-                <br />
-                <a href={formatPanoramaxLink(detailsInfo)} target="_blank">
-                  Consulter le site Panoramax
-                </a>
               </div>
             </div>
           )}
+        </div>
+
+        {detailsInfo.status && (
           <div className={styles.detailBlockInfo}>
             <div className={styles.detailInfo}>
               <div className={styles.detailLabel}>
                 <span className={styles.label}>
-                  État :
+                  Statut physique :
                   {detailsInfo.event?.details?.updated_fields?.includes(
-                    'is_active',
+                    'status',
                   ) && <ChangedIcon />}
                 </span>
               </div>
-              <span>{detailsInfo.is_active ? 'Activé' : 'Désactivé'}</span>
+              <span>
+                {BuildingStatusMap[detailsInfo.status as BuildingStatusType] ||
+                  detailsInfo.status}
+              </span>
             </div>
+            <div className={styles.banLink}>
+              <a href={formatLinkGoBackIgn(detailsInfo)} target="_blank">
+                Consulter le site Remonter le Temps de l&apos;IGN
+              </a>
+              <br />
+              <a href={formatPanoramaxLink(detailsInfo)} target="_blank">
+                Consulter le site Panoramax
+              </a>
+            </div>
+          </div>
+        )}
+        <div className={styles.detailBlockInfo}>
+          <div className={styles.detailInfo}>
+            <div className={styles.detailLabel}>
+              <span className={styles.label}>
+                État :
+                {detailsInfo.event?.details?.updated_fields?.includes(
+                  'is_active',
+                ) && <ChangedIcon />}
+              </span>
+            </div>
+            <span>{detailsInfo.is_active ? 'Activé' : 'Désactivé'}</span>
           </div>
         </div>
         <div className={styles.detailBlockInfo}>

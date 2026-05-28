@@ -18,10 +18,10 @@ import { useMapDraw } from '@/components/map/useMapDraw';
 import { useMapPolygonDraw } from '@/components/map/useMapPolygonDraw';
 import { useMapSplitDraw } from '@/components/map/useMapSplitDraw';
 import { useMapSplitChildren } from '@/components/map/useMapSplitChildren';
-import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
-import { useMapStateSyncSelectedBuildingsForMerge } from '@/components/map/useMapStateSyncSelectedBuildingsForMerge';
+import { useMapHighlightForEdition } from '@/components/map/useMapHighlightForEdition';
 import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
 import { useMapPointer } from '@/components/map/useMapPointer';
+import { useMapMerge } from './useMapMerge';
 
 type Props = {
   disabledLayers?: MapLayer[];
@@ -57,9 +57,9 @@ export default function EditMap({
   useMapSplitDraw(map, drawRef);
 
   useMapSplitChildren(map);
-  useMapStateSyncSelectedBuilding(map);
-  useMapStateSyncSelectedBuildingsForMerge(map);
+  useMapMerge(map);
   useMapStateSyncReport(map);
+  useMapHighlightForEdition(map);
   useMapPointer(map);
   return mapContainer;
 }
