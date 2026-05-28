@@ -16,10 +16,10 @@ import {
 } from '@/stores/map/map-slice';
 import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
 import { useMapSplitChildren } from '@/components/map/useMapSplitChildren';
-import { useMapStateSyncSelectedBuilding } from '@/components/map/useMapStateSyncSelectedBuilding';
-import { useMapStateSyncSelectedBuildingsForMerge } from '@/components/map/useMapStateSyncSelectedBuildingsForMerge';
+import { useMapHighlightForEdition } from '@/components/map/useMapHighlightForEdition';
 import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
 import { useMapPointer } from '@/components/map/useMapPointer';
+import { useMapMerge } from './useMapMerge';
 
 type Props = {
   disabledLayers?: MapLayer[];
@@ -50,9 +50,9 @@ export default function EditMap({
   useMapStateSync(map);
   useMapEditBuildingShape(map);
   useMapSplitChildren(map);
-  useMapStateSyncSelectedBuilding(map);
-  useMapStateSyncSelectedBuildingsForMerge(map);
+  useMapMerge(map);
   useMapStateSyncReport(map);
+  useMapHighlightForEdition(map);
   useMapPointer(map);
   return mapContainer;
 }
