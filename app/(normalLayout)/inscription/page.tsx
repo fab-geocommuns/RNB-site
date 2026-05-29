@@ -56,8 +56,8 @@ export default async function InscriptionPage({
               <p>
                 <span className="stab stab--yellow">
                   <b>
-                    Créer un compte vous permet de participer à l'amélioration
-                    du RNB.
+                    Créer un compte vous permet de participer à
+                    l&apos;amélioration du RNB.
                   </b>
                 </span>
               </p>
@@ -66,7 +66,7 @@ export default async function InscriptionPage({
                 bâtiment, corriger une adresse, désactiver les erreurs, ...
               </p>
               <p>
-                Services de l'État, collectivités, citoyens, entreprises ou
+                Services de l&apos;État, collectivités, citoyens, entreprises ou
                 associations sont invités à apporter leur pierre au RNB.
               </p>
               <p>
