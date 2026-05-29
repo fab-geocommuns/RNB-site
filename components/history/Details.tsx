@@ -55,21 +55,21 @@ export default function Details({
         </div>
 
         <div className={styles.detailBlock}>
-          {detailsInfo.marked_as_correct_by && (
+          {detailsInfo.validated_by && (
             <div className={styles.detailBlockInfo}>
               <div className={styles.detailInfo}>
                 <div className={styles.detailLabel}>
                   <span className={styles.label}>
                     Marqué c. correct par :
                     {detailsInfo.event?.details?.updated_fields?.includes(
-                      'marked_as_correct_by',
+                      'validated_by',
                     ) && <ChangedIcon />}
                   </span>
                 </div>
                 <span>
-                  {detailsInfo?.marked_as_correct_by?.length ? (
+                  {detailsInfo?.validated_by?.length ? (
                     <div className={styles.detailAddressItems}>
-                      {detailsInfo.marked_as_correct_by.map((user, i) => (
+                      {detailsInfo.validated_by.map((user, i) => (
                         <div className="fr-mb-1v" key={i}>
                           <span className={styles.mergePanelAddressText}>
                             {user.display_name || user.username}
