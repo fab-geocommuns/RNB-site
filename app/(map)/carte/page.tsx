@@ -65,6 +65,7 @@ export default function RNBMap() {
     });
   };
 
+  const SOURCES_FROM = ['RNC', 'PrioReno', 'IPPER'] as const;
   const [from, setFrom] = useQueryParamState('from', '');
   const cookieState = Cookies.get('state') === 'true';
 
@@ -72,6 +73,14 @@ export default function RNBMap() {
     if (document.referrer.includes('registre-coproprietes.gouv.fr') && !from) {
       setFrom('RNC');
       Cookies.set('from', 'RNC', { expires: 365 });
+      Cookies.set('state', 'true', { expires: 365 });
+    } else if (document.referrer.includes('banquedesterritoires.fr')) {
+      setFrom('PrioReno');
+      Cookies.set('from', 'PrioReno', { expires: 365 });
+      Cookies.set('state', 'true', { expires: 365 });
+    } else if (document.referrer.includes('programme-cee-actee.fr')) {
+      setFrom('IPPER');
+      Cookies.set('from', 'IPPER', { expires: 365 });
       Cookies.set('state', 'true', { expires: 365 });
     }
   }, [from, setFrom]);
@@ -107,7 +116,9 @@ export default function RNBMap() {
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}
-        {from === 'RNC' && <HelpRNCPanel defaultOpen={cookieState} />}
+        {SOURCES_FROM.includes(from as 'RNC' | 'PrioReno' | 'IPPER') && (
+          <HelpRNCPanel defaultOpen={cookieState} from={from} />
+        )}
 
         <div className={styles.map__mapShell}>
           <VisuMap defaultExtraLayers={defaultExtraLayers} />
