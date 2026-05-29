@@ -5,12 +5,14 @@ declare module 'next-auth' {
     accessToken?: string;
     username?: string;
     groups?: string[];
+    authProvider?: string;
   }
 
   interface User {
     token: string;
     username: string;
     groups: string[];
+    authProvider?: string;
   }
 }
 
@@ -19,5 +21,6 @@ declare module 'next-auth/jwt' {
     accessToken?: string;
     username?: string;
     groups?: string[];
+    authProvider?: string;
   }
 }
