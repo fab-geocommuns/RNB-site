@@ -24,7 +24,7 @@ export interface ApiHistoryItem {
       username: string;
       first_name: string;
       last_name: string;
-      organizations_names: string | null;
+      organization_name: string | null;
     } | null;
     origin: {
       type: string;
@@ -60,6 +60,12 @@ export interface ApiHistoryItem {
     city_name: string;
     city_zipcode: string;
     city_insee_code: string;
+  }>;
+  marked_as_correct_by: Array<{
+    id: string;
+    username: string;
+    display_name: string;
+    organization_name: string;
   }>;
 }
 

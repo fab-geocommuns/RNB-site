@@ -261,7 +261,7 @@ export const useMapLayers = ({
         ],
         'circle-stroke-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           '#431407',
           '#ffffff',
         ],
@@ -374,13 +374,13 @@ export const useMapLayers = ({
         paint: {
           'line-color': [
             'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
+            ['boolean', ['feature-state', 'highlighted'], false],
             '#31e060',
             '#00000033',
           ],
           'line-width': [
             'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
+            ['boolean', ['feature-state', 'highlighted'], false],
             3,
             1.5,
           ],
@@ -405,7 +405,7 @@ export const useMapLayers = ({
         'circle-stroke-width': 3,
         'circle-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           '#31e060',
           '#1452e3',
         ],
@@ -428,7 +428,7 @@ export const useMapLayers = ({
       paint: {
         'fill-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
@@ -448,7 +448,7 @@ export const useMapLayers = ({
       paint: {
         'line-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           selectedBuildingColor,
           ['boolean', ['feature-state', 'hovered'], false],
           '#87d443',
@@ -474,7 +474,7 @@ export const useMapLayers = ({
         ],
         'circle-stroke-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           '#ffffff',
           ['>', ['get', 'contributions'], 0],
           '#fef4f4',
@@ -483,7 +483,7 @@ export const useMapLayers = ({
         'circle-stroke-width': 3,
         'circle-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           '#31e060',
           '#1452e3',
         ],
@@ -589,7 +589,7 @@ export const useMapLayers = ({
         'circle-stroke-width': 2,
         'circle-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           darkColor,
           lightColor,
         ],
@@ -613,7 +613,7 @@ export const useMapLayers = ({
       paint: {
         'icon-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           lightColor,
           darkColor,
         ],
@@ -765,14 +765,6 @@ export const useMapLayers = ({
       installAll(map);
     });
   }, [layers, map]);
-
-  useEffect(() => {
-    if (map) {
-      onMapReady(map, () => {
-        installAll(map);
-      });
-    }
-  }, [map]);
 
   useEffect(() => {
     if (defaultBackgroundLayer)

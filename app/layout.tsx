@@ -61,8 +61,9 @@ heap.load("${settings.heapId}");
             href="https://forum.geocommuns.fr/t/appel-a-commentaire-jusquau-22-avril-regles-de-gouvernance-de-la-donnee-rnb/3123"
             style={{ fontWeight: 'bold' }}
           >
-            Donnez votre avis avant le 22 avril 2026 !
+            Lire et participer à la discussion
           </a>
+          .
         </div>
         <Suspense>
           <Providers>

@@ -70,7 +70,7 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
           sourceLayer: 'default',
           id: reportId,
         },
-        { in_panel: false },
+        { highlighted: false },
       );
     }
   };
@@ -83,7 +83,7 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
           sourceLayer: 'default',
           id: reportId,
         },
-        { in_panel: true },
+        { highlighted: true },
       );
     }
   };
