@@ -258,6 +258,13 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     onClick={() => handleExtraLayerClick('addresses')}
                     image={extraAddresses}
                   />
+                  <LayerButton
+                    isAvailable={isAvailable('verified')}
+                    isActive={mapLayers.extraLayers.includes('verified')}
+                    label="Bâtiments vérifiés"
+                    onClick={() => handleExtraLayerClick('verified')}
+                    image={extraAddresses}
+                  />
                 </ul>
               </div>
             </div>

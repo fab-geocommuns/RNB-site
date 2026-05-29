@@ -19,6 +19,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import reportIcon from '@/public/images/map/report.png';
+import hatchGreenIcon from '@/public/images/map/hatch-green.png';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -44,10 +45,12 @@ export const LAYERS_BDGS_POINT_ALL = [
 export const LAYER_BDGS_SHAPE_BORDER = 'bdgs_shape';
 export const LAYER_BDGS_SHAPE_FILL = 'bdgs_shape_fill';
 export const LAYER_BDGS_SHAPE_POINT = 'bdgs_shape_point';
+export const LAYER_BDGS_SHAPE_MARKED_HATCH = 'bdgs_shape_marked_hatch';
 export const LAYERS_BDGS_SHAPE_ALL = [
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_FILL,
   LAYER_BDGS_SHAPE_POINT,
+  LAYER_BDGS_SHAPE_MARKED_HATCH,
 ];
 
 ////////////////////////////////////
@@ -351,6 +354,7 @@ export const useMapLayers = ({
 
   const installBuildingsPointsLayers = (map: maplibregl.Map) => {
     const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
+    const verifiedActive = layers.extraLayers.includes('verified');
     // Shape for vector background
     if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
       map.addLayer({
@@ -401,7 +405,14 @@ export const useMapLayers = ({
           6,
           5,
         ],
-        'circle-stroke-color': '#ffffff',
+        'circle-stroke-color': verifiedActive
+          ? [
+              'case',
+              ['boolean', ['get', 'is_marked_as_correct'], false],
+              '#b9ff96',
+              '#ffffff',
+            ]
+          : '#ffffff',
         'circle-stroke-width': 3,
         'circle-color': [
           'case',
@@ -413,11 +424,23 @@ export const useMapLayers = ({
     });
   };
 
-  const installBuildingsShapesLayers = (map: maplibregl.Map) => {
+  const installBuildingsShapesLayers = async (map: maplibregl.Map) => {
     const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     const selectedBuildingColor = selectedBuildingisGreen
       ? '#31e060'
       : '#1452e3';
+    const verifiedActive = layers.extraLayers.includes('verified');
+
+    if (verifiedActive && !map.hasImage('hatchGreen')) {
+      const hatch = await map.loadImage(hatchGreenIcon.src);
+      if (!map.hasImage('hatchGreen')) {
+        map.addImage('hatchGreen', hatch.data);
+      }
+    }
+
+    const markedFillColorCase: any[] = verifiedActive
+      ? [['boolean', ['get', 'is_marked_as_correct'], false], '#b9ff96']
+      : [];
 
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
@@ -430,13 +453,42 @@ export const useMapLayers = ({
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
           selectedBuildingColor,
+          ...markedFillColorCase,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
           '#1452e3',
         ],
-        'fill-opacity': 0.08,
+        'fill-opacity': verifiedActive
+          ? [
+              'case',
+              ['boolean', ['feature-state', 'in_panel'], false],
+              0.7,
+              ['boolean', ['get', 'is_marked_as_correct'], false],
+              0.15,
+              0.08,
+            ]
+          : 0.08,
       },
     });
+
+    // Hatched overlay for buildings marked as correct
+    if (verifiedActive) {
+      map.addLayer({
+        id: LAYER_BDGS_SHAPE_MARKED_HATCH,
+        type: 'fill',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        filter: [
+          'all',
+          ...defaultBuildingFeatureFilter.slice(1),
+          ['==', 'is_marked_as_correct', true],
+        ],
+        paint: {
+          'fill-pattern': 'hatchGreen',
+          'fill-opacity': 0.7,
+        },
+      });
+    }
 
     // Polygon border
     map.addLayer({
@@ -472,14 +524,14 @@ export const useMapLayers = ({
           6,
           5,
         ],
-        'circle-stroke-color': [
-          'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
-          '#ffffff',
-          ['>', ['get', 'contributions'], 0],
-          '#fef4f4',
-          '#ffffff',
-        ],
+        'circle-stroke-color': verifiedActive
+          ? [
+              'case',
+              ['boolean', ['get', 'is_marked_as_correct'], false],
+              '#31e060',
+              '#ff0000',
+            ]
+          : '#ff0000',
         'circle-stroke-width': 3,
         'circle-color': [
           'case',

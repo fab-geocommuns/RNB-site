@@ -75,12 +75,18 @@ export type MapBackgroundLayer =
   | 'vectorIgnStandard'
   | 'satellite_2016_2020';
 export type MapBuildingsLayer = 'point' | 'polygon';
-export type MapExtraLayer = 'ads' | 'plots' | 'addresses' | 'reports';
+export type MapExtraLayer =
+  | 'ads'
+  | 'plots'
+  | 'addresses'
+  | 'reports'
+  | 'verified';
 const validExtraLayers: MapExtraLayer[] = [
   'ads',
   'plots',
   'addresses',
   'reports',
+  'verified',
 ];
 export function isValidExtraLayer(layer: MapExtraLayer): boolean {
   return validExtraLayers.includes(layer);
