@@ -7,7 +7,9 @@ import { Report } from '@/types/report';
 import {
   getArrayQueryParam,
   setArrayQueryParam,
-} from '@/utils/arrayQueryParams';
+  setQueryParam,
+  removeQueryParam,
+} from '@/utils/queryParams';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
@@ -41,6 +43,7 @@ export const reportSlice = createSlice({
       state.filtersDrawerOpen = !state.filtersDrawerOpen;
       if (state.filtersDrawerOpen) {
         state.selectedReport = null;
+        removeQueryParam('report');
       }
     },
     setSelectedReport(state, action) {
@@ -61,6 +64,11 @@ export const reportSlice = createSlice({
       if (action.payload?.id) {
         // If there is something to show, open the details panel
         state.filtersDrawerOpen = false;
+        // Update URL with report parameter
+        setQueryParam('report', action.payload.id);
+      } else {
+        // Remove report parameter when no report is selected
+        removeQueryParam('report');
       }
     });
   },

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
 import { MapMouseEvent } from 'maplibre-gl';
@@ -7,7 +7,6 @@ import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
-  SRC_BDGS_SHAPES,
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
@@ -17,6 +16,7 @@ import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-s
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { toasterSuccess } from '@/components/contribution/toaster';
 import { displayBANPopup } from './BanLayerEvent';
+import { fetchBuilding } from '@/utils/requests';
 
 /**
  * Ajout et gestion des événements de la carte
@@ -24,15 +24,21 @@ import { displayBANPopup } from './BanLayerEvent';
  */
 export const useEditionMapEvents = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
+  const store = useStore<RootState>();
   const previousHoveredFeatureId = useRef<string | undefined>(undefined);
   const previousHoveredFeatureSource = useRef<string | undefined>(undefined);
-  const previousSplitCandidate = useRef<string | undefined>(undefined);
   const shapeInteractionMode = useSelector(
     (state: RootState) => state.edition.updateCreate.shapeInteractionMode,
   );
   const operation = useSelector((state: RootState) => state.edition.operation);
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
+  );
+  const selectedChildIndex = useSelector(
+    (state: RootState) => state.edition.split.selectedChildIndex,
+  );
+  const cutStep = useSelector(
+    (state: RootState) => state.edition.split.cutStep,
   );
   const selectedBuildingRnbId = useSelector((state: RootState) =>
     state.map.selectedItem?._type === 'building'
@@ -137,6 +143,17 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                   location: [e.lngLat.lng, e.lngLat.lat],
                 }),
               );
+              // Fetch the precise shape from the API
+              fetchBuilding(rnb_id).then((building) => {
+                if (building?.shape) {
+                  dispatch(Actions.edition.setCandidateShape(building.shape));
+                }
+                if (building?.addresses) {
+                  dispatch(
+                    Actions.edition.setCandidateAddresses(building.addresses),
+                  );
+                }
+              });
             }
           }
         } else if (operation === 'merge') {
@@ -160,12 +177,11 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           0,
         );
 
-        if (shapeInteractionMode === 'drawing') {
-          map!.getCanvas().style.cursor = 'crosshair';
-        } else if (featureCloseToCursor) {
-          map!.getCanvas().style.cursor = 'pointer';
-        } else {
-          map!.getCanvas().style.cursor = '';
+        // Le survol ne change le curseur que si aucun composant n'a déclaré
+        // de claim via <MapPointerClaim />. Sinon, le claim métier l'emporte.
+        const claim = store.getState().map.pointer;
+        if (claim === '') {
+          map!.getCanvas().style.cursor = featureCloseToCursor ? 'pointer' : '';
         }
 
         if (
@@ -210,33 +226,9 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
     map,
     shapeInteractionMode,
     operation,
+    splitCandidateId,
     selectedBuildingRnbId,
     buildingNewShape,
+    selectedChildIndex,
   ]);
-
-  // split candidate highlighting
-  useEffect(() => {
-    if (map) {
-      if (previousSplitCandidate.current) {
-        map.removeFeatureState({
-          source: SRC_BDGS_SHAPES,
-          sourceLayer: 'default',
-          id: previousSplitCandidate.current,
-        });
-        previousSplitCandidate.current = undefined;
-      }
-
-      if (operation === 'split' && splitCandidateId) {
-        map.setFeatureState(
-          {
-            source: SRC_BDGS_SHAPES,
-            id: splitCandidateId,
-            sourceLayer: 'default',
-          },
-          { in_panel: true },
-        );
-        previousSplitCandidate.current = splitCandidateId;
-      }
-    }
-  }, [map, splitCandidateId, operation]);
 };

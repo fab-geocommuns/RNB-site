@@ -13,7 +13,7 @@ import GenericPanel from '@/components/panel/GenericPanel';
 import EditionButton from '@/components/contribution/EditionButton';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import PanelTabs from '@/components/panel/PanelTabs';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import { BuildingAddressType } from './types';
 import { Loader } from '@/components/Loader';

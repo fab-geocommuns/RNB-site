@@ -1,5 +1,6 @@
 const blue = '#120090';
 const green = '#87d443';
+const orange = '#e4794a';
 const white = '#fff';
 const styles = [
   // Polygons
@@ -14,14 +15,11 @@ const styles = [
       'fill-opacity': ['case', ['==', ['get', 'active'], 'true'], 0.5, 0],
     },
   },
-  // Lines
-  // Polygon
-  //   Matches Lines AND Polygons
-  //   Active state defines color
+  // Polygon outlines (dashed green)
   {
-    id: 'gl-draw-lines',
+    id: 'gl-draw-polygon-lines',
     type: 'line',
-    filter: ['any', ['==', '$type', 'LineString'], ['==', '$type', 'Polygon']],
+    filter: ['all', ['==', '$type', 'Polygon']],
     layout: {
       'line-cap': 'round',
       'line-join': 'round',
@@ -29,6 +27,42 @@ const styles = [
     paint: {
       'line-color': green,
       'line-dasharray': ['literal', [0.2, 2]],
+      'line-width': 3,
+    },
+  },
+  // Lines seen when polygons are drawed
+  {
+    id: 'gl-draw-lines',
+    type: 'line',
+    filter: [
+      'all',
+      ['==', '$type', 'LineString'],
+      ['!=', 'mode', 'draw_line_string'],
+    ],
+    layout: {
+      'line-cap': 'round',
+      'line-join': 'round',
+    },
+    paint: {
+      'line-color': green,
+      'line-width': 3,
+    },
+  },
+  // Cut lines (solid pink, used for split operation)
+  {
+    id: 'gl-draw-cut-lines',
+    type: 'line',
+    filter: [
+      'all',
+      ['==', '$type', 'LineString'],
+      ['==', 'mode', 'draw_line_string'],
+    ],
+    layout: {
+      'line-cap': 'round',
+      'line-join': 'round',
+    },
+    paint: {
+      'line-color': '#ff00e1',
       'line-width': 3,
     },
   },
@@ -65,6 +99,7 @@ const styles = [
       ['==', '$type', 'Point'],
       ['==', 'meta', 'vertex'],
       ['!=', 'mode', 'simple_select'],
+      ['!=', 'mode', 'draw_line_string'],
     ],
     paint: {
       'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 12, 8],
@@ -79,6 +114,7 @@ const styles = [
       ['==', '$type', 'Point'],
       ['==', 'meta', 'vertex'],
       ['!=', 'mode', 'simple_select'],
+      ['!=', 'mode', 'draw_line_string'],
     ],
     paint: {
       'circle-radius': ['case', ['==', ['get', 'active'], 'true'], 8, 5],
@@ -91,7 +127,11 @@ const styles = [
   {
     id: 'gl-draw-midpoint',
     type: 'circle',
-    filter: ['all', ['==', 'meta', 'midpoint']],
+    filter: [
+      'all',
+      ['==', 'meta', 'midpoint'],
+      ['!=', 'mode', 'draw_line_string'],
+    ],
     paint: {
       'circle-radius': 7,
       'circle-color': green,

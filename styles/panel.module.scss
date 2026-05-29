@@ -130,6 +130,37 @@
   }
 }
 
+.markedAsCorrect {
+  display: flex;
+  align-items: center;
+  background: #e6feda;
+  padding: 1rem 0.8rem 1rem 1rem;
+  border-radius: 4px;
+  color: #142117;
+  .sectionTitle {
+    color: #2a401a;
+  }
+}
+
+.markedAsCorrectIconShell {
+  margin-right: 0.8rem;
+  text-align: center;
+  i {
+    height: 20px;
+    &::before {
+      color: #142117;
+      width: 25px;
+      height: 25px;
+    }
+  }
+}
+
+.use {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .sectionTitle {
   font-size: 0.7em;
   line-height: 1.3em;

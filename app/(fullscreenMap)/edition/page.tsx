@@ -4,7 +4,7 @@ import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
-import { useRNBAuthentication } from '@/utils/use-rnb-authentication';
+import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
 import '@/styles/mapBanLayer.scss';
@@ -14,7 +14,7 @@ import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
 import { MapExtraLayer, isValidExtraLayer } from '@/stores/map/map-slice';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
-import { getArrayQueryParam } from '@/utils/arrayQueryParams';
+import { getArrayQueryParam } from '@/utils/queryParams';
 
 function getDefaultExtraLayers() {
   return (

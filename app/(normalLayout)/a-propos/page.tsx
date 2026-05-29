@@ -1,22 +1,12 @@
-// Styles
-import styles from '@/styles/about.module.scss';
-
 // Comps
 import AboutCol from '@/components/AboutCol';
-import ImageNext from 'next/image';
-
-// Settings
-import settings from '@/logic/settings';
 
 // Logos
-import logoFnv from '@/public/images/logos/france-nation-verte.jpg';
 import pageTitle from '@/utils/pageTitle';
 
 export const metadata = pageTitle('À propos');
 
 export default function Page() {
-  const contactEmail = settings.contactEmail;
-
   return (
     <>
       <div className="fr-container">
@@ -26,49 +16,145 @@ export default function Page() {
               À propos du Référentiel National des Bâtiments
             </h1>
 
-            <h2 className="fr-h4">
-              Problématique : le cloisonnement de l&apos;information
-              bâtimentaire
+            <h2 className="fr-h4 fr-pt-10v">
+              Problème : le cloisonnement de l&apos;information bâtimentaire
             </h2>
+            <blockquote>
+              <p>
+                <em>
+                  &quot;Du fait d&apos;un écosystème atomisé, la production de
+                  l&apos;information géolocalisée dans la sphère publique se
+                  traduit par un usage sous-optimal des deniers publics.&quot;
+                </em>{' '}
+                - Rapport d&apos;Information, Sénat, Commission des Finances
+                pour l&apos;IGN, 5 Octobre 2022
+              </p>
+            </blockquote>
             <p>
-              Jusqu&apos;à présent, les données liées aux bâtiments sont
-              détenues par une multitude d&apos;acteurs, travaillant en silos.
-              Les administrations, les collectivités et de nombreux acteurs
-              privés (ex : fournisseurs d&apos;énergie), œuvrent
-              individuellement pour produire et obtenir l&apos;information sans
-              que celle-ci soit mise en commun.
+              Parmi ces données géolocalisées, l&apos;information relative au
+              bâtiment se démarque par l&apos;absence de référentiel. Le concept
+              de bâtiment ne faisant pas consensus,{' '}
+              <strong>
+                les acteurs publics et privés travaillent jusqu&apos;à présent
+                en silos
+              </strong>{' '}
+              répondant chacun à leur propre vision du bâtiment.
             </p>
             <p>
-              Cette absence de base de données nationale de référence sur le
-              bâtiment engendre des ralentissements et des coûts importants dans
-              la conduite d&apos;actions publiques et territoriales.
+              Cette absence de base de données nationale et de référence sur le
+              bâtiment engendre :
+            </p>
+            <ul>
+              <li>
+                <strong>
+                  des difficultés de croisement et une qualité variable
+                </strong>{' '}
+                entre les jeux de données et outils rattachés à l&apos;adresse,
+                au logement ou parfois à la parcelle cadastrale ;
+              </li>
+              <li>
+                <strong>
+                  une difficulté à suivre et piloter leurs actions sur leurs
+                  parcs bâtimentaires
+                </strong>{' '}
+                (ex : BDD coûteuses à maintenir et/ou informations partagées
+                tardivement)
+              </li>
+            </ul>
+            <p>
+              L&apos;objet bâtiment apparaît alors comme le maillon manquant au
+              socle de données géolocalisées pour relier les concepts
+              d&apos;adresses - bâtiments - locaux et parcelles et permettre un
+              pilotage satisfaisant des politiques publiques.
             </p>
 
-            <h2 className="fr-h4">
+            <h2 className="fr-h4 fr-pt-10v">
               Solution : rendre efficace et commune l&apos;identification des
               bâtiments et l&apos;échange d&apos;informations les concernant
             </h2>
             <p>
-              Le Référentiel National des Bâtiments (RNB) est un service public
-              numérique, qui répertorie l&apos;ensemble des bâtiments du
-              territoire et leur associe un identifiant unique et pérenne
+              Aujourd&apos;hui, le Référentiel National des Bâtiments (RNB) est
+              un service public numérique, qui{' '}
+              <strong>
+                répertorie l&apos;ensemble des bâtiments du territoire
+              </strong>{' '}
+              et{' '}
+              <strong>
+                leur associe un identifiant unique et pérenne, appelé ID-RNB.
+              </strong>
             </p>
             <p>
-              Une fois attribué au bâtiment, cet identifiant pivot, appelé
-              ID-RNB, permet de simplifier le croisement et les échanges de
-              données bâtimentaires entre les administrations publiques, les
-              collectivités et les acteurs privés.
+              Une fois attribué au bâtiment, cet identifiant pivot (ID-RNB),
+              permet de{' '}
+              <strong>simplifier le croisement et les échanges</strong> de
+              données bâtimentaires entre{' '}
+              <strong>
+                les administrations publiques, les collectivités et les acteurs
+                privés.
+              </strong>
             </p>
-            <p>
-              Le RNB unifie ainsi la connaissance portant sur chaque bâtiment,
-              tout en améliorant la qualité des données du bâtiment dont
-              disposent les différents acteurs, pour opérer le suivi et la
-              gestion de leur parc immobilier.
-            </p>
+            <p>Le RNB a pour objectifs principaux de :</p>
+            <div>
+              <ul>
+                <li>
+                  <strong>Standardiser</strong> l&apos;identification des
+                  bâtiments dans les systèmes d&apos;information ;
+                </li>
+                <li>
+                  <strong>Favoriser l&apos;interopérabilité</strong> entre les
+                  bases de données de l&apos;État, des collectivités et des
+                  acteurs privés ;
+                </li>
+                <li>
+                  <strong>Soutenir le pilotage des politiques publiques</strong>
+                  , notamment en matière de{' '}
+                  <strong>
+                    rénovation énergétique, de logement et d&apos;aménagement du
+                    territoire.
+                  </strong>
+                </li>
+              </ul>
+            </div>
 
-            <h2 className="fr-h4">
-              Méthode : Co-construire ensemble ce nouveau géocommun
+            <h2 className="fr-h4 fr-pt-10v">
+              Méthode : co-construire un géocommun et une future donnée de
+              référence
             </h2>
+            <p>
+              La stratégie du RNB repose sur trois approches complémentaires :
+            </p>
+            <ul>
+              <li>
+                <strong>
+                  Diffuser les ID-RNB dans les jeux de données et outils
+                  nationaux et territoriaux
+                </strong>
+                , en accompagnant les administrations, les collectivités et
+                éditeurs de logiciel volontaires.
+              </li>
+              <li>
+                Disposer d&apos;une donnée bâtimentaire la plus proche du
+                terrain, par l&apos;
+                <strong>approche géocommun,</strong> en favorisant l&apos;
+                <a
+                  href="https://rnb.beta.gouv.fr/blog/le-rnb-souvre-a-ledition-collaborative"
+                  target="_blank"
+                >
+                  édition collaborative
+                </a>{' '}
+                dans le RNB
+              </li>
+              <li>
+                Renforcer l&apos;impact systémique du RNB, en lui conférant une
+                base juridique, en tant que{' '}
+                <strong>future donnée de référence</strong>
+              </li>
+            </ul>
+            <p>
+              Ces ambitions se traduisent par un portage et un financement
+              collectifs, réunissant plusieurs administrations et opérateurs
+              publics :
+            </p>
             <p>
               Le financement du RNB est assuré conjointement par l&apos;Agence
               de la Transition Écologique (
@@ -87,8 +173,8 @@ export default function Page() {
               >
                 DGALN
               </a>
-              ) et l&apos;Institut national de l&apos;information géographique
-              et forestière (
+              ), l&apos;Institut national de l&apos;information géographique et
+              forestière (
               <a href="https://www.ign.fr/" target="_blank">
                 IGN
               </a>
@@ -127,53 +213,46 @@ export default function Page() {
               </a>
               ).
             </p>
-            <p>
-              Vous souhaitez contribuer ? Toutes les contributions sont les
-              bienvenues pour construire ce géocommun, faciliter et réduire les
-              coûts de maintenance et optimiser la qualité des données.
-              Contactez l&apos;équipe du RNB sur{' '}
-              <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-            </p>
 
-            <div className="block block--yellow fr-mt-24v">
+            <div className="block block--yellow fr-mt-12v">
               <div className="fr-grid-row fr-grid-row--gutters ">
                 <div className="fr-col-12">
                   <p className="block__title">
                     <strong>
-                      D’où proviennent les données du RNB ? Comment le RNB est
-                      mis à jour ?
+                      D&apos;où proviennent les données du RNB ? Comment le RNB
+                      est mis à jour ?
                     </strong>
                   </p>
                   <p>
                     Les bâtiments présentés dans le RNB sont essentiellement
-                    issus d’une fusion de la 
+                    issus d&apos;une fusion de la{' '}
                     <a href="https://geoservices.ign.fr/bdtopo" target="_blank">
                       BDTOPO
                     </a>
-                    , éditée par l’IGN et de la 
+                    , éditée par l&apos;IGN et de la{' '}
                     <a href="https://bdnb.io/" target="_blank">
                       BDNB
                     </a>
-                    , éditée par le CSTB. La mise à jour du RNB est aujourd’hui
-                    réalisée par :
+                    , éditée par le CSTB. La mise à jour du RNB est
+                    aujourd&apos;hui réalisée par :
                   </p>
                   <ul>
                     <li>
-                      les importations, lors de parution de nouveaux
-                      millésimes de la BDTOPO
+                      les importations, lors de parution de nouveaux millésimes
+                      de la BDTOPO
                     </li>
 
                     <li>les imports des Bases Adresses Locales (BAL)</li>
                     <li>
-                      les 
+                      les{' '}
                       <a
                         href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#communaute-et-contributions"
                         target="_blank"
                       >
                         contributions
-                      </a>
-                       de la communauté, à savoir les éditions directes dans le
-                      RNB ; ainsi que par les signalements reçus par une
+                      </a>{' '}
+                      de la communauté, à savoir les éditions directes dans le
+                      RNB ; ainsi que par les signalements reçus par une
                       personne suggérant une modification du contenu du RNB,
                       sans la réaliser par elle-même.
                     </li>

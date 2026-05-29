@@ -26,6 +26,6 @@ test.describe('Carte', () => {
     await mapPage.goToBuilding('NHDE2W8HE3X3');
     await expect(mapPage.buildingDetailsPannel).toBeVisible();
     await expect(mapPage.buildingDetailsPannel).toContainText('NHDE2W8HE3X3');
-    await expect(mapPage.buildingDetailsPannel).toContainText('segur');
+    await expect(mapPage.buildingDetailsPannel).toContainText('Ségur');
   });
 });

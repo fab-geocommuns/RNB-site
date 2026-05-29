@@ -4,7 +4,8 @@ import { Actions, AppDispatch } from '@/stores/store';
 import styles from '@/styles/report/form.module.scss';
 import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { useRNBFetch } from '@/utils/use-rnb-fetch';
+import { useRNBFetch } from '@/utils/useRNBFetch';
+import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import {
   throwErrorMessageForHumans,
   toasterError,
@@ -13,18 +14,19 @@ import {
 import { Report, Feve } from '@/types/report';
 
 import FeveFound from '@/components/games/feve/feveFound';
+import { loginUrl } from '@/utils/useRNBAuthentication';
 
 type FormAction = 'comment' | 'fix' | 'reject';
 
 export default function ReportForm({ report }: { report: Report }) {
   const { fetch } = useRNBFetch();
+  const { isAuthenticated } = useRNBAuthentication();
   const dispatch: AppDispatch = useDispatch();
 
   const [action, setAction] = useState<FormAction>('comment');
   const [message, setMessage] = useState('');
-
   const [foundFeve, setFoundFeve] = useState<Feve | null>(null);
-
+  const [email, setEmail] = useState('');
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
     resize(e);
@@ -66,10 +68,14 @@ export default function ReportForm({ report }: { report: Report }) {
     e.preventDefault();
 
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/reports/${report.id}/reply/`;
-    const data: { message: string; action: string } = {
+    const data: { message: string; action: string; email?: string } = {
       message: message,
       action: action,
     };
+    const trimmedEmail = email.trim();
+    if (trimmedEmail.length > 0) {
+      data.email = trimmedEmail;
+    }
 
     try {
       const response = await fetch(url, {
@@ -119,50 +125,73 @@ export default function ReportForm({ report }: { report: Report }) {
                 onChange={handleMessageChange}
                 required
               ></textarea>
+              {!isAuthenticated && (
+                <>
+                  <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    name="email"
+                    type="email"
+                    className="fr-input fr-text--sm fr-mb-2v"
+                    placeholder="Votre adresse email (optionnelle)"
+                  />
+                </>
+              )}
             </div>
             <div className={styles.actionShell}>
-              <RadioButtons
-                name="action"
-                legend="Votre action"
-                small={true}
-                className={styles.actionInput}
-                options={[
-                  {
-                    label: 'Commenter',
-                    hintText: 'Laisser un simple message',
-                    nativeInputProps: {
-                      checked: action === 'comment',
-                      onChange: () => setAction('comment'),
+              {isAuthenticated && (
+                <RadioButtons
+                  name="action"
+                  legend="Votre action"
+                  small={true}
+                  className={styles.actionInput}
+                  options={[
+                    {
+                      label: 'Commenter',
+                      hintText: 'Laisser un simple message',
+                      nativeInputProps: {
+                        checked: action === 'comment',
+                        onChange: () => setAction('comment'),
+                      },
                     },
-                  },
-                  {
-                    label: 'Marquer comme traité',
-                    hintText: 'Fermer le signalement car il est déjà corrigé',
-                    nativeInputProps: {
-                      checked: action === 'fix',
-                      onChange: () => setAction('fix'),
+                    {
+                      label: 'Marquer comme traité',
+                      hintText: 'Fermer le signalement car il est déjà corrigé',
+                      nativeInputProps: {
+                        checked: action === 'fix',
+                        onChange: () => setAction('fix'),
+                      },
                     },
-                  },
-                  {
-                    label: report.tags.includes('Les fèves du RNB')
-                      ? 'Adresse introuvable'
-                      : 'Rejeter',
-                    hintText: report.tags.includes('Les fèves du RNB')
-                      ? 'Adresse BAN inexistante'
-                      : 'Fermer le signalement car il est non pertinent',
-                    nativeInputProps: {
-                      checked: action === 'reject',
-                      onChange: () => setAction('reject'),
+                    {
+                      label: report.tags.includes('Les fèves du RNB')
+                        ? 'Adresse introuvable'
+                        : 'Rejeter',
+                      hintText: report.tags.includes('Les fèves du RNB')
+                        ? 'Adresse BAN inexistante'
+                        : 'Fermer le signalement car il est non pertinent',
+                      nativeInputProps: {
+                        checked: action === 'reject',
+                        onChange: () => setAction('reject'),
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              )}
             </div>
             <div>
               <Button size="small" type="submit">
                 {getSubmitLabel()}
               </Button>
             </div>
+            {!isAuthenticated && (
+              <div className="fr-mt-2v fr-mb-0">
+                ou{' '}
+                <a href={loginUrl()} className="fr-link">
+                  connectez-vous
+                </a>{' '}
+                pour traiter ce signalement
+              </div>
+            )}
           </form>
         </>
       )}

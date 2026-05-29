@@ -13,22 +13,27 @@ export function useRNBFetch() {
 
   const customFetch = useCallback(
     (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+      const defaultHeaders: Record<string, string> = {};
+      defaultHeaders['Content-Type'] = 'application/json';
+      if (accessToken) {
+        defaultHeaders['Authorization'] = 'Token ' + accessToken;
+      }
       if (input instanceof URL || typeof input === 'string') {
         const url = input;
         if (!init) init = {};
 
         init.headers = {
           ...init.headers,
-          Authorization: 'Token ' + accessToken,
-          'Content-Type': 'application/json',
+          ...defaultHeaders,
         };
 
         const urlWithParam = appendFromSiteParam(url);
         return fetch(urlWithParam, init);
       } else {
         const urlWithParam = appendFromSiteParam(input.url);
-        input.headers.set('Authorization', 'Token ' + accessToken);
-        input.headers.set('Content-Type', 'application/json');
+        for (const key in defaultHeaders) {
+          input.headers.set(key, defaultHeaders[key]);
+        }
         return fetch(
           {
             ...input,

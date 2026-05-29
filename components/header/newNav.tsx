@@ -162,7 +162,14 @@ export default function newNav(pathName: string) {
                   href: 'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb',
                   target: '_blank',
                 },
-                text: "Guides d'éditions",
+                text: "Guides d'édition",
+              },
+              {
+                linkProps: {
+                  href: '/gouvernance-donnee',
+                  target: '_blank',
+                },
+                text: 'Règles de gouvernance de la donnée',
               },
             ],
           },

@@ -3,7 +3,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { fetchBuilding } from '@/utils/requests';
-import { setArrayQueryParam } from '@/utils/arrayQueryParams';
+import {
+  setArrayQueryParam,
+  setQueryParam,
+  removeQueryParam,
+} from '@/utils/queryParams';
 import { RootState } from '../store';
 
 export type BuildingAddress = {
@@ -15,6 +19,13 @@ export type BuildingAddress = {
   city_name: string;
   city_zipcode: string;
   city_insee_code: string;
+};
+
+export type PublicUser = {
+  id: number;
+  display_name: string;
+  username: string;
+  organization_name: string;
 };
 
 export type Plot = {
@@ -32,6 +43,7 @@ export interface SelectedBuilding {
   };
   shape: GeoJSON.Geometry;
   addresses: BuildingAddress[];
+  marked_as_correct_by: PublicUser[]; // List of user IDs who marked this building as correct
   ext_ids: any[];
   plots: Plot[] | null;
   is_active: boolean;
@@ -74,6 +86,7 @@ export function isValidExtraLayer(layer: MapExtraLayer): boolean {
   return validExtraLayers.includes(layer);
 }
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
+export type MapPointer = 'crosshair' | 'pointer' | '';
 
 export type MapStore = {
   addressSearch: {
@@ -93,6 +106,7 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
+  pointer: MapPointer;
 };
 
 const initialState: MapStore = {
@@ -105,6 +119,7 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: [],
   },
+  pointer: 'pointer',
 };
 
 export const mapSlice = createSlice({
@@ -152,6 +167,9 @@ export const mapSlice = createSlice({
     removeBuildings(state) {
       state.selectedItem = undefined;
     },
+    setPointer(state, action) {
+      state.pointer = action.payload;
+    },
   },
 
   extraReducers(builder) {
@@ -160,11 +178,9 @@ export const mapSlice = createSlice({
       if (!action.payload) state.selectedItem = undefined;
       else state.selectedItem = action.payload;
       if (action.payload) {
-        window.history.replaceState({}, '', `?q=${action.payload.rnb_id}`);
+        setQueryParam('q', action.payload.rnb_id);
       } else {
-        let url = new URL(window.location.href);
-        url.searchParams.delete('q');
-        window.history.replaceState({}, '', url);
+        removeQueryParam('q');
       }
     });
 

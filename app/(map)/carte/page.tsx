@@ -27,7 +27,7 @@ import { useMemo } from 'react';
 
 // Types
 import { MapExtraLayer } from '@/stores/map/map-slice';
-import { getArrayQueryParam } from '@/utils/arrayQueryParams';
+import { getArrayQueryParam } from '@/utils/queryParams';
 import { isValidExtraLayer } from '@/stores/map/map-slice';
 
 function getDefaultExtraLayers() {

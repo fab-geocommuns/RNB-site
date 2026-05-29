@@ -46,7 +46,7 @@ export default function BuildingInfo({
                     <span className={styles.mergePanelAddressText}>
                       {isNewAddress(addresse)
                         ? addresse.label
-                        : `${addresse.street_number}${addresse.street_rep} ${addresse.street}, ${addresse.city_zipcode} ${addresse.city_name}`}
+                        : `${addresse.street_number || ''}${addresse.street_rep || ''} ${addresse.street || ''}, ${addresse.city_zipcode || ''} ${addresse.city_name || ''}`}
                     </span>
                   </div>
                 </div>
