@@ -1,17 +1,13 @@
 // Types
 // Store
-import {
-  bdgApiUrl,
-  Plot,
-  PublicUser,
-  SelectedBuilding,
-} from '@/stores/map/map-slice';
+import { bdgApiUrl, Plot, SelectedBuilding } from '@/stores/map/map-slice';
 
 // Comps
 import ContributionForm from '@/components/ContributionForm';
 import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 import RNBIDHeader from '@/components/contribution/RNBIDHeader';
+import BuildingValidations from '@/components/BuildingValidations';
 import PanelTabs from '@/components/panel/PanelTabs';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
 
@@ -94,34 +90,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         <PanelTabs rnbId={bdg?.rnb_id}></PanelTabs>
       </div>
 
-      {bdg.validated_by.length > 0 && (
-        <div className={panelStyles.section}>
-          <div className={panelStyles.validated}>
-            <div className={panelStyles.validatedIconShell}>
-              <i className="fr-icon-success-fill" aria-hidden="true"></i>
-            </div>
-            <div>
-              <h2 className={panelStyles.sectionTitle}>Bâtiment validé</h2>
-              <div className={panelStyles.sectionBody}>
-                {bdg.validated_by.map((user: PublicUser) => (
-                  <div key={user.id} className={panelStyles.user}>
-                    <span>
-                      <span className={panelStyles.userName}>
-                        par {user.display_name}
-                      </span>{' '}
-                      {user.organization_name && (
-                        <span className={panelStyles.userOrganization}>
-                          ({user.organization_name})
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <BuildingValidations building={bdg} allowEdit={false} />
 
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
