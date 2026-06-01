@@ -31,6 +31,7 @@ export const buildingSegur = {
       city_name: 'Paris 7e Arrondissement',
     },
   ],
+  marked_as_correct_by: [],
   ext_ids: [],
   plots: [],
 };
@@ -53,6 +54,7 @@ export const buildingToSplit = {
     ],
   },
   addresses: [],
+  marked_as_correct_by: [],
   ext_ids: [],
   plots: [],
 };

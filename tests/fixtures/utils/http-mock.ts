@@ -151,13 +151,24 @@ export class HttpMocker {
     const apiPath = fullPath.replace(this.apiBase.pathname, '');
     const method = request.method() as Method;
 
+    // Vector tile endpoints are absorbed with an empty PBF — they're not
+    // worth stubbing individually and we don't assert on them.
+    if (/\.pbf(\?.*)?$/.test(url.pathname + url.search)) {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/x-protobuf',
+        body: EMPTY_PBF,
+      });
+      return;
+    }
+
     const stub = this.stubs.find(
       (s) => s.method === method && s.path === apiPath,
     );
 
     if (!stub) {
       const error = `Unmocked API request: ${method} ${apiPath}`;
-      console.error(error);
+      console.error(`[http-mock] ${error}`);
       await route.fulfill({
         status: 599,
         body: JSON.stringify({ error }),
