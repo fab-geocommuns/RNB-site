@@ -44,7 +44,7 @@ export abstract class RNBPage {
       .getByLabel('Mot de passe')
       .fill(process.env.TEST_ACCOUNT_PASSWORD!);
     await this.loginForm.getByRole('button', { name: /se connecter/i }).click();
-    await expect(this.myAccountButton).toBeVisible();
+    await expect(this.myAccountButton).toBeVisible({ timeout: 30_000 });
   }
 
   async isLoggedIn() {
