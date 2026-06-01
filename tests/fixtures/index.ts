@@ -21,13 +21,11 @@ import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { testWithNewsletter } from '@/tests/fixtures/utils/components/newsletter';
 import { HttpMocker, createHttpMocker } from '@/tests/fixtures/utils/http-mock';
 import { signInAs, FakeUser } from '@/tests/fixtures/utils/auth-mock';
+import { API_BASE } from '@/tests/config';
 import {
   test as mapGrabTest,
   expect as mapGrabExpect,
 } from '@mapgrab/playwright';
-
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'http://api.test/api/alpha';
 
 export type AuthFixture = {
   /** Inject a next-auth session cookie. Call before the first page navigation. */

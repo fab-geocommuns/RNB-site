@@ -1,14 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
+import { APP_URL, API_BASE, GHOST_BASE, MOCK_PORT } from './tests/config';
 
 dotenv.config({ path: path.resolve(__dirname, '.env.test') });
 
-const API_BASE = 'http://api.test/api/alpha';
-const APP_URL = 'http://localhost:3000';
-
 export default defineConfig({
   testDir: './tests',
+  testIgnore: ['**/mock-server/**'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -39,21 +38,35 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    command: 'pnpm dev',
-    url: APP_URL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-    stdout: 'ignore',
-    stderr: 'pipe',
-    env: {
-      NEXT_PUBLIC_API_BASE: API_BASE,
-      NEXTAUTH_URL: APP_URL,
-      // Deterministic secret so JWT issued by next-auth is valid across the
-      // test run. Not a real secret — only used in the test webServer.
-      NEXTAUTH_SECRET: 'test-secret-do-not-use-in-prod',
-      NEXT_PUBLIC_ENABLE_EDITION_MODE: 'true',
-      NEXT_PUBLIC_ENABLE_MAPGRAB: 'true',
+  webServer: [
+    {
+      command: 'node tests/mock-server/index.mjs',
+      url: `http://localhost:${MOCK_PORT}/__health`,
+      // The mock server returns 404 for unknown paths, which Playwright treats
+      // as "server is up" (any HTTP response counts).
+      reuseExistingServer: !process.env.CI,
+      timeout: 15_000,
+      env: { MOCK_SERVER_PORT: String(MOCK_PORT) },
     },
-  },
+    {
+      command: 'pnpm dev',
+      url: APP_URL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+      stdout: 'ignore',
+      stderr: 'pipe',
+      env: {
+        NEXT_PUBLIC_API_BASE: API_BASE,
+        NEXT_GHOST_API_URL: GHOST_BASE,
+        NEXT_GHOST_API_KEY: '0'.repeat(26),
+        NEXT_GHOST_API_VERSION: 'v5.0',
+        NEXTAUTH_URL: APP_URL,
+        // Deterministic secret so the JWT issued by next-auth is valid
+        // across the test run. Not a real secret — only used in tests.
+        NEXTAUTH_SECRET: 'test-secret-do-not-use-in-prod',
+        NEXT_PUBLIC_ENABLE_EDITION_MODE: 'true',
+        NEXT_PUBLIC_ENABLE_MAPGRAB: 'true',
+      },
+    },
+  ],
 });
