@@ -81,7 +81,22 @@ const testPage = baseTest.extend<PagesFixtures>({
   faqPage: createPageFixture(FaqPage),
   homePage: createPageFixture(HomePage),
   mapPage: createPageFixture(MapPage),
-  editionPage: createPageFixture(EditionPage),
+  editionPage: async (
+    {
+      page,
+      httpMocker,
+      auth,
+    }: PlaywrightTestArgs & PlaywrightTestOptions & PagesFixtures,
+    use: (p: EditionPage) => Promise<void>,
+  ) => {
+    await httpMocker.install();
+    // /edition is gated by next-auth — sign in before navigating so the
+    // middleware doesn't bounce us to /login.
+    await auth.signIn();
+    const instance = new EditionPage(page);
+    await instance.goto();
+    await use(instance);
+  },
   toolsAndServicesPage: createPageFixture(ToolsAndServicesPage),
   useCasesPage: createPageFixture(UseCasesPage),
 });

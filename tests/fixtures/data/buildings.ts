@@ -36,20 +36,23 @@ export const buildingSegur = {
   plots: [],
 };
 
+// Tight rectangle sized so the test's cut line (vertical at x=2.424, going
+// from y=48.8449 to y=48.8456) starts and ends outside the polygon and fully
+// bisects it.
 export const buildingToSplit = {
   rnb_id: '6NFTV4Z6DP92',
   status: 'constructed',
   is_active: true,
-  point: { type: 'Point', coordinates: [2.4245, 48.8455] },
+  point: { type: 'Point', coordinates: [2.4245, 48.8453] },
   shape: {
     type: 'Polygon',
     coordinates: [
       [
-        [2.423, 48.844],
-        [2.426, 48.844],
-        [2.426, 48.847],
-        [2.423, 48.847],
-        [2.423, 48.844],
+        [2.4237, 48.8452],
+        [2.4253, 48.8452],
+        [2.4253, 48.8454],
+        [2.4237, 48.8454],
+        [2.4237, 48.8452],
       ],
     ],
   },
