@@ -25,14 +25,8 @@ import {
   expect as mapGrabExpect,
 } from '@mapgrab/playwright';
 
-async function addAutomationBypassHeader(page: Page) {
-  await page.route(new URL(process.env.BASE_URL!).origin + '/**/*', (route) => {
-    const headers = route.request().headers();
-    headers['x-vercel-protection-bypass'] =
-      process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
-    route.continue({ headers });
-  });
-}
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || 'http://api.test/api/alpha';
 
 type PagesFixtures = {
   aboutPage: AboutPage;
@@ -51,16 +45,25 @@ type PagesFixtures = {
 const createPageFixture =
   <T extends RNBPage>(PageClass: new (page: Page) => T) =>
   async (
-    { page }: PlaywrightTestArgs & PlaywrightTestOptions,
+    {
+      page,
+      httpMocker,
+    }: PlaywrightTestArgs & PlaywrightTestOptions & PagesFixtures,
     use: (page: T) => Promise<void>,
   ) => {
-    await addAutomationBypassHeader(page);
+    // Install the default-deny mock layer before navigating so the first
+    // request fired by the page is already intercepted.
+    await httpMocker.install();
     const instance = new PageClass(page);
     await instance.goto();
     await use(instance);
   };
 
 const testPage = baseTest.extend<PagesFixtures>({
+  httpMocker: async ({ page }, use) => {
+    const httpMocker = createHttpMocker(page, API_BASE);
+    await use(httpMocker);
+  },
   aboutPage: createPageFixture(AboutPage),
   blogPage: createPageFixture(BlogPage),
   contactPage: createPageFixture(ContactPage),
@@ -71,10 +74,6 @@ const testPage = baseTest.extend<PagesFixtures>({
   editionPage: createPageFixture(EditionPage),
   toolsAndServicesPage: createPageFixture(ToolsAndServicesPage),
   useCasesPage: createPageFixture(UseCasesPage),
-  httpMocker: async ({ page }, use) => {
-    const httpMocker = createHttpMocker(page);
-    await use(httpMocker);
-  },
 });
 
 export const test = mergeTests(testPage, testWithNewsletter, mapGrabTest);
