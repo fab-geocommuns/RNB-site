@@ -155,6 +155,43 @@
   }
 }
 
+.user {
+  margin-bottom: 0.2rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.userName {
+  font-weight: 500;
+}
+
+.userOrganization {
+  opacity: 0.8;
+}
+
+.validationAction {
+  margin-top: 0.8rem;
+}
+
+.validationEmpty {
+  display: flex;
+  align-items: center;
+  background: #f6f6f6;
+  padding: 1rem 0.8rem 1rem 1rem;
+  border-radius: 4px;
+  color: #3a3a3a;
+}
+
+.locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.unlockNotice {
+  margin-bottom: 1rem;
+}
+
 .use {
   display: flex;
   align-items: center;
