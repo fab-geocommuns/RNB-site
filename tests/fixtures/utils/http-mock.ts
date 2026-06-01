@@ -75,6 +75,35 @@ export class HttpMocker {
   }
 
   /**
+   * Stub the BAN geocoder so the address autocomplete returns the given
+   * features instead of hitting the live service.
+   */
+  async banSearch(features: unknown[]) {
+    await this.installBanIfNeeded();
+    this.banFeatures = features;
+  }
+
+  private banFeatures: unknown[] | null = null;
+  private banInstalled = false;
+  private async installBanIfNeeded() {
+    if (this.banInstalled) return;
+    this.banInstalled = true;
+    await this.page.route(
+      (url) => url.host === 'data.geopf.fr',
+      async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            type: 'FeatureCollection',
+            features: this.banFeatures ?? [],
+          }),
+        });
+      },
+    );
+  }
+
+  /**
    * @deprecated Use `on(method, path, response, { expectBody })` together with
    * `install()` for default-deny behaviour. Kept as a thin shim while
    * edition-page specs are being migrated.
