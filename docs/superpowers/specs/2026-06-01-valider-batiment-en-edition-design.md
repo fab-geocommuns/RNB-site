@@ -71,13 +71,21 @@ interface BuildingValidationsProps {
 
 ### Comportement
 
-Le composant est **auto-suffisant** : il gère son propre appel API
-(`useRNBFetch`), son état de chargement, et le rafraîchissement du bâtiment via
-le store. Il connaît l'utilisateur courant via `useRNBAuthentication()`.
+**Aucun appel API au montage / à l'initialisation.** Le composant ne consulte
+jamais l'API pour récupérer le bâtiment : il reçoit en prop `building` la donnée
+**déjà affichée** dans le panneau latéral (le `selectedItem` du store map). Il en
+dérive `validated_by` directement.
+
+Le seul appel réseau que le composant déclenche est l'**écriture** (PATCH
+`is_valid`) provoquée par un clic de l'utilisateur sur le bouton de validation
+(uniquement en `allowEdit=true`). Il utilise pour cela `useRNBFetch`, gère son
+propre état de chargement, et connaît l'utilisateur courant via
+`useRNBAuthentication()`.
 
 - **Affichage des validations** : reprend à l'identique le style vert existant
   (`panel.module.scss` → `.validated`, `.validatedIconShell`, etc.), avec la
   liste des `validated_by` (display_name + organisation entre parenthèses).
+  Donnée lue depuis la prop `building` (store), sans aucune requête.
 
 - **`allowEdit = false`** (consultation) :
   - Le bloc n'est rendu **que si** `validated_by.length > 0`.
@@ -92,8 +100,7 @@ le store. Il connaît l'utilisateur courant via `useRNBAuthentication()`.
   - Détection « ma validation » :
     `validated_by.some(u => u.username === currentUser.username)`.
   - Pendant l'appel : bouton en état `loading` / désactivé.
-  - Après succès : `dispatch(Actions.map.selectBuilding(rnb_id))` +
-    `dispatch(Actions.map.reloadBuildings())` pour rafraîchir l'affichage.
+  - Après succès (204) : rafraîchissement (voir section dédiée ci-dessous).
   - En cas d'erreur : `toasterError`.
 
 ### Couplage avec le verrouillage du formulaire (voir plus bas)
@@ -103,6 +110,31 @@ d'édition a été déverrouillé (`editUnlocked = true`) : les intentions « va
 et « modifier (donc effacer les validations) » sont mutuellement exclusives.
 Le parent d'édition passe pour cela `actionsDisabled={editUnlocked}` (voir
 Intégration en édition). En consultation, le prop est omis (`false`).
+
+### Rafraîchissement après écriture (validation / retrait / édition)
+
+Les écritures renvoient `204 No Content` : aucune donnée n'est retournée. Le store
+(`selectedItem`) contient donc encore l'ancien `validated_by` juste après l'appel.
+On **ne fait pas d'update optimiste** ; on récupère la donnée autoritative en
+re-consultant le bâtiment.
+
+- **Après validation / retrait de validation** (PATCH `is_valid`) : le composant
+  `dispatch(Actions.map.selectBuilding(rnb_id))`. Ce thunk re-consulte le bâtiment
+  (`GET /buildings/{rnb_id}/`) et remplace `selectedItem` dans le store ; la nouvelle
+  liste `validated_by` (avec les `display_name` / organisations corrects) est alors
+  propagée à tous les composants qui lisent le store, y compris `BuildingValidations`.
+  Ce re-fetch est volontaire et distinct de l'interdiction d'appel **au montage** :
+  il n'a lieu qu'en réponse à une action explicite de l'utilisateur.
+  - `reloadBuildings()` n'est ajouté **que si** l'état de validation modifie le rendu
+    cartographique d'un bâtiment (à vérifier à l'implémentation ; a priori non
+    nécessaire car la validation ne change ni la géométrie ni le statut).
+
+- **Après édition du bâtiment** (soumission du formulaire, `handleSubmit`
+  existant) : le flux actuel `dispatch(selectBuilding(rnbId))` +
+  `dispatch(reloadBuildings())` est **conservé tel quel**. Comme le back-end
+  réinitialise `validated_by` lors d'une modification, le re-fetch ramène une liste
+  vide et le bloc de validation se met à jour automatiquement. Aucune logique
+  supplémentaire n'est nécessaire.
 
 ## Intégration en consultation
 
