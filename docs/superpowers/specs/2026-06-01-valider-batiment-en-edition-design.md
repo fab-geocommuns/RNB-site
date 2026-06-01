@@ -62,10 +62,6 @@ Fichier : `components/BuildingValidations.tsx`
 interface BuildingValidationsProps {
   building: SelectedBuilding; // pour validated_by + rnb_id
   allowEdit: boolean; // false en consultation, true en édition
-  // En édition, passé à true quand le formulaire a été déverrouillé pour
-  // modification : désactive le bouton de validation (intentions valider vs
-  // modifier mutuellement exclusives). Optionnel, défaut false.
-  actionsDisabled?: boolean;
 }
 ```
 
@@ -102,14 +98,6 @@ propre état de chargement, et connaît l'utilisateur courant via
   - Pendant l'appel : bouton en état `loading` / désactivé.
   - Après succès (204) : rafraîchissement (voir section dédiée ci-dessous).
   - En cas d'erreur : `toasterError`.
-
-### Couplage avec le verrouillage du formulaire (voir plus bas)
-
-Le bouton « Valider ce bâtiment » est **désactivé** lorsque le formulaire
-d'édition a été déverrouillé (`editUnlocked = true`) : les intentions « valider »
-et « modifier (donc effacer les validations) » sont mutuellement exclusives.
-Le parent d'édition passe pour cela `actionsDisabled={editUnlocked}` (voir
-Intégration en édition). En consultation, le prop est omis (`false`).
 
 ### Rafraîchissement après écriture (validation / retrait / édition)
 
@@ -156,11 +144,7 @@ Fichier : `components/contribution/EditionPanel.tsx`
 Ajouter en **haut du corps** (après l'en-tête RNBID / `PanelTabs`) :
 
 ```tsx
-<BuildingValidations
-  building={selectedBuilding}
-  allowEdit={true}
-  actionsDisabled={editUnlocked}
-/>
+<BuildingValidations building={selectedBuilding} allowEdit={true} />
 ```
 
 ### Verrouillage du formulaire
