@@ -1,7 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
-import { APP_URL, API_BASE, GHOST_BASE, MOCK_PORT } from './tests/config';
+import {
+  APP_URL,
+  API_BASE,
+  GHOST_BASE,
+  MOCK_HOST,
+  MOCK_PORT,
+} from './tests/config';
 
 dotenv.config({ path: path.resolve(__dirname, '.env.test') });
 
@@ -41,12 +47,15 @@ export default defineConfig({
   webServer: [
     {
       command: 'node tests/mock-server/index.mjs',
-      url: `http://localhost:${MOCK_PORT}/__health`,
-      // The mock server returns 404 for unknown paths, which Playwright treats
-      // as "server is up" (any HTTP response counts).
+      url: `http://${MOCK_HOST}:${MOCK_PORT}/__health`,
       reuseExistingServer: !process.env.CI,
-      timeout: 15_000,
-      env: { MOCK_SERVER_PORT: String(MOCK_PORT) },
+      timeout: 30_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      env: {
+        MOCK_SERVER_PORT: String(MOCK_PORT),
+        MOCK_SERVER_HOST: MOCK_HOST,
+      },
     },
     {
       command: 'pnpm dev',

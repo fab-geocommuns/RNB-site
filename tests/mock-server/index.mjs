@@ -13,6 +13,8 @@
 import { createServer } from 'node:http';
 
 const PORT = Number(process.env.MOCK_SERVER_PORT || 8001);
+const HOST = process.env.MOCK_SERVER_HOST || '127.0.0.1';
+console.log(`[mock-server] starting on ${HOST}:${PORT} (pid=${process.pid})`);
 
 const json = (res, status, body) => {
   res.writeHead(status, {
@@ -29,6 +31,10 @@ const server = createServer((req, res) => {
 
   if (process.env.MOCK_SERVER_VERBOSE) {
     console.log(`[mock-server] ${method} ${u.pathname}${u.search}`);
+  }
+
+  if (path === '/__health') {
+    return json(res, 200, { ok: true });
   }
 
   // RNB API
@@ -51,6 +57,11 @@ const server = createServer((req, res) => {
   json(res, 404, { error: `mock-server: unhandled ${method} ${path}` });
 });
 
-server.listen(PORT, () => {
-  console.log(`[mock-server] listening on http://localhost:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.log(`[mock-server] listening on http://${HOST}:${PORT}`);
+});
+
+server.on('error', (err) => {
+  console.error(`[mock-server] failed to listen on ${HOST}:${PORT}:`, err);
+  process.exit(1);
 });
