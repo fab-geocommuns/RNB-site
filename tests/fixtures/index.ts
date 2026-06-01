@@ -20,6 +20,7 @@ import { UseCasesPage } from '@/tests/fixtures/pages/use-cases-page';
 import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { testWithNewsletter } from '@/tests/fixtures/utils/components/newsletter';
 import { HttpMocker, createHttpMocker } from '@/tests/fixtures/utils/http-mock';
+import { signInAs, FakeUser } from '@/tests/fixtures/utils/auth-mock';
 import {
   test as mapGrabTest,
   expect as mapGrabExpect,
@@ -27,6 +28,11 @@ import {
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || 'http://api.test/api/alpha';
+
+export type AuthFixture = {
+  /** Inject a next-auth session cookie. Call before the first page navigation. */
+  signIn: (user?: Partial<FakeUser>) => Promise<void>;
+};
 
 type PagesFixtures = {
   aboutPage: AboutPage;
@@ -40,6 +46,7 @@ type PagesFixtures = {
   toolsAndServicesPage: ToolsAndServicesPage;
   useCasesPage: UseCasesPage;
   httpMocker: HttpMocker;
+  auth: AuthFixture;
 };
 
 const createPageFixture =
@@ -63,6 +70,11 @@ const testPage = baseTest.extend<PagesFixtures>({
   httpMocker: async ({ page }, use) => {
     const httpMocker = createHttpMocker(page, API_BASE);
     await use(httpMocker);
+  },
+  auth: async ({ context }, use) => {
+    await use({
+      signIn: (user) => signInAs(context, user),
+    });
   },
   aboutPage: createPageFixture(AboutPage),
   blogPage: createPageFixture(BlogPage),
