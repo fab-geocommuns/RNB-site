@@ -189,13 +189,17 @@ function EditSelectedBuildingPanelContent({
           />
         }
         footer={
-          <FooterPanel
-            isActive={isActive}
-            anyChanges={anyChanges}
-            isLoading={isLoading}
-            handleSubmit={handleSubmit}
-            cancelUpdate={cancelUpdate}
-          />
+          // En mode lecture seule (bâtiment validé non déverrouillé), pas de
+          // footer : le bouton « Valider les modifications » n'a pas lieu d'être.
+          !locked && (
+            <FooterPanel
+              isActive={isActive}
+              anyChanges={anyChanges}
+              isLoading={isLoading}
+              handleSubmit={handleSubmit}
+              cancelUpdate={cancelUpdate}
+            />
+          )
         }
         testId="edition-panel"
       ></GenericPanel>
