@@ -33,6 +33,8 @@ import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
 import BuildingValidations from '@/components/BuildingValidations';
 import { formatValidatorNames } from '@/utils/validations';
 import panelStyles from '@/styles/panel.module.scss';
+import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
+import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import {
   throwErrorMessageForHumans,
   toasterError,
@@ -249,54 +251,69 @@ function BodyPanel({
         isActive && (
           <>
             <BuildingValidations building={selectedBuilding} allowEdit={true} />
-            {locked && (
-              <Checkbox
-                className={panelStyles.unlockNotice}
-                options={[
-                  {
-                    label: `Je souhaite modifier ce bâtiment et effacer les validations faites par ${formatValidatorNames(
-                      selectedBuilding.validated_by,
-                    )}.`,
-                    nativeInputProps: {
-                      checked: editUnlocked,
-                      onChange: (e) => setEditUnlocked(e.target.checked),
-                    },
-                  },
-                ]}
-              />
-            )}
-            <fieldset
-              disabled={locked}
-              className={locked ? panelStyles.locked : undefined}
-              style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}
-            >
-              <BuildingStatus
-                status={newStatus}
-                onChange={setNewStatus}
-              ></BuildingStatus>
-              <BuildingAddresses
-                buildingPoint={selectedBuilding.point.coordinates}
-                addresses={localAddresses}
-                onChange={handleEditAddress}
-              />
-              <BuildingShape
-                shapeInteractionMode={shapeInteractionMode}
-                selectedBuilding={selectedBuilding}
-              ></BuildingShape>
-              <div className={`${styles.panelSection}`}>
-                <div className={`fr-text--xs ${styles.sectionTitle}`}>
-                  <label htmlFor="comment">Commentaire</label>
+            {locked ? (
+              <>
+                <div className={panelStyles.section}>
+                  <h2 className={panelStyles.sectionTitle}>
+                    Statut du bâtiment
+                  </h2>
+                  <div className={panelStyles.sectionBody}>
+                    <ContributionStatusPicker
+                      currentStatus={selectedBuilding.status}
+                    />
+                  </div>
                 </div>
-                <textarea
-                  value={commentValue}
-                  onChange={handleChange}
-                  id="comment"
-                  name="text"
-                  className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                  placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
+                <div className={panelStyles.section}>
+                  <h2 className={panelStyles.sectionTitle}>Adresses</h2>
+                  <div className={panelStyles.sectionBody}>
+                    <BuildingAdresses adresses={selectedBuilding.addresses} />
+                  </div>
+                </div>
+                <Checkbox
+                  className={panelStyles.unlockNotice}
+                  options={[
+                    {
+                      label: `Je souhaite modifier ce bâtiment et effacer les validations faites par ${formatValidatorNames(
+                        selectedBuilding.validated_by,
+                      )}.`,
+                      nativeInputProps: {
+                        checked: editUnlocked,
+                        onChange: (e) => setEditUnlocked(e.target.checked),
+                      },
+                    },
+                  ]}
                 />
-              </div>
-            </fieldset>
+              </>
+            ) : (
+              <>
+                <BuildingStatus
+                  status={newStatus}
+                  onChange={setNewStatus}
+                ></BuildingStatus>
+                <BuildingAddresses
+                  buildingPoint={selectedBuilding.point.coordinates}
+                  addresses={localAddresses}
+                  onChange={handleEditAddress}
+                />
+                <BuildingShape
+                  shapeInteractionMode={shapeInteractionMode}
+                  selectedBuilding={selectedBuilding}
+                ></BuildingShape>
+                <div className={`${styles.panelSection}`}>
+                  <div className={`fr-text--xs ${styles.sectionTitle}`}>
+                    <label htmlFor="comment">Commentaire</label>
+                  </div>
+                  <textarea
+                    value={commentValue}
+                    onChange={handleChange}
+                    id="comment"
+                    name="text"
+                    className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+                    placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
+                  />
+                </div>
+              </>
+            )}
           </>
         )
       )}
