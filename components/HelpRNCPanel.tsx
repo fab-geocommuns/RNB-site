@@ -150,10 +150,10 @@ const PAGES = [
         </p>
         <p>
           “Construction souterraine et/ou au-dessus du sol, ayant pour objectif
-          d'être permanente, pour abriter des humains ou des activités humaines.
-          Un bâtiment possède a minima un accès depuis l’extérieur. Dans la
-          mesure du possible, un bâtiment est distinct d’un autre dès lors qu’il
-          est impossible de circuler entre eux.”
+          d&apos;être permanente, pour abriter des humains ou des activités
+          humaines. Un bâtiment possède a minima un accès depuis l’extérieur.
+          Dans la mesure du possible, un bâtiment est distinct d’un autre dès
+          lors qu&apos;il est impossible de circuler entre eux.”
         </p>
 
         <p>
