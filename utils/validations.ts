@@ -13,9 +13,17 @@ export function hasUserValidated(
 }
 
 /**
- * Formate la liste des validateurs en une énumération de noms d'affichage
- * séparés par des virgules. Ex : "Jean Dupont, Marie Martin".
+ * Formate la liste des validateurs en une énumération « display_name
+ * (organization_name) », séparés par des virgules sauf le dernier, introduit par
+ * « et ». Ex : "Jean Dupont (IGN), Marie Martin (INSEE) et Luc Petit (BAN)".
+ * Les parenthèses sont omises pour un validateur sans organisation.
  */
 export function formatValidatorNames(validatedBy: PublicUser[]): string {
-  return validatedBy.map((u) => u.display_name).join(', ');
+  const parts = validatedBy.map((u) =>
+    u.organization_name
+      ? `${u.display_name} (${u.organization_name})`
+      : u.display_name,
+  );
+  if (parts.length <= 1) return parts[0] ?? '';
+  return `${parts.slice(0, -1).join(', ')} et ${parts[parts.length - 1]}`;
 }

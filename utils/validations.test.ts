@@ -42,18 +42,33 @@ describe('formatValidatorNames', () => {
     expect(formatValidatorNames([])).toBe('');
   });
 
-  it('liste un seul nom', () => {
-    expect(formatValidatorNames([user({ display_name: 'Jean Dupont' })])).toBe(
-      'Jean Dupont',
-    );
-  });
-
-  it('joint plusieurs noms par des virgules', () => {
+  it('affiche le nom suivi de l’organisation entre parenthèses', () => {
     expect(
       formatValidatorNames([
-        user({ id: 1, display_name: 'Jean Dupont' }),
-        user({ id: 2, display_name: 'Marie Martin' }),
+        user({ display_name: 'Jean Dupont', organization_name: 'IGN' }),
       ]),
-    ).toBe('Jean Dupont, Marie Martin');
+    ).toBe('Jean Dupont (IGN)');
+  });
+
+  it('omet les parenthèses en l’absence d’organisation', () => {
+    expect(
+      formatValidatorNames([
+        user({ display_name: 'Jean Dupont', organization_name: '' }),
+      ]),
+    ).toBe('Jean Dupont');
+  });
+
+  it('sépare par des virgules sauf le dernier, introduit par « et »', () => {
+    expect(
+      formatValidatorNames([
+        user({ id: 1, display_name: 'Jean Dupont', organization_name: 'IGN' }),
+        user({
+          id: 2,
+          display_name: 'Marie Martin',
+          organization_name: 'INSEE',
+        }),
+        user({ id: 3, display_name: 'Luc Petit', organization_name: 'BAN' }),
+      ]),
+    ).toBe('Jean Dupont (IGN), Marie Martin (INSEE) et Luc Petit (BAN)');
   });
 });
