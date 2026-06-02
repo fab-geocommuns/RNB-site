@@ -15,9 +15,10 @@ $textColor: white;
   display: flex;
   align-items: top;
   background: $bckg;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  padding: 0.7rem 0.8rem 0.7rem 1rem;
   border-radius: 4px;
   color: $textColor;
+  margin-bottom: 1.5rem;
   .sectionTitle {
     color: #2a401a;
   }
@@ -39,14 +40,6 @@ $textColor: white;
   font-size: 0.9em;
 }
 
-.validationEmpty {
-  display: flex;
-  align-items: center;
-  background: #f6f6f6;
-  padding: 1rem 0.8rem 1rem 1rem;
-  border-radius: 4px;
-  color: #3a3a3a;
-}
 .user {
   margin-bottom: 0.2rem;
   &:last-child {

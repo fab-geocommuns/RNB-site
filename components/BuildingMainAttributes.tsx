@@ -24,17 +24,21 @@ export default function BuildingMainAttributes({
 }: BuildingMainAttributesProps) {
   return (
     <>
-      <BuildingValidations building={building} allowEdit={allowEdit} />
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
-        <div className={panelStyles.sectionBody}>
-          <ContributionStatusPicker currentStatus={building.status} />
+      <div
+        className={`${panelStyles.mainAttributes} ${building.validated_by.length > 0 ? panelStyles.validated : ''}`}
+      >
+        <BuildingValidations building={building} allowEdit={allowEdit} />
+        <div className={panelStyles.section}>
+          <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
+          <div className={panelStyles.sectionBody}>
+            <ContributionStatusPicker currentStatus={building.status} />
+          </div>
         </div>
-      </div>
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Adresses</h2>
-        <div className={panelStyles.sectionBody}>
-          <BuildingAdresses adresses={building.addresses} />
+        <div className={panelStyles.section}>
+          <h2 className={panelStyles.sectionTitle}>Adresses</h2>
+          <div className={panelStyles.sectionBody}>
+            <BuildingAdresses adresses={building.addresses} />
+          </div>
         </div>
       </div>
     </>

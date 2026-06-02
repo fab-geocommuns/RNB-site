@@ -30,19 +30,6 @@ export default function BuildingValidations({
     </div>
   );
 
-  // Cas édition sans aucune validation : bloc neutre + bouton "Valider".
-  if (validatedBy.length === 0) {
-    return (
-      <div className={styles.validationEmpty}>
-        <div>
-          La géométrie, le statut et les adresses de ce bâtiment vous semblent
-          corrects ? {actionButton}
-        </div>
-      </div>
-    );
-  }
-
-  // Cas avec validations : bloc vert (style existant) + liste + bouton éventuel.
   return (
     <div className={styles.validated}>
       <div className={styles.iconShell}>

@@ -29,7 +29,6 @@ import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
-import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
 import BuildingValidations from '@/components/BuildingValidations';
 import BuildingMainAttributes from '@/components/BuildingMainAttributes';
 import { formatValidatorNames } from '@/utils/validations';
@@ -40,6 +39,7 @@ import {
   toasterSuccess,
 } from './toaster';
 import SplitPanel from './SplitPanel';
+import ValidationToggler from '../ValidationToggler';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -259,28 +259,31 @@ function BodyPanel({
                   building={selectedBuilding}
                   allowEdit={true}
                 />
-                <Checkbox
-                  className={panelStyles.unlockNotice}
-                  options={[
-                    {
-                      label: `Je souhaite modifier ce bâtiment et effacer les validations faites par ${formatValidatorNames(
-                        selectedBuilding.validated_by,
-                      )}.`,
-                      nativeInputProps: {
-                        checked: editUnlocked,
-                        onChange: (e) => setEditUnlocked(e.target.checked),
-                      },
-                    },
-                  ]}
-                />
+
+                <div>
+                  <Button size="small" onClick={() => setEditUnlocked(true)}>
+                    Accéder au formulaire d&apos;édition
+                  </Button>
+                </div>
               </>
             ) : (
               <>
                 {selectedBuilding.validated_by.length === 0 && (
-                  <BuildingValidations
-                    building={selectedBuilding}
-                    allowEdit={true}
-                  />
+                  <div
+                    className={`${styles.validationAction} fr-p-5v fr-text--sm`}
+                  >
+                    La géométrie, le statut et les adresses vous semblent
+                    corrects ? <ValidationToggler building={selectedBuilding} />
+                  </div>
+                )}
+                {selectedBuilding.validated_by.length > 0 && (
+                  <>
+                    <div className={styles.validationWarning}>
+                      Modifier ce bâtiment aura pour effet de supprimer la
+                      validation faite par{' '}
+                      {formatValidatorNames(selectedBuilding.validated_by)}.
+                    </div>
+                  </>
                 )}
                 <BuildingStatus
                   status={newStatus}
