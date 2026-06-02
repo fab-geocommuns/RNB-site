@@ -4,7 +4,6 @@ import React from 'react';
 
 import { SelectedBuilding, PublicUser } from '@/stores/map/map-slice';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
-import { hasUserValidated } from '@/utils/validations';
 import ValidationToggler from '@/components/ValidationToggler';
 
 import styles from '@/styles/buildingValidations.module.scss';
@@ -21,20 +20,13 @@ export default function BuildingValidations({
   const { user } = useRNBAuthentication();
 
   const validatedBy = building.validated_by;
-  const userHasValidated = hasUserValidated(validatedBy, user?.username);
 
   // En consultation, rien à afficher s'il n'y a aucune validation.
   if (!allowEdit && validatedBy.length === 0) return null;
 
   const actionButton = allowEdit && user && (
     <div className={styles.actionShell}>
-      <ValidationToggler
-        rnbId={building.rnb_id}
-        label={
-          userHasValidated ? 'Retirer ma validation' : 'Valider ce bâtiment'
-        }
-        isValid={!userHasValidated}
-      />
+      <ValidationToggler building={building} />
     </div>
   );
 
