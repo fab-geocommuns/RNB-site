@@ -124,14 +124,27 @@ re-consultant le bâtiment.
   vide et le bloc de validation se met à jour automatiquement. Aucune logique
   supplémentaire n'est nécessaire.
 
+## Composant `BuildingMainAttributes` (nouveau, partagé)
+
+Fichier : `components/BuildingMainAttributes.tsx`. Props
+`{ building: SelectedBuilding; allowEdit: boolean }`. Regroupe la présentation
+**lecture seule** des attributs principaux, dans l'ordre :
+
+1. `<BuildingValidations building allowEdit />`
+2. Section « Statut du bâtiment » → `ContributionStatusPicker`
+3. Section « Adresses » → `BuildingAdresses`
+
+Utilisé en **consultation** et dans le **mode lecture seule de l'édition**
+(branche verrouillée), pour éviter la duplication entre les deux panneaux.
+
 ## Intégration en consultation
 
 Fichier : `components/panel/BuildingPanel.tsx`
 
-Remplacer le bloc vert codé en dur (actuellement ~lignes 97-124) par :
+Remplacer le bloc validations + les sections Statut/Adresses par :
 
 ```tsx
-<BuildingValidations building={bdg} allowEdit={false} />
+<BuildingMainAttributes building={bdg} allowEdit={false} />
 ```
 
 ## Intégration en édition
@@ -167,13 +180,15 @@ formulaire d'édition complet.
 ```tsx
 {locked ? (
   <>
-    {/* Lecture seule, mêmes composants/markup que la consultation */}
-    <section> « Statut du bâtiment » → <ContributionStatusPicker currentStatus={selectedBuilding.status} /> </section>
-    <section> « Adresses » → <BuildingAdresses adresses={selectedBuilding.addresses} /> </section>
+    <BuildingMainAttributes building={selectedBuilding} allowEdit={true} />
     <Checkbox … case à cocher de déverrouillage … />
   </>
 ) : (
   <>
+    {/* Bâtiment non validé : on garde le bouton « Valider ce bâtiment ». */}
+    {selectedBuilding.validated_by.length === 0 && (
+      <BuildingValidations building={selectedBuilding} allowEdit={true} />
+    )}
     <BuildingStatus … />
     <BuildingAddresses … />
     <BuildingShape … />
