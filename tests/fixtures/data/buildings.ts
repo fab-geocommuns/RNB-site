@@ -1,7 +1,14 @@
 /**
- * Canned building responses for e2e tests. Shapes mirror `SelectedBuilding`
- * (see stores/map/map-slice.tsx) and the `/buildings/{id}/?from=site` endpoint.
+ * Canned building responses for e2e tests. Shapes mirror what the
+ * `/buildings/{id}/?from=site` endpoint returns — i.e. `SelectedBuilding`
+ * minus the client-only `_type` discriminator that `fetchBuilding` adds.
+ *
+ * Typed with `satisfies` so TypeScript flags drift when the upstream
+ * `SelectedBuilding` interface gains a new required field.
  */
+import type { SelectedBuilding } from '@/stores/map/map-slice';
+
+type BuildingFixture = Omit<SelectedBuilding, '_type'>;
 
 export const buildingSegur = {
   rnb_id: 'NHDE2W8HE3X3',
@@ -29,12 +36,13 @@ export const buildingSegur = {
       street: 'avenue de Ségur',
       city_zipcode: '75007',
       city_name: 'Paris 7e Arrondissement',
+      city_insee_code: '75107',
     },
   ],
   marked_as_correct_by: [],
   ext_ids: [],
   plots: [],
-};
+} satisfies BuildingFixture;
 
 // Tight rectangle sized so the test's cut line (vertical at x=2.424, going
 // from y=48.8449 to y=48.8456) starts and ends outside the polygon and fully
@@ -60,7 +68,7 @@ export const buildingToSplit = {
   marked_as_correct_by: [],
   ext_ids: [],
   plots: [],
-};
+} satisfies BuildingFixture;
 
 export const banFeatureSegur = {
   type: 'Feature',
