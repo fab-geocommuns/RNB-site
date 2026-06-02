@@ -43,14 +43,17 @@ test.describe('Validation depuis l’édition', () => {
     await editionPage.goToBuilding(BUILDING_ID);
     await expect(editionPage.panel).toBeVisible();
 
-    // Le select de statut est désactivé (formulaire verrouillé).
-    await expect(editionPage.statusSelect).toBeDisabled();
+    // Verrouillé : données en lecture seule (pas de champ de formulaire).
+    await expect(
+      editionPage.panel.getByRole('heading', { name: 'Statut du bâtiment' }),
+    ).toBeVisible();
+    await expect(editionPage.statusSelect).toHaveCount(0);
     // La case à cocher de déverrouillage est présente.
     await expect(editionPage.unlockCheckbox).toBeVisible();
 
-    // Cocher déverrouille le formulaire.
+    // Cocher fait apparaître le formulaire d'édition.
     await editionPage.unlockCheckbox.check();
-    await expect(editionPage.statusSelect).toBeEnabled();
+    await expect(editionPage.statusSelect).toBeVisible();
   });
 
   test('valider un bâtiment depuis l’édition', async ({
