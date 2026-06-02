@@ -7,7 +7,7 @@ import ContributionForm from '@/components/ContributionForm';
 import DeployableBlock from '@/components/DeployableBlock';
 import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 import RNBIDHeader from '@/components/contribution/RNBIDHeader';
-import BuildingValidations from '@/components/BuildingValidations';
+import BuildingMainAttributes from '@/components/BuildingMainAttributes';
 import PanelTabs from '@/components/panel/PanelTabs';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
 
@@ -20,8 +20,6 @@ import va from '@vercel/analytics';
 
 // Hooks
 import React, { useEffect } from 'react';
-import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
-import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 
 // Store
 import { useDispatch, useSelector } from 'react-redux';
@@ -89,22 +87,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         </div>
         <PanelTabs rnbId={bdg?.rnb_id}></PanelTabs>
       </div>
-
-      <BuildingValidations building={bdg} allowEdit={false} />
-
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Statut du bâtiment</h2>
-        <div className={panelStyles.sectionBody}>
-          <ContributionStatusPicker currentStatus={bdg.status} />
-        </div>
-      </div>
-      <div className={panelStyles.section}>
-        <h2 className={panelStyles.sectionTitle}>Adresses</h2>
-        <div className={panelStyles.sectionBody}>
-          <BuildingAdresses adresses={bdg.addresses} />
-        </div>
-      </div>
-
+      <BuildingMainAttributes building={bdg} allowEdit={false} />
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle + ' fr-mb-2v'}>
           Améliorez le RNB
@@ -119,7 +102,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
           <BdTopoBdnbContent building={bdg} />
         </DeployableBlock>
       </div>
-
       <div className={panelStyles.section}>
         <DeployableBlock title="Parcelles cadastrales" className="blue">
           <>
@@ -185,7 +167,6 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
           </>
         </DeployableBlock>
       </div>
-
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Lien API</h2>
         <div className={panelStyles.sectionBody}>

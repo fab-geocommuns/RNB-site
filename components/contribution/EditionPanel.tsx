@@ -31,10 +31,9 @@ import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
 import BuildingValidations from '@/components/BuildingValidations';
+import BuildingMainAttributes from '@/components/BuildingMainAttributes';
 import { formatValidatorNames } from '@/utils/validations';
 import panelStyles from '@/styles/panel.module.scss';
-import { ContributionStatusPicker } from '@/components/panel/ContributionStatusPicker';
-import { BuildingAdresses } from '@/components/panel/adresse/BuildingAdresses';
 import {
   throwErrorMessageForHumans,
   toasterError,
@@ -250,30 +249,12 @@ function BodyPanel({
       ) : (
         isActive && (
           <>
-            {!editUnlocked && (
-              <BuildingValidations
-                building={selectedBuilding}
-                allowEdit={true}
-              />
-            )}
             {locked ? (
               <>
-                <div className={panelStyles.section}>
-                  <h2 className={panelStyles.sectionTitle}>
-                    Statut du bâtiment
-                  </h2>
-                  <div className={panelStyles.sectionBody}>
-                    <ContributionStatusPicker
-                      currentStatus={selectedBuilding.status}
-                    />
-                  </div>
-                </div>
-                <div className={panelStyles.section}>
-                  <h2 className={panelStyles.sectionTitle}>Adresses</h2>
-                  <div className={panelStyles.sectionBody}>
-                    <BuildingAdresses adresses={selectedBuilding.addresses} />
-                  </div>
-                </div>
+                <BuildingMainAttributes
+                  building={selectedBuilding}
+                  allowEdit={true}
+                />
                 <Checkbox
                   className={panelStyles.unlockNotice}
                   options={[
@@ -291,6 +272,12 @@ function BodyPanel({
               </>
             ) : (
               <>
+                {selectedBuilding.validated_by.length === 0 && (
+                  <BuildingValidations
+                    building={selectedBuilding}
+                    allowEdit={true}
+                  />
+                )}
                 <BuildingStatus
                   status={newStatus}
                   onChange={setNewStatus}
