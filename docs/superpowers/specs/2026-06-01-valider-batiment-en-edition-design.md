@@ -192,8 +192,13 @@ formulaire d'édition complet.
 - **Plus de `<fieldset disabled>` ni de greyage** : le masquage du formulaire
   est un simple rendu conditionnel. La classe SCSS `.locked` n'est plus
   nécessaire.
-- Le bloc `BuildingValidations` (vert) reste affiché **au-dessus**, dans les deux
-  états (verrouillé et déverrouillé).
+- Le bloc `BuildingValidations` (vert) est affiché **au-dessus** tant que la case
+  n'est pas cochée ; **il est masqué une fois la case cochée** (`editUnlocked`),
+  pendant l'édition (rendu : `{!editUnlocked && <BuildingValidations … />}`).
+- Le bloc de (dés)activation `BuildingActivationToggle` est **masqué tant que la
+  case n'est pas cochée** sur un bâtiment actif validé, c.-à-d. quand
+  `isActive && locked`. Il reste visible sinon — notamment sur un bâtiment déjà
+  **désactivé** (pour permettre la réactivation) et une fois la case cochée.
 - Aucune modification des sous-composants d'édition `BuildingStatus` /
   `BuildingAddresses` / `BuildingShape`.
 
