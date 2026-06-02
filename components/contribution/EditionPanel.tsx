@@ -250,7 +250,12 @@ function BodyPanel({
       ) : (
         isActive && (
           <>
-            <BuildingValidations building={selectedBuilding} allowEdit={true} />
+            {!editUnlocked && (
+              <BuildingValidations
+                building={selectedBuilding}
+                allowEdit={true}
+              />
+            )}
             {locked ? (
               <>
                 <div className={panelStyles.section}>
@@ -317,7 +322,7 @@ function BodyPanel({
           </>
         )
       )}
-      {!isLoading && (
+      {!isLoading && !(isActive && locked) && (
         <BuildingActivationToggle
           isActive={isActive}
           onToggle={toggleBuildingActivation}
