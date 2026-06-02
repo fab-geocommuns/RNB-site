@@ -130,59 +130,6 @@
   }
 }
 
-.validated {
-  display: flex;
-  align-items: center;
-  background: #e6feda;
-  padding: 1rem 0.8rem 1rem 1rem;
-  border-radius: 4px;
-  color: #142117;
-  .sectionTitle {
-    color: #2a401a;
-  }
-}
-
-.validatedIconShell {
-  margin-right: 0.8rem;
-  text-align: center;
-  i {
-    height: 20px;
-    &::before {
-      color: #142117;
-      width: 25px;
-      height: 25px;
-    }
-  }
-}
-
-.user {
-  margin-bottom: 0.2rem;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.userName {
-  font-weight: 500;
-}
-
-.userOrganization {
-  opacity: 0.8;
-}
-
-.validationAction {
-  margin-top: 0.8rem;
-}
-
-.validationEmpty {
-  display: flex;
-  align-items: center;
-  background: #f6f6f6;
-  padding: 1rem 0.8rem 1rem 1rem;
-  border-radius: 4px;
-  color: #3a3a3a;
-}
-
 .unlockNotice {
   margin-bottom: 1rem;
 }

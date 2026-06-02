@@ -18,7 +18,7 @@ import {
   toasterSuccess,
 } from '@/components/contribution/toaster';
 
-import panelStyles from '@/styles/panel.module.scss';
+import styles from '@/styles/buildingValidations.module.scss';
 
 interface BuildingValidationsProps {
   building: SelectedBuilding;
@@ -71,26 +71,21 @@ export default function BuildingValidations({
   };
 
   const actionButton = allowEdit && user && (
-    <div className={panelStyles.validationAction}>
-      <Button
-        size="small"
-        priority={userHasValidated ? 'tertiary' : 'primary'}
-        disabled={isLoading}
-        onClick={() => setValidation(!userHasValidated)}
-      >
+    <div className={styles.actionShell}>
+      <a href="#" onClick={() => setValidation(!userHasValidated)}>
         {userHasValidated ? 'Retirer ma validation' : 'Valider ce bâtiment'}
-      </Button>
+      </a>
     </div>
   );
 
   // Cas édition sans aucune validation : bloc neutre + bouton "Valider".
   if (validatedBy.length === 0) {
     return (
-      <div className={panelStyles.section}>
-        <div className={panelStyles.validationEmpty}>
+      <div className={styles.section}>
+        <div className={styles.validationEmpty}>
           <div>
-            <h2 className={panelStyles.sectionTitle}>Bâtiment non validé</h2>
-            <div className={panelStyles.sectionBody}>
+            <h2 className={styles.sectionTitle}>Bâtiment non validé</h2>
+            <div className={styles.sectionBody}>
               <span>Aucune validation pour le moment.</span>
               {actionButton}
             </div>
@@ -102,31 +97,28 @@ export default function BuildingValidations({
 
   // Cas avec validations : bloc vert (style existant) + liste + bouton éventuel.
   return (
-    <div className={panelStyles.section}>
-      <div className={panelStyles.validated}>
-        <div className={panelStyles.validatedIconShell}>
-          <i className="fr-icon-success-fill" aria-hidden="true"></i>
-        </div>
-        <div>
-          <h2 className={panelStyles.sectionTitle}>Bâtiment validé</h2>
-          <div className={panelStyles.sectionBody}>
-            {validatedBy.map((u: PublicUser) => (
-              <div key={u.id} className={panelStyles.user}>
-                <span>
-                  <span className={panelStyles.userName}>
-                    par {u.display_name}
-                  </span>{' '}
-                  {u.organization_name && (
-                    <span className={panelStyles.userOrganization}>
-                      ({u.organization_name})
-                    </span>
-                  )}
+    <div className={styles.validated}>
+      <div className={styles.iconShell}>
+        <i className="fr-icon-chat-check-fill" aria-hidden="true"></i>
+      </div>
+      <div>
+        <p className={styles.title}>
+          Bâtiment validé par
+          {validatedBy.map((u: PublicUser) => (
+            <span key={u.id} className={styles.user}>
+              {' '}
+              <span className={styles.username}>{u.display_name}</span>{' '}
+              {u.organization_name && (
+                <span className={styles.organization}>
+                  ({u.organization_name})
+                  {/* add a comma between users except for the last one */}
+                  {u.id !== validatedBy[validatedBy.length - 1].id && ','}
                 </span>
-              </div>
-            ))}
-            {actionButton}
-          </div>
-        </div>
+              )}
+            </span>
+          ))}
+        </p>
+        <div>{actionButton}</div>
       </div>
     </div>
   );
