@@ -156,56 +156,78 @@ Ajouter en **haut du corps** (après l'en-tête RNBID / `PanelTabs`) :
 - Réinitialiser `editUnlocked` à `false` quand `selectedBuilding` change
   (dans le `useEffect` existant qui réinitialise `newStatus` / `localAddresses`).
 
-### Formulaire grisé en place (approche A)
+### Vue lecture seule, puis bascule vers le formulaire
 
-La zone éditable (`BuildingStatus`, `BuildingAddresses`, `BuildingShape`, et la
-textarea commentaire) est enveloppée dans :
+Quand `locked` (le bâtiment a au moins une validation et la case n'est pas
+cochée), on **n'affiche pas le formulaire** : on présente les données en
+**lecture seule, comme dans le panneau de consultation**, suivies de la case à
+cocher. Cocher la case **remplace** la vue lecture seule + la case par le
+formulaire d'édition complet.
 
 ```tsx
-<fieldset disabled={locked} className={locked ? styles.locked : undefined}>
-  … formulaire …
-</fieldset>
+{locked ? (
+  <>
+    {/* Lecture seule, mêmes composants/markup que la consultation */}
+    <section> « Statut du bâtiment » → <ContributionStatusPicker currentStatus={selectedBuilding.status} /> </section>
+    <section> « Adresses » → <BuildingAdresses adresses={selectedBuilding.addresses} /> </section>
+    <Checkbox … case à cocher de déverrouillage … />
+  </>
+) : (
+  <>
+    <BuildingStatus … />
+    <BuildingAddresses … />
+    <BuildingShape … />
+    {/* textarea commentaire */}
+  </>
+)}
 ```
 
-- `fieldset[disabled]` désactive nativement tous les contrôles de formulaire à
-  l'intérieur : radios de statut, champ de recherche d'adresse, textarea, et le
-  bouton qui déclenche l'édition de la forme sur la carte. Comme l'édition de la
-  forme ne peut être amorcée que via ce bouton, la carte reste de fait
-  non-éditable.
-- Classe CSS `.locked { opacity: 0.5; pointer-events: none; }` pour l'aspect
-  grisé et bloquer tout clic résiduel (sécurité).
-- Aucune modification des sous-composants `BuildingStatus` / `BuildingAddresses`
-  / `BuildingShape`.
+- Composants réutilisés de la consultation (aucun nouveau composant) :
+  `ContributionStatusPicker` (`components/panel/ContributionStatusPicker`) et
+  `BuildingAdresses` (`components/panel/adresse/BuildingAdresses`), avec le même
+  markup de section que `BuildingPanel` (`<h2 class="sectionTitle">` +
+  `<div class="sectionBody">`).
+- Données lecture seule = valeurs **persistées** `selectedBuilding.status` /
+  `selectedBuilding.addresses` (cohérent avec la consultation).
+- **Plus de `<fieldset disabled>` ni de greyage** : le masquage du formulaire
+  est un simple rendu conditionnel. La classe SCSS `.locked` n'est plus
+  nécessaire.
+- Le bloc `BuildingValidations` (vert) reste affiché **au-dessus**, dans les deux
+  états (verrouillé et déverrouillé).
+- Aucune modification des sous-composants d'édition `BuildingStatus` /
+  `BuildingAddresses` / `BuildingShape`.
 
 ### Case à cocher de déverrouillage
 
-Affichée **au-dessus du formulaire**, uniquement quand `hasValidations` :
+Affichée **sous les données en lecture seule**, uniquement quand `locked` :
 
 > ☐ « Je souhaite modifier ce bâtiment et effacer les validations faites par
 > **xxx, yyy**. »
 
-- `xxx, yyy` = liste des `display_name` de `validated_by`.
-- La cocher → `setEditUnlocked(true)` → `locked = false` → formulaire actif.
+- `xxx, yyy` = liste des `display_name` de `validated_by`
+  (`formatValidatorNames`).
+- La cocher → `setEditUnlocked(true)` → `locked = false` → la vue lecture seule
+  et la case sont remplacées par le formulaire d'édition.
 - À la soumission d'une modification (`handleSubmit` existant), le back-end
   réinitialise automatiquement `validated_by` ; le `selectBuilding` post-submit
-  déjà présent rafraîchit l'état → la case disparaît et le bloc redevient vide.
-- Composant DSFR `Checkbox` (`@codegouvfr/react-dsfr/Checkbox`) pour rester
-  cohérent avec le reste de l'UI.
+  déjà présent rafraîchit l'état → retour à l'état non validé.
+- Composant DSFR `Checkbox` (`@codegouvfr/react-dsfr/Checkbox`).
 
 ### Soumission
 
-Aucun changement de logique sur `handleSubmit` : quand `locked`, aucune
-modification n'est possible donc `anyChanges` reste `false` et le bouton
-« Valider les modifications » est déjà désactivé. (Le `fieldset disabled` empêche
-toute interaction de toute façon.)
+Aucun changement de logique sur `handleSubmit` : quand `locked`, le formulaire
+n'est pas rendu, donc aucune modification n'est possible et le bouton « Valider
+les modifications » du pied de panneau reste désactivé (`anyChanges` reste
+`false`).
 
 ## Styles
 
 Fichier : `styles/panel.module.scss` (réutilisé par consultation **et** édition).
 
 - Ajouter le style du bouton/zone d'action de validation dans le bloc vert.
-- Ajouter `.locked { opacity: 0.5; pointer-events: none; }`.
-- Style de la case à cocher d'avertissement.
+- Style de la case à cocher d'avertissement (`.unlockNotice`).
+- (La classe `.locked` n'est plus utilisée : l'ancien greyage par `<fieldset>`
+  est remplacé par une vue lecture seule en rendu conditionnel.)
 - Ajouter les classes manquantes `.user`, `.userName`, `.userOrganization`
   (actuellement référencées par `BuildingPanel` mais absentes du SCSS → rendu non
   stylé). Le nouveau composant les réutilise ; on les définit proprement.
@@ -217,9 +239,11 @@ Fichier : `styles/panel.module.scss` (réutilisé par consultation **et** éditi
   - `allowEdit=false` : aucun bouton, et rien si `validated_by` vide ;
   - `allowEdit=true` : bouton « Valider ce bâtiment » si l'utilisateur n'a pas
     validé, « Retirer ma validation » s'il a validé.
-- **e2e** (`tests/edition-page.spec.ts`) :
-  - formulaire grisé/désactivé quand le bâtiment a une validation ;
-  - déverrouillage via la case à cocher → formulaire éditable ;
+- **e2e** (`tests/validation-edition.spec.ts`) :
+  - bâtiment validé en édition → données Statut/Adresses en lecture seule, **pas
+    de champ de formulaire** (`<select>` absent), case à cocher visible ;
+  - cocher la case → le formulaire apparaît (le `<select>` de statut devient
+    présent) ;
   - validation puis dévalidation depuis l'écran d'édition.
 
 ## Hors périmètre
