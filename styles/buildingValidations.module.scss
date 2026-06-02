@@ -19,9 +19,6 @@ $textColor: white;
   border-radius: 4px;
   color: $textColor;
   margin-bottom: 1.5rem;
-  .sectionTitle {
-    color: #2a401a;
-  }
 }
 
 .iconShell {
@@ -47,10 +44,10 @@ $textColor: white;
   }
 }
 
-.userName {
+.username {
   font-weight: 500;
 }
 
-.userOrganization {
+.organization {
   opacity: 0.8;
 }

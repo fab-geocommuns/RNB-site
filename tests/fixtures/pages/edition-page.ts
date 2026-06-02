@@ -28,11 +28,11 @@ export class EditionPage extends RNBPage {
   }
 
   get validateButton(): Locator {
-    return this.panel.getByRole('button', { name: /Valider ce bâtiment/i });
+    return this.panel.getByRole('link', { name: /Valider ce bâtiment/i });
   }
 
   get removeValidationButton(): Locator {
-    return this.panel.getByRole('button', { name: /Retirer ma validation/i });
+    return this.panel.getByRole('link', { name: /Retirer ma validation/i });
   }
 
   get unlockCheckbox(): Locator {

@@ -29,7 +29,6 @@ import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
-import BuildingValidations from '@/components/BuildingValidations';
 import BuildingMainAttributes from '@/components/BuildingMainAttributes';
 import { formatValidatorNames } from '@/utils/validations';
 import panelStyles from '@/styles/panel.module.scss';
@@ -261,6 +260,10 @@ function BodyPanel({
                 />
 
                 <div>
+                  <p>
+                    Vous avez une modification à apporter malgré la validation
+                    du bâtiment ?{' '}
+                  </p>
                   <Button size="small" onClick={() => setEditUnlocked(true)}>
                     Accéder au formulaire d&apos;édition
                   </Button>
@@ -277,13 +280,11 @@ function BodyPanel({
                   </div>
                 )}
                 {selectedBuilding.validated_by.length > 0 && (
-                  <>
-                    <div className={styles.validationWarning}>
-                      Modifier ce bâtiment aura pour effet de supprimer la
-                      validation faite par{' '}
-                      {formatValidatorNames(selectedBuilding.validated_by)}.
-                    </div>
-                  </>
+                  <div className={styles.validationWarning}>
+                    Modifier ce bâtiment aura pour effet de supprimer la
+                    validation faite par{' '}
+                    {formatValidatorNames(selectedBuilding.validated_by)}.
+                  </div>
                 )}
                 <BuildingStatus
                   status={newStatus}
