@@ -14,7 +14,9 @@ import {
   MapBuildingsLayer,
   MapExtraLayer,
 } from '@/stores/map/map-slice';
-import { useMapEditBuildingShape } from '@/components/map/useMapEditBuildingShape';
+import { useMapDraw } from '@/components/map/useMapDraw';
+import { useMapPolygonDraw } from '@/components/map/useMapPolygonDraw';
+import { useMapSplitDraw } from '@/components/map/useMapSplitDraw';
 import { useMapSplitChildren } from '@/components/map/useMapSplitChildren';
 import { useMapHighlightForEdition } from '@/components/map/useMapHighlightForEdition';
 import { useMapStateSyncReport } from '@/components/map/report/useMapStateSyncReport';
@@ -48,7 +50,12 @@ export default function EditMap({
   useMapSyncCoordinates(map);
   useEditionMapEvents(map);
   useMapStateSync(map);
-  useMapEditBuildingShape(map);
+
+  // draw plugin
+  const drawRef = useMapDraw(map);
+  useMapPolygonDraw(map, drawRef);
+  useMapSplitDraw(map, drawRef);
+
   useMapSplitChildren(map);
   useMapMerge(map);
   useMapStateSyncReport(map);
