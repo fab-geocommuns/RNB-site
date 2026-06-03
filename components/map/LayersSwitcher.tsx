@@ -89,9 +89,13 @@ function LayerButton({
 
 type Props = {
   disabledLayers?: MapLayer[];
+  editionMode?: boolean;
 };
 
-export default function LayersSwitcher({ disabledLayers = [] }: Props) {
+export default function LayersSwitcher({
+  disabledLayers = [],
+  editionMode = false,
+}: Props) {
   // Open or not
   const [open, setOpen] = useState(false);
 
@@ -259,13 +263,15 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     onClick={() => handleExtraLayerClick('addresses')}
                     image={extraAddresses}
                   />
-                  <LayerButton
-                    isAvailable={isAvailable('verified')}
-                    isActive={mapLayers.extraLayers.includes('verified')}
-                    label="Bâtiments vérifiés"
-                    onClick={() => handleExtraLayerClick('verified')}
-                    image={extraVerified}
-                  />
+                  {editionMode && (
+                    <LayerButton
+                      isAvailable={isAvailable('verified')}
+                      isActive={mapLayers.extraLayers.includes('verified')}
+                      label="Bâtiments vérifiés"
+                      onClick={() => handleExtraLayerClick('verified')}
+                      image={extraVerified}
+                    />
+                  )}
                 </ul>
               </div>
             </div>

@@ -34,7 +34,7 @@ export default function EditMap({
   defaultBuildingLayer,
   defaultExtraLayers,
 }: Props) {
-  const { map, mapContainer } = useMap({ disabledLayers });
+  const { map, mapContainer } = useMap({ disabledLayers, editionMode: true });
 
   useMapLayers({
     map,
@@ -42,6 +42,7 @@ export default function EditMap({
     defaultBuildingLayer,
     defaultExtraLayers,
     selectedBuildingisGreen: true,
+    editionMode: true,
   });
 
   useMapControls(map);

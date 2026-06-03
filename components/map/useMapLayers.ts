@@ -60,12 +60,14 @@ export const useMapLayers = ({
   defaultBuildingLayer,
   defaultExtraLayers,
   selectedBuildingisGreen,
+  editionMode,
 }: {
   map?: maplibregl.Map;
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
   defaultExtraLayers?: MapExtraLayer[] | null;
   selectedBuildingisGreen?: Boolean;
+  editionMode?: boolean;
 }) => {
   // Get the layers from the store
   const layers = useSelector((state: RootState) => state.map.layers);
@@ -84,7 +86,7 @@ export const useMapLayers = ({
     installAllRunning.current = true;
 
     try {
-      installBuildings(map);
+      installBuildings(map, { layers, selectedBuildingisGreen, editionMode });
       await installADS(map);
 
       if (layers.extraLayers.includes('plots')) {
@@ -144,7 +146,7 @@ export const useMapLayers = ({
 
   useEffect(() => {
     if (map) {
-      installBuildings(map);
+      installBuildings(map, { layers, selectedBuildingisGreen, editionMode });
     }
   }, [reloadBuildings]);
 };
