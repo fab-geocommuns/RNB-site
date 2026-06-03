@@ -19,7 +19,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 // Images
 import reportIcon from '@/public/images/map/report.png';
-import hatchGreenIcon from '@/public/images/map/hatch-green.png';
+import checkGreenIcon from '@/public/images/map/check-green.png';
 
 ///////////////////////////////////
 ///////////////////////////////////
@@ -35,10 +35,13 @@ export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x
 export const LAYER_BDGS_POINT = 'bdgs_point';
 export const LAYER_BDGS_POINT_SHAPE_BORDER = 'bdgs_bdgs_point_shape_border';
 export const LAYER_BDGS_POINT_SHAPE_FILL = 'bdgs_bdgs_point_shape_fill';
+export const LAYER_BDGS_POINT_SHAPE_VERIFIED_CHECK =
+  'bdgs_point_shape_marked_hatch';
 export const LAYERS_BDGS_POINT_ALL = [
   LAYER_BDGS_POINT,
   LAYER_BDGS_POINT_SHAPE_BORDER,
   LAYER_BDGS_POINT_SHAPE_FILL,
+  LAYER_BDGS_POINT_SHAPE_VERIFIED_CHECK,
 ];
 
 // Buildings layers : shapes
@@ -352,10 +355,18 @@ export const useMapLayers = ({
     }
   };
 
-  const installBuildingsPointsLayers = (map: maplibregl.Map) => {
+  const installBuildingsPointsLayers = async (map: maplibregl.Map) => {
     const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
     const verifiedActive = layers.extraLayers.includes('verified');
-    // Shape for vector background
+
+    if (!map.hasImage('checkGreen')) {
+      const check = await map.loadImage(checkGreenIcon.src);
+      if (!map.hasImage('checkGreen')) {
+        map.addImage('checkGreen', check.data);
+      }
+    }
+
+    // Building shapes for vector background
     if (['vectorIgnStandard', 'vectorOsm'].includes(layers.background)) {
       map.addLayer({
         id: LAYER_BDGS_POINT_SHAPE_FILL,
@@ -364,8 +375,25 @@ export const useMapLayers = ({
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
         paint: {
-          'fill-color': '#cccccc',
+          'fill-color': '#dcdcdc',
           'fill-opacity': 1,
+        },
+      });
+
+      // add check marks in the consultation map
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_VERIFIED_CHECK,
+        type: 'fill',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        filter: [
+          'all',
+          ...defaultBuildingFeatureFilter.slice(1),
+          ['==', 'is_marked_as_correct', true],
+        ],
+        paint: {
+          'fill-pattern': 'checkGreen',
+          'fill-opacity': 0.9,
         },
       });
 
@@ -405,14 +433,7 @@ export const useMapLayers = ({
           6,
           5,
         ],
-        'circle-stroke-color': verifiedActive
-          ? [
-              'case',
-              ['boolean', ['get', 'is_marked_as_correct'], false],
-              '#b9ff96',
-              '#ffffff',
-            ]
-          : '#ffffff',
+        'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 3,
         'circle-color': [
           'case',
@@ -430,17 +451,16 @@ export const useMapLayers = ({
       ? '#31e060'
       : '#1452e3';
     const verifiedActive = layers.extraLayers.includes('verified');
+    const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
+      layers.background,
+    );
 
     if (verifiedActive && !map.hasImage('hatchGreen')) {
-      const hatch = await map.loadImage(hatchGreenIcon.src);
+      const hatch = await map.loadImage(checkGreenIcon.src);
       if (!map.hasImage('hatchGreen')) {
         map.addImage('hatchGreen', hatch.data);
       }
     }
-
-    const markedFillColorCase: any[] = verifiedActive
-      ? [['boolean', ['get', 'is_marked_as_correct'], false], '#b9ff96']
-      : [];
 
     map.addLayer({
       id: LAYER_BDGS_SHAPE_BORDER,
@@ -453,7 +473,6 @@ export const useMapLayers = ({
           'case',
           ['boolean', ['feature-state', 'in_panel'], false],
           selectedBuildingColor,
-          ...markedFillColorCase,
           ['boolean', ['feature-state', 'hovered'], false],
           '#132353',
           '#1452e3',
@@ -462,9 +481,9 @@ export const useMapLayers = ({
           ? [
               'case',
               ['boolean', ['feature-state', 'in_panel'], false],
-              0.7,
-              ['boolean', ['get', 'is_marked_as_correct'], false],
               0.15,
+              ['boolean', ['get', 'is_marked_as_correct'], false],
+              0.2,
               0.08,
             ]
           : 0.08,
@@ -485,7 +504,7 @@ export const useMapLayers = ({
         ],
         paint: {
           'fill-pattern': 'hatchGreen',
-          'fill-opacity': 0.7,
+          'fill-opacity': isSatellite ? 0.5 : 0.9,
         },
       });
     }
