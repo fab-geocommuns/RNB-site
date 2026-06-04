@@ -33,8 +33,8 @@ export abstract class RNBPage {
   }
 
   async login() {
-    if (!this.page.url().includes('/login')) {
-      await this.page.goto('/login');
+    if (!this.page.url().includes('/connexion')) {
+      await this.page.goto('/connexion');
     }
     await this.page.waitForLoadState('domcontentloaded');
     await this.loginForm
