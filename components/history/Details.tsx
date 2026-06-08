@@ -60,7 +60,7 @@ export default function Details({
               <div className={styles.detailInfo}>
                 <div className={styles.detailLabel}>
                   <span className={styles.label}>
-                    Marqué c. correct par :
+                    Validé par :
                     {detailsInfo.event?.details?.updated_fields?.includes(
                       'validated_by',
                     ) && <ChangedIcon />}
@@ -82,9 +82,7 @@ export default function Details({
                     </div>
                   ) : (
                     <span>
-                      <i>
-                        Ce bâtiment n&apos;est pas encore marqué comme correct.
-                      </i>
+                      <i>Ce bâtiment n&apos;a pas encore été validé.</i>
                     </span>
                   )}
                 </span>
