@@ -80,13 +80,13 @@ export type MapExtraLayer =
   | 'plots'
   | 'addresses'
   | 'reports'
-  | 'verified';
+  | 'validated';
 const validExtraLayers: MapExtraLayer[] = [
   'ads',
   'plots',
   'addresses',
   'reports',
-  'verified',
+  'validated',
 ];
 export function isValidExtraLayer(layer: MapExtraLayer): boolean {
   return validExtraLayers.includes(layer);

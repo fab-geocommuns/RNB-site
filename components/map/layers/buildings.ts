@@ -12,31 +12,32 @@ export const SRC_BDGS_POINTS_URL = `${process.env.NEXT_PUBLIC_API_BASE}/tiles/{x
 export const LAYER_BDGS_POINT = 'bdgs_point';
 export const LAYER_BDGS_POINT_SHAPE_BORDER = 'bdgs_bdgs_point_shape_border';
 export const LAYER_BDGS_POINT_SHAPE_FILL = 'bdgs_bdgs_point_shape_fill';
-export const LAYER_BDGS_POINT_SHAPE_VERIFIED_CHECK =
-  'bdgs_point_shape_marked_hatch';
+export const LAYER_BDGS_POINT_SHAPE_VALIDATED_CHECK =
+  'bdgs_point_shape_marked_green_check';
 export const LAYERS_BDGS_POINT_ALL = [
   LAYER_BDGS_POINT,
   LAYER_BDGS_POINT_SHAPE_BORDER,
   LAYER_BDGS_POINT_SHAPE_FILL,
-  LAYER_BDGS_POINT_SHAPE_VERIFIED_CHECK,
+  LAYER_BDGS_POINT_SHAPE_VALIDATED_CHECK,
 ];
 
 // Buildings layers : shapes
 export const LAYER_BDGS_SHAPE_BORDER = 'bdgs_shape';
 export const LAYER_BDGS_SHAPE_FILL = 'bdgs_shape_fill';
 export const LAYER_BDGS_SHAPE_POINT = 'bdgs_shape_point';
-export const LAYER_BDGS_SHAPE_MARKED_HATCH = 'bdgs_shape_marked_hatch';
+export const LAYER_BDGS_SHAPE_MARKED_GREEN_CHECK =
+  'bdgs_shape_marked_green_check';
 export const LAYERS_BDGS_SHAPE_ALL = [
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_FILL,
   LAYER_BDGS_SHAPE_POINT,
-  LAYER_BDGS_SHAPE_MARKED_HATCH,
+  LAYER_BDGS_SHAPE_MARKED_GREEN_CHECK,
 ];
 
 type BuildingsOptions = {
   layers: MapLayers;
   selectedBuildingisGreen?: Boolean;
-  // In edition mode, the "verified" display is toggled via the extra layer.
+  // In edition mode, the "validated" display is toggled via the extra layer.
   // In visu mode it is always on (non conditional).
   editionMode?: boolean;
 };
@@ -125,7 +126,7 @@ const installBuildingsPointsLayers = async (
 
     // add check marks in the consultation map
     map.addLayer({
-      id: LAYER_BDGS_POINT_SHAPE_VERIFIED_CHECK,
+      id: LAYER_BDGS_POINT_SHAPE_VALIDATED_CHECK,
       type: 'fill',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
@@ -194,19 +195,19 @@ const installBuildingsShapesLayers = async (
 ) => {
   const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
   const selectedBuildingColor = selectedBuildingisGreen ? '#31e060' : '#1452e3';
-  // In visu mode the verified display is always on (non conditional).
-  // In edition mode it depends on the "verified" extra layer toggle.
-  const verifiedActive = editionMode
-    ? layers.extraLayers.includes('verified')
+  // In visu mode the validated display is always on (non conditional).
+  // In edition mode it depends on the "validated" extra layer toggle.
+  const validatedActive = editionMode
+    ? layers.extraLayers.includes('validated')
     : true;
   const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
     layers.background,
   );
 
-  if (verifiedActive && !map.hasImage('hatchGreen')) {
-    const hatch = await map.loadImage(checkGreenIcon.src);
-    if (!map.hasImage('hatchGreen')) {
-      map.addImage('hatchGreen', hatch.data);
+  if (validatedActive && !map.hasImage('greenCheck')) {
+    const greenCheck = await map.loadImage(checkGreenIcon.src);
+    if (!map.hasImage('greenCheck')) {
+      map.addImage('greenCheck', greenCheck.data);
     }
   }
 
@@ -225,7 +226,7 @@ const installBuildingsShapesLayers = async (
         '#132353',
         '#1452e3',
       ],
-      'fill-opacity': verifiedActive
+      'fill-opacity': validatedActive
         ? [
             'case',
             ['boolean', ['feature-state', 'in_panel'], false],
@@ -238,10 +239,10 @@ const installBuildingsShapesLayers = async (
     },
   });
 
-  // Hatched overlay for buildings marked as correct
-  if (verifiedActive) {
+  // Green check overlay for buildings marked as correct
+  if (validatedActive) {
     map.addLayer({
-      id: LAYER_BDGS_SHAPE_MARKED_HATCH,
+      id: LAYER_BDGS_SHAPE_MARKED_GREEN_CHECK,
       type: 'fill',
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
@@ -251,7 +252,7 @@ const installBuildingsShapesLayers = async (
         ['==', 'is_marked_as_correct', true],
       ],
       paint: {
-        'fill-pattern': 'hatchGreen',
+        'fill-pattern': 'greenCheck',
         'fill-opacity': isSatellite ? 0.5 : 0.9,
       },
     });
@@ -291,7 +292,7 @@ const installBuildingsShapesLayers = async (
         6,
         5,
       ],
-      'circle-stroke-color': verifiedActive
+      'circle-stroke-color': validatedActive
         ? [
             'case',
             ['boolean', ['get', 'is_marked_as_correct'], false],
