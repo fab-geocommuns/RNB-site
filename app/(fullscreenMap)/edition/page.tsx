@@ -22,7 +22,7 @@ function getDefaultExtraLayers() {
       'extra_layers',
       (value) => value as MapExtraLayer,
       isValidExtraLayer,
-    ) || ['reports']
+    ) || ['reports', 'validated']
   );
 }
 
