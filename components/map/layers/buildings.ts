@@ -188,7 +188,9 @@ const installBuildingsPointsLayers = async (
             '#ffffff',
           ]
         : '#ffffff',
-      'circle-stroke-width': 3,
+      'circle-stroke-width': isSatellite
+        ? ['case', ['boolean', ['get', 'is_validated'], false], 5, 3]
+        : 3,
       'circle-color': [
         'case',
         ['boolean', ['feature-state', 'in_panel'], false],
