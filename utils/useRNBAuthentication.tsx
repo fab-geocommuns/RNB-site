@@ -25,7 +25,7 @@ type UseRNBAuthentication = {
 export function loginUrl(redirect?: string) {
   const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   const redirectUrl = redirect || currentLocation;
-  return `/login?redirect=${encodeURIComponent(redirectUrl)}`;
+  return `/connexion?redirect=${encodeURIComponent(redirectUrl)}`;
 }
 
 export const useRNBAuthentication = (options?: {

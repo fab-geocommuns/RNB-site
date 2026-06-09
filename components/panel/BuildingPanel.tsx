@@ -96,14 +96,12 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
       {bdg.validated_by.length > 0 && (
         <div className={panelStyles.section}>
-          <div className={panelStyles.markedAsCorrect}>
-            <div className={panelStyles.markedAsCorrectIconShell}>
+          <div className={panelStyles.validated}>
+            <div className={panelStyles.validatedIconShell}>
               <i className="fr-icon-success-fill" aria-hidden="true"></i>
             </div>
             <div>
-              <h2 className={panelStyles.sectionTitle}>
-                Bâtiment marqué comme correct
-              </h2>
+              <h2 className={panelStyles.sectionTitle}>Bâtiment validé</h2>
               <div className={panelStyles.sectionBody}>
                 {bdg.validated_by.map((user: PublicUser) => (
                   <div key={user.id} className={panelStyles.user}>
