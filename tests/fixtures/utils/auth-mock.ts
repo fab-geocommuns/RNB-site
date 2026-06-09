@@ -9,8 +9,11 @@ export type FakeUser = {
   groups?: string[];
 };
 
+/** Username de la session injectée par défaut (cf. DEFAULT_USER). */
+export const DEFAULT_USERNAME = 'e2e-tester';
+
 const DEFAULT_USER: FakeUser = {
-  username: 'e2e-tester',
+  username: DEFAULT_USERNAME,
   accessToken: 'fake-access-token',
   groups: ['contributors'],
 };

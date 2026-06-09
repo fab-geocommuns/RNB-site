@@ -72,7 +72,7 @@ export default function Details({
                       {detailsInfo.validated_by.map((user, i) => (
                         <div className="fr-mb-1v" key={i}>
                           <span className={styles.mergePanelAddressText}>
-                            {user.display_name || user.username}
+                            {user.username}
                             {user.organization_name
                               ? ' (' + user.organization_name + ')'
                               : ''}

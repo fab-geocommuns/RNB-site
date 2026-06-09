@@ -29,12 +29,16 @@ import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
 import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_selected.svg';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
+import BuildingMainAttributes from '@/components/BuildingMainAttributes';
+import { formatValidatorNames } from '@/utils/validations';
+import panelStyles from '@/styles/panel.module.scss';
 import {
   throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from './toaster';
 import SplitPanel from './SplitPanel';
+import ValidationToggler from '../ValidationToggler';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -56,6 +60,9 @@ function EditSelectedBuildingPanelContent({
   const [localAddresses, setLocalAddresses] = useState<BuildingAddressType[]>(
     selectedBuilding.addresses,
   );
+  const [editUnlocked, setEditUnlocked] = useState<boolean>(false);
+  const hasValidations = selectedBuilding.validated_by.length > 0;
+  const locked = hasValidations && !editUnlocked;
 
   const buildingNewShape = useSelector(
     (state: RootState) => state.edition.updateCreate.buildingNewShape,
@@ -84,6 +91,7 @@ function EditSelectedBuildingPanelContent({
   useEffect(() => {
     setNewStatus(selectedBuilding.status);
     setLocalAddresses(selectedBuilding.addresses);
+    setEditUnlocked(false);
   }, [selectedBuilding]);
 
   const handleEditAddress = (addresses: BuildingAddressType[]) => {
@@ -174,16 +182,23 @@ function EditSelectedBuildingPanelContent({
             handleEditAddress={handleEditAddress}
             handleChange={handleChange}
             toggleBuildingActivation={toggleBuildingActivation}
+            locked={locked}
+            editUnlocked={editUnlocked}
+            setEditUnlocked={setEditUnlocked}
           />
         }
         footer={
-          <FooterPanel
-            isActive={isActive}
-            anyChanges={anyChanges}
-            isLoading={isLoading}
-            handleSubmit={handleSubmit}
-            cancelUpdate={cancelUpdate}
-          />
+          // En mode lecture seule (bâtiment validé non déverrouillé), pas de
+          // footer : le bouton « Valider les modifications » n'a pas lieu d'être.
+          !locked && (
+            <FooterPanel
+              isActive={isActive}
+              anyChanges={anyChanges}
+              isLoading={isLoading}
+              handleSubmit={handleSubmit}
+              cancelUpdate={cancelUpdate}
+            />
+          )
         }
         testId="edition-panel"
       ></GenericPanel>
@@ -203,6 +218,9 @@ function BodyPanel({
   handleEditAddress,
   handleChange,
   toggleBuildingActivation,
+  locked,
+  editUnlocked,
+  setEditUnlocked,
 }: {
   rnbId: string;
   isLoading: boolean;
@@ -216,6 +234,9 @@ function BodyPanel({
   handleEditAddress: (addresses: BuildingAddressType[]) => void;
   handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   toggleBuildingActivation: (isActive: boolean) => void;
+  locked: boolean;
+  editUnlocked: boolean;
+  setEditUnlocked: (value: boolean) => void;
 }) {
   return (
     <>
@@ -231,36 +252,72 @@ function BodyPanel({
       ) : (
         isActive && (
           <>
-            <BuildingStatus
-              status={newStatus}
-              onChange={setNewStatus}
-            ></BuildingStatus>
-            <BuildingAddresses
-              buildingPoint={selectedBuilding.point.coordinates}
-              addresses={localAddresses}
-              onChange={handleEditAddress}
-            />
-            <BuildingShape
-              shapeInteractionMode={shapeInteractionMode}
-              selectedBuilding={selectedBuilding}
-            ></BuildingShape>
-            <div className={`${styles.panelSection}`}>
-              <div className={`fr-text--xs ${styles.sectionTitle}`}>
-                <label htmlFor="comment">Commentaire</label>
-              </div>
-              <textarea
-                value={commentValue}
-                onChange={handleChange}
-                id="comment"
-                name="text"
-                className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-                placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
-              />
-            </div>
+            {locked ? (
+              <>
+                <BuildingMainAttributes
+                  building={selectedBuilding}
+                  allowEdit={true}
+                />
+
+                <div>
+                  <p>
+                    Vous avez une modification à apporter malgré la validation
+                    du bâtiment ?{' '}
+                  </p>
+                  <Button size="small" onClick={() => setEditUnlocked(true)}>
+                    Accéder au formulaire d&apos;édition
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                {selectedBuilding.validated_by.length === 0 && (
+                  <div
+                    className={`${styles.validationAction} fr-p-5v fr-text--sm`}
+                  >
+                    La géométrie, le statut et les adresses vous semblent
+                    corrects ? <ValidationToggler building={selectedBuilding} />
+                  </div>
+                )}
+                {selectedBuilding.validated_by.length > 0 && (
+                  <div className={styles.validationWarning}>
+                    Modifier ce bâtiment aura pour effet de supprimer la
+                    validation faite par{' '}
+                    {formatValidatorNames(selectedBuilding.validated_by)}.
+                  </div>
+                )}
+                <BuildingStatus
+                  status={newStatus}
+                  onChange={setNewStatus}
+                ></BuildingStatus>
+                <BuildingAddresses
+                  buildingPoint={selectedBuilding.point.coordinates}
+                  addresses={localAddresses}
+                  onChange={handleEditAddress}
+                />
+                <BuildingShape
+                  shapeInteractionMode={shapeInteractionMode}
+                  selectedBuilding={selectedBuilding}
+                ></BuildingShape>
+                <div className={`${styles.panelSection}`}>
+                  <div className={`fr-text--xs ${styles.sectionTitle}`}>
+                    <label htmlFor="comment">Commentaire</label>
+                  </div>
+                  <textarea
+                    value={commentValue}
+                    onChange={handleChange}
+                    id="comment"
+                    name="text"
+                    className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
+                    placeholder="Vous souhaitez signaler quelque chose à propos d'un bâtiment ? Laissez un commentaire ici."
+                  />
+                </div>
+              </>
+            )}
           </>
         )
       )}
-      {!isLoading && (
+      {!isLoading && !(isActive && locked) && (
         <BuildingActivationToggle
           isActive={isActive}
           onToggle={toggleBuildingActivation}

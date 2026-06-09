@@ -69,7 +69,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
         <>
           Référentiel National des Bâtiments
           <br />
-          <Badge as="span" noIcon severity="success" small>
+          <Badge as="span" noIcon severity="info" small>
             Mode Édition
           </Badge>
         </>,
