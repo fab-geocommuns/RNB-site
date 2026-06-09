@@ -39,7 +39,7 @@ export const buildingSegur = {
       city_insee_code: '75107',
     },
   ],
-  marked_as_correct_by: [],
+  validated_by: [],
   ext_ids: [],
   plots: [],
 } satisfies BuildingFixture;
@@ -65,7 +65,7 @@ export const buildingToSplit = {
     ],
   },
   addresses: [],
-  marked_as_correct_by: [],
+  validated_by: [],
   ext_ids: [],
   plots: [],
 } satisfies BuildingFixture;
