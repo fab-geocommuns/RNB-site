@@ -133,7 +133,7 @@ const installBuildingsPointsLayers = async (
       filter: [
         'all',
         ...defaultBuildingFeatureFilter.slice(1),
-        ['==', 'is_marked_as_correct', true],
+        ['==', 'is_validated', true],
       ],
       paint: {
         'fill-pattern': 'checkGreen',
@@ -231,7 +231,7 @@ const installBuildingsShapesLayers = async (
             'case',
             ['boolean', ['feature-state', 'in_panel'], false],
             0.15,
-            ['boolean', ['get', 'is_marked_as_correct'], false],
+            ['boolean', ['get', 'is_validated'], false],
             0.2,
             0.08,
           ]
@@ -249,7 +249,7 @@ const installBuildingsShapesLayers = async (
       filter: [
         'all',
         ...defaultBuildingFeatureFilter.slice(1),
-        ['==', 'is_marked_as_correct', true],
+        ['==', 'is_validated', true],
       ],
       paint: {
         'fill-pattern': 'greenCheck',
@@ -295,7 +295,7 @@ const installBuildingsShapesLayers = async (
       'circle-stroke-color': validatedActive
         ? [
             'case',
-            ['boolean', ['get', 'is_marked_as_correct'], false],
+            ['boolean', ['get', 'is_validated'], false],
             '#31e060',
             '#ff0000',
           ]
