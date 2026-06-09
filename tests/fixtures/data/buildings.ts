@@ -6,7 +6,7 @@
  * Typed with `satisfies` so TypeScript flags drift when the upstream
  * `SelectedBuilding` interface gains a new required field.
  */
-import type { SelectedBuilding } from '@/stores/map/map-slice';
+import type { SelectedBuilding, PublicUser } from '@/stores/map/map-slice';
 
 type BuildingFixture = Omit<SelectedBuilding, '_type'>;
 
@@ -87,3 +87,45 @@ export const banFeatureSegur = {
     y: 6859000,
   },
 };
+
+/** Un validateur fictif (utilisé pour les listes `validated_by`). */
+export function makeValidator(over: Partial<PublicUser> = {}): PublicUser {
+  return {
+    id: 1,
+    display_name: 'Camille Témoin',
+    username: 'ctemoin',
+    organization_name: 'Organisation Test',
+    ...over,
+  };
+}
+
+/**
+ * Bâtiment servant aux tests de validation depuis l'édition. `validated_by`
+ * est paramétrable car ces tests assertent les états verrouillé / déverrouillé.
+ */
+export function buildingValidatedBy(
+  validated_by: PublicUser[] = [],
+): BuildingFixture {
+  return {
+    rnb_id: 'PG46YY6YWCX8',
+    status: 'constructed',
+    is_active: true,
+    point: { type: 'Point', coordinates: [2.424, 48.8452] },
+    shape: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [2.423721634213109, 48.84523835886833],
+          [2.4237562502758863, 48.84539782325717],
+          [2.4242824144108397, 48.84534770593274],
+          [2.4242477983494553, 48.84518368524684],
+          [2.423721634213109, 48.84523835886833],
+        ],
+      ],
+    },
+    addresses: [],
+    validated_by,
+    ext_ids: [],
+    plots: [],
+  };
+}

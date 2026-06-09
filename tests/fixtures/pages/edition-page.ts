@@ -35,9 +35,9 @@ export class EditionPage extends RNBPage {
     return this.panel.getByRole('link', { name: /Retirer ma validation/i });
   }
 
-  get unlockCheckbox(): Locator {
-    return this.panel.getByRole('checkbox', {
-      name: /Je souhaite modifier ce bâtiment/i,
+  get unlockButton(): Locator {
+    return this.panel.getByRole('button', {
+      name: /Accéder au formulaire/i,
     });
   }
 
@@ -56,11 +56,9 @@ export class EditionPage extends RNBPage {
     await this.removeValidationButton.click();
   }
 
-  /** Username de l'utilisateur connecté, lu depuis la session NextAuth. */
-  async getCurrentUsername(): Promise<string> {
-    const res = await this.page.request.get('/api/auth/session');
-    const json = await res.json();
-    return json.username;
+  async clickUnlock() {
+    await this.unlockButton.scrollIntoViewIfNeeded();
+    await this.unlockButton.click();
   }
 
   async startSplit() {

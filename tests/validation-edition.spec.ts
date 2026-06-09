@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
 import { test } from '@/tests/fixtures';
 import {
-  makeBuildingResponse,
+  buildingValidatedBy,
   makeValidator,
-} from '@/tests/fixtures/data/building';
+} from '@/tests/fixtures/data/buildings';
+import { DEFAULT_USERNAME } from '@/tests/fixtures/utils/auth-mock';
 
 const BUILDING_ID = 'PG46YY6YWCX8';
 const GET_PATH = `/buildings/${BUILDING_ID}/?from=site&withPlots=1`;
@@ -23,21 +24,9 @@ test.describe('Validation depuis l’édition', () => {
     );
 
     // Bâtiment validé par un autre utilisateur (verrouille le formulaire).
-    await httpMocker.mockAPIRoutes(
-      [
-        {
-          method: 'GET',
-          path: GET_PATH,
-          response: {
-            status: 200,
-            body: makeBuildingResponse({
-              rnb_id: BUILDING_ID,
-              validated_by: [makeValidator({ display_name: 'Camille Témoin' })],
-            }),
-          },
-        },
-      ],
-      true,
+    httpMocker.get(
+      GET_PATH,
+      buildingValidatedBy([makeValidator({ display_name: 'Camille Témoin' })]),
     );
 
     await editionPage.goToBuilding(BUILDING_ID);
@@ -48,11 +37,11 @@ test.describe('Validation depuis l’édition', () => {
       editionPage.panel.getByRole('heading', { name: 'Statut du bâtiment' }),
     ).toBeVisible();
     await expect(editionPage.statusSelect).toHaveCount(0);
-    // La case à cocher de déverrouillage est présente.
-    await expect(editionPage.unlockCheckbox).toBeVisible();
+    // Le bouton de déverrouillage est présent.
+    await expect(editionPage.unlockButton).toBeVisible();
 
-    // Cocher fait apparaître le formulaire d'édition.
-    await editionPage.unlockCheckbox.check();
+    // Cliquer fait apparaître le formulaire d'édition.
+    await editionPage.clickUnlock();
     await expect(editionPage.statusSelect).toBeVisible();
   });
 
@@ -66,52 +55,13 @@ test.describe('Validation depuis l’édition', () => {
       'Pas de support de WebGL2 sur Firefox headless',
     );
 
-    // État initial : bâtiment non validé.
-    await httpMocker.mockAPIRoutes(
-      [
-        {
-          method: 'GET',
-          path: GET_PATH,
-          response: {
-            status: 200,
-            body: makeBuildingResponse({
-              rnb_id: BUILDING_ID,
-              validated_by: [],
-            }),
-          },
-        },
-      ],
-      true,
-    );
+    // Bâtiment non validé + PATCH is_valid:true attendu lors du clic.
+    httpMocker.get(GET_PATH, buildingValidatedBy([]));
+    httpMocker.patch(PATCH_PATH, { status: 204 }, { is_valid: true });
 
     await editionPage.goToBuilding(BUILDING_ID);
     await expect(editionPage.panel).toBeVisible();
     await expect(editionPage.validateButton).toBeVisible();
-
-    // Mocks pour le clic : PATCH is_valid:true puis re-GET (validé).
-    // Ce nouvel enregistrement masque le précédent (handler le plus récent).
-    await httpMocker.mockAPIRoutes(
-      [
-        {
-          method: 'PATCH',
-          path: PATCH_PATH,
-          body: { is_valid: true },
-          response: { status: 204 },
-        },
-        {
-          method: 'GET',
-          path: GET_PATH,
-          response: {
-            status: 200,
-            body: makeBuildingResponse({
-              rnb_id: BUILDING_ID,
-              validated_by: [makeValidator()],
-            }),
-          },
-        },
-      ],
-      true,
-    );
 
     await editionPage.clickValidate();
     await expect(
@@ -129,56 +79,18 @@ test.describe('Validation depuis l’édition', () => {
       'Pas de support de WebGL2 sur Firefox headless',
     );
 
-    // Connexion puis récupération de l'username courant.
-    await editionPage.goToBuilding(BUILDING_ID);
-    const username = await editionPage.getCurrentUsername();
-
-    // État initial : bâtiment validé par l'utilisateur courant.
-    await httpMocker.mockAPIRoutes(
-      [
-        {
-          method: 'GET',
-          path: GET_PATH,
-          response: {
-            status: 200,
-            body: makeBuildingResponse({
-              rnb_id: BUILDING_ID,
-              validated_by: [makeValidator({ username, display_name: 'Moi' })],
-            }),
-          },
-        },
-      ],
-      true,
+    // Bâtiment validé par l'utilisateur courant + PATCH is_valid:false au clic.
+    httpMocker.get(
+      GET_PATH,
+      buildingValidatedBy([
+        makeValidator({ username: DEFAULT_USERNAME, display_name: 'Moi' }),
+      ]),
     );
+    httpMocker.patch(PATCH_PATH, { status: 204 }, { is_valid: false });
 
-    // Recharger la page pour partir de l'état mocké (validé par moi).
     await editionPage.goToBuilding(BUILDING_ID);
     await expect(editionPage.panel).toBeVisible();
     await expect(editionPage.removeValidationButton).toBeVisible();
-
-    // Mocks pour le clic : PATCH is_valid:false puis re-GET (non validé).
-    await httpMocker.mockAPIRoutes(
-      [
-        {
-          method: 'PATCH',
-          path: PATCH_PATH,
-          body: { is_valid: false },
-          response: { status: 204 },
-        },
-        {
-          method: 'GET',
-          path: GET_PATH,
-          response: {
-            status: 200,
-            body: makeBuildingResponse({
-              rnb_id: BUILDING_ID,
-              validated_by: [],
-            }),
-          },
-        },
-      ],
-      true,
-    );
 
     await editionPage.clickRemoveValidation();
     await expect(
