@@ -15,7 +15,7 @@ export default function ActivationPage() {
       const message =
         'Votre email a été validé. Vous pouvez désormais vous connecter.';
       redirect(
-        `/login?email=${encodeURIComponent(email || '')}&success=${encodeURIComponent(message)}`,
+        `/connexion?email=${encodeURIComponent(email || '')}&success=${encodeURIComponent(message)}`,
       );
     }
   }, [status, email]);

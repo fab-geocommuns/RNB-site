@@ -34,16 +34,11 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [redirectUrl, setRedirectUrl] = useState(pathname);
 
   const [quickActions, setQuickActions] = useState([]);
   const [title, setTitle] = useState('Référentiel National des Bâtiments');
 
   const nav = newNav(pathname);
-
-  useEffect(() => {
-    setRedirectUrl(window.location.href);
-  }, [pathname]);
 
   const enableEditionMode =
     process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
@@ -116,7 +111,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       let loginQA = {
         iconId: 'fr-icon-account-circle-line',
         linkProps: {
-          href: '/login?redirect=' + redirectUrl,
+          href: '/connexion?redirect=' + window.location.href,
         },
         text: 'Se connecter',
       };
@@ -125,7 +120,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       let registerQA = {
         iconId: 'fr-icon-add-circle-fill',
         linkProps: {
-          href: '/login',
+          href: '/inscription',
         },
         text: "S'inscrire",
       };
@@ -158,7 +153,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           historisée, tracée et mise à disposition de tous.
         </p>
         <div className="fr-btns-group fr-btns-group--inline-md">
-          <Link href="/login" className="fr-btn fr-btn--primary">
+          <Link href="/inscription" className="fr-btn fr-btn--primary">
             S&apos;inscrire
           </Link>
           <Link href="/guide" className="fr-btn fr-btn--tertiary">

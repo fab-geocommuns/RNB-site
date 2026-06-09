@@ -51,9 +51,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Tests
 
-| Command | Description |
-|---|---|
-| `pnpm e2e` | Run all tests |
+| Command       | Description                   |
+| ------------- | ----------------------------- |
+| `pnpm e2e`    | Run all tests                 |
 | `pnpm e2e-ui` | Run tests in interactive mode |
 
 > **Note:** Tests currently run against the staging database. Any change in staging can cause test failures. If CI tests suddenly break without any code change, this is worth investigating. This setup is not optimal but acceptable for now. Future improvements may include a dedicated test database or running the [RNB-coeur](https://github.com/fab-geocommuns/RNB-coeur) project within the RNB-site CI for a fully controlled environment.
