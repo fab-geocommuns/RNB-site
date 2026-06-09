@@ -15,8 +15,8 @@ export class EditionPage extends RNBPage {
   }
 
   async goToBuilding(buildingId: string) {
-    await this.loginIfNotLoggedIn();
     await this.page.goto(`/edition?q=${buildingId}`);
+    await this.expectLoggedIn();
   }
 
   async deactivateBuilding() {
