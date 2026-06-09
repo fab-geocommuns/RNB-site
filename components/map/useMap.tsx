@@ -8,14 +8,13 @@ import Toaster from '@/components/contribution/toaster';
 
 type UseMapParams = {
   disabledLayers?: MapLayer[];
-  editionMode?: boolean;
 };
 
 /**
  * Création de la carte MapLibre
  */
 export const useMap = (params?: UseMapParams) => {
-  const { disabledLayers = [], editionMode = false } = params || {};
+  const { disabledLayers = [] } = params || {};
   const [map, setMap] = useState<maplibregl.Map>();
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
@@ -24,10 +23,7 @@ export const useMap = (params?: UseMapParams) => {
     () => (
       <>
         <div className={styles.map} ref={mapContainerRef} />
-        <LayersSwitcher
-          disabledLayers={disabledLayers}
-          editionMode={editionMode}
-        />
+        <LayersSwitcher disabledLayers={disabledLayers} />
         <Toaster></Toaster>
       </>
     ),

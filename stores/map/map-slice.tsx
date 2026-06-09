@@ -43,7 +43,7 @@ export interface SelectedBuilding {
   };
   shape: GeoJSON.Geometry;
   addresses: BuildingAddress[];
-  validated_by: PublicUser[]; // List of user IDs who marked this building as correct
+  validated_by: PublicUser[]; // List of users who validated this building
   ext_ids: any[];
   plots: Plot[] | null;
   is_active: boolean;

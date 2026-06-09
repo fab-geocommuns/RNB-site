@@ -89,13 +89,9 @@ function LayerButton({
 
 type Props = {
   disabledLayers?: MapLayer[];
-  editionMode?: boolean;
 };
 
-export default function LayersSwitcher({
-  disabledLayers = [],
-  editionMode = false,
-}: Props) {
+export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   // Open or not
   const [open, setOpen] = useState(false);
 
