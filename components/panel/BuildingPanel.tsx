@@ -94,7 +94,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
         <PanelTabs rnbId={bdg?.rnb_id}></PanelTabs>
       </div>
 
-      {bdg.marked_as_correct_by.length > 0 && (
+      {bdg.validated_by.length > 0 && (
         <div className={panelStyles.section}>
           <div className={panelStyles.markedAsCorrect}>
             <div className={panelStyles.markedAsCorrectIconShell}>
@@ -105,7 +105,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
                 Bâtiment marqué comme correct
               </h2>
               <div className={panelStyles.sectionBody}>
-                {bdg.marked_as_correct_by.map((user: PublicUser) => (
+                {bdg.validated_by.map((user: PublicUser) => (
                   <div key={user.id} className={panelStyles.user}>
                     <span>
                       <span className={panelStyles.userName}>

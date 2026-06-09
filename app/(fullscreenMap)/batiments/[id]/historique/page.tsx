@@ -61,7 +61,7 @@ export interface ApiHistoryItem {
     city_zipcode: string;
     city_insee_code: string;
   }>;
-  marked_as_correct_by: Array<{
+  validated_by: Array<{
     id: string;
     username: string;
     display_name: string;
