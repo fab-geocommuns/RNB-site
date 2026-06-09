@@ -102,6 +102,9 @@ const installBuildingsPointsLayers = async (
   { layers }: BuildingsOptions,
 ) => {
   const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
+  const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
+    layers.background,
+  );
 
   if (!map.hasImage('checkGreen')) {
     const check = await map.loadImage(checkGreenIcon.src);
@@ -177,7 +180,14 @@ const installBuildingsPointsLayers = async (
         6,
         5,
       ],
-      'circle-stroke-color': '#ffffff',
+      'circle-stroke-color': isSatellite
+        ? [
+            'case',
+            ['boolean', ['get', 'is_validated'], false],
+            '#e6feda',
+            '#ffffff',
+          ]
+        : '#ffffff',
       'circle-stroke-width': 3,
       'circle-color': [
         'case',
