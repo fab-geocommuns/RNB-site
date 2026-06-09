@@ -7,6 +7,17 @@
   animation: spin 1.5s linear infinite;
 }
 
+.loaderInline {
+  border: 0.15em solid white;
+  border-top: 0.15em solid var(--blue-france-sun-113-625);
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  animation: spin 1.5s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
