@@ -43,7 +43,7 @@ export interface SelectedBuilding {
   };
   shape: GeoJSON.Geometry;
   addresses: BuildingAddress[];
-  validated_by: PublicUser[];
+  validated_by: PublicUser[]; // List of users who validated this building
   ext_ids: any[];
   plots: Plot[] | null;
   is_active: boolean;
@@ -75,12 +75,18 @@ export type MapBackgroundLayer =
   | 'vectorIgnStandard'
   | 'satellite_2016_2020';
 export type MapBuildingsLayer = 'point' | 'polygon';
-export type MapExtraLayer = 'ads' | 'plots' | 'addresses' | 'reports';
+export type MapExtraLayer =
+  | 'ads'
+  | 'plots'
+  | 'addresses'
+  | 'reports'
+  | 'validated';
 const validExtraLayers: MapExtraLayer[] = [
   'ads',
   'plots',
   'addresses',
   'reports',
+  'validated',
 ];
 export function isValidExtraLayer(layer: MapExtraLayer): boolean {
   return validExtraLayers.includes(layer);

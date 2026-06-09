@@ -44,6 +44,7 @@ export default function EditMap({
     defaultBuildingLayer,
     defaultExtraLayers,
     selectedBuildingisGreen: true,
+    editionMode: true,
   });
 
   useMapControls(map);
