@@ -263,15 +263,13 @@ export default function LayersSwitcher({
                     onClick={() => handleExtraLayerClick('addresses')}
                     image={extraAddresses}
                   />
-                  {editionMode && (
-                    <LayerButton
-                      isAvailable={isAvailable('validated')}
-                      isActive={mapLayers.extraLayers.includes('validated')}
-                      label="Bâtiments validés"
-                      onClick={() => handleExtraLayerClick('validated')}
-                      image={extraValidated}
-                    />
-                  )}
+                  <LayerButton
+                    isAvailable={isAvailable('validated')}
+                    isActive={mapLayers.extraLayers.includes('validated')}
+                    label="Bâtiments validés"
+                    onClick={() => handleExtraLayerClick('validated')}
+                    image={extraValidated}
+                  />
                 </ul>
               </div>
             </div>

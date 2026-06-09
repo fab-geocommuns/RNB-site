@@ -102,6 +102,7 @@ const installBuildingsPointsLayers = async (
   { layers }: BuildingsOptions,
 ) => {
   const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
+  const validatedActive = layers.extraLayers.includes('validated');
   const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
     layers.background,
   );
@@ -128,21 +129,23 @@ const installBuildingsPointsLayers = async (
     });
 
     // add check marks in the consultation map
-    map.addLayer({
-      id: LAYER_BDGS_POINT_SHAPE_VALIDATED_CHECK,
-      type: 'fill',
-      source: SRC_BDGS_SHAPES,
-      'source-layer': 'default',
-      filter: [
-        'all',
-        ...defaultBuildingFeatureFilter.slice(1),
-        ['==', 'is_validated', true],
-      ],
-      paint: {
-        'fill-pattern': 'checkGreen',
-        'fill-opacity': 0.9,
-      },
-    });
+    if (validatedActive) {
+      map.addLayer({
+        id: LAYER_BDGS_POINT_SHAPE_VALIDATED_CHECK,
+        type: 'fill',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        filter: [
+          'all',
+          ...defaultBuildingFeatureFilter.slice(1),
+          ['==', 'is_validated', true],
+        ],
+        paint: {
+          'fill-pattern': 'checkGreen',
+          'fill-opacity': 0.9,
+        },
+      });
+    }
 
     map.addLayer({
       id: LAYER_BDGS_POINT_SHAPE_BORDER,
@@ -180,17 +183,19 @@ const installBuildingsPointsLayers = async (
         6,
         5,
       ],
-      'circle-stroke-color': isSatellite
-        ? [
-            'case',
-            ['boolean', ['get', 'is_validated'], false],
-            '#e6feda',
-            '#ffffff',
-          ]
-        : '#ffffff',
-      'circle-stroke-width': isSatellite
-        ? ['case', ['boolean', ['get', 'is_validated'], false], 5, 3]
-        : 3,
+      'circle-stroke-color':
+        isSatellite && validatedActive
+          ? [
+              'case',
+              ['boolean', ['get', 'is_validated'], false],
+              '#e6feda',
+              '#ffffff',
+            ]
+          : '#ffffff',
+      'circle-stroke-width':
+        isSatellite && validatedActive
+          ? ['case', ['boolean', ['get', 'is_validated'], false], 5, 3]
+          : 3,
       'circle-color': [
         'case',
         ['boolean', ['feature-state', 'in_panel'], false],
@@ -207,11 +212,7 @@ const installBuildingsShapesLayers = async (
 ) => {
   const defaultBuildingFeatureFilter = getDefaultBuildingFeatureFilter();
   const selectedBuildingColor = selectedBuildingisGreen ? '#31e060' : '#1452e3';
-  // In visu mode the validated display is always on (non conditional).
-  // In edition mode it depends on the "validated" extra layer toggle.
-  const validatedActive = editionMode
-    ? layers.extraLayers.includes('validated')
-    : true;
+  const validatedActive = layers.extraLayers.includes('validated');
   const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
     layers.background,
   );
