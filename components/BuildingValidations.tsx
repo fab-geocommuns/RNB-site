@@ -41,7 +41,7 @@ export default function BuildingValidations({
           {validatedBy.map((u: PublicUser) => (
             <span key={u.id} className={styles.user}>
               {' '}
-              <span className={styles.username}>{u.display_name}</span>{' '}
+              <span className={styles.username}>{u.username}</span>{' '}
               {u.organization_name && (
                 <span className={styles.organization}>
                   ({u.organization_name})

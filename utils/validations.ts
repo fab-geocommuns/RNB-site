@@ -20,9 +20,7 @@ export function hasUserValidated(
  */
 export function formatValidatorNames(validatedBy: PublicUser[]): string {
   const parts = validatedBy.map((u) =>
-    u.organization_name
-      ? `${u.display_name} (${u.organization_name})`
-      : u.display_name,
+    u.organization_name ? `${u.username} (${u.organization_name})` : u.username,
   );
   if (parts.length <= 1) return parts[0] ?? '';
   return `${parts.slice(0, -1).join(', ')} et ${parts[parts.length - 1]}`;
