@@ -75,14 +75,10 @@ const installBuildingsSource = (map: maplibregl.Map) => {
   });
 };
 
-const getDefaultBuildingFeatureFilter = () => {
-  const defaultBuildingFeatureFilter: any = [
-    'all',
-    ['==', 'is_active', true],
-    ['!=', 'status', 'demolished'],
-  ];
+type BuildingFeatureFilter = ['all', ...maplibregl.ExpressionSpecification[]];
 
-  return defaultBuildingFeatureFilter;
+const getDefaultBuildingFeatureFilter = (): BuildingFeatureFilter => {
+  return ['all', ['==', 'is_active', true], ['!=', 'status', 'demolished']];
 };
 
 const installBuildingsLayers = (
@@ -135,11 +131,7 @@ const installBuildingsPointsLayers = async (
         type: 'fill',
         source: SRC_BDGS_SHAPES,
         'source-layer': 'default',
-        filter: [
-          'all',
-          ...defaultBuildingFeatureFilter.slice(1),
-          ['==', 'is_validated', true],
-        ],
+        filter: [...defaultBuildingFeatureFilter, ['==', 'is_validated', true]],
         paint: {
           'fill-pattern': 'checkGreen',
           'fill-opacity': 0.9,
@@ -260,10 +252,9 @@ const installBuildingsShapesLayers = async (
       source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
       filter: [
-        'all',
-        ...defaultBuildingFeatureFilter.slice(1),
+        ...defaultBuildingFeatureFilter,
         ['==', 'is_validated', true],
-      ],
+      ] as any,
       paint: {
         'fill-pattern': 'greenCheck',
         'fill-opacity': isSatellite ? 0.5 : 0.9,
