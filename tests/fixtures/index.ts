@@ -20,19 +20,17 @@ import { UseCasesPage } from '@/tests/fixtures/pages/use-cases-page';
 import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { testWithNewsletter } from '@/tests/fixtures/utils/components/newsletter';
 import { HttpMocker, createHttpMocker } from '@/tests/fixtures/utils/http-mock';
+import { signInAs, FakeUser } from '@/tests/fixtures/utils/auth-mock';
+import { API_BASE } from '@/tests/config';
 import {
   test as mapGrabTest,
   expect as mapGrabExpect,
 } from '@mapgrab/playwright';
 
-async function addAutomationBypassHeader(page: Page) {
-  await page.route(new URL(process.env.BASE_URL!).origin + '/**/*', (route) => {
-    const headers = route.request().headers();
-    headers['x-vercel-protection-bypass'] =
-      process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
-    route.continue({ headers });
-  });
-}
+export type AuthFixture = {
+  /** Inject a next-auth session cookie. Call before the first page navigation. */
+  signIn: (user?: Partial<FakeUser>) => Promise<void>;
+};
 
 type PagesFixtures = {
   aboutPage: AboutPage;
@@ -46,21 +44,36 @@ type PagesFixtures = {
   toolsAndServicesPage: ToolsAndServicesPage;
   useCasesPage: UseCasesPage;
   httpMocker: HttpMocker;
+  auth: AuthFixture;
 };
 
 const createPageFixture =
   <T extends RNBPage>(PageClass: new (page: Page) => T) =>
   async (
-    { page }: PlaywrightTestArgs & PlaywrightTestOptions,
+    {
+      page,
+      httpMocker,
+    }: PlaywrightTestArgs & PlaywrightTestOptions & PagesFixtures,
     use: (page: T) => Promise<void>,
   ) => {
-    await addAutomationBypassHeader(page);
+    // Install the default-deny mock layer before navigating so the first
+    // request fired by the page is already intercepted.
+    await httpMocker.install();
     const instance = new PageClass(page);
     await instance.goto();
     await use(instance);
   };
 
 const testPage = baseTest.extend<PagesFixtures>({
+  httpMocker: async ({ page }, use) => {
+    const httpMocker = createHttpMocker(page, API_BASE);
+    await use(httpMocker);
+  },
+  auth: async ({ context }, use) => {
+    await use({
+      signIn: (user) => signInAs(context, user),
+    });
+  },
   aboutPage: createPageFixture(AboutPage),
   blogPage: createPageFixture(BlogPage),
   contactPage: createPageFixture(ContactPage),
@@ -68,13 +81,24 @@ const testPage = baseTest.extend<PagesFixtures>({
   faqPage: createPageFixture(FaqPage),
   homePage: createPageFixture(HomePage),
   mapPage: createPageFixture(MapPage),
-  editionPage: createPageFixture(EditionPage),
+  editionPage: async (
+    {
+      page,
+      httpMocker,
+      auth,
+    }: PlaywrightTestArgs & PlaywrightTestOptions & PagesFixtures,
+    use: (p: EditionPage) => Promise<void>,
+  ) => {
+    await httpMocker.install();
+    // /edition is gated by next-auth — sign in before navigating so the
+    // middleware doesn't bounce us to /login.
+    await auth.signIn();
+    const instance = new EditionPage(page);
+    await instance.goto();
+    await use(instance);
+  },
   toolsAndServicesPage: createPageFixture(ToolsAndServicesPage),
   useCasesPage: createPageFixture(UseCasesPage),
-  httpMocker: async ({ page }, use) => {
-    const httpMocker = createHttpMocker(page);
-    await use(httpMocker);
-  },
 });
 
 export const test = mergeTests(testPage, testWithNewsletter, mapGrabTest);
