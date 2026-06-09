@@ -13,9 +13,9 @@ export function hasUserValidated(
 }
 
 /**
- * Formate la liste des validateurs en une énumération « display_name
+ * Formate la liste des validateurs en une énumération « username
  * (organization_name) », séparés par des virgules sauf le dernier, introduit par
- * « et ». Ex : "Jean Dupont (IGN), Marie Martin (INSEE) et Luc Petit (BAN)".
+ * « et ». Ex : "jdupont (IGN), mmartin (INSEE) et lpetit (BAN)".
  * Les parenthèses sont omises pour un validateur sans organisation.
  */
 export function formatValidatorNames(validatedBy: PublicUser[]): string {
