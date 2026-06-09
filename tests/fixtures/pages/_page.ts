@@ -32,33 +32,7 @@ export abstract class RNBPage {
     await expect(this.page).toHaveScreenshot(name, options);
   }
 
-  async login() {
-    if (!this.page.url().includes('/connexion')) {
-      await this.page.goto('/connexion');
-    }
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.loginForm
-      .getByLabel('Email')
-      .fill(process.env.TEST_ACCOUNT_EMAIL!);
-    await this.loginForm
-      .getByLabel('Mot de passe')
-      .fill(process.env.TEST_ACCOUNT_PASSWORD!);
-    await this.loginForm.getByRole('button', { name: /se connecter/i }).click();
-    await expect(this.myAccountButton).toBeVisible({ timeout: 30_000 });
-  }
-
-  async isLoggedIn() {
-    return await this.myAccountButton.isVisible();
-  }
-
-  async loginIfNotLoggedIn() {
-    // Wait for either the account button (logged in) or the login form (redirected by auth)
-    await Promise.race([
-      this.myAccountButton.waitFor({ state: 'visible' }),
-      this.loginForm.waitFor({ state: 'visible' }),
-    ]);
-    if (!(await this.isLoggedIn())) {
-      await this.login();
-    }
+  async expectLoggedIn() {
+    await expect(this.myAccountButton).toBeVisible();
   }
 }
