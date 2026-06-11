@@ -148,13 +148,13 @@ const installBuildingsPointsLayers = async (
       paint: {
         'line-color': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           '#31e060',
           '#00000033',
         ],
         'line-width': [
           'case',
-          ['boolean', ['feature-state', 'in_panel'], false],
+          ['boolean', ['feature-state', 'highlighted'], false],
           3,
           1.5,
         ],
@@ -190,7 +190,7 @@ const installBuildingsPointsLayers = async (
           : 3,
       'circle-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         '#31e060',
         '#1452e3',
       ],
@@ -225,7 +225,7 @@ const installBuildingsShapesLayers = async (
     paint: {
       'fill-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         selectedBuildingColor,
         ['boolean', ['feature-state', 'hovered'], false],
         '#132353',
@@ -234,7 +234,7 @@ const installBuildingsShapesLayers = async (
       'fill-opacity': validatedActive
         ? [
             'case',
-            ['boolean', ['feature-state', 'in_panel'], false],
+            ['boolean', ['feature-state', 'highlighted'], false],
             0.15,
             ['boolean', ['get', 'is_validated'], false],
             0.2,
@@ -272,7 +272,7 @@ const installBuildingsShapesLayers = async (
     paint: {
       'line-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         selectedBuildingColor,
         ['boolean', ['feature-state', 'hovered'], false],
         '#87d443',
@@ -301,13 +301,13 @@ const installBuildingsShapesLayers = async (
             'case',
             ['boolean', ['get', 'is_validated'], false],
             '#31e060',
-            '#ff0000',
+            '#ffffff',
           ]
-        : '#ff0000',
+        : '#ffffff',
       'circle-stroke-width': 3,
       'circle-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         '#31e060',
         '#1452e3',
       ],

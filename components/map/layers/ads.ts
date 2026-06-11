@@ -57,7 +57,7 @@ export const installADS = async (map: maplibregl.Map) => {
       ],
       'circle-stroke-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         '#431407',
         '#ffffff',
       ],
