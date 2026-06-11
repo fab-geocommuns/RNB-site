@@ -42,33 +42,33 @@ describe('formatValidatorNames', () => {
     expect(formatValidatorNames([])).toBe('');
   });
 
-  it('affiche le nom suivi de l’organisation entre parenthèses', () => {
+  it('affiche le username suivi de l’organisation entre parenthèses', () => {
     expect(
       formatValidatorNames([
-        user({ display_name: 'Jean Dupont', organization_name: 'IGN' }),
+        user({ username: 'jdupont', organization_name: 'IGN' }),
       ]),
-    ).toBe('Jean Dupont (IGN)');
+    ).toBe('jdupont (IGN)');
   });
 
   it('omet les parenthèses en l’absence d’organisation', () => {
     expect(
       formatValidatorNames([
-        user({ display_name: 'Jean Dupont', organization_name: '' }),
+        user({ username: 'jdupont', organization_name: '' }),
       ]),
-    ).toBe('Jean Dupont');
+    ).toBe('jdupont');
   });
 
   it('sépare par des virgules sauf le dernier, introduit par « et »', () => {
     expect(
       formatValidatorNames([
-        user({ id: 1, display_name: 'Jean Dupont', organization_name: 'IGN' }),
+        user({ id: 1, username: 'jdupont', organization_name: 'IGN' }),
         user({
           id: 2,
-          display_name: 'Marie Martin',
+          username: 'mmartin',
           organization_name: 'INSEE',
         }),
-        user({ id: 3, display_name: 'Luc Petit', organization_name: 'BAN' }),
+        user({ id: 3, username: 'lpetit', organization_name: 'BAN' }),
       ]),
-    ).toBe('Jean Dupont (IGN), Marie Martin (INSEE) et Luc Petit (BAN)');
+    ).toBe('jdupont (IGN), mmartin (INSEE) et lpetit (BAN)');
   });
 });
