@@ -118,7 +118,7 @@ export const installReports = async (
       'circle-stroke-width': 2,
       'circle-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         darkColor,
         lightColor,
       ],
@@ -142,7 +142,7 @@ export const installReports = async (
     paint: {
       'icon-color': [
         'case',
-        ['boolean', ['feature-state', 'in_panel'], false],
+        ['boolean', ['feature-state', 'highlighted'], false],
         lightColor,
         darkColor,
       ],
