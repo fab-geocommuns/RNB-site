@@ -7,6 +7,8 @@ import {
   polygonize,
   intersect,
   area,
+  booleanPointInPolygon,
+  point as turfPoint,
 } from '@turf/turf';
 import type {
   Feature,
@@ -147,6 +149,74 @@ function splitPolygonByLine(
 }
 
 /**
+ * Fraction de la diagonale de la bounding box du bâtiment dont on prolonge une
+ * extrémité du trait de coupe. Le prolongement est invisible (il est rogné à la
+ * frontière lors de la découpe) : il sert uniquement à garantir que le trait
+ * traverse bien la frontière. On le veut « très très léger » pour ne pas risquer
+ * d'aller croiser une autre partie d'un bâtiment concave.
+ */
+const EXTENSION_RATIO = 0.01;
+
+const distance = (a: Position, b: Position): number =>
+  Math.hypot(a[0] - b[0], a[1] - b[1]);
+
+/**
+ * Prolonge une extrémité du trait de coupe vers l'extérieur, en conservant
+ * l'orientation du trait dessiné par l'utilisateur (on prolonge le long du
+ * dernier segment, `neighbor -> endpoint`).
+ *
+ * Le prolongement n'a lieu que si l'extrémité est *strictement à l'intérieur*
+ * du bâtiment : si elle est déjà sur la frontière (cas d'une aimantation
+ * exacte) ou à l'extérieur (le trait traverse déjà), on la laisse telle quelle.
+ * Cela règle le cas où l'aimantation a posé l'extrémité légèrement en deçà de
+ * la frontière (géométrie des tuiles vs géométrie de l'API), qui empêchait la
+ * découpe de traverser de part en part.
+ */
+const extendEndpointOutward = (
+  endpoint: Position,
+  neighbor: Position,
+  polygon: Feature<Polygon>,
+  amount: number,
+): Position => {
+  if (
+    !booleanPointInPolygon(turfPoint(endpoint), polygon, {
+      ignoreBoundary: true,
+    })
+  ) {
+    return endpoint; // déjà sur la frontière ou à l'extérieur : on n'y touche pas
+  }
+  const len = distance(endpoint, neighbor);
+  if (len === 0) return endpoint;
+  const ux = (endpoint[0] - neighbor[0]) / len;
+  const uy = (endpoint[1] - neighbor[1]) / len;
+  return [endpoint[0] + ux * amount, endpoint[1] + uy * amount];
+};
+
+/**
+ * Prolonge légèrement les deux extrémités d'un trait de coupe pour qu'il
+ * traverse la frontière du bâtiment, sans changer son orientation.
+ */
+const extendCutLine = (
+  lineGeom: LineString,
+  polygon: Feature<Polygon>,
+  amount: number,
+): LineString => {
+  const coords = lineGeom.coordinates;
+  if (coords.length < 2) return lineGeom;
+  const first = extendEndpointOutward(coords[0], coords[1], polygon, amount);
+  const last = extendEndpointOutward(
+    coords[coords.length - 1],
+    coords[coords.length - 2],
+    polygon,
+    amount,
+  );
+  return {
+    type: 'LineString',
+    coordinates: [first, ...coords.slice(1, -1), last],
+  };
+};
+
+/**
  * Split a polygon by multiple lines iteratively.
  * Each line is applied to all existing sub-polygons.
  */
@@ -162,13 +232,34 @@ export function splitPolygonByLines(
     polygonGeometry.type === 'MultiPolygon'
       ? (polygonGeometry as MultiPolygon).coordinates[0]
       : (polygonGeometry as Polygon).coordinates;
-  let currentPolygons: Feature<Polygon>[] = [turfPolygon(coords)];
+  const originalPolygon = turfPolygon(coords);
+  let currentPolygons: Feature<Polygon>[] = [originalPolygon];
+
+  // Distance de prolongement des extrémités, exprimée par rapport à la taille
+  // du bâtiment d'origine (les traits sont prolongés contre cette frontière).
+  const ring = coords[0];
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const [x, y] of ring) {
+    if (x < minX) minX = x;
+    if (y < minY) minY = y;
+    if (x > maxX) maxX = x;
+    if (y > maxY) maxY = y;
+  }
+  const extensionAmount =
+    Math.hypot(maxX - minX, maxY - minY) * EXTENSION_RATIO;
 
   for (const lineGeom of lines) {
     const line: Feature<LineString> = {
       type: 'Feature',
       properties: {},
-      geometry: lineGeom as LineString,
+      geometry: extendCutLine(
+        lineGeom as LineString,
+        originalPolygon,
+        extensionAmount,
+      ),
     };
 
     const nextPolygons: Feature<Polygon>[] = [];

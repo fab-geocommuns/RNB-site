@@ -109,7 +109,8 @@ export const snapDrawEvent = (e: SnappableDrawEvent): boolean => {
   return true;
 };
 
-// Indicateur visuel : un anneau orange autour du point d'aimantation
+// Indicateur visuel : un anneau rose autour du point d'aimantation
+// (même rose que les lignes de coupe de l'outil de scission)
 const SNAP_INDICATOR_SOURCE = 'snap-indicator';
 const SNAP_INDICATOR_LAYER = 'snap-indicator';
 
@@ -136,7 +137,7 @@ const showSnapIndicator = (map: maplibregl.Map, lngLat: maplibregl.LngLat) => {
         'circle-radius': 11,
         'circle-opacity': 0,
         'circle-stroke-width': 3,
-        'circle-stroke-color': '#e4794a',
+        'circle-stroke-color': '#ff00e1',
       },
     });
   } else {

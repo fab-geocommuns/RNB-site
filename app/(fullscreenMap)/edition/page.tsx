@@ -2,7 +2,6 @@
 
 import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
-import SnapControl from '@/components/contribution/SnapControl';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
@@ -56,7 +55,6 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
-        <SnapControl />
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}

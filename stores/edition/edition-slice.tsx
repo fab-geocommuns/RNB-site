@@ -52,8 +52,8 @@ export type SplitChild = {
 };
 
 // Aimantation des outils de dessin sur les bâtiments voisins.
-// La tolérance est en pixels écran : la sensibilité est ainsi indépendante
-// du niveau de zoom.
+// La tolérance est en pixels écran (sensibilité indépendante du niveau de
+// zoom) ; elle est fixe et non réglable par l'utilisateur.
 export type SnapSettings = {
   enabled: boolean;
   tolerancePx: number;
@@ -160,9 +160,6 @@ export const editionSlice = createSlice({
     },
     setSnapEnabled(state, action: PayloadAction<boolean>) {
       state.snap.enabled = action.payload;
-    },
-    setSnapTolerancePx(state, action: PayloadAction<number>) {
-      state.snap.tolerancePx = action.payload;
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
