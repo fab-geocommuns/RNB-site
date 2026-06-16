@@ -10,9 +10,8 @@ const LOCAL_STORAGE_KEY = 'rnb-edition-snap-settings';
 
 /**
  * Tient à jour le contexte de l'aimantation (cf components/map/snap) à partir
- * du store : activation, sensibilité et bâtiment à exclure des cibles. Les
- * modes de dessin patchés dans useMapDraw lisent ce contexte à chaque
- * évènement souris.
+ * du store : activation et bâtiment à exclure des cibles. Les modes de dessin
+ * patchés dans useMapDraw lisent ce contexte à chaque évènement souris.
  *
  * Gère aussi la persistance de la préférence d'activation dans le
  * localStorage.
@@ -21,9 +20,6 @@ export const useMapSnap = (map?: maplibregl.Map) => {
   const dispatch: AppDispatch = useDispatch();
   const snapEnabled = useSelector(
     (state: RootState) => state.edition.snap.enabled,
-  );
-  const snapTolerancePx = useSelector(
-    (state: RootState) => state.edition.snap.tolerancePx,
   );
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
@@ -59,13 +55,12 @@ export const useMapSnap = (map?: maplibregl.Map) => {
     setSnapContext({
       map: map ?? null,
       enabled: snapEnabled,
-      tolerancePx: snapTolerancePx,
       excludedRnbId,
     });
     if (map && !snapEnabled) {
       hideSnapIndicator(map);
     }
-  }, [map, snapEnabled, snapTolerancePx, excludedRnbId]);
+  }, [map, snapEnabled, excludedRnbId]);
 
   useEffect(() => {
     return () => {

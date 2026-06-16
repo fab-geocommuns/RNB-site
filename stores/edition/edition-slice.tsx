@@ -52,11 +52,10 @@ export type SplitChild = {
 };
 
 // Aimantation des outils de dessin sur les bâtiments voisins.
-// La tolérance est en pixels écran (sensibilité indépendante du niveau de
-// zoom) ; elle est fixe et non réglable par l'utilisateur.
+// Seule l'activation est une préférence utilisateur : la sensibilité est une
+// constante en dur dans le code (cf SNAP_TOLERANCE_PX dans buildingSnap).
 export type SnapSettings = {
   enabled: boolean;
-  tolerancePx: number;
 };
 
 export type EditionStore = {
@@ -103,7 +102,6 @@ const initialState: EditionStore = {
   },
   snap: {
     enabled: true,
-    tolerancePx: 15,
   },
 
   // Summer challenge

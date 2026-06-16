@@ -16,10 +16,15 @@ import {
  * state React/Redux par props. Le contexte est donc tenu à jour ici, au
  * niveau module, par le hook `useMapSnap`.
  */
+// Sensibilité de l'aimantation, en pixels écran : un sommet/arête est aimanté
+// quand le curseur passe à moins de cette distance. En pixels, la sensibilité
+// est indépendante du niveau de zoom. Valeur fixe, non réglable par
+// l'utilisateur.
+const SNAP_TOLERANCE_PX = 15;
+
 type SnapContext = {
   map: maplibregl.Map | null;
   enabled: boolean;
-  tolerancePx: number;
   // bâtiment en cours d'édition : sa forme d'origine est toujours visible
   // dans les tuiles, on ne veut pas que ses propres sommets l'attirent
   excludedRnbId: string | null;
@@ -28,7 +33,6 @@ type SnapContext = {
 const context: SnapContext = {
   map: null,
   enabled: false,
-  tolerancePx: 15,
   excludedRnbId: null,
 };
 
@@ -66,7 +70,7 @@ type SnappableDrawEvent = {
  * @returns true si l'évènement a été aimanté
  */
 export const snapDrawEvent = (e: SnappableDrawEvent): boolean => {
-  const { map, enabled, tolerancePx, excludedRnbId } = context;
+  const { map, enabled, excludedRnbId } = context;
   if (!map || !enabled) return false;
 
   const layers = SNAP_TARGET_LAYERS.filter((id) => map.getLayer(id));
@@ -77,8 +81,8 @@ export const snapDrawEvent = (e: SnappableDrawEvent): boolean => {
 
   const features = map.queryRenderedFeatures(
     [
-      [e.point.x - tolerancePx, e.point.y - tolerancePx],
-      [e.point.x + tolerancePx, e.point.y + tolerancePx],
+      [e.point.x - SNAP_TOLERANCE_PX, e.point.y - SNAP_TOLERANCE_PX],
+      [e.point.x + SNAP_TOLERANCE_PX, e.point.y + SNAP_TOLERANCE_PX],
     ],
     { layers },
   );
@@ -96,7 +100,7 @@ export const snapDrawEvent = (e: SnappableDrawEvent): boolean => {
     }
   }
 
-  const result = findSnapPoint(e.point, rings, tolerancePx);
+  const result = findSnapPoint(e.point, rings, SNAP_TOLERANCE_PX);
   if (!result) {
     hideSnapIndicator(map);
     return false;
