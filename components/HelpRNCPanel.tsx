@@ -45,11 +45,6 @@ const PAGES = [
             Vos modifications dans le RNB seront automatiquement prises en
             compte dans le Registre National des Copropriétés.
           </p>
-          <img
-            src="/images/homeBanner/bordeaux.jpg"
-            alt="test"
-            style={{ maxWidth: '100%' }}
-          />
         </>
       ),
       PrioReno: (
