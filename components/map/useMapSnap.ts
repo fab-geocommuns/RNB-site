@@ -69,15 +69,19 @@ export const useMapSnap = (map?: maplibregl.Map) => {
   }, []);
 
   // l'indicateur suit le curseur pendant le dessin : on le masque quand le
-  // geste ou le mode se termine
+  // geste ou le mode se termine, ou quand le curseur quitte la carte (ex :
+  // pour cliquer « Annuler » dans le panneau latéral, sans mouseup ni
+  // changement de mode sur la carte)
   useEffect(() => {
     if (!map) return;
     const hide = () => hideSnapIndicator(map);
     map.on('draw.modechange', hide);
     map.on('mouseup', hide);
+    map.on('mouseout', hide);
     return () => {
       map.off('draw.modechange', hide);
       map.off('mouseup', hide);
+      map.off('mouseout', hide);
     };
   }, [map]);
 };
