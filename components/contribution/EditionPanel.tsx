@@ -30,7 +30,7 @@ import mergeSelectedBuildingImage from '@/public/images/map/edition/merge_select
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import BuildingMainAttributes from '@/components/BuildingMainAttributes';
-import { formatValidatorNames } from '@/utils/validations';
+import { ValidatorNames } from '@/components/ValidatorNames';
 import panelStyles from '@/styles/panel.module.scss';
 import {
   throwErrorMessageForHumans,
@@ -283,7 +283,10 @@ function BodyPanel({
                   <div className={styles.validationWarning}>
                     Modifier ce bâtiment aura pour effet de supprimer la
                     validation faite par{' '}
-                    {formatValidatorNames(selectedBuilding.validated_by)}.
+                    <ValidatorNames
+                      validatedBy={selectedBuilding.validated_by}
+                    />
+                    .
                   </div>
                 )}
                 <BuildingStatus

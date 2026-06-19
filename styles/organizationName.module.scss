@@ -1,0 +1,17 @@
+// Le nom court affiché : souligné en tirets discrets pour signaler qu'un
+// contenu apparaît au survol, avec le curseur classique (flèche).
+.shortName {
+  cursor: default;
+  text-decoration: underline dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--text-mention-grey);
+}
+
+// Le tooltip DSFR : on borne sa largeur pour éviter qu'il sorte de l'écran et
+// on autorise le retour à la ligne du nom complet. Le sélecteur est doublé pour
+// l'emporter sur le `max-width` par défaut de `.fr-tooltip` (même spécificité).
+.tooltip.tooltip {
+  max-width: 16rem;
+  white-space: normal;
+}

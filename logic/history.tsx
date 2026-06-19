@@ -1,4 +1,7 @@
+import { ReactNode } from 'react';
+
 import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
+import { OrganizationName } from '@/components/OrganizationName';
 
 export function getHistoryLongTitle(historyItem: ApiHistoryItem): string {
   if (historyItem.event?.type === 'creation') return 'Création';
@@ -72,15 +75,28 @@ export function getHistoryShortTitle(historyItem: ApiHistoryItem): string {
   return historyItem.event?.type || 'Inconnu';
 }
 
-export function displayAuthor(historyItem: ApiHistoryItem): string | null {
+export function displayAuthor(historyItem: ApiHistoryItem): ReactNode {
   if (historyItem?.event?.origin?.type === 'import') return 'Équipe RNB';
   if (historyItem?.event?.origin?.type === 'data_fix') return 'Équipe RNB';
-  if (historyItem?.event?.author?.username) {
-    let display = historyItem.event.author.username;
-    if (historyItem.event.author.organization_name) {
-      display += ` (${historyItem.event.author.organization_name})`;
-    }
-    return display;
+  const author = historyItem?.event?.author;
+  if (author?.username) {
+    const hasOrganization =
+      author.organization_short_name || author.organization_name;
+    return (
+      <>
+        {author.username}
+        {hasOrganization && (
+          <>
+            {' ('}
+            <OrganizationName
+              name={author.organization_name}
+              shortName={author.organization_short_name}
+            />
+            {')'}
+          </>
+        )}
+      </>
+    );
   }
 
   return null;

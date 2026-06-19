@@ -5,6 +5,7 @@ import React from 'react';
 import { SelectedBuilding, PublicUser } from '@/stores/map/map-slice';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import ValidationToggler from '@/components/ValidationToggler';
+import { OrganizationName } from '@/components/OrganizationName';
 
 import styles from '@/styles/buildingValidations.module.scss';
 
@@ -42,10 +43,14 @@ export default function BuildingValidations({
             <span key={u.id} className={styles.user}>
               {' '}
               <span className={styles.username}>{u.username}</span>{' '}
-              {u.organization_name && (
+              {(u.organization_short_name || u.organization_name) && (
                 <span className={styles.organization}>
-                  ({u.organization_name})
-                  {/* add a comma between users except for the last one */}
+                  (
+                  <OrganizationName
+                    name={u.organization_name}
+                    shortName={u.organization_short_name}
+                  />
+                  ){/* add a comma between users except for the last one */}
                   {u.id !== validatedBy[validatedBy.length - 1].id && ','}
                 </span>
               )}

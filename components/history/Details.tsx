@@ -5,6 +5,7 @@ import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/
 import CopyInlineBtn from '@/components/util/CopyInlineBtn';
 import VisuMapReact from '@/components/map/VisuMapReact';
 import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
+import { OrganizationName } from '@/components/OrganizationName';
 
 import {
   BuildingStatusMap,
@@ -73,9 +74,17 @@ export default function Details({
                         <div className="fr-mb-1v" key={i}>
                           <span className={styles.mergePanelAddressText}>
                             {user.username}
-                            {user.organization_name
-                              ? ' (' + user.organization_name + ')'
-                              : ''}
+                            {(user.organization_short_name ||
+                              user.organization_name) && (
+                              <>
+                                {' ('}
+                                <OrganizationName
+                                  name={user.organization_name}
+                                  shortName={user.organization_short_name}
+                                />
+                                {')'}
+                              </>
+                            )}
                           </span>
                         </div>
                       ))}
