@@ -8,6 +8,25 @@ interface PageProps {
   }>;
 }
 
+export type AnnotationStatus = 'correct' | 'uncertain' | 'incorrect';
+
+export interface AnnotationReviewer {
+  id: number;
+  username: string;
+  display_name: string;
+  organization_name: string | null;
+}
+
+export interface EditionAnnotation {
+  id: number;
+  event_id: string;
+  status: AnnotationStatus;
+  comment: string | null;
+  reviewer: AnnotationReviewer;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ApiHistoryItem {
   rnb_id: string;
   is_active: boolean;
@@ -43,6 +62,7 @@ export interface ApiHistoryItem {
       split_children?: string[];
       split_parent?: string;
     } | null;
+    annotations?: EditionAnnotation[];
   };
   ext_ids: Array<{
     id: string;
