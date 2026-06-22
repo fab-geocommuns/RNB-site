@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
@@ -50,15 +50,6 @@ export default function AnnotationPanel({
   const [comment, setComment] = useState<string>(myAnnotation?.comment ?? '');
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
-
-  // Re-synchronise le formulaire quand on change d'évènement sélectionné.
-  useEffect(() => {
-    const mine = findMyAnnotation(annotations, currentUsername);
-    setStatus(mine?.status ?? 'correct');
-    setComment(mine?.comment ?? '');
-    setFeedback(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventId]);
 
   const sortedAnnotations = [...annotations].sort((a, b) =>
     a.created_at.localeCompare(b.created_at),

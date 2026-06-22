@@ -52,6 +52,7 @@ export default function Details({
     >
       {isReviewer && detailsInfo.event?.id && onAnnotationsChange && (
         <AnnotationPanel
+          key={detailsInfo.event.id}
           eventId={detailsInfo.event.id}
           annotations={annotations}
           currentUsername={currentUsername}
