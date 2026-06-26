@@ -16,6 +16,7 @@ import {
 } from '@/stores/map/map-slice';
 import { useMapDraw } from '@/components/map/useMapDraw';
 import { useMapPolygonDraw } from '@/components/map/useMapPolygonDraw';
+import { useMapSnap } from '@/components/map/useMapSnap';
 import { useMapSplitDraw } from '@/components/map/useMapSplitDraw';
 import { useMapSplitChildren } from '@/components/map/useMapSplitChildren';
 import { useMapHighlightForEdition } from '@/components/map/useMapHighlightForEdition';
@@ -56,6 +57,7 @@ export default function EditMap({
   const drawRef = useMapDraw(map);
   useMapPolygonDraw(map, drawRef);
   useMapSplitDraw(map, drawRef);
+  useMapSnap(map);
 
   useMapSplitChildren(map);
   useMapMerge(map);

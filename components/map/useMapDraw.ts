@@ -4,6 +4,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 // @ts-ignore
 import DrawAssistedRectangle from '@geostarters/mapbox-gl-draw-rectangle-assisted-mode/dist/DrawAssistedRectangle.js';
+import { snapDrawEvent } from '@/components/map/snap/buildingSnap';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -50,6 +51,56 @@ MapboxDraw.modes.draw_line_string.onKeyUp = function (state, e) {
     this.deleteFeature([state.line.id], { silent: true });
     this.changeMode('draw_line_string');
   }
+};
+
+// Aimantation : on enveloppe les handlers qui positionnent un sommet à partir
+// du curseur, pour que e.lngLat soit magnétisé vers les sommets et arêtes des
+// bâtiments voisins quand l'aimantation est active (cf components/map/snap).
+type DrawEventHandler = (this: unknown, state: any, e: any) => unknown;
+const withSnap = (handler: DrawEventHandler): DrawEventHandler =>
+  function (state, e) {
+    snapDrawEvent(e);
+    return handler.call(this, state, e);
+  };
+
+MapboxDraw.modes.draw_polygon.onMouseMove = withSnap(
+  // @ts-ignore
+  MapboxDraw.modes.draw_polygon.onMouseMove,
+);
+MapboxDraw.modes.draw_polygon.onTap = MapboxDraw.modes.draw_polygon.onClick =
+  // @ts-ignore
+  withSnap(MapboxDraw.modes.draw_polygon.onClick);
+
+MapboxDraw.modes.draw_line_string.onMouseMove = withSnap(
+  // @ts-ignore
+  MapboxDraw.modes.draw_line_string.onMouseMove,
+);
+MapboxDraw.modes.draw_line_string.onTap =
+  MapboxDraw.modes.draw_line_string.onClick =
+    // @ts-ignore
+    withSnap(MapboxDraw.modes.draw_line_string.onClick);
+
+DrawAssistedRectangle.onMouseMove = withSnap(DrawAssistedRectangle.onMouseMove);
+// le onTap du mode rectangle délègue à onClick : ne patcher que onClick
+DrawAssistedRectangle.onClick = withSnap(DrawAssistedRectangle.onClick);
+
+// direct_select : aimantation du sommet en cours de déplacement
+const originalDragVertex =
+  // @ts-ignore
+  MapboxDraw.modes.direct_select.dragVertex;
+// @ts-ignore
+MapboxDraw.modes.direct_select.dragVertex = function (state, e, delta) {
+  // L'aimantation n'a de sens que pour un sommet unique : il est alors posé
+  // sur le point magnétisé plutôt que déplacé du delta du curseur.
+  if (state.selectedCoordPaths.length === 1 && snapDrawEvent(e)) {
+    state.feature.updateCoordinate(
+      state.selectedCoordPaths[0],
+      e.lngLat.lng,
+      e.lngLat.lat,
+    );
+    return;
+  }
+  originalDragVertex.call(this, state, e, delta);
 };
 
 /**
