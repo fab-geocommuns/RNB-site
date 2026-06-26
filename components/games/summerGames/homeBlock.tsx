@@ -26,8 +26,6 @@ export default function SummerGame({
   size?: 'small' | 'large';
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
-  const displayCountInsteadOfScore =
-    process.env.NEXT_PUBLIC_DISPLAY_COUNT_INSTEAD_OF_SCORE === 'true';
 
   return (
     !loading &&
@@ -47,17 +45,7 @@ export default function SummerGame({
             </div>
             <div className={`section__subtitle ${styles.instruction}`}>
               <p className={styles.highlight}>
-                Bonne nouvelle : face à l&apos;engouement pour l&apos;édition
-                collaborative et à la qualité de vos contributions, nous
-                laissons les outils d&apos;éditions ouverts à la communauté
-                durant les travaux du{' '}
-                <a
-                  href="https://cnig.gouv.fr/gt-bati-a25939.html"
-                  target="_blank"
-                >
-                  GT Bâti CNIG
-                </a>
-                .
+                Introduction description du jeu
               </p>
             </div>
 
@@ -65,16 +53,12 @@ export default function SummerGame({
               <div className={styles.barShell}>
                 <div className={styles.legend}>
                   <span className={styles.legend_subtitle}>
-                    {displayCountInsteadOfScore
-                      ? 'Éditions dans le RNB'
-                      : 'Score global'}
+                    Validations faites
                   </span>
                   <br />
                   <p>
-                    {summerGamesData.shared.absolute}{' '}
-                    {displayCountInsteadOfScore
-                      ? 'éditions réalisées par la communauté'
-                      : 'points'}
+                    {summerGamesData.shared.absolute} validations faites par la
+                    communauté
                   </p>
                 </div>
               </div>
@@ -90,8 +74,8 @@ export default function SummerGame({
 
                   <div className={styles.ranksTable}>
                     <RankTable
-                      title="Classement des villes"
-                      ranks={summerGamesData.city}
+                      title="Classement des organisations"
+                      ranks={summerGamesData.organization}
                     />
                   </div>
 
@@ -124,7 +108,7 @@ export default function SummerGame({
                 href="/blog/le-rnb-souvre-a-ledition-collaborative"
                 className={`${styles.btn}`}
               >
-                En savoir plus
+                En savoir plus TODO
               </Link>
             </div>
           </div>
