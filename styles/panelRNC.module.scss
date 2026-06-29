@@ -3,25 +3,33 @@
   bottom: 1rem;
   left: 1rem;
   z-index: calc(var(--ground) + 760);
-
-  width: 36px;
   height: 36px;
-  border-radius: 50%;
+  padding: 0 12px;
+  border-radius: 8px;
   border: 2px solid #1a73e8;
   background: white;
   color: #1a73e8;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  white-space: nowrap;
   &:hover {
-    background: lighten(#e7edff, 2%);
+    background: #e7edff;
   }
 }
-
+.connexionBlock {
+  display: block;
+  margin-top: 1rem;
+  padding: 12px 16px;
+  background: #e7edff;
+  border-radius: 6px;
+  color: #1a73e8;
+  font-weight: 700;
+  text-decoration: none;
+}
 .content {
   font-size: 13px;
   line-height: 1.5;
