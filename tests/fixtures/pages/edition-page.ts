@@ -15,8 +15,8 @@ export class EditionPage extends RNBPage {
   }
 
   async goToBuilding(buildingId: string) {
-    await this.loginIfNotLoggedIn();
     await this.page.goto(`/edition?q=${buildingId}`);
+    await this.expectLoggedIn();
   }
 
   async deactivateBuilding() {
@@ -25,6 +25,40 @@ export class EditionPage extends RNBPage {
     );
     await deactivationButton.scrollIntoViewIfNeeded();
     await deactivationButton.click();
+  }
+
+  get validateButton(): Locator {
+    return this.panel.getByRole('link', { name: /Valider ce bâtiment/i });
+  }
+
+  get removeValidationButton(): Locator {
+    return this.panel.getByRole('link', { name: /Retirer ma validation/i });
+  }
+
+  get unlockButton(): Locator {
+    return this.panel.getByRole('button', {
+      name: /Accéder au formulaire/i,
+    });
+  }
+
+  get statusSelect(): Locator {
+    // Le select de statut (BuildingStatus) est le premier select du formulaire.
+    return this.panel.locator('select').first();
+  }
+
+  async clickValidate() {
+    await this.validateButton.scrollIntoViewIfNeeded();
+    await this.validateButton.click();
+  }
+
+  async clickRemoveValidation() {
+    await this.removeValidationButton.scrollIntoViewIfNeeded();
+    await this.removeValidationButton.click();
+  }
+
+  async clickUnlock() {
+    await this.unlockButton.scrollIntoViewIfNeeded();
+    await this.unlockButton.click();
   }
 
   async startSplit() {

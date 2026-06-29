@@ -1,52 +1,7 @@
 import { RootState } from '@/stores/store';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import {
-  SRC_REPORTS,
-  LAYER_REPORTS_CIRCLE,
-  LAYER_REPORTS_ICON,
-  LAYER_REPORTS_SMALL_CIRCLES,
-} from '../useMapLayers';
-
-export function setDisplayedReportFilters(
-  map: maplibregl.Map,
-  displayedTags: 'all' | number[],
-  selectedReportId?: number,
-) {
-  const reportLayersSetup = [
-    LAYER_REPORTS_CIRCLE,
-    LAYER_REPORTS_ICON,
-    LAYER_REPORTS_SMALL_CIRCLES,
-  ].every((layer) => map?.getLayer(layer));
-  if (!reportLayersSetup) return;
-  // We want to show only some reports given by vector tiles.
-  // We can either show the selected report, or the pending reports with the right tags.
-  let filters = ['any'] as any;
-
-  // First possibility: a report is selected
-  if (selectedReportId) {
-    filters.push(['==', ['get', 'id'], selectedReportId]);
-  }
-
-  // Second possibility: we want to show pending reports with the right tags
-  let catFilter = ['all', ['==', ['get', 'status'], 'pending']];
-  if (displayedTags !== 'all') {
-    let tagFilters = ['any'] as any;
-
-    displayedTags.forEach((tagId: number) => {
-      const singleTagFilter = ['in', tagId.toString(), ['get', 'tag_ids']];
-      tagFilters.push(singleTagFilter);
-    });
-
-    catFilter.push(tagFilters);
-  }
-
-  filters.push(catFilter);
-
-  map?.setFilter(LAYER_REPORTS_CIRCLE, filters);
-  map?.setFilter(LAYER_REPORTS_ICON, filters);
-  map?.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filters);
-}
+import { SRC_REPORTS, setDisplayedReportFilters } from '../layers/reports';
 
 export const useMapStateSyncReport = (map?: maplibregl.Map) => {
   const selectedReportId = useSelector(

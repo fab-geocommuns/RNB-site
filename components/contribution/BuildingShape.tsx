@@ -10,6 +10,7 @@ import editPolygonIcon from '@/public/images/map/edition/edit_polygon.svg';
 import editPolygonDisabledIcon from '@/public/images/map/edition/edit_polygon_disabled.svg';
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
+import SnapToggle from '@/components/contribution/SnapToggle';
 
 export default function BuildingShape({
   shapeInteractionMode,
@@ -38,6 +39,8 @@ export default function BuildingShape({
     <>
       <div className={styles.panelSection}>
         <span className={`fr-text--xs ${styles.sectionTitle}`}>Géométrie</span>
+
+        <SnapToggle className="fr-mt-4v fr-mb-2v" />
 
         <div className="">
           <span style={{ display: 'inline-block', width: 250 }}>

@@ -51,6 +51,13 @@ export type SplitChild = {
   addresses: BuildingAddressType[];
 };
 
+// Aimantation des outils de dessin sur les bâtiments voisins.
+// Seule l'activation est une préférence utilisateur : la sensibilité est une
+// constante en dur dans le code (cf SNAP_TOLERANCE_PX dans buildingSnap).
+export type SnapSettings = {
+  enabled: boolean;
+};
+
 export type EditionStore = {
   // data shared by all operations
   operation: Operation;
@@ -64,6 +71,9 @@ export type EditionStore = {
 
   merge: MergeInfos;
   split: SplitInfos;
+
+  // préférence utilisateur, partagée par tous les modes de dessin
+  snap: SnapSettings;
 
   // Summer challenge
   editMapSummerScoreUpdatedAt: number | null;
@@ -90,6 +100,9 @@ const initialState: EditionStore = {
     candidateAddresses: [],
     cutStep: 'drawing',
   },
+  snap: {
+    enabled: true,
+  },
 
   // Summer challenge
   editMapSummerScoreUpdatedAt: null,
@@ -99,6 +112,8 @@ export const editionSlice = createSlice({
   name: 'edition',
   initialState,
   reducers: {
+    // ne réinitialise pas `snap` : c'est une préférence utilisateur qui doit
+    // survivre aux changements d'opération
     reset(state) {
       state.updateCreate.shapeInteractionMode = null;
       state.updateCreate.buildingNewShape = null;
@@ -140,6 +155,9 @@ export const editionSlice = createSlice({
     },
     setBuildingNewShape(state, action: PayloadAction<GeoJSON.Geometry | null>) {
       state.updateCreate.buildingNewShape = action.payload;
+    },
+    setSnapEnabled(state, action: PayloadAction<boolean>) {
+      state.snap.enabled = action.payload;
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;

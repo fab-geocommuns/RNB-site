@@ -26,71 +26,71 @@ Remplacer le mode actuel de scission (ou l'utilisateur redessine un polygone par
 
 #### Composants UI
 
-| Fichier | Role |
-|---------|------|
-| `components/contribution/SplitPanel.tsx` | Panel principal avec wizard multi-etapes (Initial, ChildInfos, Summary) |
-| `components/contribution/EditionPanel.tsx` | Panel parent qui route vers SplitPanel quand `operation === 'split'` |
-| `components/contribution/EditionButton.tsx` | Bouton declencheur de l'operation split |
-| `components/contribution/BuildingStatus.tsx` | Dropdown de selection du statut |
-| `components/contribution/BuildingAddresses.tsx` | Gestion des adresses |
-| `components/contribution/BuildingInfo.tsx` | Affichage des infos batiment (utilise dans le recapitulatif) |
-| `components/contribution/drawStyle.tsx` | Styles des polygones dessines (couleurs, tailles des vertices) |
+| Fichier                                         | Role                                                                    |
+| ----------------------------------------------- | ----------------------------------------------------------------------- |
+| `components/contribution/SplitPanel.tsx`        | Panel principal avec wizard multi-etapes (Initial, ChildInfos, Summary) |
+| `components/contribution/EditionPanel.tsx`      | Panel parent qui route vers SplitPanel quand `operation === 'split'`    |
+| `components/contribution/EditionButton.tsx`     | Bouton declencheur de l'operation split                                 |
+| `components/contribution/BuildingStatus.tsx`    | Dropdown de selection du statut                                         |
+| `components/contribution/BuildingAddresses.tsx` | Gestion des adresses                                                    |
+| `components/contribution/BuildingInfo.tsx`      | Affichage des infos batiment (utilise dans le recapitulatif)            |
+| `components/contribution/drawStyle.tsx`         | Styles des polygones dessines (couleurs, tailles des vertices)          |
 
 #### State management (Redux)
 
-| Fichier | Role |
-|---------|------|
-| `stores/edition/edition-slice.tsx` | Slice Redux : actions, reducers, types, listener middleware |
-| `stores/edition/edition-selector.tsx` | Selectors : transformation des donnees pour l'API |
-| `stores/store.tsx` | Configuration du store Redux |
+| Fichier                               | Role                                                        |
+| ------------------------------------- | ----------------------------------------------------------- |
+| `stores/edition/edition-slice.tsx`    | Slice Redux : actions, reducers, types, listener middleware |
+| `stores/edition/edition-selector.tsx` | Selectors : transformation des donnees pour l'API           |
+| `stores/store.tsx`                    | Configuration du store Redux                                |
 
 #### Interaction carte
 
-| Fichier | Role |
-|---------|------|
-| `components/map/useMapEditBuildingShape.ts` | Integration Mapbox Draw : gestion du dessin de polygones |
-| `components/map/useEditionMapEvents.ts` | Evenements clic/survol de la carte pour la selection du batiment candidat |
-| `components/map/useMapLayers.ts` | Definition des layers et sources de la carte |
+| Fichier                                     | Role                                                                      |
+| ------------------------------------------- | ------------------------------------------------------------------------- |
+| `components/map/useMapEditBuildingShape.ts` | Integration Mapbox Draw : gestion du dessin de polygones                  |
+| `components/map/useEditionMapEvents.ts`     | Evenements clic/survol de la carte pour la selection du batiment candidat |
+| `components/map/useMapLayers.ts`            | Definition des layers et sources de la carte                              |
 
 #### Utilitaires
 
-| Fichier | Role |
-|---------|------|
+| Fichier                                 | Role                                                           |
+| --------------------------------------- | -------------------------------------------------------------- |
 | `utils/geojsonToReducedPrecisionWKT.ts` | Conversion GeoJSON -> WKT avec precision reduite (7 decimales) |
-| `utils/use-rnb-fetch.tsx` | Wrapper fetch avec token d'authentification |
+| `utils/use-rnb-fetch.tsx`               | Wrapper fetch avec token d'authentification                    |
 
 ### Structure de donnees dans le store Redux
 
 ```typescript
 // State principal pour la scission
 type SplitInfos = {
-  splitCandidateId: string | null;       // ID RNB du batiment a scinder
-  location: [number, number] | null;     // Coordonnees [lng, lat] pour la recherche d'adresses
-  selectedChildIndex: number | null;     // Index de l'enfant en cours d'edition (null = etape 1)
-  children: SplitChild[];               // Tableau des batiments enfants
+  splitCandidateId: string | null; // ID RNB du batiment a scinder
+  location: [number, number] | null; // Coordonnees [lng, lat] pour la recherche d'adresses
+  selectedChildIndex: number | null; // Index de l'enfant en cours d'edition (null = etape 1)
+  children: SplitChild[]; // Tableau des batiments enfants
 };
 
 type SplitChild = {
-  status: BuildingStatusType;            // 'constructed', 'demolished', etc.
-  shape: GeoJSON.Geometry | null;        // Geometrie GeoJSON du polygone dessine
+  status: BuildingStatusType; // 'constructed', 'demolished', etc.
+  shape: GeoJSON.Geometry | null; // Geometrie GeoJSON du polygone dessine
   shapeId: string | null | undefined | number; // ID de la feature Mapbox Draw
-  addresses: BuildingAddressType[];      // Adresses associees
+  addresses: BuildingAddressType[]; // Adresses associees
 };
 ```
 
 ### Actions Redux principales (dans `edition-slice.tsx`)
 
-| Action | Role |
-|--------|------|
-| `setOperation('split')` | Declenche le mode scission, reset le state, sauvegarde le candidat si un batiment est deja selectionne |
-| `setSplitCandidateAndLocation()` | Enregistre le batiment a scinder + ses coordonnees |
-| `setSplitChildrenNumber(n)` | Cree N enfants vides |
-| `setCurrentChildSelected(index)` | Selectionne un enfant, active le mode `drawing` ou `updating` |
-| `setSplitChildBuildingShape()` | Stocke la geometrie d'un enfant (premiere creation) |
-| `updateSplitBuildingShape()` | Met a jour la geometrie d'un enfant (edition) |
-| `setCurrentChildFromShapeId()` | Selectionne l'enfant correspondant quand on clique sur une shape deja dessinee |
-| `setSplitChildStatus()` | Change le statut d'un enfant |
-| `setSplitChildAddresses()` | Change les adresses d'un enfant |
+| Action                           | Role                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `setOperation('split')`          | Declenche le mode scission, reset le state, sauvegarde le candidat si un batiment est deja selectionne |
+| `setSplitCandidateAndLocation()` | Enregistre le batiment a scinder + ses coordonnees                                                     |
+| `setSplitChildrenNumber(n)`      | Cree N enfants vides                                                                                   |
+| `setCurrentChildSelected(index)` | Selectionne un enfant, active le mode `drawing` ou `updating`                                          |
+| `setSplitChildBuildingShape()`   | Stocke la geometrie d'un enfant (premiere creation)                                                    |
+| `updateSplitBuildingShape()`     | Met a jour la geometrie d'un enfant (edition)                                                          |
+| `setCurrentChildFromShapeId()`   | Selectionne l'enfant correspondant quand on clique sur une shape deja dessinee                         |
+| `setSplitChildStatus()`          | Change le statut d'un enfant                                                                           |
+| `setSplitChildAddresses()`       | Change les adresses d'un enfant                                                                        |
 
 ### Flux du dessin de forme (dans `useMapEditBuildingShape.ts`)
 
@@ -119,13 +119,14 @@ POST /buildings/{splitCandidateId}/split/?from=site
 ```
 
 Body :
+
 ```json
 {
   "created_buildings": [
     {
       "status": "constructed",
       "addresses_cle_interop": ["id_adresse_1"],
-      "shape": "POLYGON((lng lat, lng lat, ...))"  // format WKT
+      "shape": "POLYGON((lng lat, lng lat, ...))" // format WKT
     }
   ],
   "comment": "Commentaire optionnel"
@@ -145,6 +146,7 @@ Quand le batiment candidat est selectionne, son feature state `in_panel` est mis
 ### Concept
 
 Au lieu de redessiner N polygones independants, l'utilisateur :
+
 1. Selectionne le batiment a scinder (inchange)
 2. Trace un ou plusieurs **traits de decoupe** (lignes) sur le polygone existant
 3. Le systeme calcule automatiquement les sous-polygones resultants
@@ -190,7 +192,7 @@ import * as turf from '@turf/turf';
 
 function splitPolygonByLine(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
-  cutLine: GeoJSON.Feature<GeoJSON.LineString>
+  cutLine: GeoJSON.Feature<GeoJSON.LineString>,
 ): GeoJSON.FeatureCollection<GeoJSON.Polygon> | null {
   // 1. Convertir les contours du polygone en LineString
   const outerLine = turf.polygonToLine(polygon);
@@ -232,16 +234,16 @@ function splitPolygonByLine(
 
 **Fonctions Turf utilisees** (toutes disponibles dans `@turf/turf` v7.1.0) :
 
-| Fonction | Role |
-|----------|------|
-| `turf.polygonToLine()` | Convertir le contour du polygone en LineString |
-| `turf.lineIntersect()` | Trouver les points d'intersection |
-| `turf.lineSplit()` | Decouper une ligne a des points donnes |
-| `turf.truncate()` | Limiter la precision des coordonnees |
-| `turf.combine()` | Fusionner des features en Multi* |
-| `turf.polygonize()` | Reconstruire des polygones a partir de segments |
-| `turf.pointOnFeature()` | Obtenir un point garanti a l'interieur d'une feature |
-| `turf.booleanPointInPolygon()` | Tester si un point est dans un polygone |
+| Fonction                       | Role                                                 |
+| ------------------------------ | ---------------------------------------------------- |
+| `turf.polygonToLine()`         | Convertir le contour du polygone en LineString       |
+| `turf.lineIntersect()`         | Trouver les points d'intersection                    |
+| `turf.lineSplit()`             | Decouper une ligne a des points donnes               |
+| `turf.truncate()`              | Limiter la precision des coordonnees                 |
+| `turf.combine()`               | Fusionner des features en Multi\*                    |
+| `turf.polygonize()`            | Reconstruire des polygones a partir de segments      |
+| `turf.pointOnFeature()`        | Obtenir un point garanti a l'interieur d'une feature |
+| `turf.booleanPointInPolygon()` | Tester si un point est dans un polygone              |
 
 #### Mapbox GL Draw — deja installe
 
@@ -263,8 +265,8 @@ Fonction utilitaire pure qui prend un polygone et un tableau de lignes de decoup
 // Gere le cas de plusieurs traits : decoupe iterativement
 function splitPolygonByLines(
   polygon: GeoJSON.Feature<GeoJSON.Polygon>,
-  lines: GeoJSON.Feature<GeoJSON.LineString>[]
-): GeoJSON.Feature<GeoJSON.Polygon>[]
+  lines: GeoJSON.Feature<GeoJSON.LineString>[],
+): GeoJSON.Feature<GeoJSON.Polygon>[];
 ```
 
 **Attention** : pour N lignes, il faut decouper iterativement. Chaque ligne est appliquee a chaque sous-polygone existant.
@@ -272,6 +274,7 @@ function splitPolygonByLines(
 #### 2. `stores/edition/edition-slice.tsx` — MODIFICATION
 
 **Changements dans `SplitInfos`** :
+
 ```typescript
 type SplitInfos = {
   splitCandidateId: string | null;
@@ -279,9 +282,9 @@ type SplitInfos = {
   selectedChildIndex: number | null;
   children: SplitChild[];
   // NOUVEAUX CHAMPS :
-  cutLines: CutLine[];               // Lignes de decoupe tracees
-  candidateShape: GeoJSON.Geometry | null;  // Geometrie du batiment a scinder
-  cutStep: 'drawing' | 'done';       // Sous-etape de la phase de decoupe
+  cutLines: CutLine[]; // Lignes de decoupe tracees
+  candidateShape: GeoJSON.Geometry | null; // Geometrie du batiment a scinder
+  cutStep: 'drawing' | 'done'; // Sous-etape de la phase de decoupe
 };
 
 type CutLine = {
@@ -309,6 +312,7 @@ type CutLine = {
 | `setCurrentChildSelected()` | **Simplifier** — ne gere plus le mode `drawing`/`updating` pour les shapes |
 
 **Action `validateCut()`** — logique cle :
+
 ```
 1. Recuperer candidateShape et cutLines depuis le state
 2. Appeler splitPolygonByLines(candidateShape, cutLines)
@@ -321,14 +325,18 @@ type CutLine = {
 Le selector `selectSplitChildrenForAPI` reste identique — les enfants ont toujours une `shape` GeoJSON a convertir en WKT.
 
 Ajouter un **nouveau selector** :
+
 ```typescript
 // Calcule les sous-polygones en temps reel pour l'apercu
 export const selectCutPreview = createSelector(
-  [(state) => state.edition.split.candidateShape, (state) => state.edition.split.cutLines],
+  [
+    (state) => state.edition.split.candidateShape,
+    (state) => state.edition.split.cutLines,
+  ],
   (candidateShape, cutLines) => {
     if (!candidateShape || cutLines.length === 0) return null;
     return splitPolygonByLines(candidateShape, cutLines);
-  }
+  },
 );
 ```
 
@@ -348,13 +356,16 @@ export const selectCutPreview = createSelector(
   - Permettre la selection visuelle d'un enfant par clic
 
 **Gestion de `draw.create` pour le split (nouveau)** :
+
 ```typescript
 if (operation === 'split') {
   // La feature creee est une LineString, pas un Polygon
-  dispatch(Actions.edition.addCutLine({
-    geometry: e.features[0].geometry,
-    featureId: e.features[0].id,
-  }));
+  dispatch(
+    Actions.edition.addCutLine({
+      geometry: e.features[0].geometry,
+      featureId: e.features[0].id,
+    }),
+  );
   // Rester en mode dessin de ligne pour d'autres traits
   drawRef.current.changeMode('draw_line_string');
 }
@@ -369,10 +380,12 @@ Quand le split demarre, ajouter la shape du batiment candidat comme feature non-
 #### 5. `components/contribution/SplitPanel.tsx` — MODIFICATION
 
 **`SplitBuildingInitialStep`** :
+
 - **Supprimer** le select "En combien de batiments souhaitez-vous scinder ?"
 - Apres selection du batiment candidat, passer directement a l'etape de decoupe
 
 **Nouvelle etape : `SplitBuildingCutStep`** (remplace le debut de la boucle ChildInfos) :
+
 ```
 - Instruction : "Tracez des traits de decoupe sur le batiment"
 - Compteur : "X trait(s) trace(s) → Y batiments"
@@ -383,17 +396,20 @@ Quand le split demarre, ajouter la shape du batiment candidat comme feature non-
 ```
 
 **`SplitBuildingChildInfosStep`** :
+
 - **Supprimer** tout ce qui concerne le dessin de shape (`currentChildHasNoShape`, message "Tracez la geometrie...")
 - Les shapes sont deja definies par la decoupe, l'utilisateur ne modifie que statut et adresses
 - Ajouter un indicateur visuel montrant quel sous-polygone correspond a l'enfant selectionne
 
 **`SplitBuildingSummaryStep`** :
+
 - La verification `currentChildHasNoShape` n'est plus necessaire car toutes les shapes sont automatiquement generees
 - Le reste (commentaire, bouton scinder) reste identique
 
 #### 6. `components/contribution/drawStyle.tsx` — MODIFICATION
 
 Ajouter des styles pour :
+
 - Les lignes de decoupe (style visuel distinct : couleur rouge/orange, ligne pleine, epaisseur visible)
 - L'apercu des sous-polygones (couleurs differentes par sous-polygone)
 
@@ -406,6 +422,7 @@ Changement : une fois le candidat selectionne, il faut **recuperer la shape du b
 #### 8. `tests/edition-page.spec.ts` — MODIFICATION
 
 Adapter les tests de scission :
+
 - Remplacer le dessin de 2 polygones par le dessin de 1 ligne de decoupe
 - Adapter l'assertion sur le body API (les shapes seront calculees, pas dessinee manuellement)
 - Ajouter un test pour le cas "ligne qui ne traverse pas le polygone"
@@ -424,6 +441,7 @@ Adapter les tests de scission :
 #### 2. Validation des lignes de decoupe
 
 Une ligne de decoupe doit :
+
 - Traverser le polygone (au moins 2 intersections avec le contour)
 - Ne pas simplement toucher un sommet ou longer un bord
 
@@ -432,21 +450,25 @@ Si la ligne ne coupe pas correctement, afficher un message d'erreur et ne pas l'
 #### 3. Decoupe iterative (plusieurs traits)
 
 Quand l'utilisateur trace plusieurs lignes :
+
 ```
 Polygone initial → Ligne 1 → [PolA, PolB]
 [PolA, PolB] → Ligne 2 → [PolA1, PolA2, PolB] (si Ligne 2 ne coupe que PolA)
 ```
+
 Chaque nouvelle ligne doit etre testee contre tous les sous-polygones existants.
 
 #### 4. Affichage du polygone candidat
 
 Le polygone du batiment candidat doit etre visible pendant le dessin des lignes. Il ne doit **pas** etre editable (pas via Mapbox Draw). Options :
+
 - Ajouter un layer MapLibre dedie avec la geometrie du candidat
 - Ou utiliser le feature state `in_panel` deja existant pour le mettre en surbrillance (deja en place dans `useEditionMapEvents.ts`)
 
 #### 5. Recuperation de la shape du batiment candidat
 
 Actuellement, `setSplitCandidateAndLocation()` ne stocke que l'ID et la localisation. Il faut aussi recuperer la shape complète du batiment. Deux options :
+
 - Ajouter la shape dans l'action `setSplitCandidateAndLocation()` — necessite que la shape soit disponible a ce moment
 - Faire un fetch de la shape via l'API au moment de la selection — plus fiable (la shape dans le tile vectoriel n'est pas forcement precise)
 
@@ -459,6 +481,7 @@ Le selector `selectCutPreview` est un `createSelector` memorise. Le recalcul ne 
 #### 7. Compatibilite avec l'API existante
 
 Le format d'envoi a l'API (`POST /buildings/{id}/split/`) reste identique :
+
 - `created_buildings` avec `status`, `addresses_cle_interop`, `shape` (WKT)
 - La seule difference : les shapes sont calculees cote client au lieu d'etre dessinee manuellement
 

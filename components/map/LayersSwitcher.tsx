@@ -15,6 +15,7 @@ import backgroundPlanIGN from '@/public/images/map/switch-bckg-plan-ign.png';
 import backgroundPlanOSM from '@/public/images/map/switch-bckg-plan-osm.jpg';
 import extraPlots from '@/public/images/map/switch-plots.jpg';
 import extraAddresses from '@/public/images/map/switch-addresses.png';
+import extraValidated from '@/public/images/map/switch-validated.png';
 import extraReports from '@/public/images/map/switch-reports.png';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
@@ -257,6 +258,13 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
                     label="Adresses BAN"
                     onClick={() => handleExtraLayerClick('addresses')}
                     image={extraAddresses}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('validated')}
+                    isActive={mapLayers.extraLayers.includes('validated')}
+                    label="Bâtiments validés"
+                    onClick={() => handleExtraLayerClick('validated')}
+                    image={extraValidated}
                   />
                 </ul>
               </div>
