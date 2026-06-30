@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatRanks } from './summerGames';
+import { formatRanks, userTrophyStatus } from './summerGames';
 
 describe('formatRanks', () => {
   const raw = {
@@ -61,8 +61,6 @@ describe('formatRanks', () => {
     expect(formatRanks({ ...raw, goal: 0 }).shared.percent).toBe(0);
   });
 });
-
-import { userTrophyStatus } from './summerGames';
 
 describe('userTrophyStatus', () => {
   const owned = [

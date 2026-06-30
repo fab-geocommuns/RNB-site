@@ -649,7 +649,10 @@ body .mapSummerScoreInside {
   font-weight: 700;
   font-size: 1.05em;
   margin-bottom: 4px;
-  text-transform: capitalize;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
 }
 
 .badgeCount {
