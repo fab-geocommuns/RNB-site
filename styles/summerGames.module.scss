@@ -4,10 +4,10 @@ $title-color: #f2f4f9;
 
 $title-color-hover: #25589f;
 
-$bckg-color: #e8c022;
+$bckg-color: #4059db;
 $bckg-color-light: #edd15e;
 
-$accent-color: #ff8800;
+$accent-color: #42f19d;
 $accent-color-light: #ffea00;
 
 .seriousShell {
@@ -18,22 +18,70 @@ $accent-color-light: #ffea00;
 
 .shell {
   position: relative;
-  padding: 100px 1rem 70px;
-  background-color: #03731f;
+  padding: 15px;
+  background-color: $bckg-color;
   border-radius: 20px;
+  overflow: hidden;
+}
+
+.shellContent {
+  position: relative;
+  z-index: 1;
+  border: 10px solid rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 60px 1rem 70px;
   @media screen and (max-width: 640px) {
     padding-top: 40px;
     padding-bottom: 40px;
   }
 }
 
+.checkField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.check {
+  position: absolute;
+  // centré sur sa position de grille quelle que soit la taille
+  transform: translate(-50%, -50%);
+  // état initial : coche cachée, révélée au passage du curseur
+  color: #ffffff;
+  opacity: 0;
+  transition:
+    color 0.45s ease,
+    opacity 0.45s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
 .titleblock {
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
+
+  .overTitle {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 0px darken($bckg-color, 0.8);
+    //text-transform: uppercase;
+    //letter-spacing: 0.05em;
+    color: $accent-color;
+    opacity: 1;
+    text-align: center;
+  }
+
   h2 {
     font-size: 4em;
     line-height: 1em;
 
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+    text-shadow: 3px 3px 0px darken($bckg-color, 0.9);
     color: white;
     font-family: SummerGameTitle, sans-serif;
     font-weight: 500;
@@ -508,7 +556,8 @@ body .mapSummerScoreInside {
   font-weight: 500;
 }
 .highlight {
-  color: $accent-color-light;
+  //color: $accent-color-light;
+  color: white;
   font-weight: 900;
 }
 
@@ -534,10 +583,6 @@ body .mapSummerScoreInside {
 }
 
 .small {
-  .shell {
-    padding: 50px 1rem;
-  }
-
   .titleblock {
     margin-bottom: 1rem;
   }
