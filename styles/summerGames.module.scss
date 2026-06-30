@@ -240,7 +240,9 @@ $accent-color-light: #ffea00;
 
 .rankShell {
   padding: 26px;
-  background: rgba(255, 255, 255, 0.1);
+  // Fond plus opaque : couleur perçue #536bdf au-dessus du shell (#4059db),
+  // les coches du fond interactif ne restent que très légèrement visibles.
+  background: rgba(83, 107, 223, 0.92);
   border-radius: 10px;
 
   @media screen and (max-width: 640px) {
