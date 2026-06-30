@@ -73,6 +73,19 @@ export default function SummerGame({
                       la communauté
                     </p>
                   </div>
+
+                  <div className={styles.bar}>
+                    <div
+                      className={styles.progress}
+                      style={{
+                        width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
+                      }}
+                    >
+                      <span className={styles.progressTotal}>
+                        {summerGamesData.shared.percent}%
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {withRankingTable && (

@@ -168,8 +168,8 @@ $accent-color-light: #ffea00;
   background: linear-gradient(
     251deg,
     $accent-color 0%,
-    $accent-color 20%,
-    $accent-color-light 100%
+    $accent-color 40%,
+    lighten($accent-color, 18%) 100%
   );
 
   height: 100%;
