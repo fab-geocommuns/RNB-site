@@ -4,6 +4,7 @@
 import styles from '@/styles/summerGames.module.scss';
 import RankTable from './rankTable';
 import CheckmarkBackground from './checkmarkBackground';
+import BadgesList from './badgesList';
 
 // Utils
 import { useSummerGamesData } from '@/utils/summerGames';
@@ -87,6 +88,8 @@ export default function SummerGame({
                     </div>
                   </div>
                 </div>
+
+                <BadgesList />
 
                 {withRankingTable && (
                   <div className={styles.ranks}>
