@@ -26,6 +26,39 @@ const buildRankingUrl = (path: string) =>
     window.location.origin,
   );
 
+export type Rank = { name: string; count: number; shortName?: string | null };
+export type FormattedRanks = {
+  individual: Rank[];
+  organization: Rank[];
+  department: Rank[];
+  shared: { goal: number; absolute: number; percent: number };
+};
+
+// Met en forme la réponse brute du classement (cf. mock
+// `app/api/mock/editions/ranking/data.ts`) en gardant, pour les organisations,
+// le nom long et le nom court séparés (affichage du nom court + survol).
+export function formatRanks(ranks: any): FormattedRanks {
+  return {
+    individual: ranks.individual.map((r: any[]) => ({
+      name: r[0],
+      count: r[1],
+    })),
+    organization: ranks.organization.map((r: any[]) => {
+      const [name, shortName, count] = r;
+      return { name, shortName: shortName || null, count };
+    }),
+    department: ranks.departement.map((r: any[]) => ({
+      name: `${r[1]} (${r[0]})`,
+      count: r[2],
+    })),
+    shared: {
+      goal: ranks.goal,
+      absolute: ranks.global,
+      percent: ranks.goal ? Math.round((ranks.global / ranks.goal) * 100) : 0,
+    },
+  };
+}
+
 export const useSummerGameUserData = (username: string, updatedAt: number) => {
   const [loading, setLoading] = useState(true);
   const [summerGameUserData, setSummerGameUserData] = useState<any>();
@@ -75,51 +108,7 @@ export const useSummerGamesData = (limit: number) => {
           headers: { 'Content-Type': 'application/json' },
         });
         const ranks = await response.json();
-
-        let formatted = {
-          individual: [],
-          department: [],
-          organization: [],
-          shared: {
-            goal: ranks.goal,
-            absolute: 0,
-            percent: 0,
-          },
-        };
-
-        // individual
-        formatted.individual = ranks.individual.map((rank: any) => {
-          return {
-            name: rank[0],
-            count: rank[1],
-          };
-        });
-
-        // organization : [name, short_name, count]
-        formatted.organization = ranks.organization.map((rank: any) => {
-          const [name, shortName, count] = rank;
-          return {
-            name: shortName ? `${name} (${shortName})` : name,
-            count,
-          };
-        });
-
-        // department
-        formatted.department = ranks.departement.map((rank: any) => {
-          return {
-            name: rank[1] + ' (' + rank[0] + ')',
-            count: rank[2],
-          };
-        });
-
-        // global
-        formatted.shared['absolute'] = ranks.global;
-
-        formatted.shared.percent = Math.round(
-          (ranks.global / formatted.shared.goal) * 100,
-        );
-
-        setSummerGamesData(formatted);
+        setSummerGamesData(formatRanks(ranks));
       } catch (e) {
         console.error(e);
       } finally {
