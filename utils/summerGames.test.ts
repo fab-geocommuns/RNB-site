@@ -61,3 +61,59 @@ describe('formatRanks', () => {
     expect(formatRanks({ ...raw, goal: 0 }).shared.percent).toBe(0);
   });
 });
+
+import { userTrophyStatus } from './summerGames';
+
+describe('userTrophyStatus', () => {
+  const owned = [
+    {
+      trophy: 'validateur',
+      trophy_label: 'validateur',
+      level: 1,
+      level_label: 'apprenti',
+      unlocked_at: 'x',
+    },
+    {
+      trophy: 'validateur',
+      trophy_label: 'validateur',
+      level: 2,
+      level_label: 'maçon',
+      unlocked_at: 'x',
+    },
+    {
+      trophy: 'superv',
+      trophy_label: 'superV',
+      level: 1,
+      level_label: null,
+      unlocked_at: 'x',
+    },
+  ];
+
+  it('returns the highest-level label for an earned trophy', () => {
+    expect(userTrophyStatus(owned, 'validateur')).toEqual({
+      earned: true,
+      levelLabel: 'maçon',
+    });
+  });
+
+  it('marks an earned trophy with no level label (superv) as earned, null label', () => {
+    expect(userTrophyStatus(owned, 'superv')).toEqual({
+      earned: true,
+      levelLabel: null,
+    });
+  });
+
+  it('reports not earned for a trophy the user lacks', () => {
+    expect(userTrophyStatus(owned, 'tour_de_france')).toEqual({
+      earned: false,
+      levelLabel: null,
+    });
+  });
+
+  it('handles undefined input', () => {
+    expect(userTrophyStatus(undefined, 'validateur')).toEqual({
+      earned: false,
+      levelLabel: null,
+    });
+  });
+});

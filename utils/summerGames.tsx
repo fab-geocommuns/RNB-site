@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { Trophy, UserTrophy } from '@/app/api/mock/editions/trophies/data';
 
 // Base des endpoints du jeu de l'été. Par défaut on tape l'API RNB ; si
 // `NEXT_PUBLIC_SUMMER_GAME_API_BASE` est défini (ex. `/api/mock` en dev), on
@@ -123,4 +124,76 @@ export const useSummerGamesData = (limit: number) => {
     summerGamesData,
     loading,
   };
+};
+
+export type TrophyStatus = { earned: boolean; levelLabel: string | null };
+
+// Statut du trophée pour l'utilisateur connecté : gagné ou non, et le label du
+// plus haut niveau atteint (null pour superv qui n'a pas de label de niveau).
+export function userTrophyStatus(
+  userTrophies: UserTrophy[] | undefined,
+  trophyKey: string,
+): TrophyStatus {
+  const owned = (userTrophies ?? []).filter((t) => t.trophy === trophyKey);
+  if (owned.length === 0) return { earned: false, levelLabel: null };
+  const top = owned.reduce((a, b) => (b.level > a.level ? b : a));
+  return { earned: true, levelLabel: top.level_label ?? null };
+}
+
+export const useTrophies = () => {
+  const [loading, setLoading] = useState(true);
+  const [trophies, setTrophies] = useState<Trophy[]>();
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const url = buildRankingUrl('/editions/trophies');
+        const response = await fetch(url, {
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        setTrophies(await response.json());
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
+
+  return { trophies, loading };
+};
+
+export const useUserTrophies = (username?: string | null) => {
+  const [loading, setLoading] = useState(true);
+  const [userTrophies, setUserTrophies] = useState<UserTrophy[]>();
+
+  useEffect(() => {
+    if (!username) {
+      setUserTrophies([]);
+      setLoading(false);
+      return;
+    }
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const url = buildRankingUrl(
+          `/editions/user/${encodeURIComponent(username)}/trophies`,
+        );
+        const response = await fetch(url, {
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        setUserTrophies(await response.json());
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, [username]);
+
+  return { userTrophies, loading };
 };
