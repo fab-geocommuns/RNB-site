@@ -41,7 +41,7 @@ export default function SummerGame({
           <div className={styles.shell}>
             <CheckmarkBackground />
             <div className={styles.shellContent}>
-              <div className={`section__titleblock ${styles.titleblock}`}>
+              <div className={` ${styles.titleblock}`}>
                 {subtitle && (
                   <span className={styles.overTitle}>{subtitle}</span>
                 )}
@@ -62,17 +62,15 @@ export default function SummerGame({
                 </p>
               </div>
 
+              <h3 className={styles.sectionTitle}>Objectifs partagés</h3>
+
               <div className={styles.progressShell}>
                 <div className={styles.barShell}>
                   <div className={styles.legend}>
-                    <span className={styles.legend_subtitle}>
-                      Validations faites
-                    </span>
-                    <br />
-                    <p>
+                    <div>
                       {summerGamesData.shared.absolute} validations faites par
                       la communauté
-                    </p>
+                    </div>
                   </div>
 
                   <div className={styles.bar}>
@@ -89,7 +87,11 @@ export default function SummerGame({
                   </div>
                 </div>
 
+                <h3 className={styles.sectionTitle}>Badges à gagner</h3>
+
                 <BadgesList />
+
+                <h3 className={styles.sectionTitle}>Classement</h3>
 
                 {withRankingTable && (
                   <div className={styles.ranks}>

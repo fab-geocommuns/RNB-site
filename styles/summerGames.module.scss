@@ -209,6 +209,15 @@ $accent-color-light: #ffea00;
   }
 }
 
+.sectionTitle {
+  font-family: SummerGameTitle, sans-serif;
+  text-align: center;
+  color: white;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1rem;
+}
+
 .ranks {
   display: flex;
   width: 98%;

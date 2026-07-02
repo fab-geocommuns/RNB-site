@@ -33,7 +33,6 @@ export default function BadgesList() {
 
   return (
     <div className={styles.badges}>
-      <div className={styles.legend}>Badges à débloquer</div>
       <div className={styles.badgesGrid}>
         {trophies.map((trophy) => {
           const status = userTrophyStatus(userTrophies, trophy.trophy);
