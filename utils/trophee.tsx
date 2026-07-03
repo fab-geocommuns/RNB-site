@@ -22,6 +22,13 @@ export interface LevelData {
   count: string | null;
 }
 
+export interface TrophyDetails {
+  description: string;
+  currentLevel: LevelData | undefined;
+  nextLevel: LevelData | undefined;
+  count: string | null | undefined;
+}
+
 export const getTrophiesData = () => {
   const [loadingTrophies, setLoading] = useState(true);
   const [data, setData] = useState<TrophyData[]>();
@@ -90,4 +97,55 @@ export const getUserTrophiesData = (username: string | undefined) => {
     data,
     loadingUserTrophies,
   };
+};
+
+export const getUserTrophyData = (
+  trophies: TrophyData[],
+  userTrophy: TrophyUserData,
+): TrophyDetails => {
+  const trophyInfos = trophies?.find(
+    (t) => t.trophy_label === userTrophy.trophy_label,
+  );
+
+  const currentLevelIndex = trophyInfos?.levels.findIndex(
+    (l) => l.level === userTrophy.level,
+  );
+
+  const currentLevel =
+    currentLevelIndex !== undefined && currentLevelIndex >= 0
+      ? trophyInfos?.levels[currentLevelIndex]
+      : undefined;
+
+  const nextLevel =
+    currentLevelIndex !== undefined &&
+    currentLevelIndex >= 0 &&
+    trophyInfos?.levels[currentLevelIndex + 1]
+      ? trophyInfos.levels[currentLevelIndex + 1]
+      : undefined;
+
+  const count =
+    currentLevelIndex !== undefined && currentLevelIndex >= 0
+      ? trophyInfos?.levels[currentLevelIndex].count
+      : undefined;
+
+  return {
+    description: trophyInfos?.description || '',
+    currentLevel,
+    nextLevel,
+    count,
+  };
+};
+
+export const getTrophiesToWin = (
+  trophies: TrophyData[] | undefined,
+  userTrophies: TrophyUserData[] | undefined,
+): TrophyData[] => {
+  const safeTrophies = Array.isArray(trophies) ? trophies : [];
+  const safeUserTrophies = Array.isArray(userTrophies) ? userTrophies : [];
+
+  const wonTrophyIds = new Set(
+    safeUserTrophies.map((userTrophy) => userTrophy.trophy),
+  );
+
+  return safeTrophies.filter((trophy) => !wonTrophyIds.has(trophy.trophy));
 };
