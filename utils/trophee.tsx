@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { MedalColor } from '@/components/games/summerGames/Medal';
 
 export interface TrophyUserData {
   trophy: string;
@@ -149,3 +150,13 @@ export const getTrophiesToWin = (
 
   return safeTrophies.filter((trophy) => !wonTrophyIds.has(trophy.trophy));
 };
+
+export function trophyImageUrl(trophy: TrophyUserData): string {
+  return `/images/trophies/${trophy.trophy}.png`;
+}
+
+export function trophyMedalColor(level: number): MedalColor {
+  if (level <= 1) return 'bronze';
+  if (level === 2) return 'silver';
+  return 'gold';
+}

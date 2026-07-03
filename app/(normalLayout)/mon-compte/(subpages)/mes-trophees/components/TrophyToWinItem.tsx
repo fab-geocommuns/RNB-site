@@ -12,7 +12,7 @@ export default function TrophyToWinItem({ trophy }: TrophyToWinItemProps) {
     <li className={`${styles.item} ${styles.itemLocked}`}>
       <div className={styles.imageContainer}>
         <img
-          src={`/images/badges/${trophy.trophy}.png`}
+          src={`/images/trophies/${trophy.trophy}.png`}
           alt={trophy.trophy_label}
         />
       </div>
@@ -26,7 +26,7 @@ export default function TrophyToWinItem({ trophy }: TrophyToWinItemProps) {
           </p>
         )}
         <p className={styles.trophyDescription}>
-          {`Remporté par ${firstLevel.count} personnes`}
+          {`Remporté par ${firstLevel.count} ${Number(firstLevel.count) > 1 ? 'personnes' : 'personne'}`}
         </p>
       </div>
     </li>
