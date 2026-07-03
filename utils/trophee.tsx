@@ -37,10 +37,7 @@ export const getTrophiesData = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        // faire appel à la bonne variable de process.env
-        const url = new URL(
-          `https://staging.rnb-api.beta.gouv.fr/api/alpha/trophies/`,
-        );
+        const url = new URL(process.env.NEXT_PUBLIC_API_BASE + `/trophies/`);
 
         const response = await fetch(url, {
           cache: 'no-cache',
@@ -70,11 +67,8 @@ export const getUserTrophiesData = (username: string | undefined) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        // faire appel à la bonne variable de process.env
         const url = new URL(
-          `https://staging.rnb-api.beta.gouv.fr/api/alpha/user/` +
-            username +
-            `/trophies/`,
+          process.env.NEXT_PUBLIC_API_BASE + `/user/${username}/trophies/`,
         );
 
         const response = await fetch(url, {
@@ -137,6 +131,21 @@ export const getUserTrophyData = (
   };
 };
 
+export const getUserTrophieDetails = (trophy: TrophyData): TrophyDetails => {
+  const firstLevel = trophy.levels[0];
+  const description = trophy.description;
+  const currentLevel = firstLevel;
+  const nextLevel = undefined;
+  const count = firstLevel.count;
+
+  return {
+    description: description || '',
+    currentLevel,
+    nextLevel,
+    count,
+  };
+};
+
 export const getTrophiesToWin = (
   trophies: TrophyData[] | undefined,
   userTrophies: TrophyUserData[] | undefined,
@@ -151,7 +160,7 @@ export const getTrophiesToWin = (
   return safeTrophies.filter((trophy) => !wonTrophyIds.has(trophy.trophy));
 };
 
-export function trophyImageUrl(trophy: TrophyUserData): string {
+export function trophyImageUrl(trophy: TrophyUserData | TrophyData): string {
   return `/images/trophies/${trophy.trophy}.png`;
 }
 

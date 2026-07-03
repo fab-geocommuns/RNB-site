@@ -3,37 +3,38 @@ import {
   trophyImageUrl,
   trophyMedalColor,
   TrophyUserData,
+  TrophyData,
 } from '@/utils/trophee';
 import styles from '@/styles/mes-trophees.module.scss';
 import Medal from '@/components/games/summerGames/Medal';
 
 interface TrophyItemProps {
-  userTrophy: TrophyUserData;
+  trophy: TrophyUserData | TrophyData;
   details: TrophyDetails;
 }
 
-export default function TrophyItem({ userTrophy, details }: TrophyItemProps) {
+export default function TrophyItem({ trophy, details }: TrophyItemProps) {
   const { description, currentLevel, nextLevel, count } = details;
 
   return (
     <li className={styles.item}>
       <div className={styles.imageContainer}>
-        {userTrophy.trophy === 'superv' ? (
+        {trophy.trophy === 'superv' || ('levels' in trophy && trophy.levels) ? (
           <img
-            src={`/images/trophies/${userTrophy.trophy}.png`}
-            alt={userTrophy.trophy_label}
+            src={`/images/trophies/${trophy.trophy}.png`}
+            alt={trophy.trophy_label}
           />
         ) : (
           <Medal
             color={trophyMedalColor(Number(currentLevel?.level) ?? 0)}
-            image={trophyImageUrl(userTrophy)}
+            image={trophyImageUrl(trophy)}
             size={120}
-            alt={userTrophy.trophy_label}
+            alt={trophy.trophy_label}
           />
         )}
       </div>
       <div className={styles.textContainer}>
-        <span className={styles.trophyTitle}>{userTrophy.trophy_label}</span>
+        <span className={styles.trophyTitle}>{trophy.trophy_label}</span>
         <p className={styles.trophyDescription}>{description}</p>
         {currentLevel?.level_label && (
           <p className={styles.trophyDescription}>

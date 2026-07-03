@@ -9,9 +9,9 @@ import {
   getUserTrophiesData,
   getUserTrophyData,
   getTrophiesToWin,
+  getUserTrophieDetails,
 } from '@/utils/trophee';
 import TrophyItem from './components/TrophyItem';
-import TrophyToWinItem from './components/TrophyToWinItem';
 
 export default function MesFevesPage() {
   const { data: session } = useSession();
@@ -47,7 +47,7 @@ export default function MesFevesPage() {
                 (userTrophy: TrophyUserData) => (
                   <TrophyItem
                     key={userTrophy.trophy}
-                    userTrophy={userTrophy}
+                    trophy={userTrophy}
                     details={getUserTrophyData(trophies ?? [], userTrophy)}
                   />
                 ),
@@ -80,7 +80,11 @@ export default function MesFevesPage() {
             <h2 className="block__title">Trophées à gagner</h2>
             <ul className={styles.grid}>
               {trophiesToWin.map((trophy) => (
-                <TrophyToWinItem key={trophy.trophy} trophy={trophy} />
+                <TrophyItem
+                  key={trophy.trophy}
+                  trophy={trophy}
+                  details={getUserTrophieDetails(trophy)}
+                />
               ))}
             </ul>
           </div>
