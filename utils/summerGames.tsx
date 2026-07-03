@@ -1,31 +1,47 @@
 import { useEffect, useState } from 'react';
-import type { Trophy, UserTrophy } from '@/app/api/mock/editions/trophies/data';
 
-// Base des endpoints du jeu de l'été. Par défaut on tape l'API RNB ; si
-// `NEXT_PUBLIC_SUMMER_GAME_API_BASE` est défini (ex. `/api/mock` en dev), on
-// tape les route handlers locaux qui mockent `/editions/ranking/`. Pour
-// revenir à la vraie API, il suffit de retirer cette variable d'environnement.
-const SUMMER_GAME_API_BASE =
-  process.env.NEXT_PUBLIC_SUMMER_GAME_API_BASE ||
-  process.env.NEXT_PUBLIC_API_BASE;
+// Base de l'API RNB (cf. `NEXT_PUBLIC_API_BASE`). Les endpoints du jeu de l'été
+// sont désormais servis par le vrai backend (PR fab-geocommuns/RNB-coeur#947) :
+//  - `GET /validation/ranking/`          -> classement (individuel/orga/dépt)
+//  - `GET /trophies/`                    -> liste des trophées + gagnants
+//  - `GET /user/<username>/trophies/`    -> trophées gagnés par un utilisateur
+//  - `GET /editions/ranking/<username>/` -> score & rang d'un utilisateur
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
-// Base relative (`/api/...`) => route handlers mock locaux ; base absolue
-// (`https://...`) => vraie API.
-const isRelativeBase = SUMMER_GAME_API_BASE?.startsWith('/');
+// Objectif partagé de la barre de progression. Le backend ne renvoie pas de
+// `goal` : on le fixe côté front (valeur produit, ajustable ici).
+export const SUMMER_GAME_GOAL = 5000;
 
-// Construit l'URL de classement à partir d'un chemin SANS slash final, p.ex.
-// `/editions/ranking` ou `/editions/ranking/<username>`.
-// - Vraie API (base absolue) : on rajoute le slash final attendu par le backend.
-// - Mock local (base relative) : on n'en met pas. Un slash final déclencherait
-//   une redirection 308 de Next, que la CSP `upgrade-insecure-requests` casse
-//   en dev (http -> https -> ERR_SSL_PROTOCOL_ERROR). Les route handlers sont
-//   servis à l'URL exacte sans slash.
-// `window.location.origin` sert de base pour résoudre une base relative.
-const buildRankingUrl = (path: string) =>
-  new URL(
-    `${SUMMER_GAME_API_BASE}${path}${isRelativeBase ? '' : '/'}`,
-    window.location.origin,
-  );
+// Construit l'URL d'un endpoint à partir d'un chemin AVEC son slash final
+// (ex. `/trophies/`). `window.location.origin` n'est qu'une base de repli :
+// `API_BASE` étant absolue, elle est ignorée.
+const buildUrl = (path: string) =>
+  new URL(`${API_BASE}${path}`, window.location.origin);
+
+// Types des trophées, alignés sur les endpoints réels `/trophies/` et
+// `/user/<username>/trophies/`.
+export type TrophyLevel = {
+  level: number;
+  level_label: string | null;
+  condition?: string;
+  count: number;
+};
+
+export type Trophy = {
+  trophy: string;
+  trophy_label: string;
+  description: string;
+  count: number;
+  levels: TrophyLevel[];
+};
+
+export type UserTrophy = {
+  trophy: string;
+  trophy_label: string;
+  level: number;
+  level_label: string | null;
+  unlocked_at: string;
+};
 
 export type Rank = { name: string; count: number; shortName?: string | null };
 export type FormattedRanks = {
@@ -35,27 +51,32 @@ export type FormattedRanks = {
   shared: { goal: number; absolute: number; percent: number };
 };
 
-// Met en forme la réponse brute du classement (cf. mock
-// `app/api/mock/editions/ranking/data.ts`) en gardant, pour les organisations,
-// le nom long et le nom court séparés (affichage du nom court + survol).
+// Met en forme la réponse brute de `GET /validation/ranking/`. Le backend
+// renvoie des objets `{ username|name|code, rank }` où `rank` est en fait le
+// SCORE (nombre de validations). Pour les organisations on garde le nom long et
+// le nom court séparés (affichage du nom court + survol). L'objectif `goal`
+// n'est pas fourni par l'API : on utilise la constante front `SUMMER_GAME_GOAL`.
 export function formatRanks(ranks: any): FormattedRanks {
   return {
-    individual: ranks.individual.map((r: any[]) => ({
-      name: r[0],
-      count: r[1],
+    individual: (ranks.individual ?? []).map((r: any) => ({
+      name: r.username,
+      count: r.rank,
     })),
-    organization: ranks.organization.map((r: any[]) => {
-      const [name, shortName, count] = r;
-      return { name, shortName: shortName || null, count };
-    }),
-    department: ranks.departement.map((r: any[]) => ({
-      name: `${r[1]} (${r[0]})`,
-      count: r[2],
+    organization: (ranks.organization ?? []).map((r: any) => ({
+      name: r.name,
+      shortName: r.short_name || null,
+      count: r.rank,
+    })),
+    department: (ranks.departement ?? []).map((r: any) => ({
+      name: `${r.name} (${r.code})`,
+      count: r.rank,
     })),
     shared: {
-      goal: ranks.goal,
+      goal: SUMMER_GAME_GOAL,
       absolute: ranks.global,
-      percent: ranks.goal ? Math.round((ranks.global / ranks.goal) * 100) : 0,
+      percent: SUMMER_GAME_GOAL
+        ? Math.round((ranks.global / SUMMER_GAME_GOAL) * 100)
+        : 0,
     },
   };
 }
@@ -67,8 +88,8 @@ export const useSummerGameUserData = (username: string, updatedAt: number) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = buildRankingUrl(
-          `/editions/ranking/${encodeURIComponent(username)}`,
+        const url = buildUrl(
+          `/editions/ranking/${encodeURIComponent(username)}/`,
         );
 
         const response = await fetch(url, {
@@ -101,7 +122,7 @@ export const useSummerGamesData = (limit: number) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = buildRankingUrl('/editions/ranking');
+        const url = buildUrl('/validation/ranking/');
         url.searchParams.append('max_rank', limit.toString());
 
         const response = await fetch(url, {
@@ -147,7 +168,7 @@ export const useTrophies = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = buildRankingUrl('/editions/trophies');
+        const url = buildUrl('/trophies/');
         const response = await fetch(url, {
           cache: 'no-cache',
           headers: { 'Content-Type': 'application/json' },
@@ -178,9 +199,7 @@ export const useUserTrophies = (username?: string | null) => {
     const getData = async () => {
       setLoading(true);
       try {
-        const url = buildRankingUrl(
-          `/editions/user/${encodeURIComponent(username)}/trophies`,
-        );
+        const url = buildUrl(`/user/${encodeURIComponent(username)}/trophies/`);
         const response = await fetch(url, {
           cache: 'no-cache',
           headers: { 'Content-Type': 'application/json' },

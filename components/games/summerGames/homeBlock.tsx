@@ -62,7 +62,10 @@ export default function SummerGame({
                 </p>
               </div>
 
-              <h3 className={styles.sectionTitle}>Objectifs partagés</h3>
+              <h3 className={styles.sectionTitle}>
+                Objectif : {summerGamesData.shared.goal.toLocaleString('fr-FR')}{' '}
+                validations
+              </h3>
 
               <div className={styles.progressShell}>
                 <div className={styles.barShell}>
@@ -79,11 +82,7 @@ export default function SummerGame({
                       style={{
                         width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
                       }}
-                    >
-                      <span className={styles.progressTotal}>
-                        {summerGamesData.shared.percent}%
-                      </span>
-                    </div>
+                    />
                   </div>
                 </div>
 

@@ -1,20 +1,13 @@
 'use client';
 
 import styles from '@/styles/summerGames.module.scss';
+import Medal from './Medal';
 import {
   useTrophies,
   useUserTrophies,
   userTrophyStatus,
 } from '@/utils/summerGames';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
-
-// Placeholder en attendant les vraies images : une pastille emoji par trophée.
-const TROPHY_EMOJI: Record<string, string> = {
-  validateur: '🏗️',
-  course_de_fond: '🏃',
-  tour_de_france: '🚴',
-  superv: '🏆',
-};
 
 const winnersLabel = (count: number) =>
   count <= 0
@@ -39,7 +32,12 @@ export default function BadgesList() {
           return (
             <div key={trophy.trophy} className={styles.badge}>
               <div className={styles.badgeIcon} aria-hidden="true">
-                {TROPHY_EMOJI[trophy.trophy] ?? '🏅'}
+                <Medal
+                  color="neutral"
+                  image={`/images/trophies/${trophy.trophy}.png`}
+                  size={80}
+                  alt=""
+                />
               </div>
               <div className={styles.badgeName}>{trophy.trophy_label}</div>
               <div className={styles.badgeCount}>
