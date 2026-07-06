@@ -158,8 +158,6 @@ export interface LevelData {
  */
 export interface TrophyDetails {
   description: string;
-  currentLevel: LevelData | undefined;
-  nextLevel: LevelData | undefined;
   levels: LevelData[]; // paliers du catalogue (vide si trophée inconnu)
   userLevel: number; // palier atteint par l'utilisateur (0 si non gagné)
   count: number | null | undefined;
@@ -232,7 +230,7 @@ export const getUserTrophiesData = (username: string | null | undefined) => {
 
 /**
  * Croise un trophée gagné par l'utilisateur avec le catalogue pour en déduire
- * la description, le palier courant, le palier suivant et le nombre de gagnants.
+ * la description, les paliers du catalogue et le nombre de gagnants.
  */
 export const getUserTrophyData = (
   trophies: TrophyData[],
@@ -240,26 +238,8 @@ export const getUserTrophyData = (
 ): TrophyDetails => {
   const trophyInfos = trophies?.find((t) => t.trophy === userTrophy.trophy);
 
-  const currentLevelIndex = trophyInfos?.levels.findIndex(
-    (l) => l.level === userTrophy.level,
-  );
-
-  const currentLevel =
-    currentLevelIndex !== undefined && currentLevelIndex >= 0
-      ? trophyInfos?.levels[currentLevelIndex]
-      : undefined;
-
-  const nextLevel =
-    currentLevelIndex !== undefined &&
-    currentLevelIndex >= 0 &&
-    trophyInfos?.levels[currentLevelIndex + 1]
-      ? trophyInfos.levels[currentLevelIndex + 1]
-      : undefined;
-
   return {
     description: trophyInfos?.description || '',
-    currentLevel,
-    nextLevel,
     levels: trophyInfos?.levels ?? [],
     userLevel: userTrophy.level,
     count: trophyInfos?.count,
@@ -267,14 +247,11 @@ export const getUserTrophyData = (
 };
 
 /**
- * Détails d'affichage d'un trophée du catalogue non encore gagné (on se base
- * sur son premier palier).
+ * Détails d'affichage d'un trophée du catalogue non encore gagné.
  */
 export const getUserTrophieDetails = (trophy: TrophyData): TrophyDetails => {
   return {
     description: trophy.description || '',
-    currentLevel: trophy.levels[0],
-    nextLevel: undefined,
     levels: trophy.levels,
     userLevel: 0,
     count: trophy.count,

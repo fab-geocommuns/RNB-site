@@ -75,7 +75,7 @@ export default function MesFevesPage() {
           </div>
         </div>
 
-        <div className="fr-grid-row">
+        <div className="fr-grid-row fr-mt-12v">
           <div className="fr-col-12 fr-col-md-12">
             <h2 className="block__title">Trophées à gagner</h2>
             <ul className={styles.grid}>

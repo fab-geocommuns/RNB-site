@@ -61,7 +61,12 @@
 .trophyTitle {
   font-weight: bold;
   font-size: 1.1rem;
-  text-transform: capitalize;
+  // `inline-block` requis pour que `::first-letter` s'applique.
+  display: inline-block;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
 }
 
 .trophyDescription {
@@ -71,8 +76,18 @@
   line-height: 1.3;
 }
 
-.levelsRow {
+.levelsList {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
   display: flex;
-  gap: 12px;
-  margin-top: 8px;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.4;
+}
+
+.levelName {
+  font-weight: 600;
 }
