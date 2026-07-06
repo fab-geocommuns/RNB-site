@@ -71,8 +71,8 @@ export default function SummerGame({
                 <div className={styles.barShell}>
                   <div className={styles.legend}>
                     <div>
-                      {summerGamesData.shared.absolute} validations faites par
-                      la communauté
+                      {summerGamesData.shared.absolute.toLocaleString('fr-FR')}{' '}
+                      validations réalisées par la communauté
                     </div>
                   </div>
 
