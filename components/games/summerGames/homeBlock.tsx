@@ -3,6 +3,8 @@
 // Styles
 import styles from '@/styles/summerGames.module.scss';
 import RankTable from './rankTable';
+import CheckmarkBackground from './checkmarkBackground';
+import BadgesList from './badgesList';
 
 // Utils
 import { useSummerGamesData } from '@/utils/summerGames';
@@ -12,6 +14,7 @@ export const revalidate = 10;
 
 export default function SummerGame({
   title,
+  subtitle = null,
   limit,
   showRankingLink,
   withRankingTable = false,
@@ -19,6 +22,7 @@ export default function SummerGame({
   size = 'small',
 }: {
   title: React.ReactNode | string;
+  subtitle?: React.ReactNode | string | null;
   limit: number;
   showRankingLink?: boolean;
   withRankingTable?: boolean;
@@ -26,8 +30,6 @@ export default function SummerGame({
   size?: 'small' | 'large';
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
-  const displayCountInsteadOfScore =
-    process.env.NEXT_PUBLIC_DISPLAY_COUNT_INSTEAD_OF_SCORE === 'true';
 
   return (
     !loading &&
@@ -37,95 +39,107 @@ export default function SummerGame({
           className={`section ${size === 'small' && styles.small} ${styles.seriousShell}`}
         >
           <div className={styles.shell}>
-            <div className={`section__titleblock ${styles.titleblock}`}>
-              <h2 className="section__title">{title}</h2>
-              {withEndFlag && (
-                <div className={styles.endFlagShell}>
-                  <span className={styles.endFlag}>Terminée</span>
-                </div>
-              )}
-            </div>
-            <div className={`section__subtitle ${styles.instruction}`}>
-              <p className={styles.highlight}>
-                Bonne nouvelle : face à l&apos;engouement pour l&apos;édition
-                collaborative et à la qualité de vos contributions, nous
-                laissons les outils d&apos;éditions ouverts à la communauté
-                durant les travaux du{' '}
-                <a
-                  href="https://cnig.gouv.fr/gt-bati-a25939.html"
-                  target="_blank"
-                >
-                  GT Bâti CNIG
-                </a>
-                .
-              </p>
-            </div>
+            <CheckmarkBackground />
+            <div className={styles.shellContent}>
+              <div className={` ${styles.titleblock}`}>
+                {subtitle && (
+                  <span className={styles.overTitle}>{subtitle}</span>
+                )}
+                <h2 className="section__title">{title}</h2>
 
-            <div className={styles.progressShell}>
-              <div className={styles.barShell}>
-                <div className={styles.legend}>
-                  <span className={styles.legend_subtitle}>
-                    {displayCountInsteadOfScore
-                      ? 'Éditions dans le RNB'
-                      : 'Score global'}
-                  </span>
-                  <br />
-                  <p>
-                    {summerGamesData.shared.absolute}{' '}
-                    {displayCountInsteadOfScore
-                      ? 'éditions réalisées par la communauté'
-                      : 'points'}
-                  </p>
-                </div>
+                {withEndFlag && (
+                  <div className={styles.endFlagShell}>
+                    <span className={styles.endFlag}>Terminée</span>
+                  </div>
+                )}
+              </div>
+              <div className={`section__subtitle ${styles.instruction}`}>
+                <p className={styles.highlight}>
+                  Participez à la validation des bâtiments du RNB. Inspectez les
+                  bâtiments de votre parc immobilier, de votre voisinage et des
+                  territoires que vous connaissez. Validez les bâtiments
+                  corrects et faites monter le score global.
+                </p>
               </div>
 
-              {withRankingTable && (
-                <div className={styles.ranks}>
-                  <div className={styles.ranksTable}>
-                    <RankTable
-                      title="Classement des départements"
-                      ranks={summerGamesData.department}
-                    />
+              <h3 className={styles.sectionTitle}>
+                Objectif : {summerGamesData.shared.goal.toLocaleString('fr-FR')}{' '}
+                validations
+              </h3>
+
+              <div className={styles.progressShell}>
+                <div className={styles.barShell}>
+                  <div className={styles.legend}>
+                    <div>
+                      {summerGamesData.shared.absolute} validations faites par
+                      la communauté
+                    </div>
                   </div>
 
-                  <div className={styles.ranksTable}>
-                    <RankTable
-                      title="Classement des villes"
-                      ranks={summerGamesData.city}
-                    />
-                  </div>
-
-                  <div className={styles.ranksTable}>
-                    <RankTable
-                      title="Classement des participants"
-                      ranks={summerGamesData.individual}
+                  <div className={styles.bar}>
+                    <div
+                      className={styles.progress}
+                      style={{
+                        width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
+                      }}
                     />
                   </div>
                 </div>
-              )}
-            </div>
 
-            <div className={styles.buttonsShell}>
-              {showRankingLink && (
+                <h3 className={styles.sectionTitle}>Badges à gagner</h3>
+
+                <BadgesList />
+
+                <h3 className={styles.sectionTitle}>Classement</h3>
+
+                {withRankingTable && (
+                  <div className={styles.ranks}>
+                    <div className={styles.ranksTable}>
+                      <RankTable
+                        title="Classement des départements"
+                        ranks={summerGamesData.department}
+                      />
+                    </div>
+
+                    <div className={styles.ranksTable}>
+                      <RankTable
+                        title="Classement des organisations"
+                        ranks={summerGamesData.organization}
+                      />
+                    </div>
+
+                    <div className={styles.ranksTable}>
+                      <RankTable
+                        title="Classement des participants"
+                        ranks={summerGamesData.individual}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.buttonsShell}>
+                {showRankingLink && (
+                  <Link
+                    href="/classement"
+                    className={`${styles.btn} ${styles.btnRank}`}
+                  >
+                    Voir le classement
+                  </Link>
+                )}
                 <Link
-                  href="/classement"
-                  className={`${styles.btn} ${styles.btnRank}`}
+                  href="/edition"
+                  className={`${styles.btn} ${styles.btn_primary}`}
                 >
-                  Voir le classement
+                  Participer
                 </Link>
-              )}
-              <Link
-                href="/edition"
-                className={`${styles.btn} ${styles.btn_primary}`}
-              >
-                Participer
-              </Link>
-              <Link
-                href="/blog/le-rnb-souvre-a-ledition-collaborative"
-                className={`${styles.btn}`}
-              >
-                En savoir plus
-              </Link>
+                <Link
+                  href="/blog/le-rnb-souvre-a-ledition-collaborative"
+                  className={`${styles.btn}`}
+                >
+                  En savoir plus TODO
+                </Link>
+              </div>
             </div>
           </div>
         </div>

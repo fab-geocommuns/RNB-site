@@ -4,10 +4,10 @@ $title-color: #f2f4f9;
 
 $title-color-hover: #25589f;
 
-$bckg-color: #e8c022;
+$bckg-color: #4059db;
 $bckg-color-light: #edd15e;
 
-$accent-color: #ff8800;
+$accent-color: #42f19d;
 $accent-color-light: #ffea00;
 
 .seriousShell {
@@ -18,23 +18,70 @@ $accent-color-light: #ffea00;
 
 .shell {
   position: relative;
-  padding: 100px 1rem 70px;
-  background-image: url('/images/summerGames/summergame2025.png');
-  background-size: cover;
+  padding: 15px;
+  background-color: $bckg-color;
   border-radius: 20px;
+  overflow: hidden;
+}
+
+.shellContent {
+  position: relative;
+  z-index: 1;
+  border: 10px solid rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 60px 1rem 70px;
   @media screen and (max-width: 640px) {
     padding-top: 40px;
     padding-bottom: 40px;
   }
 }
 
+.checkField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.check {
+  position: absolute;
+  // centré sur sa position de grille quelle que soit la taille
+  transform: translate(-50%, -50%);
+  // état initial : coche cachée, révélée au passage du curseur
+  color: #ffffff;
+  opacity: 0;
+  transition:
+    color 0.45s ease,
+    opacity 0.45s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
 .titleblock {
-  margin-bottom: 4rem;
+  margin-bottom: 8rem;
+
+  .overTitle {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 0px darken($bckg-color, 0.8);
+    //text-transform: uppercase;
+    //letter-spacing: 0.05em;
+    color: $accent-color;
+    opacity: 1;
+    text-align: center;
+  }
+
   h2 {
     font-size: 4em;
     line-height: 1em;
 
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+    text-shadow: 3px 3px 0px darken($bckg-color, 0.9);
     color: white;
     font-family: SummerGameTitle, sans-serif;
     font-weight: 500;
@@ -121,8 +168,8 @@ $accent-color-light: #ffea00;
   background: linear-gradient(
     251deg,
     $accent-color 0%,
-    $accent-color 20%,
-    $accent-color-light 100%
+    $accent-color 40%,
+    lighten($accent-color, 18%) 100%
   );
 
   height: 100%;
@@ -162,6 +209,15 @@ $accent-color-light: #ffea00;
   }
 }
 
+.sectionTitle {
+  font-family: SummerGameTitle, sans-serif;
+  text-align: center;
+  color: white;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1rem;
+}
+
 .ranks {
   display: flex;
   width: 98%;
@@ -193,7 +249,9 @@ $accent-color-light: #ffea00;
 
 .rankShell {
   padding: 26px;
-  background: rgba(255, 255, 255, 0.1);
+  // Fond plus opaque : couleur perçue #536bdf au-dessus du shell (#4059db),
+  // les coches du fond interactif ne restent que très légèrement visibles.
+  background: rgba(83, 107, 223, 0.92);
   border-radius: 10px;
 
   @media screen and (max-width: 640px) {
@@ -509,7 +567,8 @@ body .mapSummerScoreInside {
   font-weight: 500;
 }
 .highlight {
-  color: $accent-color-light;
+  //color: $accent-color-light;
+  color: white;
   font-weight: 900;
 }
 
@@ -535,12 +594,8 @@ body .mapSummerScoreInside {
 }
 
 .small {
-  .shell {
-    padding: 50px 1rem;
-  }
-
   .titleblock {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 
   .instruction {
@@ -554,4 +609,80 @@ body .mapSummerScoreInside {
   .buttonsShell {
     margin-top: 30px;
   }
+}
+
+.badges {
+  width: 98%;
+  margin: 0 auto 3.5rem auto;
+  color: white;
+
+  .legend {
+    text-align: center;
+    margin-bottom: 1.2rem;
+  }
+}
+
+.badgesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.badge {
+  position: relative;
+  flex: 1 1 200px;
+  max-width: 260px;
+  padding: 20px 18px;
+  background: rgba(83, 107, 223, 0.92);
+  border-radius: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badgeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.badgeName {
+  font-weight: 700;
+  font-size: 1.05em;
+  margin-bottom: 4px;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.badgeCount {
+  font-size: 0.8em;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+
+.badgeDesc {
+  font-size: 0.85em;
+  line-height: 1.3em;
+}
+
+.badgeEarned {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 1000px;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: darken($accent-color, 80%);
+  background: $accent-color;
+}
+
+.badgeCheck {
+  font-weight: 900;
 }
