@@ -1,17 +1,15 @@
 'use client';
 
 import styles from '@/styles/summerGames.module.scss';
+import Link from 'next/link';
 import Medal from './Medal';
 import { userTrophyStatus } from '@/utils/summerGames';
-import { getTrophiesData, getUserTrophiesData } from '@/utils/trophies';
+import {
+  getTrophiesData,
+  getUserTrophiesData,
+  wonByLabel,
+} from '@/utils/trophies';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
-
-const winnersLabel = (count: number) =>
-  count <= 0
-    ? "Personne ne l'a encore gagné"
-    : count === 1
-      ? "1 personne l'a gagné"
-      : `${count.toLocaleString('fr-FR')} personnes l'ont gagné`;
 
 export default function BadgesList() {
   const { data: trophies, loadingTrophies } = getTrophiesData();
@@ -38,7 +36,7 @@ export default function BadgesList() {
               </div>
               <div className={styles.badgeName}>{trophy.trophy_label}</div>
               <div className={styles.badgeCount}>
-                {winnersLabel(trophy.count)}
+                {wonByLabel(trophy.count)}
               </div>
               <div className={styles.badgeDesc}>{trophy.description}</div>
               {status.earned && (
@@ -53,6 +51,16 @@ export default function BadgesList() {
           );
         })}
       </div>
+      {isAuthenticated && (
+        <div className={styles.allTrophiesLinkShell}>
+          <Link
+            href="/mon-compte/mes-trophees"
+            className={styles.allTrophiesLink}
+          >
+            Voir tous les trophées
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

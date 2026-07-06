@@ -686,3 +686,17 @@ body .mapSummerScoreInside {
 .badgeCheck {
   font-weight: 900;
 }
+
+.allTrophiesLinkShell {
+  text-align: center;
+  margin-top: 1.2rem;
+}
+
+.allTrophiesLink {
+  color: white;
+  font-size: 0.9em;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

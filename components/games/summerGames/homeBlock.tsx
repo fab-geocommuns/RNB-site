@@ -86,7 +86,7 @@ export default function SummerGame({
                   </div>
                 </div>
 
-                <h3 className={styles.sectionTitle}>Badges à gagner</h3>
+                <h3 className={styles.sectionTitle}>Trophées à gagner</h3>
 
                 <BadgesList />
 
