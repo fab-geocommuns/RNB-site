@@ -18,7 +18,7 @@ export interface Trophy {
   trophy: string; // identifiant stable du type (ex: "validateur")
   trophy_label: string; // libellé d'affichage du trophée
   level: number; // palier atteint
-  level_label: string; // libellé du palier (ex: "apprenti")
+  level_label: string | null; // libellé du palier (ex: "apprenti"), null pour superv
   unlocked_at?: string; // date ISO de déblocage du palier courant
 }
 
@@ -119,16 +119,16 @@ export async function fetchUserTrophiesSafe(
 export interface TrophyData {
   trophy: string;
   trophy_label: string;
-  description: string | null;
-  count: string | null;
+  description: string;
+  count: number; // nombre de personnes ayant gagné ce trophée
   levels: LevelData[];
 }
 
 export interface LevelData {
   level: number;
-  level_label: string;
-  condition: string | null;
-  count: string | null;
+  level_label: string | null;
+  condition?: string | null;
+  count: number; // nombre de personnes ayant atteint ce palier
 }
 
 /**
@@ -138,7 +138,7 @@ export interface TrophyDetails {
   description: string;
   currentLevel: LevelData | undefined;
   nextLevel: LevelData | undefined;
-  count: string | null | undefined;
+  count: number | null | undefined;
 }
 
 /**
@@ -178,7 +178,7 @@ export const getTrophiesData = () => {
  * Hook : trophées gagnés par un utilisateur (`/user/<username>/trophies/`).
  * Réutilise `fetchUserTrophies` pour ne pas dupliquer la logique de requête.
  */
-export const getUserTrophiesData = (username: string | undefined) => {
+export const getUserTrophiesData = (username: string | null | undefined) => {
   const [loadingUserTrophies, setLoading] = useState(true);
   const [data, setData] = useState<Trophy[]>();
 

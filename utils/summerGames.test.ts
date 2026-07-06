@@ -1,20 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { formatRanks, userTrophyStatus } from './summerGames';
+import { SUMMER_GAME_GOAL, formatRanks, userTrophyStatus } from './summerGames';
 
 describe('formatRanks', () => {
+  // Format objet du backend réel (PR fab-geocommuns/RNB-coeur#947) : chaque
+  // entrée est un objet et `rank` porte en fait le SCORE (nb de validations).
   const raw = {
-    goal: 50000,
     global: 12345,
-    individual: [['jdupont', 1320]],
+    individual: [{ username: 'jdupont', rank: 1320 }],
     organization: [
-      [
-        "Institut national de l'information géographique et forestière",
-        'IGN',
-        3120,
-      ],
-      ['Etalab', null, 980],
+      {
+        name: "Institut national de l'information géographique et forestière",
+        short_name: 'IGN',
+        rank: 3120,
+      },
+      // `short_name` absent -> shortName doit valoir null
+      { name: 'Etalab', rank: 980 },
     ],
-    departement: [['35', 'Ille-et-Vilaine', 2980]],
+    departement: [{ name: 'Ille-et-Vilaine', code: '35', rank: 2980 }],
   };
 
   it('keeps organization name and shortName separate', () => {
@@ -49,16 +51,12 @@ describe('formatRanks', () => {
     });
   });
 
-  it('computes shared goal/absolute/percent', () => {
+  it('computes shared goal/absolute/percent from SUMMER_GAME_GOAL', () => {
     expect(formatRanks(raw).shared).toEqual({
-      goal: 50000,
+      goal: SUMMER_GAME_GOAL,
       absolute: 12345,
-      percent: 25,
+      percent: Math.round((12345 / SUMMER_GAME_GOAL) * 100),
     });
-  });
-
-  it('guards percent against a zero goal', () => {
-    expect(formatRanks({ ...raw, goal: 0 }).shared.percent).toBe(0);
   });
 });
 

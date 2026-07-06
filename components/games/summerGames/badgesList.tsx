@@ -2,11 +2,8 @@
 
 import styles from '@/styles/summerGames.module.scss';
 import Medal from './Medal';
-import {
-  useTrophies,
-  useUserTrophies,
-  userTrophyStatus,
-} from '@/utils/summerGames';
+import { userTrophyStatus } from '@/utils/summerGames';
+import { getTrophiesData, getUserTrophiesData } from '@/utils/trophies';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 
 const winnersLabel = (count: number) =>
@@ -17,12 +14,12 @@ const winnersLabel = (count: number) =>
       : `${count.toLocaleString('fr-FR')} personnes l'ont gagné`;
 
 export default function BadgesList() {
-  const { trophies, loading } = useTrophies();
+  const { data: trophies, loadingTrophies } = getTrophiesData();
   const { user, isAuthenticated } = useRNBAuthentication();
   const username = isAuthenticated ? user?.username : null;
-  const { userTrophies } = useUserTrophies(username);
+  const { data: userTrophies } = getUserTrophiesData(username);
 
-  if (loading || !trophies) return null;
+  if (loadingTrophies || !trophies) return null;
 
   return (
     <div className={styles.badges}>

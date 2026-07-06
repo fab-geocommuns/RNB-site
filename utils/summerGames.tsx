@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Trophy } from '@/utils/trophies';
 
 // Base de l'API RNB (cf. `NEXT_PUBLIC_API_BASE`). Les endpoints du jeu de l'été
 // sont désormais servis par le vrai backend (PR fab-geocommuns/RNB-coeur#947) :
@@ -18,30 +19,10 @@ export const SUMMER_GAME_GOAL = 5000;
 const buildUrl = (path: string) =>
   new URL(`${API_BASE}${path}`, window.location.origin);
 
-// Types des trophées, alignés sur les endpoints réels `/trophies/` et
-// `/user/<username>/trophies/`.
-export type TrophyLevel = {
-  level: number;
-  level_label: string | null;
-  condition?: string;
-  count: number;
-};
-
-export type Trophy = {
-  trophy: string;
-  trophy_label: string;
-  description: string;
-  count: number;
-  levels: TrophyLevel[];
-};
-
-export type UserTrophy = {
-  trophy: string;
-  trophy_label: string;
-  level: number;
-  level_label: string | null;
-  unlocked_at: string;
-};
+// Les types et hooks de récupération des trophées (`Trophy`, `TrophyData`,
+// `getTrophiesData`, `getUserTrophiesData`) vivent dans `@/utils/trophies`
+// (source unique). Ce module ne garde que ce qui est propre au jeu de l'été :
+// classements, barre de progression et statut d'affichage des badges.
 
 export type Rank = { name: string; count: number; shortName?: string | null };
 export type FormattedRanks = {
@@ -152,7 +133,7 @@ export type TrophyStatus = { earned: boolean; levelLabel: string | null };
 // Statut du trophée pour l'utilisateur connecté : gagné ou non, et le label du
 // plus haut niveau atteint (null pour superv qui n'a pas de label de niveau).
 export function userTrophyStatus(
-  userTrophies: UserTrophy[] | undefined,
+  userTrophies: Trophy[] | undefined,
   trophyKey: string,
 ): TrophyStatus {
   const owned = (userTrophies ?? []).filter((t) => t.trophy === trophyKey);
@@ -160,59 +141,3 @@ export function userTrophyStatus(
   const top = owned.reduce((a, b) => (b.level > a.level ? b : a));
   return { earned: true, levelLabel: top.level_label ?? null };
 }
-
-export const useTrophies = () => {
-  const [loading, setLoading] = useState(true);
-  const [trophies, setTrophies] = useState<Trophy[]>();
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const url = buildUrl('/trophies/');
-        const response = await fetch(url, {
-          cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        setTrophies(await response.json());
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
-  return { trophies, loading };
-};
-
-export const useUserTrophies = (username?: string | null) => {
-  const [loading, setLoading] = useState(true);
-  const [userTrophies, setUserTrophies] = useState<UserTrophy[]>();
-
-  useEffect(() => {
-    if (!username) {
-      setUserTrophies([]);
-      setLoading(false);
-      return;
-    }
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const url = buildUrl(`/user/${encodeURIComponent(username)}/trophies/`);
-        const response = await fetch(url, {
-          cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        setUserTrophies(await response.json());
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, [username]);
-
-  return { userTrophies, loading };
-};
