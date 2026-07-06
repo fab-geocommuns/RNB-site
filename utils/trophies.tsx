@@ -43,6 +43,28 @@ export function trophyMedalColor(level: number): MedalColor {
 }
 
 /**
+ * Nom du palier affiché à l'utilisateur, aligné sur la couleur de médaille
+ * (cf. `trophyMedalColor`) : Bronze pour le premier, Argent pour le deuxième,
+ * Or au-delà.
+ */
+export function trophyLevelName(level: number): string {
+  if (level <= 1) return 'Bronze';
+  if (level === 2) return 'Argent';
+  return 'Or';
+}
+
+/**
+ * Libellé « Gagné par N personnes » (format demandé par l'issue #471),
+ * avec les cas zéro et singulier.
+ */
+export function wonByLabel(count: number | null | undefined): string {
+  const n = count ?? 0;
+  if (n <= 0) return 'Pas encore gagné';
+  if (n === 1) return 'Gagné par 1 personne';
+  return `Gagné par ${n.toLocaleString('fr-FR')} personnes`;
+}
+
+/**
  * Compare deux instantanés de trophées et renvoie ceux nouvellement gagnés :
  * un type de trophée absent avant, ou dont le palier a augmenté.
  */
@@ -138,6 +160,8 @@ export interface TrophyDetails {
   description: string;
   currentLevel: LevelData | undefined;
   nextLevel: LevelData | undefined;
+  levels: LevelData[]; // paliers du catalogue (vide si trophée inconnu)
+  userLevel: number; // palier atteint par l'utilisateur (0 si non gagné)
   count: number | null | undefined;
 }
 
@@ -214,9 +238,7 @@ export const getUserTrophyData = (
   trophies: TrophyData[],
   userTrophy: Trophy,
 ): TrophyDetails => {
-  const trophyInfos = trophies?.find(
-    (t) => t.trophy_label === userTrophy.trophy_label,
-  );
+  const trophyInfos = trophies?.find((t) => t.trophy === userTrophy.trophy);
 
   const currentLevelIndex = trophyInfos?.levels.findIndex(
     (l) => l.level === userTrophy.level,
@@ -234,16 +256,13 @@ export const getUserTrophyData = (
       ? trophyInfos.levels[currentLevelIndex + 1]
       : undefined;
 
-  const count =
-    currentLevelIndex !== undefined && currentLevelIndex >= 0
-      ? trophyInfos?.levels[currentLevelIndex].count
-      : undefined;
-
   return {
     description: trophyInfos?.description || '',
     currentLevel,
     nextLevel,
-    count,
+    levels: trophyInfos?.levels ?? [],
+    userLevel: userTrophy.level,
+    count: trophyInfos?.count,
   };
 };
 
@@ -252,17 +271,13 @@ export const getUserTrophyData = (
  * sur son premier palier).
  */
 export const getUserTrophieDetails = (trophy: TrophyData): TrophyDetails => {
-  const firstLevel = trophy.levels[0];
-  const description = trophy.description;
-  const currentLevel = firstLevel;
-  const nextLevel = undefined;
-  const count = firstLevel.count;
-
   return {
-    description: description || '',
-    currentLevel,
-    nextLevel,
-    count,
+    description: trophy.description || '',
+    currentLevel: trophy.levels[0],
+    nextLevel: undefined,
+    levels: trophy.levels,
+    userLevel: 0,
+    count: trophy.count,
   };
 };
 
