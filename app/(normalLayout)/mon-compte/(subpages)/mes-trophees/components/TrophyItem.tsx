@@ -2,14 +2,14 @@ import {
   TrophyDetails,
   trophyImageUrl,
   trophyMedalColor,
-  TrophyUserData,
+  Trophy,
   TrophyData,
-} from '@/utils/trophee';
+} from '@/utils/trophies';
 import styles from '@/styles/mes-trophees.module.scss';
 import Medal from '@/components/games/summerGames/Medal';
 
 interface TrophyItemProps {
-  trophy: TrophyUserData | TrophyData;
+  trophy: Trophy | TrophyData;
   details: TrophyDetails;
 }
 
@@ -26,7 +26,7 @@ export default function TrophyItem({ trophy, details }: TrophyItemProps) {
           />
         ) : (
           <Medal
-            color={trophyMedalColor(Number(currentLevel?.level) ?? 0)}
+            color={trophyMedalColor(currentLevel?.level ?? 0)}
             image={trophyImageUrl(trophy)}
             size={120}
             alt={trophy.trophy_label}

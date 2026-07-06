@@ -4,13 +4,13 @@ import { useSession } from 'next-auth/react';
 import { FeveData, useUserFeves } from '@/utils/feve';
 import styles from '@/styles/mes-trophees.module.scss';
 import {
-  TrophyUserData,
+  Trophy,
   getTrophiesData,
   getUserTrophiesData,
   getUserTrophyData,
   getTrophiesToWin,
   getUserTrophieDetails,
-} from '@/utils/trophee';
+} from '@/utils/trophies';
 import TrophyItem from './components/TrophyItem';
 
 export default function MesFevesPage() {
@@ -44,7 +44,7 @@ export default function MesFevesPage() {
             <h2 className="block__title">Mes trophées</h2>
             <ul className={styles.grid}>
               {(Array.isArray(userTrophies) ? userTrophies : []).map(
-                (userTrophy: TrophyUserData) => (
+                (userTrophy: Trophy) => (
                   <TrophyItem
                     key={userTrophy.trophy}
                     trophy={userTrophy}
