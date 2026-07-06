@@ -50,20 +50,30 @@ export default function TrophyItem({ trophy, details }: TrophyItemProps) {
                   <span className={styles.levelName}>
                     {trophyLevelName(level.level)}
                     {userLevel >= level.level && (
-                      <span aria-label="niveau remporté"> ✅</span>
+                      <span role="img" aria-label="niveau remporté">
+                        {' '}
+                        ✅
+                      </span>
                     )}
                     {' : '}
                   </span>
                 )}
                 {level.condition}
                 {levels.length === 1 && userLevel >= level.level && (
-                  <span aria-label="niveau remporté"> ✅</span>
+                  <span role="img" aria-label="niveau remporté">
+                    {' '}
+                    ✅
+                  </span>
                 )}
               </li>
             ))}
           </ul>
         )}
-        <p className={styles.trophyDescription}>{wonByLabel(count)}</p>
+        {/* Trophée gagné mais absent du catalogue : on ne sait pas combien de
+            personnes l'ont gagné, mieux vaut ne rien dire que « Pas encore gagné ». */}
+        {!(won && count == null) && (
+          <p className={styles.trophyDescription}>{wonByLabel(count)}</p>
+        )}
       </div>
     </li>
   );

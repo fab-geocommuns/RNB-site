@@ -8,7 +8,7 @@ import { useSummerGameUserData, SUMMER_GAME_GOAL } from '@/utils/summerGames';
 
 type SummerGameUserData = {
   global: number;
-  goal: number;
+  goal?: number;
   user_score: number;
   user_rank: number;
 };

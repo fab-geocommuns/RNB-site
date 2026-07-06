@@ -83,4 +83,27 @@ describe('getUserTrophieDetails', () => {
     expect(details.userLevel).toBe(0);
     expect(details.count).toBe(2);
   });
+
+  it('gère un trophée à palier unique (superv)', () => {
+    const supervTrophy: TrophyData = {
+      trophy: 'superv',
+      trophy_label: 'superV',
+      description:
+        'Gagnez ce trophée en étant la personne qui a fait le plus de validations.',
+      count: 1,
+      levels: [
+        {
+          level: 1,
+          level_label: null,
+          condition:
+            'Trophée unique : être la personne ayant réalisé le plus de validations',
+          count: 1,
+        },
+      ],
+    };
+    const details = getUserTrophieDetails(supervTrophy);
+    expect(details.levels).toHaveLength(1);
+    expect(details.userLevel).toBe(0);
+    expect(details.count).toBe(1);
+  });
 });
