@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { SUMMER_GAME_GOAL, formatRanks, userTrophyStatus } from './summerGames';
+import {
+  SUMMER_GAME_GOAL,
+  deriveUserScore,
+  formatRanks,
+  userTrophyStatus,
+} from './summerGames';
 
 describe('formatRanks', () => {
   // Format objet du backend réel (PR fab-geocommuns/RNB-coeur#947) : chaque
@@ -56,6 +61,48 @@ describe('formatRanks', () => {
       goal: SUMMER_GAME_GOAL,
       absolute: 12345,
       percent: Math.round((12345 / SUMMER_GAME_GOAL) * 100),
+    });
+  });
+});
+
+describe('deriveUserScore', () => {
+  // Réponse brute de `GET /validation/ranking/` : `rank` porte le SCORE et la
+  // liste `individual` est triée par score décroissant.
+  const raw = {
+    global: 55,
+    individual: [
+      { username: 'aainsa', rank: 35 },
+      { username: 'francis', rank: 12 },
+      { username: 'paul', rank: 8 },
+    ],
+    departement: [],
+    organization: [],
+  };
+
+  it('trouve le score et la position du joueur dans le classement', () => {
+    expect(deriveUserScore(raw, 'paul')).toEqual({
+      global: 55,
+      goal: SUMMER_GAME_GOAL,
+      user_score: 8,
+      user_rank: 3,
+    });
+  });
+
+  it('score nul et rang null pour un joueur absent du classement', () => {
+    expect(deriveUserScore(raw, 'inconnu')).toEqual({
+      global: 55,
+      goal: SUMMER_GAME_GOAL,
+      user_score: 0,
+      user_rank: null,
+    });
+  });
+
+  it('tolère une réponse sans liste individuelle', () => {
+    expect(deriveUserScore({ global: 0 }, 'paul')).toEqual({
+      global: 0,
+      goal: SUMMER_GAME_GOAL,
+      user_score: 0,
+      user_rank: null,
     });
   });
 });
