@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/summerGames.module.scss';
 import ProgressBar from './ProgressBar';
 
-import { useSummerGameUserData } from '@/utils/summerGames';
+import { useSummerGameUserData, SUMMER_GAME_GOAL } from '@/utils/summerGames';
 
 type SummerGameUserData = {
   global: number;
@@ -72,22 +72,27 @@ export default function EditMapSummerScore({
     return `${rank}ème`;
   };
 
+  // L'API ne renvoie pas toujours `goal` : repli sur l'objectif front partagé
+  // avec le bloc classement (SUMMER_GAME_GOAL).
+  const goal = summerGameUserData?.goal ?? SUMMER_GAME_GOAL;
+
   return (
     <div className={styles.mapSummerScore}>
       <a href="/classement" className={styles.mapSummerScoreInside}>
         <div className={styles.mapSummerScoreTitle}>
-          L&apos;expérience <br />
-          collaborative
+          Le jeu <br />
+          de l&apos;été
         </div>
 
         {!loading && summerGameUserData && (
           <>
             <div className={styles.mapSummerScoreSubpart}>
               <div className={styles.mapSummerScoreSubpartTitle}>
-                Score global
+                Objectif global
               </div>
               <div className={styles.mapSummerScoreSubpartValue}>
-                {summerGameUserData.global}/{summerGameUserData.goal}
+                {summerGameUserData.global.toLocaleString('fr-FR')}/
+                {goal.toLocaleString('fr-FR')}
                 {isAnimating.global && (
                   <span className={styles.mapSummerScoreAnimation}>
                     +{scoreDiff.global}
@@ -119,10 +124,7 @@ export default function EditMapSummerScore({
           </>
         )}
         {summerGameUserData && (
-          <ProgressBar
-            score={summerGameUserData.global}
-            goal={summerGameUserData.goal}
-          />
+          <ProgressBar score={summerGameUserData.global} goal={goal} />
         )}
       </a>
     </div>

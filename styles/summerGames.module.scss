@@ -423,8 +423,7 @@ $accent-color-light: #ffea00;
 body .mapSummerScoreInside {
   position: relative;
   color: white;
-  //background: #00176a;
-  background: #0054cb;
+  background: #4059db;
 
   padding: 0.7rem 1.3rem;
   border-radius: 0.25rem;
@@ -432,7 +431,7 @@ body .mapSummerScoreInside {
   display: flex;
   align-items: center;
   &:hover {
-    background: #0a2a9e;
+    background: #35479f;
   }
 }
 
