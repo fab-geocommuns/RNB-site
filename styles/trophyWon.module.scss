@@ -89,6 +89,11 @@
   font-weight: bold;
   margin-top: 1rem;
   overflow-wrap: break-word;
+  // Les labels de trophées arrivent en minuscules de l'API (« validateur »,
+  // « course de fond ») : majuscule sur la première lettre uniquement.
+  &::first-letter {
+    text-transform: uppercase;
+  }
   // La taille de police est fixée en ligne, proportionnelle au diamètre.
   opacity: 0;
   animation: fadeIn 0.5s ease-out forwards;
