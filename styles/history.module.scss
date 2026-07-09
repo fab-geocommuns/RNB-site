@@ -373,3 +373,66 @@
     margin-left: 1rem;
   }
 }
+
+// --- Annotations des éditions (reviewers) ---
+
+.annotationPanel {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.0625rem solid #f6f6f6;
+}
+
+.annotationList {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.annotationItem {
+  padding: 0.75rem;
+  background-color: #f6f6f6;
+  border-radius: 0.25rem;
+}
+
+.annotationMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.annotationReviewer {
+  font-weight: 600;
+  color: #161616;
+}
+
+.annotationDate {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.annotationComment {
+  margin: 0.5rem 0 0;
+  white-space: pre-wrap;
+}
+
+.annotationEmpty {
+  color: #666;
+}
+
+.annotationForm {
+  margin-top: 1rem;
+}
+
+.annotationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.annotationBadge {
+  margin-bottom: 0.5rem;
+}

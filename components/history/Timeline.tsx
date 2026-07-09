@@ -1,6 +1,9 @@
 'use client';
 import styles from '@/styles/history.module.scss';
-import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
+import {
+  ApiHistoryItem,
+  EditionAnnotation,
+} from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
 import historyImage from '@/public/images/history/history.svg';
 import Link from 'next/link';
 import TimelineItem from './TimelineItem';
@@ -11,12 +14,16 @@ export default function TimelineHistory({
   responsiveTimelineIsOpen,
   onTimelineItemClick,
   selectedIndex = 0,
+  isReviewer = false,
+  annotationsByEvent = {},
 }: {
   timelineInfo: ApiHistoryItem[];
   id: string;
   responsiveTimelineIsOpen: boolean;
   onTimelineItemClick?: (index: number) => void;
   selectedIndex?: number;
+  isReviewer?: boolean;
+  annotationsByEvent?: Record<string, EditionAnnotation[]>;
 }) {
   return (
     <section
@@ -43,6 +50,12 @@ export default function TimelineHistory({
             selectedIndex={selectedIndex}
             timelineLength={timelineInfo.length}
             onTimelineItemClick={onTimelineItemClick}
+            isReviewer={isReviewer}
+            annotations={
+              history.event?.id
+                ? (annotationsByEvent[history.event.id] ?? [])
+                : []
+            }
           />
         ))}
       </div>
