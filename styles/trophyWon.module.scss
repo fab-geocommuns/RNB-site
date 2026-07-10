@@ -1,0 +1,134 @@
+.trophyModal {
+  :global(.fr-modal__body) {
+    background-color: transparent !important;
+    box-shadow: none;
+    overflow: hidden !important;
+    position: relative;
+    z-index: 1752;
+  }
+
+  :global(.fr-modal__header) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  :global(.fr-modal__title) {
+    color: white !important;
+    font-size: 1.7em !important;
+    line-height: 1.2em;
+    text-align: center;
+    display: block !important;
+  }
+
+  :global(.fr-btn--close) {
+    color: white !important;
+    &:hover {
+      color: black !important;
+      background-color: white !important;
+    }
+  }
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(250px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.trophyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUpFadeIn 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.trophyList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 2rem;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  // Filet de sécurité : si, malgré la taille adaptative des médailles, la grille
+  // dépasse la hauteur de l'écran (beaucoup de trophées sur petit écran), on
+  // défile plutôt que de rogner le contenu.
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.trophyItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  // La largeur est fixée en ligne (= diamètre de la médaille) pour que le nom
+  // se retourne à la largeur de la médaille et que les colonnes soient régulières.
+  flex: 0 0 auto;
+}
+
+.trophyName {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+  overflow-wrap: break-word;
+  // Les labels de trophées arrivent en minuscules de l'API (« validateur »,
+  // « course de fond ») : majuscule sur la première lettre uniquement.
+  &::first-letter {
+    text-transform: uppercase;
+  }
+  // La taille de police est fixée en ligne, proportionnelle au diamètre.
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 1s;
+}
+
+.trophyDescription {
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 1.2s;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 1.5s;
+}
+
+.actionBtn {
+  color: white !important;
+  border: 1px solid white !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none !important;
+
+  &:hover {
+    color: black !important;
+    background-color: white !important;
+  }
+}

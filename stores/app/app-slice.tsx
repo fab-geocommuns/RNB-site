@@ -1,7 +1,8 @@
 'use client';
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AlertProps } from '@codegouvfr/react-dsfr/Alert';
+import { Trophy } from '@/utils/trophies';
 
 type Alert = {
   id: string;
@@ -9,10 +10,14 @@ type Alert = {
 
 export type AppStore = {
   alerts: Alert[];
+  // Trophées gagnés lors de la dernière action de l'utilisateur, à afficher
+  // dans la modale de félicitations (cf. `TrophyWon`). Vidé = rien à montrer.
+  wonTrophies: Trophy[];
 };
 
 const initialState: AppStore = {
   alerts: [],
+  wonTrophies: [],
 };
 
 export const appSlice = createSlice({
@@ -24,6 +29,9 @@ export const appSlice = createSlice({
     },
     _hideAlert(state, action) {
       state.alerts = state.alerts.filter((a) => a.id !== action.payload);
+    },
+    setWonTrophies(state, action: PayloadAction<Trophy[]>) {
+      state.wonTrophies = action.payload;
     },
   },
 });

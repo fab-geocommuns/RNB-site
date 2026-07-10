@@ -4,6 +4,7 @@ import EditMap from '@/components/map/EditMap';
 import EditionPanel from '@/components/contribution/EditionPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
+import EditMapSummerScore from '@/components/games/summerGames/editMapSummerScore';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
@@ -31,9 +32,15 @@ export default function Page() {
 
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
+  const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
 
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
+
+  // Summer game : timestamp bumped after each successful edition to refresh the score badge
+  const editMapSummerScoreUpdatedAt = useSelector(
+    (state: RootState) => state.edition.editMapSummerScoreUpdatedAt,
+  );
 
   const { user } = useRNBAuthentication({ require: true });
 
@@ -55,6 +62,12 @@ export default function Page() {
       <div className={styles.map}>
         <AddressSearchMap />
         <EditionPanel />
+        {showSummerGame && (
+          <EditMapSummerScore
+            updatedAt={editMapSummerScoreUpdatedAt || 0}
+            username={user.username}
+          />
+        )}
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}

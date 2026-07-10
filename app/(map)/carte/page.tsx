@@ -13,6 +13,7 @@ import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
+import VisuMapSummerScore from '@/components/games/summerGames/visuMapSummerScore';
 
 // Analytics
 import va from '@vercel/analytics';
@@ -44,6 +45,7 @@ export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
+  const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
 
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
@@ -88,6 +90,7 @@ export default function RNBMap() {
       <div className={styles.map}>
         <AddressSearchMap />
         <VisuPanel />
+        {showSummerGame && <VisuMapSummerScore />}
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}
