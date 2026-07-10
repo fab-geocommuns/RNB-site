@@ -13,7 +13,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 // Objectif partagé de la barre de progression. Le backend ne renvoie pas de
 // `goal` : on le fixe côté front (valeur produit, ajustable ici).
-export const SUMMER_GAME_GOAL = 5000;
+export const SUMMER_GAME_GOAL = 100000;
 
 // Construit l'URL d'un endpoint à partir d'un chemin AVEC son slash final
 // (ex. `/trophies/`). `window.location.origin` n'est qu'une base de repli :
