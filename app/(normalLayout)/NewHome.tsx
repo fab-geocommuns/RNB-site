@@ -40,7 +40,7 @@ export default async function Home() {
         )}
         {showSummerGame && (
           <SummerGame
-            title={<>Trophées &amp; Validations</>}
+            title="L'été des validations"
             subtitle="Le nouveau jeu participatif du RNB"
             limit={5}
             withRankingTable={true}
