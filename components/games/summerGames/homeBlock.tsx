@@ -55,10 +55,14 @@ export default function SummerGame({
               </div>
               <div className={`section__subtitle ${styles.instruction}`}>
                 <p className={styles.highlight}>
-                  Participez à la validation des bâtiments du RNB. Inspectez les
-                  bâtiments de votre parc immobilier, de votre voisinage et des
-                  territoires que vous connaissez. Validez les bâtiments
-                  corrects et faites monter le score global.
+                  Participez à la{' '}
+                  <a href="https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart#valider-un-batiment">
+                    validation
+                  </a>{' '}
+                  des bâtiments du RNB. Inspectez les bâtiments de votre parc
+                  immobilier, de votre voisinage et des territoires que vous
+                  connaissez. Validez les bâtiments corrects et faites monter le
+                  score global.
                 </p>
               </div>
 
