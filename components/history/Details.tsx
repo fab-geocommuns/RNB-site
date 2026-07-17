@@ -1,9 +1,13 @@
 import styles from '@/styles/history.module.scss';
 import { formatDate, formatTime } from '@/utils/date';
 import changedImage from '@/public/images/history/changed.svg';
-import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
+import {
+  ApiHistoryItem,
+  EditionAnnotation,
+} from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
 import CopyInlineBtn from '@/components/util/CopyInlineBtn';
 import VisuMapReact from '@/components/map/VisuMapReact';
+import AnnotationPanel from '@/components/history/AnnotationPanel';
 import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
 import { OrganizationName } from '@/components/OrganizationName';
 
@@ -31,14 +35,31 @@ function ChangedIcon() {
 export default function Details({
   detailsInfo,
   responsivePanelIsOpen,
+  isReviewer = false,
+  annotations = [],
+  currentUsername,
+  onAnnotationsChange,
 }: {
   detailsInfo: ApiHistoryItem;
   responsivePanelIsOpen: boolean;
+  isReviewer?: boolean;
+  annotations?: EditionAnnotation[];
+  currentUsername?: string | null;
+  onAnnotationsChange?: (eventId: string, next: EditionAnnotation[]) => void;
 }) {
   return (
     <section
       className={`${styles.detailSection} ${responsivePanelIsOpen ? styles.detailSectionOpen : styles.detailSectionClosed}`}
     >
+      {isReviewer && detailsInfo.event?.id && onAnnotationsChange && (
+        <AnnotationPanel
+          key={detailsInfo.event.id}
+          eventId={detailsInfo.event.id}
+          annotations={annotations}
+          currentUsername={currentUsername}
+          onAnnotationsChange={onAnnotationsChange}
+        />
+      )}
       <div className={styles.detailsWrapper}>
         {detailsInfo.updated_at && (
           <h2 className={styles.detailsSubtitle}>

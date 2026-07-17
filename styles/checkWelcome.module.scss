@@ -1,0 +1,98 @@
+.page {
+  // global.scss makes body a 100vh flex column (for the fullscreen map), which
+  // would shrink this page down to one viewport. Opt out so it keeps its full
+  // content height and the background covers it all.
+  flex: 0 0 auto;
+  min-height: 100vh;
+  background: #e5e5e5;
+  padding: 2rem 2rem 4rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.variation {
+  margin-bottom: 3rem;
+}
+
+.variationTitle {
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+}
+
+.urls {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 1rem;
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+
+  dt {
+    font-weight: 700;
+    color: #666;
+  }
+
+  dd {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.mono {
+  font-family: monospace;
+  color: #161616;
+}
+
+// The real trigger is absolutely positioned over the map, so it needs a
+// positioned box of its own height to sit in here.
+.triggerRow {
+  position: relative;
+  height: 52px;
+  margin-bottom: 1rem;
+}
+
+.slides {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.slide {
+  flex: 1 1 480px;
+  max-width: 640px;
+}
+
+.slideLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+// .fr-modal is a fixed, hidden, dimmed overlay by default. Undo only that,
+// so everything inside keeps its real DSFR styling.
+.slide :global(.fr-modal) {
+  position: static;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  width: 100%;
+  height: auto;
+  background-color: transparent;
+  transition: none;
+
+  &::before,
+  &::after {
+    content: none;
+  }
+
+  :global(.fr-modal__body) {
+    max-height: none;
+    width: 100%;
+  }
+}

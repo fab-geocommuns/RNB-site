@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 export enum RNBGroup {
   CONTRIBUTORS = 'Contributors',
+  REVIEWERS = 'Reviewers',
 }
 
 export enum RNBAuthenticationStatus {

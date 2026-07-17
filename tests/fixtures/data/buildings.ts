@@ -92,7 +92,6 @@ export const banFeatureSegur = {
 export function makeValidator(over: Partial<PublicUser> = {}): PublicUser {
   return {
     id: 1,
-    display_name: 'Camille Témoin',
     username: 'ctemoin',
     organization_name: 'Organisation Test',
     organization_short_name: null,

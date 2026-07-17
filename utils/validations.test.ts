@@ -4,7 +4,6 @@ import { PublicUser } from '@/stores/map/map-slice';
 
 const user = (over: Partial<PublicUser>): PublicUser => ({
   id: 1,
-  display_name: 'Jean Dupont',
   username: 'jdupont',
   organization_name: 'IGN',
   organization_short_name: null,

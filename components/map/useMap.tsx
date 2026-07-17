@@ -5,6 +5,7 @@ import { DEFAULT_STYLE } from '@/components/map/useMapLayers';
 import LayersSwitcher from '@/components/map/LayersSwitcher';
 import { MapLayer } from '@/stores/map/map-slice';
 import Toaster from '@/components/contribution/toaster';
+import TrophyWon from '@/components/games/trophy/trophyWon';
 
 type UseMapParams = {
   disabledLayers?: MapLayer[];
@@ -25,6 +26,7 @@ export const useMap = (params?: UseMapParams) => {
         <div className={styles.map} ref={mapContainerRef} />
         <LayersSwitcher disabledLayers={disabledLayers} />
         <Toaster></Toaster>
+        <TrophyWon />
       </>
     ),
     [],
