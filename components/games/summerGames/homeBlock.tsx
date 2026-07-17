@@ -140,6 +140,12 @@ export default function SummerGame({
                 >
                   Participer
                 </Link>
+                <Link
+                  href="/blog/lete-des-validations-validons-ensemble-le-rnb"
+                  className={styles.btn}
+                >
+                  En savoir plus
+                </Link>
               </div>
             </div>
           </div>

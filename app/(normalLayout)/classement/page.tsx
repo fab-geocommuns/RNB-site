@@ -9,7 +9,7 @@ export default function Page() {
       <div className="fr-grid-row">
         <div className="fr-col-12 fr-col-md-12 fr-py-12v">
           <SummerGame
-            title="Classement du jeu de l'été"
+            title="Classement de l'été des validations"
             limit={100}
             showRankingLink={false}
             withRankingTable={true}
