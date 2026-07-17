@@ -84,7 +84,6 @@ export interface ApiHistoryItem {
   validated_by: Array<{
     id: string;
     username: string;
-    display_name: string;
     organization_name: string;
   }>;
 }

@@ -23,7 +23,6 @@ export type BuildingAddress = {
 
 export type PublicUser = {
   id: number;
-  display_name: string;
   username: string;
   organization_name: string;
 };

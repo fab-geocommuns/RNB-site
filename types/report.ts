@@ -3,7 +3,6 @@ import { Point } from 'geojson';
 export type ReportStatus = 'pending' | 'fixed' | 'rejected';
 
 export interface ReportAuthor {
-  display_name: string;
   id: number | null;
   username: string | null;
 }

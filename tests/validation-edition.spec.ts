@@ -24,10 +24,7 @@ test.describe('Validation depuis l’édition', () => {
     );
 
     // Bâtiment validé par un autre utilisateur (verrouille le formulaire).
-    httpMocker.get(
-      GET_PATH,
-      buildingValidatedBy([makeValidator({ display_name: 'Camille Témoin' })]),
-    );
+    httpMocker.get(GET_PATH, buildingValidatedBy([makeValidator()]));
 
     await editionPage.goToBuilding(BUILDING_ID);
     await expect(editionPage.panel).toBeVisible();
@@ -82,9 +79,7 @@ test.describe('Validation depuis l’édition', () => {
     // Bâtiment validé par l'utilisateur courant + PATCH is_valid:false au clic.
     httpMocker.get(
       GET_PATH,
-      buildingValidatedBy([
-        makeValidator({ username: DEFAULT_USERNAME, display_name: 'Moi' }),
-      ]),
+      buildingValidatedBy([makeValidator({ username: DEFAULT_USERNAME })]),
     );
     httpMocker.patch(PATCH_PATH, { status: 204 }, { is_valid: false });
 
