@@ -63,9 +63,9 @@ export default function EditMapSummerScore({
     <div className={styles.mapSummerScore}>
       <a href="/classement" className={styles.mapSummerScoreInside}>
         <div className={styles.mapSummerScoreTitle}>
-          Trophées &amp;
+          L&apos;été des
           <br />
-          Validations
+          validations
         </div>
 
         {!loading && summerGameScore && (

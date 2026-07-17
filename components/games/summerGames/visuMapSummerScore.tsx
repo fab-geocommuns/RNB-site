@@ -12,8 +12,8 @@ export default function VisuMapSummerScore() {
       <div className={styles.mapSummerScore}>
         <a href="/edition" className={styles.mapSummerScoreInside}>
           <div className={styles.mapSummerScoreTitle}>
-            L&apos;expérience <br />
-            collaborative
+            L&apos;été des <br />
+            validations
           </div>
 
           {!loading && summerGamesData && (
