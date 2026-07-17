@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { area } from '@turf/turf';
-import type { Polygon, LineString } from 'geojson';
+import { area, booleanTouches, intersect, featureCollection } from '@turf/turf';
+import type { Feature, Polygon, LineString } from 'geojson';
 import { splitPolygonByLines } from './splitPolygonByLines';
 
 describe('splitPolygonByLines', () => {
@@ -146,5 +146,121 @@ describe('splitPolygonByLines', () => {
     const totalArea = area(polygon);
     const sumArea = result!.reduce((acc, p) => acc + area(p), 0);
     expect(sumArea).toBeCloseTo(totalArea, 3);
+  });
+
+  // Comportement de la scission combinée à l'aimantation. L'aimantation pose
+  // les extrémités du trait de coupe sur la frontière du bâtiment : on vérifie
+  // ici le cas où elle réussit (extrémités exactement sur le bord) et le cas
+  // qui produit le message « Le trait ne découpe pas correctement le bâtiment.
+  // Assurez-vous que le trait traverse le bâtiment de part en part. »
+  describe('aimantation du trait de coupe', () => {
+    const square: Polygon = {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+          [0, 0],
+        ],
+      ],
+    };
+
+    const verticalCut = (y0: number, y1: number): LineString => ({
+      type: 'LineString',
+      coordinates: [
+        [5, y0],
+        [5, y1],
+      ],
+    });
+
+    it('un trait aimanté exactement bord à bord découpe en deux moitiés mitoyennes', () => {
+      // extrémités posées pile sur le bord bas (y=0) et le bord haut (y=10)
+      const result = splitPolygonByLines(square, [verticalCut(0, 10)]);
+
+      expect(result).not.toBeNull();
+      expect(result).toHaveLength(2);
+
+      const [left, right] = result as Feature<Polygon>[];
+
+      // pas de perte de surface
+      const sumArea = area(left) + area(right);
+      expect(sumArea).toBeCloseTo(area(square), 5);
+
+      // les deux bâtiments produits sont mitoyens : ils se touchent le long du
+      // trait de coupe, sans aire commune
+      expect(booleanTouches(left, right)).toBe(true);
+      expect(intersect(featureCollection([left, right]))).toBeNull();
+    });
+
+    it("prolonge une extrémité tombée juste à l'intérieur pour découper quand même", () => {
+      // Cas réel du bug : l'outil aimante sur la géométrie des tuiles
+      // vectorielles (généralisée), légèrement décalée par rapport à la forme
+      // de l'API utilisée pour la découpe. L'extrémité « aimantée » se retrouve
+      // 0,05 à l'intérieur du polygone. Sans correction, le trait ne traverse
+      // plus de part en part (-> message rouge). On prolonge donc très
+      // légèrement cette extrémité vers l'extérieur pour rétablir la découpe.
+      const result = splitPolygonByLines(square, [verticalCut(0.05, 11)]);
+
+      expect(result).not.toBeNull();
+      expect(result).toHaveLength(2);
+
+      const [a, b] = result as Feature<Polygon>[];
+      // pas de perte de surface
+      expect(area(a) + area(b)).toBeCloseTo(area(square), 5);
+      // l'orientation verticale du trait est conservée : deux moitiés égales
+      expect(area(a)).toBeCloseTo(area(b), 5);
+    });
+
+    it('ne prolonge pas une extrémité déjà posée sur la frontière', () => {
+      // bord à bord exact : l'extrémité est sur la frontière, donc inchangée,
+      // et la découpe reste deux moitiés égales
+      const result = splitPolygonByLines(square, [verticalCut(0, 10)]);
+      expect(result).not.toBeNull();
+      const [a, b] = result as Feature<Polygon>[];
+      expect(area(a)).toBeCloseTo(area(b), 5);
+    });
+
+    it("conserve l'orientation : prolonger ne déplace pas le trait de coupe", () => {
+      // une même droite oblique (pente 3, passant par (3,-1) et (7,11)).
+      // Référence : extrémités franchement hors du carré -> découpe nette.
+      const reference: LineString = {
+        type: 'LineString',
+        coordinates: [
+          [3, -1],
+          [7, 11],
+        ],
+      };
+      // Même droite, mais l'extrémité basse (3.35, 0.05) est colinéaire et
+      // tombe juste à l'intérieur du carré : elle doit être prolongée le long
+      // de cette même droite.
+      const insideEndpoint: LineString = {
+        type: 'LineString',
+        coordinates: [
+          [3.35, 0.05],
+          [7, 11],
+        ],
+      };
+
+      const exact = splitPolygonByLines(square, [reference]);
+      const extended = splitPolygonByLines(square, [insideEndpoint]);
+
+      expect(exact).not.toBeNull();
+      expect(extended).not.toBeNull();
+      expect(extended).toHaveLength(2);
+
+      const sortedAreas = (r: Feature<Polygon>[]) =>
+        r.map((p) => area(p)).sort((x, y) => x - y);
+      const exactAreas = sortedAreas(exact as Feature<Polygon>[]);
+      const extendedAreas = sortedAreas(extended as Feature<Polygon>[]);
+
+      // les pièces obtenues sont identiques (à l'arrondi près) : le trait n'a
+      // été prolongé que dans son propre axe, sans changer où il traverse le
+      // bâtiment. On compare en relatif (aires géodésiques très grandes).
+      const relDiff = (a: number, b: number) => Math.abs(a - b) / b;
+      expect(relDiff(extendedAreas[0], exactAreas[0])).toBeLessThan(1e-6);
+      expect(relDiff(extendedAreas[1], exactAreas[1])).toBeLessThan(1e-6);
+    });
   });
 });

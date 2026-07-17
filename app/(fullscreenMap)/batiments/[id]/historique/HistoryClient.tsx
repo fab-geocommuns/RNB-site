@@ -3,23 +3,50 @@ import { useState, useEffect } from 'react';
 import styles from '@/styles/history.module.scss';
 import Timeline from '@/components/history/Timeline';
 import Details from '@/components/history/Details';
-import { ApiHistoryItem } from './page';
+import { ApiHistoryItem, EditionAnnotation } from './page';
+import { RNBGroup, useRNBAuthentication } from '@/utils/useRNBAuthentication';
 
 type HistoryClientProps = {
   buildingData: ApiHistoryItem[];
   id: string;
 };
 
+type AnnotationsByEvent = Record<string, EditionAnnotation[]>;
+
+function initialAnnotationsByEvent(
+  buildingData: ApiHistoryItem[],
+): AnnotationsByEvent {
+  const map: AnnotationsByEvent = {};
+  for (const item of buildingData) {
+    if (item.event?.id) {
+      map[item.event.id] = item.event.annotations ?? [];
+    }
+  }
+  return map;
+}
+
 export default function HistoryClient({
   buildingData,
   id,
 }: HistoryClientProps) {
+  const { is, user } = useRNBAuthentication();
+  const isReviewer = is(RNBGroup.REVIEWERS);
+
   const [detailsInfo, setDetailsInfo] = useState<ApiHistoryItem>(
     buildingData[0],
   );
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [responsivePanelIsOpen, setResponsivePanelIsOpen] =
     useState<boolean>(true);
+  const [annotationsByEvent, setAnnotationsByEvent] =
+    useState<AnnotationsByEvent>(() => initialAnnotationsByEvent(buildingData));
+
+  const handleAnnotationsChange = (
+    eventId: string,
+    next: EditionAnnotation[],
+  ) => {
+    setAnnotationsByEvent((prev) => ({ ...prev, [eventId]: next }));
+  };
   const selectEventById = (eventId: string) => {
     const eventIndex = buildingData.findIndex(
       (item) => item.event.id === eventId,
@@ -70,6 +97,8 @@ export default function HistoryClient({
           responsiveTimelineIsOpen={!responsivePanelIsOpen}
           onTimelineItemClick={handleTimelineItemClick}
           selectedIndex={selectedIndex}
+          isReviewer={isReviewer}
+          annotationsByEvent={annotationsByEvent}
         />
         <button
           className={`${styles.responsiveButton} ${responsivePanelIsOpen ? styles.responsiveButtonInitial : styles.responsiveButtonClicked}`}
@@ -86,6 +115,14 @@ export default function HistoryClient({
         <Details
           detailsInfo={detailsInfo}
           responsivePanelIsOpen={responsivePanelIsOpen}
+          isReviewer={isReviewer}
+          annotations={
+            detailsInfo.event?.id
+              ? (annotationsByEvent[detailsInfo.event.id] ?? [])
+              : []
+          }
+          currentUsername={user?.username}
+          onAnnotationsChange={handleAnnotationsChange}
         />
       </div>
     </div>

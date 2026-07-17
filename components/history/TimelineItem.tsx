@@ -1,4 +1,7 @@
-import { ApiHistoryItem } from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
+import {
+  ApiHistoryItem,
+  EditionAnnotation,
+} from '@/app/(fullscreenMap)/batiments/[id]/historique/page';
 import { formatDate, formatTime } from '@/utils/date';
 import styles from '@/styles/history.module.scss';
 import mergeBuildingImage from '@/public/images/map/edition/merge.svg';
@@ -8,6 +11,11 @@ import disableBuildingImage from '@/public/images/history/disable.svg';
 import activateBuildingImage from '@/public/images/history/checked.svg';
 import updateBuildingImage from '@/public/images/history/update.svg';
 import { getHistoryShortTitle, displayAuthor } from '@/logic/history';
+import {
+  ANNOTATION_STATUS_LABELS,
+  ANNOTATION_STATUS_SEVERITY,
+  worstAnnotationStatus,
+} from '@/logic/annotations';
 
 export default function TimelineItem({
   history,
@@ -15,13 +23,18 @@ export default function TimelineItem({
   selectedIndex,
   timelineLength,
   onTimelineItemClick,
+  isReviewer = false,
+  annotations = [],
 }: {
   history: ApiHistoryItem;
   index: number;
   selectedIndex: number;
   timelineLength: number;
   onTimelineItemClick?: (index: number) => void;
+  isReviewer?: boolean;
+  annotations?: EditionAnnotation[];
 }) {
+  const annotationStatus = worstAnnotationStatus(annotations);
   return (
     <div key={index} className={styles.timelineItem}>
       {index < timelineLength - 1 && <div className={styles.timelineLine} />}
@@ -53,6 +66,16 @@ export default function TimelineItem({
         <div className={styles.eventAuthor}>
           {getHistoryShortTitle(history)}
         </div>
+
+        {isReviewer && annotationStatus && (
+          <div
+            className={`fr-badge fr-badge--sm fr-badge--no-icon fr-badge--${ANNOTATION_STATUS_SEVERITY[annotationStatus]} ${styles.annotationBadge}`}
+          >
+            {annotations.length > 1
+              ? `${annotations.length} relectures`
+              : `Relu : ${ANNOTATION_STATUS_LABELS[annotationStatus].toLowerCase()}`}
+          </div>
+        )}
 
         <div className={styles.eventDate}>
           Le {formatDate(history.updated_at)} à {formatTime(history.updated_at)}

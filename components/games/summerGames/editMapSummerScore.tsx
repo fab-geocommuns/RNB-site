@@ -1,17 +1,9 @@
 'use client';
-import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/summerGames.module.scss';
 import ProgressBar from './ProgressBar';
 
-import { useSummerGameUserData } from '@/utils/summerGames';
-
-type SummerGameUserData = {
-  global: number;
-  goal: number;
-  user_score: number;
-  user_rank: number;
-};
+import { useSummerGameScore, SummerGameScore } from '@/utils/summerGames';
 
 type EditMapSummerScoreProps = {
   updatedAt: number;
@@ -22,28 +14,23 @@ export default function EditMapSummerScore({
   updatedAt,
   username,
 }: EditMapSummerScoreProps) {
-  const { summerGameUserData, loading } = useSummerGameUserData(
-    username,
-    updatedAt,
-  );
+  const { summerGameScore, loading } = useSummerGameScore(username, updatedAt);
   const [scoreDiff, setScoreDiff] = useState({ global: 0, user: 0 });
   const [isAnimating, setIsAnimating] = useState({
     global: false,
     user: false,
   });
 
-  const prevSummerGameUserDataRef = useRef<SummerGameUserData | undefined>(
-    undefined,
-  );
+  const prevSummerGameScoreRef = useRef<SummerGameScore | undefined>(undefined);
 
   useEffect(() => {
-    if (summerGameUserData) {
-      if (prevSummerGameUserDataRef.current) {
+    if (summerGameScore) {
+      if (prevSummerGameScoreRef.current) {
         const globalDiff =
-          summerGameUserData.global - prevSummerGameUserDataRef.current.global;
+          summerGameScore.global - prevSummerGameScoreRef.current.global;
         const userDiff =
-          summerGameUserData.user_score -
-          prevSummerGameUserDataRef.current.user_score;
+          summerGameScore.user_score -
+          prevSummerGameScoreRef.current.user_score;
 
         if (globalDiff > 0) {
           setScoreDiff((prev) => ({ ...prev, global: globalDiff }));
@@ -63,9 +50,9 @@ export default function EditMapSummerScore({
           ); // Animation duration
         }
       }
-      prevSummerGameUserDataRef.current = summerGameUserData;
+      prevSummerGameScoreRef.current = summerGameScore;
     }
-  }, [summerGameUserData]);
+  }, [summerGameScore]);
 
   const formatRank = (rank: number): string => {
     if (rank === 1) return '1er';
@@ -76,18 +63,20 @@ export default function EditMapSummerScore({
     <div className={styles.mapSummerScore}>
       <a href="/classement" className={styles.mapSummerScoreInside}>
         <div className={styles.mapSummerScoreTitle}>
-          L&apos;expérience <br />
-          collaborative
+          Trophées &amp;
+          <br />
+          Validations
         </div>
 
-        {!loading && summerGameUserData && (
+        {!loading && summerGameScore && (
           <>
             <div className={styles.mapSummerScoreSubpart}>
               <div className={styles.mapSummerScoreSubpartTitle}>
-                Score global
+                Objectif global
               </div>
               <div className={styles.mapSummerScoreSubpartValue}>
-                {summerGameUserData.global}/{summerGameUserData.goal}
+                {summerGameScore.global.toLocaleString('fr-FR')}/
+                {summerGameScore.goal.toLocaleString('fr-FR')}
                 {isAnimating.global && (
                   <span className={styles.mapSummerScoreAnimation}>
                     +{scoreDiff.global}
@@ -99,15 +88,16 @@ export default function EditMapSummerScore({
             <div className={styles.mapSummerScoreSubpart}>
               <div className={styles.mapSummerScoreSubpartTitle}>Mon score</div>
               <div className={styles.mapSummerScoreSubpartValue}>
-                {summerGameUserData.user_score}
-                {summerGameUserData.user_score > 0 && (
-                  <>
-                    {' '}
-                    <span className={styles.userRank}>
-                      ({formatRank(summerGameUserData.user_rank)})
-                    </span>
-                  </>
-                )}
+                {summerGameScore.user_score}
+                {summerGameScore.user_score > 0 &&
+                  summerGameScore.user_rank !== null && (
+                    <>
+                      {' '}
+                      <span className={styles.userRank}>
+                        ({formatRank(summerGameScore.user_rank)})
+                      </span>
+                    </>
+                  )}
 
                 {isAnimating.user && (
                   <span className={styles.mapSummerScoreAnimation}>
@@ -118,10 +108,10 @@ export default function EditMapSummerScore({
             </div>
           </>
         )}
-        {summerGameUserData && (
+        {summerGameScore && (
           <ProgressBar
-            score={summerGameUserData.global}
-            goal={summerGameUserData.goal}
+            score={summerGameScore.global}
+            goal={summerGameScore.goal}
           />
         )}
       </a>

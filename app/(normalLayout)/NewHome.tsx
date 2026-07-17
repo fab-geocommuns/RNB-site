@@ -3,6 +3,7 @@ import UseCases from '@/components/home/UseCases';
 import Databases from '@/components/home/Databases';
 import ToolsAndServices from '@/components/home/ToolsAndServices';
 import Governance from '@/components/home/Governance';
+import SummerGame from '@/components/games/summerGames/homeBlock';
 
 import { getBreakingNews, getUseCases } from '@/utils/blog';
 
@@ -11,6 +12,7 @@ import { getDatabases } from '@/utils/databases';
 export const revalidate = 10;
 
 export default async function Home() {
+  const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
   const breakingNews = await getBreakingNews();
   const useCases = await getUseCases();
 
@@ -35,6 +37,15 @@ export default async function Home() {
               </div>
             </div>
           </>
+        )}
+        {showSummerGame && (
+          <SummerGame
+            title="L'été des validations"
+            subtitle="Le nouveau jeu participatif du RNB"
+            limit={5}
+            withRankingTable={true}
+            showRankingLink={true}
+          />
         )}
         {!!useCases && <UseCases useCases={useCases} />}
         {availableDatabases && <Databases databases={availableDatabases} />}

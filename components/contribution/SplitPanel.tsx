@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingStatus from './BuildingStatus';
+import SnapToggle from './SnapToggle';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
@@ -183,6 +184,8 @@ function SplitBuildingCutStep({
                 Tracez un ou plusieurs traits de découpe sur le bâtiment.
                 Double-cliquez pour terminer un trait.
               </div>
+
+              <SnapToggle className="fr-mb-3v" />
 
               <div className="fr-mb-3v">
                 {cutLinesCount === 0 && <span>Aucun trait tracé</span>}

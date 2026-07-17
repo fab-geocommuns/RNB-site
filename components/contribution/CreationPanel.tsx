@@ -16,6 +16,7 @@ import {
   toasterSuccess,
 } from './toaster';
 import MapPointerClaim from '../map/MapPointerClaim';
+import SnapToggle from './SnapToggle';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -188,6 +189,7 @@ function BodyPanel({
                 <div>Un double-clic termine le tracé.</div>
               </>
             )}
+            <SnapToggle className="fr-mt-4v" />
           </div>
         </>
       )}

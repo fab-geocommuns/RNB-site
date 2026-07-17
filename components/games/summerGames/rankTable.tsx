@@ -27,7 +27,15 @@ export default function RankTable({ title, ranks }: RankTableProps) {
         {ranks.map((rank, index) => (
           <div key={index} className={styles.rankRow}>
             <div className={styles.rankMedalShell}>{index + 1} •</div>
-            <div className={styles.rankNameShell}>{rank.name}</div>
+            <div className={styles.rankNameShell}>
+              {rank.shortName ? (
+                <Tooltip kind="hover" title={rank.name}>
+                  {rank.shortName}
+                </Tooltip>
+              ) : (
+                rank.name
+              )}
+            </div>
             <div className={styles.rankCountShell}>
               {rank.count >= bigScoreLimit && (
                 <Tooltip kind="hover" title={rank.count}>
