@@ -13,10 +13,9 @@ import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
-import HelpRNCPanel from '@/components/HelpRNCPanel';
-
-// @ts-ignore
-import Cookies from 'js-cookie';
+import HelpSourcePanel, {
+  useHelpVariation,
+} from '@/components/HelpSourcePanel';
 
 // Analytics
 import va from '@vercel/analytics';
@@ -33,7 +32,6 @@ import { useMemo } from 'react';
 import { MapExtraLayer } from '@/stores/map/map-slice';
 import { getArrayQueryParam } from '@/utils/queryParams';
 import { isValidExtraLayer } from '@/stores/map/map-slice';
-import useQueryParamState from '@/utils/useQueryParamState';
 
 function getDefaultExtraLayers() {
   return (
@@ -65,25 +63,8 @@ export default function RNBMap() {
     });
   };
 
-  const SOURCES_FROM = ['RNC', 'PrioReno', 'IPPER'] as const;
-  const [from, setFrom] = useQueryParamState('from', '');
-  const cookieState = Cookies.get('state') === 'true';
-
-  useEffect(() => {
-    if (document.referrer.includes('registre-coproprietes.gouv.fr') && !from) {
-      setFrom('RNC');
-      Cookies.set('from', 'RNC', { expires: 365 });
-      Cookies.set('state', 'true', { expires: 365 });
-    } else if (document.referrer.includes('banquedesterritoires.fr')) {
-      setFrom('PrioReno');
-      Cookies.set('from', 'PrioReno', { expires: 365 });
-      Cookies.set('state', 'true', { expires: 365 });
-    } else if (document.referrer.includes('programme-cee-actee.fr')) {
-      setFrom('IPPER');
-      Cookies.set('from', 'IPPER', { expires: 365 });
-      Cookies.set('state', 'true', { expires: 365 });
-    }
-  }, [from, setFrom]);
+  const { variation: helpVariation, defaultOpen: helpDefaultOpen } =
+    useHelpVariation();
 
   useEffect(() => {
     Bus.on('address:search', trackAddressSearch);
@@ -116,8 +97,11 @@ export default function RNBMap() {
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}
-        {SOURCES_FROM.includes(from as 'RNC' | 'PrioReno' | 'IPPER') && (
-          <HelpRNCPanel defaultOpen={cookieState} from={from} />
+        {helpVariation && (
+          <HelpSourcePanel
+            defaultOpen={helpDefaultOpen}
+            variation={helpVariation}
+          />
         )}
 
         <div className={styles.map__mapShell}>

@@ -4,11 +4,14 @@
   left: 1rem;
   z-index: calc(var(--ground) + 760);
   height: 36px;
+  // Fixed so the button keeps the same footprint over the map whatever the
+  // source; sized for the longest label (PrioRéno, ~391px natural width).
+  width: 400px;
   padding: 0 12px;
   border-radius: 8px;
-  border: 2px solid #1a73e8;
+  border: 2px solid var(--blue-france-sun-113-625);
   background: white;
-  color: #1a73e8;
+  color: var(--blue-france-sun-113-625);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -23,45 +26,26 @@
 .connexionBlock {
   display: block;
   margin-top: 1rem;
-  padding: 12px 16px;
+  padding: 20px 24px;
   background: #e7edff;
   border-radius: 6px;
   color: #1a73e8;
   font-weight: 700;
   text-decoration: none;
-}
-.content {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #555;
-
-  h4 {
-    font-size: 14px;
-    font-weight: 500;
-    margin: 1rem 0 4px;
-    color: #222;
-  }
 
   p {
-    margin: 0 0 13px;
+    margin: 0 0 12px;
   }
 
-  ul {
-    margin: 4px 0 8px 1rem;
-    padding: 0;
+  ol {
+    margin: 0;
+    padding: 0 0 0 2rem;
+    font-weight: 400;
     li {
       margin-bottom: 4px;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
-  }
-
-  a {
-    color: #1a73e8;
-    text-decoration: underline;
-  }
-
-  img {
-    width: 100%;
-    margin: 8px 0;
-    display: block;
   }
 }
