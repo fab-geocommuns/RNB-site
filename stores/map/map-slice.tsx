@@ -25,6 +25,7 @@ export type PublicUser = {
   id: number;
   username: string;
   organization_name: string;
+  organization_short_name: string | null;
 };
 
 export type Plot = {

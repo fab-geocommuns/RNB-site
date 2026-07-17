@@ -44,6 +44,7 @@ export interface ApiHistoryItem {
       first_name: string;
       last_name: string;
       organization_name: string | null;
+      organization_short_name: string | null;
     } | null;
     origin: {
       type: string;
@@ -85,6 +86,7 @@ export interface ApiHistoryItem {
     id: string;
     username: string;
     organization_name: string;
+    organization_short_name: string | null;
   }>;
 }
 

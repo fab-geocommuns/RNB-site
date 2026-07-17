@@ -94,6 +94,7 @@ export function makeValidator(over: Partial<PublicUser> = {}): PublicUser {
     id: 1,
     username: 'ctemoin',
     organization_name: 'Organisation Test',
+    organization_short_name: null,
     ...over,
   };
 }

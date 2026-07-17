@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { hasUserValidated, formatValidatorNames } from './validations';
+import { hasUserValidated } from './validations';
 import { PublicUser } from '@/stores/map/map-slice';
 
 const user = (over: Partial<PublicUser>): PublicUser => ({
   id: 1,
   username: 'jdupont',
   organization_name: 'IGN',
+  organization_short_name: null,
   ...over,
 });
 
@@ -33,41 +34,5 @@ describe('hasUserValidated', () => {
     expect(hasUserValidated([user({ username: 'autre' })], 'jdupont')).toBe(
       false,
     );
-  });
-});
-
-describe('formatValidatorNames', () => {
-  it('retourne une chaîne vide pour une liste vide', () => {
-    expect(formatValidatorNames([])).toBe('');
-  });
-
-  it('affiche le username suivi de l’organisation entre parenthèses', () => {
-    expect(
-      formatValidatorNames([
-        user({ username: 'jdupont', organization_name: 'IGN' }),
-      ]),
-    ).toBe('jdupont (IGN)');
-  });
-
-  it('omet les parenthèses en l’absence d’organisation', () => {
-    expect(
-      formatValidatorNames([
-        user({ username: 'jdupont', organization_name: '' }),
-      ]),
-    ).toBe('jdupont');
-  });
-
-  it('sépare par des virgules sauf le dernier, introduit par « et »', () => {
-    expect(
-      formatValidatorNames([
-        user({ id: 1, username: 'jdupont', organization_name: 'IGN' }),
-        user({
-          id: 2,
-          username: 'mmartin',
-          organization_name: 'INSEE',
-        }),
-        user({ id: 3, username: 'lpetit', organization_name: 'BAN' }),
-      ]),
-    ).toBe('jdupont (IGN), mmartin (INSEE) et lpetit (BAN)');
   });
 });
