@@ -13,6 +13,9 @@ import VisuMap from '@/components/map/VisuMap';
 import VisuPanel from '@/components/VisuPanel';
 import AddressSearchMap from '@/components/address/AddressSearchMap';
 import ReportPanels from '@/components/map/report/ReportPanels';
+import HelpSourcePanel, {
+  useHelpVariation,
+} from '@/components/HelpSourcePanel';
 import VisuMapSummerScore from '@/components/games/summerGames/visuMapSummerScore';
 
 // Analytics
@@ -62,6 +65,9 @@ export default function RNBMap() {
     });
   };
 
+  const { variation: helpVariation, defaultOpen: helpDefaultOpen } =
+    useHelpVariation();
+
   useEffect(() => {
     Bus.on('address:search', trackAddressSearch);
     return () => {
@@ -94,6 +100,13 @@ export default function RNBMap() {
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
           <ReportPanels />
         )}
+        {helpVariation && (
+          <HelpSourcePanel
+            defaultOpen={helpDefaultOpen}
+            variation={helpVariation}
+          />
+        )}
+
         <div className={styles.map__mapShell}>
           <VisuMap defaultExtraLayers={defaultExtraLayers} />
         </div>
