@@ -26,7 +26,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@sentry/nextjs": "^8.55.0",
     "@terraformer/wkt": "^2.2.1",
-    "@tryghost/content-api": "^1.11.21",
+    "@tryghost/content-api": "^1.12.10",
     "@turf/turf": "^7.1.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "22.2.0",
