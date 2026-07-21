@@ -29,3 +29,6 @@ Sentry.init({
   debug: false,
   enabled: process.env.NODE_ENV !== 'development',
 });
+
+// Instrumente les navigations du routeur App Router (requis depuis Sentry v9).
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
