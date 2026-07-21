@@ -2,4 +2,10 @@ minimumReleaseAge: 2880 # 2 days
 minimumReleaseAgeExclude: ['react', 'react-dom', 'next', '@next/env']
 trustPolicy: no-downgrade
 trustPolicyExclude:
-  - semver@6.3.1 # https://github.com/pnpm/pnpm/issues/10202 
+  - semver@6.3.1 # https://github.com/pnpm/pnpm/issues/10202
+  # eslint-import-resolver-typescript 3.10.1 (dépendance d'eslint-config-next) est publié
+  # sans attestation de provenance alors que des versions antérieures en avaient une.
+  # Cette version exacte était déjà dans le lockfile et en production avant l'ajout de
+  # cette exclusion ; on l'accepte explicitement pour permettre le rafraîchissement du
+  # sous-arbre eslint-config-next (correctif minimatch, audit de juillet 2026).
+  - eslint-import-resolver-typescript@3.10.1 
