@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
+import CopyInlineBtn from '../util/CopyInlineBtn';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -166,6 +167,18 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             </div>
           </>
         </DeployableBlock>
+      </div>
+      <div className={panelStyles.section}>
+        <h2 className={panelStyles.sectionTitle}>Coordonnées</h2>
+        <div className={styles.coordsRow}>
+          <span>
+            {bdg.point.coordinates[1]}, {bdg.point.coordinates[0]}
+          </span>
+          <CopyInlineBtn
+            tooltipText="Copier les coordonnées"
+            strToCopy={`${bdg.point.coordinates[1]},${bdg.point.coordinates[0]}`}
+          />
+        </div>
       </div>
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Lien API</h2>
