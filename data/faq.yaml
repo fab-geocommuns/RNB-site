@@ -50,6 +50,10 @@
         <p>Cette définition est complétée par une <a href="https://github.com/fab-geocommuns/RNB/blob/main/CNIG/Annexe-Definition-Batiment.md">annexe</a>, qui vise à l’étayer et apporter un éclairage aux cas particuliers rencontrés.</p>
         <p>Vous ne savez pas si votre construction ou structure correspond à la définition du bâtiment ?</p>
         <p><b>Evaluez si votre construction est un bâtiment</b> dans le <a href="https://rnb.beta.gouv.fr/definition" target="_blank">moteur de recherche</a> et parcourez la liste des cas recensés par le RNB, par mots clés (ex : extension, terrasse, kiosque…).</p>
+    - question: Le RNB contient-il des bâtiments légers ? 
+      key: batimentslegers
+      answer: >
+        <p>Non, le RNB ne contient pas les bâtiments “légers” sans fondation (ex : serre avec tubulures en acier et bâche en plastique). Il contient les bâtiments ayant pour objectif d’être permanent. Si vous constatez qu’un bâtiment léger est présent dans le RNB, vous pouvez désactiver son ID-RNB (Voir <a href="https://rnb.beta.gouv.fr/faq#editer">Comment éditer dans le RNB ?</a></p> 
     - question: Qu’est-ce qu’un ID-RNB  ?
       key: idrnb
       answer: >
