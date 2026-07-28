@@ -171,8 +171,9 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
       <div className={panelStyles.section}>
         <h2 className={panelStyles.sectionTitle}>Coordonnées</h2>
         <div className={styles.coordsRow}>
-          <span>
-            {bdg.point.coordinates[1]}, {bdg.point.coordinates[0]}
+          <span className={styles.coordsValue}>
+            {bdg.point.coordinates[1].toFixed(6)},{' '}
+            {bdg.point.coordinates[0].toFixed(6)}
           </span>
           <CopyInlineBtn
             tooltipText="Copier les coordonnées"
