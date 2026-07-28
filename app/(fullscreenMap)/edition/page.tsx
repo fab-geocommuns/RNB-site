@@ -13,9 +13,19 @@ import '@/styles/mapBanLayer.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
+import { MapExtraLayer, isValidExtraLayer } from '@/stores/map/map-slice';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
-import { getDefaultMapLayers } from '@/utils/mapLayersDefaults';
-import { useSyncMapLayersCookie } from '@/utils/useSyncMapLayersCookie';
+import { getArrayQueryParam } from '@/utils/queryParams';
+
+function getDefaultExtraLayers() {
+  return (
+    getArrayQueryParam<MapExtraLayer>(
+      'extra_layers',
+      (value) => value as MapExtraLayer,
+      isValidExtraLayer,
+    ) || ['reports', 'validated']
+  );
+}
 
 export default function Page() {
   useClientSidePageTitle("Carte d'édition");
@@ -25,7 +35,7 @@ export default function Page() {
   const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
 
   // Map layers from store
-  const mapLayers = useSyncMapLayersCookie();
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   // Summer game : timestamp bumped after each successful edition to refresh the score badge
   const editMapSummerScoreUpdatedAt = useSelector(
@@ -34,19 +44,7 @@ export default function Page() {
 
   const { user } = useRNBAuthentication({ require: true });
 
-  const {
-    background: defaultBackgroundLayer,
-    buildings: defaultBuildingLayer,
-    extraLayers: defaultExtraLayers,
-  } = useMemo(
-    () =>
-      getDefaultMapLayers({
-        background: 'satellite',
-        buildings: 'polygon',
-        extraLayers: ['reports', 'validated'],
-      }),
-    [],
-  );
+  const defaultExtraLayers = useMemo(() => getDefaultExtraLayers(), []);
 
   if (!user) {
     return (
@@ -75,8 +73,8 @@ export default function Page() {
         )}
         <div className={styles.map__mapShell}>
           <EditMap
-            defaultBackgroundLayer={defaultBackgroundLayer}
-            defaultBuildingLayer={defaultBuildingLayer}
+            defaultBackgroundLayer="satellite"
+            defaultBuildingLayer="polygon"
             defaultExtraLayers={defaultExtraLayers}
             disabledLayers={['point']}
           />

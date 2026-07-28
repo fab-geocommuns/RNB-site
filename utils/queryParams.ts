@@ -32,12 +32,6 @@ export function setQueryParam(param: string, value: string | number) {
   window.history.replaceState({}, '', url);
 }
 
-export function getQueryParam(key: string): string | null {
-  if (typeof window === 'undefined') return null;
-  const searchParams = new URLSearchParams(window.location.search);
-  return searchParams.get(key);
-}
-
 export function removeQueryParam(param: string) {
   if (typeof window === 'undefined') return;
   const url = new URL(window.location.href);

@@ -25,11 +25,24 @@ import va from '@vercel/analytics';
 import Bus from '@/utils/Bus';
 
 // Store
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
 
 // Types
-import { getDefaultMapLayers } from '@/utils/mapLayersDefaults';
-import { useSyncMapLayersCookie } from '@/utils/useSyncMapLayersCookie';
+import { MapExtraLayer } from '@/stores/map/map-slice';
+import { getArrayQueryParam } from '@/utils/queryParams';
+import { isValidExtraLayer } from '@/stores/map/map-slice';
+
+function getDefaultExtraLayers() {
+  return (
+    getArrayQueryParam<MapExtraLayer>(
+      'extra_layers',
+      (value) => value as MapExtraLayer,
+      isValidExtraLayer,
+    ) || ['ads', 'validated']
+  );
+}
 
 export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
@@ -38,21 +51,10 @@ export default function RNBMap() {
   const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
 
   // Map layers from store
-  const mapLayers = useSyncMapLayersCookie();
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
-  const {
-    background: defaultBackgroundLayer,
-    buildings: defaultBuildingLayer,
-    extraLayers: defaultExtraLayers,
-  } = useMemo(
-    () =>
-      getDefaultMapLayers({
-        background: 'vectorIgnStandard',
-        buildings: 'point',
-        extraLayers: ['ads', 'validated'],
-      }),
-    [],
-  );
+  const defaultExtraLayers = useMemo(() => getDefaultExtraLayers(), []);
+
   // //////////////////////
   // Tracking address search
   // @ts-ignore
@@ -106,11 +108,7 @@ export default function RNBMap() {
         )}
 
         <div className={styles.map__mapShell}>
-          <VisuMap
-            defaultBackgroundLayer={defaultBackgroundLayer}
-            defaultBuildingLayer={defaultBuildingLayer}
-            defaultExtraLayers={defaultExtraLayers}
-          />
+          <VisuMap defaultExtraLayers={defaultExtraLayers} />
         </div>
       </div>
     </>
