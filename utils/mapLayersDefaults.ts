@@ -28,7 +28,9 @@ function getSavedLayers(): SavedLayers {
   const raw = Cookies.get(MAP_LAYERS_COOKIE_KEY);
   if (!raw) return {};
   try {
-    return JSON.parse(raw);
+    const savedLayers = JSON.parse(raw);
+    if (!savedLayers) return {};
+    return savedLayers;
   } catch {
     return {};
   }
