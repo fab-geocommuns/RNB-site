@@ -54,3 +54,13 @@
     }
   }
 }
+
+.coordsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.coordsValue {
+  font-size: 0.9em;
+}
