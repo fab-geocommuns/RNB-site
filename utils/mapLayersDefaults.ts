@@ -9,6 +9,7 @@ import {
 } from '@/stores/map/map-slice';
 
 export const MAP_LAYERS_COOKIE_KEY = 'rnb_map_layers';
+export const MAP_LAYERS_EDITION_COOKIE_KEY = 'rnb_map-layers_edition';
 
 export type SavedLayers = {
   background?: MapBackgroundLayer;
@@ -24,8 +25,8 @@ const VALID_BACKGROUNDS: MapBackgroundLayer[] = [
 ];
 const VALID_BUILDINGS: MapBuildingsLayer[] = ['point', 'polygon'];
 
-function getSavedLayers(): SavedLayers {
-  const raw = Cookies.get(MAP_LAYERS_COOKIE_KEY);
+function getSavedLayers(cookieKey: string): SavedLayers {
+  const raw = Cookies.get(cookieKey);
   if (!raw) return {};
   try {
     const savedLayers = JSON.parse(raw);
@@ -36,12 +37,15 @@ function getSavedLayers(): SavedLayers {
   }
 }
 
-export function getDefaultMapLayers(fallbacks: {
-  background: MapBackgroundLayer;
-  buildings: MapBuildingsLayer;
-  extraLayers: MapExtraLayer[];
-}): Required<SavedLayers> {
-  const saved = getSavedLayers();
+export function getDefaultMapLayers(
+  fallbacks: {
+    background: MapBackgroundLayer;
+    buildings: MapBuildingsLayer;
+    extraLayers: MapExtraLayer[];
+  },
+  cookieKey: string = MAP_LAYERS_COOKIE_KEY,
+): Required<SavedLayers> {
+  const saved = getSavedLayers(cookieKey);
 
   const fromUrlBackground = getQueryParam(
     'bg_layer',
@@ -83,8 +87,11 @@ export function getDefaultMapLayers(fallbacks: {
   return { background, buildings, extraLayers };
 }
 
-export function saveMapLayersPreference(layers: SavedLayers) {
-  Cookies.set(MAP_LAYERS_COOKIE_KEY, JSON.stringify(layers), {
+export function saveMapLayersPreference(
+  layers: SavedLayers,
+  cookieKey: string = MAP_LAYERS_COOKIE_KEY,
+) {
+  Cookies.set(cookieKey, JSON.stringify(layers), {
     expires: 365,
     path: '/',
     sameSite: 'Lax',

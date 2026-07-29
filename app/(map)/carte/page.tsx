@@ -28,12 +28,23 @@ import Bus from '@/utils/Bus';
 import { useMemo } from 'react';
 
 // Types
-import { getDefaultMapLayers } from '@/utils/mapLayersDefaults';
-import { useSelector } from 'react-redux';
+import {
+  getDefaultMapLayers,
+  MAP_LAYERS_COOKIE_KEY,
+} from '@/utils/mapLayersDefaults';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import { mapActions } from '@/stores/map/map-slice';
 
 export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(mapActions.setLayersCookieKey(MAP_LAYERS_COOKIE_KEY));
+  }, [dispatch]);
+
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
   const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
@@ -41,17 +52,21 @@ export default function RNBMap() {
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
+  // On réccupère les fonds de carte depuis les cookies
   const {
     background: defaultBackgroundLayer,
     buildings: defaultBuildingLayer,
     extraLayers: defaultExtraLayers,
   } = useMemo(
     () =>
-      getDefaultMapLayers({
-        background: 'vectorIgnStandard',
-        buildings: 'point',
-        extraLayers: ['ads', 'validated'],
-      }),
+      getDefaultMapLayers(
+        {
+          background: 'vectorIgnStandard',
+          buildings: 'point',
+          extraLayers: ['ads', 'validated'],
+        },
+        MAP_LAYERS_COOKIE_KEY,
+      ),
     [],
   );
 

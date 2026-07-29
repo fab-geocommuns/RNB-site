@@ -9,7 +9,10 @@ import {
   removeQueryParam,
 } from '@/utils/queryParams';
 import { RootState } from '../store';
-import { saveMapLayersPreference } from '@/utils/mapLayersDefaults';
+import {
+  MAP_LAYERS_COOKIE_KEY,
+  saveMapLayersPreference,
+} from '@/utils/mapLayersDefaults';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -113,6 +116,7 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
+  layersCookieKey: string;
   pointer: MapPointer;
 };
 
@@ -126,6 +130,7 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: [],
   },
+  layersCookieKey: MAP_LAYERS_COOKIE_KEY,
   pointer: 'pointer',
 };
 
@@ -133,6 +138,9 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
+    setLayersCookieKey(state, action) {
+      state.layersCookieKey = action.payload;
+    },
     setLayersBackground(state, action) {
       state.layers.background = action.payload;
     },
@@ -201,16 +209,16 @@ const setBackgroundLayer =
   (background: MapBackgroundLayer) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersBackground(background));
-    const { layers } = getState().map;
-    saveMapLayersPreference({ ...layers, background });
+    const { layers, layersCookieKey } = getState().map;
+    saveMapLayersPreference({ ...layers, background }, layersCookieKey);
   };
 
 const setBuildingsLayer =
   (buildings: MapBuildingsLayer) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersBuildings(buildings));
-    const { layers } = getState().map;
-    saveMapLayersPreference({ ...layers, buildings });
+    const { layers, layersCookieKey } = getState().map;
+    saveMapLayersPreference({ ...layers, buildings }, layersCookieKey);
   };
 
 const setExtraLayers =
@@ -218,8 +226,8 @@ const setExtraLayers =
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
     setArrayQueryParam('extra_layers', extraLayers);
-    const { layers } = getState().map;
-    saveMapLayersPreference({ ...layers, extraLayers });
+    const { layers, layersCookieKey } = getState().map;
+    saveMapLayersPreference({ ...layers, extraLayers }, layersCookieKey);
   };
 
 const toggleExtraLayer =
