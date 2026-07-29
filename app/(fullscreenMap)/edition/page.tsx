@@ -14,8 +14,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
-import { useSyncMapLayersCookie } from '@/utils/useSyncMapLayersCookie';
-import { getDefaultMapLayers } from '@/utils/mapLayersDefaults';
 import { getArrayQueryParam } from '@/utils/queryParams';
 import { isValidExtraLayer, MapExtraLayer } from '@/stores/map/map-slice';
 

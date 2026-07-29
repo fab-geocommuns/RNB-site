@@ -29,7 +29,8 @@ import { useMemo } from 'react';
 
 // Types
 import { getDefaultMapLayers } from '@/utils/mapLayersDefaults';
-import { useSyncMapLayersCookie } from '@/utils/useSyncMapLayersCookie';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
@@ -38,7 +39,7 @@ export default function RNBMap() {
   const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
 
   // Map layers from store
-  const mapLayers = useSyncMapLayersCookie();
+  const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const {
     background: defaultBackgroundLayer,

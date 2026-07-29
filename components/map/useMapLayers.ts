@@ -131,10 +131,10 @@ export const useMapLayers = ({
 
   useEffect(() => {
     if (defaultBackgroundLayer)
-      dispatch(Actions.map.setLayersBackground(defaultBackgroundLayer));
+      dispatch(Actions.map.setBackgroundLayer(defaultBackgroundLayer));
 
     if (defaultBuildingLayer)
-      dispatch(Actions.map.setLayersBuildings(defaultBuildingLayer));
+      dispatch(Actions.map.setBuildingsLayer(defaultBuildingLayer));
 
     if (defaultExtraLayers)
       dispatch(

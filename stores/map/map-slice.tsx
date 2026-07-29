@@ -9,6 +9,7 @@ import {
   removeQueryParam,
 } from '@/utils/queryParams';
 import { RootState } from '../store';
+import { saveMapLayersPreference } from '@/utils/mapLayersDefaults';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -196,10 +197,31 @@ export const mapSlice = createSlice({
   },
 });
 
-const setExtraLayers = (extraLayers: MapExtraLayer[]) => (dispatch: any) => {
-  dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
-  setArrayQueryParam('extra_layers', extraLayers);
-};
+const setBackgroundLayer =
+  (background: MapBackgroundLayer) =>
+  (dispatch: any, getState: () => RootState) => {
+    dispatch(mapSlice.actions.setLayersBackground(background));
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, background });
+  };
+
+const setBuildingsLayer =
+  (buildings: MapBuildingsLayer) =>
+  (dispatch: any, getState: () => RootState) => {
+    dispatch(mapSlice.actions.setLayersBuildings(buildings));
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, buildings });
+  };
+
+const setExtraLayers =
+  (extraLayers: MapExtraLayer[]) =>
+  (dispatch: any, getState: () => RootState) => {
+    dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
+    setArrayQueryParam('extra_layers', extraLayers);
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, extraLayers });
+  };
+
 const toggleExtraLayer =
   (extraLayer: MapExtraLayer) => (dispatch: any, getState: () => RootState) => {
     const state = getState();
@@ -260,6 +282,8 @@ export const mapActions = {
   selectADS,
   setExtraLayers,
   toggleExtraLayer,
+  setBackgroundLayer,
+  setBuildingsLayer,
 };
 
 export const mapReducer = mapSlice.reducer;

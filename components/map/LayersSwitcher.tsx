@@ -100,7 +100,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const handleChangeBackgroundClick = (background: MapBackgroundLayer) => {
-    dispatch(Actions.map.setLayersBackground(background));
+    dispatch(Actions.map.setBackgroundLayer(background));
   };
 
   useHotkeys('shift+s', () => {
@@ -114,7 +114,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   });
 
   const handleChangeBuildingLayer = (layer: MapBuildingsLayer) => {
-    dispatch(Actions.map.setLayersBuildings(layer));
+    dispatch(Actions.map.setBuildingsLayer(layer));
   };
 
   const handleExtraLayerClick = (layer: MapExtraLayer) => {
