@@ -53,7 +53,7 @@
     - question: Le RNB contient-il des bâtiments légers ? 
       key: batimentslegers
       answer: >
-        <p>Non, le RNB ne contient pas les bâtiments “légers” sans fondation (ex : serre avec tubulures en acier et bâche en plastique). Il contient les bâtiments ayant pour objectif d’être permanent. Si vous constatez qu’un bâtiment léger est présent dans le RNB, vous pouvez désactiver son ID-RNB (Voir <a href="https://rnb.beta.gouv.fr/faq#editer">Comment éditer dans le RNB ?</a></p> 
+        <p>Non, le RNB ne contient pas les bâtiments “légers” sans fondation (ex : serre avec tubulures en acier et bâche en plastique). Il contient les bâtiments ayant pour objectif d’être permanents. Si vous constatez qu’un bâtiment léger est présent dans le RNB, vous pouvez désactiver son ID-RNB (Voir <a href="https://rnb.beta.gouv.fr/faq#editer">Comment éditer dans le RNB ?</a></p> 
     - question: Qu’est-ce qu’un ID-RNB  ?
       key: idrnb
       answer: >
