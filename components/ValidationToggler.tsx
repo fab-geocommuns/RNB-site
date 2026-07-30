@@ -75,6 +75,7 @@ export default function ValidationToggler({
         );
         // Re-consultation du bâtiment pour rafraîchir validated_by (réponse 204).
         await dispatch(Actions.map.selectBuilding(building.rnb_id));
+        dispatch(Actions.map.reloadBuildings());
 
         // Détection des trophées gagnés grâce à cette validation (nouveau type
         // ou passage à un palier supérieur).
