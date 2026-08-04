@@ -32,18 +32,11 @@ import {
   getDefaultMapLayers,
   MAP_LAYERS_COOKIE_KEY,
 } from '@/utils/mapLayersDefaults';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
-import { mapActions } from '@/stores/map/map-slice';
 
 export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(mapActions.setLayersCookieKey(MAP_LAYERS_COOKIE_KEY));
-  }, [dispatch]);
 
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
@@ -127,6 +120,7 @@ export default function RNBMap() {
             defaultBackgroundLayer={defaultBackgroundLayer}
             defaultBuildingLayer={defaultBuildingLayer}
             defaultExtraLayers={defaultExtraLayers}
+            cookieKey={MAP_LAYERS_COOKIE_KEY}
           />
         </div>
       </div>

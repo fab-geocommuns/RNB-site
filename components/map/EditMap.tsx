@@ -29,6 +29,7 @@ type Props = {
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
   defaultExtraLayers?: MapExtraLayer[];
+  cookieKey: string;
 };
 
 export default function EditMap({
@@ -36,14 +37,16 @@ export default function EditMap({
   defaultBackgroundLayer,
   defaultBuildingLayer,
   defaultExtraLayers,
+  cookieKey,
 }: Props) {
-  const { map, mapContainer } = useMap({ disabledLayers });
+  const { map, mapContainer } = useMap({ disabledLayers, cookieKey });
 
   useMapLayers({
     map,
     defaultBackgroundLayer,
     defaultBuildingLayer,
     defaultExtraLayers,
+    cookieKey,
     selectedBuildingisGreen: true,
     editionMode: true,
   });

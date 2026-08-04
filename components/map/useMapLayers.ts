@@ -59,6 +59,7 @@ export const useMapLayers = ({
   defaultBackgroundLayer,
   defaultBuildingLayer,
   defaultExtraLayers,
+  cookieKey,
   selectedBuildingisGreen,
   editionMode,
 }: {
@@ -66,6 +67,7 @@ export const useMapLayers = ({
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
   defaultExtraLayers?: MapExtraLayer[] | null;
+  cookieKey: string;
   selectedBuildingisGreen?: Boolean;
   editionMode?: boolean;
 }) => {
@@ -131,18 +133,26 @@ export const useMapLayers = ({
 
   useEffect(() => {
     if (defaultBackgroundLayer)
-      dispatch(Actions.map.setBackgroundLayer(defaultBackgroundLayer));
+      dispatch(
+        Actions.map.setBackgroundLayer(defaultBackgroundLayer, cookieKey),
+      );
 
     if (defaultBuildingLayer)
-      dispatch(Actions.map.setBuildingsLayer(defaultBuildingLayer));
+      dispatch(Actions.map.setBuildingsLayer(defaultBuildingLayer, cookieKey));
 
     if (defaultExtraLayers)
       dispatch(
         Actions.map.setExtraLayers(
           defaultExtraLayers as unknown as MapExtraLayer[],
+          cookieKey,
         ),
       );
-  }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
+  }, [
+    defaultBackgroundLayer,
+    defaultBuildingLayer,
+    defaultExtraLayers,
+    cookieKey,
+  ]);
 
   useEffect(() => {
     if (map) {

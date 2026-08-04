@@ -89,7 +89,7 @@ export function getDefaultMapLayers(
 
 export function saveMapLayersPreference(
   layers: SavedLayers,
-  cookieKey: string = MAP_LAYERS_COOKIE_KEY,
+  cookieKey: string,
 ) {
   Cookies.set(cookieKey, JSON.stringify(layers), {
     expires: 365,

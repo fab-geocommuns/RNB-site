@@ -116,7 +116,6 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
-  layersCookieKey: string;
   pointer: MapPointer;
 };
 
@@ -130,7 +129,6 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: [],
   },
-  layersCookieKey: MAP_LAYERS_COOKIE_KEY,
   pointer: 'pointer',
 };
 
@@ -138,9 +136,6 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    setLayersCookieKey(state, action) {
-      state.layersCookieKey = action.payload;
-    },
     setLayersBackground(state, action) {
       state.layers.background = action.payload;
     },
@@ -206,32 +201,33 @@ export const mapSlice = createSlice({
 });
 
 const setBackgroundLayer =
-  (background: MapBackgroundLayer) =>
+  (background: MapBackgroundLayer, cookieKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersBackground(background));
-    const { layers, layersCookieKey } = getState().map;
-    saveMapLayersPreference({ ...layers, background }, layersCookieKey);
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, background }, cookieKey);
   };
 
 const setBuildingsLayer =
-  (buildings: MapBuildingsLayer) =>
+  (buildings: MapBuildingsLayer, cookieKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersBuildings(buildings));
-    const { layers, layersCookieKey } = getState().map;
-    saveMapLayersPreference({ ...layers, buildings }, layersCookieKey);
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, buildings }, cookieKey);
   };
 
 const setExtraLayers =
-  (extraLayers: MapExtraLayer[]) =>
+  (extraLayers: MapExtraLayer[], cookieKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
     setArrayQueryParam('extra_layers', extraLayers);
-    const { layers, layersCookieKey } = getState().map;
-    saveMapLayersPreference({ ...layers, extraLayers }, layersCookieKey);
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, extraLayers }, cookieKey);
   };
 
 const toggleExtraLayer =
-  (extraLayer: MapExtraLayer) => (dispatch: any, getState: () => RootState) => {
+  (extraLayer: MapExtraLayer, cookieKey: string) =>
+  (dispatch: any, getState: () => RootState) => {
     const state = getState();
     const index = state.map.layers.extraLayers.indexOf(extraLayer);
     const newExtraLayers = [...state.map.layers.extraLayers];
@@ -240,7 +236,7 @@ const toggleExtraLayer =
     } else {
       newExtraLayers.splice(index, 1);
     }
-    dispatch(setExtraLayers(newExtraLayers));
+    dispatch(setExtraLayers(newExtraLayers, cookieKey));
   };
 
 export const selectADS = createAsyncThunk(

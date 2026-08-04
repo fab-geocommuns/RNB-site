@@ -22,6 +22,7 @@ type Props = {
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
   defaultExtraLayers?: MapExtraLayer[];
+  cookieKey: string;
 };
 
 export default function VisuMap({
@@ -29,13 +30,15 @@ export default function VisuMap({
   defaultBackgroundLayer,
   defaultBuildingLayer,
   defaultExtraLayers,
+  cookieKey,
 }: Props) {
-  const { map, mapContainer } = useMap({ disabledLayers });
+  const { map, mapContainer } = useMap({ disabledLayers, cookieKey });
   useMapLayers({
     map,
     defaultBackgroundLayer,
     defaultBuildingLayer,
     defaultExtraLayers,
+    cookieKey,
     selectedBuildingisGreen: true,
   });
   useMapControls(map);

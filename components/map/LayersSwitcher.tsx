@@ -89,9 +89,13 @@ function LayerButton({
 
 type Props = {
   disabledLayers?: MapLayer[];
+  cookieKey: string;
 };
 
-export default function LayersSwitcher({ disabledLayers = [] }: Props) {
+export default function LayersSwitcher({
+  disabledLayers = [],
+  cookieKey,
+}: Props) {
   // Open or not
   const [open, setOpen] = useState(false);
 
@@ -100,7 +104,7 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
   const handleChangeBackgroundClick = (background: MapBackgroundLayer) => {
-    dispatch(Actions.map.setBackgroundLayer(background));
+    dispatch(Actions.map.setBackgroundLayer(background, cookieKey));
   };
 
   useHotkeys('shift+s', () => {
@@ -114,11 +118,11 @@ export default function LayersSwitcher({ disabledLayers = [] }: Props) {
   });
 
   const handleChangeBuildingLayer = (layer: MapBuildingsLayer) => {
-    dispatch(Actions.map.setBuildingsLayer(layer));
+    dispatch(Actions.map.setBuildingsLayer(layer, cookieKey));
   };
 
   const handleExtraLayerClick = (layer: MapExtraLayer) => {
-    dispatch(Actions.map.toggleExtraLayer(layer));
+    dispatch(Actions.map.toggleExtraLayer(layer, cookieKey));
   };
 
   const isAvailable = (layer: MapLayer) => !disabledLayers.includes(layer);

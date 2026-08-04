@@ -10,24 +10,17 @@ import { Loader } from '@/components/Loader';
 import styles from '@/styles/mapPage.module.scss';
 import '@/styles/mapBanLayer.scss';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
 import {
   getDefaultMapLayers,
   MAP_LAYERS_EDITION_COOKIE_KEY,
 } from '@/utils/mapLayersDefaults';
-import { mapActions } from '@/stores/map/map-slice';
 
 export default function Page() {
   useClientSidePageTitle("Carte d'édition");
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(mapActions.setLayersCookieKey(MAP_LAYERS_EDITION_COOKIE_KEY));
-  }, [dispatch]);
 
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
@@ -91,6 +84,7 @@ export default function Page() {
             defaultBackgroundLayer={defaultBackgroundLayer}
             defaultBuildingLayer={defaultBuildingLayer}
             defaultExtraLayers={defaultExtraLayers}
+            cookieKey={MAP_LAYERS_EDITION_COOKIE_KEY}
             disabledLayers={['point']}
           />
         </div>
