@@ -1,6 +1,5 @@
 import { getArrayQueryParam, getQueryParam } from '@/utils/queryParams';
 // @ts-ignore
-import Cookies from 'js-cookie';
 import {
   MapBackgroundLayer,
   MapBuildingsLayer,
@@ -26,12 +25,11 @@ const VALID_BACKGROUNDS: MapBackgroundLayer[] = [
 const VALID_BUILDINGS: MapBuildingsLayer[] = ['point', 'polygon'];
 
 function getSavedLayers(cookieKey: string): SavedLayers {
-  const raw = Cookies.get(cookieKey);
+  const raw =
+    typeof window !== 'undefined' ? localStorage.getItem(cookieKey) : null;
   if (!raw) return {};
   try {
-    const savedLayers = JSON.parse(raw);
-    if (!savedLayers) return {};
-    return savedLayers;
+    return JSON.parse(raw) ?? {};
   } catch {
     return {};
   }
@@ -91,9 +89,6 @@ export function saveMapLayersPreference(
   layers: SavedLayers,
   cookieKey: string,
 ) {
-  Cookies.set(cookieKey, JSON.stringify(layers), {
-    expires: 365,
-    path: '/',
-    sameSite: 'Lax',
-  });
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(cookieKey, JSON.stringify(layers));
 }
