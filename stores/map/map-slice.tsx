@@ -9,6 +9,10 @@ import {
   removeQueryParam,
 } from '@/utils/queryParams';
 import { RootState } from '../store';
+import {
+  MAP_LAYERS_KEY,
+  saveMapLayersPreference,
+} from '@/utils/mapLayersDefaults';
 
 export type BuildingAddress = {
   id: string; // Also BAN ID
@@ -196,12 +200,34 @@ export const mapSlice = createSlice({
   },
 });
 
-const setExtraLayers = (extraLayers: MapExtraLayer[]) => (dispatch: any) => {
-  dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
-  setArrayQueryParam('extra_layers', extraLayers);
-};
+const setBackgroundLayer =
+  (background: MapBackgroundLayer, layersKey: string) =>
+  (dispatch: any, getState: () => RootState) => {
+    dispatch(mapSlice.actions.setLayersBackground(background));
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, background }, layersKey);
+  };
+
+const setBuildingsLayer =
+  (buildings: MapBuildingsLayer, layersKey: string) =>
+  (dispatch: any, getState: () => RootState) => {
+    dispatch(mapSlice.actions.setLayersBuildings(buildings));
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, buildings }, layersKey);
+  };
+
+const setExtraLayers =
+  (extraLayers: MapExtraLayer[], layersKey: string) =>
+  (dispatch: any, getState: () => RootState) => {
+    dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
+    setArrayQueryParam('extra_layers', extraLayers);
+    const { layers } = getState().map;
+    saveMapLayersPreference({ ...layers, extraLayers }, layersKey);
+  };
+
 const toggleExtraLayer =
-  (extraLayer: MapExtraLayer) => (dispatch: any, getState: () => RootState) => {
+  (extraLayer: MapExtraLayer, layersKey: string) =>
+  (dispatch: any, getState: () => RootState) => {
     const state = getState();
     const index = state.map.layers.extraLayers.indexOf(extraLayer);
     const newExtraLayers = [...state.map.layers.extraLayers];
@@ -210,7 +236,7 @@ const toggleExtraLayer =
     } else {
       newExtraLayers.splice(index, 1);
     }
-    dispatch(setExtraLayers(newExtraLayers));
+    dispatch(setExtraLayers(newExtraLayers, layersKey));
   };
 
 export const selectADS = createAsyncThunk(
@@ -260,6 +286,8 @@ export const mapActions = {
   selectADS,
   setExtraLayers,
   toggleExtraLayer,
+  setBackgroundLayer,
+  setBuildingsLayer,
 };
 
 export const mapReducer = mapSlice.reducer;

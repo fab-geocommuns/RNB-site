@@ -34,6 +34,8 @@ export default function RNBHeader({ withNavigation = true }: Props) {
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const cleanedSearchParams = new URLSearchParams(searchParams.toString());
+  cleanedSearchParams.delete('extra_layers');
 
   const [quickActions, setQuickActions] = useState([]);
   const [title, setTitle] = useState('Référentiel National des Bâtiments');
@@ -56,7 +58,11 @@ export default function RNBHeader({ withNavigation = true }: Props) {
       let goBackToSiteQA = {
         iconId: 'fr-icon-arrow-left-line',
         linkProps: {
-          href: `/carte?${searchParams.toString()}`,
+          href: `/carte?${cleanedSearchParams.toString()}`,
+          onClick: (e: React.MouseEvent) => {
+            e.preventDefault();
+            window.location.href = `/carte?${cleanedSearchParams.toString()}`;
+          },
         },
         text: 'Retour au site',
       };

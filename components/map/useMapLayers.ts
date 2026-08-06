@@ -59,6 +59,7 @@ export const useMapLayers = ({
   defaultBackgroundLayer,
   defaultBuildingLayer,
   defaultExtraLayers,
+  layersKey,
   selectedBuildingisGreen,
   editionMode,
 }: {
@@ -66,6 +67,7 @@ export const useMapLayers = ({
   defaultBackgroundLayer?: MapBackgroundLayer;
   defaultBuildingLayer?: MapBuildingsLayer;
   defaultExtraLayers?: MapExtraLayer[] | null;
+  layersKey: string;
   selectedBuildingisGreen?: Boolean;
   editionMode?: boolean;
 }) => {
@@ -140,9 +142,15 @@ export const useMapLayers = ({
       dispatch(
         Actions.map.setExtraLayers(
           defaultExtraLayers as unknown as MapExtraLayer[],
+          layersKey,
         ),
       );
-  }, [defaultBackgroundLayer, defaultBuildingLayer, defaultExtraLayers]);
+  }, [
+    defaultBackgroundLayer,
+    defaultBuildingLayer,
+    defaultExtraLayers,
+    layersKey,
+  ]);
 
   useEffect(() => {
     if (map) {

@@ -25,27 +25,16 @@ import va from '@vercel/analytics';
 import Bus from '@/utils/Bus';
 
 // Store
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/store';
 import { useMemo } from 'react';
 
 // Types
-import { MapExtraLayer } from '@/stores/map/map-slice';
-import { getArrayQueryParam } from '@/utils/queryParams';
-import { isValidExtraLayer } from '@/stores/map/map-slice';
-
-function getDefaultExtraLayers() {
-  return (
-    getArrayQueryParam<MapExtraLayer>(
-      'extra_layers',
-      (value) => value as MapExtraLayer,
-      isValidExtraLayer,
-    ) || ['ads', 'validated']
-  );
-}
+import { getDefaultMapLayers, MAP_LAYERS_KEY } from '@/utils/mapLayersDefaults';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 export default function RNBMap() {
   useClientSidePageTitle('Carte des bâtiments');
+
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
   const showSummerGame = process.env.NEXT_PUBLIC_SHOW_SUMMER_GAME === 'true';
@@ -53,7 +42,23 @@ export default function RNBMap() {
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
-  const defaultExtraLayers = useMemo(() => getDefaultExtraLayers(), []);
+  // On récupère les fonds de carte depuis le local storage
+  const {
+    background: defaultBackgroundLayer,
+    buildings: defaultBuildingLayer,
+    extraLayers: defaultExtraLayers,
+  } = useMemo(
+    () =>
+      getDefaultMapLayers(
+        {
+          background: 'vectorIgnStandard',
+          buildings: 'point',
+          extraLayers: ['ads', 'validated'],
+        },
+        MAP_LAYERS_KEY,
+      ),
+    [],
+  );
 
   // //////////////////////
   // Tracking address search
@@ -108,7 +113,12 @@ export default function RNBMap() {
         )}
 
         <div className={styles.map__mapShell}>
-          <VisuMap defaultExtraLayers={defaultExtraLayers} />
+          <VisuMap
+            defaultBackgroundLayer={defaultBackgroundLayer}
+            defaultBuildingLayer={defaultBuildingLayer}
+            defaultExtraLayers={defaultExtraLayers}
+            layersKey={MAP_LAYERS_KEY}
+          />
         </div>
       </div>
     </>
