@@ -9,9 +9,11 @@ import { usePathname, useSearchParams } from 'next/navigation';
 export default function EditRNBButton({ modal }: any) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const cleanedSearchParams = new URLSearchParams(searchParams.toString());
+  cleanedSearchParams.delete('extra_layers');
   let editUrl = '/edition';
   if (pathname === '/carte') {
-    editUrl = `/edition?${searchParams.toString()}`;
+    editUrl = `/edition?${cleanedSearchParams.toString()}`;
   }
 
   const explainBtnClickHandler = (e: React.MouseEvent) => {
