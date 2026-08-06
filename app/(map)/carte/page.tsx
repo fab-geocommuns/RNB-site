@@ -28,10 +28,7 @@ import Bus from '@/utils/Bus';
 import { useMemo } from 'react';
 
 // Types
-import {
-  getDefaultMapLayers,
-  MAP_LAYERS_COOKIE_KEY,
-} from '@/utils/mapLayersDefaults';
+import { getDefaultMapLayers, MAP_LAYERS_KEY } from '@/utils/mapLayersDefaults';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 
@@ -58,7 +55,7 @@ export default function RNBMap() {
           buildings: 'point',
           extraLayers: ['ads', 'validated'],
         },
-        MAP_LAYERS_COOKIE_KEY,
+        MAP_LAYERS_KEY,
       ),
     [],
   );
@@ -120,7 +117,7 @@ export default function RNBMap() {
             defaultBackgroundLayer={defaultBackgroundLayer}
             defaultBuildingLayer={defaultBuildingLayer}
             defaultExtraLayers={defaultExtraLayers}
-            cookieKey={MAP_LAYERS_COOKIE_KEY}
+            layersKey={MAP_LAYERS_KEY}
           />
         </div>
       </div>

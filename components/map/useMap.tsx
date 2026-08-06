@@ -9,14 +9,14 @@ import TrophyWon from '@/components/games/trophy/trophyWon';
 
 type UseMapParams = {
   disabledLayers?: MapLayer[];
-  cookieKey: string;
+  layersKey: string;
 };
 
 /**
  * Création de la carte MapLibre
  */
 export const useMap = (params: UseMapParams) => {
-  const { disabledLayers = [], cookieKey } = params;
+  const { disabledLayers = [], layersKey } = params;
   const [map, setMap] = useState<maplibregl.Map>();
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +25,7 @@ export const useMap = (params: UseMapParams) => {
     () => (
       <>
         <div className={styles.map} ref={mapContainerRef} />
-        <LayersSwitcher disabledLayers={disabledLayers} cookieKey={cookieKey} />
+        <LayersSwitcher disabledLayers={disabledLayers} layersKey={layersKey} />
         <Toaster></Toaster>
         <TrophyWon />
       </>

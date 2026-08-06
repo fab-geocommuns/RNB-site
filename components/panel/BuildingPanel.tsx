@@ -27,7 +27,7 @@ import { Actions, AppDispatch, RootState } from '@/stores/store';
 
 import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
 import CopyInlineBtn from '../util/CopyInlineBtn';
-import { MAP_LAYERS_COOKIE_KEY } from '@/utils/mapLayersDefaults';
+import { MAP_LAYERS_KEY } from '@/utils/mapLayersDefaults';
 
 interface BuildingPanelProps {
   bdg: SelectedBuilding;
@@ -64,7 +64,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
 
   const handlePlotBtnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    dispatch(Actions.map.toggleExtraLayer('plots', MAP_LAYERS_COOKIE_KEY));
+    dispatch(Actions.map.toggleExtraLayer('plots', MAP_LAYERS_KEY));
   };
 
   useEffect(() => {

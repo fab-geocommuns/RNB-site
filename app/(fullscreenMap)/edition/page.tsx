@@ -16,7 +16,7 @@ import { useMemo } from 'react';
 import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
 import {
   getDefaultMapLayers,
-  MAP_LAYERS_EDITION_COOKIE_KEY,
+  MAP_LAYERS_EDITION_KEY,
 } from '@/utils/mapLayersDefaults';
 
 export default function Page() {
@@ -42,7 +42,7 @@ export default function Page() {
           buildings: 'polygon',
           extraLayers: ['reports', 'validated'],
         },
-        MAP_LAYERS_EDITION_COOKIE_KEY,
+        MAP_LAYERS_EDITION_KEY,
       ),
     [],
   );
@@ -84,7 +84,7 @@ export default function Page() {
             defaultBackgroundLayer={defaultBackgroundLayer}
             defaultBuildingLayer={defaultBuildingLayer}
             defaultExtraLayers={defaultExtraLayers}
-            cookieKey={MAP_LAYERS_EDITION_COOKIE_KEY}
+            layersKey={MAP_LAYERS_EDITION_KEY}
             disabledLayers={['point']}
           />
         </div>

@@ -10,7 +10,7 @@ import {
 } from '@/utils/queryParams';
 import { RootState } from '../store';
 import {
-  MAP_LAYERS_COOKIE_KEY,
+  MAP_LAYERS_KEY,
   saveMapLayersPreference,
 } from '@/utils/mapLayersDefaults';
 
@@ -201,32 +201,32 @@ export const mapSlice = createSlice({
 });
 
 const setBackgroundLayer =
-  (background: MapBackgroundLayer, cookieKey: string) =>
+  (background: MapBackgroundLayer, layersKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersBackground(background));
     const { layers } = getState().map;
-    saveMapLayersPreference({ ...layers, background }, cookieKey);
+    saveMapLayersPreference({ ...layers, background }, layersKey);
   };
 
 const setBuildingsLayer =
-  (buildings: MapBuildingsLayer, cookieKey: string) =>
+  (buildings: MapBuildingsLayer, layersKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersBuildings(buildings));
     const { layers } = getState().map;
-    saveMapLayersPreference({ ...layers, buildings }, cookieKey);
+    saveMapLayersPreference({ ...layers, buildings }, layersKey);
   };
 
 const setExtraLayers =
-  (extraLayers: MapExtraLayer[], cookieKey: string) =>
+  (extraLayers: MapExtraLayer[], layersKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     dispatch(mapSlice.actions.setLayersExtraInStore(extraLayers));
     setArrayQueryParam('extra_layers', extraLayers);
     const { layers } = getState().map;
-    saveMapLayersPreference({ ...layers, extraLayers }, cookieKey);
+    saveMapLayersPreference({ ...layers, extraLayers }, layersKey);
   };
 
 const toggleExtraLayer =
-  (extraLayer: MapExtraLayer, cookieKey: string) =>
+  (extraLayer: MapExtraLayer, layersKey: string) =>
   (dispatch: any, getState: () => RootState) => {
     const state = getState();
     const index = state.map.layers.extraLayers.indexOf(extraLayer);
@@ -236,7 +236,7 @@ const toggleExtraLayer =
     } else {
       newExtraLayers.splice(index, 1);
     }
-    dispatch(setExtraLayers(newExtraLayers, cookieKey));
+    dispatch(setExtraLayers(newExtraLayers, layersKey));
   };
 
 export const selectADS = createAsyncThunk(
