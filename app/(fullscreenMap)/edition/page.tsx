@@ -29,7 +29,7 @@ export default function Page() {
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
 
-  // On réccupère les fonds de carte depuis les cookies
+  // On récupère les fonds de carte depuis le local storage
   const {
     background: defaultBackgroundLayer,
     buildings: defaultBuildingLayer,
