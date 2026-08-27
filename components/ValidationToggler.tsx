@@ -71,7 +71,7 @@ export default function ValidationToggler({
       } else {
         toasterSuccess(
           dispatch,
-          isValid ? 'Validation enregistrée' : 'Validation retirée',
+          isValid ? 'Validation enregistrée' : 'Validation retiréezzz',
         );
         // Re-consultation du bâtiment pour rafraîchir validated_by (réponse 204).
         await dispatch(Actions.map.selectBuilding(building.rnb_id));
