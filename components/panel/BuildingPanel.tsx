@@ -9,7 +9,7 @@ import BdTopoBdnbContent from '@/components/BdTopoBdnbContent';
 import RNBIDHeader from '@/components/contribution/RNBIDHeader';
 import BuildingMainAttributes from '@/components/BuildingMainAttributes';
 import PanelTabs from '@/components/panel/PanelTabs';
-import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import { useAutoActivateDemolishedLayer } from '@/components/map/useAutoActivateDemolishedLayer';
 
 // Styles
 import styles from '@/styles/panelBuilding.module.scss';
@@ -72,6 +72,8 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
       va.track('open-side-panel', { rnb_id: bdg.rnb_id });
     }
   }, [bdg?.rnb_id]);
+
+  useAutoActivateDemolishedLayer(bdg, MAP_LAYERS_KEY);
 
   return (
     <div>

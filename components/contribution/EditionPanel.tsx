@@ -39,6 +39,8 @@ import {
 } from './toaster';
 import SplitPanel from './SplitPanel';
 import ValidationToggler from '../ValidationToggler';
+import { useAutoActivateDemolishedLayer } from '@/components/map/useAutoActivateDemolishedLayer';
+import { MAP_LAYERS_EDITION_KEY } from '@/utils/mapLayersDefaults';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -54,6 +56,7 @@ function EditSelectedBuildingPanelContent({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [commentValue, setCommentValue] = useState('');
   const dispatch: AppDispatch = useDispatch();
+  useAutoActivateDemolishedLayer(selectedBuilding, MAP_LAYERS_EDITION_KEY);
   const [newStatus, setNewStatus] = useState<BuildingStatusType>(
     selectedBuilding.status,
   );
