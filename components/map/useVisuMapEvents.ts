@@ -12,6 +12,9 @@ import {
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
   LAYER_REPORTS_ICON,
+  LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+  LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+  LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
 } from '@/components/map/useMapLayers';
 import { displayBANPopup } from './BanLayerEvent';
 
@@ -43,6 +46,9 @@ export const useVisuMapEvents = (map?: maplibregl.Map) => {
               LAYER_BDGS_POINT,
               LAYER_BDGS_SHAPE_BORDER,
               LAYER_BDGS_SHAPE_POINT,
+              LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+              LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+              LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
             ].includes(featureCloseToCursor.layer.id)
           ) {
             // It is a building

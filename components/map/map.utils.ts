@@ -8,6 +8,9 @@ import {
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
   LAYER_REPORTS_ICON,
+  LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+  LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+  LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
 } from '@/components/map/useMapLayers';
 import { distance } from '@turf/turf';
 import { MapMouseEvent } from 'maplibre-gl';
@@ -34,6 +37,10 @@ export const getNearestFeatureFromCursorWithBuffer = (
     LAYER_ADS_CIRCLE,
     LAYER_REPORTS_CIRCLE,
     LAYER_REPORTS_ICON,
+    // The fill, not the dashed border: a query only hits where a layer paints.
+    LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+    LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+    LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
   ].filter((layer) => map.getLayer(layer));
 
   // First, we need to draw a bbxox expressed in pixels,

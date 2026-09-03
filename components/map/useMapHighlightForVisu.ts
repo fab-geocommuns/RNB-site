@@ -41,6 +41,8 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
+  // A layer change rebuilds the style, which wipes the feature states: re-apply.
+  const layers = useSelector((state: RootState) => state.map.layers);
 
   const selectedSources = selectedItem ? getItemSources(selectedItem) : [];
   const selectedId = selectedItem ? getItemId(selectedItem) : undefined;
@@ -72,12 +74,15 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
     applyHighlight();
 
     // La source peut ne pas être encore chargée (ex : arrivée sur la page avec
-    // ?q=rnbId). On ré-applique au premier chargement puis on se retire : le
-    // feature-state est stocké par id (pas par tuile), donc une seule pose suffit.
+    // ?q=rnbId). On ré-applique au chargement : le feature-state est stocké par
+    // id (pas par tuile), donc une seule pose suffit.
     const onSourceData = (e: maplibregl.MapSourceDataEvent) => {
       if (e.isSourceLoaded && ALL_HIGHLIGHTABLE_SOURCES.includes(e.sourceId)) {
         applyHighlight();
-        map.off('sourcedata', onSourceData);
+        // Wait for the source holding the selection: another one may load first.
+        if (!selectedId || selectedSources.includes(e.sourceId)) {
+          map.off('sourcedata', onSourceData);
+        }
       }
     };
     map.on('sourcedata', onSourceData);
@@ -85,5 +90,5 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
     return () => {
       map.off('sourcedata', onSourceData);
     };
-  }, [map, selectedId]);
+  }, [map, selectedId, layers]);
 };

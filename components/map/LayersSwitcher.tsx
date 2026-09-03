@@ -17,6 +17,7 @@ import extraPlots from '@/public/images/map/switch-plots.jpg';
 import extraAddresses from '@/public/images/map/switch-addresses.png';
 import extraValidated from '@/public/images/map/switch-validated.png';
 import extraReports from '@/public/images/map/switch-reports.png';
+import extraDemolished from '@/public/images/map/switch-demolished.png';
 import bdgPoint from '@/public/images/map/switch-bdg-point.png';
 import bdgShape from '@/public/images/map/switch-bdg-shape.png';
 
@@ -269,6 +270,13 @@ export default function LayersSwitcher({
                     label="Bâtiments validés"
                     onClick={() => handleExtraLayerClick('validated')}
                     image={extraValidated}
+                  />
+                  <LayerButton
+                    isAvailable={isAvailable('demolished')}
+                    isActive={mapLayers.extraLayers.includes('demolished')}
+                    label="Bâtiments démolis"
+                    onClick={() => handleExtraLayerClick('demolished')}
+                    image={extraDemolished}
                   />
                 </ul>
               </div>
