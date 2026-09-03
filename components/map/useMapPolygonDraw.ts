@@ -157,7 +157,7 @@ export const useMapPolygonDraw = (
         drawRef.current.add({
           id: BUILDING_DRAW_SHAPE_FEATURE_ID,
           type: 'Feature',
-          properties: {},
+          properties: { demolished: selectedBuilding.status === 'demolished' },
           geometry: selectedBuilding.shape,
         });
         // used to know if we are selecting a different building next time we click on the map

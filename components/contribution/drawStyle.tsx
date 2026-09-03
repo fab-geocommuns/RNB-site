@@ -1,21 +1,30 @@
+import { DEMOLISHED_SELECTED_COLOR } from '@/components/map/layers/buildings';
+
 const blue = '#120090';
 const green = '#87d443';
-const orange = '#e4794a';
 const white = '#fff';
 const styles = [
   // Polygons
   //   Solid fill
   //   Active state defines color
+  //   Demolished buildings keep the orange used elsewhere for that status
   {
     id: 'gl-draw-polygon-fill',
     type: 'fill',
     filter: ['all', ['==', '$type', 'Polygon']],
     paint: {
-      'fill-color': ['case', ['==', ['get', 'active'], 'true'], green, blue],
+      'fill-color': [
+        'case',
+        ['==', ['get', 'user_demolished'], true],
+        DEMOLISHED_SELECTED_COLOR,
+        ['==', ['get', 'active'], 'true'],
+        green,
+        blue,
+      ],
       'fill-opacity': ['case', ['==', ['get', 'active'], 'true'], 0.5, 0],
     },
   },
-  // Polygon outlines (dashed green)
+  // Polygon outlines (dashed green, orange for demolished buildings)
   {
     id: 'gl-draw-polygon-lines',
     type: 'line',
@@ -25,7 +34,12 @@ const styles = [
       'line-join': 'round',
     },
     paint: {
-      'line-color': green,
+      'line-color': [
+        'case',
+        ['==', ['get', 'user_demolished'], true],
+        DEMOLISHED_SELECTED_COLOR,
+        green,
+      ],
       'line-dasharray': ['literal', [0.2, 2]],
       'line-width': 3,
     },

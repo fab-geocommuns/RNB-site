@@ -122,6 +122,8 @@ export const useMapDraw = (
           polygon: false,
           trash: false,
         },
+        // exposes properties set via draw.add() to the style as 'user_<name>'
+        userProperties: true,
         styles: drawStyle,
         modes: {
           simple_select: MapboxDraw.modes.simple_select,
