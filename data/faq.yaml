@@ -186,7 +186,7 @@
     - question: <b>Vous avez une base de données et vous aimeriez intégrer les ID-RNB ?</b> ou <b>Vous avez déjà intégré les ID-RNB et vous souhaitez les actualiser ?</b>
       key: rapprochement
       answer: >
-        <p>Enrichir vos données avec un identifiant RNB vous permet de croiser plus facilement vos données avec celles des autres acteurs qui utilisent le référentiel cf : <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement#identifiants" target="_blank">Liste des bases ayant intégré les ID RNB</a></p>
+        <p>Enrichir vos données avec un identifiant RNB vous permet de croiser plus facilement vos données avec celles des autres acteurs qui utilisent le référentiel cf : <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement#identifiants" target="_blank">Liste des bases ayant intégré les ID-RNB</a></p>
         <p>Vous avez également peut-être déjà intégré les ID-RNB ? <b>Il est temps d’actualiser ce rapprochement</b>. Le RNB est une base vivante : de nouveaux bâtiments apparaissent, certains liens adresse ↔ bâtiment sont corrigés, d’autres bâtiments évoluent ou disparaissent.</p>
         <p>Actualiser vos rapprochements, c’est vous assurer de travailler avec une donnée mise à jour, pour : faciliter le croisement avec d’autres bases (DPE, BDNB, BDTopo…) et fiabiliser vos analyses.</p>
         <ul>
