@@ -53,7 +53,7 @@
     - question: Le RNB contient-il des bâtiments légers ? 
       key: batimentslegers
       answer: >
-        <p>Non, le RNB ne contient pas les bâtiments “légers” sans fondation (ex : serre avec tubulures en acier et bâche en plastique). Il contient les bâtiments ayant pour objectif d’être permanents. Si vous constatez qu’un bâtiment léger est présent dans le RNB, vous pouvez désactiver son ID-RNB (Voir <a href="https://rnb.beta.gouv.fr/faq#editer">Comment éditer dans le RNB ?</a></p> 
+        <p>Non, le RNB ne contient pas les bâtiments “légers” sans fondation (ex : serre avec tubulures en acier et bâche en plastique). Il contient les bâtiments ayant pour objectif d’être permanents. Si vous constatez qu’un bâtiment léger est présent dans le RNB, vous pouvez désactiver son ID-RNB (Voir <a href="https://rnb.beta.gouv.fr/faq#editer">Comment éditer dans le RNB ?</a>)</p>
     - question: Qu’est-ce qu’un ID-RNB  ?
       key: idrnb
       answer: >
@@ -84,6 +84,7 @@
         <li><b>les imports des Bases Adresses Locales (BAL)
         <li><b>les <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#communaute-et-contributions" target="_blank">contributions</a> de la communauté</b>, à savoir <b>les éditions directes dans le RNB</b> ; ainsi que par les <b>signalements reçus</b> par une personne suggérant une modification du contenu du RNB, sans la réaliser par elle-même</b></li>
         </ul>
+        <p>En savoir plus sur le <a href="https://rnb-fr.gitbook.io/documentation/cycle-de-vie-de-la-donnee">Cycle de vie de la donnée du RNB</a>.</p>
     - question: Qu’est ce qu'un ID-RNB ? Quelles sont ses caractéristiques ?
       key: identifiant
       answer: >
@@ -139,8 +140,16 @@
       key: erreurs
       answer: >
         <p>Oui, le RNB comporte des erreurs, mais pas d’inquiétude, c’est le lot de toute représentation cartographique d’une réalité mouvante. En effet, le parc bâtimentaire français est en constante évolution. En permanence, des bâtiments sont construits, d’autres sont détruits.</p> 
-        <p>C’est pourquoi, le RNB se consolide au fil de l’eau !</p>
+        <p>C’est pourquoi, le RNB est ouvert à l’édition collaborative ! Objectif : Partagez la connaissance de votre territoire et bénéficiez en retour des améliorations apportées par la communauté pour une donnée bâtimentaire la plus proche du terrain ! Pour éditer dans le RNB, retrouvez les explications sur <a href="https://rnb.beta.gouv.fr/blog/le-rnb-souvre-a-ledition-collaborative" target="_blank">Éditer dans le RNB</a></p>
         <p>En effet, le RNB est un commun numérique (voir <a href="https://rnb.beta.gouv.fr/faq#geocommun" target="_blank">Qu’est ce qu’un Géocommun</a>), il bénéficie de nombreuses contributions d’acteurs variés (administrations, collectivités, citoyens), ce qui permet de consolider la représentation du bâti au fil du temps et de la tenir à jour !</p>
+    - question: Est ce qu’un batiment peut avoir plusieurs adresses ?
+      key: plusieurs-adresses
+      answer: >
+        <p>C'est tout à fait normal. Une adresse peut avoir plusieurs bâtiments. De même un bâtiment peut avoir plusieurs adresses (car une entrée de bâtiment peut donner sur plusieurs rues par exemple). C'est une relation N-N.</p>
+    - question: Le RNB couvre-t-il les DROM et les COM ?
+      key: drom-com
+      answer: >
+        <p>Le RNB couvre les DROM suivants : la Guadeloupe, La Réunion, la Martinique, la Guyane et Mayotte. Il couvre également les COM suivantes : Saint-Martin, Saint-Barthélemy et Saint-Pierre-et-Miquelon.</p>
 - name: Comment utiliser le RNB ?
   desc: En savoir plus sur l’utilisation concrète du RNB par vos services
   key: utilisation
@@ -166,7 +175,6 @@
         <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a> : Les tuiles vectorielles du RNB vous permettent d'intégrer à une carte les bâtiments du référentiel et d'afficher leurs ID-RNB. Cette API vous permettra de naviguer sur vos propres cartes tout en disposant des ID-RNB.</li>
         <li>le <a href="https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments" target="_blank">sélecteur de bâtiment</a> : Cet exemple de sélecteur de bâtiment du RNB vous montrera comment se servir des différentes briques techniques pour construire un tel sélecteur. Celui-ci permettra à vos utilisateurs d’identifier et de sélectionner un bâtiment sur une carte, au sein même de vos logiciels.</li>
         <li>l'<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/differentiel-entre-deux-dates" target="_blank">API différentiel entre deux dates</a> : Celle-ci vous permet de lister l'ensemble des modifications apportées au RNB depuis une date données.</li>
-        <li>l’ <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-ads" target="_blank">API ADS</a> : Cette API permet aux instructeurs des Droits du Sol d'ajouter des informations sur un bâtiment existant (ex : Démoli) ou de créer un nouveau bâtiment au sein du RNB.</li>
         </ul>
         <li><b>Télécharger les données du RNB</b> : le jeu de données du <a href="https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/" target="_blank">RNB est accessible et téléchargeable sur data.gouv.fr</a>, la plateforme communautaire qui vise à centraliser les données ouvertes en France. Vous pouvez télécharger l’export du RNB dans son entièreté, afin de vous en servir.</li>
         <li><b>Alimenter ce géocommun</b> : vous pouvez contribuer au RNB par</li> 
@@ -175,6 +183,17 @@
         <li>les signalements en tant que personne suggérant une modification du contenu du RNB, sans la réaliser par vous même</b></li>
         </ul>
         </ol>
+    - question: <b>Vous avez une base de données et vous aimeriez intégrer les ID-RNB ?</b> ou <b>Vous avez déjà intégré les ID-RNB et vous souhaitez les actualiser ?</b>
+      key: rapprochement
+      answer: >
+        <p>Enrichir vos données avec un identifiant RNB vous permet de croiser plus facilement vos données avec celles des autres acteurs qui utilisent le référentiel cf : <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement#identifiants" target="_blank">Liste des bases ayant intégré les ID-RNB</a></p>
+        <p>Vous avez également peut-être déjà intégré les ID-RNB ? <b>Il est temps d’actualiser ce rapprochement</b>. Le RNB est une base vivante : de nouveaux bâtiments apparaissent, certains liens adresse ↔ bâtiment sont corrigés, d’autres bâtiments évoluent ou sont démolis.</p>
+        <p>Actualiser vos rapprochements, c’est vous assurer de travailler avec une donnée mise à jour, pour faciliter le croisement avec d’autres bases (DPE, BDNB, BDTopo…) et fiabiliser vos analyses.</p>
+        <ul>
+        <li>La méthode la plus simple est de <b>relancer la procédure de rapprochement dans son intégralité.</b></li>
+        <li>Refaire <b>un rapprochement tous les 6 à 12 mois</b> permet de garantir une bonne qualité du lien entre votre base et le RNB.</li>
+        </ul>
+        <p>Retrouvez les conseils de l’équipe et le <a href="https://rnb-fr.gitbook.io/documentation/guides/faire-et-refaire-un-rapprochement-avec-le-rnb" target="_blank">Guide méthodologique</a> pour “Faire et Refaire un rapprochement” étape par étape.</p>
     - question: Quelles bases contiennent des ID-RNB ?
       key: liste-bases
       answer: >
@@ -199,13 +218,14 @@
     - question: Est-ce que le RNB distribue des polygones ? À quoi correspond une géométrie au sens du RNB ?
       key: polygones
       answer: >
-        <p>Le RNB met désormais à disposition la géométrie (”polygone” ou “shape”) des bâtiments présents dans le référentiel.</p>
+        <p>Le RNB met à disposition la géométrie (”polygone” ou “shape”) des bâtiments présents dans le référentiel.</p>
         <p>Vous pouvez retrouver cette fonctionnalité dans :</p>
         <ul>
         <li>l’<a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments" target="_blank">API Bâtiment</a></li>
         <li>les <a href="https://rnb-fr.gitbook.io/documentation/api-et-outils/tuiles-vectorielles" target="_blank">tuiles vectorielles</a></li> 
         <li>la <a href="https://rnb.beta.gouv.fr/carte" target="_blank">carte du RNB</a></li>
         </ul>
+        <p>La géométrie du RNB n'a pas pour objectif d'être la source de vérité quand à la géométrie physique du bâtiment.</p>
         <p>Les polygones présents dans le RNB sont la <b>meilleure représentation à notre disposition</b> de la réalité physique du bâtiment. La plupart du temps cette géométrie correspond à un polygone, mais elle peut également être un simple point (coordonnées), lorsque cette dernière n’est pas disponible.</p>
         <p>Objectifs :</p>
         <ol>
@@ -216,7 +236,6 @@
         <p>Sources de ces géométries :</p>
         <ul>
         <li>Les polygones proposés proviennent principalement, à ce stade, de la BDNB du CSTB et de la BDTOPO de l’IGN. Toutefois, ces géométries ont subi une harmonisation de système de coordonnées au format WGS 84 (coordonnées GPS), lors de l’import pour assurer l’homogénéité d’unité de toutes les géométries proposées dans le RNB.</li> 
-        <li>À terme, le géocommun du RNB intégrant de nouvelles sources de contribution, les polygones pourront également être proposés par les services instructeurs d’une collectivité territoriale, par exemple.</li>
         </ul>
 - name: Comment contribuer au RNB ?
   desc: En savoir plus sur les contributions au RNB
