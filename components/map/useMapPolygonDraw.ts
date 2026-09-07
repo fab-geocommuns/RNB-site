@@ -165,12 +165,15 @@ export const useMapPolygonDraw = (
       }
 
       if (selectedBuilding) {
-        // no matter what happens, drawing should be on top
-        const lastLayer = map.getStyle().layers.at(-1);
-        if (lastLayer) {
-          const drawLayers = map
-            .getStyle()
-            .layers?.filter((layer) => layer.id.includes('gl-draw'));
+        // no matter what happens, drawing should be on top.
+        // getStyle() returns undefined while the style is (re)loading: there is
+        // no layer to reorder yet, mapbox-gl-draw re-adds its own once it lands.
+        const styleLayers = map.getStyle()?.layers;
+        const lastLayer = styleLayers?.at(-1);
+        if (styleLayers && lastLayer) {
+          const drawLayers = styleLayers.filter((layer) =>
+            layer.id.includes('gl-draw'),
+          );
           for (const draw_layer of drawLayers) {
             map.moveLayer(draw_layer.id, lastLayer.id);
           }
