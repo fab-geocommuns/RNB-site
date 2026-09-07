@@ -113,7 +113,7 @@ export default function Page() {
 
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
-              src="https://rnb-api.beta.gouv.fr/metabase/public/question/8da126c9-c3c3-41b7-9a95-93e5c35e26c2"
+              src="https://rnb-api.beta.gouv.fr/metabase/public/question/5c03dbdb-cd22-4642-8057-d539214af326"
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
