@@ -15,6 +15,7 @@ import { test } from '@/tests/fixtures';
 import {
   buildingSegur,
   buildingDemolished,
+  buildingDemolishedValidated,
   buildingDemolishedInactive,
 } from '@/tests/fixtures/data/buildings';
 
@@ -40,7 +41,9 @@ test.describe('Bâtiments démolis', () => {
       mapPage.toaster.getByText(/Bâtiments démolis.*activé/),
     ).toBeVisible();
     await expect(
-      mapPage.buildingDetailsPannel.getByText('Démoli', { exact: true }),
+      mapPage.buildingDetailsPannel.locator('.fr-badge', {
+        hasText: 'Démoli',
+      }),
     ).toBeVisible();
   });
 
@@ -80,18 +83,19 @@ test.describe('Bâtiments démolis', () => {
       'Pas de support de WebGL2 sur Firefox headless',
     );
 
+    // Validated (locked): the edition panel then shows the same read-only
+    // status badge as consultation, instead of the editable status <select>.
     httpMocker.get(
-      `/buildings/${buildingDemolished.rnb_id}/?from=site&withPlots=1`,
-      buildingDemolished,
+      `/buildings/${buildingDemolishedValidated.rnb_id}/?from=site&withPlots=1`,
+      buildingDemolishedValidated,
     );
-
-    await editionPage.goToBuilding(buildingDemolished.rnb_id);
+    await editionPage.goToBuilding(buildingDemolishedValidated.rnb_id);
 
     await expect(
       editionPage.toaster.getByText(/Bâtiments démolis.*activé/),
     ).toBeVisible();
     await expect(
-      editionPage.panel.getByText('Démoli', { exact: true }),
+      editionPage.panel.locator('.fr-badge', { hasText: 'Démoli' }),
     ).toBeVisible();
   });
 
