@@ -4,7 +4,7 @@ import { getPosts } from '@/utils/blog';
 // Comps
 import Link from 'next/link';
 import ArticleCard from '@/components/blog/ArticleCard';
-import NewsletterForm from '@/components/NewsletterForm';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 
 // Style
 import styles from '@/styles/blog.module.scss';

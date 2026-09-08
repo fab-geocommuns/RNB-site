@@ -8,7 +8,7 @@ type Args = {
 
 class NewsletterTestUtil extends ComponentTestUtil<Args> {
   async run({
-    newsletterField = this.page.locator('[value="S\'inscrire"]'),
+    newsletterField = this.page.getByRole('button', { name: "S'inscrire" }),
     newsletterButton = this.page.getByPlaceholder('Votre adresse email'),
   }: Args) {
     const email = 'email123@beta.gouv.fr';
