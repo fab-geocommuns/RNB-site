@@ -100,23 +100,26 @@ const getDemolishedBuildingFeatureFilter = (): BuildingFeatureFilter => {
   return ['all', ['==', 'is_active', true], ['==', 'status', 'demolished']];
 };
 
-const DEMOLISHED_COLOR = '#c9191e';
-export const DEMOLISHED_SELECTED_COLOR = '#ff8c00';
+// Selection is shown by weight (opacity, size), never by a different hue:
+// red stays the one visual cue for "demolished", selected or not.
+export const DEMOLISHED_COLOR = '#c9191e';
+const DEMOLISHED_FILL_OPACITY = 0.08;
+export const DEMOLISHED_SELECTED_FILL_OPACITY = 0.4;
 
-const DEMOLISHED_COLOR_EXPRESSION: maplibregl.ExpressionSpecification = [
+const DEMOLISHED_FILL_OPACITY_EXPRESSION: maplibregl.ExpressionSpecification = [
   'case',
   ['boolean', ['feature-state', 'highlighted'], false],
-  DEMOLISHED_SELECTED_COLOR,
-  DEMOLISHED_COLOR,
+  DEMOLISHED_SELECTED_FILL_OPACITY,
+  DEMOLISHED_FILL_OPACITY,
 ];
 
 const DEMOLISHED_FILL_PAINT: maplibregl.FillLayerSpecification['paint'] = {
-  'fill-color': DEMOLISHED_COLOR_EXPRESSION,
-  'fill-opacity': 0.08,
+  'fill-color': DEMOLISHED_COLOR,
+  'fill-opacity': DEMOLISHED_FILL_OPACITY_EXPRESSION,
 };
 
 const DEMOLISHED_LINE_PAINT: maplibregl.LineLayerSpecification['paint'] = {
-  'line-color': DEMOLISHED_COLOR_EXPRESSION,
+  'line-color': DEMOLISHED_COLOR,
   'line-width': 2.4,
   'line-dasharray': [2, 1.4],
 };
@@ -124,13 +127,15 @@ const DEMOLISHED_LINE_PAINT: maplibregl.LineLayerSpecification['paint'] = {
 const DEMOLISHED_CIRCLE_PAINT: maplibregl.CircleLayerSpecification['paint'] = {
   'circle-radius': [
     'case',
+    ['boolean', ['feature-state', 'highlighted'], false],
+    7,
     ['boolean', ['==', ['feature-state', 'hovered'], true]],
     6,
     5,
   ],
   'circle-stroke-color': '#ffffff',
   'circle-stroke-width': 3,
-  'circle-color': DEMOLISHED_COLOR_EXPRESSION,
+  'circle-color': DEMOLISHED_COLOR,
 };
 
 const installBuildingsLayers = (
@@ -167,36 +172,18 @@ const installBuildingsPointsLayers = async (
     }
   }
 
-  // Demolished buildings, added first so they sit below the regular buildings.
-  if (demolishedActive) {
-    // Point mode draws no footprint on satellite, demolished ones included.
-    if (hasVectorBackground) {
-      map.addLayer({
-        id: LAYER_BDGS_POINT_DEMOLISHED_FILL,
-        type: 'fill',
-        source: SRC_BDGS_SHAPES,
-        'source-layer': 'default',
-        filter: demolishedFilter,
-        paint: DEMOLISHED_FILL_PAINT,
-      });
-
-      map.addLayer({
-        id: LAYER_BDGS_POINT_DEMOLISHED_BORDER,
-        type: 'line',
-        source: SRC_BDGS_SHAPES,
-        'source-layer': 'default',
-        filter: demolishedFilter,
-        paint: DEMOLISHED_LINE_PAINT,
-      });
-    }
-
+  // Demolished fill added first (vector backgrounds only, like the
+  // footprint fill below), so a regular building's opaque footprint still
+  // sits on top of it and isn't visually eaten by an overlapping demolished
+  // one. Point mode draws no footprint on satellite, demolished ones included.
+  if (demolishedActive && hasVectorBackground) {
     map.addLayer({
-      id: LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
-      type: 'circle',
-      source: SRC_BDGS_POINTS,
+      id: LAYER_BDGS_POINT_DEMOLISHED_FILL,
+      type: 'fill',
+      source: SRC_BDGS_SHAPES,
       'source-layer': 'default',
       filter: demolishedFilter,
-      paint: DEMOLISHED_CIRCLE_PAINT,
+      paint: DEMOLISHED_FILL_PAINT,
     });
   }
 
@@ -286,6 +273,30 @@ const installBuildingsPointsLayers = async (
       ],
     },
   });
+
+  // Demolished border and circle added last, so they stay discoverable over
+  // a regular building's opaque footprint or marker on the same spot.
+  if (demolishedActive) {
+    if (hasVectorBackground) {
+      map.addLayer({
+        id: LAYER_BDGS_POINT_DEMOLISHED_BORDER,
+        type: 'line',
+        source: SRC_BDGS_SHAPES,
+        'source-layer': 'default',
+        filter: demolishedFilter,
+        paint: DEMOLISHED_LINE_PAINT,
+      });
+    }
+
+    map.addLayer({
+      id: LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+      type: 'circle',
+      source: SRC_BDGS_POINTS,
+      'source-layer': 'default',
+      filter: demolishedFilter,
+      paint: DEMOLISHED_CIRCLE_PAINT,
+    });
+  }
 };
 
 const installBuildingsShapesLayers = async (
@@ -308,7 +319,8 @@ const installBuildingsShapesLayers = async (
     }
   }
 
-  // Demolished buildings, added first so they sit below the regular buildings.
+  // Demolished fill added first, so a regular building's fill still sits on
+  // top of it and isn't visually eaten by an overlapping demolished one.
   if (demolishedActive) {
     map.addLayer({
       id: LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
@@ -317,25 +329,6 @@ const installBuildingsShapesLayers = async (
       'source-layer': 'default',
       filter: demolishedFilter,
       paint: DEMOLISHED_FILL_PAINT,
-    });
-
-    map.addLayer({
-      id: LAYER_BDGS_SHAPE_DEMOLISHED_BORDER,
-      type: 'line',
-      source: SRC_BDGS_SHAPES,
-      'source-layer': 'default',
-      filter: demolishedFilter,
-      paint: DEMOLISHED_LINE_PAINT,
-    });
-
-    // The shapes source also carries points, for buildings without a surface geometry.
-    map.addLayer({
-      id: LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
-      type: 'circle',
-      source: SRC_BDGS_SHAPES,
-      'source-layer': 'default',
-      filter: ['all', ['==', '$type', 'Point'], demolishedFilter],
-      paint: DEMOLISHED_CIRCLE_PAINT,
     });
   }
 
@@ -436,6 +429,29 @@ const installBuildingsShapesLayers = async (
       ],
     },
   });
+
+  // Demolished border and point added last, so their dashed outline stays
+  // discoverable even over a regular building built on the same footprint.
+  if (demolishedActive) {
+    map.addLayer({
+      id: LAYER_BDGS_SHAPE_DEMOLISHED_BORDER,
+      type: 'line',
+      source: SRC_BDGS_SHAPES,
+      'source-layer': 'default',
+      filter: demolishedFilter,
+      paint: DEMOLISHED_LINE_PAINT,
+    });
+
+    // The shapes source also carries points, for buildings without a surface geometry.
+    map.addLayer({
+      id: LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
+      type: 'circle',
+      source: SRC_BDGS_SHAPES,
+      'source-layer': 'default',
+      filter: ['all', ['==', '$type', 'Point'], demolishedFilter],
+      paint: DEMOLISHED_CIRCLE_PAINT,
+    });
+  }
 };
 
 export const removeBuildings = (map: maplibregl.Map, layers: MapLayers) => {

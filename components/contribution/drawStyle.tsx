@@ -1,13 +1,22 @@
-import { DEMOLISHED_SELECTED_COLOR } from '@/components/map/layers/buildings';
+import {
+  DEMOLISHED_COLOR,
+  DEMOLISHED_SELECTED_FILL_OPACITY,
+} from '@/components/map/layers/buildings';
 
 const blue = '#120090';
-const green = '#87d443';
+// Exported: useMapPolygonDraw sets the vertex/midpoint circle-color to this
+// at runtime, since generated vertex features don't carry the parent
+// polygon's custom properties (no way to branch on "demolished" in a style
+// filter for those).
+export const DEFAULT_VERTEX_COLOR = '#87d443';
+const green = DEFAULT_VERTEX_COLOR;
 const white = '#fff';
 const styles = [
   // Polygons
   //   Solid fill
   //   Active state defines color
-  //   Demolished buildings keep the orange used elsewhere for that status
+  //   Demolished buildings stay red, at the same weight as the map's
+  //   selected/highlighted demolished style
   {
     id: 'gl-draw-polygon-fill',
     type: 'fill',
@@ -16,15 +25,22 @@ const styles = [
       'fill-color': [
         'case',
         ['==', ['get', 'user_demolished'], true],
-        DEMOLISHED_SELECTED_COLOR,
+        DEMOLISHED_COLOR,
         ['==', ['get', 'active'], 'true'],
         green,
         blue,
       ],
-      'fill-opacity': ['case', ['==', ['get', 'active'], 'true'], 0.5, 0],
+      'fill-opacity': [
+        'case',
+        ['==', ['get', 'user_demolished'], true],
+        DEMOLISHED_SELECTED_FILL_OPACITY,
+        ['==', ['get', 'active'], 'true'],
+        0.5,
+        0,
+      ],
     },
   },
-  // Polygon outlines (dashed green, orange for demolished buildings)
+  // Polygon outlines (dashed green, red for demolished buildings)
   {
     id: 'gl-draw-polygon-lines',
     type: 'line',
@@ -37,7 +53,7 @@ const styles = [
       'line-color': [
         'case',
         ['==', ['get', 'user_demolished'], true],
-        DEMOLISHED_SELECTED_COLOR,
+        DEMOLISHED_COLOR,
         green,
       ],
       'line-dasharray': ['literal', [0.2, 2]],

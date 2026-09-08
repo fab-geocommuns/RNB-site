@@ -12,6 +12,27 @@ import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { toasterSuccess } from '../contribution/toaster';
+import { DEMOLISHED_COLOR } from '@/components/map/layers/buildings';
+import { DEFAULT_VERTEX_COLOR } from '@/components/contribution/drawStyle';
+
+// The vertex/midpoint circles mapbox-gl-draw generates for a polygon don't
+// carry that polygon's own properties (see create_vertex.js): there is no
+// "demolished" flag to branch on in drawStyle.tsx's filters, so their color
+// is set imperatively here instead, from the same state that colors the
+// polygon itself.
+const VERTEX_DRAW_LAYERS = [
+  'gl-draw-point-inner',
+  'gl-draw-vertex-inner',
+  'gl-draw-midpoint',
+];
+
+const setVertexColor = (map: maplibregl.Map, color: string) => {
+  for (const layerId of VERTEX_DRAW_LAYERS) {
+    if (map.getLayer(layerId)) {
+      map.setPaintProperty(layerId, 'circle-color', color);
+    }
+  }
+};
 
 /**
  * Gère le dessin de la forme d'un bâtiment pour les opérations `update`,
@@ -178,10 +199,19 @@ export const useMapPolygonDraw = (
             map.moveLayer(draw_layer.id, lastLayer.id);
           }
         }
+
+        setVertexColor(
+          map,
+          selectedBuilding._type === 'building' &&
+            selectedBuilding.status === 'demolished'
+            ? DEMOLISHED_COLOR
+            : DEFAULT_VERTEX_COLOR,
+        );
       } else {
         // selectedBuilding is null => cleaning
         deleteFeatures(drawRef.current);
         selectedBuildingRef.current = null;
+        setVertexColor(map, DEFAULT_VERTEX_COLOR);
       }
     }
   }, [selectedBuilding, operation, dispatch]);
