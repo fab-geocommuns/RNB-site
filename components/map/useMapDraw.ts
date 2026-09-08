@@ -150,9 +150,17 @@ export const useMapDraw = (
       const mapContainer = map.getContainer();
       mapContainer.addEventListener('keydown', handleKeyDown);
 
+      // mapbox-gl-draw bug: a mode switch interrupting an in-progress vertex
+      // drag (e.g. clicking another building fast) can leave dragPan disabled
+      // forever, since it's only re-enabled on a normal mouseup.
+      // https://github.com/mapbox/mapbox-gl-draw/issues/1366
+      const reEnableDragPan = () => map.dragPan.enable();
+      map.on('draw.selectionchange', reEnableDragPan);
+
       // cleaning the hooks when the component is unmounted
       return () => {
         mapContainer.removeEventListener('keydown', handleKeyDown);
+        map.off('draw.selectionchange', reEnableDragPan);
       };
     }
   }, [map]);
