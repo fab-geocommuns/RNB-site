@@ -10,6 +10,7 @@ import {
   GENERIC_ERROR,
   subscribeToNewsletter,
 } from './brevo';
+import { TURNSTILE_SITE_KEY, useTurnstile } from './turnstile';
 
 type Props = {
   formId?: string;
@@ -20,7 +21,13 @@ type Status = {
   message: string;
 };
 
+const CAPTCHA_PENDING =
+  "La vérification anti-robot n'est pas terminée. Patientez un instant ou validez-la ci-dessous, puis réessayez.";
+const CAPTCHA_ERROR =
+  "La vérification anti-robot n'a pas pu se charger. Rechargez la page et réessayez.";
+
 export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
+  const captcha = useTurnstile();
   const [status, setStatus] = useState<Status | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -31,6 +38,14 @@ export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
     const formData = new FormData(formEl);
 
     setStatus(null);
+
+    if (TURNSTILE_SITE_KEY && captcha.state !== 'solved') {
+      setStatus({
+        severity: 'error',
+        message: captcha.state === 'error' ? CAPTCHA_ERROR : CAPTCHA_PENDING,
+      });
+      return;
+    }
 
     setSubmitting(true);
 
@@ -49,6 +64,7 @@ export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
     } catch {
       setStatus({ severity: 'error', message: GENERIC_ERROR });
     } finally {
+      captcha.reset();
       setSubmitting(false);
     }
   };
@@ -93,6 +109,10 @@ export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
         />
         <input type="hidden" name="locale" value="fr" />
       </div>
+
+      {TURNSTILE_SITE_KEY && (
+        <div ref={captcha.container} className={styles.nl__captcha} />
+      )}
 
       {status && (
         <div className={styles.nl__feedback}>

@@ -25,6 +25,7 @@ function cspMiddleware(request: NextRequest) {
     'https://heapanalytics.com',
   ];
   const captchaOrigin = 'https://api.privatecaptcha.com/';
+  const turnstileOrigin = 'https://challenges.cloudflare.com/';
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
@@ -33,8 +34,12 @@ function cspMiddleware(request: NextRequest) {
     newsletterOrigin,
     ...analyticsOrigins,
     captchaOrigin,
+    turnstileOrigin,
   ];
-  const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
+  const frameOrigins = [
+    'https://rnb-api.beta.gouv.fr/',
+    'https://challenges.cloudflare.com/',
+  ];
   const mediaOrigins = [
     'https://rnb-open.s3.fr-par.scw.cloud/',
     'https://referentiel-national-du-batiment.ghost.io/',

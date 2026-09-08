@@ -73,6 +73,9 @@ export default defineConfig({
         // Deterministic secret so the JWT issued by next-auth is valid
         // across the test run. Not a real secret — only used in tests.
         NEXTAUTH_SECRET: 'test-secret-do-not-use-in-prod',
+        // Cle de test Cloudflare "always passes" : rend le captcha
+        // newsletter deterministe, quelle que soit la cle dans .env.local.
+        NEXT_PUBLIC_BREVO_TURNSTILE_SITEKEY: '1x00000000000000000000AA',
         NEXT_PUBLIC_ENABLE_EDITION_MODE: 'true',
         NEXT_PUBLIC_ENABLE_MAPGRAB: 'true',
       },
