@@ -1,7 +1,8 @@
 // Endpoint public du formulaire Brevo "Inscription newsletter site" (URL
-// /serve/), pas un secret.
+// /serve/). Non défini, aucune requête n'est envoyée : un poste de dev
+// n'inscrit personne à la vraie infolettre.
 export const BREVO_NEWSLETTER_URL =
-  'https://9468302f.sibforms.com/serve/MUIFAPYq1oJpmEs2x6ie3BS9jHJojZlq9vxvUbqk84cPxzdcyRJ9b2ckp_JOdn60FlypsKHryyzjRAoQjODmEDPmgrJFMopfS3KOYUr3EThWFnnfs-WFawbi0L-cUm6xzHhRKVFVWulC8jWJYrBcOexerRBI-k9cs6vPe84tyEstqpKcyRW_5ITKvlF8CZa6-pvnILLRJ5UxZSvm';
+  process.env.NEXT_PUBLIC_BREVO_NEWSLETTER_URL;
 
 export const GENERIC_ERROR =
   'Une erreur est survenue. Merci de réessayer plus tard.';
@@ -14,6 +15,10 @@ type BrevoErrorResponse = {
 export async function subscribeToNewsletter(
   formData: FormData,
 ): Promise<string | null> {
+  if (!BREVO_NEWSLETTER_URL) {
+    return "Inscription désactivée : NEXT_PUBLIC_BREVO_NEWSLETTER_URL n'est pas défini.";
+  }
+
   const response = await fetch(`${BREVO_NEWSLETTER_URL}?isAjax=1`, {
     method: 'POST',
     body: formData,

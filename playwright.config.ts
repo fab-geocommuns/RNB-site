@@ -73,6 +73,11 @@ export default defineConfig({
         // Deterministic secret so the JWT issued by next-auth is valid
         // across the test run. Not a real secret — only used in tests.
         NEXTAUTH_SECRET: 'test-secret-do-not-use-in-prod',
+        // Endpoint bidon : les requetes sont interceptees par
+        // tests/fixtures/utils/components/newsletter.ts, l'URL doit
+        // seulement contenir sibforms.com pour que la route matche.
+        NEXT_PUBLIC_BREVO_NEWSLETTER_URL:
+          'https://e2e.sibforms.com/serve/no-real-list',
         // Cle de test Cloudflare "always passes" : rend le captcha
         // newsletter deterministe, quelle que soit la cle dans .env.local.
         NEXT_PUBLIC_BREVO_TURNSTILE_SITEKEY: '1x00000000000000000000AA',
