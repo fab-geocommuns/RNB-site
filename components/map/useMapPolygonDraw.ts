@@ -15,16 +15,14 @@ import { toasterSuccess } from '../contribution/toaster';
 import { DEMOLISHED_COLOR } from '@/components/map/layers/buildings';
 import { DEFAULT_VERTEX_COLOR } from '@/components/contribution/drawStyle';
 
-// The vertex/midpoint circles mapbox-gl-draw generates for a polygon don't
-// carry that polygon's own properties (see create_vertex.js): there is no
-// "demolished" flag to branch on in drawStyle.tsx's filters, so their color
-// is set imperatively here instead, from the same state that colors the
-// polygon itself.
+// Vertices don't carry the polygon's properties, so their color can't be a
+// style filter (drawStyle.tsx) — set imperatively here instead. mapbox-gl-draw
+// suffixes every style id with .cold/.hot; the bare id doesn't exist.
 const VERTEX_DRAW_LAYERS = [
   'gl-draw-point-inner',
   'gl-draw-vertex-inner',
   'gl-draw-midpoint',
-];
+].flatMap((id) => [`${id}.cold`, `${id}.hot`]);
 
 const setVertexColor = (map: maplibregl.Map, color: string) => {
   for (const layerId of VERTEX_DRAW_LAYERS) {
