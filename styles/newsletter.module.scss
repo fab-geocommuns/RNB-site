@@ -3,7 +3,9 @@
   flex-direction: row;
 }
 
-.nl__captcha {
+// L'iframe n'existe que si Cloudflare affiche reellement le challenge :
+// sans elle le conteneur fait 0 de haut et ne doit rien espacer.
+.nl__captcha:has(iframe) {
   margin-top: 1rem;
 }
 

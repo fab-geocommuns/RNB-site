@@ -22,7 +22,7 @@ type Status = {
 };
 
 const CAPTCHA_PENDING =
-  "La vérification anti-robot n'est pas terminée. Patientez un instant ou validez-la ci-dessous, puis réessayez.";
+  "La vérification anti-robot n'est pas terminée. Patientez un instant, validez-la si elle s'affiche, puis réessayez.";
 const CAPTCHA_ERROR =
   "La vérification anti-robot n'a pas pu se charger. Rechargez la page et réessayez.";
 

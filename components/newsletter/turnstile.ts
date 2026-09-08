@@ -19,6 +19,7 @@ const LOAD_TIMEOUT_MS = 10_000;
 
 type RenderOptions = {
   sitekey: string;
+  appearance?: 'interaction-only';
   size?: 'flexible';
   callback?: () => void;
   'error-callback'?: () => void;
@@ -63,6 +64,9 @@ export function useTurnstile() {
       try {
         widgetId.current = window.turnstile.render(el, {
           sitekey: TURNSTILE_SITE_KEY,
+          // Invisible tant que Cloudflare ne réclame pas d'interaction, au lieu
+          // d'afficher en permanence un bandeau "Succès".
+          appearance: 'interaction-only',
           // Prend la largeur du conteneur, donc celle du champ et du bouton.
           size: 'flexible',
           callback: () => setState('solved'),
