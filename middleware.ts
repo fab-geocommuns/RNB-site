@@ -16,7 +16,10 @@ function cspMiddleware(request: NextRequest) {
     'https://openmaptiles.github.io/',
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';
-  const newsletterOrigin = 'https://9468302f.sibforms.com/';
+  // Suit NEXT_PUBLIC_BREVO_NEWSLETTER_URL : sans ca, changer l'endpoint
+  // Brevo ferait bloquer la soumission par la CSP.
+  const newsletterUrl = process.env.NEXT_PUBLIC_BREVO_NEWSLETTER_URL;
+  const newsletterOrigin = newsletterUrl ? new URL(newsletterUrl).origin : '';
   const analyticsOrigins = [
     'https://cdn.us.heap-api.com',
     'https://c.us.heap-api.com',
@@ -25,6 +28,7 @@ function cspMiddleware(request: NextRequest) {
     'https://heapanalytics.com',
   ];
   const captchaOrigin = 'https://api.privatecaptcha.com/';
+  const turnstileOrigin = 'https://challenges.cloudflare.com/';
   const connectOrigins = [
     rnbApiOrigin,
     ...banApiOrigins,
@@ -33,8 +37,12 @@ function cspMiddleware(request: NextRequest) {
     newsletterOrigin,
     ...analyticsOrigins,
     captchaOrigin,
+    turnstileOrigin,
   ];
-  const frameOrigins = ['https://rnb-api.beta.gouv.fr/'];
+  const frameOrigins = [
+    'https://rnb-api.beta.gouv.fr/',
+    'https://challenges.cloudflare.com/',
+  ];
   const mediaOrigins = [
     'https://rnb-open.s3.fr-par.scw.cloud/',
     'https://referentiel-national-du-batiment.ghost.io/',

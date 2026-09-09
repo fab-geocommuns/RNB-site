@@ -13,7 +13,7 @@ export class BlogPage extends RNBPage {
     this.pressTitle = page.getByText('Dans la presse');
     this.followUsTitle = page.getByText('Nous suivre');
     this.newsletterField = page.getByPlaceholder('Votre adresse email');
-    this.newsletterButton = page.locator('[value="S\'inscrire"]');
+    this.newsletterButton = page.getByRole('button', { name: "S'inscrire" });
     this.blogPosts = page.locator(
       '.fr-card.fr-enlarge-link.fr-card--horizontal.fr-card--sm',
     );

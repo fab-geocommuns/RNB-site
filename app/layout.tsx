@@ -13,6 +13,7 @@ import RNBSessionProvider from '@/components/SessionProvider';
 import { Analytics } from '@vercel/analytics/react';
 import FlashMessage from '@/components/FlashMessage';
 import Script from 'next/script';
+import { TURNSTILE_SCRIPT_URL } from '@/components/newsletter/turnstile';
 
 // Settings
 import settings from '@/logic/settings';
@@ -42,6 +43,13 @@ window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.h
 heap.load("${settings.heapId}");
           `}
         </Script>
+
+        <Script
+          id="cf-turnstile"
+          src={TURNSTILE_SCRIPT_URL}
+          strategy="afterInteractive"
+          nonce={nonce || undefined}
+        />
       </head>
       <body>
         <Suspense>
