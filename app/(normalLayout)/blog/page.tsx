@@ -3,8 +3,9 @@ import { getPosts } from '@/utils/blog';
 
 // Comps
 import Link from 'next/link';
+import { Card } from '@codegouvfr/react-dsfr/Card';
 import ArticleCard from '@/components/blog/ArticleCard';
-import NewsletterForm from '@/components/NewsletterForm';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 
 // Style
 import styles from '@/styles/blog.module.scss';
@@ -144,29 +145,22 @@ export default async function Page({
                   </div>
                 </div>
 
-                <div className="fr-card">
-                  <div className="fr-card__body">
-                    <div className="fr-card__content">
-                      <h4 className={`fr-card__title ${styles.pressListTitle}`}>
-                        Nous suivre
-                      </h4>
-                      <div className="fr-card__desc">
-                        <div className="fr-mb-2v">
-                          <p>
-                            Restez informé des actualités du RNB en vous
-                            inscrivant à l&apos;infolettre ou en nous suivant
-                            sur{' '}
-                            <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">
-                              LinkedIn
-                            </a>
-                            .
-                          </p>
-                          <NewsletterForm />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Card
+                  title="Nous suivre"
+                  titleAs="h4"
+                  desc={
+                    <>
+                      Restez informé des actualités du RNB en vous inscrivant à
+                      l&apos;infolettre ou en nous suivant sur{' '}
+                      <a href="https://www.linkedin.com/company/r-f-rentiel-national-des-b-timents/">
+                        LinkedIn
+                      </a>
+                      .
+                    </>
+                  }
+                  footer={<NewsletterForm />}
+                  classes={{ end: styles.followUsCardEnd }}
+                />
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ hljs.registerLanguage('python', python);
 // Components
 import TagsList from '@/components/blog/TagsList';
 import BackToTop from '@/components/BackToTop';
-import NewsletterForm from '@/components/NewsletterForm';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import Link from 'next/link';
 
 // Style

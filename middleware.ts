@@ -16,7 +16,6 @@ function cspMiddleware(request: NextRequest) {
     'https://openmaptiles.github.io/',
   ];
   const sentryOrigin = 'https://sentry.incubateur.net/';
-  const newsletterOrigin = 'https://9468302f.sibforms.com/';
   const analyticsOrigins = [
     'https://cdn.us.heap-api.com',
     'https://c.us.heap-api.com',
@@ -30,7 +29,6 @@ function cspMiddleware(request: NextRequest) {
     ...banApiOrigins,
     ...tileOrigins,
     sentryOrigin,
-    newsletterOrigin,
     ...analyticsOrigins,
     captchaOrigin,
   ];

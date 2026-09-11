@@ -3,12 +3,10 @@
   flex-direction: row;
 }
 
-.nl__form {
-  position: relative;
+.nl__captcha {
+  margin-top: 0.5rem;
 }
 
 .nl__feedback {
-  position: absolute;
-  bottom: -30px;
-  z-index: 20;
+  margin-top: 0.5rem;
 }
