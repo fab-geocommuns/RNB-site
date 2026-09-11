@@ -27,6 +27,12 @@ const VERTEX_DRAW_LAYERS = [
 const setVertexColor = (map: maplibregl.Map, color: string) => {
   for (const layerId of VERTEX_DRAW_LAYERS) {
     if (map.getLayer(layerId)) {
+      // The base style sets a global 300ms transition on every paint
+      // property: without this, switching buildings visibly fades the old
+      // color into the new one instead of swapping instantly.
+      map.setPaintProperty(layerId, 'circle-color-transition', {
+        duration: 0,
+      });
       map.setPaintProperty(layerId, 'circle-color', color);
     }
   }
@@ -164,6 +170,8 @@ export const useMapPolygonDraw = (
   }, [shapeInteractionMode, operation, dispatch]);
 
   useEffect(() => {
+    let offStyleData: (() => void) | undefined;
+
     if (map && operationIsUpdateCreateNull) {
       if (
         selectedBuilding &&
@@ -198,13 +206,18 @@ export const useMapPolygonDraw = (
           }
         }
 
-        setVertexColor(
-          map,
+        const vertexColor =
           selectedBuilding._type === 'building' &&
-            selectedBuilding.status === 'demolished'
+          selectedBuilding.status === 'demolished'
             ? DEMOLISHED_COLOR
-            : DEFAULT_VERTEX_COLOR,
-        );
+            : DEFAULT_VERTEX_COLOR;
+        const applyVertexColor = () => setVertexColor(map, vertexColor);
+        applyVertexColor();
+        // mapbox-gl-draw's own vertex layers are installed lazily (on the
+        // map's 'load' event): on a first paint landing before that, the
+        // call above silently no-ops. Retry once they exist.
+        map.on('styledata', applyVertexColor);
+        offStyleData = () => map.off('styledata', applyVertexColor);
       } else {
         // selectedBuilding is null => cleaning
         deleteFeatures(drawRef.current);
@@ -212,6 +225,8 @@ export const useMapPolygonDraw = (
         setVertexColor(map, DEFAULT_VERTEX_COLOR);
       }
     }
+
+    return () => offStyleData?.();
   }, [selectedBuilding, operation, dispatch]);
 
   const deleteFeatures = (currentDrawRef: MapboxDraw | null) => {
