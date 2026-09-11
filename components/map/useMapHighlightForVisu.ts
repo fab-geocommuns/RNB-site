@@ -3,11 +3,25 @@ import {
   SRC_BDGS_POINTS,
   SRC_BDGS_SHAPES,
 } from '@/components/map/useMapLayers';
+import {
+  LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+  LAYER_BDGS_SHAPE_BORDER,
+  LAYER_BDGS_POINT_DEMOLISHED_FILL,
+  LAYER_BDGS_POINT_SHAPE_FILL,
+} from '@/components/map/layers/buildings';
 import { RootState } from '@/stores/store';
 import { SelectedItem } from '@/stores/map/map-slice';
 import maplibregl from 'maplibre-gl';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
+// A demolished building's fill sits below regular buildings by default; the
+// selected one is promoted above everything so its highlighted opacity is
+// actually visible, then restored below the regular fill on deselection.
+const DEMOLISHED_FILL_LAYERS: Array<[string, string]> = [
+  [LAYER_BDGS_SHAPE_DEMOLISHED_FILL, LAYER_BDGS_SHAPE_BORDER],
+  [LAYER_BDGS_POINT_DEMOLISHED_FILL, LAYER_BDGS_POINT_SHAPE_FILL],
+];
 
 const BUILDING_SOURCES = [SRC_BDGS_POINTS, SRC_BDGS_SHAPES];
 const ADS_SOURCES = [SRC_ADS];
@@ -41,9 +55,13 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
+  // A layer change rebuilds the style, which wipes the feature states: re-apply.
+  const layers = useSelector((state: RootState) => state.map.layers);
 
   const selectedSources = selectedItem ? getItemSources(selectedItem) : [];
   const selectedId = selectedItem ? getItemId(selectedItem) : undefined;
+  const isDemolishedSelected =
+    selectedItem?._type === 'building' && selectedItem.status === 'demolished';
 
   useEffect(() => {
     if (!map) return;
@@ -69,21 +87,47 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
       }
     };
 
+    // The demolished layers are installed asynchronously (installBuildings
+    // awaits an image load first), on their own timeline unrelated to tile
+    // loading: a layer may not exist yet the first time a relevant
+    // `sourcedata` fires, so this can't share that one-shot listener below.
+    // `styledata` fires again on every layer addition, so retrying here
+    // until the layer exists costs nothing once it does.
+    const promoteOrRestoreDemolishedFill = () => {
+      for (const [
+        demolishedFillLayer,
+        regularFillLayer,
+      ] of DEMOLISHED_FILL_LAYERS) {
+        if (!map.getLayer(demolishedFillLayer)) continue;
+        if (isDemolishedSelected) {
+          map.moveLayer(demolishedFillLayer);
+        } else if (map.getLayer(regularFillLayer)) {
+          map.moveLayer(demolishedFillLayer, regularFillLayer);
+        }
+      }
+    };
+
     applyHighlight();
+    promoteOrRestoreDemolishedFill();
 
     // La source peut ne pas être encore chargée (ex : arrivée sur la page avec
-    // ?q=rnbId). On ré-applique au premier chargement puis on se retire : le
-    // feature-state est stocké par id (pas par tuile), donc une seule pose suffit.
+    // ?q=rnbId). On ré-applique au chargement : le feature-state est stocké par
+    // id (pas par tuile), donc une seule pose suffit.
     const onSourceData = (e: maplibregl.MapSourceDataEvent) => {
       if (e.isSourceLoaded && ALL_HIGHLIGHTABLE_SOURCES.includes(e.sourceId)) {
         applyHighlight();
-        map.off('sourcedata', onSourceData);
+        // Wait for the source holding the selection: another one may load first.
+        if (!selectedId || selectedSources.includes(e.sourceId)) {
+          map.off('sourcedata', onSourceData);
+        }
       }
     };
     map.on('sourcedata', onSourceData);
+    map.on('styledata', promoteOrRestoreDemolishedFill);
 
     return () => {
       map.off('sourcedata', onSourceData);
+      map.off('styledata', promoteOrRestoreDemolishedFill);
     };
-  }, [map, selectedId]);
+  }, [map, selectedId, isDemolishedSelected, layers]);
 };

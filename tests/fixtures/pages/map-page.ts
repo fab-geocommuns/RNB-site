@@ -17,4 +17,16 @@ export class MapPage extends RNBPage {
   get buildingDetailsPannel() {
     return this.page.getByTestId('visu-panel');
   }
+
+  get toaster() {
+    return this.page.getByTestId('toaster');
+  }
+
+  get demolishedLayerButton(): Locator {
+    return this.page.getByRole('link', { name: 'Bâtiments démolis' });
+  }
+
+  async openLayersMenu() {
+    await this.page.getByText('Calques', { exact: true }).click();
+  }
 }

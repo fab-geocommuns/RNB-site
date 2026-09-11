@@ -12,6 +12,31 @@ import type { Feature } from 'geojson';
 import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { toasterSuccess } from '../contribution/toaster';
+import { DEMOLISHED_COLOR } from '@/components/map/layers/buildings';
+import { DEFAULT_VERTEX_COLOR } from '@/components/contribution/drawStyle';
+
+// Vertices don't carry the polygon's properties, so their color can't be a
+// style filter (drawStyle.tsx) — set imperatively here instead. mapbox-gl-draw
+// suffixes every style id with .cold/.hot; the bare id doesn't exist.
+const VERTEX_DRAW_LAYERS = [
+  'gl-draw-point-inner',
+  'gl-draw-vertex-inner',
+  'gl-draw-midpoint',
+].flatMap((id) => [`${id}.cold`, `${id}.hot`]);
+
+const setVertexColor = (map: maplibregl.Map, color: string) => {
+  for (const layerId of VERTEX_DRAW_LAYERS) {
+    if (map.getLayer(layerId)) {
+      // The base style sets a global 300ms transition on every paint
+      // property: without this, switching buildings visibly fades the old
+      // color into the new one instead of swapping instantly.
+      map.setPaintProperty(layerId, 'circle-color-transition', {
+        duration: 0,
+      });
+      map.setPaintProperty(layerId, 'circle-color', color);
+    }
+  }
+};
 
 /**
  * Gère le dessin de la forme d'un bâtiment pour les opérations `update`,
@@ -145,6 +170,8 @@ export const useMapPolygonDraw = (
   }, [shapeInteractionMode, operation, dispatch]);
 
   useEffect(() => {
+    let offStyleData: (() => void) | undefined;
+
     if (map && operationIsUpdateCreateNull) {
       if (
         selectedBuilding &&
@@ -157,7 +184,7 @@ export const useMapPolygonDraw = (
         drawRef.current.add({
           id: BUILDING_DRAW_SHAPE_FEATURE_ID,
           type: 'Feature',
-          properties: {},
+          properties: { demolished: selectedBuilding.status === 'demolished' },
           geometry: selectedBuilding.shape,
         });
         // used to know if we are selecting a different building next time we click on the map
@@ -178,12 +205,28 @@ export const useMapPolygonDraw = (
             map.moveLayer(draw_layer.id, lastLayer.id);
           }
         }
+
+        const vertexColor =
+          selectedBuilding._type === 'building' &&
+          selectedBuilding.status === 'demolished'
+            ? DEMOLISHED_COLOR
+            : DEFAULT_VERTEX_COLOR;
+        const applyVertexColor = () => setVertexColor(map, vertexColor);
+        applyVertexColor();
+        // mapbox-gl-draw's own vertex layers are installed lazily (on the
+        // map's 'load' event): on a first paint landing before that, the
+        // call above silently no-ops. Retry once they exist.
+        map.on('styledata', applyVertexColor);
+        offStyleData = () => map.off('styledata', applyVertexColor);
       } else {
         // selectedBuilding is null => cleaning
         deleteFeatures(drawRef.current);
         selectedBuildingRef.current = null;
+        setVertexColor(map, DEFAULT_VERTEX_COLOR);
       }
     }
+
+    return () => offStyleData?.();
   }, [selectedBuilding, operation, dispatch]);
 
   const deleteFeatures = (currentDrawRef: MapboxDraw | null) => {

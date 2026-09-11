@@ -7,16 +7,45 @@ import {
   LAYER_BDGS_POINT,
   LAYER_BDGS_SHAPE_BORDER,
   LAYER_BDGS_SHAPE_POINT,
+  LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+  LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+  LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
   LAYER_BAN_POINT,
   LAYER_BAN_TXT,
   LAYER_REPORTS_CIRCLE,
   LAYER_REPORTS_ICON,
+  LAYER_ADS_CIRCLE,
 } from '@/components/map/useMapLayers';
 import { selectBuildingsAndSetMergeCandidates } from '@/stores/edition/edition-slice';
 import { selectBuildingAndSetOperationUpdate } from '@/stores/edition/edition-slice';
 import { toasterSuccess } from '@/components/contribution/toaster';
 import { displayBANPopup } from './BanLayerEvent';
 import { fetchBuilding } from '@/utils/requests';
+
+// Split and merge only make sense for an active building.
+const BDGS_SELECTABLE_LAYERS = [
+  LAYER_BDGS_POINT,
+  LAYER_BDGS_SHAPE_BORDER,
+  LAYER_BDGS_SHAPE_POINT,
+];
+
+// Simple selection (operation update/null) additionally accepts demolished
+// buildings, so one can be opened just like an active one.
+const BDGS_SELECTABLE_LAYERS_WITH_DEMOLISHED = [
+  ...BDGS_SELECTABLE_LAYERS,
+  LAYER_BDGS_POINT_DEMOLISHED_CIRCLE,
+  LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
+  LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
+];
+
+// Clicking one of these must not unselect the building being edited.
+const SELF_HANDLED_LAYERS = [
+  LAYER_BAN_POINT,
+  LAYER_BAN_TXT,
+  LAYER_REPORTS_CIRCLE,
+  LAYER_REPORTS_ICON,
+  LAYER_ADS_CIRCLE,
+];
 
 /**
  * Ajout et gestion des événements de la carte
@@ -85,6 +114,15 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           }
         }
 
+        const clickedOnSelectableBuilding =
+          !!featureOnCursor &&
+          BDGS_SELECTABLE_LAYERS_WITH_DEMOLISHED.includes(
+            featureOnCursor.layer.id,
+          );
+        const clickIsSelfHandled =
+          !!featureOnCursor &&
+          SELF_HANDLED_LAYERS.includes(featureOnCursor.layer.id);
+
         const rnbIdClickedOn = featureOnCursor
           ? featureOnCursor.properties.rnb_id
           : undefined;
@@ -105,21 +143,13 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
                 );
               }
             } else if (
-              featureOnCursor &&
+              clickedOnSelectableBuilding &&
               rnbIdClickedOn !== selectedBuildingRnbId
             ) {
-              // What did we click on?
-              if (
-                [
-                  LAYER_BDGS_POINT,
-                  LAYER_BDGS_SHAPE_BORDER,
-                  LAYER_BDGS_SHAPE_POINT,
-                ].includes(featureOnCursor.layer.id)
-              ) {
-                dispatch(selectBuildingAndSetOperationUpdate(rnbIdClickedOn));
-              }
+              dispatch(selectBuildingAndSetOperationUpdate(rnbIdClickedOn));
             } else if (
-              featureOnCursor === undefined &&
+              !clickedOnSelectableBuilding &&
+              !clickIsSelfHandled &&
               rnbIdClickedClose !== selectedBuildingRnbId
             ) {
               // click out unselects the currently selected item, unless the click is very close to the currently edited building
@@ -128,14 +158,7 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
           }
         } else if (operation === 'split' && splitCandidateId === null) {
           if (featureOnCursor) {
-            // What did we click on?
-            if (
-              [
-                LAYER_BDGS_POINT,
-                LAYER_BDGS_SHAPE_BORDER,
-                LAYER_BDGS_SHAPE_POINT,
-              ].includes(featureOnCursor.layer.id)
-            ) {
+            if (BDGS_SELECTABLE_LAYERS.includes(featureOnCursor.layer.id)) {
               const rnb_id = featureOnCursor.properties.rnb_id;
               dispatch(
                 Actions.edition.setSplitCandidateAndLocation({
@@ -157,7 +180,10 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
             }
           }
         } else if (operation === 'merge') {
-          if (featureOnCursor) {
+          if (
+            featureOnCursor &&
+            BDGS_SELECTABLE_LAYERS.includes(featureOnCursor.layer.id)
+          ) {
             dispatch(
               selectBuildingsAndSetMergeCandidates(
                 featureOnCursor.properties.rnb_id,
