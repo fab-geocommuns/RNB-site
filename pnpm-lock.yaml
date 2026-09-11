@@ -23,6 +23,9 @@ importers:
       '@mapgrab/playwright':
         specifier: ^0.0.3
         version: 0.0.3(playwright@1.56.1)
+      '@private-captcha/private-captcha-js':
+        specifier: ^0.0.12
+        version: 0.0.12
       '@private-captcha/private-captcha-react':
         specifier: 0.0.8
         version: 0.0.8(react@19.2.3)
@@ -757,6 +760,9 @@ packages:
 
   '@private-captcha/private-captcha-js-core@0.0.24':
     resolution: {integrity: sha512-iQTIqHrGyQwqY560P1gpbZk2tDRzbyp5FgWsfXfLRCKo0jKci6MzMTwGwJFj65l3Ec//Yb1Oh8dmbddnuwazNA==}
+
+  '@private-captcha/private-captcha-js@0.0.12':
+    resolution: {integrity: sha512-iRqULokOfjtdLwJiuNeJnmT8ScBMgFW+r0vcfSR6OlaO6slOAHANQWqYRLtYLprWct2/yOdEkcfbDFVJmuYdyA==}
 
   '@private-captcha/private-captcha-react@0.0.8':
     resolution: {integrity: sha512-et+SwJn7gW6jp7HDkAb5tI3LnklZYnBg3hCBAu/cbaiY9jcTQgtkf1DAwnWxCtFPKH/ukr1RCemBDybCFaDkTA==}
@@ -5257,6 +5263,8 @@ snapshots:
       playwright: 1.56.1
 
   '@private-captcha/private-captcha-js-core@0.0.24': {}
+
+  '@private-captcha/private-captcha-js@0.0.12': {}
 
   '@private-captcha/private-captcha-react@0.0.8(react@19.2.3)':
     dependencies:
