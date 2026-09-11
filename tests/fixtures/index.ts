@@ -18,7 +18,6 @@ import { EditionPage } from '@/tests/fixtures/pages/edition-page';
 import { ToolsAndServicesPage } from '@/tests/fixtures/pages/tools-and-services-page';
 import { UseCasesPage } from '@/tests/fixtures/pages/use-cases-page';
 import { RNBPage } from '@/tests/fixtures/pages/_page';
-import { testWithNewsletter } from '@/tests/fixtures/utils/components/newsletter';
 import { HttpMocker, createHttpMocker } from '@/tests/fixtures/utils/http-mock';
 import { signInAs, FakeUser } from '@/tests/fixtures/utils/auth-mock';
 import { API_BASE } from '@/tests/config';
@@ -101,5 +100,5 @@ const testPage = baseTest.extend<PagesFixtures>({
   useCasesPage: createPageFixture(UseCasesPage),
 });
 
-export const test = mergeTests(testPage, testWithNewsletter, mapGrabTest);
+export const test = mergeTests(testPage, mapGrabTest);
 export const expect = mergeExpects(baseExpect, mapGrabExpect);
