@@ -1,5 +1,5 @@
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
-import NewsletterForm from '../NewsletterForm';
+import NewsletterForm from '../newsletter/NewsletterForm';
 import Link from 'next/link';
 
 const newsletterModal = createModal({
