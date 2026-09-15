@@ -36,6 +36,8 @@ export class HomePage extends RNBPage {
     this.newsletterField = newsletterForm.getByPlaceholder(
       'Votre adresse email',
     );
-    this.newsletterButton = newsletterForm.locator('[value="S\'inscrire"]');
+    this.newsletterButton = newsletterForm.getByRole('button', {
+      name: "S'inscrire",
+    });
   }
 }

@@ -14,3 +14,10 @@
     margin-bottom: 1rem;
   }
 }
+
+// Card DSFR rend toujours .fr-card__end, vide sur cette carte : sa marge et son
+// padding ajoutent 1,5 rem entre le texte et le formulaire d'inscription.
+.followUsCardEnd {
+  margin-top: 0;
+  padding-top: 0;
+}

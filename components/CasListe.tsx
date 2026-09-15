@@ -2,7 +2,6 @@
 import { getUseCases } from '@/utils/blog';
 import styles from '@/styles/blog.module.scss';
 import ArticleCard from '@/components/blog/ArticleCard';
-import NewsletterForm from '@/components/NewsletterForm';
 
 export default async function CasList() {
   const useCases = await getUseCases();
