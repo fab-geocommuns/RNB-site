@@ -1,0 +1,17 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  > *:first-child {
+    flex: 1 1 auto;
+  }
+
+  :global(.fr-input-group) {
+    margin: 0;
+  }
+
+  :global(.fr-input) {
+    margin-top: 0;
+  }
+}

@@ -22,6 +22,7 @@
     "@mapbox/mapbox-gl-draw": "^1.5.0",
     "@mapgrab/map-interface": "^1.0.0",
     "@mapgrab/playwright": "^0.0.3",
+    "@private-captcha/private-captcha-js": "^0.0.12",
     "@private-captcha/private-captcha-react": "0.0.8",
     "@reduxjs/toolkit": "^2.8.2",
     "@sentry/nextjs": "^10.66.0",
