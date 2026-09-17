@@ -252,10 +252,10 @@ function SplitBuildingCutStep({
             title={
               !hasValidCut
                 ? 'Tracez au moins un trait de découpe valide'
-                : `Valider la découpe en ${resultingPolygonsCount} bâtiments`
+                : `Terminer la découpe en ${resultingPolygonsCount} bâtiments`
             }
           >
-            Valider la découpe
+            Terminer la découpe
           </Button>
         </>
       }

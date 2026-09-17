@@ -73,7 +73,7 @@ export class EditionPage extends RNBPage {
 
   async validateCut() {
     const validateButton = this.panel.getByRole('button', {
-      name: 'Valider la découpe',
+      name: 'Terminer la découpe',
     });
     await validateButton.click();
   }
