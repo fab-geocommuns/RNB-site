@@ -5,7 +5,7 @@ import styles from '@/styles/home.module.scss';
 import { Card } from '@codegouvfr/react-dsfr/Card';
 import ImageNext from 'next/image';
 import CasListe from '@/components/CasListe';
-import NewsletterForm from '@/components/NewsletterForm';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import AddressSearchHome from '@/components/address/AddressSearchHome';
 import DatabaseSearchForm from '@/components/DatabaseSearchForm';
 import PivotIllustration from '@/components/PivotIllustration';

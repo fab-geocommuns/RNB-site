@@ -183,7 +183,7 @@
         <li>les signalements en tant que personne suggérant une modification du contenu du RNB, sans la réaliser par vous même</b></li>
         </ul>
         </ol>
-    - question: <b>Vous avez une base de données et vous aimeriez intégrer les ID-RNB ?</b> ou <b>Vous avez déjà intégré les ID-RNB et vous souhaitez les actualiser ?</b>
+    - question: Vous avez une base de données et vous aimeriez intégrer les ID-RNB ? Ou avez-vous déjà intégré les ID-RNB et souhaitez-vous les actualiser ?
       key: rapprochement
       answer: >
         <p>Enrichir vos données avec un identifiant RNB vous permet de croiser plus facilement vos données avec celles des autres acteurs qui utilisent le référentiel cf : <a href="https://rnb.beta.gouv.fr/outils-services/rapprochement#identifiants" target="_blank">Liste des bases ayant intégré les ID-RNB</a></p>

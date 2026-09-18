@@ -10,8 +10,6 @@ export class HomePage extends RNBPage {
   readonly toolsTitle: Locator;
   readonly useCasesTitle: Locator;
   readonly faqButton: Locator;
-  readonly newsletterField: Locator;
-  readonly newsletterButton: Locator;
 
   constructor(page: Page) {
     super(page, '/');
@@ -32,10 +30,5 @@ export class HomePage extends RNBPage {
     this.toolsTitle = page.locator('h2').getByText('Outils et services');
     this.useCasesTitle = page.locator('h2').getByText("Cas d'usage");
     this.faqButton = page.getByText('Consulter la Foire aux Questions');
-    const newsletterForm = page.locator('#newsletter-form');
-    this.newsletterField = newsletterForm.getByPlaceholder(
-      'Votre adresse email',
-    );
-    this.newsletterButton = newsletterForm.locator('[value="S\'inscrire"]');
   }
 }
