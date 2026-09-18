@@ -1,0 +1,24 @@
+// Bandeau de maintenance affiché sous la bannière d'accueil.
+// Le bloc remonte de la marge basse du Hero (fr-mb-6v = 1.5rem) pour être
+// accolé à la bannière.
+.block {
+  margin-top: -1.5rem;
+  background-color: var(--background-flat-blue-france);
+  color: var(--text-inverted-blue-france);
+
+  h2,
+  p {
+    color: inherit;
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    // Icône DSFR (fr-icon-*) : la couleur suit celle du texte inversé.
+    flex-shrink: 0;
+  }
+}

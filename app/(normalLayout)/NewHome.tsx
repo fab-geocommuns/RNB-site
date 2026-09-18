@@ -1,4 +1,5 @@
 import Hero from '@/components/home/Hero';
+import MaintenanceBlock from '@/components/home/MaintenanceBlock';
 import UseCases from '@/components/home/UseCases';
 import Databases from '@/components/home/Databases';
 import ToolsAndServices from '@/components/home/ToolsAndServices';
@@ -26,6 +27,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
+      <MaintenanceBlock />
       <div className="fr-container">
         {breakingNews?.featured && (
           <>
