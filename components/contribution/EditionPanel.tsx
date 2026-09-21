@@ -192,7 +192,7 @@ function EditSelectedBuildingPanelContent({
         }
         footer={
           // En mode lecture seule (bâtiment validé non déverrouillé), pas de
-          // footer : le bouton « Valider les modifications » n'a pas lieu d'être.
+          // footer : le bouton « Enregistrer les modifications » n'a pas lieu d'être.
           !locked && (
             <FooterPanel
               isActive={isActive}
@@ -352,7 +352,7 @@ function FooterPanel({
           onClick={handleSubmit}
           disabled={!isActive || !anyChanges || isLoading}
         >
-          Valider les modifications
+          Enregistrer les modifications
         </Button>
         {anyChanges && (
           <Button onClick={cancelUpdate} priority="tertiary no outline">
