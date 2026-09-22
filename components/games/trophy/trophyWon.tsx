@@ -93,17 +93,17 @@ export default function TrophyWon() {
 
   const confettiCount = 400;
   const scalar = 2;
-  var checks = confetti.shapeFromText({ text: '✅', scalar });
-  var stars = confetti.shapeFromText({ text: '⭐️', scalar });
-  const confettiDefaults = {
-    shapes: [checks, stars],
-    origin: { x: 0.5, y: 0.7 },
-    zIndex: 1751,
-    scalar,
-  };
   const fire = function (particleRatio: number, opts: any) {
+    // `shapeFromText` needs OffscreenCanvas: it must stay out of the render body,
+    // which also runs on the server.
     confetti({
-      ...confettiDefaults,
+      shapes: [
+        confetti.shapeFromText({ text: '✅', scalar }),
+        confetti.shapeFromText({ text: '⭐️', scalar }),
+      ],
+      origin: { x: 0.5, y: 0.7 },
+      zIndex: 1751,
+      scalar,
       ...opts,
       particleCount: Math.floor(confettiCount * particleRatio),
     });

@@ -10,7 +10,14 @@ Si vous souhaitez accéder au répertoire de code contenant le coeur technique d
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+pnpm i
+```
+Ask a colleague to send you his .env.local file.
+
+Then run the development server:
 
 ```bash
 pnpm dev

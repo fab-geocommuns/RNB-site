@@ -29,6 +29,9 @@ export default function CreateAccountForm() {
   const [genericError, setGenericError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
+  // A solution is single-use: the captcha is unmounted after each request and
+  // mounted again when the user engages with the form.
+  const [captchaMounted, setCaptchaMounted] = useState(false);
   const isCaptchaEnabled = process.env.NEXT_PUBLIC_ENABLE_CAPTCHA === 'true';
 
   const clearError = (field: keyof CreateAccountErrors) => {
@@ -80,6 +83,9 @@ export default function CreateAccountForm() {
     if (hasErrors) {
       return;
     }
+
+    setCaptchaSolution(null);
+    setCaptchaMounted(false);
 
     try {
       const response = await fetch(
@@ -155,7 +161,11 @@ export default function CreateAccountForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      onFocus={() => setCaptchaMounted(true)}
+      onInput={() => setCaptchaMounted(true)}
+    >
       {genericError ? (
         <div className="fr-mb-3w">
           <Alert
@@ -237,11 +247,8 @@ export default function CreateAccountForm() {
         >
           Créer un compte
         </button>
-        {isCaptchaEnabled && (
-          <Captcha
-            style={{ flex: '1 0 0' }}
-            onSolved={(solution) => setCaptchaSolution(solution)}
-          />
+        {isCaptchaEnabled && captchaMounted && (
+          <Captcha style={{ flex: '1 0 0' }} onSolved={setCaptchaSolution} />
         )}
       </div>
       <p className="fr-mt-3w">

@@ -275,7 +275,7 @@ function FooterPanel({
                 : 'Sélectionnez au moins 2 bâtiments à fusionner'
             }
           >
-            Valider la fusion
+            Fusionner les bâtiments
           </Button>
         </>
       )}

@@ -78,13 +78,17 @@ export const useMapLayers = ({
   );
   const dispatch = useDispatch<AppDispatch>();
   const installAllRunning = useRef(false);
+  const installAllPending = useRef(false);
   const displayedReportTags = useSelector(
     (state: RootState) => state.report.displayedTags,
   );
 
   const installAll = async (map: maplibregl.Map) => {
-    // We don't want concurrent calls running
-    if (installAllRunning.current) return;
+    // A call arriving during an install is replayed at the end of it, with fresh state
+    if (installAllRunning.current) {
+      installAllPending.current = true;
+      return;
+    }
     installAllRunning.current = true;
 
     try {
@@ -106,6 +110,11 @@ export const useMapLayers = ({
       throw e;
     } finally {
       installAllRunning.current = false;
+
+      if (installAllPending.current) {
+        installAllPending.current = false;
+        onMapReady(map, () => installAllRef.current(map));
+      }
     }
 
     if (process.env.NEXT_PUBLIC_ENABLE_MAPGRAB === 'true' && map) {
@@ -115,6 +124,10 @@ export const useMapLayers = ({
       });
     }
   };
+
+  // Points at the installAll closure of the latest render, so a replay uses fresh `layers`
+  const installAllRef = useRef(installAll);
+  installAllRef.current = installAll;
 
   // When layers change, we rebuild the style and the layers
   useEffect(() => {

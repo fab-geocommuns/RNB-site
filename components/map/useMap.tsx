@@ -52,7 +52,10 @@ export const useMap = (params: UseMapParams) => {
 
       newMap.once('load', () => {
         newMap.resize();
-        mapContainerRef.current!.style.opacity = '1';
+        // the component may have unmounted before 'load' fires
+        if (mapContainerRef.current) {
+          mapContainerRef.current.style.opacity = '1';
+        }
       });
 
       // disable map rotation using right click + drag
@@ -62,6 +65,11 @@ export const useMap = (params: UseMapParams) => {
       newMap.touchZoomRotate.disableRotation();
 
       setMap(newMap);
+
+      // tears down the map (and its pending 'load' listener) on unmount
+      return () => {
+        newMap.remove();
+      };
     }
   }, []);
 

@@ -14,6 +14,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env.test') });
 export default defineConfig({
   testDir: './tests',
   testIgnore: ['**/mock-server/**'],
+  globalSetup: './tests/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -75,6 +76,12 @@ export default defineConfig({
         NEXTAUTH_SECRET: 'test-secret-do-not-use-in-prod',
         NEXT_PUBLIC_ENABLE_EDITION_MODE: 'true',
         NEXT_PUBLIC_ENABLE_MAPGRAB: 'true',
+        // Explicit, not left to fall through to a dev's own .env.local:
+        // these gate background-polling widgets (reports, summer game) that
+        // throw into Next's dev error overlay on any unmocked request.
+        NEXT_PUBLIC_SHOW_REPORTS: 'false',
+        NEXT_PUBLIC_SHOW_SUMMER_GAME: 'false',
+        NEXT_PUBLIC_ENABLE_CAPTCHA: 'false',
       },
     },
   ],

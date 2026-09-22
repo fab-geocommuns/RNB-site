@@ -70,6 +70,49 @@ export const buildingToSplit = {
   plots: [],
 } satisfies BuildingFixture;
 
+/** Bâtiment démoli et actif, pour les tests du calque « Bâtiments démolis ». */
+export const buildingDemolished = {
+  rnb_id: 'DGDX7T9K3MW1',
+  status: 'demolished',
+  is_active: true,
+  point: { type: 'Point', coordinates: [2.35, 48.86] },
+  shape: {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [2.35, 48.86],
+        [2.3505, 48.86],
+        [2.3505, 48.8605],
+        [2.35, 48.8605],
+        [2.35, 48.86],
+      ],
+    ],
+  },
+  addresses: [],
+  validated_by: [],
+  ext_ids: [],
+  plots: [],
+} satisfies BuildingFixture;
+
+/**
+ * Même bâtiment que `buildingDemolished`, mais validé. En édition, le
+ * panneau n'affiche la pastille de statut en lecture seule que pour un
+ * bâtiment verrouillé (`validated_by.length > 0`) ; un bâtiment non validé
+ * affiche un `<select>` modifiable à la place.
+ */
+export const buildingDemolishedValidated = {
+  ...buildingDemolished,
+  rnb_id: 'PMWQ6NC4EJ8H',
+  validated_by: [makeValidator()],
+} satisfies BuildingFixture;
+
+/** Même bâtiment que `buildingDemolished`, mais désactivé (`is_active: false`). */
+export const buildingDemolishedInactive = {
+  ...buildingDemolished,
+  rnb_id: 'FQ2WY8LB6TN4',
+  is_active: false,
+} satisfies BuildingFixture;
+
 export const banFeatureSegur = {
   type: 'Feature',
   geometry: { type: 'Point', coordinates: [2.305, 48.85] },

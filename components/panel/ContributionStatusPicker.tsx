@@ -10,5 +10,12 @@ type ContributionStatusPickerProps = {
 export function ContributionStatusPicker({
   currentStatus,
 }: ContributionStatusPickerProps) {
-  return BuildingStatusMap[currentStatus];
+  const severity = currentStatus === 'demolished' ? 'error' : 'info';
+  return (
+    <span
+      className={`fr-badge fr-badge--sm fr-badge--no-icon fr-badge--${severity}`}
+    >
+      {BuildingStatusMap[currentStatus]}
+    </span>
+  );
 }
