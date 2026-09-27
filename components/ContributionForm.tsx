@@ -19,7 +19,6 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 // Utils
 // @ts-ignore
 import Cookies from 'js-cookie';
-import Bus from '@/utils/Bus';
 import { Actions, RootState } from '@/stores/store';
 
 export default function ContributionForm() {
@@ -64,6 +63,8 @@ export default function ContributionForm() {
       body: data,
     })
       .then(async (res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
         // Temporary block for the summer games
         const data = await res.json();
         if (Object.hasOwn(data, 'contributor_rank')) {
@@ -79,14 +80,6 @@ export default function ContributionForm() {
           setSummerGamesMessage(undefined);
         }
 
-        // Warn the map and the contribution counter there is a new one
-        Bus.emit('contribution:new', {
-          // @ts-ignore
-          rnb_id: selectedBuilding!.rnb_id,
-        });
-
-        /* Empty textarea */
-
         setSending(false);
         setSuccess(true);
         emptyMsgInput();
@@ -94,8 +87,9 @@ export default function ContributionForm() {
         /* Store email in cookie */
         Cookies.set('email', email, { expires: 365 });
 
-        // Reload map buildings
+        // Reload map buildings and reports
         dispatch(Actions.map.reloadBuildings());
+        dispatch(Actions.report.setLastReportUpdate());
 
         va.track('contribution-success');
 
@@ -104,6 +98,7 @@ export default function ContributionForm() {
         }, 10000);
       })
       .catch((err) => {
+        setSending(false);
         console.error(err);
         va.track('contribution-error', { error: err.message });
       });
