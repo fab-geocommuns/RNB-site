@@ -19,7 +19,7 @@ export default function ReportDetails({ report }: { report: Report }) {
     dispatch(Actions.report.selectReport(null));
   };
 
-  const answers = report?.messages.slice(1);
+  const answers = report.messages.slice(1);
 
   return (
     <>
@@ -41,13 +41,13 @@ export default function ReportDetails({ report }: { report: Report }) {
             <ReportHead report={report} />
           </div>
 
-          <div className={panelStyles.section}>
-            {answers?.map((message: any, index: number) => (
-              <div key={index} className={styles.messageShell}>
-                <ReportMessage message={message} />
-              </div>
-            ))}
-          </div>
+          {answers.length > 0 && (
+            <div className={panelStyles.section}>
+              {answers.map((message: any, index: number) => (
+                <ReportMessage key={index} message={message} />
+              ))}
+            </div>
+          )}
 
           <div className={panelStyles.section}>
             <ReportForm report={report} />
