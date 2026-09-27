@@ -19,6 +19,7 @@ export type ReportStore = {
   lastReportUpdate: number;
   displayedTags: 'all' | number[];
   showClosedReports: boolean;
+  reportIdsAtPoint: number[];
 };
 
 function getDisplayedTagsFromUrl() {
@@ -37,6 +38,7 @@ const initialState: ReportStore = {
   lastReportUpdate: Date.now(),
   displayedTags: getDisplayedTagsFromUrl(),
   showClosedReports: getQueryParam('report_closed') === '1',
+  reportIdsAtPoint: [],
 };
 
 export const reportSlice = createSlice({
@@ -61,6 +63,9 @@ export const reportSlice = createSlice({
     },
     setShowClosedReportsInStore(state, action: PayloadAction<boolean>) {
       state.showClosedReports = action.payload;
+    },
+    setReportIdsAtPoint(state, action: PayloadAction<number[]>) {
+      state.reportIdsAtPoint = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -117,10 +122,17 @@ export const setShowClosedReports =
     }
   };
 
+export const selectReportAtPoint =
+  (reportIds: number[]) => (dispatch: AppDispatch) => {
+    dispatch(reportSlice.actions.setReportIdsAtPoint(reportIds));
+    dispatch(selectReport(reportIds[0]));
+  };
+
 export const reportReducer = reportSlice.reducer;
 export const reportActions = {
   ...reportSlice.actions,
   selectReport,
   setDisplayedTags,
   setShowClosedReports,
+  selectReportAtPoint,
 };
