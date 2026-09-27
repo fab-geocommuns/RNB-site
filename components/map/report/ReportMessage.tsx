@@ -47,7 +47,9 @@ export default function ReportMessage({ message, status }: Props) {
     <div className={`${styles.shell} ${status ? styles.withStatus : ''}`}>
       <div className={styles.metaInfos}>
         <span>
-          <span className={styles.author}>{message.author.username}</span>
+          {message.author.username && (
+            <span className={styles.author}>{message.author.username}</span>
+          )}
           <Tooltip
             kind="hover"
             title={new Date(message.created_at).toLocaleString()}
