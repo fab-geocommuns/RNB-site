@@ -7,6 +7,7 @@ import panelStyles from '@/styles/panel.module.scss';
 import ReportMessage from '@/components/map/report/ReportMessage';
 import ReportHead from '@/components/map/report/ReportHead';
 import ReportForm from '@/components/map/report/ReportForm';
+import ReportPagination from '@/components/map/report/ReportPagination';
 
 import { Report } from '@/types/report';
 
@@ -29,6 +30,7 @@ export default function ReportDetails({ report }: { report: Report }) {
               Signalement
             </h2>
           </div>
+          <ReportPagination reportId={report.id} />
           <a href="#" onClick={onClose} className={genericStyles.closeLink}>
             <i className="fr-icon-close-line" />
           </a>

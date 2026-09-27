@@ -15,6 +15,11 @@ import {
 import { distance } from '@turf/turf';
 import { MapMouseEvent } from 'maplibre-gl';
 
+// Stacked reports share a point: the selected one is drawn on top, so it wins the tie
+const isSelectedReport = (feature: MapGeoJSONFeature) =>
+  [LAYER_REPORTS_CIRCLE, LAYER_REPORTS_ICON].includes(feature.layer.id) &&
+  feature.state.highlighted === true;
+
 /**
  * Récupère la feature la plus proche du curseur dans un rayon maximum spécifié en pixels.
  * @param map - La carte en question.
@@ -80,7 +85,10 @@ export const getNearestFeatureFromCursorWithBuffer = (
         const pointLat = feature.geometry.coordinates[1];
         let d = distance([cursorLng, cursorLat], [pointLng, pointLat]);
 
-        if (d < minDistance) {
+        if (
+          d < minDistance ||
+          (d === minDistance && isSelectedReport(feature))
+        ) {
           minDistance = d;
           closestFeature = feature;
         }
