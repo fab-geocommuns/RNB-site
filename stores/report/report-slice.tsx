@@ -1,21 +1,24 @@
 'use client';
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { fetchReport } from '@/utils/requests';
 import { Report } from '@/types/report';
 import {
   getArrayQueryParam,
+  getQueryParam,
   setArrayQueryParam,
   setQueryParam,
   removeQueryParam,
 } from '@/utils/queryParams';
+import type { AppDispatch } from '../store';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
   selectedReport: Report | null;
   lastReportUpdate: number;
   displayedTags: 'all' | number[];
+  showClosedReports: boolean;
 };
 
 function getDisplayedTagsFromUrl() {
@@ -33,6 +36,7 @@ const initialState: ReportStore = {
   selectedReport: null,
   lastReportUpdate: Date.now(),
   displayedTags: getDisplayedTagsFromUrl(),
+  showClosedReports: getQueryParam('report_closed') === '1',
 };
 
 export const reportSlice = createSlice({
@@ -54,6 +58,9 @@ export const reportSlice = createSlice({
     },
     setDisplayedTagsInStore(state, action) {
       state.displayedTags = action.payload;
+    },
+    setShowClosedReportsInStore(state, action: PayloadAction<boolean>) {
+      state.showClosedReports = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -97,9 +104,23 @@ export const setDisplayedTags =
     }
   };
 
+export const setShowClosedReports =
+  (showClosedReports: boolean) => (dispatch: AppDispatch) => {
+    dispatch(
+      reportSlice.actions.setShowClosedReportsInStore(showClosedReports),
+    );
+
+    if (showClosedReports) {
+      setQueryParam('report_closed', 1);
+    } else {
+      removeQueryParam('report_closed');
+    }
+  };
+
 export const reportReducer = reportSlice.reducer;
 export const reportActions = {
   ...reportSlice.actions,
   selectReport,
   setDisplayedTags,
+  setShowClosedReports,
 };

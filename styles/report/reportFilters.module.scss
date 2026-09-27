@@ -56,9 +56,12 @@ body .head {
 
 .subtitle {
   font-size: 0.8em;
-  font-weight: 500;
+  // react-dsfr always adds fr-text--regular (font-weight !important) to the legend
+  font-weight: 500 !important;
   text-transform: uppercase;
+  color: inherit;
 
+  padding-bottom: 0;
   margin-bottom: 12px;
 }
 
@@ -76,33 +79,6 @@ body .head {
   background-color: #518fff;
   transition: width 0.3s ease;
   border-radius: 4px;
-}
-
-.tagItem {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  margin-bottom: 8px;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.tagLabel {
-  display: flex;
-  flex-direction: column;
-}
-
-.tagName {
-  font-weight: 500;
-  font-size: 0.9em;
-}
-
-.tagCount {
-  font-size: 0.8em;
 }
 
 .activityIndicator {
