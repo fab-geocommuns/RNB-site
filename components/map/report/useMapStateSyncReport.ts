@@ -12,6 +12,9 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
   >(null);
 
   const displayedTags = useSelector((state: any) => state.report.displayedTags);
+  const showClosedReports = useSelector(
+    (state: RootState) => state.report.showClosedReports,
+  );
 
   const lastReportUpdate = useSelector(
     (state: RootState) => state.report.lastReportUpdate,
@@ -69,6 +72,11 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
 
   useEffect(() => {
     if (!map) return;
-    setDisplayedReportFilters(map, displayedTags, selectedReportId);
-  }, [map, displayedTags, selectedReportId]);
+    setDisplayedReportFilters({
+      map,
+      displayedTags,
+      showClosedReports,
+      selectedReportId,
+    });
+  }, [map, displayedTags, showClosedReports, selectedReportId]);
 };
