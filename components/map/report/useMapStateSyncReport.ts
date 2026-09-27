@@ -72,11 +72,26 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
 
   useEffect(() => {
     if (!map) return;
-    setDisplayedReportFilters({
-      map,
-      displayedTags,
-      showClosedReports,
-      selectedReportId,
-    });
+    const syncReportLayers = () =>
+      setDisplayedReportFilters({
+        map,
+        displayedTags,
+        showClosedReports,
+        selectedReportId,
+      });
+    syncReportLayers();
+
+    // A layers change reinstalls the reports source, losing its filters and feature states
+    const onReportsSourceLoaded = (e: maplibregl.MapSourceDataEvent) => {
+      if (e.sourceId !== SRC_REPORTS || e.sourceDataType !== 'metadata') return;
+      // Also fired by removeSource, once the source is gone
+      if (!map.getSource(SRC_REPORTS)) return;
+      syncReportLayers();
+      if (selectedReportId) selectReport(selectedReportId);
+    };
+    map.on('sourcedata', onReportsSourceLoaded);
+    return () => {
+      map.off('sourcedata', onReportsSourceLoaded);
+    };
   }, [map, displayedTags, showClosedReports, selectedReportId]);
 };
