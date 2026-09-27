@@ -82,6 +82,9 @@ export const useMapLayers = ({
   const displayedReportTags = useSelector(
     (state: RootState) => state.report.displayedTags,
   );
+  const showClosedReports = useSelector(
+    (state: RootState) => state.report.showClosedReports,
+  );
 
   const installAll = async (map: maplibregl.Map) => {
     // A call arriving during an install is replayed at the end of it, with fresh state
@@ -104,7 +107,11 @@ export const useMapLayers = ({
       }
 
       if (layers.extraLayers.includes('reports')) {
-        await installReports(map, displayedReportTags);
+        await installReports({
+          map,
+          displayedTags: displayedReportTags,
+          showClosedReports,
+        });
       }
     } catch (e) {
       throw e;
