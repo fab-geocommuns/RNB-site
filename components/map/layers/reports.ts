@@ -1,6 +1,5 @@
 import maplibregl, {
   ExpressionSpecification,
-  FilterSpecification,
   MapGeoJSONFeature,
 } from 'maplibre-gl';
 import { fr } from '@codegouvfr/react-dsfr';
@@ -50,16 +49,6 @@ const reportOpacity = byReportStatus({
   pending: 1,
   closed: CLOSED_REPORT_OPACITY,
 });
-
-export const getDefaultReportFilter = () => {
-  const defaultReportFilter: FilterSpecification = [
-    '==',
-    'pending',
-    ['get', 'status'],
-  ];
-
-  return defaultReportFilter;
-};
 
 type ReportFilterParams = {
   displayedTags: 'all' | number[];
@@ -148,15 +137,7 @@ export const getReportIdsAtPoint = ({
   return Array.from(new Set([reportId, ...stackedIds]));
 };
 
-export const installReports = async ({
-  map,
-  displayedTags,
-  showClosedReports,
-}: {
-  map: maplibregl.Map;
-  displayedTags: 'all' | number[];
-  showClosedReports: boolean;
-}) => {
+export const installReports = async (map: maplibregl.Map) => {
   const darkColor = '#d64d00';
   const lightColor = '#fcf5f4';
   const closedColor = fr.colors.getHex({ isDark: false }).options.grey._625_425
@@ -184,7 +165,7 @@ export const installReports = async ({
     id: LAYER_REPORTS_SMALL_CIRCLES,
     source: SRC_REPORTS,
     'source-layer': 'default',
-    filter: getDefaultReportFilter(),
+    filter: isPending,
     maxzoom: zoomThreshold,
     type: 'circle',
     paint: {
@@ -206,7 +187,7 @@ export const installReports = async ({
     type: 'circle',
     source: SRC_REPORTS,
     'source-layer': 'default',
-    filter: getDefaultReportFilter(),
+    filter: isPending,
     minzoom: zoomThreshold,
     paint: {
       'circle-radius': 15,
@@ -228,7 +209,7 @@ export const installReports = async ({
     source: SRC_REPORTS,
     'source-layer': 'default',
     type: 'symbol',
-    filter: getDefaultReportFilter(),
+    filter: isPending,
     minzoom: zoomThreshold,
 
     layout: {
@@ -249,6 +230,4 @@ export const installReports = async ({
       ],
     },
   });
-
-  setDisplayedReportFilters({ map, displayedTags, showClosedReports });
 };
