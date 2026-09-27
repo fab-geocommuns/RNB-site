@@ -1,6 +1,7 @@
 import maplibregl, {
   ExpressionSpecification,
   FilterSpecification,
+  MapGeoJSONFeature,
 } from 'maplibre-gl';
 import { fr } from '@codegouvfr/react-dsfr';
 import reportIcon from '@/public/images/map/report.png';
@@ -107,7 +108,45 @@ export function setDisplayedReportFilters({
   map.setFilter(LAYER_REPORTS_CIRCLE, filter);
   map.setFilter(LAYER_REPORTS_ICON, filter);
   map.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filter);
+
+  // Draw the selected report above the reports stacked at the same point
+  const selectedOnTop: ExpressionSpecification = [
+    'case',
+    ['==', ['get', 'id'], filterParams.selectedReportId ?? -1],
+    1,
+    0,
+  ];
+  map.setLayoutProperty(LAYER_REPORTS_CIRCLE, 'circle-sort-key', selectedOnTop);
+  map.setLayoutProperty(LAYER_REPORTS_ICON, 'symbol-sort-key', selectedOnTop);
 }
+
+// Ids of the displayed reports sharing the clicked report's point, clicked one first
+export const getReportIdsAtPoint = ({
+  map,
+  report,
+}: {
+  map: maplibregl.Map;
+  report: MapGeoJSONFeature;
+}): number[] => {
+  const reportId = report.id as number;
+  if (report.geometry.type !== 'Point') return [reportId];
+
+  const [lng, lat] = report.geometry.coordinates;
+  const stackedIds = map
+    .queryRenderedFeatures(map.project([lng, lat]), {
+      layers: [LAYER_REPORTS_CIRCLE],
+    })
+    .filter(
+      ({ geometry }) =>
+        geometry.type === 'Point' &&
+        geometry.coordinates[0] === lng &&
+        geometry.coordinates[1] === lat,
+    )
+    .map(({ id }) => id as number);
+
+  // A report spanning several tiles is returned once per tile
+  return Array.from(new Set([reportId, ...stackedIds]));
+};
 
 export const installReports = async ({
   map,
