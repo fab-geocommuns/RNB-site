@@ -4,6 +4,7 @@ import maplibregl, {
 } from 'maplibre-gl';
 import { fr } from '@codegouvfr/react-dsfr';
 import reportIcon from '@/public/images/map/report.png';
+import type { ReportStatus } from '@/types/report';
 
 export const SRC_REPORTS = 'reports';
 export const LAYER_REPORTS_CIRCLE = 'reports_circle';
@@ -109,7 +110,7 @@ export function setDisplayedReportFilters({
   map.setLayoutProperty(LAYER_REPORTS_ICON, 'symbol-sort-key', selectedOnTop);
 }
 
-// Ids of the displayed reports sharing the clicked report's point, clicked one first
+// Ids of the displayed reports sharing the report's point: open ones first, then closed, oldest (smallest id) first
 export const getReportIdsAtPoint = ({
   map,
   report,
@@ -117,11 +118,10 @@ export const getReportIdsAtPoint = ({
   map: maplibregl.Map;
   report: MapGeoJSONFeature;
 }): number[] => {
-  const reportId = report.id as number;
-  if (report.geometry.type !== 'Point') return [reportId];
+  if (report.geometry.type !== 'Point') return [report.id as number];
 
   const [lng, lat] = report.geometry.coordinates;
-  const stackedIds = map
+  const stackedReports = map
     .queryRenderedFeatures(map.project([lng, lat]), {
       layers: [LAYER_REPORTS_CIRCLE],
     })
@@ -130,11 +130,19 @@ export const getReportIdsAtPoint = ({
         geometry.type === 'Point' &&
         geometry.coordinates[0] === lng &&
         geometry.coordinates[1] === lat,
-    )
-    .map(({ id }) => id as number);
+    );
 
   // A report spanning several tiles is returned once per tile
-  return Array.from(new Set([reportId, ...stackedIds]));
+  const statusById = new Map(
+    [report, ...stackedReports].map(({ id, properties }) => [
+      id as number,
+      properties.status as ReportStatus,
+    ]),
+  );
+  const isClosed = (id: number) => Number(statusById.get(id) !== 'pending');
+  return Array.from(statusById.keys()).sort(
+    (a, b) => isClosed(a) - isClosed(b) || a - b,
+  );
 };
 
 export const installReports = async (map: maplibregl.Map) => {

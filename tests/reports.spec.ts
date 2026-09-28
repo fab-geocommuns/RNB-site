@@ -66,6 +66,7 @@ test.describe('Signalements', () => {
       addressReport,
       missingBuildingReport,
       closedReport,
+      newReport,
     ]) {
       httpMocker.get(`/reports/${api.id}/?from=site`, api);
     }
@@ -93,36 +94,55 @@ test.describe('Signalements', () => {
     await expect(mapLocator(REPORTS_ON_MAP)).toHaveCountOnMap(3);
   });
 
-  test('parcourt les signalements superposés au point cliqué', async ({
+  test('parcourt les signalements superposés, ouverts puis clôturés, du plus ancien au plus récent', async ({
     page,
     mapLocator,
   }) => {
+    // The closed report (id 3) is older than the open newReport (id 4)
     await serveReportTiles({
       page,
-      reports: [addressReport, missingBuildingReport],
+      reports: [closedReport, newReport, addressReport],
     });
-    await page.goto(REPORTS_MAP_URL);
+    await page.goto(`${REPORTS_MAP_URL}&report_closed=1`);
 
     await mapLocator(REPORTS_ON_MAP).first().click();
-    await expect(page.getByText('1 sur 2')).toBeVisible();
-    const [first, second] =
-      Number(new URL(page.url()).searchParams.get('report')) ===
-      addressReport.api.id
-        ? [addressReport, missingBuildingReport]
-        : [missingBuildingReport, addressReport];
-    await expect(page.getByText(first.text)).toBeVisible();
+    await expect(page.getByText('1 sur 3')).toBeVisible();
+    await expect(page.getByText(addressReport.text)).toBeVisible();
     await page.getByLabel('Votre message').fill('Brouillon non envoyé');
 
     await page.getByRole('button', { name: 'Signalement suivant' }).click();
-    await expect(page.getByText('2 sur 2')).toBeVisible();
-    await expect(page.getByText(second.text)).toBeVisible();
-    await expect(page).toHaveURL(new RegExp(`report=${second.api.id}\\b`));
+    await expect(page.getByText('2 sur 3')).toBeVisible();
+    await expect(page.getByText(newReport.text)).toBeVisible();
     await expect(page.getByLabel('Votre message')).toHaveValue('');
 
-    // The selected report is drawn on top: clicking the point again keeps it
+    await page.getByRole('button', { name: 'Signalement suivant' }).click();
+    await expect(page.getByText('3 sur 3')).toBeVisible();
+    await expect(page.getByText(closedReport.text)).toBeVisible();
+    await expect(page).toHaveURL(
+      new RegExp(`report=${closedReport.api.id}\\b`),
+    );
+
+    // Clicking the point again keeps the selected report and its page
     await mapLocator(REPORTS_ON_MAP).first().click();
-    await expect(page.getByText('1 sur 2')).toBeVisible();
-    await expect(page).toHaveURL(new RegExp(`report=${second.api.id}\\b`));
+    await expect(page.getByText('3 sur 3')).toBeVisible();
+    await expect(page).toHaveURL(
+      new RegExp(`report=${closedReport.api.id}\\b`),
+    );
+  });
+
+  test('un signalement superposé ouvert par lien affiche sa position dans le groupe sans clic', async ({
+    page,
+  }) => {
+    await serveReportTiles({
+      page,
+      reports: [addressReport, missingBuildingReport, newReport],
+    });
+    await page.goto(
+      `${REPORTS_MAP_URL}&report=${missingBuildingReport.api.id}`,
+    );
+
+    await expect(page.getByText(missingBuildingReport.text)).toBeVisible();
+    await expect(page.getByText('2 sur 3')).toBeVisible();
   });
 
   test("le filtre par étiquette ne confond pas l'étiquette 1 avec l'étiquette 12", async ({
@@ -139,12 +159,12 @@ test.describe('Signalements', () => {
     await expect(mapLocator(REPORTS_ON_MAP)).toHaveCountOnMap(1);
   });
 
-  test('un signalement envoyé depuis la fiche bâtiment apparaît sur la carte sans recharger la page', async ({
+  test('un signalement envoyé depuis la fiche bâtiment apparaît sur la carte et dans le groupe ouvert sans recharger la page', async ({
     page,
     mapLocator,
     mapController,
   }) => {
-    const reports: ReportFixture[] = [];
+    const reports = [addressReport, missingBuildingReport];
     await serveReportTiles({ page, reports });
     await page.route(
       (url) => url.pathname.endsWith('/contributions/'),
@@ -165,6 +185,8 @@ test.describe('Signalements', () => {
         ),
       )
       .toBe(true);
+    await mapLocator(REPORTS_ON_MAP).first().click();
+    await expect(page.getByText('1 sur 2')).toBeVisible();
 
     await page.getByPlaceholder(/Il manque un bâtiment/).fill(newReport.text);
     const reportTilesRefetched = page.waitForRequest(/\/reports\/tiles\//);
@@ -172,7 +194,9 @@ test.describe('Signalements', () => {
     await expect(page.getByText('Signalement envoyé. Merci.')).toBeVisible();
     await reportTilesRefetched;
 
-    await expect(mapLocator(REPORTS_ON_MAP)).toHaveCountOnMap(1);
+    await expect(mapLocator(REPORTS_ON_MAP)).toHaveCountOnMap(3);
+    await expect(page.getByText('1 sur 3')).toBeVisible();
+    await expect(page.getByText(addressReport.text)).toBeVisible();
     // The buildings reloaded after sending must stay drawn under the reports
     await expect
       .poll(() =>
