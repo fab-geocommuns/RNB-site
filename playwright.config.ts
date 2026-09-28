@@ -77,9 +77,10 @@ export default defineConfig({
         NEXT_PUBLIC_ENABLE_EDITION_MODE: 'true',
         NEXT_PUBLIC_ENABLE_MAPGRAB: 'true',
         // Explicit, not left to fall through to a dev's own .env.local:
-        // these gate background-polling widgets (reports, summer game) that
-        // throw into Next's dev error overlay on any unmocked request.
-        NEXT_PUBLIC_SHOW_REPORTS: 'false',
+        // these gate background-polling widgets that throw into Next's dev
+        // error overlay on any unmocked request.
+        // Reports on: their stats are mocked wherever the reports layer shows.
+        NEXT_PUBLIC_SHOW_REPORTS: 'true',
         NEXT_PUBLIC_SHOW_SUMMER_GAME: 'false',
         NEXT_PUBLIC_ENABLE_CAPTCHA: 'false',
       },
