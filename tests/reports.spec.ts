@@ -173,6 +173,22 @@ test.describe('Signalements', () => {
     await reportTilesRefetched;
 
     await expect(mapLocator(REPORTS_ON_MAP)).toHaveCountOnMap(1);
+    // The buildings reloaded after sending must stay drawn under the reports
+    await expect
+      .poll(() =>
+        map.evaluate((mapInstance) => {
+          const layerIds = mapInstance
+            .getStyle()
+            .layers.map((layer) => layer.id);
+          const lastBuildingIndex = Math.max(
+            ...layerIds.map((id, index) =>
+              id.startsWith('bdgs') ? index : -1,
+            ),
+          );
+          return layerIds.indexOf('reports_circle') > lastBuildingIndex;
+        }),
+      )
+      .toBe(true);
   });
 
   test('un signalement clôturé ouvert par lien reste affiché et mis en avant après un changement de fond de carte', async ({
