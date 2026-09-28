@@ -4,6 +4,7 @@ import maplibregl, {
 } from 'maplibre-gl';
 import { fr } from '@codegouvfr/react-dsfr';
 import reportIcon from '@/public/images/map/report.png';
+import type { ReportStatus } from '@/types/report';
 
 export const SRC_REPORTS = 'reports';
 export const LAYER_REPORTS_CIRCLE = 'reports_circle';
@@ -28,6 +29,13 @@ const delimitedTagIds: ExpressionSpecification = [
 ];
 
 const CLOSED_REPORT_OPACITY = 0.6;
+
+// Draw priority in a stack of reports: the higher value is drawn on top
+enum ReportDrawPriority {
+  Selected = 2,
+  Pending = 1,
+  Closed = 0,
+}
 
 // The selected report keeps its full style whatever its status
 const byReportStatus = ({
@@ -98,18 +106,31 @@ export function setDisplayedReportFilters({
   map.setFilter(LAYER_REPORTS_ICON, filter);
   map.setFilter(LAYER_REPORTS_SMALL_CIRCLES, filter);
 
-  // Draw the selected report above the reports stacked at the same point
-  const selectedOnTop: ExpressionSpecification = [
+  // A higher sort key is drawn above, for circles as for overlapping symbols
+  const drawPriority: ExpressionSpecification = [
     'case',
     ['==', ['get', 'id'], filterParams.selectedReportId ?? -1],
-    1,
-    0,
+    ReportDrawPriority.Selected,
+    isPending,
+    ReportDrawPriority.Pending,
+    ReportDrawPriority.Closed,
   ];
-  map.setLayoutProperty(LAYER_REPORTS_CIRCLE, 'circle-sort-key', selectedOnTop);
-  map.setLayoutProperty(LAYER_REPORTS_ICON, 'symbol-sort-key', selectedOnTop);
+  map.setLayoutProperty(LAYER_REPORTS_CIRCLE, 'circle-sort-key', drawPriority);
+  map.setLayoutProperty(LAYER_REPORTS_ICON, 'symbol-sort-key', drawPriority);
+  map.setLayoutProperty(
+    LAYER_REPORTS_SMALL_CIRCLES,
+    'circle-sort-key',
+    drawPriority,
+  );
 }
 
-// Ids of the displayed reports sharing the clicked report's point, clicked one first
+export const getReportDrawPriority = (report: MapGeoJSONFeature) => {
+  if (report.state.highlighted) return ReportDrawPriority.Selected;
+  if (report.properties.status === 'pending') return ReportDrawPriority.Pending;
+  return ReportDrawPriority.Closed;
+};
+
+// Ids of the displayed reports sharing the report's point: open ones first, then closed, oldest (smallest id) first
 export const getReportIdsAtPoint = ({
   map,
   report,
@@ -117,11 +138,10 @@ export const getReportIdsAtPoint = ({
   map: maplibregl.Map;
   report: MapGeoJSONFeature;
 }): number[] => {
-  const reportId = report.id as number;
-  if (report.geometry.type !== 'Point') return [reportId];
+  if (report.geometry.type !== 'Point') return [report.id as number];
 
   const [lng, lat] = report.geometry.coordinates;
-  const stackedIds = map
+  const stackedReports = map
     .queryRenderedFeatures(map.project([lng, lat]), {
       layers: [LAYER_REPORTS_CIRCLE],
     })
@@ -130,11 +150,20 @@ export const getReportIdsAtPoint = ({
         geometry.type === 'Point' &&
         geometry.coordinates[0] === lng &&
         geometry.coordinates[1] === lat,
-    )
-    .map(({ id }) => id as number);
+    );
 
   // A report spanning several tiles is returned once per tile
-  return Array.from(new Set([reportId, ...stackedIds]));
+  const statusById = new Map(
+    [report, ...stackedReports].map(({ id, properties }) => [
+      id as number,
+      properties.status as ReportStatus,
+    ]),
+  );
+  const isClosed = (id: number) => Number(statusById.get(id) !== 'pending');
+  // Tiles carry no creation date: report ids are a Postgres identity, a lower id is an older report
+  return Array.from(statusById.keys()).sort(
+    (a, b) => isClosed(a) - isClosed(b) || a - b,
+  );
 };
 
 export const installReports = async (map: maplibregl.Map) => {

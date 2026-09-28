@@ -1,9 +1,16 @@
-import { RootState } from '@/stores/store';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { SRC_REPORTS, setDisplayedReportFilters } from '../layers/reports';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  LAYER_REPORTS_CIRCLE,
+  SRC_REPORTS,
+  getReportIdsAtPoint,
+  setDisplayedReportFilters,
+} from '../layers/reports';
 
 export const useMapStateSyncReport = (map?: maplibregl.Map) => {
+  const dispatch: AppDispatch = useDispatch();
+  const store = useStore<RootState>();
   const selectedReportId = useSelector(
     (state: RootState) => (state.report.selectedReport?.id as number) ?? null,
   );
@@ -63,12 +70,52 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
     }
   }, [selectedReportId]);
 
-  useEffect(() => {
-    if (map?.getSource(SRC_REPORTS)) {
-      // @ts-ignore
-      map.getSource(SRC_REPORTS).setSourceProperty(() => {});
+  // Returns whether the selected report was rendered, hence its group computed
+  const refreshReportIdsAtPoint = useCallback(() => {
+    // Read at idle time: another report may have been selected meanwhile
+    const selectedReportId = store.getState().report.selectedReport?.id;
+    if (!map || !selectedReportId || !map.getLayer(LAYER_REPORTS_CIRCLE)) {
+      return false;
     }
-  }, [lastReportUpdate]);
+    const [selectedReport] = map.queryRenderedFeatures({
+      layers: [LAYER_REPORTS_CIRCLE],
+      filter: ['==', ['get', 'id'], selectedReportId],
+    });
+    if (!selectedReport) return false;
+    dispatch(
+      Actions.report.setReportIdsAtPoint(
+        getReportIdsAtPoint({ map, report: selectedReport }),
+      ),
+    );
+    return true;
+  }, [map, dispatch, store]);
+
+  useEffect(() => {
+    if (!map?.getSource(SRC_REPORTS)) return;
+    // @ts-ignore
+    map.getSource(SRC_REPORTS).setSourceProperty(() => {});
+
+    // Reports created or closed at the selected report's point change its group
+    map.once('idle', refreshReportIdsAtPoint);
+    return () => {
+      map.off('idle', refreshReportIdsAtPoint);
+    };
+  }, [map, refreshReportIdsAtPoint, lastReportUpdate]);
+
+  // A report opened by link comes without its group: computed once it is rendered
+  useEffect(() => {
+    if (!map || !selectedReportId) return;
+    if (store.getState().report.reportIdsAtPoint.includes(selectedReportId)) {
+      return;
+    }
+    const onIdle = () => {
+      if (refreshReportIdsAtPoint()) map.off('idle', onIdle);
+    };
+    map.on('idle', onIdle);
+    return () => {
+      map.off('idle', onIdle);
+    };
+  }, [map, store, refreshReportIdsAtPoint, selectedReportId]);
 
   useEffect(() => {
     if (!map) return;
