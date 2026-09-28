@@ -21,6 +21,7 @@ import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { HttpMocker, createHttpMocker } from '@/tests/fixtures/utils/http-mock';
 import { signInAs, FakeUser } from '@/tests/fixtures/utils/auth-mock';
 import { API_BASE } from '@/tests/config';
+import { emptyReportStats } from '@/tests/fixtures/data/reports';
 import {
   test as mapGrabTest,
   expect as mapGrabExpect,
@@ -89,6 +90,8 @@ const testPage = baseTest.extend<PagesFixtures>({
     use: (p: EditionPage) => Promise<void>,
   ) => {
     await httpMocker.install();
+    // /edition shows the reports layer by default, whose panel polls the stats
+    httpMocker.get('/reports/stats/', emptyReportStats);
     // /edition is gated by next-auth — sign in before navigating so the
     // middleware doesn't bounce us to /login.
     await auth.signIn();
