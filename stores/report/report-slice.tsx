@@ -11,7 +11,7 @@ import {
   setQueryParam,
   removeQueryParam,
 } from '@/utils/queryParams';
-import type { AppDispatch } from '../store';
+import type { AppDispatch, RootState } from '../store';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
@@ -122,10 +122,15 @@ export const setShowClosedReports =
     }
   };
 
+// Keeps the selected report when it is part of the clicked stack
 export const selectReportAtPoint =
-  (reportIds: number[]) => (dispatch: AppDispatch) => {
+  (reportIds: number[]) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(reportSlice.actions.setReportIdsAtPoint(reportIds));
-    dispatch(selectReport(reportIds[0]));
+    const selectedReportId = getState().report.selectedReport?.id;
+    if (!selectedReportId || !reportIds.includes(selectedReportId)) {
+      dispatch(selectReport(reportIds[0]));
+    }
   };
 
 export const reportReducer = reportSlice.reducer;
