@@ -403,113 +403,6 @@ $accent-color-light: #ffea00;
   font-size: 0.9em;
 }
 
-.mapSummerScore {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 100;
-  background: white;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 2px;
-  padding: 4px;
-  border-radius: 4px;
-
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  min-width: 200px;
-  @media (max-width: 770px) {
-    display: none;
-  }
-}
-
-body .mapSummerScoreInside {
-  position: relative;
-  color: white;
-  background: #4059db;
-
-  padding: 0.7rem 1.3rem;
-  border-radius: 0.25rem;
-
-  display: flex;
-  align-items: center;
-  &:hover {
-    background: #35479f;
-  }
-}
-
-.mapSummerScoreTitle {
-  line-height: 1.2em;
-  font-size: 0.92em;
-  margin-right: 2.5rem;
-  text-transform: uppercase;
-  font-family: SummerGameTitle, sans-serif;
-  text-shadow: 0 2px 0px rgba(0, 0, 0, 0.6);
-}
-
-.progressBarContainer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.progressBar {
-  height: 100%;
-  background-color: $accent-color;
-}
-
-.mapSummerScoreSubpart {
-  margin-right: 1rem;
-  line-height: 1em;
-}
-.mapSummerScoreSubpartTitle {
-  font-size: 0.65em;
-  font-weight: 400;
-  text-transform: uppercase;
-  margin-bottom: 0.1rem;
-}
-.mapSummerScoreSubpartValue {
-  font-size: 0.9em;
-  font-weight: bold;
-  position: relative;
-}
-
-@keyframes score-animation {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  40% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
-  80% {
-    transform: translateY(-12px);
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-14px);
-    opacity: 0;
-  }
-}
-
-.mapSummerScoreAnimation {
-  position: absolute;
-  animation: score-animation 2s ease-out;
-  //color: $accent-color;
-  color: white;
-  //background: white;
-  font-weight: bold;
-  font-size: 1.4em;
-  left: 80%;
-  transform: translateX(-40%);
-
-  text-shadow:
-    0 2px 0px #001564,
-    0 3px 0px #001564,
-    0 4px 0px #001564;
-}
-
 .title {
   margin: 0 0 12px 0;
   font-size: 14px;
@@ -540,10 +433,6 @@ body .mapSummerScoreInside {
   font-size: 14px;
   font-weight: 600;
   color: #161616;
-}
-
-.userRank {
-  font-size: 0.8em;
 }
 
 .loginShell {

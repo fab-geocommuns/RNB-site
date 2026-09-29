@@ -74,9 +74,6 @@ export type EditionStore = {
 
   // préférence utilisateur, partagée par tous les modes de dessin
   snap: SnapSettings;
-
-  // Summer challenge
-  editMapSummerScoreUpdatedAt: number | null;
 };
 const initialState: EditionStore = {
   operation: null,
@@ -103,9 +100,6 @@ const initialState: EditionStore = {
   snap: {
     enabled: true,
   },
-
-  // Summer challenge
-  editMapSummerScoreUpdatedAt: null,
 };
 
 export const editionSlice = createSlice({
@@ -161,12 +155,6 @@ export const editionSlice = createSlice({
     },
     setToasterInfos(state, action: PayloadAction<ToasterInfos>) {
       state.toasterInfos = action.payload;
-    },
-    setSummerChallengeBadgeUpdatedAt(
-      state,
-      action: PayloadAction<number | null>,
-    ) {
-      state.editMapSummerScoreUpdatedAt = action.payload;
     },
     setSplitCandidateAndLocation(
       state,
