@@ -699,3 +699,32 @@ body .mapSummerScoreInside {
     text-decoration: none;
   }
 }
+
+// Both figures share one cell: the hidden final one reserves the width.
+.countStack {
+  display: inline-grid;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+// Anchored at the start, the growing count never moves (no layout shift).
+.animatedCount {
+  text-align: start;
+}
+
+.finalCount {
+  visibility: hidden;
+}
+
+// Without animation, show the final figure from the first paint.
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .animatedCount {
+    visibility: hidden;
+  }
+
+  .finalCount {
+    visibility: visible;
+  }
+}
