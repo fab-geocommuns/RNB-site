@@ -101,7 +101,7 @@ $accent-color-light: #ffea00;
 
     @media screen and (max-width: 500px) {
       font-size: 2em;
-      width: 300px;
+      max-width: 300px;
       margin: auto;
       margin-bottom: 1em;
     }
