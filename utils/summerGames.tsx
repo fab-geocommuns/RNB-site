@@ -140,6 +140,9 @@ export const useSummerGamesData = (limit: number) => {
           cache: 'no-cache',
           headers: { 'Content-Type': 'application/json' },
         });
+        if (!response.ok) {
+          throw new Error(`Ranking request failed: ${response.status}`);
+        }
         const ranks = await response.json();
         setSummerGamesData(formatRanks(ranks));
       } catch (e) {

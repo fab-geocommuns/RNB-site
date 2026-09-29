@@ -1,0 +1,33 @@
+.skeleton {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--skeleton-highlight),
+      transparent
+    );
+    opacity: 0.4;
+    transform: translateX(-100%);
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
