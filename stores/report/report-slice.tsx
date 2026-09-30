@@ -1,21 +1,25 @@
 'use client';
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { fetchReport } from '@/utils/requests';
 import { Report } from '@/types/report';
 import {
   getArrayQueryParam,
+  getQueryParam,
   setArrayQueryParam,
   setQueryParam,
   removeQueryParam,
 } from '@/utils/queryParams';
+import type { AppDispatch, RootState } from '../store';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
   selectedReport: Report | null;
   lastReportUpdate: number;
   displayedTags: 'all' | number[];
+  showClosedReports: boolean;
+  reportIdsAtPoint: number[];
 };
 
 function getDisplayedTagsFromUrl() {
@@ -33,6 +37,8 @@ const initialState: ReportStore = {
   selectedReport: null,
   lastReportUpdate: Date.now(),
   displayedTags: getDisplayedTagsFromUrl(),
+  showClosedReports: getQueryParam('report_closed') === '1',
+  reportIdsAtPoint: [],
 };
 
 export const reportSlice = createSlice({
@@ -54,6 +60,12 @@ export const reportSlice = createSlice({
     },
     setDisplayedTagsInStore(state, action) {
       state.displayedTags = action.payload;
+    },
+    setShowClosedReportsInStore(state, action: PayloadAction<boolean>) {
+      state.showClosedReports = action.payload;
+    },
+    setReportIdsAtPoint(state, action: PayloadAction<number[]>) {
+      state.reportIdsAtPoint = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -97,9 +109,35 @@ export const setDisplayedTags =
     }
   };
 
+export const setShowClosedReports =
+  (showClosedReports: boolean) => (dispatch: AppDispatch) => {
+    dispatch(
+      reportSlice.actions.setShowClosedReportsInStore(showClosedReports),
+    );
+
+    if (showClosedReports) {
+      setQueryParam('report_closed', 1);
+    } else {
+      removeQueryParam('report_closed');
+    }
+  };
+
+// Keeps the selected report when it is part of the clicked stack
+export const selectReportAtPoint =
+  (reportIds: number[]) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(reportSlice.actions.setReportIdsAtPoint(reportIds));
+    const selectedReportId = getState().report.selectedReport?.id;
+    if (!selectedReportId || !reportIds.includes(selectedReportId)) {
+      dispatch(selectReport(reportIds[0]));
+    }
+  };
+
 export const reportReducer = reportSlice.reducer;
 export const reportActions = {
   ...reportSlice.actions,
   selectReport,
   setDisplayedTags,
+  setShowClosedReports,
+  selectReportAtPoint,
 };
