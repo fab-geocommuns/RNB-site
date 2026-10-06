@@ -1,7 +1,7 @@
 import Notice from '@codegouvfr/react-dsfr/Notice';
 import styles from '@/styles/contribution/toaster.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions, AppDispatch, RootState, store } from '@/stores/store';
+import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useState } from 'react';
 
 export async function throwErrorMessageForHumans(response: Response) {
@@ -30,11 +30,6 @@ export function toasterSuccess(dispatch: AppDispatch, msg: string) {
       message: msg,
     }),
   );
-
-  // Summer challenge 2025
-  // This is a hacky plug to update the badge when a successful operation occurs.
-  // Ideally, we should have a more structured way to handle this.
-  store.dispatch(Actions.edition.setSummerChallengeBadgeUpdatedAt(Date.now()));
 }
 
 export function toasterError(dispatch: AppDispatch, msg: string) {

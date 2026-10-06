@@ -4,10 +4,7 @@ $title-color: #414e71;
 .reportShell {
   position: absolute;
   right: 12px;
-  // Abaissé temporairement pendant le jeu de l'été : le bloc de score du jeu
-  // (.mapSummerScore) occupe le coin haut-droit de la carte d'édition et se
-  // faisait recouvrir. Valeur d'origine à restaurer après le jeu :
-  // top: 20px;
+  // Laisse la place à la recherche d'adresse sur mobile.
   top: 100px;
   z-index: 350;
   max-width: 350px;

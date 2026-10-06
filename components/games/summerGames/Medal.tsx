@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export type MedalColor = 'bronze' | 'silver' | 'gold' | 'neutral';
 
@@ -91,15 +92,12 @@ const Medal: React.FC<MedalProps> = ({ color, image, size, alt = '' }) => {
           background: '#0d0f13',
         }}
       >
-        <img
+        <Image
           src={image}
           alt={alt}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            display: 'block',
-          }}
+          fill
+          sizes={`${size}px`}
+          style={{ objectFit: 'cover' }}
         />
       </div>
     </div>

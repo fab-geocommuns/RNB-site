@@ -5,12 +5,12 @@ import styles from '@/styles/summerGames.module.scss';
 import RankTable from './rankTable';
 import CheckmarkBackground from './checkmarkBackground';
 import BadgesList from './badgesList';
+import ClassementSkeleton from './classementSkeleton';
+import Alert from '@codegouvfr/react-dsfr/Alert';
 
 // Utils
 import { useSummerGamesData } from '@/utils/summerGames';
 import Link from 'next/link';
-
-export const revalidate = 10;
 
 export default function SummerGame({
   title,
@@ -31,126 +31,150 @@ export default function SummerGame({
 }) {
   const { summerGamesData, loading } = useSummerGamesData(limit);
 
+  if (loading) {
+    return (
+      <div role="status">
+        <ClassementSkeleton
+          title={title}
+          withEndFlag={withEndFlag}
+          withRankingTable={withRankingTable}
+          size={size}
+        />
+        <span className="fr-sr-only">Chargement du classement</span>
+      </div>
+    );
+  }
+
+  if (!summerGamesData) {
+    return (
+      <Alert
+        className="fr-my-6w"
+        severity="error"
+        small
+        title="Le classement est momentanément indisponible"
+        description="Veuillez réessayer dans quelques instants."
+      />
+    );
+  }
+
   return (
-    !loading &&
-    summerGamesData && (
-      <>
-        <div
-          className={`section ${size === 'small' && styles.small} ${styles.seriousShell}`}
-        >
-          <div className={styles.shell}>
-            <CheckmarkBackground />
-            <div className={styles.shellContent}>
-              <div className={` ${styles.titleblock}`}>
-                {subtitle && (
-                  <span className={styles.overTitle}>{subtitle}</span>
-                )}
-                <h2 className="section__title">{title}</h2>
+    <div
+      className={`section ${size === 'small' && styles.small} ${styles.seriousShell}`}
+    >
+      <div className={styles.shell}>
+        <CheckmarkBackground />
+        <div className={styles.shellContent}>
+          <div className={styles.titleblock}>
+            {subtitle && <span className={styles.overTitle}>{subtitle}</span>}
+            <h2 className="section__title">{title}</h2>
 
-                {withEndFlag && (
-                  <div className={styles.endFlagShell}>
-                    <span className={styles.endFlag}>Terminée</span>
-                  </div>
-                )}
+            {withEndFlag && (
+              <div className={styles.endFlagShell}>
+                <span className={styles.endFlag}>Terminée</span>
               </div>
-              <div className={`section__subtitle ${styles.instruction}`}>
-                <p className={styles.highlight}>
-                  Participez à la{' '}
-                  <a
-                    href="https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart#valider-un-batiment"
-                    target="_blank"
-                  >
-                    validation
-                  </a>{' '}
-                  des bâtiments du RNB. Inspectez les bâtiments de votre parc
-                  immobilier, de votre voisinage et des territoires que vous
-                  connaissez. Validez les bâtiments corrects et faites monter le
-                  score global.
-                </p>
-              </div>
+            )}
+          </div>
+          <div className={`section__subtitle ${styles.instruction}`}>
+            <p className={styles.highlight}>
+              {withEndFlag
+                ? "Tout l'été, la communauté a participé à la"
+                : 'Participez à la'}{' '}
+              <a
+                href="https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart#valider-un-batiment"
+                target="_blank"
+              >
+                validation
+              </a>{' '}
+              {withEndFlag
+                ? 'des bâtiments du RNB. Merci à toutes et à tous !'
+                : 'des bâtiments du RNB. Inspectez les bâtiments de votre parc immobilier, de votre voisinage et des territoires que vous connaissez. Validez les bâtiments corrects et faites monter le score global.'}
+            </p>
+          </div>
 
-              <h3 className={styles.sectionTitle}>
-                Objectif : {summerGamesData.shared.goal.toLocaleString('fr-FR')}{' '}
-                validations
-              </h3>
+          <h3 className={styles.sectionTitle}>
+            {withEndFlag ? 'Objectif atteint' : 'Objectif'} :{' '}
+            {summerGamesData.shared.goal.toLocaleString('fr-FR')} validations
+          </h3>
 
-              <div className={styles.progressShell}>
-                <div className={styles.barShell}>
-                  <div className={styles.legend}>
-                    <div>
-                      {summerGamesData.shared.absolute.toLocaleString('fr-FR')}{' '}
-                      validations réalisées par la communauté
-                    </div>
-                  </div>
-
-                  <div className={styles.bar}>
-                    <div
-                      className={styles.progress}
-                      style={{
-                        width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
-                      }}
-                    />
-                  </div>
+          <div className={styles.progressShell}>
+            <div className={styles.barShell}>
+              <div className={styles.legend}>
+                <div>
+                  {summerGamesData.shared.absolute.toLocaleString('fr-FR')}{' '}
+                  validations réalisées par la communauté
                 </div>
-
-                <h3 className={styles.sectionTitle}>Trophées à gagner</h3>
-
-                <BadgesList />
-
-                <h3 className={styles.sectionTitle}>Classement</h3>
-
-                {withRankingTable && (
-                  <div className={styles.ranks}>
-                    <div className={styles.ranksTable}>
-                      <RankTable
-                        title="Classement des départements"
-                        ranks={summerGamesData.department}
-                      />
-                    </div>
-
-                    <div className={styles.ranksTable}>
-                      <RankTable
-                        title="Classement des organisations"
-                        ranks={summerGamesData.organization}
-                      />
-                    </div>
-
-                    <div className={styles.ranksTable}>
-                      <RankTable
-                        title="Classement des participants"
-                        ranks={summerGamesData.individual}
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
 
-              <div className={styles.buttonsShell}>
-                {showRankingLink && (
-                  <Link
-                    href="/classement"
-                    className={`${styles.btn} ${styles.btnRank}`}
-                  >
-                    Voir le classement
-                  </Link>
-                )}
-                <Link
-                  href="/edition"
-                  className={`${styles.btn} ${styles.btn_primary}`}
-                >
-                  Participer
-                </Link>
-                <Link
-                  href="/blog/lete-des-validations-validons-ensemble-le-rnb"
-                  className={styles.btn}
-                >
-                  En savoir plus
-                </Link>
+              <div className={styles.bar}>
+                <div
+                  className={styles.progress}
+                  style={{
+                    width: `${Math.min(summerGamesData.shared.percent, 100)}%`,
+                  }}
+                />
               </div>
             </div>
+
+            <h3 className={styles.sectionTitle}>
+              {withEndFlag ? 'Trophées' : 'Trophées à gagner'}
+            </h3>
+
+            <BadgesList />
+
+            <h3 className={styles.sectionTitle}>Classement</h3>
+
+            {withRankingTable && (
+              <div className={styles.ranks}>
+                <div className={styles.ranksTable}>
+                  <RankTable
+                    title="Classement des départements"
+                    ranks={summerGamesData.department}
+                  />
+                </div>
+
+                <div className={styles.ranksTable}>
+                  <RankTable
+                    title="Classement des organisations"
+                    ranks={summerGamesData.organization}
+                  />
+                </div>
+
+                <div className={styles.ranksTable}>
+                  <RankTable
+                    title="Classement des participants"
+                    ranks={summerGamesData.individual}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.buttonsShell}>
+            {showRankingLink && (
+              <Link
+                href="/classement"
+                className={`${styles.btn} ${styles.btnRank}`}
+              >
+                Voir le classement
+              </Link>
+            )}
+            {!withEndFlag && (
+              <Link
+                href="/edition"
+                className={`${styles.btn} ${styles.btn_primary}`}
+              >
+                Participer
+              </Link>
+            )}
+            <Link
+              href="/blog/lete-des-validations-validons-ensemble-le-rnb"
+              className={styles.btn}
+            >
+              En savoir plus
+            </Link>
           </div>
         </div>
-      </>
-    )
+      </div>
+    </div>
   );
 }

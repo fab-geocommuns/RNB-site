@@ -8,7 +8,10 @@ import {
   TrophyData,
 } from '@/utils/trophies';
 import styles from '@/styles/mes-trophees.module.scss';
+import Image from 'next/image';
 import Medal from '@/components/games/summerGames/Medal';
+
+const TROPHY_SIZE = 120;
 
 interface TrophyItemProps {
   trophy: Trophy | TrophyData;
@@ -27,12 +30,17 @@ export default function TrophyItem({ trophy, details }: TrophyItemProps) {
     <li className={styles.item}>
       <div className={styles.imageContainer}>
         {showRawImage ? (
-          <img src={trophyImageUrl(trophy)} alt={trophy.trophy_label} />
+          <Image
+            src={trophyImageUrl(trophy)}
+            alt={trophy.trophy_label}
+            width={TROPHY_SIZE}
+            height={TROPHY_SIZE}
+          />
         ) : (
           <Medal
             color={won ? trophyMedalColor(userLevel) : 'neutral'}
             image={trophyImageUrl(trophy)}
-            size={120}
+            size={TROPHY_SIZE}
             alt={trophy.trophy_label}
           />
         )}
