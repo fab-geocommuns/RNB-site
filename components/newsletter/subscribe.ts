@@ -1,6 +1,6 @@
 'use server';
 
-import { captchaMode, verifyCaptcha, CaptchaMode } from './captcha';
+import { checkCaptcha, CaptchaCheck } from './captcha';
 import { callBrevo, mapBrevoErrorCode, GENERIC_ERROR } from './brevo';
 
 export async function subscribeToNewsletter({
@@ -11,35 +11,18 @@ export async function subscribeToNewsletter({
   captchaSolution: string | null;
 }): Promise<string | null> {
   const brevoApiKey = process.env.BREVO_API_KEY;
-  const captchaApiKey = process.env.PRIVATE_CAPTCHA_API_KEY;
-  const sitekey = process.env.NEXT_PUBLIC_PRIVATE_CAPTCHA_SITEKEY;
 
-  const mode = captchaMode({
-    enabled: process.env.NEXT_PUBLIC_ENABLE_CAPTCHA === 'true',
-    hasApiKey: !!captchaApiKey,
-    hasSitekey: !!sitekey,
-  });
-
-  if (!brevoApiKey || mode === CaptchaMode.MISCONFIGURED) {
+  if (!brevoApiKey) {
     return "La newsletter n'est pas configurée.";
   }
 
-  if (mode === CaptchaMode.VERIFY) {
-    let solved = false;
-    try {
-      solved =
-        !!captchaSolution &&
-        (await verifyCaptcha({
-          solution: captchaSolution,
-          apiKey: captchaApiKey!,
-          sitekey: sitekey!,
-        }));
-    } catch {
-      return GENERIC_ERROR;
-    }
-    if (!solved) {
+  switch (await checkCaptcha({ captchaSolution })) {
+    case CaptchaCheck.MISCONFIGURED:
+      return "La newsletter n'est pas configurée.";
+    case CaptchaCheck.FAILED:
       return 'Vérification anti-robot invalide.';
-    }
+    case CaptchaCheck.ERROR:
+      return GENERIC_ERROR;
   }
 
   const redirectionUrl = new URL('/', process.env.NEXTAUTH_URL).toString();
