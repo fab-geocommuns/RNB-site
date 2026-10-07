@@ -3,6 +3,8 @@ import styles from '@/styles/toolDetail.module.scss';
 
 // Comps
 import ImageNext from 'next/image';
+import Link from 'next/link';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 // Images
 import adsSchemeIllu from '@/public/images/ads-scheme.svg';
@@ -10,12 +12,10 @@ import updateIllu from '@/public/images/update.svg';
 import cityIllu from '@/public/images/city.svg';
 import sameSoftIllu from '@/public/images/same-software.svg';
 
-// Settings
-import settings from '@/logic/settings';
+const requestAccessHref =
+  '/outils-services/autorisation-droit-sols/demande-acces';
 
 export default function Page() {
-  const formUrl = settings.adsFormUrl;
-
   return (
     <>
       <div className="fr-container">
@@ -43,9 +43,9 @@ export default function Page() {
               </p>
 
               <div className="blockLinkShell blockLinkShell--noGrow">
-                <a className="fr-btn" target="_blank" href={formUrl}>
+                <Button linkProps={{ href: requestAccessHref }}>
                   Demander un accès
-                </a>
+                </Button>
               </div>
             </div>
           </div>
@@ -124,7 +124,11 @@ export default function Page() {
                             <b>Demandez des identifiants</b>
                             <br />
                             Obtenez rapidement des identifiants en remplissant
-                            le <a href={formUrl}>formulaire dédié</a>.
+                            le{' '}
+                            <Link href={requestAccessHref}>
+                              formulaire dédié
+                            </Link>
+                            .
                           </li>
                           <li>
                             <b>
@@ -161,9 +165,9 @@ export default function Page() {
                         </ol>
 
                         <div className="blockLinkShell blockLinkShell--noGrow">
-                          <a className="fr-btn" href={formUrl}>
+                          <Button linkProps={{ href: requestAccessHref }}>
                             Demander un accès
-                          </a>
+                          </Button>
                         </div>
                       </div>
                       <div
