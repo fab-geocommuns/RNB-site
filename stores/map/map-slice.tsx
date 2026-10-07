@@ -98,7 +98,7 @@ export function isValidExtraLayer(layer: MapExtraLayer): boolean {
   return validExtraLayers.includes(layer);
 }
 export type MapLayer = MapBackgroundLayer | MapBuildingsLayer | MapExtraLayer;
-export type MapPointer = 'crosshair' | 'pointer' | '';
+export type MapPointer = 'crosshair' | '';
 
 export type MapStore = {
   addressSearch: {
@@ -131,7 +131,7 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: [],
   },
-  pointer: 'pointer',
+  pointer: '',
 };
 
 export const mapSlice = createSlice({
