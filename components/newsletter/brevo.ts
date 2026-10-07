@@ -8,6 +8,8 @@ const BREVO_DOI_URL =
 const TEMPLATE_ID = 1;
 const INCLUDE_LIST_IDS = [3];
 
+const REQUEST_TIMEOUT_MS = 10_000;
+
 export async function callBrevo({
   email,
   redirectionUrl,
@@ -29,7 +31,52 @@ export async function callBrevo({
       templateId: TEMPLATE_ID,
       includeListIds: INCLUDE_LIST_IDS,
     }),
-    signal: AbortSignal.timeout(10_000),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+}
+
+const BREVO_SMTP_URL = 'https://api.brevo.com/v3/smtp/email';
+
+export enum TransactionalEmail {
+  AdsAccessRequest = 'ads-access-request',
+}
+
+// Recipients are fixed per email type so the endpoint cannot be used as an open relay.
+const TRANSACTIONAL_EMAILS: Record<
+  TransactionalEmail,
+  { templateId: number; to: string[] }
+> = {
+  [TransactionalEmail.AdsAccessRequest]: {
+    templateId: 74,
+    to: ['tech@rnb.beta.gouv.fr', 'rnb@beta.gouv.fr'],
+  },
+};
+
+export async function sendTransactionalEmail({
+  email,
+  params,
+  replyTo,
+  apiKey,
+}: {
+  email: TransactionalEmail;
+  params: Record<string, string>;
+  replyTo: string;
+  apiKey: string;
+}): Promise<Response> {
+  const { templateId, to } = TRANSACTIONAL_EMAILS[email];
+  return fetch(BREVO_SMTP_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'api-key': apiKey,
+    },
+    body: JSON.stringify({
+      templateId,
+      params,
+      to: to.map((address) => ({ email: address })),
+      replyTo: { email: replyTo },
+    }),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
 }
 
