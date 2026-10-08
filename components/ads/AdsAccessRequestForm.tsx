@@ -114,6 +114,7 @@ export default function AdsAccessRequestForm() {
       setFieldErrors(fields);
       setError(captcha ?? null);
     } catch {
+      // Server errors are already reported by onRequestError.
       setError('Une erreur est survenue. Merci de réessayer plus tard.');
     } finally {
       setSubmitting(false);
