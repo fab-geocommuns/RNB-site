@@ -100,9 +100,12 @@ export async function sendTransactionalEmail({
   }
 }
 
+// Brevo API error code for an invalid email: an external value, so a string, not an enum.
+export const BREVO_INVALID_PARAMETER_CODE = 'invalid_parameter';
+
 export function mapBrevoErrorCode(code: string | undefined): string {
   switch (code) {
-    case 'invalid_parameter':
+    case BREVO_INVALID_PARAMETER_CODE:
       return 'Adresse email invalide';
     default:
       return GENERIC_ERROR;
