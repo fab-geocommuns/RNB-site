@@ -4,19 +4,13 @@ import { checkCaptcha, CaptchaCheck } from '@/components/newsletter/captcha';
 import {
   sendTransactionalEmail,
   TransactionalEmail,
-  GENERIC_ERROR,
 } from '@/components/newsletter/brevo';
 import {
   validateAdsAccessRequest,
-  AdsAccessRequestFieldErrors,
+  AdsAccessRequestErrors,
 } from './accessRequest';
 
-type RequestAdsAccessResult =
-  | { ok: true }
-  | { ok: false; error?: string; fieldErrors?: AdsAccessRequestFieldErrors };
-
-const NOT_CONFIGURED_ERROR = "Le formulaire n'est pas configuré.";
-
+// Returns the errors the user can fix, null on success. Unexpected failures throw.
 export async function requestAdsAccess({
   email,
   inseeCodes,
@@ -27,7 +21,7 @@ export async function requestAdsAccess({
   inseeCodes: string[];
   organisation: string;
   captchaSolution: string | null;
-}): Promise<RequestAdsAccessResult> {
+}): Promise<AdsAccessRequestErrors | null> {
   // Server action arguments are untrusted at runtime, whatever the types say.
   if (
     typeof email !== 'string' ||
@@ -35,12 +29,12 @@ export async function requestAdsAccess({
     !inseeCodes.every((code) => typeof code === 'string') ||
     typeof organisation !== 'string'
   ) {
-    return { ok: false, error: GENERIC_ERROR };
+    throw new Error('Invalid ADS access request arguments');
   }
 
   const brevoApiKey = process.env.BREVO_API_KEY;
   if (!brevoApiKey) {
-    return { ok: false, error: NOT_CONFIGURED_ERROR };
+    throw new Error('BREVO_API_KEY is not configured');
   }
 
   // Validated before the captcha so an invalid request does not consume the solution.
@@ -50,43 +44,29 @@ export async function requestAdsAccess({
     organisation,
   });
   if (!validation.ok) {
-    return { ok: false, fieldErrors: validation.fieldErrors };
+    return validation.fieldErrors;
   }
 
   switch (await checkCaptcha({ captchaSolution })) {
     case CaptchaCheck.MISCONFIGURED:
-      return { ok: false, error: NOT_CONFIGURED_ERROR };
+      throw new Error('Captcha is misconfigured');
     case CaptchaCheck.FAILED:
-      return { ok: false, error: 'Vérification anti-robot invalide.' };
+      return { captcha: 'Vérification anti-robot invalide.' };
     case CaptchaCheck.ERROR:
-      return { ok: false, error: GENERIC_ERROR };
+      throw new Error('Captcha verification failed unexpectedly');
   }
 
   const request = validation.value;
+  await sendTransactionalEmail({
+    email: TransactionalEmail.AdsAccessRequest,
+    params: {
+      REQUESTER_EMAIL: request.email,
+      INSEE_CODES: request.inseeCodes.join(', '),
+      ORGANISATION: request.organisation,
+    },
+    replyTo: request.email,
+    apiKey: brevoApiKey,
+  });
 
-  let response: Response;
-  try {
-    response = await sendTransactionalEmail({
-      email: TransactionalEmail.AdsAccessRequest,
-      params: {
-        REQUESTER_EMAIL: request.email,
-        INSEE_CODES: request.inseeCodes.join(', '),
-        ORGANISATION: request.organisation,
-      },
-      replyTo: request.email,
-      apiKey: brevoApiKey,
-    });
-  } catch {
-    return { ok: false, error: GENERIC_ERROR };
-  }
-
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    console.error(
-      `Brevo ADS access request failed: HTTP ${response.status}, code ${data.code}`,
-    );
-    return { ok: false, error: GENERIC_ERROR };
-  }
-
-  return { ok: true };
+  return null;
 }

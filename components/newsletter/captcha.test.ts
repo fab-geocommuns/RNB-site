@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const verify = vi.fn();
+const captureException = vi.hoisted(() => vi.fn());
+vi.mock('@sentry/nextjs', () => ({ captureException }));
 vi.mock('@private-captcha/private-captcha-js', () => ({
   createClient: () => ({ verify }),
 }));
@@ -41,6 +43,7 @@ describe('captchaMode', () => {
 describe('checkCaptcha', () => {
   beforeEach(() => {
     verify.mockReset();
+    captureException.mockReset();
     vi.stubEnv('NEXT_PUBLIC_ENABLE_CAPTCHA', 'true');
     vi.stubEnv('PRIVATE_CAPTCHA_API_KEY', 'api-key');
     vi.stubEnv('NEXT_PUBLIC_PRIVATE_CAPTCHA_SITEKEY', 'sitekey');
@@ -73,10 +76,12 @@ describe('checkCaptcha', () => {
   });
 
   it('renvoie une erreur quand le SDK lève une exception', async () => {
-    verify.mockRejectedValue(new Error('network'));
+    const failure = new Error('network');
+    verify.mockRejectedValue(failure);
     expect(await checkCaptcha({ captchaSolution: 'abc' })).toBe(
       CaptchaCheck.ERROR,
     );
+    expect(captureException).toHaveBeenCalledWith(failure);
   });
 
   it('passe quand la solution est valide', async () => {

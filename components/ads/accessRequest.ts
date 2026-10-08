@@ -2,14 +2,15 @@ const MAX_EMAIL_LENGTH = 254;
 const MAX_ORGANISATION_LENGTH = 200;
 export const MAX_INSEE_CODES = 100;
 
-const EMAIL_PATTERN = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/;
+const EMAIL_PATTERN = /^[^\s@,;<>"]+@(?:[^\s@,;<>".]+\.)+[^\s@,;<>".]{2,}$/;
 // Departments 01-95, 2A, 2B, 96-98 (overseas), then 3 digits.
 const INSEE_CODE_PATTERN = /^(?:0[1-9]|1\d|2[1-9AB]|[3-8]\d|9[0-8])\d{3}$/;
 
-export type AdsAccessRequestFieldErrors = {
+export type AdsAccessRequestErrors = {
   email?: string;
   inseeCodes?: string;
   organisation?: string;
+  captcha?: string;
 };
 
 type AdsAccessRequest = {
@@ -20,7 +21,7 @@ type AdsAccessRequest = {
 
 type AdsAccessRequestValidation =
   | { ok: true; value: AdsAccessRequest }
-  | { ok: false; fieldErrors: AdsAccessRequestFieldErrors };
+  | { ok: false; fieldErrors: AdsAccessRequestErrors };
 
 function validateEmail(email: string): string | undefined {
   if (!email) {
@@ -81,7 +82,7 @@ export function validateAdsAccessRequest({
     organisation: organisation.trim(),
   };
 
-  const fieldErrors: AdsAccessRequestFieldErrors = {
+  const fieldErrors: AdsAccessRequestErrors = {
     email: validateEmail(value.email),
     inseeCodes: validateInseeCodes(value.inseeCodes),
     organisation: validateOrganisation(value.organisation),

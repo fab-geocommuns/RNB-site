@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { createClient } from '@private-captcha/private-captcha-js';
 
 export enum CaptchaMode {
@@ -61,7 +62,8 @@ export async function checkCaptcha({
       sitekey: sitekey!,
     });
     return solved ? CaptchaCheck.PASSED : CaptchaCheck.FAILED;
-  } catch {
+  } catch (error) {
+    Sentry.captureException(error);
     return CaptchaCheck.ERROR;
   }
 }

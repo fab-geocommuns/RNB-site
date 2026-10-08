@@ -42,17 +42,22 @@ describe('validateAdsAccessRequest', () => {
     expect(fieldErrors({ email: 'abc' }).email).toBeDefined();
   });
 
-  it.each(['a@b.co,c@d.fr', '<x>@y.fr', 'a@b.fr;c@d.fr'])(
-    "refuse l'email %s",
-    (email) => {
-      expect(fieldErrors({ email }).email).toBe(
-        "L'adresse email n'est pas valide.",
-      );
-    },
-  );
+  it.each([
+    'a@b.co,c@d.fr',
+    '<x>@y.fr',
+    'a@b.fr;c@d.fr',
+    'a@b..fr',
+    'a@b.c',
+    'a@b.fr.',
+  ])("refuse l'email %s", (email) => {
+    expect(fieldErrors({ email }).email).toBe(
+      "L'adresse email n'est pas valide.",
+    );
+  });
 
   it.each([
-    'moi@gmail.com',
+    'a@mairie.fr',
+    'a@sous.domaine.fr',
     'prenom.nom+rnb@mairie-nantes.fr',
     "o'brien@mairie.fr",
   ])("accepte l'email %s", (email) => {

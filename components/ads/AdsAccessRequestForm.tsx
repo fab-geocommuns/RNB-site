@@ -9,7 +9,7 @@ import TagsGroup from '@codegouvfr/react-dsfr/TagsGroup';
 import { ComponentProps, useRef, useState } from 'react';
 import Captcha from '@/components/authentication/Captcha';
 import {
-  AdsAccessRequestFieldErrors,
+  AdsAccessRequestErrors,
   MAX_INSEE_CODES,
   validateAdsAccessRequest,
   validateInseeCode,
@@ -23,9 +23,7 @@ type TagsTuple = ComponentProps<typeof TagsGroup>['tags'];
 const fieldState = (message?: string) => (message ? 'error' : 'default');
 
 export default function AdsAccessRequestForm() {
-  const [fieldErrors, setFieldErrors] = useState<AdsAccessRequestFieldErrors>(
-    {},
-  );
+  const [fieldErrors, setFieldErrors] = useState<AdsAccessRequestErrors>({});
   const [inseeCodes, setInseeCodes] = useState<string[]>([]);
   const [pendingCode, setPendingCode] = useState('');
   const codeInputRef = useRef<HTMLInputElement>(null);
@@ -38,7 +36,7 @@ export default function AdsAccessRequestForm() {
   const [captchaMounted, setCaptchaMounted] = useState(false);
   const [captchaKey, setCaptchaKey] = useState(0);
 
-  const clearFieldError = (field: keyof AdsAccessRequestFieldErrors) =>
+  const clearFieldError = (field: keyof AdsAccessRequestErrors) =>
     setFieldErrors((errors) => ({ ...errors, [field]: undefined }));
 
   const clearCodesError = () => clearFieldError('inseeCodes');
@@ -106,23 +104,22 @@ export default function AdsAccessRequestForm() {
     setFieldErrors({});
 
     setSubmitting(true);
-    const result = await requestAdsAccess({ ...values, captchaSolution }).catch(
-      () => ({
-        ok: false as const,
-        error: 'Une erreur est survenue. Merci de réessayer plus tard.',
-        fieldErrors: undefined,
-      }),
-    );
-    setSubmitting(false);
-    setCaptchaSolution(null);
-    setCaptchaKey((key) => key + 1);
-
-    if (result.ok) {
-      setSuccess(true);
-      return;
+    try {
+      const errors = await requestAdsAccess({ ...values, captchaSolution });
+      if (!errors) {
+        setSuccess(true);
+        return;
+      }
+      const { captcha, ...fields } = errors;
+      setFieldErrors(fields);
+      setError(captcha ?? null);
+    } catch {
+      setError('Une erreur est survenue. Merci de réessayer plus tard.');
+    } finally {
+      setSubmitting(false);
+      setCaptchaSolution(null);
+      setCaptchaKey((key) => key + 1);
     }
-    setFieldErrors(result.fieldErrors ?? {});
-    setError(result.error ?? null);
   };
 
   if (success) {
@@ -137,9 +134,9 @@ export default function AdsAccessRequestForm() {
         <Button
           className={fr.cx('fr-mt-3w')}
           priority="secondary"
-          linkProps={{ href: '/outils-services/autorisation-droit-sols' }}
+          linkProps={{ href: '/outils-services' }}
         >
-          Retour à la page ADS
+          Retour aux outils et services
         </Button>
       </div>
     );
@@ -164,7 +161,7 @@ export default function AdsAccessRequestForm() {
       )}
       <Input
         label="Adresse email"
-        hintText="La clef d'accès (token) sera envoyée à cette adresse si votre demande est acceptée"
+        hintText="La clé d'accès (token) sera envoyée à cette adresse si votre demande est acceptée"
         nativeInputProps={{
           name: 'email',
           type: 'email',

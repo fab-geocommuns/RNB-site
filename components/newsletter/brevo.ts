@@ -52,6 +52,18 @@ const TRANSACTIONAL_EMAILS: Record<
   },
 };
 
+export class BrevoError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code?: string,
+  ) {
+    super(
+      `Brevo request failed: HTTP ${status}${code ? `, code ${code}` : ''}`,
+    );
+    this.name = 'BrevoError';
+  }
+}
+
 export async function sendTransactionalEmail({
   email,
   params,
@@ -62,9 +74,9 @@ export async function sendTransactionalEmail({
   params: Record<string, string>;
   replyTo: string;
   apiKey: string;
-}): Promise<Response> {
+}): Promise<void> {
   const { templateId, to } = TRANSACTIONAL_EMAILS[email];
-  return fetch(BREVO_SMTP_URL, {
+  const response = await fetch(BREVO_SMTP_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -78,6 +90,14 @@ export async function sendTransactionalEmail({
     }),
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new BrevoError(
+      response.status,
+      typeof data.code === 'string' ? data.code : undefined,
+    );
+  }
 }
 
 export function mapBrevoErrorCode(code: string | undefined): string {
