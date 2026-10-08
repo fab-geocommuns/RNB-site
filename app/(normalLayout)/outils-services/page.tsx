@@ -67,15 +67,14 @@ export default function Outils() {
                     <b>Réservé aux instructeurs d&apos;ADS</b>
                     <br />
                     Utilisez vos outils d&apos;instruction d&apos;ADS pour
-                    alimenter le RNB. Soyez prévenus lorsque des bâtiments sont
-                    achevés sur votre territoire.
+                    alimenter le RNB.
                   </p>
                   <div className="blockLinkShell">
                     <a
                       className="fr-btn fr-btn--secondary"
                       href="/outils-services/autorisation-droit-sols"
                     >
-                      En savoir plus
+                      Demander un accès
                     </a>
                   </div>
                 </div>

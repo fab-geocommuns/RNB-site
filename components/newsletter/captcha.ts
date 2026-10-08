@@ -23,7 +23,46 @@ export function captchaMode({
     : CaptchaMode.MISCONFIGURED;
 }
 
-export async function verifyCaptcha({
+export const CAPTCHA_REFUSED_MESSAGE = 'Vérification anti-robot invalide.';
+
+export enum CaptchaCheck {
+  PASSED = 'passed',
+  REFUSED = 'refused',
+}
+
+export async function checkCaptcha({
+  captchaSolution,
+}: {
+  captchaSolution: string | null;
+}): Promise<CaptchaCheck> {
+  const apiKey = process.env.PRIVATE_CAPTCHA_API_KEY;
+  const sitekey = process.env.NEXT_PUBLIC_PRIVATE_CAPTCHA_SITEKEY;
+
+  const mode = captchaMode({
+    enabled: process.env.NEXT_PUBLIC_ENABLE_CAPTCHA === 'true',
+    hasApiKey: !!apiKey,
+    hasSitekey: !!sitekey,
+  });
+
+  if (mode === CaptchaMode.SKIP) {
+    return CaptchaCheck.PASSED;
+  }
+  if (mode === CaptchaMode.MISCONFIGURED) {
+    throw new Error('Captcha is misconfigured');
+  }
+  if (!captchaSolution) {
+    return CaptchaCheck.REFUSED;
+  }
+
+  const solved = await verifyCaptcha({
+    solution: captchaSolution,
+    apiKey: apiKey!,
+    sitekey: sitekey!,
+  });
+  return solved ? CaptchaCheck.PASSED : CaptchaCheck.REFUSED;
+}
+
+async function verifyCaptcha({
   solution,
   apiKey,
   sitekey,

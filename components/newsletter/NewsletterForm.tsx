@@ -5,6 +5,7 @@ import Alert from '@codegouvfr/react-dsfr/Alert';
 import { useState } from 'react';
 import Captcha from '@/components/authentication/Captcha';
 import InlineInputButton from '@/components/InlineInputButton';
+import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 import { subscribeToNewsletter } from './subscribe';
 
 type Props = {
@@ -34,19 +35,27 @@ export default function NewsletterForm({ formId = 'newsletter-form' }: Props) {
     setSubmitting(true);
     setFeedback(null);
 
-    const error = await subscribeToNewsletter({ email, captchaSolution }).catch(
-      () => 'Une erreur est survenue. Merci de réessayer plus tard.',
-    );
-
-    setSubmitting(false);
-    setCaptchaSolution(null);
-    setCaptchaMounted(false);
-
-    setFeedback(
-      error
-        ? { message: error, success: false }
-        : { message: 'Merci de votre inscription !', success: true },
-    );
+    try {
+      const result = await subscribeToNewsletter({ email, captchaSolution });
+      setFeedback(
+        result.status === 'success'
+          ? { message: 'Merci de votre inscription !', success: true }
+          : {
+              message:
+                result.errors.email ??
+                result.errors.captcha ??
+                UNEXPECTED_ERROR_MESSAGE,
+              success: false,
+            },
+      );
+    } catch {
+      // Errors thrown by the action are already reported by onRequestError.
+      setFeedback({ message: UNEXPECTED_ERROR_MESSAGE, success: false });
+    } finally {
+      setSubmitting(false);
+      setCaptchaSolution(null);
+      setCaptchaMounted(false);
+    }
   };
 
   return (

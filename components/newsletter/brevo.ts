@@ -1,12 +1,11 @@
-export const GENERIC_ERROR =
-  'Une erreur est survenue. Merci de réessayer plus tard.';
-
 const BREVO_DOI_URL =
   'https://api.brevo.com/v3/contacts/doubleOptinConfirmation';
 
 // Double opt-in template and contact list of the RNB newsletter in Brevo.
 const TEMPLATE_ID = 1;
 const INCLUDE_LIST_IDS = [3];
+
+const REQUEST_TIMEOUT_MS = 10_000;
 
 export async function callBrevo({
   email,
@@ -16,8 +15,8 @@ export async function callBrevo({
   email: string;
   redirectionUrl: string;
   apiKey: string;
-}): Promise<Response> {
-  return fetch(BREVO_DOI_URL, {
+}): Promise<void> {
+  const response = await fetch(BREVO_DOI_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,15 +28,80 @@ export async function callBrevo({
       templateId: TEMPLATE_ID,
       includeListIds: INCLUDE_LIST_IDS,
     }),
-    signal: AbortSignal.timeout(10_000),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
+  await throwIfNotOk(response);
 }
 
-export function mapBrevoErrorCode(code: string | undefined): string {
-  switch (code) {
-    case 'invalid_parameter':
-      return 'Adresse email invalide';
-    default:
-      return GENERIC_ERROR;
+const BREVO_SMTP_URL = 'https://api.brevo.com/v3/smtp/email';
+
+export enum TransactionalEmail {
+  AdsAccessRequest = 'ads-access-request',
+}
+
+// Recipients are fixed per email type so the endpoint cannot be used as an open relay.
+const TRANSACTIONAL_EMAILS: Record<
+  TransactionalEmail,
+  { templateId: number; to: string[] }
+> = {
+  [TransactionalEmail.AdsAccessRequest]: {
+    templateId: 74,
+    to: ['tech@rnb.beta.gouv.fr', 'rnb@beta.gouv.fr'],
+  },
+};
+
+export class BrevoError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code?: string,
+  ) {
+    super(
+      `Brevo request failed: HTTP ${status}${code ? `, code ${code}` : ''}`,
+    );
+    this.name = 'BrevoError';
   }
 }
+
+export async function sendTransactionalEmail({
+  email,
+  params,
+  replyTo,
+  apiKey,
+}: {
+  email: TransactionalEmail;
+  params: Record<string, string>;
+  replyTo: string;
+  apiKey: string;
+}): Promise<void> {
+  const { templateId, to } = TRANSACTIONAL_EMAILS[email];
+  const response = await fetch(BREVO_SMTP_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'api-key': apiKey,
+    },
+    body: JSON.stringify({
+      templateId,
+      params,
+      to: to.map((address) => ({ email: address })),
+      replyTo: { email: replyTo },
+    }),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+
+  await throwIfNotOk(response);
+}
+
+async function throwIfNotOk(response: Response): Promise<void> {
+  if (response.ok) {
+    return;
+  }
+  const data = await response.json().catch(() => ({}));
+  throw new BrevoError(
+    response.status,
+    typeof data.code === 'string' ? data.code : undefined,
+  );
+}
+
+// Brevo API error code for an invalid email: an external value, so a string, not an enum.
+export const BREVO_INVALID_PARAMETER_CODE = 'invalid_parameter';
