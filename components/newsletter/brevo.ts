@@ -1,6 +1,3 @@
-export const GENERIC_ERROR =
-  'Une erreur est survenue. Merci de réessayer plus tard.';
-
 const BREVO_DOI_URL =
   'https://api.brevo.com/v3/contacts/doubleOptinConfirmation';
 
@@ -18,8 +15,8 @@ export async function callBrevo({
   email: string;
   redirectionUrl: string;
   apiKey: string;
-}): Promise<Response> {
-  return fetch(BREVO_DOI_URL, {
+}): Promise<void> {
+  const response = await fetch(BREVO_DOI_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -33,6 +30,7 @@ export async function callBrevo({
     }),
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
+  await throwIfNotOk(response);
 }
 
 const BREVO_SMTP_URL = 'https://api.brevo.com/v3/smtp/email';
@@ -91,23 +89,19 @@ export async function sendTransactionalEmail({
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
 
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    throw new BrevoError(
-      response.status,
-      typeof data.code === 'string' ? data.code : undefined,
-    );
+  await throwIfNotOk(response);
+}
+
+async function throwIfNotOk(response: Response): Promise<void> {
+  if (response.ok) {
+    return;
   }
+  const data = await response.json().catch(() => ({}));
+  throw new BrevoError(
+    response.status,
+    typeof data.code === 'string' ? data.code : undefined,
+  );
 }
 
 // Brevo API error code for an invalid email: an external value, so a string, not an enum.
 export const BREVO_INVALID_PARAMETER_CODE = 'invalid_parameter';
-
-export function mapBrevoErrorCode(code: string | undefined): string {
-  switch (code) {
-    case BREVO_INVALID_PARAMETER_CODE:
-      return 'Adresse email invalide';
-    default:
-      return GENERIC_ERROR;
-  }
-}

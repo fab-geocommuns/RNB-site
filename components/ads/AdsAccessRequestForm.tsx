@@ -8,6 +8,7 @@ import { TagProps } from '@codegouvfr/react-dsfr/Tag';
 import TagsGroup from '@codegouvfr/react-dsfr/TagsGroup';
 import { ComponentProps, useRef, useState } from 'react';
 import Captcha from '@/components/authentication/Captcha';
+import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 import {
   AdsAccessRequestErrors,
   MAX_INSEE_CODES,
@@ -105,17 +106,17 @@ export default function AdsAccessRequestForm() {
 
     setSubmitting(true);
     try {
-      const errors = await requestAdsAccess({ ...values, captchaSolution });
-      if (!errors) {
+      const result = await requestAdsAccess({ ...values, captchaSolution });
+      if (result.status === 'success') {
         setSuccess(true);
         return;
       }
-      const { captcha, ...fields } = errors;
+      const { captcha, ...fields } = result.errors;
       setFieldErrors(fields);
       setError(captcha ?? null);
     } catch {
-      // Server errors are already reported by onRequestError.
-      setError('Une erreur est survenue. Merci de réessayer plus tard.');
+      // Errors thrown by the action are already reported by onRequestError.
+      setError(UNEXPECTED_ERROR_MESSAGE);
     } finally {
       setSubmitting(false);
       setCaptchaSolution(null);

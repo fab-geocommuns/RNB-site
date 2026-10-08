@@ -1,14 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-const captureException = vi.hoisted(() => vi.fn());
 const checkCaptcha = vi.hoisted(() => vi.fn());
-vi.mock('@sentry/nextjs', () => ({ captureException }));
 vi.mock('./captcha', async (importActual) => ({
   ...(await importActual<typeof import('./captcha')>()),
   checkCaptcha,
 }));
 
-import { BrevoError, GENERIC_ERROR } from './brevo';
+import { BrevoError } from './brevo';
 import { CaptchaCheck } from './captcha';
 import { subscribeToNewsletter } from './subscribe';
 
@@ -20,7 +18,6 @@ describe('subscribeToNewsletter', () => {
 
   beforeEach(() => {
     fetchMock.mockReset();
-    captureException.mockReset();
     checkCaptcha.mockReset().mockResolvedValue(CaptchaCheck.PASSED);
     vi.stubGlobal('fetch', fetchMock);
     vi.stubEnv('BREVO_API_KEY', 'test-key');
@@ -32,64 +29,67 @@ describe('subscribeToNewsletter', () => {
     vi.unstubAllEnvs();
   });
 
-  it('signale la panne réseau à Sentry et renvoie le message générique', async () => {
-    const failure = new Error('network');
-    fetchMock.mockRejectedValue(failure);
+  it('lève une erreur si BREVO_API_KEY est absente', async () => {
+    vi.stubEnv('BREVO_API_KEY', '');
 
-    expect(await subscribe()).toBe(GENERIC_ERROR);
-    expect(captureException).toHaveBeenCalledWith(failure);
-  });
-
-  it('signale une erreur 500 de Brevo à Sentry', async () => {
-    fetchMock.mockResolvedValue(
-      new Response(JSON.stringify({ code: 'server_error' }), { status: 500 }),
+    await expect(subscribe()).rejects.toThrow(
+      'BREVO_API_KEY is not configured',
     );
-
-    expect(await subscribe()).toBe(GENERIC_ERROR);
-    expect(captureException).toHaveBeenCalledTimes(1);
-    const reported = captureException.mock.calls[0][0];
-    expect(reported).toBeInstanceOf(BrevoError);
-    expect(reported).toMatchObject({ status: 500, code: 'server_error' });
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('signale une erreur Brevo sans corps lisible', async () => {
-    fetchMock.mockResolvedValue(new Response('<html>', { status: 502 }));
+  it('renvoie une erreur captcha sans appeler Brevo quand il est refusé', async () => {
+    checkCaptcha.mockResolvedValue(CaptchaCheck.REFUSED);
 
-    expect(await subscribe()).toBe(GENERIC_ERROR);
-    expect(captureException.mock.calls[0][0]).toMatchObject({ status: 502 });
+    expect(await subscribe()).toEqual({
+      status: 'rejected',
+      errors: { captcha: 'Vérification anti-robot invalide.' },
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("n'envoie pas à Sentry une adresse email invalide", async () => {
+  it('renvoie une erreur email quand Brevo rejette le paramètre', async () => {
     fetchMock.mockResolvedValue(
       new Response(JSON.stringify({ code: 'invalid_parameter' }), {
         status: 400,
       }),
     );
 
-    expect(await subscribe()).toBe('Adresse email invalide');
-    expect(captureException).not.toHaveBeenCalled();
+    expect(await subscribe()).toEqual({
+      status: 'rejected',
+      errors: { email: 'Adresse email invalide' },
+    });
   });
 
-  it('signale une clé Brevo absente', async () => {
-    vi.stubEnv('BREVO_API_KEY', '');
+  it('lève la BrevoError sur une erreur 500 de Brevo', async () => {
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ code: 'server_error' }), { status: 500 }),
+    );
 
-    expect(await subscribe()).toBe("La newsletter n'est pas configurée.");
-    expect(captureException).toHaveBeenCalledTimes(1);
+    const error = await subscribe().catch((e) => e);
+
+    expect(error).toBeInstanceOf(BrevoError);
+    expect(error).toMatchObject({ status: 500, code: 'server_error' });
+  });
+
+  it("propage l'erreur du captcha sans appeler Brevo", async () => {
+    const failure = new Error('Captcha is misconfigured');
+    checkCaptcha.mockRejectedValue(failure);
+
+    await expect(subscribe()).rejects.toBe(failure);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('signale un captcha mal configuré', async () => {
-    checkCaptcha.mockResolvedValue(CaptchaCheck.MISCONFIGURED);
+  it('propage la panne réseau', async () => {
+    const failure = new Error('network');
+    fetchMock.mockRejectedValue(failure);
 
-    expect(await subscribe()).toBe("La newsletter n'est pas configurée.");
-    expect(captureException).toHaveBeenCalledTimes(1);
-    expect(fetchMock).not.toHaveBeenCalled();
+    await expect(subscribe()).rejects.toBe(failure);
   });
 
-  it('renvoie null quand Brevo accepte', async () => {
+  it('renvoie un succès quand Brevo accepte', async () => {
     fetchMock.mockResolvedValue(new Response('{}', { status: 201 }));
 
-    expect(await subscribe()).toBeNull();
-    expect(captureException).not.toHaveBeenCalled();
+    expect(await subscribe()).toEqual({ status: 'success' });
   });
 });

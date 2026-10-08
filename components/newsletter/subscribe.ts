@@ -1,63 +1,47 @@
 'use server';
 
-import * as Sentry from '@sentry/nextjs';
-import { checkCaptcha, CaptchaCheck } from './captcha';
-import {
-  BREVO_INVALID_PARAMETER_CODE,
-  BrevoError,
-  callBrevo,
-  mapBrevoErrorCode,
-  GENERIC_ERROR,
-} from './brevo';
+import { ActionResult } from '@/utils/actionResult';
+import { checkCaptcha, CaptchaCheck, CAPTCHA_REFUSED_MESSAGE } from './captcha';
+import { BREVO_INVALID_PARAMETER_CODE, BrevoError, callBrevo } from './brevo';
 
-const NOT_CONFIGURED_ERROR = "La newsletter n'est pas configurée.";
+type NewsletterErrors = { email?: string; captcha?: string };
 
+// Returns the errors the user can fix. Unexpected failures throw.
 export async function subscribeToNewsletter({
   email,
   captchaSolution,
 }: {
   email: string;
   captchaSolution: string | null;
-}): Promise<string | null> {
+}): Promise<ActionResult<NewsletterErrors>> {
   const brevoApiKey = process.env.BREVO_API_KEY;
-
   if (!brevoApiKey) {
-    Sentry.captureException(new Error('BREVO_API_KEY is not configured'));
-    return NOT_CONFIGURED_ERROR;
+    throw new Error('BREVO_API_KEY is not configured');
   }
 
-  switch (await checkCaptcha({ captchaSolution })) {
-    case CaptchaCheck.MISCONFIGURED:
-      Sentry.captureException(new Error('Captcha is misconfigured'));
-      return NOT_CONFIGURED_ERROR;
-    case CaptchaCheck.FAILED:
-      return 'Vérification anti-robot invalide.';
-    case CaptchaCheck.ERROR:
-      return GENERIC_ERROR;
+  if ((await checkCaptcha({ captchaSolution })) === CaptchaCheck.REFUSED) {
+    return {
+      status: 'rejected',
+      errors: { captcha: CAPTCHA_REFUSED_MESSAGE },
+    };
   }
 
   const redirectionUrl = new URL('/', process.env.NEXTAUTH_URL).toString();
 
-  let response: Response;
   try {
-    response = await callBrevo({ email, redirectionUrl, apiKey: brevoApiKey });
+    await callBrevo({ email, redirectionUrl, apiKey: brevoApiKey });
   } catch (error) {
-    Sentry.captureException(error);
-    return GENERIC_ERROR;
-  }
-
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    if (data.code !== BREVO_INVALID_PARAMETER_CODE) {
-      Sentry.captureException(
-        new BrevoError(
-          response.status,
-          typeof data.code === 'string' ? data.code : undefined,
-        ),
-      );
+    if (
+      error instanceof BrevoError &&
+      error.code === BREVO_INVALID_PARAMETER_CODE
+    ) {
+      return {
+        status: 'rejected',
+        errors: { email: 'Adresse email invalide' },
+      };
     }
-    return mapBrevoErrorCode(data.code);
+    throw error;
   }
 
-  return null;
+  return { status: 'success' };
 }

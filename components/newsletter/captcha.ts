@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nextjs';
 import { createClient } from '@private-captcha/private-captcha-js';
 
 export enum CaptchaMode {
@@ -24,11 +23,11 @@ export function captchaMode({
     : CaptchaMode.MISCONFIGURED;
 }
 
+export const CAPTCHA_REFUSED_MESSAGE = 'Vérification anti-robot invalide.';
+
 export enum CaptchaCheck {
   PASSED = 'passed',
-  MISCONFIGURED = 'misconfigured',
-  FAILED = 'failed',
-  ERROR = 'error',
+  REFUSED = 'refused',
 }
 
 export async function checkCaptcha({
@@ -49,23 +48,18 @@ export async function checkCaptcha({
     return CaptchaCheck.PASSED;
   }
   if (mode === CaptchaMode.MISCONFIGURED) {
-    return CaptchaCheck.MISCONFIGURED;
+    throw new Error('Captcha is misconfigured');
   }
   if (!captchaSolution) {
-    return CaptchaCheck.FAILED;
+    return CaptchaCheck.REFUSED;
   }
 
-  try {
-    const solved = await verifyCaptcha({
-      solution: captchaSolution,
-      apiKey: apiKey!,
-      sitekey: sitekey!,
-    });
-    return solved ? CaptchaCheck.PASSED : CaptchaCheck.FAILED;
-  } catch (error) {
-    Sentry.captureException(error);
-    return CaptchaCheck.ERROR;
-  }
+  const solved = await verifyCaptcha({
+    solution: captchaSolution,
+    apiKey: apiKey!,
+    sitekey: sitekey!,
+  });
+  return solved ? CaptchaCheck.PASSED : CaptchaCheck.REFUSED;
 }
 
 async function verifyCaptcha({

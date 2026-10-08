@@ -54,44 +54,38 @@ describe('requestAdsAccess', () => {
   });
 
   it('renvoie les erreurs de champs sans captcha ni email', async () => {
-    const errors = await requestAdsAccess({
+    const result = await requestAdsAccess({
       ...validRequest,
       email: 'pas-un-email',
       inseeCodes: [],
     });
 
-    expect(errors).toMatchObject({
-      email: expect.any(String),
-      inseeCodes: expect.any(String),
+    expect(result).toEqual({
+      status: 'rejected',
+      errors: {
+        email: expect.any(String),
+        inseeCodes: expect.any(String),
+      },
     });
     expect(checkCaptcha).not.toHaveBeenCalled();
     expect(sendTransactionalEmail).not.toHaveBeenCalled();
   });
 
   it("renvoie l'erreur captcha sans envoyer d'email quand il est refusé", async () => {
-    checkCaptcha.mockResolvedValue(CaptchaCheck.FAILED);
+    checkCaptcha.mockResolvedValue(CaptchaCheck.REFUSED);
 
     expect(await requestAdsAccess(validRequest)).toEqual({
-      captcha: 'Vérification anti-robot invalide.',
+      status: 'rejected',
+      errors: { captcha: 'Vérification anti-robot invalide.' },
     });
     expect(sendTransactionalEmail).not.toHaveBeenCalled();
   });
 
-  it('lève une erreur si le captcha est mal configuré', async () => {
-    checkCaptcha.mockResolvedValue(CaptchaCheck.MISCONFIGURED);
+  it("propage l'erreur du captcha sans envoyer d'email", async () => {
+    const failure = new Error('Captcha is misconfigured');
+    checkCaptcha.mockRejectedValue(failure);
 
-    await expect(requestAdsAccess(validRequest)).rejects.toThrow(
-      'Captcha is misconfigured',
-    );
-    expect(sendTransactionalEmail).not.toHaveBeenCalled();
-  });
-
-  it('lève une erreur si la vérification du captcha plante', async () => {
-    checkCaptcha.mockResolvedValue(CaptchaCheck.ERROR);
-
-    await expect(requestAdsAccess(validRequest)).rejects.toThrow(
-      'Captcha verification failed unexpectedly',
-    );
+    await expect(requestAdsAccess(validRequest)).rejects.toBe(failure);
     expect(sendTransactionalEmail).not.toHaveBeenCalled();
   });
 
@@ -105,8 +99,10 @@ describe('requestAdsAccess', () => {
     expect(failure.message).not.toContain(validRequest.organisation);
   });
 
-  it("envoie l'email avec les paramètres validés et renvoie null", async () => {
-    expect(await requestAdsAccess(validRequest)).toBeNull();
+  it("envoie l'email avec les paramètres validés et renvoie un succès", async () => {
+    expect(await requestAdsAccess(validRequest)).toEqual({
+      status: 'success',
+    });
 
     expect(sendTransactionalEmail).toHaveBeenCalledTimes(1);
     expect(sendTransactionalEmail).toHaveBeenCalledWith({

@@ -1,8 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const verify = vi.fn();
-const captureException = vi.hoisted(() => vi.fn());
-vi.mock('@sentry/nextjs', () => ({ captureException }));
 vi.mock('@private-captcha/private-captcha-js', () => ({
   createClient: () => ({ verify }),
 }));
@@ -43,7 +41,6 @@ describe('captchaMode', () => {
 describe('checkCaptcha', () => {
   beforeEach(() => {
     verify.mockReset();
-    captureException.mockReset();
     vi.stubEnv('NEXT_PUBLIC_ENABLE_CAPTCHA', 'true');
     vi.stubEnv('PRIVATE_CAPTCHA_API_KEY', 'api-key');
     vi.stubEnv('NEXT_PUBLIC_PRIVATE_CAPTCHA_SITEKEY', 'sitekey');
@@ -61,27 +58,26 @@ describe('checkCaptcha', () => {
     expect(verify).not.toHaveBeenCalled();
   });
 
-  it('signale une mauvaise configuration', async () => {
+  it('lève une erreur quand le captcha est mal configuré', async () => {
     vi.stubEnv('PRIVATE_CAPTCHA_API_KEY', '');
-    expect(await checkCaptcha({ captchaSolution: 'abc' })).toBe(
-      CaptchaCheck.MISCONFIGURED,
+    await expect(checkCaptcha({ captchaSolution: 'abc' })).rejects.toThrow(
+      'Captcha is misconfigured',
     );
   });
 
-  it('échoue sans appel réseau quand la solution est absente', async () => {
+  it('refuse sans appel réseau quand la solution est absente', async () => {
     expect(await checkCaptcha({ captchaSolution: null })).toBe(
-      CaptchaCheck.FAILED,
+      CaptchaCheck.REFUSED,
     );
     expect(verify).not.toHaveBeenCalled();
   });
 
-  it('renvoie une erreur quand le SDK lève une exception', async () => {
+  it("propage l'exception du SDK", async () => {
     const failure = new Error('network');
     verify.mockRejectedValue(failure);
-    expect(await checkCaptcha({ captchaSolution: 'abc' })).toBe(
-      CaptchaCheck.ERROR,
+    await expect(checkCaptcha({ captchaSolution: 'abc' })).rejects.toBe(
+      failure,
     );
-    expect(captureException).toHaveBeenCalledWith(failure);
   });
 
   it('passe quand la solution est valide', async () => {
@@ -91,10 +87,10 @@ describe('checkCaptcha', () => {
     );
   });
 
-  it('échoue quand la solution est refusée', async () => {
+  it('refuse quand la solution est invalide', async () => {
     verify.mockResolvedValue({ ok: () => false });
     expect(await checkCaptcha({ captchaSolution: 'abc' })).toBe(
-      CaptchaCheck.FAILED,
+      CaptchaCheck.REFUSED,
     );
   });
 });

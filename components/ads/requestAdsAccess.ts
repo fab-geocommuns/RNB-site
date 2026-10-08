@@ -1,6 +1,11 @@
 'use server';
 
-import { checkCaptcha, CaptchaCheck } from '@/components/newsletter/captcha';
+import { ActionResult } from '@/utils/actionResult';
+import {
+  checkCaptcha,
+  CaptchaCheck,
+  CAPTCHA_REFUSED_MESSAGE,
+} from '@/components/newsletter/captcha';
 import {
   sendTransactionalEmail,
   TransactionalEmail,
@@ -10,7 +15,7 @@ import {
   AdsAccessRequestErrors,
 } from './accessRequest';
 
-// Returns the errors the user can fix, null on success. Unexpected failures throw.
+// Returns the errors the user can fix. Unexpected failures throw.
 export async function requestAdsAccess({
   email,
   inseeCodes,
@@ -21,7 +26,7 @@ export async function requestAdsAccess({
   inseeCodes: string[];
   organisation: string;
   captchaSolution: string | null;
-}): Promise<AdsAccessRequestErrors | null> {
+}): Promise<ActionResult<AdsAccessRequestErrors>> {
   // Server action arguments are untrusted at runtime, whatever the types say.
   if (
     typeof email !== 'string' ||
@@ -44,16 +49,14 @@ export async function requestAdsAccess({
     organisation,
   });
   if (!validation.ok) {
-    return validation.fieldErrors;
+    return { status: 'rejected', errors: validation.fieldErrors };
   }
 
-  switch (await checkCaptcha({ captchaSolution })) {
-    case CaptchaCheck.MISCONFIGURED:
-      throw new Error('Captcha is misconfigured');
-    case CaptchaCheck.FAILED:
-      return { captcha: 'Vérification anti-robot invalide.' };
-    case CaptchaCheck.ERROR:
-      throw new Error('Captcha verification failed unexpectedly');
+  if ((await checkCaptcha({ captchaSolution })) === CaptchaCheck.REFUSED) {
+    return {
+      status: 'rejected',
+      errors: { captcha: CAPTCHA_REFUSED_MESSAGE },
+    };
   }
 
   const request = validation.value;
@@ -68,5 +71,5 @@ export async function requestAdsAccess({
     apiKey: brevoApiKey,
   });
 
-  return null;
+  return { status: 'success' };
 }

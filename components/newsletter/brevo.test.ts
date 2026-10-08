@@ -1,21 +1,54 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   BrevoError,
-  mapBrevoErrorCode,
+  callBrevo,
   sendTransactionalEmail,
   TransactionalEmail,
-  GENERIC_ERROR,
 } from './brevo';
 
-describe('mapBrevoErrorCode', () => {
-  it('signale une adresse email invalide', () => {
-    expect(mapBrevoErrorCode('invalid_parameter')).toBe(
-      'Adresse email invalide',
-    );
+describe('callBrevo', () => {
+  const subscription = {
+    email: 'a@b.fr',
+    redirectionUrl: 'http://localhost:3000/',
+    apiKey: 'secret',
+  };
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
-  it('retombe sur un message générique pour un code inconnu', () => {
-    expect(mapBrevoErrorCode(undefined)).toBe(GENERIC_ERROR);
+  it('envoie la souscription à Brevo et résout sur une réponse 2xx', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('{}', { status: 201 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(callBrevo(subscription)).resolves.toBeUndefined();
+
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe(
+      'https://api.brevo.com/v3/contacts/doubleOptinConfirmation',
+    );
+    expect(init.headers['api-key']).toBe('secret');
+    expect(JSON.parse(init.body)).toMatchObject({
+      email: subscription.email,
+      redirectionUrl: subscription.redirectionUrl,
+      templateId: expect.any(Number),
+      includeListIds: expect.any(Array),
+    });
+  });
+
+  it('lève une BrevoError sans code quand le corps est illisible', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response('<html>', { status: 500 })),
+    );
+
+    const error = await callBrevo(subscription).catch((e) => e);
+
+    expect(error).toBeInstanceOf(BrevoError);
+    expect(error.status).toBe(500);
+    expect(error.code).toBeUndefined();
   });
 });
 
