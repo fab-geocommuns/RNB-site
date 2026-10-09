@@ -2,7 +2,7 @@ body .msgInput {
   min-height: 100px;
   font-size: 0.875rem !important;
   line-height: 1.5rem !important;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .formTitle {
@@ -10,7 +10,7 @@ body .msgInput {
   font-weight: 700;
   margin-right: 10px;
   font-size: 0.9em;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
   display: block;
 }
 
@@ -19,13 +19,14 @@ body .msgInput {
     display: none;
   }
 
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 body .actionInput {
   label {
     padding-bottom: 0 !important;
     padding-top: 0.25rem !important;
+    background-position-x: 0 !important;
     font-size: 0.9em;
   }
 }

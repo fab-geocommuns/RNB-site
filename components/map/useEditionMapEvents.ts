@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { getNearestFeatureFromCursorWithBuffer } from '@/components/map/map.utils';
+import { getReportIdsAtPoint } from '@/components/map/layers/reports';
 import { MapMouseEvent } from 'maplibre-gl';
 import {
   LAYER_BDGS_POINT,
@@ -109,8 +110,11 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               featureOnCursor.layer.id,
             )
           ) {
-            const reportId = featureOnCursor.id as number | null;
-            dispatch(Actions.report.selectReport(reportId));
+            dispatch(
+              Actions.report.selectReportAtPoint(
+                getReportIdsAtPoint({ map, report: featureOnCursor }),
+              ),
+            );
           }
         }
 
