@@ -6,6 +6,7 @@ import { AddressSuggestion } from '@/components/address/AddressAutocomplete';
 import { NewAddress, BuildingAddressType } from './types';
 import { distance } from '@turf/turf';
 import styles from '@/styles/contribution/building.module.scss';
+import FieldHelp from './FieldHelp';
 
 function AddressCreator({
   onSubmit,
@@ -117,7 +118,12 @@ export default function BuildingAddresses({
   };
   return (
     <div className={styles.panelSection}>
-      <span className={`fr-text--xs ${styles.sectionTitle}`}>Adresses</span>
+      <FieldHelp
+        title={
+          <span className={`fr-text--xs ${styles.sectionTitle}`}>Adresses</span>
+        }
+        topic="addresses"
+      />
 
       {addresses.length === 0 && !isCreating ? (
         <div>

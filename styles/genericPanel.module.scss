@@ -33,6 +33,13 @@ $title-color: #414e71;
 .visualisationShell {
   top: 70px;
 }
+// Panneau d'aide de l'édition : collé à droite du panneau d'édition sur
+// desktop, par-dessus en plein écran sur mobile.
+.besideEditPanelShell {
+  @media (min-width: $bp-md) {
+    left: 12px + 400px + 12px;
+  }
+}
 .container {
   display: flex;
   flex-direction: column;
