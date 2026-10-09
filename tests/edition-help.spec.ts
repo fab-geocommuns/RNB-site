@@ -114,7 +114,7 @@ test.describe('Aide contextuelle de l’édition', () => {
     const guideLink = page.getByRole('link', { name: 'guide', exact: true });
     await expect(guideLink).toHaveAttribute(
       'href',
-      /editer-le-rnb-dans-les-regles-de-lart#quel-statut-donner-a-un-batiment$/,
+      /editer-le-rnb-dans-les-regles-de-lart$/,
     );
     await expect(guideLink).toHaveAttribute('target', '_blank');
   });
