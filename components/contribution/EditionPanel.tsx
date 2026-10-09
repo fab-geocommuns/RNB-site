@@ -41,6 +41,11 @@ import SplitPanel from './SplitPanel';
 import ValidationToggler from '../ValidationToggler';
 import { useAutoActivateDemolishedLayer } from '@/components/map/useAutoActivateDemolishedLayer';
 import { MAP_LAYERS_EDITION_KEY } from '@/utils/mapLayersDefaults';
+import buildingStyles from '@/styles/contribution/building.module.scss';
+import FieldHelp from './FieldHelp';
+import { GUIDE_URL } from './helpContents';
+import HelpPanel from './HelpPanel';
+import { fr } from '@codegouvfr/react-dsfr';
 
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
@@ -278,6 +283,16 @@ function BodyPanel({
                   <div
                     className={`${styles.validationAction} fr-p-5v fr-text--sm`}
                   >
+                    <FieldHelp
+                      title={
+                        <span
+                          className={`fr-text--xs ${buildingStyles.sectionTitle}`}
+                        >
+                          Validation
+                        </span>
+                      }
+                      topic="validation"
+                    />
                     La géométrie, le statut et les adresses vous semblent
                     corrects ? <ValidationToggler building={selectedBuilding} />
                   </div>
@@ -399,6 +414,24 @@ export default function EditionPanel() {
           imageSrc={splitBuildingImage.src}
           testId="split-action-button"
         ></EditionButton>
+        <Button
+          size="small"
+          priority="tertiary no outline"
+          linkProps={{
+            href: `${GUIDE_URL}`,
+            target: '_blank',
+            rel: 'noopener',
+            title: "Guide d'édition du RNB - nouvelle fenêtre",
+          }}
+        >
+          <div className={styles.action}>
+            <span
+              className={fr.cx('fr-icon-question-line', 'fr-icon--lg')}
+              aria-hidden="true"
+            />
+            <small>guide</small>
+          </div>
+        </Button>
       </div>
 
       {operation && (
@@ -411,6 +444,7 @@ export default function EditionPanel() {
           {operation == 'create' && <CreationPanel />}
           {operation == 'split' && <SplitPanel />}
           {operation == 'merge' && <MergePanel />}
+          <HelpPanel />
         </div>
       )}
     </>

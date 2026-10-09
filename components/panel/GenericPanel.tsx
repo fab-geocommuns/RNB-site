@@ -9,6 +9,7 @@ interface PanelProps {
   body: React.ReactNode;
   footer?: React.ReactNode;
   testId?: string;
+  className?: string;
   onClose: () => void;
 }
 
@@ -19,11 +20,12 @@ export default function GenericPanel({
   body,
   footer,
   testId,
+  className,
   onClose,
 }: PanelProps) {
   return (
     <div
-      className={`${styles.shell} ${operation === 'visualisation' ? styles.visualisationShell : ''}`}
+      className={`${styles.shell} ${operation === 'visualisation' ? styles.visualisationShell : ''} ${className ?? ''}`}
       data-testid={testId}
     >
       <div className={styles.container}>
@@ -32,7 +34,13 @@ export default function GenericPanel({
             <h2 className={styles.subtitle}>{title}</h2>
             {header}
           </div>
-          <a href="#" onClick={onClose} className={styles.closeLink}>
+          <a
+            href="#"
+            onClick={onClose}
+            className={styles.closeLink}
+            title="Fermer"
+            aria-label="Fermer"
+          >
             <i className="fr-icon-close-line" />
           </a>
         </div>

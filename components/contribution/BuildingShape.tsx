@@ -11,6 +11,7 @@ import editPolygonDisabledIcon from '@/public/images/map/edition/edit_polygon_di
 import newPolygonIcon from '@/public/images/map/edition/new_polygon.svg';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
 import SnapToggle from '@/components/contribution/SnapToggle';
+import FieldHelp from './FieldHelp';
 
 export default function BuildingShape({
   shapeInteractionMode,
@@ -38,7 +39,14 @@ export default function BuildingShape({
   return (
     <>
       <div className={styles.panelSection}>
-        <span className={`fr-text--xs ${styles.sectionTitle}`}>Géométrie</span>
+        <FieldHelp
+          title={
+            <span className={`fr-text--xs ${styles.sectionTitle}`}>
+              Géométrie
+            </span>
+          }
+          topic="shape"
+        />
 
         <SnapToggle className="fr-mt-4v fr-mb-2v" />
 
