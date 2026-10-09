@@ -174,8 +174,14 @@ export const installReports = async (map: maplibregl.Map) => {
 
   const zoomThreshold = 13;
 
-  if (map.getLayer(LAYER_REPORTS_CIRCLE)) map.removeLayer(LAYER_REPORTS_CIRCLE);
-  if (map.getLayer(LAYER_REPORTS_ICON)) map.removeLayer(LAYER_REPORTS_ICON);
+  // A source in use by any layer cannot be removed
+  [
+    LAYER_REPORTS_SMALL_CIRCLES,
+    LAYER_REPORTS_CIRCLE,
+    LAYER_REPORTS_ICON,
+  ].forEach((layer) => {
+    if (map.getLayer(layer)) map.removeLayer(layer);
+  });
   if (map.getSource(SRC_REPORTS)) map.removeSource(SRC_REPORTS);
 
   // add the icon if necessary
