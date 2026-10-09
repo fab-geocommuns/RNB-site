@@ -38,6 +38,7 @@ $title-color: #414e71;
 .besideEditPanelShell {
   @media (min-width: $bp-md) {
     left: 12px + 400px + 12px;
+    max-width: calc(100vw - #{12px + 400px + 12px + 12px});
   }
 }
 .container {
