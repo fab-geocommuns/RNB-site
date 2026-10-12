@@ -40,6 +40,16 @@ $title-color: #414e71;
     left: 12px + 400px + 12px;
     max-width: calc(100vw - #{12px + 400px + 12px + 12px});
   }
+
+  // Couleurs « information » du DSFR et liseré à gauche, pour distinguer
+  // l'aide du panneau d'édition (fond blanc).
+  .container {
+    background: var(--background-contrast-info);
+    border-left: 0.25rem solid var(--border-plain-info);
+  }
+  .head {
+    background-color: var(--background-action-low-blue-france);
+  }
 }
 .container {
   display: flex;
