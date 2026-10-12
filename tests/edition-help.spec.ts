@@ -84,8 +84,12 @@ test.describe('Aide contextuelle de l’édition', () => {
       });
       await button.scrollIntoViewIfNeeded();
       await button.click();
+      await expect(helpPanel).toBeVisible();
       await expect(
-        page.getByRole('region', { name: `Aide : ${section}`, exact: true }),
+        helpPanel.getByRole('heading', {
+          name: `Aide : ${section}`,
+          exact: true,
+        }),
       ).toBeVisible();
       await expect(
         helpPanel.getByRole('link', { name: /En savoir plus/ }),
