@@ -44,6 +44,18 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
   }
+  if (method === 'POST' && path === '/api/alpha/notifications/unsubscribe/') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const { token } = JSON.parse(raw || '{}');
+      if (token === 'jeton-valide') {
+        return json(res, 200, { email: 'auteur@exemple.fr' });
+      }
+      json(res, 400, { token: ['Lien de désinscription invalide.'] });
+    });
+    return;
+  }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
   }
