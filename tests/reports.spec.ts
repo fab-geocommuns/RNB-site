@@ -180,6 +180,25 @@ test.describe('Signalements', () => {
     await expect(page.getByText('2 sur 3')).toBeVisible();
   });
 
+  test("sur écran moyen, le panneau de détail défile dans la carte sans la dépasser et nomme l'auteur anonyme", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1024, height: 600 });
+    await serveReportTiles({ page, reports: [addressReport] });
+    await page.goto(`${REPORTS_MAP_URL}&report=${addressReport.api.id}`);
+
+    await expect(page.getByText(addressReport.text)).toBeVisible();
+    await expect(page.getByText('Anonyme')).toBeVisible();
+
+    const mapBox = await page.locator('[class*="map__mapShell"]').boundingBox();
+    const panelBox = await page
+      .locator('[class*="detailsContainer"]')
+      .boundingBox();
+    expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(
+      mapBox!.y + mapBox!.height,
+    );
+  });
+
   test("le filtre par étiquette ne confond pas l'étiquette 1 avec l'étiquette 12", async ({
     page,
     mapLocator,
