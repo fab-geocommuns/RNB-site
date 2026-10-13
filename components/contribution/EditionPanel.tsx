@@ -281,7 +281,7 @@ function BodyPanel({
               <>
                 {selectedBuilding.validated_by.length === 0 && (
                   <div
-                    className={`${styles.validationAction} fr-p-5v fr-text--sm`}
+                    className={`${styles.validationAction} fr-p-3v fr-text--sm`}
                   >
                     <FieldHelp
                       title={

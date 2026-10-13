@@ -17,7 +17,7 @@ function CalloutWithLink({
 }) {
   return (
     <div
-      className={fr.cx('fr-container', 'fr-p-5v', 'fr-text--sm')}
+      className={fr.cx('fr-p-3v', 'fr-text--sm')}
       style={{ backgroundColor: 'var(--background-alt-yellow-tournesol)' }}
     >
       {helpTopic && (
