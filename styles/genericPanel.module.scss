@@ -33,6 +33,23 @@ $title-color: #414e71;
 .visualisationShell {
   top: 70px;
 }
+// Panneau d'aide de l'édition : collé à droite du panneau d'édition sur
+// desktop, par-dessus en plein écran sur mobile.
+.besideEditPanelShell {
+  @media (min-width: $bp-md) {
+    left: 12px + 400px + 12px;
+    max-width: calc(100vw - #{12px + 400px + 12px + 12px});
+  }
+
+  // Couleurs « information » du DSFR et liseré à gauche, pour distinguer
+  // l'aide du panneau d'édition (fond blanc).
+  .container {
+    background: var(--background-contrast-info);
+  }
+  .head {
+    background-color: var(--background-action-low-blue-france);
+  }
+}
 .container {
   display: flex;
   flex-direction: column;

@@ -16,6 +16,13 @@ import { centroid } from '@turf/turf';
 
 export type Operation = null | 'create' | 'update' | 'split' | 'merge';
 export type ShapeInteractionMode = null | 'drawing' | 'updating';
+// Aide contextuelle affichée à côté du panneau d'édition.
+export type HelpTopic =
+  | 'status'
+  | 'addresses'
+  | 'shape'
+  | 'validation'
+  | 'deactivation';
 export type ToasterInfos = {
   state: null | 'success' | 'error';
   message: string;
@@ -74,6 +81,8 @@ export type EditionStore = {
 
   // préférence utilisateur, partagée par tous les modes de dessin
   snap: SnapSettings;
+
+  helpTopic: HelpTopic | null;
 };
 const initialState: EditionStore = {
   operation: null,
@@ -100,6 +109,7 @@ const initialState: EditionStore = {
   snap: {
     enabled: true,
   },
+  helpTopic: null,
 };
 
 export const editionSlice = createSlice({
@@ -122,6 +132,7 @@ export const editionSlice = createSlice({
       state.split.candidateAddresses = [];
       state.split.cutStep = 'drawing';
       state.isLoading = false;
+      state.helpTopic = null;
     },
     setCandidates(state, action: PayloadAction<MergeCandidate[]>) {
       state.merge.candidates = action.payload;
@@ -137,6 +148,10 @@ export const editionSlice = createSlice({
     },
     setOperation(state, action: PayloadAction<Operation>) {
       state.operation = action.payload;
+      state.helpTopic = null;
+    },
+    setHelpTopic(state, action: PayloadAction<HelpTopic | null>) {
+      state.helpTopic = action.payload;
     },
     setIsLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
