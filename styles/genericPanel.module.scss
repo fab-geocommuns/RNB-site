@@ -68,11 +68,10 @@ $title-color: #414e71;
   padding-left: 15px;
   padding-right: 7px;
 }
-// Occupe toute la largeur à gauche de la croix : un contenu d'en-tête aligné
-// à droite (ex. le bouton d'aide) reste ainsi toujours au même endroit.
-.headContent {
-  flex: 1;
-  min-width: 0;
+.headActions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 .subtitle {
   color: $title-color;

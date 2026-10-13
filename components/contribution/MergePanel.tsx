@@ -16,7 +16,7 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
-import FieldHelp from './FieldHelp';
+import HelpButton from './HelpButton';
 export default function MergePanel() {
   const dispatch: AppDispatch = useDispatch();
   const candidatesIdToMerge = useSelector((state: RootState) =>
@@ -116,17 +116,13 @@ export default function MergePanel() {
           />
         }
         header={
-          <FieldHelp
-            title={
-              <h1 className={`fr-text--lg fr-m-0 ${editPanelStyles.stepTitle}`}>
-                {newBuilding?.rnb_id
-                  ? 'Récapitulatif'
-                  : 'Sélection des bâtiments à fusionner'}
-              </h1>
-            }
-            topic="merge"
-          />
+          <h1 className={`fr-text--lg fr-m-0 ${editPanelStyles.stepTitle}`}>
+            {newBuilding?.rnb_id
+              ? 'Récapitulatif'
+              : 'Sélection des bâtiments à fusionner'}
+          </h1>
         }
+        headerActions={<HelpButton topic="merge" />}
         testId="edition-panel"
       ></GenericPanel>
     </>

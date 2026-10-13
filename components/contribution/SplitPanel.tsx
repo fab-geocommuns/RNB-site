@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingStatus from './BuildingStatus';
 import SnapToggle from './SnapToggle';
-import FieldHelp from './FieldHelp';
+import HelpButton from './HelpButton';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
@@ -112,15 +112,11 @@ function SplitBuildingInitialStep() {
         </>
       }
       header={
-        <FieldHelp
-          title={
-            <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
-              Étape 1 - Sélection du bâtiment
-            </h1>
-          }
-          topic="split"
-        />
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape 1 - Sélection du bâtiment
+        </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
@@ -266,15 +262,11 @@ function SplitBuildingCutStep({
         </>
       }
       header={
-        <FieldHelp
-          title={
-            <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
-              Étape 2 - Découpe du bâtiment
-            </h1>
-          }
-          topic="split"
-        />
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape 2 - Découpe du bâtiment
+        </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
@@ -355,16 +347,12 @@ function SplitBuildingChildInfosStep({
         </>
       }
       header={
-        <FieldHelp
-          title={
-            <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
-              Étape {selectedChildIndex + 3}/{splitChildrenCount + 3} - Infos
-              bâtiment {selectedChildIndex + 1}
-            </h1>
-          }
-          topic="split"
-        />
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape {selectedChildIndex + 3}/{splitChildrenCount + 3} - Infos
+          bâtiment {selectedChildIndex + 1}
+        </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
@@ -474,16 +462,12 @@ function SplitBuildingSummaryStep({
         </>
       }
       header={
-        <FieldHelp
-          title={
-            <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
-              Étape {splitChildrenCount + 3}/{splitChildrenCount + 3} -
-              Récapitulatif
-            </h1>
-          }
-          topic="split"
-        />
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape {splitChildrenCount + 3}/{splitChildrenCount + 3} -
+          Récapitulatif
+        </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
