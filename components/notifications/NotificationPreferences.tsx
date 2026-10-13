@@ -5,6 +5,7 @@ import Alert from '@codegouvfr/react-dsfr/Alert';
 import { ToggleSwitch } from '@codegouvfr/react-dsfr/ToggleSwitch';
 import * as Sentry from '@sentry/nextjs';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 import { useRNBFetch } from '@/utils/useRNBFetch';
@@ -16,6 +17,7 @@ export default function NotificationPreferences({
 }) {
   const { fetch } = useRNBFetch();
   const { status: sessionStatus } = useSession();
+  const router = useRouter();
   const [subscribed, setSubscribed] = useState(initialSubscribed);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -35,6 +37,8 @@ export default function NotificationPreferences({
           `PUT notifications/preferences failed: ${response.status}`,
         );
       }
+      // Back/forward navigation would otherwise restore the stale initial value.
+      router.refresh();
     } catch (error) {
       Sentry.captureException(error);
       setSubscribed(previous);
