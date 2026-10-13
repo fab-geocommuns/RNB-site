@@ -48,6 +48,14 @@ export default function MyAccountLayout({
   });
 
   menuItems.push({
+    text: 'Notifications',
+    isActive: pathname === '/mon-compte/notifications',
+    linkProps: {
+      href: '/mon-compte/notifications',
+    },
+  });
+
+  menuItems.push({
     text: 'Se déconnecter',
     isActive: false,
     linkProps: {

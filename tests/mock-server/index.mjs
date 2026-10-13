@@ -44,6 +44,9 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
   }
+  if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
+    return json(res, 200, { subscribed: true });
+  }
 
   // Ghost CMS — only used at SSR for the home page. The Ghost client hits
   // `{NEXT_GHOST_API_URL}/ghost/api/{version}/content/{resource}`.
