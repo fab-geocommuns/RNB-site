@@ -122,4 +122,63 @@ test.describe('Aide contextuelle de l’édition', () => {
     );
     await expect(guideLink).toHaveAttribute('target', '_blank');
   });
+
+  for (const { operation, actionTestId, helpTitle, anchor } of [
+    {
+      operation: 'création',
+      actionTestId: 'create-action-button',
+      helpTitle: 'Créer un bâtiment',
+      anchor: 'quand-creer-un-batiment',
+    },
+    {
+      operation: 'fusion',
+      actionTestId: 'merge-action-button',
+      helpTitle: 'Fusionner des bâtiments',
+      anchor: 'quand-fusionner-des-batiments',
+    },
+    {
+      operation: 'scission',
+      actionTestId: 'split-action-button',
+      helpTitle: 'Scinder un bâtiment',
+      anchor: 'quand-scinder-un-batiment',
+    },
+  ]) {
+    test(`le panneau de ${operation} a son aide`, async ({
+      browserName,
+      editionPage,
+      httpMocker,
+      page,
+    }) => {
+      test.skip(
+        browserName === 'firefox',
+        'Pas de support de WebGL2 sur Firefox headless',
+      );
+
+      httpMocker.get(GET_PATH, buildingValidatedBy([]));
+
+      await editionPage.goToBuilding(BUILDING_ID);
+      await page.getByTestId(actionTestId).click();
+
+      const helpPanel = page.getByTestId('edition-help-panel');
+      const helpButton = editionPage.panel.getByRole('button', {
+        name: `Aide : ${helpTitle}`,
+        exact: true,
+      });
+      await helpButton.click();
+      await expect(helpPanel).toBeVisible();
+      await expect(
+        helpPanel.getByRole('heading', {
+          name: `Aide : ${helpTitle}`,
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        helpPanel.getByRole('link', { name: /En savoir plus/ }),
+      ).toHaveAttribute('href', new RegExp(`#${anchor}$`));
+
+      // Quitter l'opération ferme l'aide.
+      await editionPage.panel.getByRole('button', { name: 'Annuler' }).click();
+      await expect(helpPanel).toBeHidden();
+    });
+  }
 });

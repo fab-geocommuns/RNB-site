@@ -8,6 +8,7 @@ import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import { Loader } from '@/components/Loader';
 import styles from '@/styles/contribution/mergePanel.module.scss';
+import editPanelStyles from '@/styles/contribution/editPanel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useRNBFetch } from '@/utils/useRNBFetch';
 import {
@@ -15,6 +16,7 @@ import {
   toasterError,
   toasterSuccess,
 } from './toaster';
+import FieldHelp from './FieldHelp';
 export default function MergePanel() {
   const dispatch: AppDispatch = useDispatch();
   const candidatesIdToMerge = useSelector((state: RootState) =>
@@ -113,6 +115,18 @@ export default function MergePanel() {
             handleSubmit={handleSubmit}
           />
         }
+        header={
+          <FieldHelp
+            title={
+              <h1 className={`fr-text--lg fr-m-0 ${editPanelStyles.stepTitle}`}>
+                {newBuilding?.rnb_id
+                  ? 'Récapitulatif'
+                  : 'Sélection des bâtiments à fusionner'}
+              </h1>
+            }
+            topic="merge"
+          />
+        }
         testId="edition-panel"
       ></GenericPanel>
     </>
@@ -146,9 +160,6 @@ function BodyPanel({
         <div>
           {!isLoading && (
             <div className={styles.mergePanelDescWrapper}>
-              <span className={styles.mergePanelDescText}>
-                Sélectionner les bâtiments à fusionner
-              </span>
               <span className={styles.mergePanelDescSubText}>
                 Sélectionnez sur la carte les bâtiments attenants qui doivent
                 être fusionnés

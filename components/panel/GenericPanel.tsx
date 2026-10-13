@@ -33,7 +33,7 @@ export default function GenericPanel({
     >
       <div className={styles.container}>
         <div className={styles.head}>
-          <div>
+          <div className={styles.headContent}>
             <h2 className={styles.subtitle}>
               {iconId && (
                 <span

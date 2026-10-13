@@ -17,6 +17,7 @@ import {
 } from './toaster';
 import MapPointerClaim from '../map/MapPointerClaim';
 import SnapToggle from './SnapToggle';
+import FieldHelp from './FieldHelp';
 
 export default function CreationPanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -142,12 +143,15 @@ function FooterPanel({
 }
 function ContentHeader({ step }: { step: number }) {
   return (
-    <>
-      <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
-        {step == 1 && 'Étape 1 - Géométrie'}
-        {step == 2 && 'Étape 2 - Informations'}
-      </h1>
-    </>
+    <FieldHelp
+      title={
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          {step == 1 && 'Étape 1 - Géométrie'}
+          {step == 2 && 'Étape 2 - Informations'}
+        </h1>
+      }
+      topic="create"
+    />
   );
 }
 function BodyPanel({
