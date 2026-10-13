@@ -1,3 +1,4 @@
+import { fr, type FrIconClassName } from '@codegouvfr/react-dsfr';
 import styles from '@/styles/genericPanel.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
@@ -5,6 +6,7 @@ import { AppDispatch, RootState } from '@/stores/store';
 interface PanelProps {
   operation?: string | null;
   title: string | null;
+  iconId?: FrIconClassName;
   header?: React.ReactNode;
   body: React.ReactNode;
   footer?: React.ReactNode;
@@ -16,6 +18,7 @@ interface PanelProps {
 export default function GenericPanel({
   operation,
   title,
+  iconId,
   header,
   body,
   footer,
@@ -31,7 +34,15 @@ export default function GenericPanel({
       <div className={styles.container}>
         <div className={styles.head}>
           <div>
-            <h2 className={styles.subtitle}>{title}</h2>
+            <h2 className={styles.subtitle}>
+              {iconId && (
+                <span
+                  className={fr.cx(iconId, 'fr-icon--sm', 'fr-mr-1v')}
+                  aria-hidden="true"
+                />
+              )}
+              {title}
+            </h2>
             {header}
           </div>
           <a

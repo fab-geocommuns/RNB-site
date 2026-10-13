@@ -39,6 +39,7 @@ export default function HelpPanel() {
     >
       <GenericPanel
         title={`Aide : ${title}`}
+        iconId="fr-icon-question-line"
         onClose={close}
         className={styles.besideEditPanelShell}
         testId="edition-help-panel"
