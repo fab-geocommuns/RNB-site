@@ -151,6 +151,73 @@ function DeactivationHelp() {
   );
 }
 
+function CreateHelp() {
+  return (
+    <>
+      <p>
+        Créez un bâtiment lorsqu&apos;il est absent du RNB, par exemple un
+        bâtiment visible sur la vue satellite mais qui n&apos;a pas
+        d&apos;ID-RNB. La création lui attribue immédiatement un ID-RNB.
+      </p>
+      <ul>
+        <li>
+          Tracez sa géométrie : de préférence son emprise au sol, sinon celle de
+          son toit, ou à défaut une approximation.
+        </li>
+        <li>
+          Associez-lui son adresse, voire ses adresses s&apos;il en a plusieurs.
+        </li>
+      </ul>
+      <p>
+        Avant de créer, vérifiez que le bâtiment n&apos;existe pas déjà :
+        s&apos;il est mal représenté, mieux vaut le mettre à jour.
+      </p>
+      <HelpLinks guideAnchor="quand-creer-un-batiment" />
+    </>
+  );
+}
+
+function MergeHelp() {
+  return (
+    <>
+      <p>
+        Fusionnez des bâtiments lorsque plusieurs ID-RNB désignent en réalité un
+        seul et même bâtiment, au sens de la définition du RNB.
+      </p>
+      <p>
+        Lors d&apos;une fusion, les ID-RNB des bâtiments fusionnés sont
+        désactivés et un nouveau bâtiment est créé avec un nouvel ID-RNB. Le
+        lien de parenté entre les anciens bâtiments et le nouveau est conservé
+        dans l&apos;historique.
+      </p>
+      <HelpLinks guideAnchor="quand-fusionner-des-batiments" />
+    </>
+  );
+}
+
+function SplitHelp() {
+  return (
+    <>
+      <p>
+        C&apos;est le cas inverse de la fusion : scindez un bâtiment lorsque le
+        RNB n&apos;en contient qu&apos;un seul alors qu&apos;il s&apos;agit en
+        réalité de plusieurs bâtiments, au sens de la définition du RNB.
+      </p>
+      <p>
+        Par exemple, une barre d&apos;immeuble avec trois entrées indépendantes
+        et trois cages d&apos;escalier qui ne communiquent pas entre elles est à
+        scinder en trois.
+      </p>
+      <p>
+        Lors d&apos;une scission, l&apos;ID-RNB du bâtiment scindé est désactivé
+        et chaque bâtiment issu de la découpe reçoit un nouvel ID-RNB. Le lien
+        de parenté est conservé dans l&apos;historique.
+      </p>
+      <HelpLinks guideAnchor="quand-scinder-un-batiment" />
+    </>
+  );
+}
+
 export const HELP_TOPICS: Record<
   HelpTopic,
   { title: string; Content: () => React.JSX.Element }
@@ -160,4 +227,7 @@ export const HELP_TOPICS: Record<
   addresses: { title: 'Adresses', Content: AddressesHelp },
   shape: { title: 'Géométrie', Content: ShapeHelp },
   deactivation: { title: 'Désactiver', Content: DeactivationHelp },
+  create: { title: 'Créer un bâtiment', Content: CreateHelp },
+  merge: { title: 'Fusionner des bâtiments', Content: MergeHelp },
+  split: { title: 'Scinder un bâtiment', Content: SplitHelp },
 };

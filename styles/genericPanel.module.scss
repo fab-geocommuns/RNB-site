@@ -72,6 +72,11 @@ $title-color: #414e71;
   padding-left: 15px;
   padding-right: 7px;
 }
+.headActions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
 .subtitle {
   color: $title-color;
   font-size: 0.8rem;

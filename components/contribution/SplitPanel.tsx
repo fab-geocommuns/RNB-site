@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BuildingAddresses from './BuildingAddresses';
 import BuildingStatus from './BuildingStatus';
 import SnapToggle from './SnapToggle';
+import HelpButton from './HelpButton';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
@@ -115,6 +116,7 @@ function SplitBuildingInitialStep() {
           Étape 1 - Sélection du bâtiment
         </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
@@ -264,6 +266,7 @@ function SplitBuildingCutStep({
           Étape 2 - Découpe du bâtiment
         </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
@@ -349,6 +352,7 @@ function SplitBuildingChildInfosStep({
           bâtiment {selectedChildIndex + 1}
         </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );
@@ -463,6 +467,7 @@ function SplitBuildingSummaryStep({
           Récapitulatif
         </h1>
       }
+      headerActions={<HelpButton topic="split" />}
       testId="edition-panel"
     />
   );

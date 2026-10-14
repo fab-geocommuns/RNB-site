@@ -22,7 +22,10 @@ export type HelpTopic =
   | 'addresses'
   | 'shape'
   | 'validation'
-  | 'deactivation';
+  | 'deactivation'
+  | 'create'
+  | 'merge'
+  | 'split';
 export type ToasterInfos = {
   state: null | 'success' | 'error';
   message: string;

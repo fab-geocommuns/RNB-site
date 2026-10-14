@@ -8,6 +8,8 @@ interface PanelProps {
   title: string | null;
   iconId?: FrIconClassName;
   header?: React.ReactNode;
+  // Actions affichées à gauche de la croix, sur la même ligne (ex. aide).
+  headerActions?: React.ReactNode;
   body: React.ReactNode;
   footer?: React.ReactNode;
   testId?: string;
@@ -20,6 +22,7 @@ export default function GenericPanel({
   title,
   iconId,
   header,
+  headerActions,
   body,
   footer,
   testId,
@@ -45,15 +48,18 @@ export default function GenericPanel({
             </h2>
             {header}
           </div>
-          <a
-            href="#"
-            onClick={onClose}
-            className={styles.closeLink}
-            title="Fermer"
-            aria-label="Fermer"
-          >
-            <i className="fr-icon-close-line" />
-          </a>
+          <div className={styles.headActions}>
+            {headerActions}
+            <a
+              href="#"
+              onClick={onClose}
+              className={styles.closeLink}
+              title="Fermer"
+              aria-label="Fermer"
+            >
+              <i className="fr-icon-close-line" />
+            </a>
+          </div>
         </div>
         <div className={styles.body}>{body}</div>
         {footer && <div className={styles.footer}>{footer}</div>}
