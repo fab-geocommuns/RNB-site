@@ -1,6 +1,6 @@
 import { auth } from '@/app/api/auth/[...nextauth]/auth';
 import { redirect } from 'next/navigation';
-import NotificationPreferences from '@/components/notifications/NotificationPreferences';
+import NotificationPreferences from './NotificationPreferences';
 import pageTitle from '@/utils/pageTitle';
 
 export const metadata = pageTitle('Mon compte');

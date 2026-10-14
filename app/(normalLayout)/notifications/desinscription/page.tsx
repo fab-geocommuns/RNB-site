@@ -1,5 +1,5 @@
 import Alert from '@codegouvfr/react-dsfr/Alert';
-import UnsubscribeForm from '@/components/notifications/UnsubscribeForm';
+import UnsubscribeForm from './UnsubscribeForm';
 import pageTitle from '@/utils/pageTitle';
 
 export const metadata = pageTitle('Désinscription des notifications', {
