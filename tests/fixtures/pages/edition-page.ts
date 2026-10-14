@@ -79,7 +79,10 @@ export class EditionPage extends RNBPage {
   }
 
   async confirmSplit() {
-    const confirmButton = this.panel.getByRole('button', { name: 'Scinder' });
+    const confirmButton = this.panel.getByRole('button', {
+      name: 'Scinder',
+      exact: true,
+    });
     await confirmButton.click();
   }
 

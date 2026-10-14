@@ -176,8 +176,9 @@ test.describe('Aide contextuelle de l’édition', () => {
         helpPanel.getByRole('link', { name: /En savoir plus/ }),
       ).toHaveAttribute('href', new RegExp(`#${anchor}$`));
 
-      // Quitter l'opération ferme l'aide.
-      await editionPage.panel.getByRole('button', { name: 'Annuler' }).click();
+      // Quitter l'opération ferme l'aide. On passe par la croix du panneau :
+      // le badge d'erreurs de Next (tuiles non stubbées) recouvre « Annuler ».
+      await editionPage.panel.getByRole('link', { name: 'Fermer' }).click();
       await expect(helpPanel).toBeHidden();
     });
   }
