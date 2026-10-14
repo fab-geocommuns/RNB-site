@@ -79,7 +79,8 @@ export default defineConfig({
         // Explicit, not left to fall through to a dev's own .env.local:
         // this gates a background-polling widget (reports) that throws into
         // Next's dev error overlay on any unmocked request.
-        NEXT_PUBLIC_SHOW_REPORTS: 'false',
+        // Reports on: their stats are mocked wherever the reports layer shows.
+        NEXT_PUBLIC_SHOW_REPORTS: 'true',
         NEXT_PUBLIC_ENABLE_CAPTCHA: 'false',
       },
     },

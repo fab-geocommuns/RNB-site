@@ -1,6 +1,6 @@
 'use client';
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { fetchBuilding } from '@/utils/requests';
 import {
@@ -118,6 +118,7 @@ export type MapStore = {
   reloadBuildings?: number;
   selectedItem?: SelectedItem;
   layers: MapLayers;
+  layersSwitcherOpen: boolean;
   pointer: MapPointer;
 };
 
@@ -131,6 +132,7 @@ const initialState: MapStore = {
     buildings: 'point',
     extraLayers: [],
   },
+  layersSwitcherOpen: false,
   pointer: '',
 };
 
@@ -146,6 +148,9 @@ export const mapSlice = createSlice({
     },
     setLayersExtraInStore(state, action) {
       state.layers.extraLayers = action.payload;
+    },
+    setLayersSwitcherOpen(state, action: PayloadAction<boolean>) {
+      state.layersSwitcherOpen = action.payload;
     },
     setAddressSearchQuery(state, action) {
       if (action.payload != state.addressSearch.q) {

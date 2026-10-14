@@ -97,12 +97,13 @@ export default function LayersSwitcher({
   disabledLayers = [],
   layersKey,
 }: Props) {
-  // Open or not
-  const [open, setOpen] = useState(false);
-
   // Store
   const dispatch: AppDispatch = useDispatch();
   const mapLayers = useSelector((state: RootState) => state.map.layers);
+  const open = useSelector((state: RootState) => state.map.layersSwitcherOpen);
+  const setOpen = (isOpen: boolean) => {
+    dispatch(Actions.map.setLayersSwitcherOpen(isOpen));
+  };
 
   const handleChangeBackgroundClick = (background: MapBackgroundLayer) => {
     dispatch(Actions.map.setBackgroundLayer(background, layersKey));
@@ -134,6 +135,9 @@ export default function LayersSwitcher({
   const filtersDrawerOpen = useSelector(
     (state: RootState) => state.report.filtersDrawerOpen,
   );
+  const selectedReportId = useSelector(
+    (state: RootState) => state.report.selectedReport?.id,
+  );
 
   const setOpenAndCloseReports = (boolean: boolean) => {
     setOpen(boolean);
@@ -141,6 +145,20 @@ export default function LayersSwitcher({
       dispatch(Actions.report.toggleFiltersDrawer());
     }
   };
+
+  // The reports panels and the layers panel are never open together
+  useEffect(() => {
+    if (filtersDrawerOpen || selectedReportId)
+      dispatch(Actions.map.setLayersSwitcherOpen(false));
+  }, [dispatch, filtersDrawerOpen, selectedReportId]);
+
+  // The store outlives the page: leaving it must not reopen the panel elsewhere
+  useEffect(
+    () => () => {
+      dispatch(Actions.map.setLayersSwitcherOpen(false));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     switch (mapLayers.background) {
@@ -160,10 +178,8 @@ export default function LayersSwitcher({
 
   return (
     <>
-      {open && !filtersDrawerOpen ? (
-        <div
-          className={`${styles.modal} ${mapLayers.extraLayers.includes('reports') ? styles.modalWithReports : ''}`}
-        >
+      {open ? (
+        <div className={styles.modal}>
           <div className={styles.head}>
             <div className={styles.title}>Calques</div>
             <a

@@ -1,7 +1,7 @@
 @import '@/styles/report/reportVars.scss';
 
 .detailsContainer {
-  max-height: calc(100vh - 280px);
+  min-height: 0;
 }
 
 body .head {
@@ -10,4 +10,11 @@ body .head {
 
 .headSubtitle {
   color: $dark-color;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
 }
