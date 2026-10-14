@@ -40,7 +40,7 @@ export default function UnsubscribeForm({ token }: { token: string }) {
           small={true}
         />
         <p className={fr.cx('fr-mt-3w')}>
-          Vous avez un compte ? Vous pouvez vous réabonner depuis{' '}
+          Vous pouvez vous réabonner depuis{' '}
           <Link href="/mon-compte/notifications">Mon compte</Link>.
         </p>
       </>
