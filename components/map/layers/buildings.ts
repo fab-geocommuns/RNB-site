@@ -57,16 +57,38 @@ type BuildingsOptions = {
   editionMode?: boolean;
 };
 
+const LAYERS_BDGS_ALL = [...LAYERS_BDGS_POINT_ALL, ...LAYERS_BDGS_SHAPE_ALL];
+
+const isBuildingLayer = (id: string) => LAYERS_BDGS_ALL.includes(id);
+
+// A selected building's layer can be moved to the very top: look right after the first building layer
+const getLayerAboveBuildings = (map: maplibregl.Map) => {
+  const layerIds = map.getLayersOrder();
+  const firstBuildingIndex = layerIds.findIndex(isBuildingLayer);
+  if (firstBuildingIndex === -1) return undefined;
+  return layerIds.slice(firstBuildingIndex).find((id) => !isBuildingLayer(id));
+};
+
 export const installBuildings = (
   map: maplibregl.Map,
   options: BuildingsOptions,
 ) => {
+  // A reinstall adds the layers on top: remember what was drawn above them (reports, ADS…)
+  const layerAboveBuildings = getLayerAboveBuildings(map);
+
   // First, we remove buildings layers and source
   removeBuildings(map, options.layers);
 
   // Then, we install the source
   installBuildingsSource(map);
   installBuildingsLayers(map, options);
+
+  if (layerAboveBuildings && map.getLayer(layerAboveBuildings)) {
+    map
+      .getLayersOrder()
+      .filter(isBuildingLayer)
+      .forEach((id) => map.moveLayer(id, layerAboveBuildings));
+  }
 };
 
 const installBuildingsSource = (map: maplibregl.Map) => {

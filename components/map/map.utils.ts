@@ -12,8 +12,16 @@ import {
   LAYER_BDGS_SHAPE_DEMOLISHED_FILL,
   LAYER_BDGS_SHAPE_DEMOLISHED_POINT,
 } from '@/components/map/useMapLayers';
+import { getReportDrawPriority } from '@/components/map/layers/reports';
 import { distance } from '@turf/turf';
 import { MapMouseEvent } from 'maplibre-gl';
+
+// Stacked reports share a point: the one drawn on top wins the tie
+const reportDrawPriority = (feature?: MapGeoJSONFeature) =>
+  feature &&
+  [LAYER_REPORTS_CIRCLE, LAYER_REPORTS_ICON].includes(feature.layer.id)
+    ? getReportDrawPriority(feature)
+    : -1;
 
 /**
  * Récupère la feature la plus proche du curseur dans un rayon maximum spécifié en pixels.
@@ -80,7 +88,11 @@ export const getNearestFeatureFromCursorWithBuffer = (
         const pointLat = feature.geometry.coordinates[1];
         let d = distance([cursorLng, cursorLat], [pointLng, pointLat]);
 
-        if (d < minDistance) {
+        if (
+          d < minDistance ||
+          (d === minDistance &&
+            reportDrawPriority(feature) > reportDrawPriority(closestFeature))
+        ) {
           minDistance = d;
           closestFeature = feature;
         }

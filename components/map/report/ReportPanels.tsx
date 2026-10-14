@@ -13,11 +13,18 @@ export default function ReportPanels() {
   const selectedReport = useSelector(
     (state: RootState) => state.report.selectedReport,
   );
+  const layersSwitcherOpen = useSelector(
+    (state: RootState) => state.map.layersSwitcherOpen,
+  );
+
+  if (layersSwitcherOpen) return null;
 
   return (
     <div className={styles.reportShell}>
       <ReportFilters isOpen={filtersDrawerOpen} />
-      {selectedReport && <ReportDetails report={selectedReport} />}
+      {selectedReport && (
+        <ReportDetails key={selectedReport.id} report={selectedReport} />
+      )}
     </div>
   );
 }

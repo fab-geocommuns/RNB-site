@@ -79,9 +79,6 @@ export const useMapLayers = ({
   const dispatch = useDispatch<AppDispatch>();
   const installAllRunning = useRef(false);
   const installAllPending = useRef(false);
-  const displayedReportTags = useSelector(
-    (state: RootState) => state.report.displayedTags,
-  );
 
   const installAll = async (map: maplibregl.Map) => {
     // A call arriving during an install is replayed at the end of it, with fresh state
@@ -104,7 +101,7 @@ export const useMapLayers = ({
       }
 
       if (layers.extraLayers.includes('reports')) {
-        await installReports(map, displayedReportTags);
+        await installReports(map);
       }
     } catch (e) {
       throw e;

@@ -9,6 +9,10 @@ $title-color: #414e71;
   z-index: 350;
   max-width: 350px;
   width: 350px;
+  // Bounded by the map so the panels scroll inside, never the page
+  max-height: calc(100% - 112px);
+  display: flex;
+  flex-direction: column;
 }
 
 .shell {

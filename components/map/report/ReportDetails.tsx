@@ -7,6 +7,7 @@ import panelStyles from '@/styles/panel.module.scss';
 import ReportMessage from '@/components/map/report/ReportMessage';
 import ReportHead from '@/components/map/report/ReportHead';
 import ReportForm from '@/components/map/report/ReportForm';
+import ReportPagination from '@/components/map/report/ReportPagination';
 
 import { Report } from '@/types/report';
 
@@ -18,7 +19,7 @@ export default function ReportDetails({ report }: { report: Report }) {
     dispatch(Actions.report.selectReport(null));
   };
 
-  const answers = report?.messages.slice(1);
+  const answers = report.messages.slice(1);
 
   return (
     <>
@@ -29,6 +30,7 @@ export default function ReportDetails({ report }: { report: Report }) {
               Signalement
             </h2>
           </div>
+          <ReportPagination reportId={report.id} />
           <a href="#" onClick={onClose} className={genericStyles.closeLink}>
             <i className="fr-icon-close-line" />
           </a>
@@ -39,13 +41,13 @@ export default function ReportDetails({ report }: { report: Report }) {
             <ReportHead report={report} />
           </div>
 
-          <div className={panelStyles.section}>
-            {answers?.map((message: any, index: number) => (
-              <div key={index} className={styles.messageShell}>
-                <ReportMessage message={message} />
-              </div>
-            ))}
-          </div>
+          {answers.length > 0 && (
+            <div className={panelStyles.section}>
+              {answers.map((message: any, index: number) => (
+                <ReportMessage key={index} message={message} />
+              ))}
+            </div>
+          )}
 
           <div className={panelStyles.section}>
             <ReportForm report={report} />
