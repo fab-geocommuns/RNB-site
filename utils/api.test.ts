@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError, api, apiUrl, createApi, humanizeApiError } from './api';
+import { UNEXPECTED_ERROR_MESSAGE } from './actionResult';
 
 const fetchMock = vi.fn();
 
@@ -33,8 +34,9 @@ describe('humanizeApiError', () => {
     );
   });
 
-  it('a un message par défaut', () => {
-    expect(humanizeApiError(null)).toBe('Erreur inconnue');
+  it('a un message générique sans contenu affichable', () => {
+    expect(humanizeApiError(null)).toBe(UNEXPECTED_ERROR_MESSAGE);
+    expect(humanizeApiError('<html>502</html>')).toBe(UNEXPECTED_ERROR_MESSAGE);
   });
 });
 
@@ -83,6 +85,7 @@ describe('apiRequest', () => {
     );
     await expect(api.get('/x/')).rejects.toMatchObject({
       status: 502,
+      message: UNEXPECTED_ERROR_MESSAGE,
       data: '<html>502</html>',
     });
   });

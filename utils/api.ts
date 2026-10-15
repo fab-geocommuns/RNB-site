@@ -4,6 +4,8 @@
 // Utilisable côté serveur comme côté client ; côté composant authentifié,
 // passer par le hook `useApi()` qui injecte le token de session.
 
+import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
+
 type QueryValue = string | number | boolean | null | undefined;
 
 export type ApiRequestOptions = {
@@ -55,8 +57,8 @@ export function humanizeApiError(data: unknown): string {
       .join('\n');
     if (messages) return messages;
   }
-  if (typeof data === 'string' && data) return data;
-  return 'Erreur inconnue';
+  // Réponse vide ou non JSON (page HTML d'un 502…) : rien d'affichable.
+  return UNEXPECTED_ERROR_MESSAGE;
 }
 
 async function parseBody(response: Response): Promise<unknown> {
