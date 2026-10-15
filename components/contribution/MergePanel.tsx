@@ -10,12 +10,8 @@ import { Loader } from '@/components/Loader';
 import styles from '@/styles/contribution/mergePanel.module.scss';
 import editPanelStyles from '@/styles/contribution/editPanel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { useRNBFetch } from '@/utils/useRNBFetch';
-import {
-  throwErrorMessageForHumans,
-  toasterError,
-  toasterSuccess,
-} from './toaster';
+import { useApi } from '@/utils/useApi';
+import { toasterError, toasterSuccess } from './toaster';
 import HelpButton from './HelpButton';
 export default function MergePanel() {
   const dispatch: AppDispatch = useDispatch();
@@ -28,7 +24,7 @@ export default function MergePanel() {
     (state: RootState) => state.edition.merge.newBuilding,
   );
   const isActive = candidatesIdToMerge.length > 1;
-  const { fetch } = useRNBFetch();
+  const api = useApi();
   const isLoading = useSelector((state: RootState) => state.edition.isLoading);
   const [commentValue, setCommentValue] = useState('');
   const candidatesWithAddresses = useSelector((state: RootState) =>
@@ -56,31 +52,19 @@ export default function MergePanel() {
 
   const handleSubmit = async () => {
     dispatch(Actions.edition.setIsLoading(true));
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/merge/`;
-
-    let data: { [key: string]: any } = {
-      comment: commentValue,
-      rnb_ids: candidatesIdToMerge,
-      status: 'constructed',
-      merge_existing_addresses: true,
-    };
     try {
-      const response = await fetch(url, {
-        body: JSON.stringify(data),
-        method: 'POST',
+      const data = await api.post<SelectedBuilding>('/buildings/merge/', {
+        comment: commentValue,
+        rnb_ids: candidatesIdToMerge,
+        status: 'constructed',
+        merge_existing_addresses: true,
       });
-
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      } else {
-        // force the map to reload the building, to immediatly show the modifications made
-        dispatch(Actions.map.reloadBuildings());
-        const data = await response.json();
-        dispatch(Actions.map.selectBuilding(data.rnb_id));
-        toasterSuccess(dispatch, `Les bâtiments ont été fusionnés avec succès`);
-        dispatch(Actions.edition.setNewBuilding(data));
-        setCommentValue('');
-      }
+      // force the map to reload the building, to immediatly show the modifications made
+      dispatch(Actions.map.reloadBuildings());
+      dispatch(Actions.map.selectBuilding(data.rnb_id));
+      toasterSuccess(dispatch, `Les bâtiments ont été fusionnés avec succès`);
+      dispatch(Actions.edition.setNewBuilding(data));
+      setCommentValue('');
       dispatch(Actions.edition.setIsLoading(false));
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la fusion');
