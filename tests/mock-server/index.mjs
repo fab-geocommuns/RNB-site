@@ -41,6 +41,10 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path === '/api/alpha/diffusion_databases') {
     return json(res, 200, []);
   }
+  // Server-side fetch of /batiments/[id]/historique: simulates an API failure
+  if (method === 'GET' && path === '/api/alpha/buildings/ERREURAPI/history/') {
+    return json(res, 500, { detail: 'Internal error (mock).' });
+  }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
   }
