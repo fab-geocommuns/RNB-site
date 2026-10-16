@@ -1,34 +1,16 @@
-// This file configures the initialization of Sentry on the client.
-// The config you add here will be used whenever a users loads a page in their browser.
-// https://docs.sentry.io/platforms/javascript/guides/nextjs/
-
-import * as Sentry from '@sentry/nextjs';
-
-Sentry.init({
-  dsn: 'https://c2aa9d4f229e4165b410251d58c88e00@sentry.incubateur.net/149',
-
-  // Route browser requests through a Next.js rewrite to circumvent ad-blockers.
-  // Must match tunnelRoute in next.config.js
-  tunnel: '/monitoring',
-
-  // Add optional integrations for additional features
-  integrations: [Sentry.replayIntegration()],
-
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
-
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
-
-  // Define how likely Replay events are sampled when an error occurs.
-  replaysOnErrorSampleRate: 1.0,
-
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
-  enabled: process.env.NODE_ENV !== 'development',
-});
+// Sentry est désactivé en dev : on ne le charge pas du tout pour ne pas
+// l'ajouter au bundle client de chaque route.
+// La condition est remplacée à la compilation, l'import disparaît en dev.
+const sentry =
+  process.env.NODE_ENV !== 'development'
+    ? import('./sentry.client.config')
+    : null;
 
 // Instrumente les navigations du routeur App Router (requis depuis Sentry v9).
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+export function onRouterTransitionStart(
+  ...args: Parameters<
+    typeof import('./sentry.client.config').onRouterTransitionStart
+  >
+) {
+  sentry?.then((s) => s.onRouterTransitionStart(...args));
+}
