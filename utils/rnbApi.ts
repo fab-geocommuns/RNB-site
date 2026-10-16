@@ -16,6 +16,7 @@ export type RnbApiRequestOptions = {
   token?: string | null;
   headers?: HeadersInit;
   signal?: AbortSignal;
+  cache?: RequestCache;
 };
 
 export class RnbApiError extends Error {
@@ -81,6 +82,7 @@ export async function rnbApiRequest<T = unknown>(
     token,
     headers,
     signal,
+    cache,
   }: RnbApiRequestOptions = {},
 ): Promise<T> {
   const isFormData = body instanceof FormData;
@@ -98,6 +100,7 @@ export async function rnbApiRequest<T = unknown>(
     body:
       body === undefined ? undefined : isFormData ? body : JSON.stringify(body),
     signal,
+    cache,
   });
 
   const data = await parseBody(response);
