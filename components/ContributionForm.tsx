@@ -20,9 +20,13 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 // @ts-ignore
 import Cookies from 'js-cookie';
 import { Actions, RootState } from '@/stores/store';
+import { rnbApiUrl } from '@/utils/rnbApi';
+import { useRnbApi } from '@/utils/useRnbApi';
+import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 
 export default function ContributionForm() {
-  const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
+  const rnbApi = useRnbApi();
+  const { isAuthenticated } = useRNBAuthentication();
   const selectedBuilding = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
@@ -47,7 +51,6 @@ export default function ContributionForm() {
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState('');
-  const [summerGamesMessage, setSummerGamesMessage] = useState<string>();
   const dispatch = useDispatch();
 
   const handleSubmit = async (e: any) => {
@@ -56,36 +59,17 @@ export default function ContributionForm() {
 
     e.preventDefault();
 
-    // submit the form to the url
-    let data = new FormData(e.target);
-    fetch(url, {
-      method: 'POST',
-      body: data,
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        // Temporary block for the summer games
-        const data = await res.json();
-        if (Object.hasOwn(data, 'contributor_rank')) {
-          let pluralS = '';
-          if (data.contributor_count > 1) {
-            pluralS = 's';
-          }
-
-          setSummerGamesMessage(
-            `<b>Vous avez envoyé ${data.contributor_count} signalement${pluralS}</b>.`,
-          );
-        } else {
-          setSummerGamesMessage(undefined);
-        }
-
+    // Connecté, le champ email n'est pas rendu : le back rattache le signalement au compte
+    const data = Object.fromEntries(new FormData(e.target));
+    rnbApi
+      .post('/reports/', data)
+      .then(() => {
         setSending(false);
         setSuccess(true);
         emptyMsgInput();
 
         /* Store email in cookie */
-        Cookies.set('email', email, { expires: 365 });
+        if (!isAuthenticated) Cookies.set('email', email, { expires: 365 });
 
         // Reload map buildings and reports
         dispatch(Actions.map.reloadBuildings());
@@ -117,7 +101,7 @@ export default function ContributionForm() {
   }, []);
 
   return (
-    <form method="post" action={url} onSubmit={handleSubmit}>
+    <form method="post" action={rnbApiUrl('/reports/')} onSubmit={handleSubmit}>
       <input
         name="rnb_id"
         type="hidden"
@@ -136,19 +120,23 @@ export default function ContributionForm() {
         placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB. "
       ></textarea>
 
-      <div className="fr-mb-1v">
-        <label className="fr-text--sm ">
-          Suivez le traitement de votre signalement
-        </label>
-      </div>
-      <input
-        onChange={changeEmail}
-        value={email}
-        name="email"
-        type="email"
-        className="fr-input fr-text--sm fr-mb-2v"
-        placeholder="Votre adresse email (optionnelle)"
-      />
+      {!isAuthenticated && (
+        <>
+          <div className="fr-mb-1v">
+            <label className="fr-text--sm ">
+              Suivez le traitement de votre signalement
+            </label>
+          </div>
+          <input
+            onChange={changeEmail}
+            value={email}
+            name="email"
+            type="email"
+            className="fr-input fr-text--sm fr-mb-2v"
+            placeholder="Votre adresse email (optionnelle)"
+          />
+        </>
+      )}
       <Button disabled={sending} size="small" type="submit">
         {sending && <span>Envoi en cours ...</span>}
         {!sending && <span>Envoyer mon signalement</span>}
@@ -158,12 +146,6 @@ export default function ContributionForm() {
           <Badge small severity="success">
             Signalement envoyé. Merci.
           </Badge>
-          {summerGamesMessage && (
-            <div
-              className={styles.summerGameMessage}
-              dangerouslySetInnerHTML={{ __html: summerGamesMessage }}
-            ></div>
-          )}
         </div>
       )}
     </form>
