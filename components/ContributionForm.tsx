@@ -20,9 +20,10 @@ import Badge from '@codegouvfr/react-dsfr/Badge';
 // @ts-ignore
 import Cookies from 'js-cookie';
 import { Actions, RootState } from '@/stores/store';
+import { rnbApi, rnbApiUrl } from '@/utils/rnbApi';
 
 export default function ContributionForm() {
-  const url = process.env.NEXT_PUBLIC_API_BASE + '/contributions/?ranking=true';
+  const query = { ranking: true };
   const selectedBuilding = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
@@ -58,15 +59,10 @@ export default function ContributionForm() {
 
     // submit the form to the url
     let data = new FormData(e.target);
-    fetch(url, {
-      method: 'POST',
-      body: data,
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
+    rnbApi
+      .post<any>('/contributions/', data, { query })
+      .then((data) => {
         // Temporary block for the summer games
-        const data = await res.json();
         if (Object.hasOwn(data, 'contributor_rank')) {
           let pluralS = '';
           if (data.contributor_count > 1) {
@@ -117,7 +113,11 @@ export default function ContributionForm() {
   }, []);
 
   return (
-    <form method="post" action={url} onSubmit={handleSubmit}>
+    <form
+      method="post"
+      action={rnbApiUrl('/contributions/', query)}
+      onSubmit={handleSubmit}
+    >
       <input
         name="rnb_id"
         type="hidden"

@@ -57,7 +57,7 @@ test.describe('Signalements', () => {
     );
 
     await httpMocker.install();
-    httpMocker.get('/reports/stats/', emptyReportStats);
+    httpMocker.get('/reports/stats/?from=site', emptyReportStats);
     httpMocker.get(
       `/buildings/${buildingSegur.rnb_id}/?from=site&withPlots=1`,
       buildingSegur,

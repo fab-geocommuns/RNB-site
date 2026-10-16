@@ -42,7 +42,7 @@ describe('unsubscribeFromNotifications', () => {
       email: 'auteur@exemple.fr',
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      'http://api.test/api/alpha/notifications/unsubscribe/',
+      'http://api.test/api/alpha/notifications/unsubscribe/?from=site',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ token: 'jeton' }),

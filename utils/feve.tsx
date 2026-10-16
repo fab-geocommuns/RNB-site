@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { rnbApi } from '@/utils/rnbApi';
 
 export interface FeveData {
   department_code: string;
@@ -14,13 +15,9 @@ export const useFeveData = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = new URL(process.env.NEXT_PUBLIC_API_BASE + `/feves/`);
-
-        const response = await fetch(url, {
+        const data = await rnbApi.get<FeveData[]>('/feves/', {
           cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
         });
-        const data = await response.json();
 
         const sortedData = data.sort((a: FeveData, b: FeveData) =>
           a.department_name.localeCompare(b.department_name),
