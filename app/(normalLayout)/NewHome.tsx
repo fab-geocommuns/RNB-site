@@ -9,18 +9,20 @@ import { getBreakingNews, getUseCases } from '@/utils/blog';
 
 import { getDatabases } from '@/utils/databases';
 
-export const revalidate = 10;
+// External data is cached for 5 minutes. A failing call only hides its block.
+const HOME_DATA_REVALIDATE = 300;
+
+const logError = (source: string) => (error: unknown) => {
+  console.error(`Error fetching ${source}:`, error);
+  return null;
+};
 
 export default async function Home() {
-  const breakingNews = await getBreakingNews();
-  const useCases = await getUseCases();
-
-  let availableDatabases = null;
-  try {
-    availableDatabases = await getDatabases();
-  } catch (error) {
-    console.error('Error fetching databases:', error);
-  }
+  const [breakingNews, useCases, availableDatabases] = await Promise.all([
+    getBreakingNews(HOME_DATA_REVALIDATE).catch(logError('breaking news')),
+    getUseCases(1, HOME_DATA_REVALIDATE).catch(logError('use cases')),
+    getDatabases(HOME_DATA_REVALIDATE).catch(logError('databases')),
+  ]);
 
   return (
     <>
