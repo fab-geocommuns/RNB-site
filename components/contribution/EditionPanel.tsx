@@ -13,7 +13,7 @@ import GenericPanel from '@/components/panel/GenericPanel';
 import EditionButton from '@/components/contribution/EditionButton';
 import BuildingActivationToggle from './BuildingActivationToggle';
 import PanelTabs from '@/components/panel/PanelTabs';
-import { useRNBFetch } from '@/utils/useRNBFetch';
+import { useRnbApi } from '@/utils/useRnbApi';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import { BuildingAddressType } from './types';
 import { Loader } from '@/components/Loader';
@@ -32,11 +32,7 @@ import { ShapeInteractionMode } from '@/stores/edition/edition-slice';
 import BuildingMainAttributes from '@/components/BuildingMainAttributes';
 import { ValidatorNames } from '@/components/ValidatorNames';
 import panelStyles from '@/styles/panel.module.scss';
-import {
-  throwErrorMessageForHumans,
-  toasterError,
-  toasterSuccess,
-} from './toaster';
+import { toasterError, toasterSuccess } from './toaster';
 import SplitPanel from './SplitPanel';
 import ValidationToggler from '../ValidationToggler';
 import { useAutoActivateDemolishedLayer } from '@/components/map/useAutoActivateDemolishedLayer';
@@ -94,7 +90,7 @@ function EditSelectedBuildingPanelContent({
     },
   );
 
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
 
   useEffect(() => {
     setNewStatus(selectedBuilding.status);
@@ -108,7 +104,6 @@ function EditSelectedBuildingPanelContent({
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
 
     let data: { [key: string]: any } = {
       status: newStatus,
@@ -120,21 +115,13 @@ function EditSelectedBuildingPanelContent({
       data['shape'] = geojsonToReducedPrecisionWKT(buildingNewShape);
     }
     try {
-      const response = await fetch(url, {
-        body: JSON.stringify(data),
-        method: 'PATCH',
-      });
-
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      } else {
-        setCommentValue('');
-        // force the map to reload the building, to immediatly show the modifications made
-        dispatch(Actions.map.reloadBuildings());
-        dispatch(Actions.edition.setBuildingNewShape(null));
-        toasterSuccess(dispatch, 'Modification enregistrée');
-        await dispatch(Actions.map.selectBuilding(rnbId));
-      }
+      await rnbApi.patch(`/buildings/${selectedBuilding.rnb_id}/`, data);
+      setCommentValue('');
+      // force the map to reload the building, to immediatly show the modifications made
+      dispatch(Actions.map.reloadBuildings());
+      dispatch(Actions.edition.setBuildingNewShape(null));
+      toasterSuccess(dispatch, 'Modification enregistrée');
+      await dispatch(Actions.map.selectBuilding(rnbId));
       setIsLoading(false);
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
@@ -149,15 +136,12 @@ function EditSelectedBuildingPanelContent({
   };
 
   const toggleBuildingActivation = async (isActive: boolean) => {
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${selectedBuilding.rnb_id}/`;
-    const data = {
-      is_active: isActive,
-    };
-    const response = await fetch(url, {
-      body: JSON.stringify(data),
-      method: 'PATCH',
-    });
-    if (!response.ok) {
+    try {
+      await rnbApi.patch(`/buildings/${selectedBuilding.rnb_id}/`, {
+        is_active: isActive,
+      });
+    } catch (err) {
+      console.error(err);
       toasterError(
         dispatch,
         `Erreur lors de ${isActive ? "l'activation" : 'la désactivation'} du bâtiment`,
