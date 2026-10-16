@@ -11,7 +11,7 @@ import type {
   Geometry,
 } from 'geojson';
 import type { StyleSpecification } from 'maplibre-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 interface VisuMapReactProps {
   point?: { coordinates: number[] };
