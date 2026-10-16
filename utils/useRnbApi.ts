@@ -2,11 +2,11 @@
 
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
-import { createApi } from '@/utils/api';
+import { createRnbApi } from '@/utils/rnbApi';
 
 // Client API authentifié avec le token de la session next-auth.
-export function useApi() {
+export function useRnbApi() {
   const { data: session } = useSession();
   const token = session?.accessToken;
-  return useMemo(() => createApi({ token }), [token]);
+  return useMemo(() => createRnbApi({ token }), [token]);
 }

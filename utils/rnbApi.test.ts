@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, api, apiUrl, createApi, humanizeApiError } from './api';
+import {
+  RnbApiError,
+  rnbApi,
+  rnbApiUrl,
+  createRnbApi,
+  humanizeApiError,
+} from './rnbApi';
 import { UNEXPECTED_ERROR_MESSAGE } from './actionResult';
 
 const fetchMock = vi.fn();
@@ -15,9 +21,9 @@ afterEach(() => {
   fetchMock.mockReset();
 });
 
-describe('apiUrl', () => {
+describe('rnbApiUrl', () => {
   it('préfixe la base, ajoute from=site et ignore les paramètres vides', () => {
-    expect(apiUrl('/buildings/ABC/', { withPlots: 1, foo: undefined })).toBe(
+    expect(rnbApiUrl('/buildings/ABC/', { withPlots: 1, foo: undefined })).toBe(
       'https://api.test/api/alpha/buildings/ABC/?from=site&withPlots=1',
     );
   });
@@ -40,15 +46,18 @@ describe('humanizeApiError', () => {
   });
 });
 
-describe('apiRequest', () => {
+describe('rnbApiRequest', () => {
   it('sérialise le body, pose le token et parse le JSON', async () => {
     fetchMock.mockResolvedValue(
       new Response(JSON.stringify({ rnb_id: 'X' }), { status: 201 }),
     );
 
-    const data = await createApi({ token: 'tok' }).post('/buildings/merge/', {
-      rnb_ids: ['A', 'B'],
-    });
+    const data = await createRnbApi({ token: 'tok' }).post(
+      '/buildings/merge/',
+      {
+        rnb_ids: ['A', 'B'],
+      },
+    );
 
     expect(data).toEqual({ rnb_id: 'X' });
     const [url, init] = fetchMock.mock.calls[0];
@@ -61,7 +70,7 @@ describe('apiRequest', () => {
 
   it('sérialise aussi une chaîne en JSON', async () => {
     fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
-    await api.post('/x/', 'texte');
+    await rnbApi.post('/x/', 'texte');
     const [, init] = fetchMock.mock.calls[0];
     expect(init.body).toBe('"texte"');
     expect(init.headers.get('Content-Type')).toBe('application/json');
@@ -71,7 +80,7 @@ describe('apiRequest', () => {
     fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
     const form = new FormData();
     form.set('email', 'a@b.fr');
-    await api.post('/x/', form);
+    await rnbApi.post('/x/', form);
     const [, init] = fetchMock.mock.calls[0];
     expect(init.body).toBe(form);
     expect(init.headers.has('Content-Type')).toBe(false);
@@ -79,29 +88,29 @@ describe('apiRequest', () => {
 
   it('renvoie null sur une réponse 204', async () => {
     fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
-    await expect(api.delete('/x/')).resolves.toBeNull();
+    await expect(rnbApi.delete('/x/')).resolves.toBeNull();
   });
 
-  it("lève une ApiError si un succès n'est pas du JSON", async () => {
+  it("lève une RnbApiError si un succès n'est pas du JSON", async () => {
     fetchMock.mockResolvedValue(
       new Response('<html>maintenance</html>', { status: 200 }),
     );
-    await expect(api.get('/x/')).rejects.toMatchObject({
+    await expect(rnbApi.get('/x/')).rejects.toMatchObject({
       status: 200,
       message: UNEXPECTED_ERROR_MESSAGE,
       data: '<html>maintenance</html>',
     });
   });
 
-  it('lève une ApiError lisible si la réponse est en erreur', async () => {
+  it('lève une RnbApiError lisible si la réponse est en erreur', async () => {
     fetchMock.mockResolvedValue(
       new Response(JSON.stringify({ detail: 'Non autorisé' }), {
         status: 403,
       }),
     );
 
-    const request = api.get('/x/');
-    await expect(request).rejects.toBeInstanceOf(ApiError);
+    const request = rnbApi.get('/x/');
+    await expect(request).rejects.toBeInstanceOf(RnbApiError);
     await expect(request).rejects.toMatchObject({
       status: 403,
       message: 'Non autorisé',
@@ -112,7 +121,7 @@ describe('apiRequest', () => {
     fetchMock.mockResolvedValue(
       new Response('<html>502</html>', { status: 502 }),
     );
-    await expect(api.get('/x/')).rejects.toMatchObject({
+    await expect(rnbApi.get('/x/')).rejects.toMatchObject({
       status: 502,
       message: UNEXPECTED_ERROR_MESSAGE,
       data: '<html>502</html>',

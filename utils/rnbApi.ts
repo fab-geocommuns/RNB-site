@@ -2,13 +2,13 @@
 // Centralise : base URL, `?from=site`, sérialisation JSON, token, parsing de la
 // réponse et transformation des erreurs en messages lisibles.
 // Utilisable côté serveur comme côté client ; côté composant authentifié,
-// passer par le hook `useApi()` qui injecte le token de session.
+// passer par le hook `useRnbApi()` qui injecte le token de session.
 
 import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 
 type QueryValue = string | number | boolean | null | undefined;
 
-export type ApiRequestOptions = {
+export type RnbApiRequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   // Sérialisé en JSON, sauf FormData qui part tel quel (multipart).
   body?: unknown;
@@ -18,18 +18,18 @@ export type ApiRequestOptions = {
   signal?: AbortSignal;
 };
 
-export class ApiError extends Error {
+export class RnbApiError extends Error {
   constructor(
     public readonly status: number,
     message: string,
     public readonly data: unknown = null,
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = 'RnbApiError';
   }
 }
 
-export function apiUrl(path: string, query?: Record<string, QueryValue>) {
+export function rnbApiUrl(path: string, query?: Record<string, QueryValue>) {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE}/${path.replace(/^\//, '')}`,
   );
@@ -72,7 +72,7 @@ async function parseBody(response: Response): Promise<unknown> {
   }
 }
 
-export async function apiRequest<T = unknown>(
+export async function rnbApiRequest<T = unknown>(
   path: string,
   {
     method = 'GET',
@@ -81,7 +81,7 @@ export async function apiRequest<T = unknown>(
     token,
     headers,
     signal,
-  }: ApiRequestOptions = {},
+  }: RnbApiRequestOptions = {},
 ): Promise<T> {
   const isFormData = body instanceof FormData;
   const finalHeaders = new Headers(headers);
@@ -92,7 +92,7 @@ export async function apiRequest<T = unknown>(
     finalHeaders.set('Authorization', `Token ${token}`);
   }
 
-  const response = await fetch(apiUrl(path, query), {
+  const response = await fetch(rnbApiUrl(path, query), {
     method,
     headers: finalHeaders,
     body:
@@ -102,21 +102,23 @@ export async function apiRequest<T = unknown>(
 
   const data = await parseBody(response);
   if (!response.ok) {
-    throw new ApiError(response.status, humanizeApiError(data), data);
+    throw new RnbApiError(response.status, humanizeApiError(data), data);
   }
   // Succès mais corps non JSON (page HTML d'un proxy…) : ce n'est pas la
   // réponse attendue de l'API.
   if (typeof data === 'string') {
-    throw new ApiError(response.status, UNEXPECTED_ERROR_MESSAGE, data);
+    throw new RnbApiError(response.status, UNEXPECTED_ERROR_MESSAGE, data);
   }
   return data as T;
 }
 
-type BodylessOptions = Omit<ApiRequestOptions, 'method' | 'body'>;
+type BodylessOptions = Omit<RnbApiRequestOptions, 'method' | 'body'>;
 
-export function createApi(defaults: Pick<ApiRequestOptions, 'token'> = {}) {
-  const request = <T>(path: string, options: ApiRequestOptions) =>
-    apiRequest<T>(path, { ...defaults, ...options });
+export function createRnbApi(
+  defaults: Pick<RnbApiRequestOptions, 'token'> = {},
+) {
+  const request = <T>(path: string, options: RnbApiRequestOptions) =>
+    rnbApiRequest<T>(path, { ...defaults, ...options });
 
   return {
     get: <T>(path: string, options?: BodylessOptions) =>
@@ -132,7 +134,7 @@ export function createApi(defaults: Pick<ApiRequestOptions, 'token'> = {}) {
   };
 }
 
-export type Api = ReturnType<typeof createApi>;
+export type RnbApi = ReturnType<typeof createRnbApi>;
 
 // Appels publics, sans authentification.
-export const api = createApi();
+export const rnbApi = createRnbApi();

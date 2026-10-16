@@ -10,7 +10,7 @@ import { Loader } from '@/components/Loader';
 import styles from '@/styles/contribution/mergePanel.module.scss';
 import editPanelStyles from '@/styles/contribution/editPanel.module.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { useApi } from '@/utils/useApi';
+import { useRnbApi } from '@/utils/useRnbApi';
 import { toasterError, toasterSuccess } from './toaster';
 import HelpButton from './HelpButton';
 export default function MergePanel() {
@@ -24,7 +24,7 @@ export default function MergePanel() {
     (state: RootState) => state.edition.merge.newBuilding,
   );
   const isActive = candidatesIdToMerge.length > 1;
-  const api = useApi();
+  const rnbApi = useRnbApi();
   const isLoading = useSelector((state: RootState) => state.edition.isLoading);
   const [commentValue, setCommentValue] = useState('');
   const candidatesWithAddresses = useSelector((state: RootState) =>
@@ -53,7 +53,7 @@ export default function MergePanel() {
   const handleSubmit = async () => {
     dispatch(Actions.edition.setIsLoading(true));
     try {
-      const data = await api.post<SelectedBuilding>('/buildings/merge/', {
+      const data = await rnbApi.post<SelectedBuilding>('/buildings/merge/', {
         comment: commentValue,
         rnb_ids: candidatesIdToMerge,
         status: 'constructed',
