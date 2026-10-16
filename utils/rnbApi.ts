@@ -43,8 +43,7 @@ export function rnbApiUrl(path: string, query?: Record<string, QueryValue>) {
   return url.toString();
 }
 
-// Même format que `throwErrorMessageForHumans` : `detail` de DRF, sinon
-// « champ : erreur1, erreur2 » par ligne.
+// `detail` de DRF, sinon « champ : erreur1, erreur2 » par ligne.
 export function humanizeApiError(data: unknown): string {
   if (data && typeof data === 'object') {
     if ('detail' in data && typeof data.detail === 'string') {
