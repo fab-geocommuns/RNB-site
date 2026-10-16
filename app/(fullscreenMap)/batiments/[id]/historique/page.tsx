@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import HistoryClient from './HistoryClient';
+import { rnbApi } from '@/utils/rnbApi';
 
 interface PageProps {
   params: Promise<{
@@ -104,14 +105,7 @@ async function fetchBuildingHistory(
   id: string,
 ): Promise<ApiHistoryItem[] | null> {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${id}/history/`,
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch building history');
-    }
-    const apiData: ApiHistoryItem[] = await response.json();
-    return apiData;
+    return await rnbApi.get<ApiHistoryItem[]>(`/buildings/${id}/history/`);
   } catch (error) {
     console.error('Error fetching building history:', error);
     return null;

@@ -6,6 +6,7 @@ import type {
 } from 'next';
 import type { NextAuthOptions } from 'next-auth';
 import { getServerSession } from 'next-auth';
+import { rnbApi } from '@/utils/rnbApi';
 
 export const authOptions = {
   callbacks: {
@@ -42,20 +43,7 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           // We send the credentials to the login API
-          const url = process.env.NEXT_PUBLIC_API_BASE + '/login/';
-          const distantLoginResponse = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: { 'Content-Type': 'application/json' },
-          });
-
-          if (!distantLoginResponse.ok) {
-            return null;
-          }
-
-          const user = await distantLoginResponse.json();
-
-          return user;
+          return await rnbApi.post<any>('/login/', credentials);
         } catch (error) {
           console.error('Auth error:', error);
           return null;
