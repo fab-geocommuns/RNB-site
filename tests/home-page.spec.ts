@@ -55,6 +55,56 @@ test.describe("Page d'accueil", () => {
     await page.waitForURL('**/carte*');
   });
 
+  test('affiche les éditions de la communauté par période', async ({
+    homePage,
+  }) => {
+    const section = homePage.editionActivitySection;
+    // first big number: the editions tile
+    const editionsCount = section.locator('.fr-display--xs').first();
+    await expect(homePage.editionActivityTitle).toHaveText(
+      'En octobre, 42 communes ont amélioré leurs bâtiments',
+    );
+    await expect(editionsCount).toHaveText(/^1\s234$/);
+    await expect(
+      section.getByText('+23 % par rapport à la même période en septembre'),
+    ).toBeVisible();
+    await expect(section.getByText('dont 3 nouveaux')).toBeVisible();
+    await expect(section.getByText('contributrice_test')).toBeVisible();
+    await expect(
+      section.getByText('Contributeur · nouveau_contributeur'),
+    ).toBeVisible();
+
+    await section.getByText('Depuis toujours').click();
+    await expect(editionsCount).toHaveText(/^98\s765$/);
+    await expect(homePage.editionActivityTitle).toHaveText(
+      'Depuis le lancement de l’édition, 42 communes ont amélioré leurs bâtiments',
+    );
+  });
+
+  test('bascule le classement entre organisations, communes et départements', async ({
+    homePage,
+  }) => {
+    const section = homePage.editionActivitySection;
+    await expect(section.getByText('Mairie Test').first()).toBeVisible();
+    await section.getByRole('button', { name: 'Communes' }).click();
+    await expect(
+      section.getByRole('heading', { name: 'Communes les plus éditées' }),
+    ).toBeVisible();
+    await expect(section.getByText('Ville Test')).toBeVisible();
+  });
+
+  test('explique comment se construit le RNB', async ({ homePage }) => {
+    const section = homePage.editionActivitySection;
+    await expect(
+      section.getByRole('heading', { name: 'Comment se construit le RNB ?' }),
+    ).toBeVisible();
+    await expect(section.getByText(/279\s500/)).toBeVisible();
+    await expect(section.getByText(/98\s765/)).toBeVisible();
+    await expect(
+      section.getByRole('link', { name: 'Rejoindre les contributeurs' }),
+    ).toHaveAttribute('href', '/inscription');
+  });
+
   test("empêche l'execution d'un script inline (CSP)", async ({ homePage }) => {
     const msgPromise = homePage.page.waitForEvent('console');
     await homePage.page.evaluate(() => {
