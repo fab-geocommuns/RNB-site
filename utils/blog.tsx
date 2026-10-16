@@ -2,8 +2,10 @@ import { cache } from 'react';
 
 import GhostContentAPI from '@tryghost/content-api';
 
-export const getUseCases = cache(async (page = 1) => {
-  const api = getClient();
+// `revalidate` (seconds) caches the Ghost responses in the Next.js data cache.
+// Without it, Ghost is called on every request.
+export const getUseCases = cache(async (page = 1, revalidate?: number) => {
+  const api = getClient(revalidate);
 
   return api.posts
     .browse({
@@ -59,12 +61,12 @@ export const getPost = cache(async (slug: string) => {
   );
 });
 
-export const getBreakingNews = cache(async () => {
-  const api = getClient();
+export const getBreakingNews = cache(async (revalidate?: number) => {
+  const api = getClient(revalidate);
   return api.pages.read({ id: '659547553d119000087a7f19' });
 });
 
-function getClient() {
+function getClient(revalidate?: number) {
   return new GhostContentAPI({
     url: process.env.NEXT_GHOST_API_URL!,
     key: process.env.NEXT_GHOST_API_KEY!,
@@ -79,7 +81,11 @@ function getClient() {
       );
 
       try {
-        const response = await fetch(apiUrl.toString(), { method, headers });
+        const response = await fetch(apiUrl.toString(), {
+          method,
+          headers,
+          ...(revalidate !== undefined && { next: { revalidate } }),
+        });
         const data = await response.json();
         return { data };
       } catch (error) {
