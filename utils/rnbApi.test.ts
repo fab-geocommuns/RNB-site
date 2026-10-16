@@ -86,6 +86,13 @@ describe('rnbApiRequest', () => {
     expect(init.headers.has('Content-Type')).toBe(false);
   });
 
+  it('garde le token du client si un appel passe token: undefined', async () => {
+    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    await createRnbApi({ token: 'tok' }).get('/x/', { token: undefined });
+    const [, init] = fetchMock.mock.calls[0];
+    expect(init.headers.get('Authorization')).toBe('Token tok');
+  });
+
   it('renvoie null sur une réponse 204', async () => {
     fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
     await expect(rnbApi.delete('/x/')).resolves.toBeNull();

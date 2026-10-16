@@ -118,7 +118,11 @@ export function createRnbApi(
   defaults: Pick<RnbApiRequestOptions, 'token'> = {},
 ) {
   const request = <T>(path: string, options: RnbApiRequestOptions) =>
-    rnbApiRequest<T>(path, { ...defaults, ...options });
+    rnbApiRequest<T>(path, {
+      ...options,
+      // Un `token: undefined` passé à l'appel ne doit pas effacer celui du client.
+      token: options.token ?? defaults.token,
+    });
 
   return {
     get: <T>(path: string, options?: BodylessOptions) =>
