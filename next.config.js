@@ -42,13 +42,13 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-
 // Injected content via Sentry wizard below
 
-const { withSentryConfig } = require('@sentry/nextjs');
+const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
 
-module.exports = withSentryConfig(module.exports, {
+// Sentry est désactivé en dev (`enabled: false` dans les configs) : on évite
+// aussi de l'injecter dans la compilation, ce qui ralentit chaque route.
+const sentryOptions = {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
@@ -88,4 +88,11 @@ module.exports = withSentryConfig(module.exports, {
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
   },
-});
+};
+
+module.exports = (phase) => {
+  if (phase === PHASE_DEVELOPMENT_SERVER) return nextConfig;
+
+  const { withSentryConfig } = require('@sentry/nextjs');
+  return withSentryConfig(nextConfig, sentryOptions);
+};
