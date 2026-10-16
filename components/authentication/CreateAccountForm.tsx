@@ -5,6 +5,7 @@ import { PasswordInput } from '@codegouvfr/react-dsfr/blocks/PasswordInput';
 import { useState } from 'react';
 import Alert from '@codegouvfr/react-dsfr/Alert';
 import Captcha from './Captcha';
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
 
 type CreateAccountErrors = {
   email: string[];
@@ -88,27 +89,22 @@ export default function CreateAccountForm() {
     setCaptchaMounted(false);
 
     try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_API_BASE + '/auth/users/',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            email: values.email,
-            username: values.username,
-            password: values.password,
-            last_name: values.lastName,
-            first_name: values.firstName,
-            captcha_solution: captchaSolution,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-
+      await rnbApi.post('/auth/users/', {
+        email: values.email,
+        username: values.username,
+        password: values.password,
+        last_name: values.lastName,
+        first_name: values.firstName,
+        captcha_solution: captchaSolution,
+      });
+      setSuccess(true);
+    } catch (error) {
+      if (
+        error instanceof RnbApiError &&
+        error.data &&
+        typeof error.data === 'object'
+      ) {
+        const data = error.data as any;
         if (data.detail) {
           setGenericError(data.detail);
           return;
@@ -125,12 +121,6 @@ export default function CreateAccountForm() {
         return;
       }
 
-      if (response.status !== 201) {
-        throw new Error('Account creation did not return a 201 status code');
-      }
-
-      setSuccess(true);
-    } catch (error) {
       setSuccess(false);
       setGenericError(
         'Une erreur est survenue lors de la création de votre compte',
