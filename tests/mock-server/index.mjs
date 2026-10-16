@@ -56,6 +56,23 @@ const server = createServer((req, res) => {
     });
     return;
   }
+  if (method === 'POST' && path === '/api/alpha/auth/pro_connect/exchange/') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const { code } = JSON.parse(raw || '{}');
+      if (code === 'code-valide') {
+        return json(res, 200, {
+          id: 42,
+          token: 'jeton-proconnect',
+          username: 'agent-proconnect',
+          groups: ['Contributors', 'Admins'],
+        });
+      }
+      json(res, 400, { error: 'invalid_code' });
+    });
+    return;
+  }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
   }
