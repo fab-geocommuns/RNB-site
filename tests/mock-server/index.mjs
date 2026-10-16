@@ -11,6 +11,13 @@
  * driven by the `HttpMocker` fixture.
  */
 import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
+
+// Historique servi au rendu serveur de /batiments/<id>/historique (cf.
+// tests/history.spec.ts).
+const HISTORY = JSON.parse(
+  readFileSync(new URL('../fixtures/data/history.json', import.meta.url)),
+);
 
 const PORT = Number(process.env.MOCK_SERVER_PORT || 8001);
 const HOST = process.env.MOCK_SERVER_HOST || '127.0.0.1';
@@ -40,6 +47,12 @@ const server = createServer((req, res) => {
   // RNB API
   if (method === 'GET' && path === '/api/alpha/diffusion_databases') {
     return json(res, 200, []);
+  }
+  if (
+    method === 'GET' &&
+    path === `/api/alpha/buildings/${HISTORY[0].rnb_id}/history/`
+  ) {
+    return json(res, 200, HISTORY);
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
