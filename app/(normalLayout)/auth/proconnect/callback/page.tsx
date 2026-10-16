@@ -15,16 +15,38 @@ export default function ProConnectCallbackPage() {
   const signInCalled = useRef(false);
   const [error, setError] = useState<string | null>(null);
 
-  const token = params.get('token');
-  const username = params.get('username');
+  const code = params.get('code');
   const errorParam = params.get('error');
-  const errorDescription = params.get('error_description');
   const redirect = params.get('redirect');
 
   const destination =
     redirect && isSafeRedirectUrl(redirect) ? redirect : '/edition';
 
   useEffect(() => {
+    // A code is always exchanged, whatever `error` or the current session say:
+    // an unconsumed code stays valid in the URL and could be replayed.
+    if (code) {
+      if (signInCalled.current) return;
+      signInCalled.current = true;
+
+      // Explicit callbackUrl: the default (current URL) would echo the code
+      // into the next-auth callback-url cookie and response.
+      signIn('proconnect', {
+        code,
+        redirect: false,
+        callbackUrl: destination,
+      }).then((result) => {
+        if (result?.error) {
+          setError(
+            'Votre lien de connexion ProConnect est invalide ou a expiré. Veuillez vous reconnecter.',
+          );
+        } else {
+          router.replace(destination);
+        }
+      });
+      return;
+    }
+
     if (status === 'authenticated') {
       router.replace(destination);
       return;
@@ -37,34 +59,8 @@ export default function ProConnectCallbackPage() {
       return;
     }
 
-    if (!token || !username) {
-      setError('Paramètres de connexion manquants.');
-      return;
-    }
-
-    if (signInCalled.current) return;
-    signInCalled.current = true;
-
-    signIn('proconnect', {
-      token,
-      username,
-      redirect: false,
-    }).then((result) => {
-      if (result?.error) {
-        setError("Échec de l'authentification ProConnect.");
-      } else {
-        router.replace(destination);
-      }
-    });
-  }, [
-    token,
-    username,
-    errorParam,
-    errorDescription,
-    status,
-    destination,
-    router,
-  ]);
+    setError('Paramètres de connexion manquants.');
+  }, [code, errorParam, status, destination, router]);
 
   if (error) {
     return (

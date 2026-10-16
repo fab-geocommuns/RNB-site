@@ -66,23 +66,34 @@ export const authOptions = {
       id: 'proconnect',
       name: 'ProConnect',
       credentials: {
-        token: { type: 'text' },
-        username: { type: 'text' },
+        code: { type: 'text' },
       },
       async authorize(credentials) {
-        if (!credentials?.token || !credentials?.username) {
+        if (!credentials?.code) {
           return null;
         }
 
-        // TODO: replace with a call to GET /auth/users/me/ once the
-        // backend endpoint exists, to validate the token and fetch groups.
-        return {
-          id: credentials.username,
-          token: credentials.token,
-          username: credentials.username,
-          groups: ['Contributors'],
-          authProvider: 'proconnect',
-        };
+        try {
+          // Server-side exchange of the one-time code: the token never transits in a URL
+          const url =
+            process.env.NEXT_PUBLIC_API_BASE + '/auth/pro_connect/exchange/';
+          const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({ code: credentials.code }),
+            headers: { 'Content-Type': 'application/json' },
+          });
+
+          if (!response.ok) {
+            return null;
+          }
+
+          const user = await response.json();
+
+          return { ...user, id: String(user.id), authProvider: 'proconnect' };
+        } catch (error) {
+          console.error('ProConnect exchange error:', error);
+          return null;
+        }
       },
     }),
   ],
