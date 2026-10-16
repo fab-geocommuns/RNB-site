@@ -6,7 +6,7 @@ import type {
 } from 'next';
 import type { NextAuthOptions } from 'next-auth';
 import { getServerSession } from 'next-auth';
-import { rnbApi } from '@/utils/rnbApi';
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
 
 export const authOptions = {
   callbacks: {
@@ -45,7 +45,10 @@ export const authOptions = {
           // We send the credentials to the login API
           return await rnbApi.post<any>('/login/', credentials);
         } catch (error) {
-          console.error('Auth error:', error);
+          // Identifiants refusés par l'API : cas attendu, pas une erreur à logger.
+          if (!(error instanceof RnbApiError)) {
+            console.error('Auth error:', error);
+          }
           return null;
         }
       },
