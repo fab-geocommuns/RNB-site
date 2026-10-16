@@ -24,6 +24,97 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
+// Home page "Suivre les modifications" block
+const EDITION_PERIODS = ['current_month', 'last_month', 'all'];
+const EDITIONS_BY_PERIOD = {
+  current_month: 1234,
+  last_month: 5678,
+  all: 98765,
+};
+
+const PERIOD_SINCE = { current_month: '2026-10-01', last_month: '2026-09-01' };
+const MONTHLY = [
+  '2025-11',
+  '2025-12',
+  '2026-01',
+  '2026-02',
+  '2026-03',
+  '2026-04',
+  '2026-05',
+  '2026-06',
+  '2026-07',
+  '2026-08',
+  '2026-09',
+  '2026-10',
+].map((month, i) => ({ month, editions: 300 + i * 100 }));
+
+const editionActivity = (period) => ({
+  period: { key: period, since: PERIOD_SINCE[period] ?? null, until: null },
+  available_periods: EDITION_PERIODS,
+  updated_at: '2026-10-15T14:00:00+02:00',
+  totals: {
+    editions: EDITIONS_BY_PERIOD[period] ?? 0,
+    cities: 42,
+    editors: 7,
+  },
+  previous_period:
+    period === 'all'
+      ? null
+      : {
+          since: '2026-09-01',
+          until: '2026-09-15T12:00:00+02:00',
+          editions: 1000,
+        },
+  monthly: MONTHLY,
+  top: {
+    users: [
+      {
+        rank: 1,
+        username: 'contributrice_test',
+        organization_short_name: 'Mairie Test',
+        count: 800,
+      },
+    ],
+    organizations: [
+      {
+        rank: 1,
+        name: 'Mairie de Test',
+        short_name: 'Mairie Test',
+        count: 800,
+      },
+    ],
+    cities: [
+      {
+        rank: 1,
+        insee_code: '99001',
+        name: 'Ville Test',
+        department: { code: '99', name: 'Département Test' },
+        count: 500,
+      },
+    ],
+    departments: [
+      { rank: 1, code: '99', name: 'Département Test', count: 500 },
+    ],
+  },
+  newcomers: {
+    users: [
+      {
+        username: 'nouveau_contributeur',
+        organization_short_name: null,
+        first_edition_at: '2026-10-03T09:12:00+02:00',
+      },
+    ],
+    cities: [],
+    departments: [],
+    count: period === 'all' ? null : { users: 3, cities: 0, departments: 0 },
+  },
+});
+
+const changeStatsDay = (date, bdtopo, bal) => ({
+  date,
+  events_count: { import_bdtopo: bdtopo, import_bal: bal, contributions: 10 },
+});
+
 const server = createServer((req, res) => {
   const { method, url } = req;
   const u = new URL(url, `http://localhost:${PORT}`);
@@ -40,6 +131,17 @@ const server = createServer((req, res) => {
   // RNB API
   if (method === 'GET' && path === '/api/alpha/diffusion_databases') {
     return json(res, 200, []);
+  }
+  if (method === 'GET' && path === '/api/alpha/editions/activity/') {
+    const period = u.searchParams.get('period') || 'current_month';
+    return json(res, 200, editionActivity(period));
+  }
+  if (method === 'GET' && path === '/api/alpha/buildings/change_stats/') {
+    return json(res, 200, [
+      changeStatsDay('2024-04-15', 120000, 3000),
+      changeStatsDay('2025-04-15', 90000, 4500),
+      changeStatsDay('2026-04-15', 60000, 2000),
+    ]);
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
