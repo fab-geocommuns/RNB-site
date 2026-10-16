@@ -64,6 +64,17 @@ describe('apiRequest', () => {
     await expect(api.delete('/x/')).resolves.toBeNull();
   });
 
+  it("lève une ApiError si un succès n'est pas du JSON", async () => {
+    fetchMock.mockResolvedValue(
+      new Response('<html>maintenance</html>', { status: 200 }),
+    );
+    await expect(api.get('/x/')).rejects.toMatchObject({
+      status: 200,
+      message: UNEXPECTED_ERROR_MESSAGE,
+      data: '<html>maintenance</html>',
+    });
+  });
+
   it('lève une ApiError lisible si la réponse est en erreur', async () => {
     fetchMock.mockResolvedValue(
       new Response(JSON.stringify({ detail: 'Non autorisé' }), {

@@ -108,6 +108,11 @@ export async function apiRequest<T = unknown>(
   if (!response.ok) {
     throw new ApiError(response.status, humanizeApiError(data), data);
   }
+  // Succès mais corps non JSON (page HTML d'un proxy…) : ce n'est pas la
+  // réponse attendue de l'API.
+  if (typeof data === 'string') {
+    throw new ApiError(response.status, UNEXPECTED_ERROR_MESSAGE, data);
+  }
   return data as T;
 }
 
