@@ -10,7 +10,7 @@ type QueryValue = string | number | boolean | null | undefined;
 
 export type ApiRequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  // Objet sérialisé en JSON (FormData et string passent tels quels).
+  // Sérialisé en JSON, sauf FormData qui part tel quel (multipart).
   body?: unknown;
   query?: Record<string, QueryValue>;
   token?: string | null;
@@ -83,9 +83,9 @@ export async function apiRequest<T = unknown>(
     signal,
   }: ApiRequestOptions = {},
 ): Promise<T> {
-  const isRawBody = body instanceof FormData || typeof body === 'string';
+  const isFormData = body instanceof FormData;
   const finalHeaders = new Headers(headers);
-  if (body !== undefined && !isRawBody) {
+  if (body !== undefined && !isFormData) {
     finalHeaders.set('Content-Type', 'application/json');
   }
   if (token) {
@@ -96,11 +96,7 @@ export async function apiRequest<T = unknown>(
     method,
     headers: finalHeaders,
     body:
-      body === undefined
-        ? undefined
-        : isRawBody
-          ? (body as BodyInit)
-          : JSON.stringify(body),
+      body === undefined ? undefined : isFormData ? body : JSON.stringify(body),
     signal,
   });
 

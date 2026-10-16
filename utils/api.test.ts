@@ -59,6 +59,24 @@ describe('apiRequest', () => {
     expect(init.headers.get('Content-Type')).toBe('application/json');
   });
 
+  it('sérialise aussi une chaîne en JSON', async () => {
+    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    await api.post('/x/', 'texte');
+    const [, init] = fetchMock.mock.calls[0];
+    expect(init.body).toBe('"texte"');
+    expect(init.headers.get('Content-Type')).toBe('application/json');
+  });
+
+  it('envoie un FormData tel quel, sans Content-Type forcé', async () => {
+    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    const form = new FormData();
+    form.set('email', 'a@b.fr');
+    await api.post('/x/', form);
+    const [, init] = fetchMock.mock.calls[0];
+    expect(init.body).toBe(form);
+    expect(init.headers.has('Content-Type')).toBe(false);
+  });
+
   it('renvoie null sur une réponse 204', async () => {
     fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
     await expect(api.delete('/x/')).resolves.toBeNull();
