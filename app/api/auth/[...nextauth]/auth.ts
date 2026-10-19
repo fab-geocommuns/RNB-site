@@ -4,8 +4,9 @@ import type {
   NextApiRequest,
   NextApiResponse,
 } from 'next';
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions, User } from 'next-auth';
 import { getServerSession } from 'next-auth';
+import { rnbApi } from '@/utils/rnbApi';
 
 export const authOptions = {
   callbacks: {
@@ -42,20 +43,7 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           // We send the credentials to the login API
-          const url = process.env.NEXT_PUBLIC_API_BASE + '/login/';
-          const distantLoginResponse = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: { 'Content-Type': 'application/json' },
-          });
-
-          if (!distantLoginResponse.ok) {
-            return null;
-          }
-
-          const user = await distantLoginResponse.json();
-
-          return user;
+          return await rnbApi.post<User>('/login/', credentials);
         } catch (error) {
           console.error('Auth error:', error);
           return null;
@@ -75,19 +63,9 @@ export const authOptions = {
 
         try {
           // Server-side exchange of the one-time code: the token never transits in a URL
-          const url =
-            process.env.NEXT_PUBLIC_API_BASE + '/auth/pro_connect/exchange/';
-          const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ code: credentials.code }),
-            headers: { 'Content-Type': 'application/json' },
+          const user = await rnbApi.post<User>('/auth/pro_connect/exchange/', {
+            code: credentials.code,
           });
-
-          if (!response.ok) {
-            return null;
-          }
-
-          const user = await response.json();
 
           return { ...user, id: String(user.id), authProvider: 'proconnect' };
         } catch (error) {
