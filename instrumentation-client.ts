@@ -40,7 +40,7 @@ function loadReplay() {
 if (process.env.NODE_ENV !== 'development' && typeof window !== 'undefined') {
   const scheduleReplay = () =>
     'requestIdleCallback' in window
-      ? window.requestIdleCallback(loadReplay)
+      ? window.requestIdleCallback(loadReplay, { timeout: 5000 })
       : setTimeout(loadReplay, 1000);
   if (document.readyState === 'complete') scheduleReplay();
   else window.addEventListener('load', scheduleReplay, { once: true });
