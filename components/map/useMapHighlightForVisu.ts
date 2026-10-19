@@ -55,7 +55,7 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
   const selectedItem = useSelector(
     (state: RootState) => state.map.selectedItem,
   );
-  // A layer change rebuilds the style, which wipes the feature states: re-apply.
+  // A background change rebuilds the style, which wipes the feature states: re-apply.
   const layers = useSelector((state: RootState) => state.map.layers);
 
   const selectedSources = selectedItem ? getItemSources(selectedItem) : [];

@@ -55,6 +55,8 @@ type BuildingsOptions = {
   // In edition mode, the "validated" display is toggled via the extra layer.
   // In visu mode it is always on (non conditional).
   editionMode?: boolean;
+  // Reinstall the layers only: no building tile is fetched again
+  keepSources?: boolean;
 };
 
 const LAYERS_BDGS_ALL = [...LAYERS_BDGS_POINT_ALL, ...LAYERS_BDGS_SHAPE_ALL];
@@ -69,19 +71,22 @@ const getLayerAboveBuildings = (map: maplibregl.Map) => {
   return layerIds.slice(firstBuildingIndex).find((id) => !isBuildingLayer(id));
 };
 
-export const installBuildings = (
+export const installBuildings = async (
   map: maplibregl.Map,
   options: BuildingsOptions,
 ) => {
   // A reinstall adds the layers on top: remember what was drawn above them (reports, ADS…)
   const layerAboveBuildings = getLayerAboveBuildings(map);
 
-  // First, we remove buildings layers and source
-  removeBuildings(map, options.layers);
+  // A source cannot be removed while a layer uses it
+  removeBuildingsLayers(map);
+  if (!options.keepSources) {
+    removeBuildingsSource(map);
+    installBuildingsSource(map);
+  }
 
-  // Then, we install the source
-  installBuildingsSource(map);
-  installBuildingsLayers(map, options);
+  // Awaited: the layers may wait for an image before being added
+  await installBuildingsLayers(map, options);
 
   if (layerAboveBuildings && map.getLayer(layerAboveBuildings)) {
     map
@@ -160,15 +165,15 @@ const DEMOLISHED_CIRCLE_PAINT: maplibregl.CircleLayerSpecification['paint'] = {
   'circle-color': DEMOLISHED_COLOR,
 };
 
-const installBuildingsLayers = (
+const installBuildingsLayers = async (
   map: maplibregl.Map,
   options: BuildingsOptions,
 ) => {
   if (options.layers.buildings == 'point') {
-    installBuildingsPointsLayers(map, options);
+    await installBuildingsPointsLayers(map, options);
   }
   if (options.layers.buildings == 'polygon') {
-    installBuildingsShapesLayers(map, options);
+    await installBuildingsShapesLayers(map, options);
   }
 };
 
@@ -476,31 +481,12 @@ const installBuildingsShapesLayers = async (
   }
 };
 
-export const removeBuildings = (map: maplibregl.Map, layers: MapLayers) => {
-  if (layers.buildings == 'point') {
-    removeBuildingsPoints(map);
-  }
-  if (layers.buildings == 'polygon') {
-    removeBuildingsShapes(map);
-  }
-};
-
-const removeBuildingsPoints = (map: maplibregl.Map) => {
-  LAYERS_BDGS_POINT_ALL.forEach((l) => {
+const removeBuildingsLayers = (map: maplibregl.Map) => {
+  LAYERS_BDGS_ALL.forEach((l) => {
     if (map.getLayer(l)) {
       map.removeLayer(l);
     }
   });
-  removeBuildingsSource(map);
-};
-
-const removeBuildingsShapes = (map: maplibregl.Map) => {
-  LAYERS_BDGS_SHAPE_ALL.forEach((l) => {
-    if (map.getLayer(l)) {
-      map.removeLayer(l);
-    }
-  });
-  removeBuildingsSource(map);
 };
 
 const removeBuildingsSource = (map: maplibregl.Map) => {
