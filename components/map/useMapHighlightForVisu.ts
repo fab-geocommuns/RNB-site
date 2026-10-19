@@ -93,16 +93,21 @@ export const useMapHighlightForVisu = (map?: maplibregl.Map) => {
     // `sourcedata` fires, so this can't share that one-shot listener below.
     // `styledata` fires again on every layer addition, so retrying here
     // until the layer exists costs nothing once it does.
+    // moveLayer always marks the style changed, which fires styledata again:
+    // only move a layer that is out of place, or this loops forever
     const promoteOrRestoreDemolishedFill = () => {
       for (const [
         demolishedFillLayer,
         regularFillLayer,
       ] of DEMOLISHED_FILL_LAYERS) {
         if (!map.getLayer(demolishedFillLayer)) continue;
+        const order = map.getLayersOrder();
+        const index = order.indexOf(demolishedFillLayer);
         if (isDemolishedSelected) {
-          map.moveLayer(demolishedFillLayer);
+          if (index !== order.length - 1) map.moveLayer(demolishedFillLayer);
         } else if (map.getLayer(regularFillLayer)) {
-          map.moveLayer(demolishedFillLayer, regularFillLayer);
+          if (order[index + 1] !== regularFillLayer)
+            map.moveLayer(demolishedFillLayer, regularFillLayer);
         }
       }
     };

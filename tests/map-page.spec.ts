@@ -40,6 +40,27 @@ test.describe('Carte', () => {
     await expect(mapPage.buildingDetailsPannel).toContainText(/ségur/i);
   });
 
+  test('le calque des bâtiments démolis ne redessine pas la carte en boucle', async ({
+    page,
+    httpMocker,
+    mapController,
+    browserName,
+  }) => {
+    test.skip(
+      browserName === 'firefox',
+      'Pas de support de WebGL2 sur Firefox headless',
+    );
+
+    await httpMocker.install();
+    await page.goto('/carte?extra_layers=demolished');
+
+    // A style changed on every frame never lets the map report itself loaded
+    const map = await mapController('mainMap').getMapInstance();
+    await expect
+      .poll(() => map.evaluate((mapInstance) => mapInstance.loaded()))
+      .toBe(true);
+  });
+
   test('activer le cadastre ne recharge pas les tuiles des bâtiments et des permis', async ({
     page,
     mapPage,
