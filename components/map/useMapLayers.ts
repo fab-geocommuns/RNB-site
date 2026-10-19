@@ -118,6 +118,27 @@ const syncExtraLayer = async ({
   }
 };
 
+// Polled: load and idle fire only during a render, and a tile that fails to load triggers none.
+// A removed map never loads: the polling stops with it
+const whenLoaded = (map: maplibregl.Map) =>
+  new Promise<void>((resolve) => {
+    let removed = false;
+    const onRemove = () => {
+      removed = true;
+    };
+    map.once('remove', onRemove);
+    const check = () => {
+      if (removed) return;
+      if (!map.loaded()) {
+        setTimeout(check, 16);
+        return;
+      }
+      map.off('remove', onRemove);
+      resolve();
+    };
+    check();
+  });
+
 // validated and demolished change how the buildings are drawn, not which tiles are loaded
 const sameBuildingLayers = (a: MapLayers, b: MapLayers) =>
   a.buildings === b.buildings &&
@@ -204,7 +225,7 @@ export const useMapLayers = ({
       map.setStyle(style, { diff: false });
       await new Promise((resolve) => map.once('style.load', resolve));
       // RNB layers wait for the background to show: their tiles never delay it
-      await new Promise((resolve) => map.once('idle', resolve));
+      await whenLoaded(map);
       await installAll(map, options);
     } else {
       if (!sameBuildingLayers(applied, layers)) {
