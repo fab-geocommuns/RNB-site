@@ -35,15 +35,22 @@ export default function ProConnectCallbackPage() {
         code,
         redirect: false,
         callbackUrl: destination,
-      }).then((result) => {
-        if (result?.error) {
+      })
+        .then((result) => {
+          if (result?.error) {
+            setError(
+              'Votre lien de connexion ProConnect est invalide ou a expiré. Veuillez vous reconnecter.',
+            );
+          } else {
+            router.replace(destination);
+          }
+        })
+        // Network failure or non-JSON response (proxy 502): signIn rejects
+        .catch(() => {
           setError(
-            'Votre lien de connexion ProConnect est invalide ou a expiré. Veuillez vous reconnecter.',
+            "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.",
           );
-        } else {
-          router.replace(destination);
-        }
-      });
+        });
       return;
     }
 
