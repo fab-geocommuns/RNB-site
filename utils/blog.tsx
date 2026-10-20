@@ -7,19 +7,12 @@ import GhostContentAPI from '@tryghost/content-api';
 export const getUseCases = cache(async (page = 1, revalidate?: number) => {
   const api = getClient(revalidate);
 
-  return api.posts
-    .browse({
-      filter: 'tag:casusage',
-      page: page,
-      limit: 10,
-      include: ['tags', 'authors'],
-    })
-    .then((posts) => {
-      return posts;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  return api.posts.browse({
+    filter: 'tag:casusage',
+    page: page,
+    limit: 10,
+    include: ['tags', 'authors'],
+  });
 });
 
 export const getPosts = cache(async (page = 1) => {
@@ -80,18 +73,16 @@ function getClient(revalidate?: number) {
         apiUrl.searchParams.set(key, params[key]),
       );
 
-      try {
-        const response = await fetch(apiUrl.toString(), {
-          method,
-          headers,
-          ...(revalidate !== undefined && { next: { revalidate } }),
-        });
-        const data = await response.json();
-        return { data };
-      } catch (error) {
-        console.error(error);
-        return { data: {} };
+      const response = await fetch(apiUrl.toString(), {
+        method,
+        headers,
+        ...(revalidate !== undefined && { next: { revalidate } }),
+      });
+      if (!response.ok) {
+        // Pathname only: the query string holds the Ghost API key
+        throw new Error(`Ghost ${response.status} on ${apiUrl.pathname}`);
       }
+      return { data: await response.json() };
     },
   });
 }

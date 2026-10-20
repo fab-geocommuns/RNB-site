@@ -9,6 +9,9 @@ export async function getDatabases(
     url,
     revalidate !== undefined ? { next: { revalidate } } : undefined,
   );
+  if (!res.ok) {
+    throw new Error(`GET ${url} failed with ${res.status}`);
+  }
   const data = await res.json();
   return data.sort(
     (a: DiffusionDatabase, b: DiffusionDatabase) =>

@@ -4,6 +4,7 @@ import Databases from '@/components/home/Databases';
 import ToolsAndServices from '@/components/home/ToolsAndServices';
 import Governance from '@/components/home/Governance';
 import ResultsConfettiBlock from '@/components/games/summerGames/resultsConfettiBlock';
+import * as Sentry from '@sentry/nextjs';
 
 import { getBreakingNews, getUseCases } from '@/utils/blog';
 
@@ -14,6 +15,7 @@ const HOME_DATA_REVALIDATE = 300;
 
 const logError = (source: string) => (error: unknown) => {
   console.error(`Error fetching ${source}:`, error);
+  Sentry.captureException(error, { tags: { source } });
   return null;
 };
 
