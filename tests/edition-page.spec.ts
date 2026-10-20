@@ -157,5 +157,47 @@ test.describe('Edition', () => {
         editionPage.toaster.getByText(/1er.*n'est pas valide/i),
       ).toBeVisible();
     });
+
+    test('doit afficher le message du back quand la scission est refusée', async ({
+      browserName,
+      editionPage,
+      httpMocker,
+      mapController,
+    }) => {
+      test.skip(
+        browserName === 'firefox',
+        'Pas de support de WebGL2 sur Firefox headless',
+      );
+
+      httpMocker.get(
+        `/buildings/${buildingToSplit.rnb_id}/?from=site&withPlots=1`,
+        buildingToSplit,
+      );
+      httpMocker.post(`/buildings/${buildingToSplit.rnb_id}/split/?from=site`, {
+        status: 403,
+        body: { detail: "Vous n'avez pas les droits" },
+      });
+
+      await editionPage.goToBuilding(buildingToSplit.rnb_id);
+      await expect(editionPage.panel).toBeVisible();
+
+      const map = mapController('mainMap');
+      await map.fitMapToBounds([2.421027, 48.844011, 2.428424, 48.84669]);
+
+      await editionPage.startSplit();
+      await editionPage.drawCutLine(map, [
+        [2.424, 48.8449],
+        [2.424, 48.8456],
+      ]);
+
+      await editionPage.validateCut();
+      await editionPage.clickNext();
+      await editionPage.clickNext();
+      await editionPage.confirmSplit();
+
+      await expect(
+        editionPage.toaster.getByText("Vous n'avez pas les droits"),
+      ).toBeVisible();
+    });
   });
 });
