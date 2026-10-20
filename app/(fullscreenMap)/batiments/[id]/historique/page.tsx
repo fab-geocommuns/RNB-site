@@ -103,19 +103,17 @@ export async function generateMetadata({
 async function fetchBuildingHistory(
   id: string,
 ): Promise<ApiHistoryItem[] | null> {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${id}/history/`,
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${id}/history/`,
+  );
+  if (response.status === 404) return null;
+  // Any other error is thrown: caught by Sentry and shown by error.tsx
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch building history for ${id}: HTTP ${response.status}`,
     );
-    if (!response.ok) {
-      throw new Error('Failed to fetch building history');
-    }
-    const apiData: ApiHistoryItem[] = await response.json();
-    return apiData;
-  } catch (error) {
-    console.error('Error fetching building history:', error);
-    return null;
   }
+  return response.json();
 }
 
 export default async function BuildingHistoryDetail({ params }: PageProps) {
