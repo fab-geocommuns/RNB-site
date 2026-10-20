@@ -76,11 +76,12 @@ désactive volontairement le cache ; ne pas le « corriger » sans en parler.
 
 ### Appels API et authentification
 
-1. Côté client authentifié : `useRNBFetch()` (`utils/useRNBFetch.tsx`) ajoute
-   `Authorization: Token <accessToken>` et `?from=site`. Ne pas appeler `fetch` nu pour une
-   écriture. Les panneaux d'édition (`components/contribution/*Panel.tsx`) l'utilisent.
-2. Lectures publiques : helpers de `utils/requests.ts` et URL construites dans les slices
-   (`bdgApiUrl`) ou `logic/`.
+1. Tout appel à RNB-coeur passe par le client de `utils/rnbApi.ts` : `useRnbApi()` côté
+   composant authentifié (token de session), `rnbApi` pour un appel public,
+   `createRnbApi({ token })` côté serveur. Il ajoute la base URL et `?from=site`, sérialise le
+   body et lève une `RnbApiError` (`status`, `data`, `message` prêt à afficher) en cas d'erreur.
+   Ne pas appeler `fetch` nu. Les URL de tuiles MapLibre restent construites à la main.
+2. Lectures publiques partagées par les slices : `utils/requests.ts`.
 3. Server actions : `actions/auth.ts` (mot de passe).
 4. next-auth (`app/api/auth/[...nextauth]/auth.ts`) : provider `credentials` qui délègue à
    `POST /login/` de l'API, provider `proconnect` qui **ne valide pas le token** et code en dur

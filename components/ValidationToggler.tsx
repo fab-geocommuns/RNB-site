@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Actions, AppDispatch } from '@/stores/store';
-import { SelectedBuilding, bdgApiUrl } from '@/stores/map/map-slice';
-import { useRNBFetch } from '@/utils/useRNBFetch';
+import { SelectedBuilding } from '@/stores/map/map-slice';
+import { useRnbApi } from '@/utils/useRnbApi';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import { hasUserValidated } from '@/utils/validations';
 import { fetchUserTrophiesSafe, findNewlyWonTrophies } from '@/utils/trophies';
@@ -29,7 +29,7 @@ export default function ValidationToggler({
   building,
 }: ValidationTogglerProps) {
   const dispatch: AppDispatch = useDispatch();
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
   const { user } = useRNBAuthentication();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,40 +56,41 @@ export default function ValidationToggler({
       // Photo des trophées AVANT validation, pour détecter par différence ceux
       // gagnés grâce à cette validation (robuste, sans dépendre d'horodatage).
       const trophiesBefore = checkTrophies
-        ? await fetchUserTrophiesSafe(username!, fetch)
+        ? await fetchUserTrophiesSafe(username!, rnbApi)
         : [];
 
-      const response = await fetch(bdgApiUrl(`${building.rnb_id}/`), {
-        method: 'PATCH',
-        body: JSON.stringify({ is_valid: isValid }),
-      });
-      if (!response.ok) {
+      try {
+        await rnbApi.patch(`/buildings/${building.rnb_id}/`, {
+          is_valid: isValid,
+        });
+      } catch (err) {
+        console.error(err);
         toasterError(
           dispatch,
           'Erreur lors de la mise à jour de la validation',
         );
-      } else {
-        toasterSuccess(
-          dispatch,
-          isValid ? 'Validation enregistrée' : 'Validation retirée',
-        );
-        // Re-consultation du bâtiment pour rafraîchir validated_by (réponse 204).
-        await dispatch(Actions.map.selectBuilding(building.rnb_id));
-        dispatch(Actions.map.reloadBuildings());
+        return;
+      }
+      toasterSuccess(
+        dispatch,
+        isValid ? 'Validation enregistrée' : 'Validation retirée',
+      );
+      // Re-consultation du bâtiment pour rafraîchir validated_by (réponse 204).
+      await dispatch(Actions.map.selectBuilding(building.rnb_id));
+      dispatch(Actions.map.reloadBuildings());
 
-        // Détection des trophées gagnés grâce à cette validation (nouveau type
-        // ou passage à un palier supérieur).
-        if (checkTrophies) {
-          const trophiesAfter = await fetchUserTrophiesSafe(username!, fetch);
-          const won = findNewlyWonTrophies(trophiesBefore, trophiesAfter);
-          if (won.length > 0) {
-            // On stocke les trophées gagnés dans le store (et non dans un état
-            // local) : ce composant n'est rendu que tant que le bâtiment n'a
-            // aucune validation, il est donc démonté dès que la validation
-            // aboutit. La modale est affichée par `TrophyWon`, monté à un
-            // endroit stable de l'arbre (cf. `useMap`).
-            dispatch(Actions.app.setWonTrophies(won));
-          }
+      // Détection des trophées gagnés grâce à cette validation (nouveau type
+      // ou passage à un palier supérieur).
+      if (checkTrophies) {
+        const trophiesAfter = await fetchUserTrophiesSafe(username!, rnbApi);
+        const won = findNewlyWonTrophies(trophiesBefore, trophiesAfter);
+        if (won.length > 0) {
+          // On stocke les trophées gagnés dans le store (et non dans un état
+          // local) : ce composant n'est rendu que tant que le bâtiment n'a
+          // aucune validation, il est donc démonté dès que la validation
+          // aboutit. La modale est affichée par `TrophyWon`, monté à un
+          // endroit stable de l'arbre (cf. `useMap`).
+          dispatch(Actions.app.setWonTrophies(won));
         }
       }
     } catch (err: any) {

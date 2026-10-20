@@ -11,6 +11,13 @@
  * driven by the `HttpMocker` fixture.
  */
 import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
+
+// Historique servi au rendu serveur de /batiments/<id>/historique (cf.
+// tests/history.spec.ts).
+const HISTORY = JSON.parse(
+  readFileSync(new URL('../fixtures/data/history.json', import.meta.url)),
+);
 
 const PORT = Number(process.env.MOCK_SERVER_PORT || 8001);
 const HOST = process.env.MOCK_SERVER_HOST || '127.0.0.1';
@@ -41,6 +48,12 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path === '/api/alpha/diffusion_databases') {
     return json(res, 200, []);
   }
+  if (
+    method === 'GET' &&
+    path === `/api/alpha/buildings/${HISTORY[0].rnb_id}/history/`
+  ) {
+    return json(res, 200, HISTORY);
+  }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
   }
@@ -53,6 +66,23 @@ const server = createServer((req, res) => {
         return json(res, 200, { email: 'auteur@exemple.fr' });
       }
       json(res, 400, { token: ['Lien de désinscription invalide.'] });
+    });
+    return;
+  }
+  if (method === 'POST' && path === '/api/alpha/auth/pro_connect/exchange/') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const { code } = JSON.parse(raw || '{}');
+      if (code === 'code-valide') {
+        return json(res, 200, {
+          id: 42,
+          token: 'jeton-proconnect',
+          username: 'agent-proconnect',
+          groups: ['Contributors', 'Admins'],
+        });
+      }
+      json(res, 400, { error: 'invalid_code' });
     });
     return;
   }
