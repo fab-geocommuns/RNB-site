@@ -51,7 +51,6 @@ export default function ContributionForm() {
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState('');
-  const [summerGamesMessage, setSummerGamesMessage] = useState<string>();
   const dispatch = useDispatch();
 
   const handleSubmit = async (e: any) => {
@@ -63,22 +62,8 @@ export default function ContributionForm() {
     // Connecté, le champ email n'est pas rendu : le back rattache le signalement au compte
     const data = Object.fromEntries(new FormData(e.target));
     rnbApi
-      .post<any>('/reports/', data)
-      .then((data) => {
-        // Temporary block for the summer games
-        if (data && Object.hasOwn(data, 'contributor_rank')) {
-          let pluralS = '';
-          if (data.contributor_count > 1) {
-            pluralS = 's';
-          }
-
-          setSummerGamesMessage(
-            `<b>Vous avez envoyé ${data.contributor_count} signalement${pluralS}</b>.`,
-          );
-        } else {
-          setSummerGamesMessage(undefined);
-        }
-
+      .post('/reports/', data)
+      .then(() => {
         setSending(false);
         setSuccess(true);
         emptyMsgInput();
@@ -161,12 +146,6 @@ export default function ContributionForm() {
           <Badge small severity="success">
             Signalement envoyé. Merci.
           </Badge>
-          {summerGamesMessage && (
-            <div
-              className={styles.summerGameMessage}
-              dangerouslySetInnerHTML={{ __html: summerGamesMessage }}
-            ></div>
-          )}
         </div>
       )}
     </form>
