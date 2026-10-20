@@ -73,14 +73,12 @@ test.describe('Carte', () => {
     );
 
     const buildingTileRequests: string[] = [];
+    const adsTileRequests: string[] = [];
     page.on('request', (request) => {
       const url = request.url();
-      if (
-        url.startsWith(`${API_BASE}/tiles/`) ||
-        url.startsWith(`${API_BASE}/permis/tiles/`)
-      ) {
-        buildingTileRequests.push(url);
-      }
+      if (url.startsWith(`${API_BASE}/tiles/`)) buildingTileRequests.push(url);
+      if (url.startsWith(`${API_BASE}/permis/tiles/`))
+        adsTileRequests.push(url);
     });
 
     await page.goto(
@@ -91,7 +89,9 @@ test.describe('Carte', () => {
       .poll(() => map.evaluate((mapInstance) => mapInstance.loaded()))
       .toBe(true);
     expect(buildingTileRequests.length).toBeGreaterThan(0);
+    expect(adsTileRequests.length).toBeGreaterThan(0);
     buildingTileRequests.length = 0;
+    adsTileRequests.length = 0;
 
     await mapPage.openLayersMenu();
     const plotTilesRequested = page.waitForRequest(/\/plots\/tiles\//);
@@ -102,5 +102,6 @@ test.describe('Carte', () => {
       .toBe(true);
 
     expect(buildingTileRequests).toEqual([]);
+    expect(adsTileRequests).toEqual([]);
   });
 });
