@@ -1,0 +1,39 @@
+[
+  {
+    "rnb_id": "HISTE2E00001",
+    "is_active": true,
+    "shape": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [2.305, 48.85],
+          [2.3055, 48.85],
+          [2.3055, 48.8505],
+          [2.305, 48.8505],
+          [2.305, 48.85]
+        ]
+      ]
+    },
+    "status": "constructed",
+    "point": { "coordinates": [2.30525, 48.85025] },
+    "event": {
+      "id": "e2e-event-update",
+      "type": "update",
+      "author": {
+        "id": 42,
+        "username": "autre-contributeur",
+        "first_name": "Camille",
+        "last_name": "Dupont",
+        "organization_name": null,
+        "organization_short_name": null
+      },
+      "origin": { "type": "user", "id": 1, "details": {} },
+      "details": { "updated_fields": ["status"] },
+      "annotations": []
+    },
+    "ext_ids": [],
+    "updated_at": "2026-09-01T10:00:00Z",
+    "addresses": [],
+    "validated_by": []
+  }
+]

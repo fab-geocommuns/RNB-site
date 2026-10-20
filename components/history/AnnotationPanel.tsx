@@ -9,8 +9,7 @@ import { Tooltip } from '@codegouvfr/react-dsfr/Tooltip';
 
 import styles from '@/styles/history.module.scss';
 import { formatDate, formatTime } from '@/utils/date';
-import { useRNBFetch } from '@/utils/useRNBFetch';
-import { throwErrorMessageForHumans } from '@/components/contribution/toaster';
+import { useRnbApi } from '@/utils/useRnbApi';
 import {
   AnnotationStatus,
   EditionAnnotation,
@@ -20,10 +19,8 @@ import {
   ANNOTATION_STATUS_LABELS,
   ANNOTATION_STATUS_SEVERITY,
   STATUSES_WITH_COMMENT,
-  annotationsApiUrl,
   findMyAnnotation,
 } from '@/logic/annotations';
-import { rollbackApiUrl } from '@/logic/rollback';
 
 type Feedback = { severity: 'success' | 'error'; message: string } | null;
 
@@ -44,7 +41,8 @@ export default function AnnotationPanel({
   currentUsername?: string | null;
   onAnnotationsChange: (eventId: string, next: EditionAnnotation[]) => void;
 }) {
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
+  const annotationsPath = `/editions/${eventId}/annotations/`;
   const myAnnotation = findMyAnnotation(annotations, currentUsername);
 
   const [status, setStatus] = useState<AnnotationStatus>(
@@ -77,14 +75,7 @@ export default function AnnotationPanel({
     }
 
     try {
-      const response = await fetch(annotationsApiUrl(eventId), {
-        method: 'PUT',
-        body: JSON.stringify(body),
-      });
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      }
-      const saved: EditionAnnotation = await response.json();
+      const saved = await rnbApi.put<EditionAnnotation>(annotationsPath, body);
       const others = annotations.filter(
         (a) => a.reviewer.username !== currentUsername,
       );
@@ -110,12 +101,7 @@ export default function AnnotationPanel({
     setFeedback(null);
 
     try {
-      const response = await fetch(annotationsApiUrl(eventId), {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      }
+      await rnbApi.delete(annotationsPath);
       const next = annotations.filter(
         (a) => a.reviewer.username !== currentUsername,
       );
@@ -156,15 +142,10 @@ export default function AnnotationPanel({
     // deux appels sont séquentiels et non transactionnels : si le premier échoue, on
     // n'essaie pas le second.
     try {
-      const annotationResponse = await fetch(annotationsApiUrl(eventId), {
-        method: 'PUT',
-        body: JSON.stringify({ status: 'incorrect', comment: trimmedComment }),
-      });
-      if (!annotationResponse.ok) {
-        await throwErrorMessageForHumans(annotationResponse);
-      }
-      const savedAnnotation: EditionAnnotation =
-        await annotationResponse.json();
+      const savedAnnotation = await rnbApi.put<EditionAnnotation>(
+        annotationsPath,
+        { status: 'incorrect', comment: trimmedComment },
+      );
       const others = annotations.filter(
         (a) => a.reviewer.username !== currentUsername,
       );
@@ -181,13 +162,13 @@ export default function AnnotationPanel({
     }
 
     try {
-      const rollbackResponse = await fetch(rollbackApiUrl(eventId), {
-        method: 'POST',
-        body: JSON.stringify({ comment: trimmedComment }),
+      // Réservé aux membres du groupe "Rollback" côté back (voir
+      // RollbackPermission dans RNB-coeur). Le bouton de rollback est visible
+      // pour tout reviewer, mais l'appel peut échouer avec un 403 si le reviewer
+      // courant n'est pas membre de ce groupe.
+      await rnbApi.post(`/editions/${eventId}/rollback/`, {
+        comment: trimmedComment,
       });
-      if (!rollbackResponse.ok) {
-        await throwErrorMessageForHumans(rollbackResponse);
-      }
       setFeedback({
         severity: 'success',
         message:

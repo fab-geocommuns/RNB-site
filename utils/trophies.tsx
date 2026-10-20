@@ -12,6 +12,7 @@
  * un palier supérieur.
  */
 import { useEffect, useState } from 'react';
+import { RnbApi, rnbApi } from '@/utils/rnbApi';
 import type { MedalColor } from '@/components/games/summerGames/Medal';
 
 export interface Trophy {
@@ -86,30 +87,16 @@ export function findNewlyWonTrophies(
  * Récupère la liste des trophées gagnés par un utilisateur.
  *
  * @param username utilisateur ciblé
- * @param fetchFn fetch à utiliser (permet de passer le fetch authentifié de
- *   `useRNBFetch`). Par défaut, le fetch global.
+ * @param api client à utiliser (permet de passer le client authentifié de
+ *   `useRnbApi`). Par défaut, le client public.
  */
 export async function fetchUserTrophies(
   username: string,
-  fetchFn: typeof fetch = fetch,
+  api: RnbApi = rnbApi,
 ): Promise<Trophy[]> {
-  const url = new URL(
-    process.env.NEXT_PUBLIC_API_BASE +
-      `/user/${encodeURIComponent(username)}/trophies/`,
-  );
-
-  const response = await fetchFn(url, {
+  return api.get<Trophy[]>(`/user/${encodeURIComponent(username)}/trophies/`, {
     cache: 'no-cache',
-    headers: { 'Content-Type': 'application/json' },
   });
-
-  if (!response.ok) {
-    throw new Error(
-      `Impossible de récupérer les trophées (statut ${response.status})`,
-    );
-  }
-
-  return await response.json();
 }
 
 /**
@@ -119,10 +106,10 @@ export async function fetchUserTrophies(
  */
 export async function fetchUserTrophiesSafe(
   username: string,
-  fetchFn: typeof fetch = fetch,
+  api: RnbApi = rnbApi,
 ): Promise<Trophy[]> {
   try {
-    return await fetchUserTrophies(username, fetchFn);
+    return await fetchUserTrophies(username, api);
   } catch (e) {
     console.error(e);
     return [];

@@ -9,12 +9,8 @@ import { BuildingAddressType } from './types';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { geojsonToReducedPrecisionWKT } from '@/utils/geojsonToReducedPrecisionWKT';
 import GenericPanel from '@/components/panel/GenericPanel';
-import { useRNBFetch } from '@/utils/useRNBFetch';
-import {
-  throwErrorMessageForHumans,
-  toasterError,
-  toasterSuccess,
-} from './toaster';
+import { useRnbApi } from '@/utils/useRnbApi';
+import { toasterError, toasterSuccess } from './toaster';
 import MapPointerClaim from '../map/MapPointerClaim';
 import SnapToggle from './SnapToggle';
 import HelpButton from './HelpButton';
@@ -34,7 +30,7 @@ export default function CreationPanel() {
     [],
   );
   const [commentValue, setCommentValue] = useState('');
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
 
   const cancelCreation = () => {
     dispatch(Actions.edition.reset());
@@ -53,7 +49,6 @@ export default function CreationPanel() {
 
   const createBuilding = async () => {
     dispatch(Actions.edition.setIsLoading(true));
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/`;
 
     let data: { [key: string]: any } = {
       status: newStatus,
@@ -62,22 +57,15 @@ export default function CreationPanel() {
     };
     if (commentValue.length) data = { ...data, comment: commentValue };
     try {
-      const response = await fetch(url, {
-        body: JSON.stringify(data),
-        method: 'POST',
-      });
-
-      if (!response.ok) {
-        await throwErrorMessageForHumans(response);
-      } else {
-        // force the map to reload the building, to immediatly show the modifications made
-        dispatch(Actions.map.reloadBuildings());
-        dispatch(Actions.edition.setBuildingNewShape(null));
-        dispatch(Actions.edition.setOperation(null));
-        const data = await response.json();
-        const rnb_id = data.rnb_id;
-        toasterSuccess(dispatch, `Bâtiment ${rnb_id} créé avec succès`);
-      }
+      const { rnb_id } = await rnbApi.post<{ rnb_id: string }>(
+        '/buildings/',
+        data,
+      );
+      // force the map to reload the building, to immediatly show the modifications made
+      dispatch(Actions.map.reloadBuildings());
+      dispatch(Actions.edition.setBuildingNewShape(null));
+      dispatch(Actions.edition.setOperation(null));
+      toasterSuccess(dispatch, `Bâtiment ${rnb_id} créé avec succès`);
     } catch (err: any) {
       toasterError(dispatch, err.message || 'Erreur lors de la modification');
       console.error(err);

@@ -4,25 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useState } from 'react';
 
-export async function throwErrorMessageForHumans(response: Response) {
-  const errorData = await response.json();
-  if (errorData.detail) {
-    throw new Error(errorData.detail);
-  }
-
-  if (typeof errorData === 'object') {
-    const messages = Object.entries(errorData)
-      .map(
-        ([field, messages]) =>
-          `${field} : ${(messages as string[]).join(', ')}`,
-      )
-      .join('\n');
-    throw new Error(messages);
-  }
-
-  throw new Error('Erreur inconnue');
-}
-
 export function toasterSuccess(dispatch: AppDispatch, msg: string) {
   dispatch(
     Actions.edition.setToasterInfos({
