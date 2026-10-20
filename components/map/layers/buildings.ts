@@ -78,6 +78,9 @@ export const installBuildings = async (
   // A reinstall adds the layers on top: remember what was drawn above them (reports, ADS…)
   const layerAboveBuildings = getLayerAboveBuildings(map);
 
+  // Before removing anything: the layers are then re-added in the same frame
+  await loadCheckImage(map);
+
   // A source cannot be removed while a layer uses it
   removeBuildingsLayers(map);
   if (!options.keepSources) {
@@ -85,8 +88,7 @@ export const installBuildings = async (
     installBuildingsSource(map);
   }
 
-  // Awaited: the layers may wait for an image before being added
-  await installBuildingsLayers(map, options);
+  installBuildingsLayers(map, options);
 
   if (layerAboveBuildings && map.getLayer(layerAboveBuildings)) {
     map
@@ -94,6 +96,12 @@ export const installBuildings = async (
       .filter(isBuildingLayer)
       .forEach((id) => map.moveLayer(id, layerAboveBuildings));
   }
+};
+
+const loadCheckImage = async (map: maplibregl.Map) => {
+  if (map.hasImage('checkGreen')) return;
+  const check = await map.loadImage(checkGreenIcon.src);
+  if (!map.hasImage('checkGreen')) map.addImage('checkGreen', check.data);
 };
 
 const installBuildingsSource = (map: maplibregl.Map) => {
@@ -165,19 +173,19 @@ const DEMOLISHED_CIRCLE_PAINT: maplibregl.CircleLayerSpecification['paint'] = {
   'circle-color': DEMOLISHED_COLOR,
 };
 
-const installBuildingsLayers = async (
+const installBuildingsLayers = (
   map: maplibregl.Map,
   options: BuildingsOptions,
 ) => {
   if (options.layers.buildings == 'point') {
-    await installBuildingsPointsLayers(map, options);
+    installBuildingsPointsLayers(map, options);
   }
   if (options.layers.buildings == 'polygon') {
-    await installBuildingsShapesLayers(map, options);
+    installBuildingsShapesLayers(map, options);
   }
 };
 
-const installBuildingsPointsLayers = async (
+const installBuildingsPointsLayers = (
   map: maplibregl.Map,
   { layers }: BuildingsOptions,
 ) => {
@@ -191,13 +199,6 @@ const installBuildingsPointsLayers = async (
   const hasVectorBackground = ['vectorIgnStandard', 'vectorOsm'].includes(
     layers.background,
   );
-
-  if (!map.hasImage('checkGreen')) {
-    const check = await map.loadImage(checkGreenIcon.src);
-    if (!map.hasImage('checkGreen')) {
-      map.addImage('checkGreen', check.data);
-    }
-  }
 
   // Demolished fill added first (vector backgrounds only, like the
   // footprint fill below), so a regular building's opaque footprint still
@@ -326,7 +327,7 @@ const installBuildingsPointsLayers = async (
   }
 };
 
-const installBuildingsShapesLayers = async (
+const installBuildingsShapesLayers = (
   map: maplibregl.Map,
   { layers, selectedBuildingisGreen, editionMode }: BuildingsOptions,
 ) => {
@@ -338,13 +339,6 @@ const installBuildingsShapesLayers = async (
   const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
     layers.background,
   );
-
-  if (validatedActive && !map.hasImage('greenCheck')) {
-    const greenCheck = await map.loadImage(checkGreenIcon.src);
-    if (!map.hasImage('greenCheck')) {
-      map.addImage('greenCheck', greenCheck.data);
-    }
-  }
 
   // Demolished fill added first, so a regular building's fill still sits on
   // top of it and isn't visually eaten by an overlapping demolished one.
@@ -399,7 +393,7 @@ const installBuildingsShapesLayers = async (
         ['==', 'is_validated', true],
       ] as any,
       paint: {
-        'fill-pattern': 'greenCheck',
+        'fill-pattern': 'checkGreen',
         'fill-opacity': isSatellite ? 0.5 : 0.9,
       },
     });
