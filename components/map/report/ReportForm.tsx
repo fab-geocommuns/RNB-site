@@ -4,10 +4,9 @@ import { Actions, AppDispatch } from '@/stores/store';
 import styles from '@/styles/report/form.module.scss';
 import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { useRNBFetch } from '@/utils/useRNBFetch';
+import { useRnbApi } from '@/utils/useRnbApi';
 import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
 import {
-  throwErrorMessageForHumans,
   toasterError,
   toasterSuccess,
 } from '@/components/contribution/toaster';
@@ -19,7 +18,7 @@ import { loginUrl } from '@/utils/useRNBAuthentication';
 type FormAction = 'comment' | 'fix' | 'reject';
 
 export default function ReportForm({ report }: { report: Report }) {
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
   const { isAuthenticated } = useRNBAuthentication();
   const dispatch: AppDispatch = useDispatch();
 
@@ -67,7 +66,6 @@ export default function ReportForm({ report }: { report: Report }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const url = `${process.env.NEXT_PUBLIC_API_BASE}/reports/${report.id}/reply/`;
     const data: { message: string; action: string; email?: string } = {
       message: message,
       action: action,
@@ -78,26 +76,19 @@ export default function ReportForm({ report }: { report: Report }) {
     }
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+      const updatedReport = await rnbApi.post<Report & { feve: Feve | null }>(
+        `/reports/${report.id}/reply/`,
+        data,
+      );
+      // Reload the selected report
+      // use the setSelectedReport redux action to update the report details panel
+      setMessage('');
 
-      if (response.ok) {
-        // Reload the selected report
-        // use the setSelectedReport redux action to update the report details panel
+      dispatch(Actions.report.setSelectedReport(updatedReport));
+      dispatch(Actions.report.setLastReportUpdate());
+      toasterSuccess(dispatch, getSuccessMessage());
 
-        const updatedReport = await response.json();
-        setMessage('');
-
-        dispatch(Actions.report.setSelectedReport(updatedReport));
-        dispatch(Actions.report.setLastReportUpdate());
-        toasterSuccess(dispatch, getSuccessMessage());
-
-        setFoundFeve(updatedReport.feve);
-      } else {
-        await throwErrorMessageForHumans(response);
-      }
+      setFoundFeve(updatedReport.feve);
     } catch (err: any) {
       toasterError(
         dispatch,

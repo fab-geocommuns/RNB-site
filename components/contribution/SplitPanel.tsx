@@ -6,7 +6,8 @@ import {
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import styles from '@/styles/contribution/splitPanel.module.scss';
-import { useRNBFetch } from '@/utils/useRNBFetch';
+import { useRnbApi } from '@/utils/useRnbApi';
+import { RnbApi, RnbApiError } from '@/utils/rnbApi';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,11 +18,7 @@ import HelpButton from './HelpButton';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
-import {
-  throwErrorMessageForHumans,
-  toasterError,
-  toasterSuccess,
-} from './toaster';
+import { toasterError, toasterSuccess } from './toaster';
 import { BuildingAddressType } from './types';
 
 export default function SplitPanel() {
@@ -371,7 +368,7 @@ function SplitBuildingSummaryStep({
 }) {
   const dispatch: AppDispatch = useDispatch();
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
   const [commentValue, setCommentValue] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -385,7 +382,7 @@ function SplitBuildingSummaryStep({
       commentValue,
       setCommentValue,
       dispatch,
-      fetch,
+      rnbApi,
     );
   };
 
@@ -483,21 +480,18 @@ const ordinal = (n: number): string => {
   return `${n}ème`;
 };
 
-const handleErrorResponse = async (
-  response: Response,
-  dispatch: AppDispatch,
-) => {
-  const errorData = await response.json();
-  if (typeof errorData === 'object' && errorData.created_buildings) {
-    const firstKey = Object.keys(errorData.created_buildings)[0];
-    const errorsOnFirstField = Object.values(
-      errorData.created_buildings[firstKey],
-    )[0] as string[];
-    const errorMessage = `Erreur sur le ${ordinal(parseInt(firstKey) + 1)} enfant : ${errorsOnFirstField.join(', ')}`;
-    toasterError(dispatch, errorMessage);
-    return;
+// Erreur de validation sur un enfant (`{"created_buildings": {"0": {"shape": [...]}}}`) :
+// `humanizeApiError` ne sait pas mettre en forme cette erreur imbriquée, on la
+// traite donc avant le message générique.
+const childErrorMessage = (data: any): string | null => {
+  if (!data || typeof data !== 'object' || !data.created_buildings) {
+    return null;
   }
-  await throwErrorMessageForHumans(response);
+  const firstKey = Object.keys(data.created_buildings)[0];
+  const errorsOnFirstField = Object.values(
+    data.created_buildings[firstKey],
+  )[0] as string[];
+  return `Erreur sur le ${ordinal(parseInt(firstKey) + 1)} enfant : ${errorsOnFirstField.join(', ')}`;
 };
 
 const nextChildStep = (
@@ -529,30 +523,27 @@ const handleSplitSubmit = async (
   commentValue: string,
   setCommentValue: (value: string) => void,
   dispatch: AppDispatch,
-  fetch: any,
+  rnbApi: RnbApi,
 ) => {
   dispatch(Actions.edition.setIsLoading(true));
-  const url = `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${splitCandidateId}/split/`;
   let data: { [key: string]: any } = {
     created_buildings: splitChildrenForAPI,
   };
   if (commentValue.length) data = { ...data, comment: commentValue };
   try {
-    const response = await fetch(url, {
-      body: JSON.stringify(data),
-      method: 'POST',
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response, dispatch);
-    } else {
-      // force the map to reload the building, to immediatly show the modifications made
-      dispatch(Actions.map.reloadBuildings());
-      dispatch(Actions.edition.setOperation(null));
-      toasterSuccess(dispatch, 'Bâtiment scindé avec succès');
-      setCommentValue('');
-    }
+    await rnbApi.post(`/buildings/${splitCandidateId}/split/`, data);
+    // force the map to reload the building, to immediatly show the modifications made
+    dispatch(Actions.map.reloadBuildings());
+    dispatch(Actions.edition.setOperation(null));
+    toasterSuccess(dispatch, 'Bâtiment scindé avec succès');
+    setCommentValue('');
   } catch (err: any) {
-    toasterError(dispatch, err.message || 'Erreur lors de la scission');
+    const childError =
+      err instanceof RnbApiError ? childErrorMessage(err.data) : null;
+    toasterError(
+      dispatch,
+      childError || err.message || 'Erreur lors de la scission',
+    );
     console.error(err);
   }
   dispatch(Actions.edition.setIsLoading(false));
