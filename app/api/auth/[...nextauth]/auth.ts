@@ -4,8 +4,9 @@ import type {
   NextApiRequest,
   NextApiResponse,
 } from 'next';
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions, User } from 'next-auth';
 import { getServerSession } from 'next-auth';
+import { rnbApi } from '@/utils/rnbApi';
 
 export const authOptions = {
   callbacks: {
@@ -42,20 +43,7 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           // We send the credentials to the login API
-          const url = process.env.NEXT_PUBLIC_API_BASE + '/login/';
-          const distantLoginResponse = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: { 'Content-Type': 'application/json' },
-          });
-
-          if (!distantLoginResponse.ok) {
-            return null;
-          }
-
-          const user = await distantLoginResponse.json();
-
-          return user;
+          return await rnbApi.post<User>('/login/', credentials);
         } catch (error) {
           console.error('Auth error:', error);
           return null;
@@ -66,23 +54,24 @@ export const authOptions = {
       id: 'proconnect',
       name: 'ProConnect',
       credentials: {
-        token: { type: 'text' },
-        username: { type: 'text' },
+        code: { type: 'text' },
       },
       async authorize(credentials) {
-        if (!credentials?.token || !credentials?.username) {
+        if (!credentials?.code) {
           return null;
         }
 
-        // TODO: replace with a call to GET /auth/users/me/ once the
-        // backend endpoint exists, to validate the token and fetch groups.
-        return {
-          id: credentials.username,
-          token: credentials.token,
-          username: credentials.username,
-          groups: ['Contributors'],
-          authProvider: 'proconnect',
-        };
+        try {
+          // Server-side exchange of the one-time code: the token never transits in a URL
+          const user = await rnbApi.post<User>('/auth/pro_connect/exchange/', {
+            code: credentials.code,
+          });
+
+          return { ...user, id: String(user.id), authProvider: 'proconnect' };
+        } catch (error) {
+          console.error('ProConnect exchange error:', error);
+          return null;
+        }
       },
     }),
   ],
