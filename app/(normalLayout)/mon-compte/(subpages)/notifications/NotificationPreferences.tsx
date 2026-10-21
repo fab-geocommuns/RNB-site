@@ -8,14 +8,14 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
-import { useRNBFetch } from '@/utils/useRNBFetch';
+import { useRnbApi } from '@/utils/useRnbApi';
 
 export default function NotificationPreferences({
   initialSubscribed,
 }: {
   initialSubscribed: boolean;
 }) {
-  const { fetch } = useRNBFetch();
+  const rnbApi = useRnbApi();
   const { status: sessionStatus } = useSession();
   const router = useRouter();
   const [subscribed, setSubscribed] = useState(initialSubscribed);
@@ -28,15 +28,7 @@ export default function NotificationPreferences({
     setSaving(true);
     setFailed(false);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE}/notifications/preferences/`,
-        { method: 'PUT', body: JSON.stringify({ subscribed: checked }) },
-      );
-      if (!response.ok) {
-        throw new Error(
-          `PUT notifications/preferences failed: ${response.status}`,
-        );
-      }
+      await rnbApi.put('/notifications/preferences/', { subscribed: checked });
       // Back/forward navigation would otherwise restore the stale initial value.
       router.refresh();
     } catch (error) {

@@ -29,10 +29,6 @@ export const ANNOTATION_STATUS_SEVERITY: Record<AnnotationStatus, string> = {
   incorrect: 'error',
 };
 
-export function annotationsApiUrl(eventId: string): string {
-  return `${process.env.NEXT_PUBLIC_API_BASE}/editions/${eventId}/annotations/`;
-}
-
 export function findMyAnnotation(
   annotations: EditionAnnotation[],
   username?: string | null,
