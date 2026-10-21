@@ -262,7 +262,7 @@ test.describe('Signalements', () => {
     const reports = [addressReport, missingBuildingReport];
     await serveReportTiles({ page, reports });
     await page.route(
-      (url) => url.pathname.endsWith('/contributions/'),
+      (url) => url.pathname.endsWith('/reports/'),
       async (route) => {
         reports.push(newReport);
         await route.fulfill({ json: {} });
