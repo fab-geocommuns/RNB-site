@@ -22,26 +22,21 @@ const logError = (source: string) => (error: unknown) => {
 };
 
 export default async function Home() {
-  const [breakingNews, useCases, availableDatabases] = await Promise.all([
+  const [
+    breakingNews,
+    useCases,
+    availableDatabases,
+    editionActivities,
+    importStats,
+  ] = await Promise.all([
     getBreakingNews(HOME_DATA_REVALIDATE).catch(logError('breaking news')),
     getUseCases(1, HOME_DATA_REVALIDATE).catch(logError('use cases')),
     getDatabases(HOME_DATA_REVALIDATE).catch(logError('databases')),
+    getEditionActivities(HOME_DATA_REVALIDATE).catch(
+      logError('edition activity'),
+    ),
+    getImportStats(HOME_DATA_REVALIDATE).catch(logError('import stats')),
   ]);
-
-  const [activitiesResult, importsResult] = await Promise.allSettled([
-    getEditionActivities(),
-    getImportStats(),
-  ]);
-  if (activitiesResult.status === 'rejected') {
-    console.error('Error fetching edition activity:', activitiesResult.reason);
-  }
-  if (importsResult.status === 'rejected') {
-    console.error('Error fetching import stats:', importsResult.reason);
-  }
-  const editionActivities =
-    activitiesResult.status === 'fulfilled' ? activitiesResult.value : [];
-  const importStats =
-    importsResult.status === 'fulfilled' ? importsResult.value : null;
 
   return (
     <>
@@ -63,9 +58,9 @@ export default async function Home() {
             <ResultsConfettiBlock />
           </div>
         </div>
-        {(editionActivities.length > 0 || importStats) && (
+        {(editionActivities || importStats) && (
           <EditionActivity
-            activities={editionActivities}
+            activities={editionActivities ?? []}
             imports={importStats}
           />
         )}

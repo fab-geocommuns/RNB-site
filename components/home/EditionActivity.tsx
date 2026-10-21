@@ -10,14 +10,14 @@ import {
 import { Tag } from '@codegouvfr/react-dsfr/Tag';
 
 import {
+  ACTIVITY_PERIODS,
   activityHeadline,
-  defaultPeriod,
+  DEFAULT_PERIOD_KEY,
   EditionActivity as EditionActivityData,
   editionsTrend,
   IMPORT_STATS_SINCE,
   ImportStats,
   monthName,
-  periodLabel,
 } from '@/utils/editionActivity';
 
 type Props = {
@@ -70,10 +70,10 @@ function TrendDetail({ activity }: { activity: EditionActivityData }) {
   if (trend === null || !previous) return null;
 
   const sign = trend > 0 ? '+' : '';
-  const reference =
-    activity.period.key === 'current_month'
-      ? `à la même période en ${monthName(previous.since)}`
-      : `à ${monthName(previous.since)}`;
+  const period = ACTIVITY_PERIODS.find((p) => p.key === activity.period.key);
+  const reference = period
+    ? `aux ${period.label} précédents`
+    : 'à la période précédente';
   return (
     <span
       style={{
@@ -89,10 +89,12 @@ function TrendDetail({ activity }: { activity: EditionActivityData }) {
   );
 }
 
-// Bar chart of the last 12 months, the month of the selected period highlighted
+// Bar chart of the last 12 months, the months covered by the selected window
+// highlighted
 function MonthlySparkline({ activity }: { activity: EditionActivityData }) {
   const max = Math.max(1, ...activity.monthly.map((m) => m.editions));
-  const highlighted = activity.period.since?.slice(0, 7);
+  const firstMonth = activity.period.since?.slice(0, 7);
+  const highlighted = (month: string) => !!firstMonth && month >= firstMonth;
   const description = activity.monthly
     .map((m) => `${monthName(m.month)} : ${formatNumber(m.editions)}`)
     .join(', ');
@@ -101,7 +103,7 @@ function MonthlySparkline({ activity }: { activity: EditionActivityData }) {
     <>
       <div
         role="img"
-        aria-label={`Éditions des 12 derniers mois : ${description}`}
+        aria-label={`Contributions des 12 derniers mois : ${description}`}
         style={{
           display: 'flex',
           alignItems: 'flex-end',
@@ -117,10 +119,9 @@ function MonthlySparkline({ activity }: { activity: EditionActivityData }) {
             style={{
               flex: 1,
               height: `${Math.max(4, (m.editions / max) * 100)}%`,
-              backgroundColor:
-                m.month === highlighted
-                  ? colors.background.actionHigh.blueFrance.default
-                  : colors.background.actionLow.blueFrance.default,
+              backgroundColor: highlighted(m.month)
+                ? colors.background.actionHigh.blueFrance.default
+                : colors.background.actionLow.blueFrance.default,
             }}
           />
         ))}
@@ -448,7 +449,8 @@ function HowItWorks({
             {editions !== null && editions > 0 && (
               <>
                 {' '}
-                <strong>{formatNumber(editions)}</strong> éditions à ce jour.
+                <strong>{formatNumber(editions)}</strong> contributions à ce
+                jour.
               </>
             )}
           </Step>
@@ -469,7 +471,7 @@ function HowItWorks({
 }
 
 export default function EditionActivity({ activities, imports }: Props) {
-  const [periodKey, setPeriodKey] = useState(defaultPeriod(activities));
+  const [periodKey, setPeriodKey] = useState(DEFAULT_PERIOD_KEY);
   const activity =
     activities.find((a) => a.period.key === periodKey) ?? activities[0];
 
@@ -479,14 +481,14 @@ export default function EditionActivity({ activities, imports }: Props) {
   const allTimeEditions =
     activities.find((a) => a.period.key === 'all')?.totals.editions ?? null;
   // the DSFR expects a tuple of 1 to 5 segments; activities is not empty here
-  const segments = activities.slice(0, 5).map((a) => ({
-    label: a.period.since
-      ? monthName(a.period.since).replace(/^./, (c) => c.toUpperCase())
-      : periodLabel(a.period.key),
+  const segments = ACTIVITY_PERIODS.filter((p) =>
+    activities.some((a) => a.period.key === p.key),
+  ).map((p) => ({
+    label: p.label,
     nativeInputProps: {
-      value: a.period.key,
-      checked: a.period.key === activity.period.key,
-      onChange: () => setPeriodKey(a.period.key),
+      value: p.key,
+      checked: p.key === activity.period.key,
+      onChange: () => setPeriodKey(p.key),
     },
   })) as unknown as SegmentedControlProps['segments'];
 
@@ -509,8 +511,8 @@ export default function EditionActivity({ activities, imports }: Props) {
           <h2>{activityHeadline(activity)}</h2>
           <p className={fr.cx('fr-text--lg', 'fr-mb-0')}>
             Des collectivités, des professionnels et des citoyens corrigent
-            chaque jour les bâtiments de leur territoire. Chaque édition est
-            tracée et profite à tous.
+            chaque jour les bâtiments de leur territoire. Chaque contribution
+            est tracée et profite à tous.
           </p>
         </div>
         <div className={fr.cx('fr-col-12', 'fr-col-lg-4')}>
@@ -521,7 +523,7 @@ export default function EditionActivity({ activities, imports }: Props) {
       <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mb-5w')}>
         <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
           <StatTile
-            label="Éditions"
+            label="Contributions"
             value={totals.editions}
             detail={<TrendDetail activity={activity} />}
           >

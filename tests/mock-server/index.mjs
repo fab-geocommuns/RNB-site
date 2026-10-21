@@ -31,15 +31,19 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
-// Home page "Suivre les modifications" block
-const EDITION_PERIODS = ['current_month', 'last_month', 'all'];
+// Home page "La communauté du RNB" block: rolling windows (?days=N) or ?period=all
 const EDITIONS_BY_PERIOD = {
-  current_month: 1234,
-  last_month: 5678,
+  last_7_days: 321,
+  last_30_days: 1234,
+  last_365_days: 5678,
   all: 98765,
 };
 
-const PERIOD_SINCE = { current_month: '2026-10-01', last_month: '2026-09-01' };
+const PERIOD_SINCE = {
+  last_7_days: '2026-10-08T14:00:00+02:00',
+  last_30_days: '2026-09-15T14:00:00+02:00',
+  last_365_days: '2025-10-15T14:00:00+02:00',
+};
 const MONTHLY = [
   '2025-11',
   '2025-12',
@@ -57,7 +61,6 @@ const MONTHLY = [
 
 const editionActivity = (period) => ({
   period: { key: period, since: PERIOD_SINCE[period] ?? null, until: null },
-  available_periods: EDITION_PERIODS,
   updated_at: '2026-10-15T14:00:00+02:00',
   totals: {
     editions: EDITIONS_BY_PERIOD[period] ?? 0,
@@ -68,8 +71,8 @@ const editionActivity = (period) => ({
     period === 'all'
       ? null
       : {
-          since: '2026-09-01',
-          until: '2026-09-15T12:00:00+02:00',
+          since: '2026-08-16T14:00:00+02:00',
+          until: '2026-09-15T14:00:00+02:00',
           editions: 1000,
         },
   monthly: MONTHLY,
@@ -150,7 +153,10 @@ const server = createServer((req, res) => {
     return json(res, 200, HISTORY);
   }
   if (method === 'GET' && path === '/api/alpha/editions/activity/') {
-    const period = u.searchParams.get('period') || 'current_month';
+    const days = u.searchParams.get('days');
+    const period = days
+      ? `last_${days}_days`
+      : u.searchParams.get('period') || 'current_month';
     return json(res, 200, editionActivity(period));
   }
   if (method === 'GET' && path === '/api/alpha/buildings/change_stats/') {

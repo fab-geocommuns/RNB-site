@@ -1,6 +1,8 @@
 // Edition activity (GET /editions/activity/) and import statistics
 // (GET /buildings/change_stats/) displayed on the home page.
 
+import { rnbApi } from '@/utils/rnbApi';
+
 export type EditionActivityDepartment = {
   code: string;
   name: string;
@@ -12,14 +14,13 @@ export type EditionActivity = {
     since: string | null;
     until: string | null;
   };
-  available_periods: string[];
   updated_at: string;
   totals: {
     editions: number;
     cities: number;
     editors: number;
   };
-  // period the edition count is compared with, null for "all"
+  // window of the same length just before, null for "all"
   previous_period: {
     since: string;
     until: string;
@@ -106,14 +107,29 @@ export type ImportStats = {
 // The API rejects change_stats requests starting before this date
 export const IMPORT_STATS_SINCE = '2024-01-01';
 
-const PERIOD_LABELS: Record<string, string> = {
-  current_month: 'Ce mois-ci',
-  last_month: 'Le mois dernier',
-  all: 'Depuis toujours',
+// Periods offered on the home page: rolling windows, compared with the window
+// of the same length just before, and the whole history
+export type ActivityPeriod = {
+  key: string;
+  label: string;
+  query: { days: number } | { period: 'all' };
 };
 
-export function periodLabel(key: string): string {
-  return PERIOD_LABELS[key] ?? key;
+export const ACTIVITY_PERIODS: ActivityPeriod[] = [
+  { key: 'last_7_days', label: '7 jours', query: { days: 7 } },
+  { key: 'last_30_days', label: '30 jours', query: { days: 30 } },
+  { key: 'last_365_days', label: '12 mois', query: { days: 365 } },
+  { key: 'all', label: 'Depuis toujours', query: { period: 'all' } },
+];
+
+export const DEFAULT_PERIOD_KEY = 'last_30_days';
+
+// "last_30_days" → "30 derniers jours", "last_365_days" → "12 derniers mois"
+export function windowLabel(key: string): string | null {
+  const days = Number(key.match(/^last_(\d+)_days$/)?.[1]);
+  if (!days) return null;
+  if (days === 365) return '12 derniers mois';
+  return days > 1 ? `${days} derniers jours` : 'dernier jour';
 }
 
 // "2026-09-01" or "2026-09" → "septembre"
@@ -128,11 +144,10 @@ export function monthName(date: string): string {
 // Short sentence summing up the period, used as the block title
 export function activityHeadline(activity: EditionActivity): string {
   const { editions, cities } = activity.totals;
-  const when = activity.period.since
-    ? `En ${monthName(activity.period.since)}`
-    : 'Depuis le lancement de l’édition';
+  const window = windowLabel(activity.period.key);
+  const when = window ? `Ces ${window}` : 'Depuis le lancement de l’édition';
   if (editions === 0) {
-    return `${when}, aucune édition pour l’instant`;
+    return `${when}, aucune contribution`;
   }
   const subject =
     cities > 1
@@ -146,17 +161,6 @@ export function editionsTrend(activity: EditionActivity): number | null {
   const previous = activity.previous_period?.editions;
   if (!previous) return null;
   return Math.round(((activity.totals.editions - previous) / previous) * 100);
-}
-
-// The current month is nearly empty during its first days: show the last month instead
-export function defaultPeriod(activities: EditionActivity[]): string | null {
-  if (activities.length === 0) return null;
-  const current = activities.find((a) => a.period.key === 'current_month');
-  const last = activities.find((a) => a.period.key === 'last_month');
-  if (current && current.totals.editions === 0 && last) {
-    return last.period.key;
-  }
-  return activities[0].period.key;
 }
 
 export function aggregateImportsByYear(days: ChangeStatsDay[]): ImportStats {
@@ -175,51 +179,43 @@ export function aggregateImportsByYear(days: ChangeStatsDay[]): ImportStats {
   return { total, years };
 }
 
-// Server-side fetches: cached for 10 minutes, and short timeout so that
-// a slow API does not block the home page
-const FETCH_OPTIONS = {
-  next: { revalidate: 600 },
-};
+// Short timeout so that a slow API does not block the home page
 const FETCH_TIMEOUT_MS = 3000;
 
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url, {
-    ...FETCH_OPTIONS,
-    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-  });
-  if (!res.ok) {
-    throw new Error(`${url} responded ${res.status}`);
+const fetchOptions = (revalidate?: number) => ({
+  signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  ...(revalidate !== undefined && { next: { revalidate } }),
+});
+
+// Activity of every period of ACTIVITY_PERIODS, in the same order. A period
+// whose request fails is left out; fails only when every request fails.
+export async function getEditionActivities(
+  revalidate?: number,
+): Promise<EditionActivity[]> {
+  const results = await Promise.allSettled(
+    ACTIVITY_PERIODS.map((p) =>
+      rnbApi.get<EditionActivity>('editions/activity/', {
+        query: p.query,
+        ...fetchOptions(revalidate),
+      }),
+    ),
+  );
+  const activities = results.flatMap((r) =>
+    r.status === 'fulfilled' ? [r.value] : [],
+  );
+  if (activities.length === 0) {
+    throw (results[0] as PromiseRejectedResult).reason;
   }
-  return res.json();
+  return activities;
 }
 
-async function getEditionActivity(period?: string): Promise<EditionActivity> {
-  const params = period ? `?period=${period}` : '';
-  return fetchJson(
-    `${process.env.NEXT_PUBLIC_API_BASE}/editions/activity/${params}`,
-  );
-}
-
-// Returns the activity of every available period, in the order given by the API
-export async function getEditionActivities(): Promise<EditionActivity[]> {
-  const first = await getEditionActivity();
-  const others = await Promise.all(
-    first.available_periods
-      .filter((key) => key !== first.period.key)
-      .map((key) => getEditionActivity(key)),
-  );
-  const byKey = new Map(
-    [first, ...others].map((activity) => [activity.period.key, activity]),
-  );
-  return first.available_periods
-    .map((key) => byKey.get(key))
-    .filter((activity): activity is EditionActivity => !!activity);
-}
-
-export async function getImportStats(): Promise<ImportStats> {
+export async function getImportStats(
+  revalidate?: number,
+): Promise<ImportStats> {
   const until = new Date().toISOString().slice(0, 10);
-  const days = await fetchJson<ChangeStatsDay[]>(
-    `${process.env.NEXT_PUBLIC_API_BASE}/buildings/change_stats/?since=${IMPORT_STATS_SINCE}&until=${until}`,
-  );
+  const days = await rnbApi.get<ChangeStatsDay[]>('buildings/change_stats/', {
+    query: { since: IMPORT_STATS_SINCE, until },
+    ...fetchOptions(revalidate),
+  });
   return aggregateImportsByYear(days);
 }

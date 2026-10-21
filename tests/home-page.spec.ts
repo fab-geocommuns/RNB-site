@@ -55,18 +55,18 @@ test.describe("Page d'accueil", () => {
     await page.waitForURL('**/carte*');
   });
 
-  test('affiche les éditions de la communauté par période', async ({
+  test('affiche les contributions de la communauté par fenêtre glissante', async ({
     homePage,
   }) => {
     const section = homePage.editionActivitySection;
-    // first big number: the editions tile
-    const editionsCount = section.locator('.fr-display--xs').first();
+    // first big number: the contributions tile
+    const contributionsCount = section.locator('.fr-display--xs').first();
     await expect(homePage.editionActivityTitle).toHaveText(
-      'En octobre, 42 communes ont amélioré leurs bâtiments',
+      'Ces 30 derniers jours, 42 communes ont amélioré leurs bâtiments',
     );
-    await expect(editionsCount).toHaveText(/^1\s234$/);
+    await expect(contributionsCount).toHaveText(/^1\s234$/);
     await expect(
-      section.getByText('+23 % par rapport à la même période en septembre'),
+      section.getByText('+23 % par rapport aux 30 jours précédents'),
     ).toBeVisible();
     await expect(section.getByText('dont 3 nouveaux')).toBeVisible();
     await expect(section.getByText('contributrice_test')).toBeVisible();
@@ -74,8 +74,14 @@ test.describe("Page d'accueil", () => {
       section.getByText('Contributeur · nouveau_contributeur'),
     ).toBeVisible();
 
+    await section.getByText('7 jours').click();
+    await expect(contributionsCount).toHaveText(/^321$/);
+    await expect(homePage.editionActivityTitle).toHaveText(
+      'Ces 7 derniers jours, 42 communes ont amélioré leurs bâtiments',
+    );
+
     await section.getByText('Depuis toujours').click();
-    await expect(editionsCount).toHaveText(/^98\s765$/);
+    await expect(contributionsCount).toHaveText(/^98\s765$/);
     await expect(homePage.editionActivityTitle).toHaveText(
       'Depuis le lancement de l’édition, 42 communes ont amélioré leurs bâtiments',
     );
