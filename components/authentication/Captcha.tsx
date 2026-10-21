@@ -1,4 +1,4 @@
-import { PrivateCaptcha } from '@private-captcha/private-captcha-react';
+import { PrivateCaptcha } from '@/components/authentication/PrivateCaptcha';
 import { useEffect, useRef, useState } from 'react';
 import { fr } from '@codegouvfr/react-dsfr';
 import { Loader } from '@/components/Loader';
