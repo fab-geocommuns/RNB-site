@@ -55,6 +55,8 @@ type BuildingsOptions = {
   // In edition mode, the "validated" display is toggled via the extra layer.
   // In visu mode it is always on (non conditional).
   editionMode?: boolean;
+  // Reinstall the layers only: no building tile is fetched again
+  keepSources?: boolean;
 };
 
 const LAYERS_BDGS_ALL = [...LAYERS_BDGS_POINT_ALL, ...LAYERS_BDGS_SHAPE_ALL];
@@ -69,18 +71,23 @@ const getLayerAboveBuildings = (map: maplibregl.Map) => {
   return layerIds.slice(firstBuildingIndex).find((id) => !isBuildingLayer(id));
 };
 
-export const installBuildings = (
+export const installBuildings = async (
   map: maplibregl.Map,
   options: BuildingsOptions,
 ) => {
   // A reinstall adds the layers on top: remember what was drawn above them (reports, ADS…)
   const layerAboveBuildings = getLayerAboveBuildings(map);
 
-  // First, we remove buildings layers and source
-  removeBuildings(map, options.layers);
+  // Before removing anything: the layers are then re-added in the same frame
+  await loadCheckImage(map);
 
-  // Then, we install the source
-  installBuildingsSource(map);
+  // A source cannot be removed while a layer uses it
+  removeBuildingsLayers(map);
+  if (!options.keepSources) {
+    removeBuildingsSource(map);
+    installBuildingsSource(map);
+  }
+
   installBuildingsLayers(map, options);
 
   if (layerAboveBuildings && map.getLayer(layerAboveBuildings)) {
@@ -89,6 +96,12 @@ export const installBuildings = (
       .filter(isBuildingLayer)
       .forEach((id) => map.moveLayer(id, layerAboveBuildings));
   }
+};
+
+const loadCheckImage = async (map: maplibregl.Map) => {
+  if (map.hasImage('checkGreen')) return;
+  const check = await map.loadImage(checkGreenIcon.src);
+  if (!map.hasImage('checkGreen')) map.addImage('checkGreen', check.data);
 };
 
 const installBuildingsSource = (map: maplibregl.Map) => {
@@ -172,7 +185,7 @@ const installBuildingsLayers = (
   }
 };
 
-const installBuildingsPointsLayers = async (
+const installBuildingsPointsLayers = (
   map: maplibregl.Map,
   { layers }: BuildingsOptions,
 ) => {
@@ -186,13 +199,6 @@ const installBuildingsPointsLayers = async (
   const hasVectorBackground = ['vectorIgnStandard', 'vectorOsm'].includes(
     layers.background,
   );
-
-  if (!map.hasImage('checkGreen')) {
-    const check = await map.loadImage(checkGreenIcon.src);
-    if (!map.hasImage('checkGreen')) {
-      map.addImage('checkGreen', check.data);
-    }
-  }
 
   // Demolished fill added first (vector backgrounds only, like the
   // footprint fill below), so a regular building's opaque footprint still
@@ -321,7 +327,7 @@ const installBuildingsPointsLayers = async (
   }
 };
 
-const installBuildingsShapesLayers = async (
+const installBuildingsShapesLayers = (
   map: maplibregl.Map,
   { layers, selectedBuildingisGreen, editionMode }: BuildingsOptions,
 ) => {
@@ -333,13 +339,6 @@ const installBuildingsShapesLayers = async (
   const isSatellite = ['satellite', 'satellite_2016_2020'].includes(
     layers.background,
   );
-
-  if (validatedActive && !map.hasImage('greenCheck')) {
-    const greenCheck = await map.loadImage(checkGreenIcon.src);
-    if (!map.hasImage('greenCheck')) {
-      map.addImage('greenCheck', greenCheck.data);
-    }
-  }
 
   // Demolished fill added first, so a regular building's fill still sits on
   // top of it and isn't visually eaten by an overlapping demolished one.
@@ -394,7 +393,7 @@ const installBuildingsShapesLayers = async (
         ['==', 'is_validated', true],
       ] as any,
       paint: {
-        'fill-pattern': 'greenCheck',
+        'fill-pattern': 'checkGreen',
         'fill-opacity': isSatellite ? 0.5 : 0.9,
       },
     });
@@ -476,31 +475,12 @@ const installBuildingsShapesLayers = async (
   }
 };
 
-export const removeBuildings = (map: maplibregl.Map, layers: MapLayers) => {
-  if (layers.buildings == 'point') {
-    removeBuildingsPoints(map);
-  }
-  if (layers.buildings == 'polygon') {
-    removeBuildingsShapes(map);
-  }
-};
-
-const removeBuildingsPoints = (map: maplibregl.Map) => {
-  LAYERS_BDGS_POINT_ALL.forEach((l) => {
+const removeBuildingsLayers = (map: maplibregl.Map) => {
+  LAYERS_BDGS_ALL.forEach((l) => {
     if (map.getLayer(l)) {
       map.removeLayer(l);
     }
   });
-  removeBuildingsSource(map);
-};
-
-const removeBuildingsShapes = (map: maplibregl.Map) => {
-  LAYERS_BDGS_SHAPE_ALL.forEach((l) => {
-    if (map.getLayer(l)) {
-      map.removeLayer(l);
-    }
-  });
-  removeBuildingsSource(map);
 };
 
 const removeBuildingsSource = (map: maplibregl.Map) => {

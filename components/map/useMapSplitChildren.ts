@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import maplibregl from 'maplibre-gl';
 import { RootState } from '@/stores/store';
@@ -20,13 +20,24 @@ const UNSELECTED_COLOR = '#6a14e3';
  */
 export const useMapSplitChildren = (map?: maplibregl.Map) => {
   const operation = useSelector((state: RootState) => state.edition.operation);
-  const mapLayers = useSelector((state: RootState) => state.map.layers);
   const children = useSelector(
     (state: RootState) => state.edition.split.children,
   );
   const selectedChildIndex = useSelector(
     (state: RootState) => state.edition.split.selectedChildIndex,
   );
+
+  // A background change rebuilds the style, which drops these layers: count
+  // each rebuild so the effect below puts them back on the new style
+  const [styleVersion, setStyleVersion] = useState(0);
+  useEffect(() => {
+    if (!map) return;
+    const onStyleLoad = () => setStyleVersion((version) => version + 1);
+    map.on('style.load', onStyleLoad);
+    return () => {
+      map.off('style.load', onStyleLoad);
+    };
+  }, [map]);
 
   useEffect(() => {
     if (!map) return;
@@ -159,5 +170,5 @@ export const useMapSplitChildren = (map?: maplibregl.Map) => {
         map.removeLayer(LAYER_SPLIT_CHILDREN_FILL);
       map.removeSource(SRC_SPLIT_CHILDREN);
     }
-  }, [map, operation, children, selectedChildIndex, mapLayers]);
+  }, [map, operation, children, selectedChildIndex, styleVersion]);
 };

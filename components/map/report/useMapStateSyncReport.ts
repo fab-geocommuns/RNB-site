@@ -128,7 +128,7 @@ export const useMapStateSyncReport = (map?: maplibregl.Map) => {
       });
     syncReportLayers();
 
-    // A layers change reinstalls the reports source, losing its filters and feature states
+    // A background change or re-enabling reports reinstalls the reports source, losing its filters and feature states
     const onReportsSourceLoaded = (e: maplibregl.MapSourceDataEvent) => {
       if (e.sourceId !== SRC_REPORTS || e.sourceDataType !== 'metadata') return;
       // Also fired by removeSource, once the source is gone
