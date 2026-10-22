@@ -8,6 +8,21 @@ import Link from 'next/link';
 import { isSafeRedirectUrl } from '@/utils/isSafeRedirectUrl';
 import { Loader } from '@/components/Loader';
 
+const GENERIC_ERROR =
+  "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.";
+
+// Keyed by the `error` query param set by RNB-coeur's CallbackView
+const ERROR_MESSAGES = new Map([
+  [
+    'mfa_required',
+    "Votre compte ProConnect doit utiliser une double authentification. Activez-la auprès de votre fournisseur d'identité, puis reconnectez-vous.",
+  ],
+  [
+    'access_denied',
+    "ProConnect n'a pas autorisé la connexion de votre compte à ce service.",
+  ],
+]);
+
 export default function ProConnectCallbackPage() {
   const params = useSearchParams();
   const router = useRouter();
@@ -47,9 +62,7 @@ export default function ProConnectCallbackPage() {
         })
         // Network failure or non-JSON response (proxy 502): signIn rejects
         .catch(() => {
-          setError(
-            "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.",
-          );
+          setError(GENERIC_ERROR);
         });
       return;
     }
@@ -60,9 +73,7 @@ export default function ProConnectCallbackPage() {
     }
 
     if (errorParam) {
-      setError(
-        "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.",
-      );
+      setError(ERROR_MESSAGES.get(errorParam) ?? GENERIC_ERROR);
       return;
     }
 
