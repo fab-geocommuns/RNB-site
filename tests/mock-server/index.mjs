@@ -31,7 +31,7 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
-// Home page "La communauté du RNB" block: rolling windows (?days=N)
+// "La communauté du RNB" block (/apercu-activite): rolling windows (?days=N)
 const EDITIONS_BY_PERIOD = {
   last_7_days: 321,
   last_30_days: 1234,

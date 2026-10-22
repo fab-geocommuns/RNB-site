@@ -10,8 +10,6 @@ export class HomePage extends RNBPage {
   readonly toolsTitle: Locator;
   readonly useCasesTitle: Locator;
   readonly faqButton: Locator;
-  readonly editionActivityTitle: Locator;
-  readonly editionActivitySection: Locator;
 
   constructor(page: Page) {
     super(page, '/');
@@ -32,11 +30,5 @@ export class HomePage extends RNBPage {
     this.toolsTitle = page.locator('h2').getByText('Outils et services');
     this.useCasesTitle = page.locator('h2').getByText("Cas d'usage");
     this.faqButton = page.getByText('Consulter la Foire aux Questions');
-    this.editionActivityTitle = page
-      .locator('h2')
-      .getByText(/amélioré (leurs|ses) bâtiments/);
-    this.editionActivitySection = page
-      .locator('section')
-      .filter({ has: this.editionActivityTitle });
   }
 }

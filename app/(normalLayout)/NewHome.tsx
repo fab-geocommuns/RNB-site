@@ -4,13 +4,11 @@ import Databases from '@/components/home/Databases';
 import ToolsAndServices from '@/components/home/ToolsAndServices';
 import Governance from '@/components/home/Governance';
 import ResultsConfettiBlock from '@/components/games/summerGames/resultsConfettiBlock';
-import EditionActivity from '@/components/home/EditionActivity';
 import * as Sentry from '@sentry/nextjs';
 
 import { getBreakingNews, getUseCases } from '@/utils/blog';
 
 import { getDatabases } from '@/utils/databases';
-import { getEditionActivities, getImportCount } from '@/utils/editionActivity';
 
 // External data is cached for 5 minutes. A failing call only hides its block.
 const HOME_DATA_REVALIDATE = 300;
@@ -22,20 +20,10 @@ const logError = (source: string) => (error: unknown) => {
 };
 
 export default async function Home() {
-  const [
-    breakingNews,
-    useCases,
-    availableDatabases,
-    editionActivities,
-    importCount,
-  ] = await Promise.all([
+  const [breakingNews, useCases, availableDatabases] = await Promise.all([
     getBreakingNews(HOME_DATA_REVALIDATE).catch(logError('breaking news')),
     getUseCases(1, HOME_DATA_REVALIDATE).catch(logError('use cases')),
     getDatabases(HOME_DATA_REVALIDATE).catch(logError('databases')),
-    getEditionActivities(HOME_DATA_REVALIDATE).catch(
-      logError('edition activity'),
-    ),
-    getImportCount(HOME_DATA_REVALIDATE).catch(logError('import count')),
   ]);
 
   return (
@@ -58,12 +46,6 @@ export default async function Home() {
             <ResultsConfettiBlock />
           </div>
         </div>
-        {(editionActivities || importCount !== null) && (
-          <EditionActivity
-            activities={editionActivities ?? []}
-            importCount={importCount}
-          />
-        )}
         {!!useCases && <UseCases useCases={useCases} />}
         {availableDatabases && <Databases databases={availableDatabases} />}
         <ToolsAndServices />
