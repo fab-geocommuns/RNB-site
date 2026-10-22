@@ -80,6 +80,30 @@ test.describe('Retour de ProConnect avec un code à usage unique', () => {
       page.getByText('Paramètres de connexion manquants.'),
     ).toBeVisible();
   });
+
+  test('affiche un message dédié quand la double authentification manque', async ({
+    page,
+  }) => {
+    await page.goto('/auth/proconnect/callback?error=mfa_required');
+
+    await expect(
+      page.getByText(
+        "Votre compte ProConnect doit utiliser une double authentification. Activez-la auprès de votre fournisseur d'identité, puis reconnectez-vous.",
+      ),
+    ).toBeVisible();
+  });
+
+  test('affiche un message dédié quand ProConnect refuse la connexion', async ({
+    page,
+  }) => {
+    await page.goto('/auth/proconnect/callback?error=access_denied');
+
+    await expect(
+      page.getByText(
+        "ProConnect n'a pas autorisé la connexion de votre compte à ce service.",
+      ),
+    ).toBeVisible();
+  });
 });
 
 test.describe('Déconnexion depuis Mon compte', () => {
