@@ -1,3 +1,4 @@
+import { Page } from '@playwright/test';
 import { test, expect } from '@/tests/fixtures';
 
 test.describe('Retour de ProConnect avec un code à usage unique', () => {
@@ -78,5 +79,70 @@ test.describe('Retour de ProConnect avec un code à usage unique', () => {
     await expect(
       page.getByText('Paramètres de connexion manquants.'),
     ).toBeVisible();
+  });
+});
+
+test.describe('Déconnexion depuis Mon compte', () => {
+  test.setTimeout(60000);
+
+  test.beforeEach(async ({ httpMocker }) => {
+    await httpMocker.install();
+  });
+
+  const getSession = async (page: Page) =>
+    (await page.request.get('/api/auth/session')).json();
+
+  // SessionProvider requests the session from an effect, so the request means
+  // the page is hydrated and the sign-out button has its click handler.
+  const openAccountPage = async (page: Page) => {
+    const hydrated = page.waitForRequest('**/api/auth/session');
+    await page.goto('/mon-compte/notifications');
+    await hydrated;
+  };
+
+  test('passe par ProConnect pour une session ProConnect', async ({
+    page,
+    auth,
+  }) => {
+    await page.route('https://proconnect.example/**', (route) =>
+      route.fulfill({ status: 200, body: 'ProConnect' }),
+    );
+    await auth.signIn({ authProvider: 'proconnect' });
+
+    await openAccountPage(page);
+    await page.getByRole('button', { name: 'Se déconnecter' }).click();
+
+    await page.waitForURL(
+      (url) =>
+        url.host === 'proconnect.example' &&
+        url.pathname === '/logout' &&
+        url.searchParams.get('id_token_hint') === 'jeton-id',
+    );
+    expect(await getSession(page)).toEqual({});
+  });
+
+  test('déconnecte localement une session identifiant / mot de passe', async ({
+    page,
+    auth,
+    baseURL,
+  }) => {
+    const proconnectLogoutCalls: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().includes('/api/auth/proconnect-logout')) {
+        proconnectLogoutCalls.push(request.url());
+      }
+    });
+    await auth.signIn();
+
+    await openAccountPage(page);
+    // Checking the session before sign-out completes would race with it: the
+    // session endpoint renews the cookie that sign-out clears.
+    const signedOut = page.waitForResponse('**/api/auth/signout');
+    await page.getByRole('button', { name: 'Se déconnecter' }).click();
+    await signedOut;
+
+    expect(await getSession(page)).toEqual({});
+    expect(new URL(page.url()).host).toBe(new URL(baseURL!).host);
+    expect(proconnectLogoutCalls).toEqual([]);
   });
 });
