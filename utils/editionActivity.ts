@@ -108,27 +108,25 @@ export type ImportStats = {
 export const IMPORT_STATS_SINCE = '2024-01-01';
 
 // Periods offered on the home page: rolling windows, compared with the window
-// of the same length just before, and the whole history
+// of the same length just before. Longer windows (12 months, all time) are left
+// out until the API computes them fast enough.
 export type ActivityPeriod = {
   key: string;
   label: string;
-  query: { days: number } | { period: 'all' };
+  query: { days: number };
 };
 
 export const ACTIVITY_PERIODS: ActivityPeriod[] = [
   { key: 'last_7_days', label: '7 jours', query: { days: 7 } },
   { key: 'last_30_days', label: '30 jours', query: { days: 30 } },
-  { key: 'last_365_days', label: '12 mois', query: { days: 365 } },
-  { key: 'all', label: 'Depuis toujours', query: { period: 'all' } },
 ];
 
 export const DEFAULT_PERIOD_KEY = 'last_30_days';
 
-// "last_30_days" → "30 derniers jours", "last_365_days" → "12 derniers mois"
+// "last_30_days" → "30 derniers jours"
 export function windowLabel(key: string): string | null {
   const days = Number(key.match(/^last_(\d+)_days$/)?.[1]);
   if (!days) return null;
-  if (days === 365) return '12 derniers mois';
   return days > 1 ? `${days} derniers jours` : 'dernier jour';
 }
 
@@ -145,7 +143,7 @@ export function monthName(date: string): string {
 export function activityHeadline(activity: EditionActivity): string {
   const { editions, cities } = activity.totals;
   const window = windowLabel(activity.period.key);
-  const when = window ? `Ces ${window}` : 'Depuis le lancement de l’édition';
+  const when = window ? `Ces ${window}` : 'Récemment';
   if (editions === 0) {
     return `${when}, aucune contribution`;
   }

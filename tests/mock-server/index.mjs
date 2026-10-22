@@ -31,18 +31,15 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
-// Home page "La communauté du RNB" block: rolling windows (?days=N) or ?period=all
+// Home page "La communauté du RNB" block: rolling windows (?days=N)
 const EDITIONS_BY_PERIOD = {
   last_7_days: 321,
   last_30_days: 1234,
-  last_365_days: 5678,
-  all: 98765,
 };
 
 const PERIOD_SINCE = {
   last_7_days: '2026-10-08T14:00:00+02:00',
   last_30_days: '2026-09-15T14:00:00+02:00',
-  last_365_days: '2025-10-15T14:00:00+02:00',
 };
 const MONTHLY = [
   '2025-11',
@@ -67,14 +64,11 @@ const editionActivity = (period) => ({
     cities: 42,
     editors: 7,
   },
-  previous_period:
-    period === 'all'
-      ? null
-      : {
-          since: '2026-08-16T14:00:00+02:00',
-          until: '2026-09-15T14:00:00+02:00',
-          editions: 1000,
-        },
+  previous_period: {
+    since: '2026-08-16T14:00:00+02:00',
+    until: '2026-09-15T14:00:00+02:00',
+    editions: 1000,
+  },
   monthly: MONTHLY,
   top: {
     users: [
@@ -116,7 +110,7 @@ const editionActivity = (period) => ({
     ],
     cities: [],
     departments: [],
-    count: period === 'all' ? null : { users: 3, cities: 0, departments: 0 },
+    count: { users: 3, cities: 0, departments: 0 },
   },
 });
 
@@ -153,11 +147,8 @@ const server = createServer((req, res) => {
     return json(res, 200, HISTORY);
   }
   if (method === 'GET' && path === '/api/alpha/editions/activity/') {
-    const days = u.searchParams.get('days');
-    const period = days
-      ? `last_${days}_days`
-      : u.searchParams.get('period') || 'current_month';
-    return json(res, 200, editionActivity(period));
+    const days = u.searchParams.get('days') || '30';
+    return json(res, 200, editionActivity(`last_${days}_days`));
   }
   if (method === 'GET' && path === '/api/alpha/buildings/change_stats/') {
     return json(res, 200, [

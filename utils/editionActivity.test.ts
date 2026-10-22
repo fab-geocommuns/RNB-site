@@ -60,11 +60,10 @@ describe('windowLabel', () => {
   it('nomme une fenêtre glissante', () => {
     expect(windowLabel('last_7_days')).toBe('7 derniers jours');
     expect(windowLabel('last_30_days')).toBe('30 derniers jours');
-    expect(windowLabel('last_365_days')).toBe('12 derniers mois');
     expect(windowLabel('last_1_days')).toBe('dernier jour');
   });
 
-  it('ne nomme rien pour « depuis toujours »', () => {
+  it('ne nomme rien pour une période qui n’est pas une fenêtre', () => {
     expect(windowLabel('all')).toBeNull();
   });
 });
@@ -79,12 +78,6 @@ describe('activityHeadline', () => {
   it('accorde au singulier', () => {
     expect(activityHeadline(withTotals('last_7_days', 2, 1))).toBe(
       'Ces 7 derniers jours, 1 commune a amélioré ses bâtiments',
-    );
-  });
-
-  it('parle du lancement pour « depuis toujours »', () => {
-    expect(activityHeadline(withTotals('all', 10, 3))).toBe(
-      'Depuis le lancement de l’édition, 3 communes ont amélioré leurs bâtiments',
     );
   });
 

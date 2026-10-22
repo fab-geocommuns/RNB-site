@@ -404,13 +404,7 @@ function Step({
 }
 
 // How the RNB is built: the national databases, the community, open data
-function HowItWorks({
-  imports,
-  editions,
-}: {
-  imports: ImportStats | null;
-  editions: number | null;
-}) {
+function HowItWorks({ imports }: { imports: ImportStats | null }) {
   const importsSince = new Date(IMPORT_STATS_SINCE).getFullYear();
   return (
     <div
@@ -446,13 +440,6 @@ function HowItWorks({
           >
             Collectivités, professionnels et citoyens corrigent la forme,
             l&apos;adresse ou le statut des bâtiments qu&apos;ils connaissent.
-            {editions !== null && editions > 0 && (
-              <>
-                {' '}
-                <strong>{formatNumber(editions)}</strong> contributions à ce
-                jour.
-              </>
-            )}
           </Step>
         </div>
         <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
@@ -478,8 +465,6 @@ export default function EditionActivity({ activities, imports }: Props) {
   if (!activity) return null;
 
   const { totals, newcomers } = activity;
-  const allTimeEditions =
-    activities.find((a) => a.period.key === 'all')?.totals.editions ?? null;
   // the DSFR expects a tuple of 1 to 5 segments; activities is not empty here
   const segments = ACTIVITY_PERIODS.filter((p) =>
     activities.some((a) => a.period.key === p.key),
@@ -565,9 +550,9 @@ export default function EditionActivity({ activities, imports }: Props) {
         </div>
       )}
 
-      {activity.period.key !== 'all' && <Newcomers activity={activity} />}
+      <Newcomers activity={activity} />
 
-      <HowItWorks imports={imports} editions={allTimeEditions} />
+      <HowItWorks imports={imports} />
 
       <ButtonsGroup
         className={fr.cx('fr-mt-5w')}

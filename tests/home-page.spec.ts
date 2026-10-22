@@ -79,12 +79,6 @@ test.describe("Page d'accueil", () => {
     await expect(homePage.editionActivityTitle).toHaveText(
       'Ces 7 derniers jours, 42 communes ont amélioré leurs bâtiments',
     );
-
-    await section.getByText('Depuis toujours').click();
-    await expect(contributionsCount).toHaveText(/^98\s765$/);
-    await expect(homePage.editionActivityTitle).toHaveText(
-      'Depuis le lancement de l’édition, 42 communes ont amélioré leurs bâtiments',
-    );
   });
 
   test('bascule le classement entre organisations, communes et départements', async ({
@@ -105,7 +99,6 @@ test.describe("Page d'accueil", () => {
       section.getByRole('heading', { name: 'Comment se construit le RNB ?' }),
     ).toBeVisible();
     await expect(section.getByText(/279\s500/)).toBeVisible();
-    await expect(section.getByText(/98\s765/)).toBeVisible();
     await expect(
       section.getByRole('link', { name: 'Rejoindre les contributeurs' }),
     ).toHaveAttribute('href', '/inscription');
