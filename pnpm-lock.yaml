@@ -26,9 +26,9 @@ importers:
       '@private-captcha/private-captcha-js':
         specifier: ^0.0.12
         version: 0.0.12
-      '@private-captcha/private-captcha-react':
-        specifier: 0.0.8
-        version: 0.0.8(react@19.2.3)
+      '@private-captcha/private-captcha-js-core':
+        specifier: 0.0.24
+        version: 0.0.24
       '@reduxjs/toolkit':
         specifier: ^2.8.2
         version: 2.8.2(react-redux@9.2.0(@types/react@19.1.5)(react@19.2.3)(redux@5.0.1))(react@19.2.3)
@@ -763,11 +763,6 @@ packages:
 
   '@private-captcha/private-captcha-js@0.0.12':
     resolution: {integrity: sha512-iRqULokOfjtdLwJiuNeJnmT8ScBMgFW+r0vcfSR6OlaO6slOAHANQWqYRLtYLprWct2/yOdEkcfbDFVJmuYdyA==}
-
-  '@private-captcha/private-captcha-react@0.0.8':
-    resolution: {integrity: sha512-et+SwJn7gW6jp7HDkAb5tI3LnklZYnBg3hCBAu/cbaiY9jcTQgtkf1DAwnWxCtFPKH/ukr1RCemBDybCFaDkTA==}
-    peerDependencies:
-      react: ^18.0.0
 
   '@reduxjs/toolkit@2.8.2':
     resolution: {integrity: sha512-MYlOhQ0sLdw4ud48FoC5w0dH9VfWQjtCjreKwYTT3l+r427qYC5Y8PihNutepr8XrNaBUDQo9khWUwQxZaqt5A==}
@@ -5265,11 +5260,6 @@ snapshots:
   '@private-captcha/private-captcha-js-core@0.0.24': {}
 
   '@private-captcha/private-captcha-js@0.0.12': {}
-
-  '@private-captcha/private-captcha-react@0.0.8(react@19.2.3)':
-    dependencies:
-      '@private-captcha/private-captcha-js-core': 0.0.24
-      react: 19.2.3
 
   '@reduxjs/toolkit@2.8.2(react-redux@9.2.0(@types/react@19.1.5)(react@19.2.3)(redux@5.0.1))(react@19.2.3)':
     dependencies:
