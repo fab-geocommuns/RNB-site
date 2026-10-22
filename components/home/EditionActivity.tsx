@@ -16,13 +16,12 @@ import {
   EditionActivity as EditionActivityData,
   editionsTrend,
   IMPORT_STATS_SINCE,
-  ImportStats,
   monthName,
 } from '@/utils/editionActivity';
 
 type Props = {
   activities: EditionActivityData[];
-  imports: ImportStats | null;
+  importCount: number | null;
 };
 
 const formatNumber = (n: number) => n.toLocaleString('fr-FR');
@@ -404,7 +403,7 @@ function Step({
 }
 
 // How the RNB is built: the national databases, the community, open data
-function HowItWorks({ imports }: { imports: ImportStats | null }) {
+function HowItWorks({ importCount }: { importCount: number | null }) {
   const importsSince = new Date(IMPORT_STATS_SINCE).getFullYear();
   return (
     <div
@@ -423,11 +422,11 @@ function HowItWorks({ imports }: { imports: ImportStats | null }) {
           >
             Le RNB s&apos;appuie sur la BD TOPO de l&apos;IGN et les Bases
             Adresse Locales, importées régulièrement.
-            {imports && imports.total > 0 && (
+            {!!importCount && (
               <>
                 {' '}
-                <strong>{formatNumber(imports.total)}</strong> mises à jour
-                depuis {importsSince}.
+                <strong>{formatNumber(importCount)}</strong> mises à jour depuis{' '}
+                {importsSince}.
               </>
             )}
           </Step>
@@ -457,7 +456,7 @@ function HowItWorks({ imports }: { imports: ImportStats | null }) {
   );
 }
 
-export default function EditionActivity({ activities, imports }: Props) {
+export default function EditionActivity({ activities, importCount }: Props) {
   const [periodKey, setPeriodKey] = useState(DEFAULT_PERIOD_KEY);
   const activity =
     activities.find((a) => a.period.key === periodKey) ?? activities[0];
@@ -552,7 +551,7 @@ export default function EditionActivity({ activities, imports }: Props) {
 
       <Newcomers activity={activity} />
 
-      <HowItWorks imports={imports} />
+      <HowItWorks importCount={importCount} />
 
       <ButtonsGroup
         className={fr.cx('fr-mt-5w')}

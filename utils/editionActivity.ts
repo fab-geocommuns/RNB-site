@@ -12,7 +12,6 @@ export type EditionActivity = {
   period: {
     key: string;
     since: string | null;
-    until: string | null;
   };
   updated_at: string;
   totals: {
@@ -93,17 +92,6 @@ type ChangeStatsDay = {
   };
 };
 
-export type ImportStatsYear = {
-  year: number;
-  bdtopo: number;
-  bal: number;
-};
-
-export type ImportStats = {
-  total: number;
-  years: ImportStatsYear[];
-};
-
 // The API rejects change_stats requests starting before this date
 export const IMPORT_STATS_SINCE = '2024-01-01';
 
@@ -161,20 +149,13 @@ export function editionsTrend(activity: EditionActivity): number | null {
   return Math.round(((activity.totals.editions - previous) / previous) * 100);
 }
 
-export function aggregateImportsByYear(days: ChangeStatsDay[]): ImportStats {
-  const byYear = new Map<number, ImportStatsYear>();
-  for (const day of days) {
-    const year = Number(day.date.slice(0, 4));
-    const entry = byYear.get(year) ?? { year, bdtopo: 0, bal: 0 };
-    entry.bdtopo += day.events_count.import_bdtopo;
-    entry.bal += day.events_count.import_bal;
-    byYear.set(year, entry);
-  }
-  const years = Array.from(byYear.values())
-    .filter((y) => y.bdtopo + y.bal > 0)
-    .sort((a, b) => a.year - b.year);
-  const total = years.reduce((sum, y) => sum + y.bdtopo + y.bal, 0);
-  return { total, years };
+// Number of BD TOPO and BAL imports, contributions left out
+export function countImports(days: ChangeStatsDay[]): number {
+  return days.reduce(
+    (sum, day) =>
+      sum + day.events_count.import_bdtopo + day.events_count.import_bal,
+    0,
+  );
 }
 
 // Short timeout so that a slow API does not block the home page
@@ -207,13 +188,11 @@ export async function getEditionActivities(
   return activities;
 }
 
-export async function getImportStats(
-  revalidate?: number,
-): Promise<ImportStats> {
+export async function getImportCount(revalidate?: number): Promise<number> {
   const until = new Date().toISOString().slice(0, 10);
   const days = await rnbApi.get<ChangeStatsDay[]>('buildings/change_stats/', {
     query: { since: IMPORT_STATS_SINCE, until },
     ...fetchOptions(revalidate),
   });
-  return aggregateImportsByYear(days);
+  return countImports(days);
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   activityHeadline,
-  aggregateImportsByYear,
+  countImports,
   EditionActivity,
   editionsTrend,
   windowLabel,
@@ -12,34 +12,19 @@ const day = (date: string, bdtopo: number, bal: number) => ({
   events_count: { import_bdtopo: bdtopo, import_bal: bal, contributions: 5 },
 });
 
-describe('aggregateImportsByYear', () => {
-  it('additionne les imports par année, sans les contributions', () => {
-    const stats = aggregateImportsByYear([
-      day('2024-01-01', 10, 1),
-      day('2024-12-31', 5, 0),
-      day('2025-06-01', 0, 3),
-    ]);
-
-    expect(stats).toEqual({
-      total: 19,
-      years: [
-        { year: 2024, bdtopo: 15, bal: 1 },
-        { year: 2025, bdtopo: 0, bal: 3 },
-      ],
-    });
+describe('countImports', () => {
+  it('additionne les imports BD TOPO et BAL, sans les contributions', () => {
+    expect(
+      countImports([
+        day('2024-01-01', 10, 1),
+        day('2024-12-31', 5, 0),
+        day('2025-06-01', 0, 3),
+      ]),
+    ).toBe(19);
   });
 
-  it('ignore les années sans import', () => {
-    const stats = aggregateImportsByYear([
-      day('2024-03-01', 0, 0),
-      day('2025-03-01', 2, 0),
-    ]);
-
-    expect(stats.years).toEqual([{ year: 2025, bdtopo: 2, bal: 0 }]);
-  });
-
-  it('renvoie un total nul sans données', () => {
-    expect(aggregateImportsByYear([])).toEqual({ total: 0, years: [] });
+  it('renvoie 0 sans données', () => {
+    expect(countImports([])).toBe(0);
   });
 });
 
@@ -50,7 +35,7 @@ const withTotals = (
   previous: number | null = null,
 ) =>
   ({
-    period: { key, since: null, until: null },
+    period: { key, since: null },
     totals: { editions, cities, editors: 1 },
     previous_period:
       previous === null ? null : { since: '', until: '', editions: previous },

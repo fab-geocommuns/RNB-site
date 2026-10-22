@@ -57,7 +57,7 @@ const MONTHLY = [
 ].map((month, i) => ({ month, editions: 300 + i * 100 }));
 
 const editionActivity = (period) => ({
-  period: { key: period, since: PERIOD_SINCE[period] ?? null, until: null },
+  period: { key: period, since: PERIOD_SINCE[period] ?? null },
   updated_at: '2026-10-15T14:00:00+02:00',
   totals: {
     editions: EDITIONS_BY_PERIOD[period] ?? 0,

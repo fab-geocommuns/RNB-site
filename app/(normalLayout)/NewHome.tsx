@@ -10,7 +10,7 @@ import * as Sentry from '@sentry/nextjs';
 import { getBreakingNews, getUseCases } from '@/utils/blog';
 
 import { getDatabases } from '@/utils/databases';
-import { getEditionActivities, getImportStats } from '@/utils/editionActivity';
+import { getEditionActivities, getImportCount } from '@/utils/editionActivity';
 
 // External data is cached for 5 minutes. A failing call only hides its block.
 const HOME_DATA_REVALIDATE = 300;
@@ -27,7 +27,7 @@ export default async function Home() {
     useCases,
     availableDatabases,
     editionActivities,
-    importStats,
+    importCount,
   ] = await Promise.all([
     getBreakingNews(HOME_DATA_REVALIDATE).catch(logError('breaking news')),
     getUseCases(1, HOME_DATA_REVALIDATE).catch(logError('use cases')),
@@ -35,7 +35,7 @@ export default async function Home() {
     getEditionActivities(HOME_DATA_REVALIDATE).catch(
       logError('edition activity'),
     ),
-    getImportStats(HOME_DATA_REVALIDATE).catch(logError('import stats')),
+    getImportCount(HOME_DATA_REVALIDATE).catch(logError('import count')),
   ]);
 
   return (
@@ -58,10 +58,10 @@ export default async function Home() {
             <ResultsConfettiBlock />
           </div>
         </div>
-        {(editionActivities || importStats) && (
+        {(editionActivities || importCount !== null) && (
           <EditionActivity
             activities={editionActivities ?? []}
-            imports={importStats}
+            importCount={importCount}
           />
         )}
         {!!useCases && <UseCases useCases={useCases} />}
