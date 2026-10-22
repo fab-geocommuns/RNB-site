@@ -91,6 +91,10 @@ const server = createServer((req, res) => {
     return;
   }
   if (method === 'GET' && path === '/api/alpha/auth/pro_connect/logout/') {
+    // Like the backend: an address outside the allowlist is refused
+    if (u.searchParams.has('post_logout_redirect_uri')) {
+      return json(res, 400, { error: 'invalid_redirect_uri' });
+    }
     res.writeHead(302, {
       Location:
         'https://proconnect.example/logout?id_token_hint=jeton-id&state=etat',
