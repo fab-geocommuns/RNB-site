@@ -118,11 +118,8 @@
         <li>les identifiants <a href="https://bdnb.io/" target="_blank">BDNB</a> et <a href="https://geoservices.ign.fr/bdtopo" target="_blank">BDTOPO</a> associés</li>
         <li>les <a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales" target="_blank">parcelles cadastrales</a></li>
         </ul>
-        <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 6 : </p>
+        <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 3 : </p>
         <ol>
-        <li>En projet</li>
-        <li>Projet annulé</li>
-        <li>Bâtiment en construction</li>
         <li>Construit</li>
         <li>Détruit</li>
         <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
