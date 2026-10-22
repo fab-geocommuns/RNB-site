@@ -7,6 +7,7 @@ export type FakeUser = {
   username: string;
   accessToken: string;
   groups?: string[];
+  authProvider?: string;
 };
 
 /** Username de la session injectée par défaut (cf. DEFAULT_USER). */
@@ -37,6 +38,7 @@ export async function signInAs(
       username: merged.username,
       accessToken: merged.accessToken,
       groups: merged.groups,
+      authProvider: merged.authProvider,
     },
     secret: SECRET,
     // next-auth default max-age is 30 days; we just need it valid for the

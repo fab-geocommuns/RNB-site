@@ -153,6 +153,13 @@ const server = createServer((req, res) => {
     });
     return;
   }
+  if (method === 'GET' && path === '/api/alpha/auth/pro_connect/logout/') {
+    res.writeHead(302, {
+      Location:
+        'https://proconnect.example/logout?id_token_hint=jeton-id&state=etat',
+    });
+    return res.end();
+  }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
   }
