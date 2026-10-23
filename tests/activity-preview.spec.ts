@@ -18,9 +18,7 @@ test.describe("Aperçu de l'activité", () => {
     ).toBeVisible();
     await expect(section.getByText('dont 3 nouveaux')).toBeVisible();
     await expect(section.getByText('contributrice_test')).toBeVisible();
-    await expect(
-      section.getByText('Contributeur · nouveau_contributeur'),
-    ).toBeVisible();
+    await expect(section.getByText('nouveau_contributeur')).toBeVisible();
 
     await section.getByText('7 jours').click();
     await expect(contributionsCount).toHaveText(/^321$/);
@@ -36,8 +34,8 @@ test.describe("Aperçu de l'activité", () => {
     await expect(section.getByText('Mairie Test').first()).toBeVisible();
     await section.getByRole('button', { name: 'Communes' }).click();
     await expect(
-      section.getByRole('heading', { name: 'Communes les plus éditées' }),
-    ).toBeVisible();
+      section.getByRole('button', { name: 'Communes' }),
+    ).toHaveAttribute('aria-pressed', 'true');
     await expect(section.getByText('Ville Test')).toBeVisible();
   });
 

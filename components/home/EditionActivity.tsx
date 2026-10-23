@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { fr } from '@codegouvfr/react-dsfr';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
+import { Card } from '@codegouvfr/react-dsfr/Card';
 import {
   SegmentedControl,
   SegmentedControlProps,
@@ -16,7 +17,6 @@ import {
   EditionActivity as EditionActivityData,
   editionsTrend,
   IMPORT_STATS_SINCE,
-  monthName,
 } from '@/utils/editionActivity';
 
 type Props = {
@@ -28,196 +28,99 @@ const formatNumber = (n: number) => n.toLocaleString('fr-FR');
 
 const colors = fr.colors.decisions;
 
-const tileStyle = {
-  height: '100%',
-  padding: fr.spacing('3w'),
-  border: `1px solid ${colors.border.default.grey.default}`,
-  display: 'flex',
-  flexDirection: 'column' as const,
-  gap: fr.spacing('1w'),
-};
+const plural = (n: number, singular: string, pluralForm: string) =>
+  `${formatNumber(n)} ${n > 1 ? pluralForm : singular}`;
 
-function StatTile({
+// Key figure: a small label, the number as the card title, one line of detail
+function FigureCard({
   label,
   value,
-  detail,
-  children,
+  desc,
 }: {
   label: string;
   value: number;
-  detail?: React.ReactNode;
-  children?: React.ReactNode;
+  desc?: string | null;
 }) {
   return (
-    <div style={tileStyle}>
-      <span>{label}</span>
-      <span
-        className={fr.cx('fr-display--xs', 'fr-mb-0')}
-        style={{ fontVariantNumeric: 'tabular-nums' }}
-      >
-        {formatNumber(value)}
-      </span>
-      {detail && <span className={fr.cx('fr-text--bold')}>{detail}</span>}
-      {children}
-    </div>
+    <Card
+      border
+      size="small"
+      titleAs="h3"
+      classes={{ title: fr.cx('fr-display--xs') }}
+      detail={label}
+      title={formatNumber(value)}
+      desc={desc ?? undefined}
+    />
   );
 }
 
-function TrendDetail({ activity }: { activity: EditionActivityData }) {
+// "+18 % par rapport aux 30 jours précédents"
+function trendText(activity: EditionActivityData): string | null {
   const trend = editionsTrend(activity);
-  const previous = activity.previous_period;
-  if (trend === null || !previous) return null;
-
-  const sign = trend > 0 ? '+' : '';
+  if (trend === null) return null;
   const period = ACTIVITY_PERIODS.find((p) => p.key === activity.period.key);
   const reference = period
     ? `aux ${period.label} précédents`
     : 'à la période précédente';
-  return (
-    <span
-      style={{
-        color:
-          trend >= 0
-            ? colors.text.default.success.default
-            : colors.text.default.error.default,
-      }}
-    >
-      {sign}
-      {trend} % par rapport {reference}
-    </span>
-  );
+  return `${trend > 0 ? '+' : ''}${trend} % par rapport ${reference}`;
 }
 
-// Bar chart of the last 12 months, the months covered by the selected window
-// highlighted
-function MonthlySparkline({ activity }: { activity: EditionActivityData }) {
-  const max = Math.max(1, ...activity.monthly.map((m) => m.editions));
-  const firstMonth = activity.period.since?.slice(0, 7);
-  const highlighted = (month: string) => !!firstMonth && month >= firstMonth;
-  const description = activity.monthly
-    .map((m) => `${monthName(m.month)} : ${formatNumber(m.editions)}`)
-    .join(', ');
+type RankingRow = { name: string; detail: string | null; count: number };
 
+// The single list layout used by every ranking of the block
+function RankingList({ rows }: { rows: RankingRow[] }) {
+  if (rows.length === 0) {
+    return <p className={fr.cx('fr-mb-0')}>Aucune donnée sur cette période.</p>;
+  }
   return (
-    <>
-      <div
-        role="img"
-        aria-label={`Contributions des 12 derniers mois : ${description}`}
-        style={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          gap: fr.spacing('1v'),
-          height: fr.spacing('7w'),
-          marginTop: fr.spacing('1w'),
-        }}
-      >
-        {activity.monthly.map((m) => (
-          <span
-            key={m.month}
-            aria-hidden="true"
-            style={{
-              flex: 1,
-              height: `${Math.max(4, (m.editions / max) * 100)}%`,
-              backgroundColor: highlighted(m.month)
-                ? colors.background.actionHigh.blueFrance.default
-                : colors.background.actionLow.blueFrance.default,
-            }}
-          />
-        ))}
-      </div>
-      <span className={fr.cx('fr-text--xs', 'fr-mb-0')}>12 derniers mois</span>
-    </>
-  );
-}
-
-function initials(name: string) {
-  return name
-    .replace(/[^A-Za-zÀ-ÿ]/g, '')
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-function TopContributors({ activity }: { activity: EditionActivityData }) {
-  const users = activity.top.users;
-  return (
-    <>
-      <h3 className={fr.cx('fr-h5')}>Contributeurs les plus actifs</h3>
-      <ol className={fr.cx('fr-raw-list')}>
-        {users.map((u) => (
-          <li
-            key={u.username}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: fr.spacing('2w'),
-              padding: `${fr.spacing('3v')} 0`,
-              borderBottom: `1px solid ${colors.border.default.grey.default}`,
-            }}
-          >
-            <span
-              className={fr.cx('fr-text--bold')}
-              style={{ width: fr.spacing('3w') }}
-            >
-              {u.rank}
-            </span>
-            <span
-              aria-hidden="true"
-              className={fr.cx('fr-text--bold')}
-              style={{
-                width: fr.spacing('5w'),
-                height: fr.spacing('5w'),
-                flex: 'none',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: colors.background.actionLow.blueFrance.default,
-                color: colors.text.actionHigh.blueFrance.default,
-              }}
-            >
-              {initials(u.username)}
-            </span>
-            <span style={{ flex: 1, minWidth: 0 }}>
-              <span className={fr.cx('fr-text--bold')}>{u.username}</span>
-              {u.organization_short_name && (
-                <span
-                  className={fr.cx('fr-text--sm')}
-                  style={{
-                    display: 'block',
-                    color: colors.text.mention.grey.default,
-                  }}
-                >
-                  {u.organization_short_name}
-                </span>
-              )}
-            </span>
-            <span className={fr.cx('fr-text--bold')}>
-              {formatNumber(u.count)}
-            </span>
-          </li>
-        ))}
-      </ol>
-    </>
+    <ol className={fr.cx('fr-raw-list')}>
+      {rows.map((row, i) => (
+        <li
+          key={`${row.name}-${i}`}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            gap: fr.spacing('2w'),
+            padding: `${fr.spacing('1w')} 0`,
+            borderTop:
+              i > 0
+                ? `1px solid ${colors.border.default.grey.default}`
+                : undefined,
+          }}
+        >
+          <span>
+            {row.name}
+            {row.detail && (
+              <span
+                className={fr.cx('fr-text--sm')}
+                style={{ color: colors.text.mention.grey.default }}
+              >
+                {' '}
+                · {row.detail}
+              </span>
+            )}
+          </span>
+          <span className={fr.cx('fr-text--bold')}>
+            {formatNumber(row.count)}
+          </span>
+        </li>
+      ))}
+    </ol>
   );
 }
 
 type RankingKey = 'organizations' | 'cities' | 'departments';
 
-const RANKINGS: { key: RankingKey; label: string; title: string }[] = [
-  {
-    key: 'organizations',
-    label: 'Organisations',
-    title: 'Organisations les plus actives',
-  },
-  { key: 'cities', label: 'Communes', title: 'Communes les plus éditées' },
-  {
-    key: 'departments',
-    label: 'Départements',
-    title: 'Départements les plus édités',
-  },
+const RANKINGS: { key: RankingKey; label: string }[] = [
+  { key: 'organizations', label: 'Organisations' },
+  { key: 'cities', label: 'Communes' },
+  { key: 'departments', label: 'Départements' },
 ];
 
-function rankingRows(activity: EditionActivityData, key: RankingKey) {
+function rankingRows(
+  activity: EditionActivityData,
+  key: RankingKey,
+): RankingRow[] {
   if (key === 'organizations') {
     return activity.top.organizations.map((o) => ({
       name: o.short_name || o.name,
@@ -228,231 +131,144 @@ function rankingRows(activity: EditionActivityData, key: RankingKey) {
   if (key === 'cities') {
     return activity.top.cities.map((c) => ({
       name: c.name,
-      detail: c.department ? `(${c.department.code})` : null,
+      detail: c.department?.code ?? null,
       count: c.count,
     }));
   }
   return activity.top.departments.map((d) => ({
     name: d.name,
-    detail: `(${d.code})`,
+    detail: d.code,
     count: d.count,
   }));
 }
 
-function Ranking({ activity }: { activity: EditionActivityData }) {
-  const [rankingKey, setRankingKey] = useState<RankingKey>('organizations');
-  const ranking = RANKINGS.find((r) => r.key === rankingKey)!;
-  const rows = rankingRows(activity, rankingKey);
-  const max = Math.max(1, ...rows.map((r) => r.count));
-
+function TopContributorsCard({ activity }: { activity: EditionActivityData }) {
   return (
-    <>
-      <h3 className={fr.cx('fr-h5')}>{ranking.title}</h3>
-      <ul className={fr.cx('fr-tags-group')}>
-        {RANKINGS.map((r) => (
-          <li key={r.key}>
-            <Tag
-              small
-              pressed={r.key === rankingKey}
-              nativeButtonProps={{ onClick: () => setRankingKey(r.key) }}
-            >
-              {r.label}
-            </Tag>
-          </li>
-        ))}
-      </ul>
-      {rows.length === 0 ? (
-        <p>Aucune donnée sur cette période.</p>
-      ) : (
-        <ol className={fr.cx('fr-raw-list')}>
-          {rows.map((row) => (
-            <li key={row.name} className={fr.cx('fr-mb-2w')}>
-              <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: fr.spacing('2w'),
-                }}
-              >
-                <span>
-                  <span className={fr.cx('fr-text--bold')}>{row.name}</span>{' '}
-                  {row.detail && (
-                    <span
-                      className={fr.cx('fr-text--sm')}
-                      style={{ color: colors.text.mention.grey.default }}
-                    >
-                      {row.detail}
-                    </span>
-                  )}
-                </span>
-                <span className={fr.cx('fr-text--bold')}>
-                  {formatNumber(row.count)}
-                </span>
-              </span>
-              <span
-                aria-hidden="true"
-                style={{
-                  display: 'block',
-                  height: fr.spacing('1w'),
-                  marginTop: fr.spacing('1v'),
-                  backgroundColor: colors.background.contrast.grey.default,
-                }}
-              >
-                <span
-                  style={{
-                    display: 'block',
-                    height: '100%',
-                    width: `${(row.count / max) * 100}%`,
-                    backgroundColor:
-                      colors.background.actionHigh.blueFrance.default,
-                  }}
-                />
-              </span>
-            </li>
-          ))}
-        </ol>
-      )}
-    </>
+    <Card
+      border
+      size="small"
+      titleAs="h3"
+      title="Contributeurs les plus actifs"
+      end={
+        <RankingList
+          rows={activity.top.users.map((u) => ({
+            name: u.username,
+            detail: u.organization_short_name,
+            count: u.count,
+          }))}
+        />
+      }
+    />
   );
 }
 
-function Newcomers({ activity }: { activity: EditionActivityData }) {
+function RankingCard({ activity }: { activity: EditionActivityData }) {
+  const [rankingKey, setRankingKey] = useState<RankingKey>('organizations');
+  return (
+    <Card
+      border
+      size="small"
+      titleAs="h3"
+      title="Les plus actifs"
+      end={
+        <>
+          <ul className={fr.cx('fr-tags-group')}>
+            {RANKINGS.map((r) => (
+              <li key={r.key}>
+                <Tag
+                  small
+                  pressed={r.key === rankingKey}
+                  nativeButtonProps={{ onClick: () => setRankingKey(r.key) }}
+                >
+                  {r.label}
+                </Tag>
+              </li>
+            ))}
+          </ul>
+          <RankingList rows={rankingRows(activity, rankingKey)} />
+        </>
+      }
+    />
+  );
+}
+
+function NewcomersCard({ activity }: { activity: EditionActivityData }) {
   const { users, cities, departments } = activity.newcomers;
   const tags = [
-    ...departments.map((d) => ({
-      kind: 'Département',
-      label: `${d.name} (${d.code})`,
-    })),
-    ...cities.map((c) => ({ kind: 'Commune', label: c.name })),
-    ...users.map((u) => ({ kind: 'Contributeur', label: u.username })),
+    ...departments.map((d) => `${d.name} (${d.code})`),
+    ...cities.map((c) => c.name),
+    ...users.map((u) => u.username),
   ];
-  if (tags.length === 0) return null;
 
   return (
-    <div
-      className={fr.cx('fr-mt-5w')}
-      style={{
-        padding: fr.spacing('3w'),
-        backgroundColor: colors.background.alt.blueFrance.default,
-      }}
-    >
-      <h3 className={fr.cx('fr-h6')}>Bienvenue aux nouveaux venus</h3>
-      <ul className={fr.cx('fr-tags-group')}>
-        {tags.map((t) => (
-          <li key={`${t.kind}-${t.label}`}>
-            <Tag>
-              {t.kind} · {t.label}
-            </Tag>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Card
+      border
+      size="small"
+      titleAs="h3"
+      title="Bienvenue aux nouveaux venus"
+      desc="Première contribution sur la période"
+      end={
+        <ul className={fr.cx('fr-tags-group')}>
+          {tags.map((label) => (
+            <li key={label}>
+              <Tag small>{label}</Tag>
+            </li>
+          ))}
+        </ul>
+      }
+    />
   );
 }
 
 const EDITION_GUIDE_URL =
   'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb';
 
-function Step({
-  number,
-  title,
-  link,
-  children,
-}: {
-  number: number;
-  title: string;
-  link: { label: string; href: string };
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ display: 'flex', gap: fr.spacing('2w') }}>
-      <span
-        aria-hidden="true"
-        className={fr.cx('fr-text--bold')}
-        style={{
-          width: fr.spacing('5w'),
-          height: fr.spacing('5w'),
-          flex: 'none',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: colors.background.actionHigh.blueFrance.default,
-          color: colors.text.inverted.grey.default,
-        }}
-      >
-        {number}
-      </span>
-      <div>
-        <h4 className={fr.cx('fr-h6', 'fr-mb-1w')}>{title}</h4>
-        <p className={fr.cx('fr-text--sm', 'fr-mb-1w')}>{children}</p>
-        <a
-          href={link.href}
-          className={fr.cx(
-            'fr-link',
-            'fr-link--sm',
-            'fr-icon-arrow-right-line',
-            'fr-link--icon-right',
-          )}
-        >
-          {link.label}
-        </a>
-      </div>
-    </div>
-  );
-}
-
 // How the RNB is built: the national databases, the community, open data
 function HowItWorks({ importCount }: { importCount: number | null }) {
   const importsSince = new Date(IMPORT_STATS_SINCE).getFullYear();
+  const steps = [
+    {
+      title: 'Les bases nationales',
+      desc:
+        'BD TOPO de l’IGN et Bases Adresse Locales, importées régulièrement.' +
+        (importCount
+          ? ` ${formatNumber(importCount)} mises à jour depuis ${importsSince}.`
+          : ''),
+      href: '/a-propos',
+    },
+    {
+      title: 'La communauté complète',
+      desc: 'Collectivités, professionnels et citoyens corrigent les bâtiments qu’ils connaissent.',
+      href: EDITION_GUIDE_URL,
+    },
+    {
+      title: 'Tout le monde en profite',
+      desc: 'Chaque modification est historisée et diffusée librement : carte, API et exports.',
+      href: '/faq',
+    },
+  ];
   return (
-    <div
-      className={fr.cx('fr-mt-6w', 'fr-pt-5w')}
-      style={{ borderTop: `1px solid ${colors.border.default.grey.default}` }}
-    >
-      <h3 className={fr.cx('fr-h5', 'fr-mb-4w')}>
+    <>
+      <h3 className={fr.cx('fr-h5', 'fr-mt-6w')}>
         Comment se construit le RNB ?
       </h3>
       <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-        <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <Step
-            number={1}
-            title="Les bases nationales"
-            link={{ label: 'Comment est construit le RNB', href: '/a-propos' }}
-          >
-            Le RNB s&apos;appuie sur la BD TOPO de l&apos;IGN et les Bases
-            Adresse Locales, importées régulièrement.
-            {!!importCount && (
-              <>
-                {' '}
-                <strong>{formatNumber(importCount)}</strong> mises à jour depuis{' '}
-                {importsSince}.
-              </>
-            )}
-          </Step>
-        </div>
-        <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <Step
-            number={2}
-            title="La communauté complète"
-            link={{ label: "Le guide de l'édition", href: EDITION_GUIDE_URL }}
-          >
-            Collectivités, professionnels et citoyens corrigent la forme,
-            l&apos;adresse ou le statut des bâtiments qu&apos;ils connaissent.
-          </Step>
-        </div>
-        <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <Step
-            number={3}
-            title="Tout le monde en profite"
-            link={{ label: 'Foire aux questions', href: '/faq' }}
-          >
-            Chaque modification est historisée, tracée et diffusée librement :
-            carte, API et exports, sous licence ouverte.
-          </Step>
-        </div>
+        {steps.map((step, i) => (
+          <div key={step.title} className={fr.cx('fr-col-12', 'fr-col-md-4')}>
+            <Card
+              border
+              size="small"
+              titleAs="h4"
+              enlargeLink
+              linkProps={{ href: step.href }}
+              detail={`Étape ${i + 1}`}
+              title={step.title}
+              desc={step.desc}
+            />
+          </div>
+        ))}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -464,6 +280,11 @@ export default function EditionActivity({ activities, importCount }: Props) {
   if (!activity) return null;
 
   const { totals, newcomers } = activity;
+  const hasNewcomers =
+    newcomers.users.length +
+      newcomers.cities.length +
+      newcomers.departments.length >
+    0;
   // the DSFR expects a tuple of 1 to 5 segments; activities is not empty here
   const segments = ACTIVITY_PERIODS.filter((p) =>
     activities.some((a) => a.period.key === p.key),
@@ -479,46 +300,30 @@ export default function EditionActivity({ activities, importCount }: Props) {
   return (
     <section className={fr.cx('fr-my-8w')}>
       <div
-        className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mb-4w')}
+        className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mb-2w')}
         style={{ alignItems: 'flex-end' }}
       >
         <div className={fr.cx('fr-col-12', 'fr-col-lg-8')}>
-          <p
-            className={fr.cx('fr-text--sm', 'fr-text--bold', 'fr-mb-1w')}
-            style={{
-              color: colors.text.actionHigh.blueFrance.default,
-              textTransform: 'uppercase',
-            }}
-          >
-            La communauté du RNB
-          </p>
-          <h2>{activityHeadline(activity)}</h2>
-          <p className={fr.cx('fr-text--lg', 'fr-mb-0')}>
-            Des collectivités, des professionnels et des citoyens corrigent
-            chaque jour les bâtiments de leur territoire. Chaque contribution
-            est tracée et profite à tous.
-          </p>
+          <h2 className={fr.cx('fr-mb-0')}>{activityHeadline(activity)}</h2>
         </div>
         <div className={fr.cx('fr-col-12', 'fr-col-lg-4')}>
           <SegmentedControl legend="Période" hideLegend segments={segments} />
         </div>
       </div>
 
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mb-5w')}>
+      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
         <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <StatTile
+          <FigureCard
             label="Contributions"
             value={totals.editions}
-            detail={<TrendDetail activity={activity} />}
-          >
-            <MonthlySparkline activity={activity} />
-          </StatTile>
+            desc={trendText(activity)}
+          />
         </div>
         <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <StatTile
+          <FigureCard
             label="Communes éditées"
             value={totals.cities}
-            detail={
+            desc={
               newcomers.count?.cities
                 ? `dont ${formatNumber(newcomers.count.cities)} pour la première fois`
                 : null
@@ -526,30 +331,34 @@ export default function EditionActivity({ activities, importCount }: Props) {
           />
         </div>
         <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <StatTile
+          <FigureCard
             label="Contributeurs actifs"
             value={totals.editors}
-            detail={
+            desc={
               newcomers.count?.users
-                ? `dont ${formatNumber(newcomers.count.users)} ${newcomers.count.users > 1 ? 'nouveaux' : 'nouveau'}`
+                ? `dont ${plural(newcomers.count.users, 'nouveau', 'nouveaux')}`
                 : null
             }
           />
         </div>
+
+        {totals.editions > 0 && (
+          <>
+            <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
+              <TopContributorsCard activity={activity} />
+            </div>
+            <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
+              <RankingCard activity={activity} />
+            </div>
+          </>
+        )}
+
+        {hasNewcomers && (
+          <div className={fr.cx('fr-col-12')}>
+            <NewcomersCard activity={activity} />
+          </div>
+        )}
       </div>
-
-      {totals.editions > 0 && (
-        <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-          <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
-            <TopContributors activity={activity} />
-          </div>
-          <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
-            <Ranking activity={activity} />
-          </div>
-        </div>
-      )}
-
-      <Newcomers activity={activity} />
 
       <HowItWorks importCount={importCount} />
 

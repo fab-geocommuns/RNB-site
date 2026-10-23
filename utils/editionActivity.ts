@@ -118,15 +118,6 @@ export function windowLabel(key: string): string | null {
   return days > 1 ? `${days} derniers jours` : 'dernier jour';
 }
 
-// "2026-09-01" or "2026-09" → "septembre"
-export function monthName(date: string): string {
-  const [year, month] = date.split('-').map(Number);
-  return new Date(Date.UTC(year, month - 1, 15)).toLocaleDateString('fr-FR', {
-    month: 'long',
-    timeZone: 'UTC',
-  });
-}
-
 // Short sentence summing up the period, used as the block title
 export function activityHeadline(activity: EditionActivity): string {
   const { editions, cities } = activity.totals;
