@@ -15,7 +15,7 @@ import styles from '@/styles/editionActivity.module.scss';
 
 import {
   ACTIVITY_PERIODS,
-  activityHeadline,
+  activitySummary,
   DEFAULT_PERIOD_KEY,
   EditionActivity as EditionActivityData,
   editionsTrend,
@@ -32,29 +32,6 @@ const colors = fr.colors.decisions;
 
 const plural = (n: number, singular: string, pluralForm: string) =>
   `${formatNumber(n)} ${n > 1 ? pluralForm : singular}`;
-
-// Key figure: a small label, the number as the card title, one line of detail
-function FigureCard({
-  label,
-  value,
-  desc,
-}: {
-  label: string;
-  value: number;
-  desc?: string | null;
-}) {
-  return (
-    <Card
-      border
-      size="small"
-      titleAs="h3"
-      classes={{ title: fr.cx('fr-display--xs') }}
-      detail={label}
-      title={formatNumber(value)}
-      desc={desc ?? undefined}
-    />
-  );
-}
 
 // "+18 % par rapport aux 30 jours précédents"
 function trendText(activity: EditionActivityData): string | null {
@@ -111,13 +88,20 @@ function RankingList({ rows }: { rows: RankingRow[] }) {
   );
 }
 
-type RankingKey = 'users' | 'organizations' | 'cities' | 'departments';
+type RankingKey = 'users' | 'organizations' | 'cities';
 
-const RANKINGS: { key: RankingKey; label: string }[] = [
-  { key: 'users', label: 'Contributeurs' },
-  { key: 'organizations', label: 'Organisations' },
-  { key: 'cities', label: 'Communes' },
-  { key: 'departments', label: 'Départements' },
+const RANKINGS: { key: RankingKey; label: string; title: string }[] = [
+  {
+    key: 'users',
+    label: 'Contributeurs',
+    title: 'Contributeurs les plus actifs',
+  },
+  {
+    key: 'organizations',
+    label: 'Organisations',
+    title: 'Organisations les plus actives',
+  },
+  { key: 'cities', label: 'Communes', title: 'Communes les plus éditées' },
 ];
 
 function rankingRows(
@@ -138,37 +122,45 @@ function rankingRows(
       count: o.count,
     }));
   }
-  if (key === 'cities') {
-    return activity.top.cities.map((c) => ({
-      name: c.name,
-      detail: c.department?.code ?? null,
-      count: c.count,
-    }));
-  }
-  return activity.top.departments.map((d) => ({
-    name: d.name,
-    detail: d.code,
-    count: d.count,
+  return activity.top.cities.map((c) => ({
+    name: c.name,
+    detail: c.department?.code ?? null,
+    count: c.count,
   }));
 }
 
-// Every ranking in one DSFR tabs component, the same list in each tab
+// The 3 rankings side by side on large screens, in DSFR tabs on small ones
 function Rankings({ activity }: { activity: EditionActivityData }) {
   return (
     <>
-      <h3 className={fr.cx('fr-h5', 'fr-mt-4w')}>Les plus actifs</h3>
-      <Tabs
-        label="Les plus actifs"
-        // white panel, like the cards, on the colored band
-        classes={{
-          panel: fr.cx('fr-p-3w'),
-        }}
-        style={{ backgroundColor: colors.background.default.grey.default }}
-        tabs={RANKINGS.map((r) => ({
-          label: r.label,
-          content: <RankingList rows={rankingRows(activity, r.key)} />,
-        }))}
-      />
+      {/* the visibility classes override display: they stay off the grid */}
+      <div className={fr.cx('fr-hidden', 'fr-unhidden-md')}>
+        <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
+          {RANKINGS.map((r) => (
+            <div key={r.key} className={fr.cx('fr-col-md-4')}>
+              <Card
+                border
+                size="small"
+                titleAs="h3"
+                title={r.title}
+                end={<RankingList rows={rankingRows(activity, r.key)} />}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className={fr.cx('fr-hidden-md')}>
+        <Tabs
+          label="Les plus actifs"
+          // white panel, like the cards, on the colored band
+          classes={{ panel: fr.cx('fr-p-3w') }}
+          style={{ backgroundColor: colors.background.default.grey.default }}
+          tabs={RANKINGS.map((r) => ({
+            label: r.label,
+            content: <RankingList rows={rankingRows(activity, r.key)} />,
+          }))}
+        />
+      </div>
     </>
   );
 }
@@ -228,6 +220,31 @@ function Newcomers({ activity }: { activity: EditionActivityData }) {
   );
 }
 
+const EDITION_GUIDE_URL =
+  'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb';
+
+// Where to start: understand the RNB, then contribute
+const RESOURCES = [
+  { label: 'Comment est construit le RNB', href: '/a-propos' },
+  { label: 'Le guide de l’édition', href: EDITION_GUIDE_URL },
+  { label: 'Foire aux questions', href: '/faq' },
+];
+
+// "+18 % par rapport aux 30 jours précédents · 2 communes et 1 contributeur
+// pour la première fois"
+function summaryDetail(activity: EditionActivityData): string | null {
+  const count = activity.newcomers.count;
+  const firsts = [
+    count?.cities ? plural(count.cities, 'commune', 'communes') : null,
+    count?.users ? plural(count.users, 'contributeur', 'contributeurs') : null,
+  ].filter(Boolean);
+  const parts = [
+    trendText(activity),
+    firsts.length ? `${firsts.join(' et ')} pour la première fois` : null,
+  ].filter(Boolean);
+  return parts.length ? parts.join(' · ') : null;
+}
+
 export default function EditionActivity({ activities }: Props) {
   const [periodKey, setPeriodKey] = useState(DEFAULT_PERIOD_KEY);
   const activity =
@@ -235,7 +252,7 @@ export default function EditionActivity({ activities }: Props) {
 
   if (!activity) return null;
 
-  const { totals, newcomers } = activity;
+  const detail = summaryDetail(activity);
   // the DSFR expects a tuple of 1 to 5 segments; activities is not empty here
   const segments = ACTIVITY_PERIODS.filter((p) =>
     activities.some((a) => a.period.key === p.key),
@@ -259,49 +276,57 @@ export default function EditionActivity({ activities }: Props) {
       }}
     >
       <div className="section__titleblock">
-        <h2 className="section__title">La communauté du RNB</h2>
-        <p className="section__subtitle">{activityHeadline(activity)}</p>
+        <h2 className="section__title">Participer au RNB</h2>
+        <p className="section__subtitle">
+          Le RNB se construit en continu : avec les bases nationales, et avec
+          celles et ceux qui connaissent leur territoire.
+        </p>
       </div>
-      <div
-        className={fr.cx('fr-mb-4w')}
-        style={{ display: 'flex', justifyContent: 'center' }}
+      <ul
+        className={fr.cx('fr-raw-list', 'fr-mb-6w')}
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: `${fr.spacing('1w')} ${fr.spacing('4w')}`,
+        }}
       >
+        {RESOURCES.map((r) => (
+          <li key={r.href}>
+            <a
+              href={r.href}
+              className={fr.cx(
+                'fr-link',
+                'fr-icon-arrow-right-line',
+                'fr-link--icon-right',
+              )}
+            >
+              {r.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div
+        className={fr.cx('fr-mb-3w')}
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: fr.spacing('2w'),
+        }}
+      >
+        <div>
+          <p className={fr.cx('fr-text--lead', 'fr-text--bold', 'fr-mb-0')}>
+            {activitySummary(activity)}
+          </p>
+          {detail && <p className={fr.cx('fr-mb-0')}>{detail}</p>}
+        </div>
         <SegmentedControl legend="Période" hideLegend segments={segments} />
       </div>
 
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-        <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <FigureCard
-            label="Contributions"
-            value={totals.editions}
-            desc={trendText(activity)}
-          />
-        </div>
-        <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <FigureCard
-            label="Communes éditées"
-            value={totals.cities}
-            desc={
-              newcomers.count?.cities
-                ? `dont ${formatNumber(newcomers.count.cities)} pour la première fois`
-                : null
-            }
-          />
-        </div>
-        <div className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-          <FigureCard
-            label="Contributeurs actifs"
-            value={totals.editors}
-            desc={
-              newcomers.count?.users
-                ? `dont ${plural(newcomers.count.users, 'nouveau', 'nouveaux')}`
-                : null
-            }
-          />
-        </div>
-      </div>
-
-      {totals.editions > 0 && <Rankings activity={activity} />}
+      {activity.totals.editions > 0 && <Rankings activity={activity} />}
 
       <Newcomers activity={activity} />
 
@@ -311,7 +336,7 @@ export default function EditionActivity({ activities }: Props) {
         alignment="center"
         buttons={[
           {
-            children: 'Rejoindre les contributeurs',
+            children: 'S’inscrire pour contribuer',
             linkProps: { href: '/inscription' },
           },
           {

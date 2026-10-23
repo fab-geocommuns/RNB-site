@@ -4,13 +4,13 @@ import { Locator, Page } from '@playwright/test';
 export class ActivityPreviewPage extends RNBPage {
   readonly section: Locator;
   // generated sentence summing up the period
-  readonly subtitle: Locator;
+  readonly summary: Locator;
 
   constructor(page: Page) {
     super(page, '/apercu-activite');
     this.section = page.locator('section').filter({
-      has: page.getByRole('heading', { name: 'La communauté du RNB' }),
+      has: page.getByRole('heading', { name: 'Participer au RNB' }),
     });
-    this.subtitle = this.section.locator('.section__subtitle');
+    this.summary = this.section.locator('.fr-text--lead');
   }
 }

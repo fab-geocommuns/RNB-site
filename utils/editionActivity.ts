@@ -105,19 +105,23 @@ export function windowLabel(key: string): string | null {
   return days > 1 ? `${days} derniers jours` : 'dernier jour';
 }
 
-// Short sentence summing up the period, used as the block title
-export function activityHeadline(activity: EditionActivity): string {
-  const { editions, cities } = activity.totals;
+const countOf = (n: number, singular: string, plural: string) =>
+  `${n.toLocaleString('fr-FR')} ${n > 1 ? plural : singular}`;
+
+// One sentence summing up the period:
+// "Ces 30 derniers jours : 35 contributions dans 3 communes par 2 contributeurs"
+export function activitySummary(activity: EditionActivity): string {
+  const { editions, cities, editors } = activity.totals;
   const window = windowLabel(activity.period.key);
   const when = window ? `Ces ${window}` : 'Récemment';
   if (editions === 0) {
-    return `${when}, aucune contribution`;
+    return `${when} : aucune contribution pour l’instant`;
   }
-  const subject =
-    cities > 1
-      ? `${cities.toLocaleString('fr-FR')} communes ont amélioré leurs bâtiments`
-      : `${cities} commune a amélioré ses bâtiments`;
-  return `${when}, ${subject}`;
+  return (
+    `${when} : ${countOf(editions, 'contribution', 'contributions')}` +
+    ` dans ${countOf(cities, 'commune', 'communes')}` +
+    ` par ${countOf(editors, 'contributeur', 'contributeurs')}`
+  );
 }
 
 // Evolution of the edition count compared with the previous period, in %

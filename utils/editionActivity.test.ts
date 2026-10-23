@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  activityHeadline,
+  activitySummary,
   EditionActivity,
   editionsTrend,
   windowLabel,
@@ -11,10 +11,11 @@ const withTotals = (
   editions: number,
   cities: number,
   previous: number | null = null,
+  editors = 1,
 ) =>
   ({
     period: { key, since: null },
-    totals: { editions, cities, editors: 1 },
+    totals: { editions, cities, editors },
     previous_period:
       previous === null ? null : { since: '', until: '', editions: previous },
   }) as EditionActivity;
@@ -31,22 +32,24 @@ describe('windowLabel', () => {
   });
 });
 
-describe('activityHeadline', () => {
-  it('résume la fenêtre avec le nombre de communes', () => {
-    expect(activityHeadline(withTotals('last_30_days', 50, 235))).toBe(
-      'Ces 30 derniers jours, 235 communes ont amélioré leurs bâtiments',
+describe('activitySummary', () => {
+  it('résume la fenêtre en une phrase', () => {
+    expect(
+      activitySummary(withTotals('last_30_days', 1234, 235, null, 20)),
+    ).toBe(
+      'Ces 30 derniers jours : 1\u202f234 contributions dans 235 communes par 20 contributeurs',
     );
   });
 
   it('accorde au singulier', () => {
-    expect(activityHeadline(withTotals('last_7_days', 2, 1))).toBe(
-      'Ces 7 derniers jours, 1 commune a amélioré ses bâtiments',
+    expect(activitySummary(withTotals('last_7_days', 1, 1, null, 1))).toBe(
+      'Ces 7 derniers jours : 1 contribution dans 1 commune par 1 contributeur',
     );
   });
 
   it('gère une période sans contribution', () => {
-    expect(activityHeadline(withTotals('last_7_days', 0, 0))).toBe(
-      'Ces 7 derniers jours, aucune contribution',
+    expect(activitySummary(withTotals('last_7_days', 0, 0))).toBe(
+      'Ces 7 derniers jours : aucune contribution pour l’instant',
     );
   });
 });
