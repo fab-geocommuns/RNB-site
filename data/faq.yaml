@@ -50,7 +50,7 @@
         <p>Cette définition est complétée par une <a href="https://github.com/fab-geocommuns/RNB/blob/main/CNIG/Annexe-Definition-Batiment.md">annexe</a>, qui vise à l’étayer et apporter un éclairage aux cas particuliers rencontrés.</p>
         <p>Vous ne savez pas si votre construction ou structure correspond à la définition du bâtiment ?</p>
         <p><b>Evaluez si votre construction est un bâtiment</b> dans le <a href="https://rnb.beta.gouv.fr/definition" target="_blank">moteur de recherche</a> et parcourez la liste des cas recensés par le RNB, par mots clés (ex : extension, terrasse, kiosque…).</p>
-    - question: Le RNB contient-il des bâtiments légers ? 
+    - question: Le RNB contient-il des bâtiments légers ?
       key: batimentslegers
       answer: >
         <p>Non, le RNB ne contient pas les bâtiments “légers” sans fondation (ex : serre avec tubulures en acier et bâche en plastique). Il contient les bâtiments ayant pour objectif d’être permanents. Si vous constatez qu’un bâtiment léger est présent dans le RNB, vous pouvez désactiver son ID-RNB (Voir <a href="https://rnb.beta.gouv.fr/faq#editer">Comment éditer dans le RNB ?</a>)</p>
@@ -118,14 +118,11 @@
         <li>les identifiants <a href="https://bdnb.io/" target="_blank">BDNB</a> et <a href="https://geoservices.ign.fr/bdtopo" target="_blank">BDTOPO</a> associés</li>
         <li>les <a href="https://rnb-fr.gitbook.io/documentation/repository-rnb-coeur/proprietes-dun-batiment/parcelles-cadastrales" target="_blank">parcelles cadastrales</a></li>
         </ul>
-        <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 6 : </p>
+        <p><b>Focus sur le statut du bâtiment :</b> le RNB indique l’état du bâtiment en question, via un statut. Il en existe 3 : </p>
         <ol>
-        <li>En projet</li>
-        <li>Projet annulé</li>
-        <li>Bâtiment en construction</li>
         <li>Construit</li>
-        <li>Détruit</li>
-        <li>Non utilisable (ne permet pas d’abriter des activités humaines, ex. en ruine)</li>
+        <li>Démoli</li>
+        <li>En ruine (ne permet pas d’abriter des activités humaines)</li>
         </ol>
         <p>Ces statuts évoluent selon les informations remontées dans le RNB.</p>
     - question: Est-ce qu'il est possible de savoir quels bâtiments sont présents sur une parcelle ? Est-ce que le RNB fait le lien entre les ID-RNB et les parcelles cadastrales ?
