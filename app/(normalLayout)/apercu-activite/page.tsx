@@ -2,7 +2,7 @@ import Alert from '@codegouvfr/react-dsfr/Alert';
 import * as Sentry from '@sentry/nextjs';
 
 import EditionActivity from '@/components/home/EditionActivity';
-import { getEditionActivities, getImportCount } from '@/utils/editionActivity';
+import { getEditionActivities } from '@/utils/editionActivity';
 import pageTitle from '@/utils/pageTitle';
 
 // Preview of the home page activity block, to try it with production data
@@ -21,10 +21,9 @@ const logError = (source: string) => (error: unknown) => {
 };
 
 export default async function Page() {
-  const [editionActivities, importCount] = await Promise.all([
-    getEditionActivities(REVALIDATE).catch(logError('edition activity')),
-    getImportCount(REVALIDATE).catch(logError('import count')),
-  ]);
+  const editionActivities = await getEditionActivities(REVALIDATE).catch(
+    logError('edition activity'),
+  );
 
   return (
     <div className="fr-container">
@@ -36,10 +35,7 @@ export default async function Page() {
           description="L’API n’a pas répondu à temps. Rechargez la page dans quelques instants."
         />
       )}
-      <EditionActivity
-        activities={editionActivities ?? []}
-        importCount={importCount}
-      />
+      <EditionActivity activities={editionActivities ?? []} />
     </div>
   );
 }

@@ -114,11 +114,6 @@ const editionActivity = (period) => ({
   },
 });
 
-const changeStatsDay = (date, bdtopo, bal) => ({
-  date,
-  events_count: { import_bdtopo: bdtopo, import_bal: bal, contributions: 10 },
-});
-
 const server = createServer((req, res) => {
   const { method, url } = req;
   const u = new URL(url, `http://localhost:${PORT}`);
@@ -149,13 +144,6 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path === '/api/alpha/editions/activity/') {
     const days = u.searchParams.get('days') || '30';
     return json(res, 200, editionActivity(`last_${days}_days`));
-  }
-  if (method === 'GET' && path === '/api/alpha/buildings/change_stats/') {
-    return json(res, 200, [
-      changeStatsDay('2024-04-15', 120000, 3000),
-      changeStatsDay('2025-04-15', 90000, 4500),
-      changeStatsDay('2026-04-15', 60000, 2000),
-    ]);
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });

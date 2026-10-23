@@ -16,12 +16,10 @@ import {
   DEFAULT_PERIOD_KEY,
   EditionActivity as EditionActivityData,
   editionsTrend,
-  IMPORT_STATS_SINCE,
 } from '@/utils/editionActivity';
 
 type Props = {
   activities: EditionActivityData[];
-  importCount: number | null;
 };
 
 const formatNumber = (n: number) => n.toLocaleString('fr-FR');
@@ -192,87 +190,36 @@ function RankingCard({ activity }: { activity: EditionActivityData }) {
   );
 }
 
-function NewcomersCard({ activity }: { activity: EditionActivityData }) {
+// One line of tags: departments, cities and users who contributed for the first time
+function Newcomers({ activity }: { activity: EditionActivityData }) {
   const { users, cities, departments } = activity.newcomers;
   const tags = [
     ...departments.map((d) => `${d.name} (${d.code})`),
     ...cities.map((c) => c.name),
     ...users.map((u) => u.username),
   ];
+  if (tags.length === 0) return null;
 
   return (
-    <Card
-      border
-      size="small"
-      titleAs="h3"
-      title="Bienvenue aux nouveaux venus"
-      desc="Première contribution sur la période"
-      end={
-        <ul className={fr.cx('fr-tags-group')}>
-          {tags.map((label) => (
-            <li key={label}>
-              <Tag small>{label}</Tag>
-            </li>
-          ))}
-        </ul>
-      }
-    />
-  );
-}
-
-const EDITION_GUIDE_URL =
-  'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb';
-
-// How the RNB is built: the national databases, the community, open data
-function HowItWorks({ importCount }: { importCount: number | null }) {
-  const importsSince = new Date(IMPORT_STATS_SINCE).getFullYear();
-  const steps = [
-    {
-      title: 'Les bases nationales',
-      desc:
-        'BD TOPO de l’IGN et Bases Adresse Locales, importées régulièrement.' +
-        (importCount
-          ? ` ${formatNumber(importCount)} mises à jour depuis ${importsSince}.`
-          : ''),
-      href: '/a-propos',
-    },
-    {
-      title: 'La communauté complète',
-      desc: 'Collectivités, professionnels et citoyens corrigent les bâtiments qu’ils connaissent.',
-      href: EDITION_GUIDE_URL,
-    },
-    {
-      title: 'Tout le monde en profite',
-      desc: 'Chaque modification est historisée et diffusée librement : carte, API et exports.',
-      href: '/faq',
-    },
-  ];
-  return (
-    <>
-      <h3 className={fr.cx('fr-h5', 'fr-mt-6w')}>
-        Comment se construit le RNB ?
-      </h3>
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-        {steps.map((step, i) => (
-          <div key={step.title} className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-            <Card
-              border
-              size="small"
-              titleAs="h4"
-              enlargeLink
-              linkProps={{ href: step.href }}
-              detail={`Étape ${i + 1}`}
-              title={step.title}
-              desc={step.desc}
-            />
-          </div>
+    <div className={fr.cx('fr-mt-4w')} style={{ textAlign: 'center' }}>
+      <p className={fr.cx('fr-text--bold', 'fr-mb-1w')}>
+        Bienvenue aux nouveaux venus
+      </p>
+      <ul
+        className={fr.cx('fr-tags-group')}
+        style={{ justifyContent: 'center' }}
+      >
+        {tags.map((label) => (
+          <li key={label}>
+            <Tag small>{label}</Tag>
+          </li>
         ))}
-      </div>
-    </>
+      </ul>
+    </div>
   );
 }
 
-export default function EditionActivity({ activities, importCount }: Props) {
+export default function EditionActivity({ activities }: Props) {
   const [periodKey, setPeriodKey] = useState(DEFAULT_PERIOD_KEY);
   const activity =
     activities.find((a) => a.period.key === periodKey) ?? activities[0];
@@ -280,11 +227,6 @@ export default function EditionActivity({ activities, importCount }: Props) {
   if (!activity) return null;
 
   const { totals, newcomers } = activity;
-  const hasNewcomers =
-    newcomers.users.length +
-      newcomers.cities.length +
-      newcomers.departments.length >
-    0;
   // the DSFR expects a tuple of 1 to 5 segments; activities is not empty here
   const segments = ACTIVITY_PERIODS.filter((p) =>
     activities.some((a) => a.period.key === p.key),
@@ -298,17 +240,24 @@ export default function EditionActivity({ activities, importCount }: Props) {
   })) as unknown as SegmentedControlProps['segments'];
 
   return (
-    <section className={fr.cx('fr-my-8w')}>
+    // colored band, like the other home page sections, so that the cards do
+    // not merge with the white cards of the next section
+    <section
+      className={fr.cx('fr-my-8w')}
+      style={{
+        padding: `${fr.spacing('6w')} ${fr.spacing('3w')}`,
+        backgroundColor: colors.background.alt.blueFrance.default,
+      }}
+    >
+      <div className="section__titleblock">
+        <h2 className="section__title">La communauté du RNB</h2>
+        <p className="section__subtitle">{activityHeadline(activity)}</p>
+      </div>
       <div
-        className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mb-2w')}
-        style={{ alignItems: 'flex-end' }}
+        className={fr.cx('fr-mb-4w')}
+        style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <div className={fr.cx('fr-col-12', 'fr-col-lg-8')}>
-          <h2 className={fr.cx('fr-mb-0')}>{activityHeadline(activity)}</h2>
-        </div>
-        <div className={fr.cx('fr-col-12', 'fr-col-lg-4')}>
-          <SegmentedControl legend="Période" hideLegend segments={segments} />
-        </div>
+        <SegmentedControl legend="Période" hideLegend segments={segments} />
       </div>
 
       <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
@@ -352,19 +301,14 @@ export default function EditionActivity({ activities, importCount }: Props) {
             </div>
           </>
         )}
-
-        {hasNewcomers && (
-          <div className={fr.cx('fr-col-12')}>
-            <NewcomersCard activity={activity} />
-          </div>
-        )}
       </div>
 
-      <HowItWorks importCount={importCount} />
+      <Newcomers activity={activity} />
 
       <ButtonsGroup
-        className={fr.cx('fr-mt-5w')}
+        className={fr.cx('fr-mt-4w')}
         inlineLayoutWhen="md and up"
+        alignment="center"
         buttons={[
           {
             children: 'Rejoindre les contributeurs',

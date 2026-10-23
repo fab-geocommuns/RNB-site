@@ -1,5 +1,4 @@
-// Edition activity (GET /editions/activity/) and import statistics
-// (GET /buildings/change_stats/) displayed on the home page.
+// Edition activity (GET /editions/activity/) displayed on the home page.
 
 import { rnbApi } from '@/utils/rnbApi';
 
@@ -83,18 +82,6 @@ export type EditionActivity = {
   };
 };
 
-type ChangeStatsDay = {
-  date: string;
-  events_count: {
-    import_bdtopo: number;
-    import_bal: number;
-    contributions: number;
-  };
-};
-
-// The API rejects change_stats requests starting before this date
-export const IMPORT_STATS_SINCE = '2024-01-01';
-
 // Periods offered on the home page: rolling windows, compared with the window
 // of the same length just before. Longer windows (12 months, all time) are left
 // out until the API computes them fast enough.
@@ -140,15 +127,6 @@ export function editionsTrend(activity: EditionActivity): number | null {
   return Math.round(((activity.totals.editions - previous) / previous) * 100);
 }
 
-// Number of BD TOPO and BAL imports, contributions left out
-export function countImports(days: ChangeStatsDay[]): number {
-  return days.reduce(
-    (sum, day) =>
-      sum + day.events_count.import_bdtopo + day.events_count.import_bal,
-    0,
-  );
-}
-
 // Short timeout so that a slow API does not block the home page
 const FETCH_TIMEOUT_MS = 3000;
 
@@ -177,13 +155,4 @@ export async function getEditionActivities(
     throw (results[0] as PromiseRejectedResult).reason;
   }
   return activities;
-}
-
-export async function getImportCount(revalidate?: number): Promise<number> {
-  const until = new Date().toISOString().slice(0, 10);
-  const days = await rnbApi.get<ChangeStatsDay[]>('buildings/change_stats/', {
-    query: { since: IMPORT_STATS_SINCE, until },
-    ...fetchOptions(revalidate),
-  });
-  return countImports(days);
 }

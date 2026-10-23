@@ -1,32 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   activityHeadline,
-  countImports,
   EditionActivity,
   editionsTrend,
   windowLabel,
 } from './editionActivity';
-
-const day = (date: string, bdtopo: number, bal: number) => ({
-  date,
-  events_count: { import_bdtopo: bdtopo, import_bal: bal, contributions: 5 },
-});
-
-describe('countImports', () => {
-  it('additionne les imports BD TOPO et BAL, sans les contributions', () => {
-    expect(
-      countImports([
-        day('2024-01-01', 10, 1),
-        day('2024-12-31', 5, 0),
-        day('2025-06-01', 0, 3),
-      ]),
-    ).toBe(19);
-  });
-
-  it('renvoie 0 sans données', () => {
-    expect(countImports([])).toBe(0);
-  });
-});
 
 const withTotals = (
   key: string,

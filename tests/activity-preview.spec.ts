@@ -6,10 +6,10 @@ test.describe("Aperçu de l'activité", () => {
   test('affiche les contributions de la communauté par fenêtre glissante', async ({
     activityPreviewPage,
   }) => {
-    const { section, title } = activityPreviewPage;
+    const { section, subtitle } = activityPreviewPage;
     // first big number: the contributions tile
     const contributionsCount = section.locator('.fr-display--xs').first();
-    await expect(title).toHaveText(
+    await expect(subtitle).toHaveText(
       'Ces 30 derniers jours, 42 communes ont amélioré leurs bâtiments',
     );
     await expect(contributionsCount).toHaveText(/^1\s234$/);
@@ -22,7 +22,7 @@ test.describe("Aperçu de l'activité", () => {
 
     await section.getByText('7 jours').click();
     await expect(contributionsCount).toHaveText(/^321$/);
-    await expect(title).toHaveText(
+    await expect(subtitle).toHaveText(
       'Ces 7 derniers jours, 42 communes ont amélioré leurs bâtiments',
     );
   });
@@ -39,16 +39,13 @@ test.describe("Aperçu de l'activité", () => {
     await expect(section.getByText('Ville Test')).toBeVisible();
   });
 
-  test('explique comment se construit le RNB', async ({
+  test('propose de rejoindre les contributeurs', async ({
     activityPreviewPage,
   }) => {
-    const { section } = activityPreviewPage;
     await expect(
-      section.getByRole('heading', { name: 'Comment se construit le RNB ?' }),
-    ).toBeVisible();
-    await expect(section.getByText(/279\s500/)).toBeVisible();
-    await expect(
-      section.getByRole('link', { name: 'Rejoindre les contributeurs' }),
+      activityPreviewPage.section.getByRole('link', {
+        name: 'Rejoindre les contributeurs',
+      }),
     ).toHaveAttribute('href', '/inscription');
   });
 
