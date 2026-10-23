@@ -141,7 +141,7 @@ function Rankings({ activity }: { activity: EditionActivityData }) {
               <Card
                 border
                 size="small"
-                titleAs="h3"
+                titleAs="h4"
                 title={r.title}
                 end={<RankingList rows={rankingRows(activity, r.key)} />}
               />
@@ -190,14 +190,14 @@ function Newcomers({ activity }: { activity: EditionActivityData }) {
   const window = windowLabel(activity.period.key);
 
   return (
-    <div className={fr.cx('fr-mt-6w')} style={{ textAlign: 'center' }}>
-      <h3 className={fr.cx('fr-h5', 'fr-mb-1w')}>
+    <div className={fr.cx('fr-mt-5w')} style={{ textAlign: 'center' }}>
+      <h4 className={fr.cx('fr-h6', 'fr-mb-1w')}>
         <span aria-hidden="true" className={styles.wave}>
           👋
         </span>{' '}
         Bienvenue aux nouveaux venus !
-      </h3>
-      <p className={fr.cx('fr-mb-2w')}>
+      </h4>
+      <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
         {window
           ? `Leur toute première contribution date de ces ${window}.`
           : 'Leur toute première contribution date de cette période.'}{' '}
@@ -275,6 +275,7 @@ export default function EditionActivity({ activities }: Props) {
         backgroundColor: colors.background.alt.blueFrance.default,
       }}
     >
+      {/* 1. what the section is about */}
       <div className="section__titleblock">
         <h2 className="section__title">Participer au RNB</h2>
         <p className="section__subtitle">
@@ -282,46 +283,31 @@ export default function EditionActivity({ activities }: Props) {
           celles et ceux qui connaissent leur territoire.
         </p>
       </div>
-      <ul
-        className={fr.cx('fr-raw-list', 'fr-mb-6w')}
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: `${fr.spacing('1w')} ${fr.spacing('4w')}`,
-        }}
-      >
-        {RESOURCES.map((r) => (
-          <li key={r.href}>
-            <a
-              href={r.href}
-              className={fr.cx(
-                'fr-link',
-                'fr-icon-arrow-right-line',
-                'fr-link--icon-right',
-              )}
-            >
-              {r.label}
-            </a>
-          </li>
-        ))}
-      </ul>
 
+      {/* 2. the activity: the summary heads everything below, the period
+          selector drives it */}
       <div
-        className={fr.cx('fr-mb-3w')}
+        className={fr.cx('fr-mt-6w', 'fr-mb-3w')}
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'space-between',
           gap: fr.spacing('2w'),
         }}
       >
         <div>
-          <p className={fr.cx('fr-text--lead', 'fr-text--bold', 'fr-mb-0')}>
+          <h3 className={fr.cx('fr-h4', 'fr-mb-1v')}>
             {activitySummary(activity)}
-          </p>
-          {detail && <p className={fr.cx('fr-mb-0')}>{detail}</p>}
+          </h3>
+          {detail && (
+            <p
+              className={fr.cx('fr-text--sm', 'fr-mb-0')}
+              style={{ color: colors.text.mention.grey.default }}
+            >
+              {detail}
+            </p>
+          )}
         </div>
         <SegmentedControl legend="Période" hideLegend segments={segments} />
       </div>
@@ -330,8 +316,9 @@ export default function EditionActivity({ activities }: Props) {
 
       <Newcomers activity={activity} />
 
+      {/* 3. what to do next */}
       <ButtonsGroup
-        className={fr.cx('fr-mt-4w')}
+        className={fr.cx('fr-mt-6w')}
         inlineLayoutWhen="md and up"
         alignment="center"
         buttons={[
@@ -346,6 +333,31 @@ export default function EditionActivity({ activities }: Props) {
           },
         ]}
       />
+      <ul
+        className={fr.cx('fr-raw-list')}
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: `${fr.spacing('1w')} ${fr.spacing('3w')}`,
+        }}
+      >
+        {RESOURCES.map((r) => (
+          <li key={r.href}>
+            <a
+              href={r.href}
+              className={fr.cx(
+                'fr-link',
+                'fr-link--sm',
+                'fr-icon-arrow-right-line',
+                'fr-link--icon-right',
+              )}
+            >
+              {r.label}
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

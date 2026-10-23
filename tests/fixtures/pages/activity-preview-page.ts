@@ -11,6 +11,6 @@ export class ActivityPreviewPage extends RNBPage {
     this.section = page.locator('section').filter({
       has: page.getByRole('heading', { name: 'Participer au RNB' }),
     });
-    this.summary = this.section.locator('.fr-text--lead');
+    this.summary = this.section.getByRole('heading', { level: 3 });
   }
 }
