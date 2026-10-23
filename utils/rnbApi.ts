@@ -17,6 +17,8 @@ export type RnbApiRequestOptions = {
   headers?: HeadersInit;
   signal?: AbortSignal;
   cache?: RequestCache;
+  // Cache des fetch côté serveur (ex. `{ revalidate: 300 }`).
+  next?: NextFetchRequestConfig;
 };
 
 export class RnbApiError extends Error {
@@ -82,6 +84,7 @@ export async function rnbApiRequest<T = unknown>(
     headers,
     signal,
     cache,
+    next,
   }: RnbApiRequestOptions = {},
 ): Promise<T> {
   const isFormData = body instanceof FormData;
@@ -100,6 +103,7 @@ export async function rnbApiRequest<T = unknown>(
       body === undefined ? undefined : isFormData ? body : JSON.stringify(body),
     signal,
     cache,
+    next,
   });
 
   const data = await parseBody(response);

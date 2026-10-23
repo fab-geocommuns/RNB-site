@@ -31,6 +31,89 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
+// "La communauté du RNB" block (/apercu-activite): rolling windows (?days=N)
+const EDITIONS_BY_PERIOD = {
+  last_7_days: 321,
+  last_30_days: 1234,
+};
+
+const PERIOD_SINCE = {
+  last_7_days: '2026-10-08T14:00:00+02:00',
+  last_30_days: '2026-09-15T14:00:00+02:00',
+};
+const MONTHLY = [
+  '2025-11',
+  '2025-12',
+  '2026-01',
+  '2026-02',
+  '2026-03',
+  '2026-04',
+  '2026-05',
+  '2026-06',
+  '2026-07',
+  '2026-08',
+  '2026-09',
+  '2026-10',
+].map((month, i) => ({ month, editions: 300 + i * 100 }));
+
+const editionActivity = (period) => ({
+  period: { key: period, since: PERIOD_SINCE[period] ?? null },
+  updated_at: '2026-10-15T14:00:00+02:00',
+  totals: {
+    editions: EDITIONS_BY_PERIOD[period] ?? 0,
+    cities: 42,
+    editors: 7,
+  },
+  previous_period: {
+    since: '2026-08-16T14:00:00+02:00',
+    until: '2026-09-15T14:00:00+02:00',
+    editions: 1000,
+  },
+  monthly: MONTHLY,
+  top: {
+    users: [
+      {
+        rank: 1,
+        username: 'contributrice_test',
+        organization_short_name: 'Mairie Test',
+        count: 800,
+      },
+    ],
+    organizations: [
+      {
+        rank: 1,
+        name: 'Mairie de Test',
+        short_name: 'Mairie Test',
+        count: 800,
+      },
+    ],
+    cities: [
+      {
+        rank: 1,
+        insee_code: '99001',
+        name: 'Ville Test',
+        department: { code: '99', name: 'Département Test' },
+        count: 500,
+      },
+    ],
+    departments: [
+      { rank: 1, code: '99', name: 'Département Test', count: 500 },
+    ],
+  },
+  newcomers: {
+    users: [
+      {
+        username: 'nouveau_contributeur',
+        organization_short_name: null,
+        first_edition_at: '2026-10-03T09:12:00+02:00',
+      },
+    ],
+    cities: [],
+    departments: [],
+    count: { users: 3, cities: 0, departments: 0 },
+  },
+});
+
 const server = createServer((req, res) => {
   const { method, url } = req;
   const u = new URL(url, `http://localhost:${PORT}`);
@@ -57,6 +140,10 @@ const server = createServer((req, res) => {
     path === `/api/alpha/buildings/${HISTORY[0].rnb_id}/history/`
   ) {
     return json(res, 200, HISTORY);
+  }
+  if (method === 'GET' && path === '/api/alpha/editions/activity/') {
+    const days = u.searchParams.get('days') || '30';
+    return json(res, 200, editionActivity(`last_${days}_days`));
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
