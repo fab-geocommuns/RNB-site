@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   activitySummary,
+  activitySummaryParts,
   EditionActivity,
   editionsTrend,
   windowLabel,
@@ -51,6 +52,24 @@ describe('activitySummary', () => {
     expect(activitySummary(withTotals('last_7_days', 0, 0))).toBe(
       'Ces 7 derniers jours : aucune contribution pour l’instant',
     );
+  });
+});
+
+describe('activitySummaryParts', () => {
+  it('isole les chiffres à mettre en avant', () => {
+    expect(
+      activitySummaryParts(withTotals('last_30_days', 35, 3, null, 2))
+        .filter((p) => p.isNumber)
+        .map((p) => p.text),
+    ).toEqual(['35', '3', '2']);
+  });
+
+  it('ne met rien en avant sans contribution', () => {
+    expect(
+      activitySummaryParts(withTotals('last_7_days', 0, 0)).some(
+        (p) => p.isNumber,
+      ),
+    ).toBe(false);
   });
 });
 

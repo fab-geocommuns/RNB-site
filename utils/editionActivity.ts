@@ -105,23 +105,42 @@ export function windowLabel(key: string): string | null {
   return days > 1 ? `${days} derniers jours` : 'dernier jour';
 }
 
-const countOf = (n: number, singular: string, plural: string) =>
-  `${n.toLocaleString('fr-FR')} ${n > 1 ? plural : singular}`;
+// A piece of the summary sentence: plain text, or a number to highlight
+export type SummaryPart = { text: string; isNumber?: boolean };
 
-// One sentence summing up the period:
+const countParts = (
+  n: number,
+  singular: string,
+  plural: string,
+): SummaryPart[] => [
+  { text: n.toLocaleString('fr-FR'), isNumber: true },
+  { text: ` ${n > 1 ? plural : singular}` },
+];
+
+// One sentence summing up the period, cut into parts so that the numbers can
+// be highlighted:
 // "Ces 30 derniers jours : 35 contributions dans 3 communes par 2 contributeurs"
-export function activitySummary(activity: EditionActivity): string {
+export function activitySummaryParts(activity: EditionActivity): SummaryPart[] {
   const { editions, cities, editors } = activity.totals;
   const window = windowLabel(activity.period.key);
   const when = window ? `Ces ${window}` : 'Récemment';
   if (editions === 0) {
-    return `${when} : aucune contribution pour l’instant`;
+    return [{ text: `${when} : aucune contribution pour l’instant` }];
   }
-  return (
-    `${when} : ${countOf(editions, 'contribution', 'contributions')}` +
-    ` dans ${countOf(cities, 'commune', 'communes')}` +
-    ` par ${countOf(editors, 'contributeur', 'contributeurs')}`
-  );
+  return [
+    { text: `${when} : ` },
+    ...countParts(editions, 'contribution', 'contributions'),
+    { text: ' dans ' },
+    ...countParts(cities, 'commune', 'communes'),
+    { text: ' par ' },
+    ...countParts(editors, 'contributeur', 'contributeurs'),
+  ];
+}
+
+export function activitySummary(activity: EditionActivity): string {
+  return activitySummaryParts(activity)
+    .map((p) => p.text)
+    .join('');
 }
 
 // Evolution of the edition count compared with the previous period, in %

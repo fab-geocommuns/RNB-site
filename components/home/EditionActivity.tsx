@@ -15,7 +15,7 @@ import styles from '@/styles/editionActivity.module.scss';
 
 import {
   ACTIVITY_PERIODS,
-  activitySummary,
+  activitySummaryParts,
   DEFAULT_PERIOD_KEY,
   EditionActivity as EditionActivityData,
   editionsTrend,
@@ -297,8 +297,23 @@ export default function EditionActivity({ activities }: Props) {
         }}
       >
         <div>
+          {/* the words in regular weight (fr-h4 forces bold on the heading
+              itself), the numbers bold and blue */}
           <h3 className={fr.cx('fr-h4', 'fr-mb-1v')}>
-            {activitySummary(activity)}
+            {activitySummaryParts(activity).map((part, i) =>
+              part.isNumber ? (
+                <strong
+                  key={i}
+                  style={{ color: colors.text.actionHigh.blueFrance.default }}
+                >
+                  {part.text}
+                </strong>
+              ) : (
+                <span key={i} className={fr.cx('fr-text--regular')}>
+                  {part.text}
+                </span>
+              ),
+            )}
           </h3>
           {detail && (
             <p
