@@ -8,6 +8,7 @@ import {
   SegmentedControl,
   SegmentedControlProps,
 } from '@codegouvfr/react-dsfr/SegmentedControl';
+import { Tabs } from '@codegouvfr/react-dsfr/Tabs';
 import { Tag } from '@codegouvfr/react-dsfr/Tag';
 
 import {
@@ -107,9 +108,10 @@ function RankingList({ rows }: { rows: RankingRow[] }) {
   );
 }
 
-type RankingKey = 'organizations' | 'cities' | 'departments';
+type RankingKey = 'users' | 'organizations' | 'cities' | 'departments';
 
 const RANKINGS: { key: RankingKey; label: string }[] = [
+  { key: 'users', label: 'Contributeurs' },
   { key: 'organizations', label: 'Organisations' },
   { key: 'cities', label: 'Communes' },
   { key: 'departments', label: 'Départements' },
@@ -119,6 +121,13 @@ function rankingRows(
   activity: EditionActivityData,
   key: RankingKey,
 ): RankingRow[] {
+  if (key === 'users') {
+    return activity.top.users.map((u) => ({
+      name: u.username,
+      detail: u.organization_short_name,
+      count: u.count,
+    }));
+  }
   if (key === 'organizations') {
     return activity.top.organizations.map((o) => ({
       name: o.short_name || o.name,
@@ -140,53 +149,24 @@ function rankingRows(
   }));
 }
 
-function TopContributorsCard({ activity }: { activity: EditionActivityData }) {
+// Every ranking in one DSFR tabs component, the same list in each tab
+function Rankings({ activity }: { activity: EditionActivityData }) {
   return (
-    <Card
-      border
-      size="small"
-      titleAs="h3"
-      title="Contributeurs les plus actifs"
-      end={
-        <RankingList
-          rows={activity.top.users.map((u) => ({
-            name: u.username,
-            detail: u.organization_short_name,
-            count: u.count,
-          }))}
-        />
-      }
-    />
-  );
-}
-
-function RankingCard({ activity }: { activity: EditionActivityData }) {
-  const [rankingKey, setRankingKey] = useState<RankingKey>('organizations');
-  return (
-    <Card
-      border
-      size="small"
-      titleAs="h3"
-      title="Les plus actifs"
-      end={
-        <>
-          <ul className={fr.cx('fr-tags-group')}>
-            {RANKINGS.map((r) => (
-              <li key={r.key}>
-                <Tag
-                  small
-                  pressed={r.key === rankingKey}
-                  nativeButtonProps={{ onClick: () => setRankingKey(r.key) }}
-                >
-                  {r.label}
-                </Tag>
-              </li>
-            ))}
-          </ul>
-          <RankingList rows={rankingRows(activity, rankingKey)} />
-        </>
-      }
-    />
+    <>
+      <h3 className={fr.cx('fr-h5', 'fr-mt-4w')}>Les plus actifs</h3>
+      <Tabs
+        label="Les plus actifs"
+        // white panel, like the cards, on the colored band
+        classes={{
+          panel: fr.cx('fr-p-3w'),
+        }}
+        style={{ backgroundColor: colors.background.default.grey.default }}
+        tabs={RANKINGS.map((r) => ({
+          label: r.label,
+          content: <RankingList rows={rankingRows(activity, r.key)} />,
+        }))}
+      />
+    </>
   );
 }
 
@@ -290,18 +270,9 @@ export default function EditionActivity({ activities }: Props) {
             }
           />
         </div>
-
-        {totals.editions > 0 && (
-          <>
-            <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
-              <TopContributorsCard activity={activity} />
-            </div>
-            <div className={fr.cx('fr-col-12', 'fr-col-md-6')}>
-              <RankingCard activity={activity} />
-            </div>
-          </>
-        )}
       </div>
+
+      {totals.editions > 0 && <Rankings activity={activity} />}
 
       <Newcomers activity={activity} />
 

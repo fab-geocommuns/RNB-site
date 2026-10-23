@@ -27,16 +27,18 @@ test.describe("Aperçu de l'activité", () => {
     );
   });
 
-  test('bascule le classement entre organisations, communes et départements', async ({
+  test('affiche les classements dans des onglets', async ({
     activityPreviewPage,
   }) => {
     const { section } = activityPreviewPage;
-    await expect(section.getByText('Mairie Test').first()).toBeVisible();
-    await section.getByRole('button', { name: 'Communes' }).click();
+    await expect(section.getByText('contributrice_test')).toBeVisible();
+
+    const citiesTab = section.getByRole('tab', { name: 'Communes' });
+    await citiesTab.click();
+    await expect(citiesTab).toHaveAttribute('aria-selected', 'true');
     await expect(
-      section.getByRole('button', { name: 'Communes' }),
-    ).toHaveAttribute('aria-pressed', 'true');
-    await expect(section.getByText('Ville Test')).toBeVisible();
+      section.getByRole('tabpanel').getByText('Ville Test'),
+    ).toBeVisible();
   });
 
   test('propose de rejoindre les contributeurs', async ({
