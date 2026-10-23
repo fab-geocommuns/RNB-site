@@ -11,12 +11,15 @@ import {
 import { Tabs } from '@codegouvfr/react-dsfr/Tabs';
 import { Tag } from '@codegouvfr/react-dsfr/Tag';
 
+import styles from '@/styles/editionActivity.module.scss';
+
 import {
   ACTIVITY_PERIODS,
   activityHeadline,
   DEFAULT_PERIOD_KEY,
   EditionActivity as EditionActivityData,
   editionsTrend,
+  windowLabel,
 } from '@/utils/editionActivity';
 
 type Props = {
@@ -170,28 +173,54 @@ function Rankings({ activity }: { activity: EditionActivityData }) {
   );
 }
 
-// One line of tags: departments, cities and users who contributed for the first time
+// Departments, cities and users who made their very first contribution in
+// the period, greeted with a waving hand
 function Newcomers({ activity }: { activity: EditionActivityData }) {
   const { users, cities, departments } = activity.newcomers;
   const tags = [
-    ...departments.map((d) => `${d.name} (${d.code})`),
-    ...cities.map((c) => c.name),
-    ...users.map((u) => u.username),
+    ...departments.map((d) => ({
+      kind: 'Département',
+      label: `${d.name} (${d.code})`,
+      iconId: 'fr-icon-france-line' as const,
+    })),
+    ...cities.map((c) => ({
+      kind: 'Commune',
+      label: c.name,
+      iconId: 'fr-icon-map-pin-2-line' as const,
+    })),
+    ...users.map((u) => ({
+      kind: 'Contributeur',
+      label: u.username,
+      iconId: 'fr-icon-user-line' as const,
+    })),
   ];
   if (tags.length === 0) return null;
+  const window = windowLabel(activity.period.key);
 
   return (
-    <div className={fr.cx('fr-mt-4w')} style={{ textAlign: 'center' }}>
-      <p className={fr.cx('fr-text--bold', 'fr-mb-1w')}>
-        Bienvenue aux nouveaux venus
+    <div className={fr.cx('fr-mt-6w')} style={{ textAlign: 'center' }}>
+      <h3 className={fr.cx('fr-h5', 'fr-mb-1w')}>
+        <span aria-hidden="true" className={styles.wave}>
+          👋
+        </span>{' '}
+        Bienvenue aux nouveaux venus !
+      </h3>
+      <p className={fr.cx('fr-mb-2w')}>
+        {window
+          ? `Leur toute première contribution date de ces ${window}.`
+          : 'Leur toute première contribution date de cette période.'}{' '}
+        Merci et bienvenue dans la communauté.
       </p>
       <ul
         className={fr.cx('fr-tags-group')}
         style={{ justifyContent: 'center' }}
       >
-        {tags.map((label) => (
-          <li key={label}>
-            <Tag small>{label}</Tag>
+        {tags.map((t) => (
+          <li key={`${t.kind}-${t.label}`}>
+            <Tag iconId={t.iconId}>
+              <span className={fr.cx('fr-sr-only')}>{t.kind} : </span>
+              {t.label}
+            </Tag>
           </li>
         ))}
       </ul>
