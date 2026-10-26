@@ -43,6 +43,9 @@ import { GUIDE_URL } from './helpContents';
 import HelpPanel from './HelpPanel';
 import { fr } from '@codegouvfr/react-dsfr';
 
+// Analytics
+import va from '@vercel/analytics';
+
 function anyChangesBetween(a: any, b: any) {
   return JSON.stringify(a) !== JSON.stringify(b);
 }
@@ -406,6 +409,7 @@ export default function EditionPanel() {
             target: '_blank',
             rel: 'noopener',
             title: "Guide d'édition du RNB - nouvelle fenêtre",
+            onClick: () => va.track('edition-guide-click'),
           }}
         >
           <div className={styles.action}>
