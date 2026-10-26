@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <>
       <h1 className="text-blue">
-        Améliorer l&apos;identification des Etablissements Recevant du Public
+        Améliorer l&apos;identification des Établissements Recevant du Public
         (ERP)
       </h1>
       <h2>Le problème</h2>
@@ -48,7 +48,7 @@ export default function Page() {
 
       <h2>L&apos;impact</h2>
       <p>
-        Au delà de l&apos;impact sur les missions des SDIS, le RNB permettra
+        Au-delà de l&apos;impact sur les missions des SDIS, le RNB permettra
         notamment de faciliter les échanges avec la Direction Départementale des
         Territoires (DDT) en charge d’établir le Plan de prévention des risques
         (inondation, incendies, accès à l’eau).
@@ -56,7 +56,7 @@ export default function Page() {
       <p>
         Ce besoin a été souligné pendant la période du risque épidémique via la
         gestion des autorisations d’ouverture au public, pour les bâtiments
-        ayant une surface importante (supérieure à 20 000 m2 dans le cas du
+        ayant une surface importante (supérieure à 20 000 m² dans le cas du
         COVID).
       </p>
     </>

@@ -27,7 +27,7 @@ export default function Page() {
                   traduit par un usage sous-optimal des deniers publics.&quot;
                 </em>{' '}
                 - Rapport d&apos;Information, Sénat, Commission des Finances
-                pour l&apos;IGN, 5 Octobre 2022
+                pour l&apos;IGN, 5 octobre 2022
               </p>
             </blockquote>
             <p>

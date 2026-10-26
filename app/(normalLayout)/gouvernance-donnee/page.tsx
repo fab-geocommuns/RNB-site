@@ -16,7 +16,7 @@ export default function RulesPage() {
             <h2>Les rôles</h2>
 
             <p>
-              <b>Editeur :</b> toute personne ou organisation qui{' '}
+              <b>Éditeur :</b> toute personne ou organisation qui{' '}
               <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#editeur-ice">
                 édite le RNB
               </a>
@@ -94,7 +94,7 @@ export default function RulesPage() {
                   la carte des bâtiments
                 </a>{' '}
                 accessible sur le site du RNB, pour visualiser ou rechercher des
-                bâtiment,
+                bâtiments,
               </li>
               <li>
                 les{' '}
@@ -199,7 +199,7 @@ export default function RulesPage() {
               <a href="https://rnb-fr.gitbook.io/documentation/lexique-du-rnb#traiter-un-signalement">
                 traité
               </a>{' '}
-              par une éditeur ou par l’administrateur.
+              par un éditeur ou par l’administrateur.
             </p>
             <p>
               La création de signalement est ouverte à tous les réutilisateurs,
@@ -237,7 +237,7 @@ export default function RulesPage() {
             <p>
               Une seule règle de gestion de la concurrence entre éditions est
               actuellement définie : un import de données, par exemple de la
-              BAN, de la BDTOPO ou de la BAL, (réalisable uniquement par
+              BAN, de la BDTOPO ou de la BAL (réalisable uniquement par
               l’administrateur) ne peut pas défaire une édition. Par exemple,
               dans le cas où un éditeur aurait supprimé un lien adresse -
               bâtiment, l&apos;import de la BAN ne pourra pas recréer ce lien.
@@ -251,7 +251,7 @@ export default function RulesPage() {
             </p>
             <p>
               Cette historisation garantit la traçabilité des ID-RNB et favorise
-              la transparence du réfénretiel. Elle est accessible à toutes et
+              la transparence du référentiel. Elle est accessible à toutes et
               tous, dans la page &quot;Historique de l&apos;identifiant&quot;.
             </p>
 
@@ -312,7 +312,7 @@ export default function RulesPage() {
             <p>Si une erreur est détectée : </p>
             <ul>
               <li>
-                si elle concerne un nombre d&apos;éditeur restreint,
+                si elle concerne un nombre d&apos;éditeurs restreint,
                 l&apos;administrateur effectue un rollback des éditions faites
                 par ces éditeurs. Il est possible de faire un rollback par
                 éditeur et sur une fenêtre de temps donnée depuis les outils
@@ -321,7 +321,7 @@ export default function RulesPage() {
               <li>
                 si la base est compromise plus largement, l&apos;administrateur
                 restaure une sauvegarde de la base, avec un risque de perte
-                d&apos;information qui ont été intégrées dans le RNB entre la
+                d&apos;informations qui ont été intégrées dans le RNB entre la
                 date du lancement de la procédure et la date de la sauvegarde.
               </li>
             </ul>
@@ -334,7 +334,7 @@ export default function RulesPage() {
               <p>
                 L&apos;objectif de ces règles est de fédérer des parties
                 prenantes aux profils variés autour de règles communes et
-                d&apos;un standard CNIG. Elle doivent garantir que le RNB reste
+                d&apos;un standard CNIG. Elles doivent garantir que le RNB reste
                 un géocommun : c&apos;est-à-dire une base ouverte, partagée et
                 co-construite.{' '}
               </p>
@@ -374,7 +374,7 @@ export default function RulesPage() {
                 </b>{' '}
                 <br />
                 Toutes vos réflexions sont les bienvenues, que vous soyez
-                spécialiste de la geodata, partie prenante de l’ecosystème bâti
+                spécialiste de la géodata, partie prenante de l’écosystème bâti
                 (gestionnaires de parc bâtimentaire, collectivités
                 territoriales, administrations publiques, bailleurs sociaux,
                 entreprises, opérateurs) ou de l’open data et des communs.
@@ -385,7 +385,7 @@ export default function RulesPage() {
                   href="https://forum.geocommuns.fr/t/appel-a-commentaire-jusquau-22-avril-regles-de-gouvernance-de-la-donnee-rnb/3123"
                   className="fr-btn fr-btn--primary"
                 >
-                  Echanger avec la communauté
+                  Échanger avec la communauté
                 </a>
               </div>
             </div>

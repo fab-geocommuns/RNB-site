@@ -137,7 +137,7 @@ export default function WithFooterLayout({
                 linkProps: {
                   href: 'https://github.com/fab-geocommuns/RNB-site',
                 },
-                text: 'Github',
+                text: 'GitHub',
               },
               {
                 linkProps: {

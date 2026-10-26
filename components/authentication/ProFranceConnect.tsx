@@ -66,7 +66,7 @@ export default function ProFranceConnect() {
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
         >
           <Loader inline />
-          Connexion via ProConnect en cours ...
+          Connexion via ProConnect en cours…
         </div>
       )}
     </>

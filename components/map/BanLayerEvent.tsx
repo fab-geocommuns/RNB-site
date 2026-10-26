@@ -15,7 +15,7 @@ export const displayBANPopup = (map: maplibregl.Map, addressFeature: any) => {
       `
       <div class="banPop">
       <h6 class="banPopTitle">${certStr}</h6>
-      <p class="banPopBody">${escapeHtml(props.numero)} ${escapeHtml(props.suffixe)}  ${escapeHtml(props.nomVoie)}<br />
+      <p class="banPopBody">${escapeHtml(props.numero)} ${escapeHtml(props.suffixe)} ${escapeHtml(props.nomVoie)}<br />
       ${escapeHtml(props.nomCommune)}</p>
       <p class="banPopFooter">Clé d'interopérabilité BAN : ${escapeHtml(props.id)}</p>
       </div>

@@ -25,7 +25,7 @@ export default function MesFevesPage() {
   const trophiesToWin = getTrophiesToWin(trophies, userTrophies);
 
   if (loading || loadingTrophies || loadingUserTrophies) {
-    return <p>Chargement...</p>;
+    return <p>Chargement…</p>;
   }
 
   if ((!userFeves || userFeves.length === 0) && !trophies) {

@@ -83,7 +83,7 @@ export default function BuildingPanel({ bdg }: BuildingPanelProps) {
             colorVariant="yellow-tournesol"
             className={panelStyles.callout}
           >
-            <span>Cet Identifiant RNB a été désactivé.</span>
+            <span>Cet identifiant RNB a été désactivé.</span>
           </CallOut>
         )}
         <div className={styles.rnbidShell}>

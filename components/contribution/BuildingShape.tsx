@@ -69,7 +69,7 @@ export default function BuildingShape({
                 title="Modifier la géométrie existante"
               ></img>
               <span className="fr-pl-2v" style={{ textAlign: 'left' }}>
-                Modifier la géometrie existante
+                Modifier la géométrie existante
               </span>
             </Button>
           </span>
@@ -77,7 +77,7 @@ export default function BuildingShape({
           {shapeInteractionMode === 'updating' && (
             <div className="fr-text--xs fr-pt-1v fr-mb-1v">
               Modifiez la géométrie du bâtiment directement sur la carte en
-              déplacant les sommets du polygone.
+              déplaçant les sommets du polygone.
             </div>
           )}
           <span style={{ display: 'inline-block', width: 250 }}>

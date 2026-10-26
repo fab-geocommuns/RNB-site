@@ -63,7 +63,7 @@ export default async function InscriptionPage({
               </p>
               <p>
                 Vous pourrez directement éditer le référentiel, ajouter un
-                bâtiment, corriger une adresse, désactiver les erreurs, ...
+                bâtiment, corriger une adresse, désactiver les erreurs…
               </p>
               <p>
                 Services de l&apos;État, collectivités, citoyens, entreprises ou

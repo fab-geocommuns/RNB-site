@@ -117,7 +117,7 @@ export default function ContributionForm() {
         required
         name="text"
         className={`fr-text--sm fr-input fr-mb-4v ${styles.msgInput}`}
-        placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement; tout le monde peut apporter sa pierre au RNB. "
+        placeholder="Il manque un bâtiment ? Une adresse semble erronée ? Envoyez votre signalement ; tout le monde peut apporter sa pierre au RNB."
       ></textarea>
 
       {!isAuthenticated && (
@@ -138,7 +138,7 @@ export default function ContributionForm() {
         </>
       )}
       <Button disabled={sending} size="small" type="submit">
-        {sending && <span>Envoi en cours ...</span>}
+        {sending && <span>Envoi en cours…</span>}
         {!sending && <span>Envoyer mon signalement</span>}
       </Button>
       {success && (
