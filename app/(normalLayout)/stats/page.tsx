@@ -92,7 +92,7 @@ export default function Page() {
           <h3>Mise à jour : objectif et progression</h3>
           <p>
             Nous visons à ce que la donnée du RNB s&apos;améliore dans des
-            proportions similaires aux nombre de constructions, destructions et
+            proportions similaires au nombre de constructions, destructions et
             changements d&apos;adresses ayant lieu sur le terrain.
           </p>
           <div className="fr-grid-row fr-grid-row--gutters fr-mb-12v">

@@ -32,8 +32,8 @@ export default function Outils() {
                     Enrichissez vos bases bâtimentaires
                   </h2>
                   <p className="blockSubtitle">
-                    Trouvez les données qui vous intéressent et obtenez les
-                    grâces aux identifiants de bâtiments RNB.
+                    Trouvez les données qui vous intéressent et obtenez-les
+                    grâce aux identifiants de bâtiments RNB.
                   </p>
                   <div className="blockLinkShell">
                     <a

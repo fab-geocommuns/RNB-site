@@ -97,7 +97,7 @@ export default function ProConnectCallbackPage() {
         <div>
           <Loader inline />
           &nbsp;
-          <b>Connexion via Pro Connect en cours ...</b>
+          <b>Connexion via ProConnect en cours…</b>
         </div>
       </div>
     </main>

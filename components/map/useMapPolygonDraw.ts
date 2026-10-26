@@ -77,9 +77,9 @@ export const useMapPolygonDraw = (
       drawMode === 'draw_polygon' ? 'draw_rectangle' : 'draw_polygon';
 
     if (targetMode === 'draw_rectangle') {
-      toasterSuccess(dispatch, `mode rectangle activé`);
+      toasterSuccess(dispatch, `Mode rectangle activé`);
     } else if (targetMode === 'draw_polygon') {
-      toasterSuccess(dispatch, `mode polygone activé`);
+      toasterSuccess(dispatch, `Mode polygone activé`);
     }
 
     setDrawMode(targetMode);

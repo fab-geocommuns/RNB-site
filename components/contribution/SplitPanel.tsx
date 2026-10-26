@@ -477,7 +477,7 @@ const cancelSplit = (dispatch: AppDispatch) => {
 
 const ordinal = (n: number): string => {
   if (n === 1) return '1er';
-  return `${n}ème`;
+  return `${n}e`;
 };
 
 // Erreur de validation sur un enfant (`{"created_buildings": {"0": {"shape": [...]}}}`) :
