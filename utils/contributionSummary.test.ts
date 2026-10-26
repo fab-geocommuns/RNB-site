@@ -10,7 +10,8 @@ import {
   loadContributionSummaries,
   loadContributionSummary,
   MAX_NEWCOMERS,
-  summaryView,
+  keyFigures,
+  windowView,
 } from './contributionSummary';
 
 const gironde = { code: '33', name: 'Gironde' };
@@ -22,13 +23,6 @@ const summary = (
   window_days: 30,
   cities: { total: 1248, new: 12 },
   organizations: { total: 86, new: 3 },
-  activity: {
-    contributions: 118,
-    cities: 35,
-    contributors: 9,
-    new_contributors: 2,
-    previous_contributions: 100,
-  },
   building_changes: { total: 4310, contributions: 520 },
   top: {
     users: [
@@ -48,9 +42,9 @@ const summary = (
   ...overrides,
 });
 
-describe('summaryView', () => {
+describe('keyFigures et windowView', () => {
   it('décrit les 3 chiffres clés avec leur évolution', () => {
-    expect(summaryView(summary()).figures).toEqual([
+    expect(keyFigures(summary())).toEqual([
       {
         value: 1248,
         label: 'communes déjà améliorées par la communauté',
@@ -70,7 +64,7 @@ describe('summaryView', () => {
   });
 
   it('n’affiche pas d’évolution nulle', () => {
-    const { figures } = summaryView(
+    const figures = keyFigures(
       summary({
         cities: { total: 10, new: 0 },
         organizations: { total: 2, new: 0 },
@@ -81,7 +75,7 @@ describe('summaryView', () => {
   });
 
   it('accorde au singulier', () => {
-    const { figures } = summaryView(
+    const figures = keyFigures(
       summary({
         cities: { total: 1, new: 1 },
         organizations: { total: 1, new: 1 },
@@ -96,7 +90,7 @@ describe('summaryView', () => {
   });
 
   it('écrit le département en clair', () => {
-    const [, organizations] = summaryView(summary()).rankings;
+    const [, organizations] = windowView(summary()).rankings;
     expect(organizations.rows).toEqual([
       { name: 'Commune de Talence', detail: 'Gironde (33)', count: 42 },
       { name: 'Syndicat SIG', detail: null, count: 18 },
@@ -104,7 +98,7 @@ describe('summaryView', () => {
   });
 
   it('masque un classement de moins de 2 lignes', () => {
-    const { rankings } = summaryView(
+    const { rankings } = windowView(
       summary({
         top: {
           ...summary().top,
@@ -119,113 +113,16 @@ describe('summaryView', () => {
   });
 
   it('liste les nouveaux contributeurs, 8 au plus', () => {
-    expect(summaryView(summary()).newcomers).toEqual(['carol']);
+    expect(windowView(summary()).newcomers).toEqual(['carol']);
     const users = Array.from({ length: 12 }, (_, i) => ({
       username: `user${i}`,
     }));
     expect(
-      summaryView(summary({ newcomers: { users } })).newcomers,
+      windowView(summary({ newcomers: { users } })).newcomers,
     ).toHaveLength(MAX_NEWCOMERS);
-    expect(
-      summaryView(summary({ newcomers: { users: [] } })).newcomers,
-    ).toEqual([]);
-  });
-});
-
-describe('summaryView, variante complet', () => {
-  it('décrit l’activité de la période avec sa tendance', () => {
-    expect(summaryView(summary(), 'complet').figures).toEqual([
-      {
-        value: 118,
-        label: 'contributions ces 30 derniers jours',
-        detail: '+18 % par rapport aux 30 jours précédents',
-      },
-      {
-        value: 35,
-        label: 'communes éditées',
-        detail: 'dont 12 pour la première fois',
-      },
-      { value: 9, label: 'contributeurs actifs', detail: 'dont 2 nouveaux' },
-    ]);
-  });
-
-  it('n’affiche pas de tendance sans période précédente', () => {
-    const [contributions] = summaryView(
-      summary({
-        activity: { ...summary().activity, previous_contributions: 0 },
-      }),
-      'complet',
-    ).figures;
-    expect(contributions.detail).toBeNull();
-  });
-
-  it('garde les 3 classements dès qu’ils ont une ligne', () => {
-    const { rankings } = summaryView(
-      summary({
-        top: {
-          ...summary().top,
-          users: [{ username: 'alice', organization: null, count: 3 }],
-        },
-      }),
-      'complet',
+    expect(windowView(summary({ newcomers: { users: [] } })).newcomers).toEqual(
+      [],
     );
-    expect(rankings).toHaveLength(3);
-  });
-});
-
-describe('summaryView, variante récit', () => {
-  const sentence = (s: ContributionSummary) =>
-    summaryView(s, 'recit')
-      .story.map((p) => p.text)
-      .join('');
-
-  it('raconte la période en une phrase, chiffres à part', () => {
-    expect(sentence(summary())).toBe(
-      'Ces 30 derniers jours, 118 contributions ont amélioré 35 communes, grâce à 9 contributeurs.',
-    );
-    expect(
-      summaryView(summary(), 'recit')
-        .story.filter((p) => p.isNumber)
-        .map((p) => p.text),
-    ).toEqual(['118', '35', '9']);
-  });
-
-  it('accorde au singulier et gère une période vide', () => {
-    const one = {
-      ...summary().activity,
-      contributions: 1,
-      cities: 1,
-      contributors: 1,
-    };
-    expect(sentence(summary({ activity: one }))).toBe(
-      'Ces 30 derniers jours, 1 contribution a amélioré 1 commune, grâce à 1 contributeur.',
-    );
-    expect(sentence(summary({ activity: { ...one, contributions: 0 } }))).toBe(
-      'Ces 30 derniers jours, aucune contribution pour l’instant.',
-    );
-  });
-
-  it('met en avant le premier de chaque classement', () => {
-    expect(summaryView(summary(), 'recit').podium).toEqual([
-      {
-        title: 'Contributeur le plus actif',
-        name: 'alice',
-        detail: 'Mairie',
-        count: 9,
-      },
-      {
-        title: 'Organisation la plus active',
-        name: 'Commune de Talence',
-        detail: 'Gironde (33)',
-        count: 42,
-      },
-      {
-        title: 'Commune la plus éditée',
-        name: 'Talence',
-        detail: 'Gironde (33)',
-        count: 7,
-      },
-    ]);
   });
 });
 
@@ -265,8 +162,8 @@ describe('loadContributionSummary', () => {
   });
 
   it('renvoie null pour une réponse incomplète, sans planter', async () => {
-    const { activity: _activity, ...withoutActivity } = summary();
-    vi.mocked(rnbApi.get).mockResolvedValue(withoutActivity);
+    const { newcomers: _newcomers, ...withoutNewcomers } = summary();
+    vi.mocked(rnbApi.get).mockResolvedValue(withoutNewcomers);
     expect(await loadContributionSummary()).toBeNull();
     expect(console.error).toHaveBeenCalled();
   });

@@ -9,11 +9,7 @@ import {
 } from '@playwright/test';
 import { HomePage } from '@/tests/fixtures/pages/home-page';
 import { AboutPage } from '@/tests/fixtures/pages/about-page';
-import {
-  ActivityPreviewCompletePage,
-  ActivityPreviewPage,
-  ActivityPreviewStoryPage,
-} from '@/tests/fixtures/pages/activity-preview-page';
+import { ActivityPreviewPage } from '@/tests/fixtures/pages/activity-preview-page';
 import { BlogPage } from '@/tests/fixtures/pages/blog-page';
 import { ContactPage } from '@/tests/fixtures/pages/contact-page';
 import { DefinitionPage } from '@/tests/fixtures/pages/definition-page';
@@ -40,8 +36,6 @@ export type AuthFixture = {
 type PagesFixtures = {
   aboutPage: AboutPage;
   activityPreviewPage: ActivityPreviewPage;
-  activityPreviewCompletePage: ActivityPreviewCompletePage;
-  activityPreviewStoryPage: ActivityPreviewStoryPage;
   blogPage: BlogPage;
   contactPage: ContactPage;
   definitionPage: DefinitionPage;
@@ -84,8 +78,6 @@ const testPage = baseTest.extend<PagesFixtures>({
   },
   aboutPage: createPageFixture(AboutPage),
   activityPreviewPage: createPageFixture(ActivityPreviewPage),
-  activityPreviewCompletePage: createPageFixture(ActivityPreviewCompletePage),
-  activityPreviewStoryPage: createPageFixture(ActivityPreviewStoryPage),
   blogPage: createPageFixture(BlogPage),
   contactPage: createPageFixture(ContactPage),
   definitionPage: createPageFixture(DefinitionPage),

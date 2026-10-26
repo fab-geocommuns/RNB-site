@@ -19,14 +19,6 @@ export type ContributionSummary = {
   cities: { total: number; new: number };
   // organizations whose members contributed at least once
   organizations: { total: number; new: number };
-  // the window itself, and the contributions of the window before for a trend
-  activity: {
-    contributions: number;
-    cities: number;
-    contributors: number;
-    new_contributors: number;
-    previous_contributions: number;
-  };
   // building changes of the window, all sources (imports included)
   building_changes: { total: number; contributions: number };
   top: {
@@ -65,7 +57,6 @@ const FETCH_TIMEOUT_MS = 5000;
 const REQUIRED_BLOCKS = [
   'cities',
   'organizations',
-  'activity',
   'building_changes',
   'top',
   'newcomers',
@@ -146,110 +137,12 @@ export type RankingView = {
   rows: { name: string; detail: string | null; count: number }[];
 };
 
-// The previewed layouts of the section:
-// - simple: cumulative figures (stock + delta), rankings of 2 rows or more
-// - complet: the window's figures with a trend, the 3 rankings
-// - recit: one sentence telling the month, the top of each ranking
-export type SummaryVariant = 'simple' | 'complet' | 'recit';
-
-// A piece of a sentence: plain text, or a number to highlight
-export type SentencePart = { text: string; isNumber?: boolean };
-
-// The first of a ranking, shown alone in the "recit" layout
-export type PodiumView = {
-  title: string;
-  name: string;
-  detail: string | null;
-  count: number;
-};
-
-export type SummaryView = {
-  figures: FigureView[];
-  rankings: RankingView[];
-  // usernames of the contributors who made their first contribution
-  newcomers: string[];
-  story: SentencePart[];
-  podium: PodiumView[];
-};
-
-const countParts = (
-  n: number,
-  singular: string,
-  pluralForm: string,
-): SentencePart[] => [
-  { text: formatNumber(n), isNumber: true },
-  { text: ` ${plural(n, singular, pluralForm)}` },
-];
-
-// "Ces 30 derniers jours, 35 contributions ont amélioré 3 communes, grâce à
-// 2 contributeurs."
-function storyParts(summary: ContributionSummary): SentencePart[] {
-  const { contributions, cities, contributors } = summary.activity;
-  const when = `Ces ${summary.window_days} derniers jours, `;
-  if (contributions === 0) {
-    return [{ text: `${when}aucune contribution pour l’instant.` }];
-  }
-  return [
-    { text: when },
-    ...countParts(contributions, 'contribution', 'contributions'),
-    { text: plural(contributions, ' a amélioré ', ' ont amélioré ') },
-    ...countParts(cities, 'commune', 'communes'),
-    { text: ', grâce à ' },
-    ...countParts(contributors, 'contributeur', 'contributeurs'),
-    { text: '.' },
-  ];
-}
-
-// "+18 % par rapport aux 30 jours précédents"
-function trendText(summary: ContributionSummary): string | null {
-  const { contributions, previous_contributions } = summary.activity;
-  if (!previous_contributions) return null;
-  const trend = Math.round(
-    ((contributions - previous_contributions) / previous_contributions) * 100,
-  );
-  return `${trend > 0 ? '+' : ''}${trend} % par rapport aux ${summary.window_days} jours précédents`;
-}
-
-// the window's figures, as in the first versions of the section
-function activityFigures(summary: ContributionSummary): FigureView[] {
-  const { activity, cities, window_days: days } = summary;
-  return [
-    {
-      value: activity.contributions,
-      label: `${plural(activity.contributions, 'contribution', 'contributions')} ces ${days} derniers jours`,
-      detail: trendText(summary),
-    },
-    {
-      value: activity.cities,
-      label: plural(activity.cities, 'commune éditée', 'communes éditées'),
-      detail:
-        cities.new > 0
-          ? `dont ${formatNumber(cities.new)} pour la première fois`
-          : null,
-    },
-    {
-      value: activity.contributors,
-      label: plural(
-        activity.contributors,
-        'contributeur actif',
-        'contributeurs actifs',
-      ),
-      detail:
-        activity.new_contributors > 0
-          ? `dont ${formatNumber(activity.new_contributors)} ${plural(activity.new_contributors, 'nouveau', 'nouveaux')}`
-          : null,
-    },
-  ];
-}
-
-export function summaryView(
-  summary: ContributionSummary,
-  variant: SummaryVariant = 'simple',
-): SummaryView {
-  const { cities, organizations, building_changes, top } = summary;
+// The key figures: global (cumulative counts, and their evolution over the
+// window of the given summary), shown above the window selector
+export function keyFigures(summary: ContributionSummary): FigureView[] {
+  const { cities, organizations, building_changes } = summary;
   const days = summary.window_days;
-
-  const stockFigures: FigureView[] = [
+  return [
     {
       value: cities.total,
       label: plural(
@@ -287,8 +180,16 @@ export function summaryView(
           : null,
     },
   ];
+}
 
-  const allRankings: RankingView[] = [
+// What follows the window selector: the rankings of 2 rows or more, and the
+// usernames of the contributors who made their very first contribution
+export function windowView(summary: ContributionSummary): {
+  rankings: RankingView[];
+  newcomers: string[];
+} {
+  const { top } = summary;
+  const rankings: RankingView[] = [
     {
       title: 'Contributeurs les plus actifs',
       rows: top.users.map((u) => ({
@@ -314,24 +215,8 @@ export function summaryView(
       })),
     },
   ];
-  // "complet" keeps the 3 rankings as soon as they have a row
-  const rankings = allRankings.filter(
-    (r) => r.rows.length >= (variant === 'complet' ? 1 : MIN_RANKING_ROWS),
-  );
-
-  const podium = [
-    { title: 'Contributeur le plus actif', ranking: allRankings[0] },
-    { title: 'Organisation la plus active', ranking: allRankings[1] },
-    { title: 'Commune la plus éditée', ranking: allRankings[2] },
-  ].flatMap(({ title, ranking }) =>
-    ranking.rows.length ? [{ title, ...ranking.rows[0] }] : [],
-  );
-
   return {
-    figures: variant === 'complet' ? activityFigures(summary) : stockFigures,
-    rankings,
-    story: storyParts(summary),
-    podium,
+    rankings: rankings.filter((r) => r.rows.length >= MIN_RANKING_ROWS),
     newcomers: summary.newcomers.users
       .slice(0, MAX_NEWCOMERS)
       .map((u) => u.username),

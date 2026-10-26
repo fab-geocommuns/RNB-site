@@ -39,13 +39,6 @@ const CONTRIBUTION_SUMMARY = {
   window_days: 30,
   cities: { total: 1248, new: 12 },
   organizations: { total: 86, new: 0 },
-  activity: {
-    contributions: 1234,
-    cities: 42,
-    contributors: 7,
-    new_contributors: 3,
-    previous_contributions: 1000,
-  },
   building_changes: { total: 4310, contributions: 520 },
   top: {
     users: [
@@ -115,7 +108,6 @@ const server = createServer((req, res) => {
         ? {
             ...CONTRIBUTION_SUMMARY,
             window_days: 7,
-            activity: { ...CONTRIBUTION_SUMMARY.activity, contributions: 321 },
             cities: { ...CONTRIBUTION_SUMMARY.cities, new: 3 },
             top: {
               ...CONTRIBUTION_SUMMARY.top,

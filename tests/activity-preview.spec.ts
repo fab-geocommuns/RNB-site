@@ -61,7 +61,7 @@ test.describe("Aperçu de l'activité", () => {
     await expect(tags.getByText('nouvelle_contributrice')).toBeVisible();
   });
 
-  test('version simple : la période ne change pas les chiffres clés', async ({
+  test('la période ne change pas les chiffres clés', async ({
     activityPreviewPage,
   }) => {
     const { section } = activityPreviewPage;
@@ -102,70 +102,5 @@ test.describe("Aperçu de l'activité", () => {
     await expect(
       activityPreviewPage.page.locator('meta[name="robots"]'),
     ).toHaveAttribute('content', /noindex/);
-  });
-
-  test('version complète : chiffres de la période et 3 classements', async ({
-    activityPreviewCompletePage,
-  }) => {
-    const { section } = activityPreviewCompletePage;
-    await expect(
-      section.getByRole('heading', {
-        name: /^1\s234 contributions ces 30 derniers jours$/,
-      }),
-    ).toBeVisible();
-    await expect(
-      section.getByText('+23 % par rapport aux 30 jours précédents'),
-    ).toBeVisible();
-    await expect(
-      section.getByRole('heading', { name: '7 contributeurs actifs' }),
-    ).toBeVisible();
-    // the single contributor still gets his card
-    await expect(
-      section.getByRole('heading', { name: 'Contributeurs les plus actifs' }),
-    ).toBeVisible();
-  });
-
-  test('version récit : la phrase de la période et le podium', async ({
-    activityPreviewStoryPage,
-  }) => {
-    const { section } = activityPreviewStoryPage;
-    await expect(
-      section.getByRole('heading', {
-        name: /^Ces 30 derniers jours, 1\s234 contributions ont amélioré 42 communes, grâce à 7 contributeurs\.$/,
-      }),
-    ).toBeVisible();
-    await expect(section.getByText('Contributeur le plus actif')).toBeVisible();
-    await expect(
-      section.getByRole('heading', { name: 'contributrice_test' }),
-    ).toBeVisible();
-    await expect(
-      activityPreviewStoryPage.page.getByRole('link', { name: 'Récit' }),
-    ).toHaveAttribute('aria-current', 'page');
-  });
-
-  test('bascule entre 30 et 7 jours', async ({
-    activityPreviewCompletePage,
-  }) => {
-    const { section } = activityPreviewCompletePage;
-    await expect(
-      section.getByRole('heading', {
-        name: 'Ces 30 derniers jours',
-        exact: true,
-      }),
-    ).toBeVisible();
-
-    await section.getByText('7 derniers jours').click();
-
-    await expect(
-      section.getByRole('heading', {
-        name: 'Ces 7 derniers jours',
-        exact: true,
-      }),
-    ).toBeVisible();
-    await expect(
-      section.getByRole('heading', {
-        name: '321 contributions ces 7 derniers jours',
-      }),
-    ).toBeVisible();
   });
 });
