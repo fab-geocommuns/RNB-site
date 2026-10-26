@@ -1,13 +1,24 @@
+'use client';
+
+import { useState } from 'react';
 import { fr } from '@codegouvfr/react-dsfr';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { Card } from '@codegouvfr/react-dsfr/Card';
+import {
+  SegmentedControl,
+  SegmentedControlProps,
+} from '@codegouvfr/react-dsfr/SegmentedControl';
 import { Tag } from '@codegouvfr/react-dsfr/Tag';
 
 import {
   ContributionSummary as ContributionSummaryData,
+  DEFAULT_WINDOW,
   FigureView,
   formatNumber,
+  PodiumView,
   RankingView,
+  SentencePart,
+  SummaryVariant,
   summaryView,
 } from '@/utils/contributionSummary';
 
@@ -61,20 +72,13 @@ function FigureCard({ figure }: { figure: FigureView }) {
   );
 }
 
-function RankingCard({
-  ranking,
-  windowDays,
-}: {
-  ranking: RankingView;
-  windowDays: number;
-}) {
+function RankingCard({ ranking }: { ranking: RankingView }) {
   return (
     <Card
       border
       size="small"
       titleAs="h3"
       title={ranking.title}
-      detail={`${windowDays} derniers jours`}
       end={
         <ol className={fr.cx('fr-raw-list')}>
           {ranking.rows.map((row, i) => (
@@ -115,15 +119,126 @@ function RankingCard({
   );
 }
 
-// « Participer au RNB » section of the home page. Renders nothing without
-// data: the home page must not break when the API fails.
+// "recit" layout: a sentence whose numbers stand out (bold, blue) while the
+// words stay in regular weight (fr-h3 forces bold on the heading itself)
+function Story({ parts }: { parts: SentencePart[] }) {
+  return (
+    <h3 className={fr.cx('fr-h3')} style={{ textAlign: 'center' }}>
+      {parts.map((part, i) =>
+        part.isNumber ? (
+          <strong
+            key={i}
+            style={{ color: colors.text.actionHigh.blueFrance.default }}
+          >
+            {part.text}
+          </strong>
+        ) : (
+          <span key={i} className={fr.cx('fr-text--regular')}>
+            {part.text}
+          </span>
+        ),
+      )}
+    </h3>
+  );
+}
+
+// "recit" layout: the first of each ranking
+function PodiumCard({ item }: { item: PodiumView }) {
+  return (
+    <Card
+      border
+      size="small"
+      titleAs="h4"
+      detail={item.title}
+      title={item.name}
+      desc={
+        <>
+          <span
+            className={fr.cx('fr-text--bold')}
+            style={{ color: colors.text.actionHigh.blueFrance.default }}
+          >
+            {formatNumber(item.count)}{' '}
+            {item.count > 1 ? 'contributions' : 'contribution'}
+          </span>
+          {item.detail && <> · {item.detail}</>}
+        </>
+      }
+    />
+  );
+}
+
+// The tiles share the whole width, whatever their number
+function Figures({ figures }: { figures: FigureView[] }) {
+  return (
+    <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
+      {figures.map((figure) => (
+        <div key={figure.label} className={fr.cx('fr-col-12', 'fr-col-md')}>
+          <FigureCard figure={figure} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Rankings({ rankings }: { rankings: RankingView[] }) {
+  return (
+    <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mt-1w')}>
+      {rankings.map((ranking) => (
+        <div key={ranking.title} className={fr.cx('fr-col-12', 'fr-col-md')}>
+          <RankingCard ranking={ranking} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// "Ces 30 derniers jours": tells which window the figures below are about
+function PeriodHeading({ days }: { days: number }) {
+  return (
+    <h3 className={fr.cx('fr-h5', 'fr-mt-4w', 'fr-mb-2w')}>
+      Ces {days} derniers jours
+    </h3>
+  );
+}
+
+// « Participer au RNB » section of the home page, with one summary per window
+// (7 and 30 days) and a selector between them. Renders nothing without data:
+// the home page must not break when the API fails.
 export default function ContributionSummary({
-  summary,
+  summaries,
+  variant = 'simple',
 }: {
-  summary: ContributionSummaryData | null;
+  summaries: ContributionSummaryData[] | null;
+  variant?: SummaryVariant;
 }) {
-  if (!summary) return null;
-  const { figures, rankings, newCities } = summaryView(summary);
+  const [selectedDays, setSelectedDays] = useState(DEFAULT_WINDOW);
+  if (!summaries?.length) return null;
+  const summary =
+    summaries.find((s) => s.window_days === selectedDays) ?? summaries[0];
+  const { rankings, newcomers, story, podium, ...view } = summaryView(
+    summary,
+    variant,
+  );
+  const days = summary.window_days;
+  // "simple": the key figures are global (cumulative counts, and their
+  // evolution over 30 days), they do not follow the selected window
+  const figures =
+    variant === 'simple'
+      ? summaryView(
+          summaries.find((s) => s.window_days === DEFAULT_WINDOW) ??
+            summaries[0],
+          variant,
+        ).figures
+      : view.figures;
+  // the DSFR expects a tuple of 1 to 5 segments; summaries is not empty here
+  const segments = summaries.map((s) => ({
+    label: `${s.window_days} derniers jours`,
+    nativeInputProps: {
+      value: s.window_days,
+      checked: s.window_days === days,
+      onChange: () => setSelectedDays(s.window_days),
+    },
+  })) as unknown as SegmentedControlProps['segments'];
 
   return (
     // colored band, like the other home page sections, so that the cards do
@@ -143,39 +258,86 @@ export default function ContributionSummary({
         </p>
       </div>
 
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-        {figures.map((figure) => (
-          <div key={figure.label} className={fr.cx('fr-col-12', 'fr-col-md-4')}>
-            <FigureCard figure={figure} />
-          </div>
-        ))}
-        {rankings.map((ranking) => (
-          <div key={ranking.title} className={fr.cx('fr-col-12', 'fr-col-md')}>
-            <RankingCard ranking={ranking} windowDays={summary.window_days} />
-          </div>
-        ))}
-      </div>
+      {/* the selector drives what it is above of */}
+      {variant !== 'simple' && summaries.length > 1 && (
+        <div
+          className={fr.cx('fr-mb-4w')}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <SegmentedControl legend="Période" hideLegend segments={segments} />
+        </div>
+      )}
 
-      {newCities.length > 0 && (
+      {variant === 'recit' ? (
+        <>
+          <Story parts={story} />
+          {podium.length > 0 && (
+            <div
+              className={fr.cx(
+                'fr-grid-row',
+                'fr-grid-row--gutters',
+                'fr-mt-3w',
+              )}
+            >
+              {podium.map((item) => (
+                <div
+                  key={item.title}
+                  className={fr.cx('fr-col-12', 'fr-col-md')}
+                >
+                  <PodiumCard item={item} />
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {/* "complet": every figure is about the window */}
+          {variant === 'complet' && <PeriodHeading days={days} />}
+          <Figures figures={figures} />
+          {/* "simple": the window, and its selector, only from here on */}
+          {variant === 'simple' && (
+            <div
+              className={fr.cx('fr-mt-4w', 'fr-mb-2w')}
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: fr.spacing('2w'),
+              }}
+            >
+              <h3 className={fr.cx('fr-h5', 'fr-mb-0')}>
+                Ces {days} derniers jours
+              </h3>
+              {summaries.length > 1 && (
+                <SegmentedControl
+                  legend="Période"
+                  hideLegend
+                  segments={segments}
+                />
+              )}
+            </div>
+          )}
+          <Rankings rankings={rankings} />
+        </>
+      )}
+
+      {newcomers.length > 0 && (
         <div className={fr.cx('fr-mt-5w')} style={{ textAlign: 'center' }}>
-          <h3 className={fr.cx('fr-h6', 'fr-mb-2w')}>
-            Nouvelles communes contributrices ce mois-ci
+          <h3 className={fr.cx('fr-h6', 'fr-mb-1v')}>
+            Nouveaux contributeurs ces {days} derniers jours
           </h3>
+          <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
+            Leur toute première contribution : bienvenue !
+          </p>
           <ul
             className={fr.cx('fr-tags-group')}
             style={{ justifyContent: 'center' }}
           >
-            {newCities.map((city) => (
-              <li key={`${city.name}-${city.department}`}>
-                <Tag iconId="fr-icon-map-pin-2-line">
-                  {city.name}
-                  {city.department && (
-                    <span className={fr.cx('fr-sr-only')}>
-                      {' '}
-                      ({city.department})
-                    </span>
-                  )}
-                </Tag>
+            {newcomers.map((username) => (
+              <li key={username}>
+                <Tag iconId="fr-icon-user-line">{username}</Tag>
               </li>
             ))}
           </ul>
@@ -190,11 +352,6 @@ export default function ContributionSummary({
           {
             children: 'S’inscrire pour contribuer',
             linkProps: { href: '/inscription' },
-          },
-          {
-            children: 'Voir l’activité de ma commune',
-            priority: 'secondary',
-            linkProps: { href: '/stats#mise-a-jour' },
           },
         ]}
       />
@@ -223,16 +380,6 @@ export default function ContributionSummary({
           </li>
         ))}
       </ul>
-      <p
-        className={fr.cx('fr-text--xs', 'fr-mt-2w', 'fr-mb-0')}
-        style={{
-          textAlign: 'center',
-          color: colors.text.mention.grey.default,
-        }}
-      >
-        Les contributions de l’équipe RNB ne sont pas comptées dans les
-        classements.
-      </p>
     </section>
   );
 }

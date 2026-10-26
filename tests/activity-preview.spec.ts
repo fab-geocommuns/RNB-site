@@ -13,7 +13,7 @@ test.describe("Aperçu de l'activité", () => {
         name: /^1\s248 communes déjà améliorées par la communauté$/,
       }),
     ).toBeVisible();
-    await expect(section.getByText('+12 ce mois-ci')).toBeVisible();
+    await expect(section.getByText('+12 ces 30 derniers jours')).toBeVisible();
     await expect(
       section.getByRole('heading', { name: '86 organisations contributrices' }),
     ).toBeVisible();
@@ -26,7 +26,7 @@ test.describe("Aperçu de l'activité", () => {
       section.getByText('dont 520 par les contributeurs'),
     ).toBeVisible();
     // no new organization: no "+0"
-    await expect(section.getByText('+0 ce mois-ci')).toHaveCount(0);
+    await expect(section.getByText(/^\+0 /)).toHaveCount(0);
   });
 
   test('affiche les classements de plus d’une ligne', async ({
@@ -47,16 +47,40 @@ test.describe("Aperçu de l'activité", () => {
     ).toHaveCount(0);
   });
 
-  test('accueille les nouvelles communes contributrices', async ({
+  test('accueille les nouveaux contributeurs, et eux seuls', async ({
     activityPreviewPage,
   }) => {
     const { section } = activityPreviewPage;
     await expect(
       section.getByRole('heading', {
-        name: 'Nouvelles communes contributrices ce mois-ci',
+        name: 'Nouveaux contributeurs ces 30 derniers jours',
       }),
     ).toBeVisible();
-    await expect(section.getByText('Verrens-Arvey').last()).toBeVisible();
+    const tags = section.locator('.fr-tags-group');
+    await expect(tags.getByRole('listitem')).toHaveCount(1);
+    await expect(tags.getByText('nouvelle_contributrice')).toBeVisible();
+  });
+
+  test('version simple : la période ne change pas les chiffres clés', async ({
+    activityPreviewPage,
+  }) => {
+    const { section } = activityPreviewPage;
+    const cities = section
+      .locator('.fr-card')
+      .filter({ hasText: 'Communes les plus éditées' });
+    await expect(cities.getByText('9')).toBeVisible();
+
+    await section.getByText('7 derniers jours').click();
+
+    await expect(
+      section.getByRole('heading', {
+        name: 'Ces 7 derniers jours',
+        exact: true,
+      }),
+    ).toBeVisible();
+    // the rankings follow the window, the key figures do not
+    await expect(cities.getByText('9')).toHaveCount(0);
+    await expect(section.getByText('+12 ces 30 derniers jours')).toBeVisible();
   });
 
   test('propose de participer', async ({ activityPreviewPage }) => {
@@ -66,15 +90,10 @@ test.describe("Aperçu de l'activité", () => {
     ).toHaveAttribute('href', '/inscription');
     await expect(
       section.getByRole('link', { name: 'Voir l’activité de ma commune' }),
-    ).toHaveAttribute('href', '/stats#mise-a-jour');
+    ).toHaveCount(0);
     await expect(
       section.getByRole('link', { name: 'Toutes les statistiques' }),
     ).toHaveAttribute('href', '/stats');
-    await expect(
-      section.getByText(
-        'Les contributions de l’équipe RNB ne sont pas comptées dans les classements.',
-      ),
-    ).toBeVisible();
   });
 
   test("n'est pas indexée par les moteurs de recherche", async ({
@@ -83,5 +102,70 @@ test.describe("Aperçu de l'activité", () => {
     await expect(
       activityPreviewPage.page.locator('meta[name="robots"]'),
     ).toHaveAttribute('content', /noindex/);
+  });
+
+  test('version complète : chiffres de la période et 3 classements', async ({
+    activityPreviewCompletePage,
+  }) => {
+    const { section } = activityPreviewCompletePage;
+    await expect(
+      section.getByRole('heading', {
+        name: /^1\s234 contributions ces 30 derniers jours$/,
+      }),
+    ).toBeVisible();
+    await expect(
+      section.getByText('+23 % par rapport aux 30 jours précédents'),
+    ).toBeVisible();
+    await expect(
+      section.getByRole('heading', { name: '7 contributeurs actifs' }),
+    ).toBeVisible();
+    // the single contributor still gets his card
+    await expect(
+      section.getByRole('heading', { name: 'Contributeurs les plus actifs' }),
+    ).toBeVisible();
+  });
+
+  test('version récit : la phrase de la période et le podium', async ({
+    activityPreviewStoryPage,
+  }) => {
+    const { section } = activityPreviewStoryPage;
+    await expect(
+      section.getByRole('heading', {
+        name: /^Ces 30 derniers jours, 1\s234 contributions ont amélioré 42 communes, grâce à 7 contributeurs\.$/,
+      }),
+    ).toBeVisible();
+    await expect(section.getByText('Contributeur le plus actif')).toBeVisible();
+    await expect(
+      section.getByRole('heading', { name: 'contributrice_test' }),
+    ).toBeVisible();
+    await expect(
+      activityPreviewStoryPage.page.getByRole('link', { name: 'Récit' }),
+    ).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('bascule entre 30 et 7 jours', async ({
+    activityPreviewCompletePage,
+  }) => {
+    const { section } = activityPreviewCompletePage;
+    await expect(
+      section.getByRole('heading', {
+        name: 'Ces 30 derniers jours',
+        exact: true,
+      }),
+    ).toBeVisible();
+
+    await section.getByText('7 derniers jours').click();
+
+    await expect(
+      section.getByRole('heading', {
+        name: 'Ces 7 derniers jours',
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      section.getByRole('heading', {
+        name: '321 contributions ces 7 derniers jours',
+      }),
+    ).toBeVisible();
   });
 });

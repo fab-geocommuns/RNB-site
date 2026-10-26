@@ -14,11 +14,19 @@ export type ContributionSummary = {
   updated_at: string;
   // length of the rolling window of the rankings and of the "new" counts
   window_days: number;
-  // cities where at least one contribution was ever made (null until the
-  // nightly computation), and how many made their very first one in the window
-  cities: { total: number | null; new: number };
+  // cities where at least one contribution was ever made, and how many made
+  // their very first one in the window
+  cities: { total: number; new: number };
   // organizations whose members contributed at least once
-  organizations: { total: number | null; new: number };
+  organizations: { total: number; new: number };
+  // the window itself, and the contributions of the window before for a trend
+  activity: {
+    contributions: number;
+    cities: number;
+    contributors: number;
+    new_contributors: number;
+    previous_contributions: number;
+  };
   // building changes of the window, all sources (imports included)
   building_changes: { total: number; contributions: number };
   top: {
@@ -35,13 +43,16 @@ export type ContributionSummary = {
       count: number;
     }[];
   };
-  // cities whose very first contribution is in the window, the latest first
-  new_cities: {
-    insee_code: string;
-    name: string;
-    department: SummaryDepartment | null;
-  }[];
+  // contributors whose very first contribution is in the window, the latest
+  // first
+  newcomers: {
+    users: { username: string }[];
+  };
 };
+
+// Rolling windows offered by the API (?days=N), and the one shown first
+export const WINDOWS = [7, 30];
+export const DEFAULT_WINDOW = 30;
 
 // The summary is recomputed every hour by the API
 export const SUMMARY_REVALIDATE = 3600;
@@ -49,14 +60,46 @@ export const SUMMARY_REVALIDATE = 3600;
 // summary takes about 2 s when it is not in the API cache
 const FETCH_TIMEOUT_MS = 5000;
 
-// The summary, or null when the API fails: the section is then hidden, the
-// error only goes to the server logs and to Sentry
-export async function loadContributionSummary(): Promise<ContributionSummary | null> {
+// Blocks the section reads: a response missing one of them (an older API
+// version, a cached response) must hide the section, not break the page
+const REQUIRED_BLOCKS = [
+  'cities',
+  'organizations',
+  'activity',
+  'building_changes',
+  'top',
+  'newcomers',
+] as const;
+
+export function isCompleteSummary(data: unknown): data is ContributionSummary {
+  if (typeof data !== 'object' || data === null) return false;
+  const summary = data as Record<string, Record<string, unknown> | null>;
+  return (
+    REQUIRED_BLOCKS.every(
+      (key) => typeof summary[key] === 'object' && summary[key] !== null,
+    ) &&
+    // the cumulative counts were null in an earlier version of the API
+    typeof summary.cities?.total === 'number' &&
+    typeof summary.organizations?.total === 'number'
+  );
+}
+
+// The summary, or null when the API fails or answers an incomplete summary:
+// the section is then hidden, the error only goes to the server logs and to
+// Sentry
+export async function loadContributionSummary(
+  days: number = DEFAULT_WINDOW,
+): Promise<ContributionSummary | null> {
   try {
-    return await rnbApi.get<ContributionSummary>('contributions/summary/', {
+    const data = await rnbApi.get<unknown>('contributions/summary/', {
+      query: { days },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       next: { revalidate: SUMMARY_REVALIDATE },
     });
+    if (!isCompleteSummary(data)) {
+      throw new Error('Incomplete contribution summary');
+    }
+    return data;
   } catch (error) {
     console.error('Error fetching contribution summary:', error);
     Sentry.captureException(error, {
@@ -66,10 +109,19 @@ export async function loadContributionSummary(): Promise<ContributionSummary | n
   }
 }
 
+// One summary per window, in WINDOWS order; null when none could be loaded
+export async function loadContributionSummaries(): Promise<
+  ContributionSummary[] | null
+> {
+  const summaries = await Promise.all(WINDOWS.map(loadContributionSummary));
+  const loaded = summaries.filter((s): s is ContributionSummary => s !== null);
+  return loaded.length ? loaded : null;
+}
+
 // What the section shows, decided from the data: kept apart from the
 // component so that the edge cases can be tested
 
-export const MAX_NEW_CITIES = 8;
+export const MAX_NEWCOMERS = 8;
 // A ranking with fewer rows does not look like a ranking: its card is hidden
 export const MIN_RANKING_ROWS = 2;
 
@@ -94,37 +146,132 @@ export type RankingView = {
   rows: { name: string; detail: string | null; count: number }[];
 };
 
+// The previewed layouts of the section:
+// - simple: cumulative figures (stock + delta), rankings of 2 rows or more
+// - complet: the window's figures with a trend, the 3 rankings
+// - recit: one sentence telling the month, the top of each ranking
+export type SummaryVariant = 'simple' | 'complet' | 'recit';
+
+// A piece of a sentence: plain text, or a number to highlight
+export type SentencePart = { text: string; isNumber?: boolean };
+
+// The first of a ranking, shown alone in the "recit" layout
+export type PodiumView = {
+  title: string;
+  name: string;
+  detail: string | null;
+  count: number;
+};
+
 export type SummaryView = {
   figures: FigureView[];
   rankings: RankingView[];
-  newCities: { name: string; department: string | null }[];
+  // usernames of the contributors who made their first contribution
+  newcomers: string[];
+  story: SentencePart[];
+  podium: PodiumView[];
 };
 
-export function summaryView(summary: ContributionSummary): SummaryView {
+const countParts = (
+  n: number,
+  singular: string,
+  pluralForm: string,
+): SentencePart[] => [
+  { text: formatNumber(n), isNumber: true },
+  { text: ` ${plural(n, singular, pluralForm)}` },
+];
+
+// "Ces 30 derniers jours, 35 contributions ont amélioré 3 communes, grâce à
+// 2 contributeurs."
+function storyParts(summary: ContributionSummary): SentencePart[] {
+  const { contributions, cities, contributors } = summary.activity;
+  const when = `Ces ${summary.window_days} derniers jours, `;
+  if (contributions === 0) {
+    return [{ text: `${when}aucune contribution pour l’instant.` }];
+  }
+  return [
+    { text: when },
+    ...countParts(contributions, 'contribution', 'contributions'),
+    { text: plural(contributions, ' a amélioré ', ' ont amélioré ') },
+    ...countParts(cities, 'commune', 'communes'),
+    { text: ', grâce à ' },
+    ...countParts(contributors, 'contributeur', 'contributeurs'),
+    { text: '.' },
+  ];
+}
+
+// "+18 % par rapport aux 30 jours précédents"
+function trendText(summary: ContributionSummary): string | null {
+  const { contributions, previous_contributions } = summary.activity;
+  if (!previous_contributions) return null;
+  const trend = Math.round(
+    ((contributions - previous_contributions) / previous_contributions) * 100,
+  );
+  return `${trend > 0 ? '+' : ''}${trend} % par rapport aux ${summary.window_days} jours précédents`;
+}
+
+// the window's figures, as in the first versions of the section
+function activityFigures(summary: ContributionSummary): FigureView[] {
+  const { activity, cities, window_days: days } = summary;
+  return [
+    {
+      value: activity.contributions,
+      label: `${plural(activity.contributions, 'contribution', 'contributions')} ces ${days} derniers jours`,
+      detail: trendText(summary),
+    },
+    {
+      value: activity.cities,
+      label: plural(activity.cities, 'commune éditée', 'communes éditées'),
+      detail:
+        cities.new > 0
+          ? `dont ${formatNumber(cities.new)} pour la première fois`
+          : null,
+    },
+    {
+      value: activity.contributors,
+      label: plural(
+        activity.contributors,
+        'contributeur actif',
+        'contributeurs actifs',
+      ),
+      detail:
+        activity.new_contributors > 0
+          ? `dont ${formatNumber(activity.new_contributors)} ${plural(activity.new_contributors, 'nouveau', 'nouveaux')}`
+          : null,
+    },
+  ];
+}
+
+export function summaryView(
+  summary: ContributionSummary,
+  variant: SummaryVariant = 'simple',
+): SummaryView {
   const { cities, organizations, building_changes, top } = summary;
   const days = summary.window_days;
 
-  // a cumulative count is missing until the API computed it for the first time
-  const candidates: (Omit<FigureView, 'value'> & { value: number | null })[] = [
+  const stockFigures: FigureView[] = [
     {
       value: cities.total,
       label: plural(
-        cities.total ?? 0,
+        cities.total,
         'commune déjà améliorée par la communauté',
         'communes déjà améliorées par la communauté',
       ),
-      detail: cities.new > 0 ? `+${formatNumber(cities.new)} ce mois-ci` : null,
+      detail:
+        cities.new > 0
+          ? `+${formatNumber(cities.new)} ces ${days} derniers jours`
+          : null,
     },
     {
       value: organizations.total,
       label: plural(
-        organizations.total ?? 0,
+        organizations.total,
         'organisation contributrice',
         'organisations contributrices',
       ),
       detail:
         organizations.new > 0
-          ? `+${formatNumber(organizations.new)} ce mois-ci`
+          ? `+${formatNumber(organizations.new)} ces ${days} derniers jours`
           : null,
     },
     {
@@ -140,9 +287,8 @@ export function summaryView(summary: ContributionSummary): SummaryView {
           : null,
     },
   ];
-  const figures = candidates.filter((f): f is FigureView => f.value !== null);
 
-  const rankings: RankingView[] = [
+  const allRankings: RankingView[] = [
     {
       title: 'Contributeurs les plus actifs',
       rows: top.users.map((u) => ({
@@ -167,14 +313,27 @@ export function summaryView(summary: ContributionSummary): SummaryView {
         count: c.count,
       })),
     },
-  ].filter((r) => r.rows.length >= MIN_RANKING_ROWS);
+  ];
+  // "complet" keeps the 3 rankings as soon as they have a row
+  const rankings = allRankings.filter(
+    (r) => r.rows.length >= (variant === 'complet' ? 1 : MIN_RANKING_ROWS),
+  );
+
+  const podium = [
+    { title: 'Contributeur le plus actif', ranking: allRankings[0] },
+    { title: 'Organisation la plus active', ranking: allRankings[1] },
+    { title: 'Commune la plus éditée', ranking: allRankings[2] },
+  ].flatMap(({ title, ranking }) =>
+    ranking.rows.length ? [{ title, ...ranking.rows[0] }] : [],
+  );
 
   return {
-    figures,
+    figures: variant === 'complet' ? activityFigures(summary) : stockFigures,
     rankings,
-    newCities: summary.new_cities.slice(0, MAX_NEW_CITIES).map((c) => ({
-      name: c.name,
-      department: departmentLabel(c.department),
-    })),
+    story: storyParts(summary),
+    podium,
+    newcomers: summary.newcomers.users
+      .slice(0, MAX_NEWCOMERS)
+      .map((u) => u.username),
   };
 }

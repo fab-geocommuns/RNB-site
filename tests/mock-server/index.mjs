@@ -39,6 +39,13 @@ const CONTRIBUTION_SUMMARY = {
   window_days: 30,
   cities: { total: 1248, new: 12 },
   organizations: { total: 86, new: 0 },
+  activity: {
+    contributions: 1234,
+    cities: 42,
+    contributors: 7,
+    new_contributors: 3,
+    previous_contributions: 1000,
+  },
   building_changes: { total: 4310, contributions: 520 },
   top: {
     users: [
@@ -68,18 +75,7 @@ const CONTRIBUTION_SUMMARY = {
       },
     ],
   },
-  new_cities: [
-    {
-      insee_code: '28158',
-      name: 'Fresnay-l’Évêque',
-      department: { code: '28', name: 'Eure-et-Loir' },
-    },
-    {
-      insee_code: '73311',
-      name: 'Verrens-Arvey',
-      department: { code: '73', name: 'Savoie' },
-    },
-  ],
+  newcomers: { users: [{ username: 'nouvelle_contributrice' }] },
 };
 
 const server = createServer((req, res) => {
@@ -110,7 +106,27 @@ const server = createServer((req, res) => {
     return json(res, 200, HISTORY);
   }
   if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
-    return json(res, 200, CONTRIBUTION_SUMMARY);
+    // the 7-day window: fewer contributions, same rankings
+    const days = Number(u.searchParams.get('days') || 30);
+    return json(
+      res,
+      200,
+      days === 7
+        ? {
+            ...CONTRIBUTION_SUMMARY,
+            window_days: 7,
+            activity: { ...CONTRIBUTION_SUMMARY.activity, contributions: 321 },
+            cities: { ...CONTRIBUTION_SUMMARY.cities, new: 3 },
+            top: {
+              ...CONTRIBUTION_SUMMARY.top,
+              cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
+                ...c,
+                count: 1,
+              })),
+            },
+          }
+        : CONTRIBUTION_SUMMARY,
+    );
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
