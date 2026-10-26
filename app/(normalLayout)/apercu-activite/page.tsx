@@ -1,41 +1,31 @@
 import Alert from '@codegouvfr/react-dsfr/Alert';
-import * as Sentry from '@sentry/nextjs';
 
-import EditionActivity from '@/components/home/EditionActivity';
-import { getEditionActivities } from '@/utils/editionActivity';
+import ContributionSummary from '@/components/home/ContributionSummary';
+import { loadContributionSummary } from '@/utils/contributionSummary';
 import pageTitle from '@/utils/pageTitle';
 
-// Preview of the home page activity block, to try it with production data
-// before showing it on the home page. Linked from nowhere and not indexed.
+// Preview of the « Participer au RNB » section of the home page, to try it with
+// production data before showing it on the home page. Linked from nowhere and
+// not indexed.
 export const metadata = pageTitle('Aperçu de l’activité', {
   robots: { index: false },
 });
 
-// Same cache as the home page external data
-const REVALIDATE = 300;
-
-const logError = (source: string) => (error: unknown) => {
-  console.error(`Error fetching ${source}:`, error);
-  Sentry.captureException(error, { tags: { source } });
-  return null;
-};
-
 export default async function Page() {
-  const editionActivities = await getEditionActivities(REVALIDATE).catch(
-    logError('edition activity'),
-  );
+  const summary = await loadContributionSummary();
 
   return (
     <div className="fr-container">
-      {!editionActivities && (
+      {/* the home page hides the section silently; the preview says why */}
+      {!summary && (
         <Alert
           className="fr-mt-6w"
           severity="warning"
-          title="Activité indisponible"
-          description="L’API n’a pas répondu à temps. Rechargez la page dans quelques instants."
+          title="Synthèse indisponible"
+          description="L’API n’a pas répondu. La section serait masquée sur la page d’accueil."
         />
       )}
-      <EditionActivity activities={editionActivities ?? []} />
+      <ContributionSummary summary={summary} />
     </div>
   );
 }

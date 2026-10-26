@@ -1,70 +1,80 @@
 import { test, expect } from '@/tests/fixtures';
 
-// /apercu-activite: the home page activity block, tried on production data
-// before it goes on the home page. Data served by the mock server.
+// /apercu-activite: the « Participer au RNB » section of the home page, tried
+// on production data before it goes on the home page. Data served by the mock
+// server (tests/mock-server/index.mjs).
 test.describe("Aperçu de l'activité", () => {
-  test('résume les contributions de la communauté par fenêtre glissante', async ({
-    activityPreviewPage,
-  }) => {
-    const { section, summary } = activityPreviewPage;
-    await expect(summary).toHaveText(
-      /^Ces 30 derniers jours : 1\s234 contributions dans 42 communes par 7 contributeurs$/,
-    );
-    await expect(
-      section.getByText(
-        '+23 % par rapport aux 30 jours précédents · 3 contributeurs pour la première fois',
-      ),
-    ).toBeVisible();
-    await expect(section.getByText('nouveau_contributeur')).toBeVisible();
-
-    await section.getByText('7 jours').click();
-    await expect(summary).toHaveText(
-      /^Ces 7 derniers jours : 321 contributions dans 42 communes par 7 contributeurs$/,
-    );
-  });
-
-  test('affiche les 3 classements côte à côte sur grand écran', async ({
-    activityPreviewPage,
-  }) => {
-    const { section } = activityPreviewPage;
-    for (const title of [
-      'Contributeurs les plus actifs',
-      'Organisations les plus actives',
-      'Communes les plus éditées',
-    ]) {
-      await expect(section.getByRole('heading', { name: title })).toBeVisible();
-    }
-    await expect(
-      section.getByText('Ville Test').filter({ visible: true }),
-    ).toBeVisible();
-    // the tabs are only for small screens
-    await expect(section.getByRole('tablist')).toBeHidden();
-  });
-
-  test('affiche les classements dans des onglets sur mobile', async ({
-    activityPreviewPage,
-  }) => {
-    const { page, section } = activityPreviewPage;
-    await page.setViewportSize({ width: 375, height: 812 });
-
-    const citiesTab = section.getByRole('tab', { name: 'Communes' });
-    await citiesTab.click();
-    await expect(citiesTab).toHaveAttribute('aria-selected', 'true');
-    await expect(
-      section.getByRole('tabpanel').getByText('Ville Test'),
-    ).toBeVisible();
-  });
-
-  test('renvoie vers les ressources pour participer', async ({
+  test('affiche les 3 chiffres clés avec leur libellé', async ({
     activityPreviewPage,
   }) => {
     const { section } = activityPreviewPage;
     await expect(
-      section.getByRole('link', { name: 'Comment est construit le RNB' }),
-    ).toHaveAttribute('href', '/a-propos');
+      section.getByRole('heading', {
+        name: /^1\s248 communes déjà améliorées par la communauté$/,
+      }),
+    ).toBeVisible();
+    await expect(section.getByText('+12 ce mois-ci')).toBeVisible();
+    await expect(
+      section.getByRole('heading', { name: '86 organisations contributrices' }),
+    ).toBeVisible();
+    await expect(
+      section.getByRole('heading', {
+        name: /^4\s310 modifications de bâtiments ces 30 derniers jours$/,
+      }),
+    ).toBeVisible();
+    await expect(
+      section.getByText('dont 520 par les contributeurs'),
+    ).toBeVisible();
+    // no new organization: no "+0"
+    await expect(section.getByText('+0 ce mois-ci')).toHaveCount(0);
+  });
+
+  test('affiche les classements de plus d’une ligne', async ({
+    activityPreviewPage,
+  }) => {
+    const { section } = activityPreviewPage;
+    const cities = section
+      .locator('.fr-card')
+      .filter({ hasText: 'Communes les plus éditées' });
+    await expect(cities.getByRole('listitem')).toHaveCount(3);
+    await expect(cities.getByText('· Gironde (33)')).toBeVisible();
+    await expect(
+      section.getByRole('heading', { name: 'Organisations les plus actives' }),
+    ).toBeVisible();
+    // a single contributor: the card is hidden
+    await expect(
+      section.getByRole('heading', { name: 'Contributeurs les plus actifs' }),
+    ).toHaveCount(0);
+  });
+
+  test('accueille les nouvelles communes contributrices', async ({
+    activityPreviewPage,
+  }) => {
+    const { section } = activityPreviewPage;
+    await expect(
+      section.getByRole('heading', {
+        name: 'Nouvelles communes contributrices ce mois-ci',
+      }),
+    ).toBeVisible();
+    await expect(section.getByText('Verrens-Arvey').last()).toBeVisible();
+  });
+
+  test('propose de participer', async ({ activityPreviewPage }) => {
+    const { section } = activityPreviewPage;
     await expect(
       section.getByRole('link', { name: 'S’inscrire pour contribuer' }),
     ).toHaveAttribute('href', '/inscription');
+    await expect(
+      section.getByRole('link', { name: 'Voir l’activité de ma commune' }),
+    ).toHaveAttribute('href', '/stats#mise-a-jour');
+    await expect(
+      section.getByRole('link', { name: 'Toutes les statistiques' }),
+    ).toHaveAttribute('href', '/stats');
+    await expect(
+      section.getByText(
+        'Les contributions de l’équipe RNB ne sont pas comptées dans les classements.',
+      ),
+    ).toBeVisible();
   });
 
   test("n'est pas indexée par les moteurs de recherche", async ({

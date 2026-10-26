@@ -31,88 +31,56 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
-// "La communauté du RNB" block (/apercu-activite): rolling windows (?days=N)
-const EDITIONS_BY_PERIOD = {
-  last_7_days: 321,
-  last_30_days: 1234,
-};
-
-const PERIOD_SINCE = {
-  last_7_days: '2026-10-08T14:00:00+02:00',
-  last_30_days: '2026-09-15T14:00:00+02:00',
-};
-const MONTHLY = [
-  '2025-11',
-  '2025-12',
-  '2026-01',
-  '2026-02',
-  '2026-03',
-  '2026-04',
-  '2026-05',
-  '2026-06',
-  '2026-07',
-  '2026-08',
-  '2026-09',
-  '2026-10',
-].map((month, i) => ({ month, editions: 300 + i * 100 }));
-
-const editionActivity = (period) => ({
-  period: { key: period, since: PERIOD_SINCE[period] ?? null },
-  updated_at: '2026-10-15T14:00:00+02:00',
-  totals: {
-    editions: EDITIONS_BY_PERIOD[period] ?? 0,
-    cities: 42,
-    editors: 7,
-  },
-  previous_period: {
-    since: '2026-08-16T14:00:00+02:00',
-    until: '2026-09-15T14:00:00+02:00',
-    editions: 1000,
-  },
-  monthly: MONTHLY,
+// « Participer au RNB » section (/apercu-activite). Chosen to show the edge
+// cases: no new organization (no delta), a 1-row ranking (its card is hidden)
+const gironde = { code: '33', name: 'Gironde' };
+const CONTRIBUTION_SUMMARY = {
+  updated_at: '2026-10-15T14:10:00+02:00',
+  window_days: 30,
+  cities: { total: 1248, new: 12 },
+  organizations: { total: 86, new: 0 },
+  building_changes: { total: 4310, contributions: 520 },
   top: {
     users: [
       {
-        rank: 1,
         username: 'contributrice_test',
-        organization_short_name: 'Mairie Test',
+        organization: 'Mairie Test',
         count: 800,
       },
     ],
     organizations: [
-      {
-        rank: 1,
-        name: 'Mairie de Test',
-        short_name: 'Mairie Test',
-        count: 800,
-      },
+      { name: 'Commune de Talence', department: gironde, count: 42 },
+      { name: 'Syndicat SIG', department: null, count: 18 },
     ],
     cities: [
       {
-        rank: 1,
-        insee_code: '99001',
-        name: 'Ville Test',
-        department: { code: '99', name: 'Département Test' },
-        count: 500,
+        insee_code: '28158',
+        name: 'Fresnay-l’Évêque',
+        department: { code: '28', name: 'Eure-et-Loir' },
+        count: 9,
       },
-    ],
-    departments: [
-      { rank: 1, code: '99', name: 'Département Test', count: 500 },
-    ],
-  },
-  newcomers: {
-    users: [
+      { insee_code: '33522', name: 'Talence', department: gironde, count: 7 },
       {
-        username: 'nouveau_contributeur',
-        organization_short_name: null,
-        first_edition_at: '2026-10-03T09:12:00+02:00',
+        insee_code: '73311',
+        name: 'Verrens-Arvey',
+        department: { code: '73', name: 'Savoie' },
+        count: 5,
       },
     ],
-    cities: [],
-    departments: [],
-    count: { users: 3, cities: 0, departments: 0 },
   },
-});
+  new_cities: [
+    {
+      insee_code: '28158',
+      name: 'Fresnay-l’Évêque',
+      department: { code: '28', name: 'Eure-et-Loir' },
+    },
+    {
+      insee_code: '73311',
+      name: 'Verrens-Arvey',
+      department: { code: '73', name: 'Savoie' },
+    },
+  ],
+};
 
 const server = createServer((req, res) => {
   const { method, url } = req;
@@ -141,9 +109,8 @@ const server = createServer((req, res) => {
   ) {
     return json(res, 200, HISTORY);
   }
-  if (method === 'GET' && path === '/api/alpha/editions/activity/') {
-    const days = u.searchParams.get('days') || '30';
-    return json(res, 200, editionActivity(`last_${days}_days`));
+  if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
+    return json(res, 200, CONTRIBUTION_SUMMARY);
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
