@@ -55,7 +55,21 @@ const FETCH_TIMEOUT_MS = 5000;
 // Every value the section reads: a response missing one of them (an older API
 // version, a cached response) must hide the section, not break the page
 const isNumber = (v: unknown) => typeof v === 'number';
-const isList = (v: unknown) => Array.isArray(v);
+const isText = (v: unknown) => typeof v === 'string';
+// a list whose every element passes the check: one bad row would break the
+// rendering of the whole section
+const isList = (v: unknown, isRow: (row: any) => boolean) =>
+  Array.isArray(v) && v.every((row) => isRow(row));
+
+const isDepartment = (d: any) =>
+  d === null || (isText(d?.code) && isText(d?.name));
+const isUser = (u: any) =>
+  isText(u?.username) &&
+  (u.organization === null || isText(u.organization)) &&
+  isNumber(u.count);
+const isPlace = (p: any) =>
+  isText(p?.name) && isDepartment(p.department) && isNumber(p.count);
+const isNewcomer = (u: any) => isText(u?.username);
 
 export function isCompleteSummary(data: unknown): data is ContributionSummary {
   // optional chaining reads through anything, the checks below say what it is
@@ -68,10 +82,10 @@ export function isCompleteSummary(data: unknown): data is ContributionSummary {
     isNumber(d?.organizations?.new) &&
     isNumber(d?.building_changes?.total) &&
     isNumber(d?.building_changes?.contributions) &&
-    isList(d?.top?.users) &&
-    isList(d?.top?.organizations) &&
-    isList(d?.top?.cities) &&
-    isList(d?.newcomers?.users)
+    isList(d?.top?.users, isUser) &&
+    isList(d?.top?.organizations, isPlace) &&
+    isList(d?.top?.cities, isPlace) &&
+    isList(d?.newcomers?.users, isNewcomer)
   );
 }
 

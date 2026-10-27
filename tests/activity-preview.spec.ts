@@ -58,7 +58,30 @@ test.describe("Aperçu de l'activité", () => {
     ).toBeVisible();
     const tags = section.locator('.fr-tags-group');
     await expect(tags.getByRole('listitem')).toHaveCount(1);
-    await expect(tags.getByText('nouvelle_contributrice')).toBeVisible();
+    await expect(
+      tags.getByText('nouvelle_contributrice', { exact: true }),
+    ).toBeVisible();
+  });
+
+  test('la période change les nouveaux contributeurs', async ({
+    activityPreviewPage,
+  }) => {
+    const { section } = activityPreviewPage;
+    const tags = section.locator('.fr-tags-group');
+
+    await section.getByText('7 derniers jours').click();
+
+    await expect(
+      section.getByRole('heading', {
+        name: 'Nouveaux contributeurs ces 7 derniers jours',
+      }),
+    ).toBeVisible();
+    await expect(
+      tags.getByText('nouvelle_contributrice_7j', { exact: true }),
+    ).toBeVisible();
+    await expect(
+      tags.getByText('nouvelle_contributrice', { exact: true }),
+    ).toHaveCount(0);
   });
 
   test('la période ne change pas les chiffres clés', async ({

@@ -178,6 +178,34 @@ describe('loadContributionSummary', () => {
     expect(isCompleteSummary(null)).toBe(false);
   });
 
+  it('rejette une réponse dont une ligne de liste est incomplète', () => {
+    const { top, newcomers } = summary();
+    const withTop = (patch: Record<string, unknown>) => ({
+      ...summary(),
+      top: { ...top, ...patch },
+    });
+    expect(isCompleteSummary(withTop({ users: [null] }))).toBe(false);
+    expect(
+      isCompleteSummary(withTop({ users: [{ username: 'alice', count: 2 }] })),
+    ).toBe(false);
+    expect(
+      isCompleteSummary(
+        withTop({ organizations: [{ name: 'Syndicat', department: null }] }),
+      ),
+    ).toBe(false);
+    expect(
+      isCompleteSummary(
+        withTop({ cities: [{ ...top.cities[0], department: { code: '33' } }] }),
+      ),
+    ).toBe(false);
+    expect(
+      isCompleteSummary({
+        ...summary(),
+        newcomers: { users: [...newcomers.users, { username: null }] },
+      }),
+    ).toBe(false);
+  });
+
   it('renvoie null pour une réponse incomplète, sans planter', async () => {
     const { newcomers: _newcomers, ...withoutNewcomers } = summary();
     vi.mocked(rnbApi.get).mockResolvedValue(withoutNewcomers);

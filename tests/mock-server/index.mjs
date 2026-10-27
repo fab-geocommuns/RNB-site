@@ -99,7 +99,7 @@ const server = createServer((req, res) => {
     return json(res, 200, HISTORY);
   }
   if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
-    // the 7-day window: fewer contributions, same rankings
+    // the 7-day window: fewer contributions, same rankings, another newcomer
     const days = Number(u.searchParams.get('days') || 30);
     return json(
       res,
@@ -116,6 +116,7 @@ const server = createServer((req, res) => {
                 count: 1,
               })),
             },
+            newcomers: { users: [{ username: 'nouvelle_contributrice_7j' }] },
           }
         : CONTRIBUTION_SUMMARY,
     );
