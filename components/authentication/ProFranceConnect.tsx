@@ -4,6 +4,10 @@ import { useSearchParams } from 'next/navigation';
 import { ProConnectButton } from '@codegouvfr/react-dsfr/ProConnectButton';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import { Loader } from '@/components/Loader';
+import {
+  createLoginCheck,
+  LOGIN_CHECK_PARAM,
+} from '@/utils/proConnectLoginCheck';
 
 export default function ProFranceConnect() {
   const [proConnectError, setProConnectError] = useState(false);
@@ -25,6 +29,8 @@ export default function ProFranceConnect() {
     }
 
     try {
+      callbackUrl.searchParams.set(LOGIN_CHECK_PARAM, createLoginCheck());
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE}/auth/pro_connect/authorize/?redirect_uri=${encodeURIComponent(callbackUrl.toString())}`,
       );
