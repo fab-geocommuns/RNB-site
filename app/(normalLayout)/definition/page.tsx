@@ -66,7 +66,7 @@ export default async function Page() {
               <div className="fr-col-12 fr-col-md-4">
                 <div className="block block--yellow block--fill">
                   <p>
-                    <strong>Contruction de la définition</strong>
+                    <strong>Construction de la définition</strong>
                   </p>
                   <p>
                     La construction du RNB est réalisée en collaboration avec
@@ -82,7 +82,7 @@ export default async function Page() {
               </div>
               <div className="fr-col-12 fr-col-md-12">
                 <h2 className="block__title">
-                  Evaluez si votre construction est un bâtiment
+                  Évaluez si votre construction est un bâtiment
                 </h2>
 
                 <p>
@@ -91,8 +91,8 @@ export default async function Page() {
                     correspond à la définition du bâtiment ?
                   </strong>
                   <br />
-                  Parcourez la liste des cas recensés par le RNB, par mots clés
-                  (ex&nbsp;: extension; terrasse; kiosque …) .
+                  Parcourez la liste des cas recensés par le RNB, par mots-clés
+                  (ex.&nbsp;: extension, terrasse, kiosque…).
                 </p>
 
                 <BuildingList buildingList={buildingList} />

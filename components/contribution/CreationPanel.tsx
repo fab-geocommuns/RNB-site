@@ -203,7 +203,7 @@ function BodyPanel({
               id="comment"
               name="text"
               className={`fr-text--sm fr-input fr-mb-4v ${styles.textarea}`}
-              placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible aux autre utilisateur dans l'historique de l'identifiant."
+              placeholder="Laissez un commentaire optionnel sur les raisons de ce changement. Celui-ci sera visible par les autres utilisateurs dans l'historique de l'identifiant."
             />
           </div>
         </>

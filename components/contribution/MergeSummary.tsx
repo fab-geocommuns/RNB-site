@@ -42,7 +42,7 @@ export default function MergeSummary({
           className={`${styles.mergePanelDescWrapper} ${styles.mergePanelNewBuildingWrapper}`}
         >
           <h3 className={styles.mergePanelSummaryTitle}>
-            Nouveau bâtiment créé:
+            Nouveau bâtiment créé :
           </h3>
           <BuildingInfo key={newBuilding.rnb_id} building={newBuilding} />
         </div>

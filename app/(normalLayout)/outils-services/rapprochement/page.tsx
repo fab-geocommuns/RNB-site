@@ -75,7 +75,7 @@ export default async function Page() {
               <p>
                 Votre base contient des identifiants RNB et vous souhaitez en
                 faire la promotion sur cette page ?<br />
-                Ecrivez-nous à{' '}
+                Écrivez-nous à{' '}
                 <a href={`mailto:${settings.contactEmail}`}>
                   {settings.contactEmail}
                 </a>{' '}
@@ -149,7 +149,7 @@ export default async function Page() {
               <Card
                 imageUrl={siloPhoto.src}
                 horizontal
-                desc="Le RNB est publié sous licence ouverte et régulièrement mis à jour sur data.gouv.fr. "
+                desc="Le RNB est publié sous licence ouverte et régulièrement mis à jour sur data.gouv.fr."
                 linkProps={{
                   href: 'https://www.data.gouv.fr/fr/datasets/referentiel-national-des-batiments/',
                 }}
@@ -178,7 +178,7 @@ export default async function Page() {
                   <li>
                     Article :{' '}
                     <Link href="/blog/identifiant-batiment-perenne">
-                      Qu&apos;est-ce qu&apos;est un ID de bâtiment pérenne ?
+                      Qu&apos;est-ce qu&apos;un ID de bâtiment pérenne ?
                     </Link>
                   </li>
                   <li>
@@ -188,7 +188,7 @@ export default async function Page() {
                     </Link>
                   </li>
                   <li>
-                    La <Link href="/faq">Foire aux Questions</Link> du RNB
+                    La <Link href="/faq">Foire aux questions</Link> du RNB
                   </li>
                 </ul>
               </div>

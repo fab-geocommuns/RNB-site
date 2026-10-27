@@ -168,7 +168,7 @@ function BodyPanel({
                                 onClick={() =>
                                   selectCandidateToRemove(candidate.rnb_id)
                                 }
-                                title="Supprime le bâtiment de la liste des bâtiments à fusionner"
+                                title="Supprimer le bâtiment de la liste des bâtiments à fusionner"
                               >
                                 <span
                                   className="fr-icon-close-circle-fill"

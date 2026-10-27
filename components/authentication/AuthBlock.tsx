@@ -10,7 +10,7 @@ export default function AuthBlock({ mode }: AuthBlockProps) {
   return (
     <>
       <h2 className={styles.titleShell}>
-        {mode === 'login' ? 'Se connecter' : "S'inscrire"} avec Pro Connect
+        {mode === 'login' ? 'Se connecter' : "S'inscrire"} avec ProConnect
       </h2>
       <ProFranceConnect />
 

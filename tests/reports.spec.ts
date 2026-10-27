@@ -72,6 +72,47 @@ test.describe('Signalements', () => {
     }
   });
 
+  test('le compteur reprend après une erreur et se met en pause onglet caché', async ({
+    page,
+  }) => {
+    // Counts are relative: React StrictMode mounts the panel twice in dev
+    let statsCalls = 0;
+    let failing = true;
+    await page.route(/\/reports\/stats\/$/, (route) => {
+      statsCalls += 1;
+      return failing
+        ? route.fulfill({ status: 500 })
+        : route.fulfill({ json: emptyReportStats });
+    });
+    const setVisibility = (state: 'visible' | 'hidden') =>
+      page.evaluate((state) => {
+        Object.defineProperty(document, 'visibilityState', {
+          configurable: true,
+          get: () => state,
+        });
+        document.dispatchEvent(new Event('visibilitychange'));
+      }, state);
+
+    await page.clock.install();
+    await page.goto(REPORTS_MAP_URL);
+    await expect.poll(() => statsCalls).toBeGreaterThan(0);
+
+    failing = false;
+    let before = statsCalls;
+    await page.clock.runFor(5000);
+    await expect.poll(() => statsCalls).toBeGreaterThan(before);
+
+    await setVisibility('hidden');
+    before = statsCalls;
+    await page.clock.runFor(20000);
+    expect(statsCalls).toBe(before);
+
+    await setVisibility('visible');
+    await expect.poll(() => statsCalls).toBe(before + 1);
+    await page.clock.runFor(5000);
+    await expect.poll(() => statsCalls).toBe(before + 2);
+  });
+
   test('« Afficher les clôturés » ajoute les signalements clôturés, et le reste après rechargement', async ({
     page,
     mapLocator,
@@ -221,7 +262,7 @@ test.describe('Signalements', () => {
     const reports = [addressReport, missingBuildingReport];
     await serveReportTiles({ page, reports });
     await page.route(
-      (url) => url.pathname.endsWith('/contributions/'),
+      (url) => url.pathname.endsWith('/reports/'),
       async (route) => {
         reports.push(newReport);
         await route.fulfill({ json: {} });

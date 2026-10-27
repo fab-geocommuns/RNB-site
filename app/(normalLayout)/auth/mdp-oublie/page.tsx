@@ -70,7 +70,7 @@ export default async function ForgotPasswordPage({
 
                 <p>
                   Indiquez l&apos;email de votre compte RNB pour que nous
-                  puissions vous envoyer des instructions de réinitilisation de
+                  puissions vous envoyer des instructions de réinitialisation de
                   votre mot de passe.
                 </p>
                 <form action={requestNewPassword}>

@@ -135,7 +135,7 @@ export default function CreateAccountForm() {
         <Alert
           description={
             <div>
-              Votre compte a été créé et un e-mail de confirmation vous a été
+              Votre compte a été créé et un email de confirmation vous a été
               envoyé.
               <br />
               <strong>Validez votre adresse email</strong> en cliquant sur le

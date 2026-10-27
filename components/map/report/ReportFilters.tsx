@@ -76,11 +76,13 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
 
   // We update the stats every 5 seconds or when a report has been closed (lastReportUpdate)
   // If the stats have changed, we make the indicator glow
+  // Polling is paused while the tab is hidden and resumes immediately when it's visible again
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: NodeJS.Timeout | undefined;
     let cancelled = false;
 
     async function fetchStats() {
+      clearTimeout(intervalId);
       try {
         const data = await rnbApi.get<any>('/reports/stats/');
         if (cancelled) return;
@@ -93,18 +95,32 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
           }
         }
         prevClosedCountRef.current = data.closed_report_count;
-
-        intervalId = setTimeout(fetchStats, 5000);
       } catch (error) {
         console.error('Failed to fetch report stats:', error);
+      } finally {
+        // Clear first: a fetch started on visibilitychange may overlap this one
+        clearTimeout(intervalId);
+        if (!cancelled && document.visibilityState === 'visible') {
+          intervalId = setTimeout(fetchStats, 5000);
+        }
       }
     }
 
-    fetchStats();
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        fetchStats();
+      } else {
+        clearTimeout(intervalId);
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    if (document.visibilityState === 'visible') fetchStats();
 
     return () => {
       cancelled = true;
       clearTimeout(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [lastReportUpdate]);
 

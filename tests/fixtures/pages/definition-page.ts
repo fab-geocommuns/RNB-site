@@ -11,9 +11,9 @@ export class DefinitionPage extends RNBPage {
     super(page, '/definition');
 
     this.definitionTitle = page.getByText("Définition d'un bâtiment");
-    this.buildDefinitionTitle = page.getByText('Contruction de la définition');
+    this.buildDefinitionTitle = page.getByText('Construction de la définition');
     this.evaluateTitle = page.getByText(
-      'Evaluez si votre construction est un bâtiment',
+      'Évaluez si votre construction est un bâtiment',
     );
     this.buildings = page.getByTestId('building');
   }

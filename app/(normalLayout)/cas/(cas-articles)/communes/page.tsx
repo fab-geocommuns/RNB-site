@@ -59,7 +59,7 @@ export default function Page() {
         patrimoine, environnement, etc.).
       </p>
       <p>
-        A terme, cela doit même permettre à la commune de plus facilement
+        À terme, cela doit même permettre à la commune de plus facilement
         échanger des informations avec les acteurs extérieurs et ainsi mieux
         cibler le recours à des bureaux d’études pour les assister dans leurs
         projets et missions.
@@ -89,8 +89,8 @@ export default function Page() {
         <li>
           Pour les services de maintenance, le RNB permet d’affecter
           correctement les agents et de préciser les lieux d’intervention et ce
-          quelque soit le domaine d’intervention (maintenance informatique,
-          entretien des chaudières, système électrique, etc….)
+          quel que soit le domaine d’intervention (maintenance informatique,
+          entretien des chaudières, système électrique, etc.)
         </li>
       </ul>
     </>

@@ -48,6 +48,10 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path === '/api/alpha/diffusion_databases') {
     return json(res, 200, []);
   }
+  // Server-side fetch of /batiments/[id]/historique: simulates an API failure
+  if (method === 'GET' && path === '/api/alpha/buildings/ERREURAPI/history/') {
+    return json(res, 500, { detail: 'Internal error (mock).' });
+  }
   if (
     method === 'GET' &&
     path === `/api/alpha/buildings/${HISTORY[0].rnb_id}/history/`
@@ -66,6 +70,23 @@ const server = createServer((req, res) => {
         return json(res, 200, { email: 'auteur@exemple.fr' });
       }
       json(res, 400, { token: ['Lien de désinscription invalide.'] });
+    });
+    return;
+  }
+  if (method === 'POST' && path === '/api/alpha/auth/pro_connect/exchange/') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const { code } = JSON.parse(raw || '{}');
+      if (code === 'code-valide') {
+        return json(res, 200, {
+          id: 42,
+          token: 'jeton-proconnect',
+          username: 'agent-proconnect',
+          groups: ['Contributors', 'Admins'],
+        });
+      }
+      json(res, 400, { error: 'invalid_code' });
     });
     return;
   }

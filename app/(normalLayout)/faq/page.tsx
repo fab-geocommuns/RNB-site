@@ -43,7 +43,7 @@ export default async function Page() {
 
             <div className="fr-my-16v">
               <Highlight>
-                Vous vous posez une autre question ? Ecrivez-nous à{' '}
+                Vous vous posez une autre question ? Écrivez-nous à{' '}
                 <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
               </Highlight>
             </div>

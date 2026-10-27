@@ -110,6 +110,7 @@ async function fetchBuildingHistory(
     console.error('Error fetching building history:', error);
     return null;
   }
+  return response.json();
 }
 
 export default async function BuildingHistoryDetail({ params }: PageProps) {
