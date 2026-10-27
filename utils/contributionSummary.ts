@@ -52,26 +52,26 @@ export const SUMMARY_REVALIDATE = 3600;
 // summary takes about 2 s when it is not in the API cache
 const FETCH_TIMEOUT_MS = 5000;
 
-// Blocks the section reads: a response missing one of them (an older API
+// Every value the section reads: a response missing one of them (an older API
 // version, a cached response) must hide the section, not break the page
-const REQUIRED_BLOCKS = [
-  'cities',
-  'organizations',
-  'building_changes',
-  'top',
-  'newcomers',
-] as const;
+const isNumber = (v: unknown) => typeof v === 'number';
+const isList = (v: unknown) => Array.isArray(v);
 
 export function isCompleteSummary(data: unknown): data is ContributionSummary {
-  if (typeof data !== 'object' || data === null) return false;
-  const summary = data as Record<string, Record<string, unknown> | null>;
+  // optional chaining reads through anything, the checks below say what it is
+  const d = data as Record<string, any> | null | undefined;
   return (
-    REQUIRED_BLOCKS.every(
-      (key) => typeof summary[key] === 'object' && summary[key] !== null,
-    ) &&
-    // the cumulative counts were null in an earlier version of the API
-    typeof summary.cities?.total === 'number' &&
-    typeof summary.organizations?.total === 'number'
+    isNumber(d?.window_days) &&
+    isNumber(d?.cities?.total) &&
+    isNumber(d?.cities?.new) &&
+    isNumber(d?.organizations?.total) &&
+    isNumber(d?.organizations?.new) &&
+    isNumber(d?.building_changes?.total) &&
+    isNumber(d?.building_changes?.contributions) &&
+    isList(d?.top?.users) &&
+    isList(d?.top?.organizations) &&
+    isList(d?.top?.cities) &&
+    isList(d?.newcomers?.users)
   );
 }
 

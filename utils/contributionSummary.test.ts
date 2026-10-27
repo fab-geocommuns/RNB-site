@@ -159,6 +159,23 @@ describe('loadContributionSummary', () => {
       isCompleteSummary({ ...summary(), cities: { total: null, new: 1 } }),
     ).toBe(false);
     expect(isCompleteSummary({ ...summary(), top: null })).toBe(false);
+    // a nested list or number missing: the component would read it
+    expect(
+      isCompleteSummary({
+        ...summary(),
+        top: { users: [], organizations: [] },
+      }),
+    ).toBe(false);
+    expect(isCompleteSummary({ ...summary(), newcomers: { cities: [] } })).toBe(
+      false,
+    );
+    expect(
+      isCompleteSummary({ ...summary(), building_changes: { total: 3 } }),
+    ).toBe(false);
+    expect(isCompleteSummary({ ...summary(), window_days: undefined })).toBe(
+      false,
+    );
+    expect(isCompleteSummary(null)).toBe(false);
   });
 
   it('renvoie null pour une réponse incomplète, sans planter', async () => {

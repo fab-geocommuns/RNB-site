@@ -8,7 +8,7 @@ import {
   SegmentedControl,
   SegmentedControlProps,
 } from '@codegouvfr/react-dsfr/SegmentedControl';
-import { Tag } from '@codegouvfr/react-dsfr/Tag';
+import { TagsGroup, TagsGroupProps } from '@codegouvfr/react-dsfr/TagsGroup';
 
 import {
   ContributionSummary as ContributionSummaryData,
@@ -70,12 +70,13 @@ function FigureCard({ figure }: { figure: FigureView }) {
   );
 }
 
+// one heading level below « Ces N derniers jours », which they belong to
 function RankingCard({ ranking }: { ranking: RankingView }) {
   return (
     <Card
       border
       size="small"
-      titleAs="h3"
+      titleAs="h4"
       title={ranking.title}
       end={
         <ol className={fr.cx('fr-raw-list')}>
@@ -199,22 +200,23 @@ export default function ContributionSummary({
 
       {newcomers.length > 0 && (
         <div className={fr.cx('fr-mt-5w')} style={{ textAlign: 'center' }}>
-          <h3 className={fr.cx('fr-h6', 'fr-mb-1v')}>
+          <h4 className={fr.cx('fr-h6', 'fr-mb-1v')}>
             Nouveaux contributeurs ces {days} derniers jours
-          </h3>
+          </h4>
           <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
             Leur toute première contribution : bienvenue !
           </p>
-          <ul
-            className={fr.cx('fr-tags-group')}
+          {/* keyed by position: two usernames can be the same once the
+              emails are cut before the @ */}
+          <TagsGroup
             style={{ justifyContent: 'center' }}
-          >
-            {newcomers.map((username) => (
-              <li key={username}>
-                <Tag iconId="fr-icon-user-line">{username}</Tag>
-              </li>
-            ))}
-          </ul>
+            tags={
+              newcomers.map((username) => ({
+                children: username,
+                iconId: 'fr-icon-user-line',
+              })) as TagsGroupProps['tags']
+            }
+          />
         </div>
       )}
 
