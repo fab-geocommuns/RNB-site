@@ -45,8 +45,9 @@ export const authOptions = {
           // We send the credentials to the login API
           return await rnbApi.post<User>('/login/', credentials);
         } catch (error) {
-          // Identifiants refusés par l'API : cas attendu, pas une erreur à logger.
-          if (!(error instanceof RnbApiError)) {
+          // Identifiants refusés par l'API (4xx) : cas attendu, pas une erreur
+          // à logger. Une panne de l'API (5xx) doit en revanche remonter.
+          if (!(error instanceof RnbApiError) || error.status >= 500) {
             console.error('Auth error:', error);
           }
           return null;

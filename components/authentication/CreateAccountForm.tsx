@@ -110,14 +110,18 @@ export default function CreateAccountForm() {
           return;
         }
 
-        setCreateAccountErrors({
-          ...createAccountErrors,
+        const fieldErrors = {
           email: data.email || [],
           username: data.username || [],
           lastName: data.last_name || [],
           firstName: data.first_name || [],
           confirmPassword: data.password || [],
-        });
+        };
+        setCreateAccountErrors({ ...createAccountErrors, ...fieldErrors });
+        // Erreur sur un champ non affiché (captcha…) : message générique lisible.
+        if (!Object.values(fieldErrors).some((errors) => errors.length > 0)) {
+          setGenericError(error.message);
+        }
         return;
       }
 

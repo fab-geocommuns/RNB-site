@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import HistoryClient from './HistoryClient';
-import { rnbApi } from '@/utils/rnbApi';
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
 
 interface PageProps {
   params: Promise<{
@@ -107,10 +107,10 @@ async function fetchBuildingHistory(
   try {
     return await rnbApi.get<ApiHistoryItem[]>(`/buildings/${id}/history/`);
   } catch (error) {
-    console.error('Error fetching building history:', error);
-    return null;
+    if (error instanceof RnbApiError && error.status === 404) return null;
+    // Any other error is thrown: caught by Sentry and shown by error.tsx
+    throw error;
   }
-  return response.json();
 }
 
 export default async function BuildingHistoryDetail({ params }: PageProps) {

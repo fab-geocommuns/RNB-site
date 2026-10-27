@@ -59,7 +59,6 @@ export default function ContributionForm() {
 
     e.preventDefault();
 
-
     // Connecté, le champ email n'est pas rendu : le back rattache le signalement au compte
     const data = Object.fromEntries(new FormData(e.target));
     rnbApi
