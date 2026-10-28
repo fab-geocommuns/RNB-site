@@ -13,6 +13,7 @@ import TagsList from '@/components/blog/TagsList';
 import BackToTop from '@/components/BackToTop';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 // Style
 import styles from '@/styles/blogArticle.module.scss';
@@ -27,7 +28,9 @@ import { Metadata, ResolvingMetadata } from 'next';
 export const revalidate = 10;
 
 async function getData(slug: string) {
-  return await getPost(slug);
+  const post = await getPost(slug);
+  if (!post) notFound();
+  return post;
 }
 
 export async function generateMetadata(
