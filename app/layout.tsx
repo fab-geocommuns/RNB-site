@@ -44,18 +44,20 @@ heap.load("${settings.heapId}");
         </Script>
       </head>
       <body>
-        <Suspense>
-          <Providers>
-            <RNBSessionProvider>
-              <DsfrProvider lang={lang}>
+        {/* No Suspense around children: notFound() must be thrown before the
+        response starts, otherwise a missing page is sent with a 200 */}
+        <Providers>
+          <RNBSessionProvider>
+            <DsfrProvider lang={lang}>
+              <Suspense>
                 <FlashMessage />
-                <Alerts />
-                {children}
-              </DsfrProvider>
-            </RNBSessionProvider>
-          </Providers>
-          <Analytics />
-        </Suspense>
+              </Suspense>
+              <Alerts />
+              {children}
+            </DsfrProvider>
+          </RNBSessionProvider>
+        </Providers>
+        <Analytics />
       </body>
     </html>
   );
