@@ -36,6 +36,50 @@ test.describe('Edition', () => {
     });
   });
 
+  test.describe('Ordre des calques', () => {
+    test('la forme éditée reste au-dessus des calques ajoutés après la sélection', async ({
+      browserName,
+      editionPage,
+      httpMocker,
+      mapController,
+      page,
+    }) => {
+      test.skip(
+        browserName === 'firefox',
+        'Pas de support de WebGL2 sur Firefox headless',
+      );
+
+      httpMocker.get(
+        `/buildings/${buildingSegur.rnb_id}/?from=site&withPlots=1`,
+        buildingSegur,
+      );
+
+      await editionPage.goToBuilding(buildingSegur.rnb_id);
+      await expect(editionPage.panel).toBeVisible();
+
+      await page.getByText('Calques', { exact: true }).click();
+      await page.getByRole('link', { name: 'Cadastre' }).click();
+
+      const isDrawOnTop = (order: string[]) => {
+        const firstDrawIndex = order.findIndex((id) => id.includes('gl-draw'));
+        return (
+          order.includes('reports_icon') &&
+          order.includes('plots_txt') &&
+          firstDrawIndex !== -1 &&
+          order.slice(firstDrawIndex).every((id) => id.includes('gl-draw'))
+        );
+      };
+      const map = await mapController('mainMap').getMapInstance();
+      await expect
+        .poll(async () =>
+          isDrawOnTop(
+            await map.evaluate((m) => m.getStyle().layers.map(({ id }) => id)),
+          ),
+        )
+        .toBe(true);
+    });
+  });
+
   test.describe('Scission', () => {
     test('doit pouvoir scinder un bâtiment', async ({
       browserName,

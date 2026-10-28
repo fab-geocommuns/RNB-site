@@ -67,7 +67,7 @@ export default function ReportHead({ report }: { report: Report }) {
       <detailsModal.Component title="Détails du signalement">
         <ul>
           <li>Numéro : {report.id}</li>
-          <li>Etiquettes : {report.tags.join(', ')}</li>
+          <li>Étiquettes : {report.tags.join(', ')}</li>
           <li>Créé le {formattedCreatedAt}</li>
         </ul>
       </detailsModal.Component>

@@ -48,7 +48,7 @@ export default function Contact() {
                   title="Foire aux questions"
                   imageSvg={false}
                   orientation="horizontal"
-                  desc="Votre demande est peut être déjà dans notre foire aux questions."
+                  desc="Votre demande est peut-être déjà dans notre foire aux questions."
                   linkProps={{
                     href: '/faq',
                   }}
@@ -102,7 +102,7 @@ export default function Contact() {
                   title="Salon de discussion"
                   imageSvg={false}
                   orientation="horizontal"
-                  desc="Rejoignez les salons de discussions du RNB."
+                  desc="Rejoignez les salons de discussion du RNB."
                   linkProps={{
                     href: 'https://matrix.to/#/#rnb:matrix.org',
                   }}

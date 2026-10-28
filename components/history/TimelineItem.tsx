@@ -122,7 +122,7 @@ function formatFields(field: string): string {
   if (field === 'shape') return 'forme';
   if (field === 'addresses') return 'adresses';
   if (field === 'ext_ids') return 'identifiants externes';
-  if (field === 'validated_by') return 'validé';
+  if (field === 'validated_by') return 'validation';
   return field;
 }
 function addDashToFields(fields: string[]): string {

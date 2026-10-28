@@ -147,7 +147,7 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           bases de données nationales mais aussi par les contributions de ceux
           ayant une connaissance fine de leur territoire. Tout le monde,
           services de l&apos;État, collectivités, citoyens, entreprises ou
-          associations est invité à apporter sa pierre au RNB.
+          associations, est invité à apporter sa pierre au RNB.
         </p>
         <p>
           Partager la connaissance de votre territoire, c&apos;est bénéficier en

@@ -273,7 +273,7 @@ export default function Details({
                 </div>
                 <span>
                   {detailsInfo.event?.origin?.type}{' '}
-                  {detailsInfo.event?.origin?.details?.imported_database} (ID:{' '}
+                  {detailsInfo.event?.origin?.details?.imported_database} (ID :{' '}
                   {detailsInfo.event?.origin?.id})
                 </span>
               </div>
