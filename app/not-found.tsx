@@ -19,7 +19,6 @@ export default function NotFound() {
       <div id={mainContentId}>
         <ErrorPage
           title="Page non trouvée"
-          code="Erreur 404"
           lead="La page que vous cherchez est introuvable. Excusez-nous pour la gêne occasionnée."
           details="Si vous avez tapé l'adresse web dans le navigateur, vérifiez qu'elle est correcte. La page n'est peut-être plus disponible."
           buttons={[{ children: "Page d'accueil", linkProps: { href: '/' } }]}
