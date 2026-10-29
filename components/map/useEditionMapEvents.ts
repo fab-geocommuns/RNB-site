@@ -172,6 +172,9 @@ export const useEditionMapEvents = (map?: maplibregl.Map) => {
               );
               // Fetch the precise shape from the API
               fetchBuilding(rnb_id).then((building) => {
+                if (building) {
+                  dispatch(Actions.edition.setCandidateBuilding(building));
+                }
                 if (building?.shape) {
                   dispatch(Actions.edition.setCandidateShape(building.shape));
                 }
