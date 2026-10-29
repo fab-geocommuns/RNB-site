@@ -17,7 +17,7 @@ export type RnbApiRequestOptions = {
   headers?: HeadersInit;
   signal?: AbortSignal;
   cache?: RequestCache;
-  // Côté serveur : `{ revalidate }` met la réponse en cache Next.js.
+  // Cache des fetch côté serveur (ex. `{ revalidate: 300 }`).
   next?: NextFetchRequestConfig;
 };
 

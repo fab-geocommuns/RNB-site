@@ -31,6 +31,46 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
+// « Participer au RNB » section (/apercu-activite). Chosen to show the edge
+// cases: no new organization (no delta), a 1-row ranking (its card is hidden)
+const gironde = { code: '33', name: 'Gironde' };
+const CONTRIBUTION_SUMMARY = {
+  updated_at: '2026-10-15T14:10:00+02:00',
+  window_days: 30,
+  cities: { total: 1248, new: 12 },
+  organizations: { total: 86, new: 0 },
+  building_changes: { total: 4310, contributions: 520 },
+  top: {
+    users: [
+      {
+        username: 'contributrice_test',
+        organization: 'Mairie Test',
+        count: 800,
+      },
+    ],
+    organizations: [
+      { name: 'Commune de Talence', department: gironde, count: 42 },
+      { name: 'Syndicat SIG', department: null, count: 18 },
+    ],
+    cities: [
+      {
+        insee_code: '28158',
+        name: 'Fresnay-l’Évêque',
+        department: { code: '28', name: 'Eure-et-Loir' },
+        count: 9,
+      },
+      { insee_code: '33522', name: 'Talence', department: gironde, count: 7 },
+      {
+        insee_code: '73311',
+        name: 'Verrens-Arvey',
+        department: { code: '73', name: 'Savoie' },
+        count: 5,
+      },
+    ],
+  },
+  newcomers: { users: [{ username: 'nouvelle_contributrice' }] },
+};
+
 const server = createServer((req, res) => {
   const { method, url } = req;
   const u = new URL(url, `http://localhost:${PORT}`);
@@ -57,6 +97,29 @@ const server = createServer((req, res) => {
     path === `/api/alpha/buildings/${HISTORY[0].rnb_id}/history/`
   ) {
     return json(res, 200, HISTORY);
+  }
+  if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
+    // the 7-day window: fewer contributions, same rankings, another newcomer
+    const days = Number(u.searchParams.get('days') || 30);
+    return json(
+      res,
+      200,
+      days === 7
+        ? {
+            ...CONTRIBUTION_SUMMARY,
+            window_days: 7,
+            cities: { ...CONTRIBUTION_SUMMARY.cities, new: 3 },
+            top: {
+              ...CONTRIBUTION_SUMMARY.top,
+              cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
+                ...c,
+                count: 1,
+              })),
+            },
+            newcomers: { users: [{ username: 'nouvelle_contributrice_7j' }] },
+          }
+        : CONTRIBUTION_SUMMARY,
+    );
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
@@ -89,6 +152,17 @@ const server = createServer((req, res) => {
       json(res, 400, { error: 'invalid_code' });
     });
     return;
+  }
+  if (method === 'GET' && path === '/api/alpha/auth/pro_connect/logout/') {
+    // Like the backend: an address outside the allowlist is refused
+    if (u.searchParams.has('post_logout_redirect_uri')) {
+      return json(res, 400, { error: 'invalid_redirect_uri' });
+    }
+    res.writeHead(302, {
+      Location:
+        'https://proconnect.example/logout?id_token_hint=jeton-id&state=etat',
+    });
+    return res.end();
   }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });

@@ -116,7 +116,7 @@ export const snapDrawEvent = (e: SnappableDrawEvent): boolean => {
 // Indicateur visuel : un anneau rose autour du point d'aimantation
 // (même rose que les lignes de coupe de l'outil de scission)
 const SNAP_INDICATOR_SOURCE = 'snap-indicator';
-const SNAP_INDICATOR_LAYER = 'snap-indicator';
+export const SNAP_INDICATOR_LAYER = 'snap-indicator';
 
 const emptyFeatureCollection: GeoJSON.FeatureCollection = {
   type: 'FeatureCollection',
@@ -144,10 +144,6 @@ const showSnapIndicator = (map: maplibregl.Map, lngLat: maplibregl.LngLat) => {
         'circle-stroke-color': '#ff00e1',
       },
     });
-  } else {
-    // les couches de dessin sont régulièrement remontées au-dessus de tout
-    // (cf useMapPolygonDraw) : on garde l'indicateur visible par-dessus
-    map.moveLayer(SNAP_INDICATOR_LAYER);
   }
   (map.getSource(SNAP_INDICATOR_SOURCE) as GeoJSONSource).setData({
     type: 'Feature',
