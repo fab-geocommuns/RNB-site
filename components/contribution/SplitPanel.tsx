@@ -6,6 +6,7 @@ import {
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import styles from '@/styles/contribution/splitPanel.module.scss';
+import editPanelStyles from '@/styles/contribution/editPanel.module.scss';
 import { useRnbApi } from '@/utils/useRnbApi';
 import { RnbApi, RnbApiError } from '@/utils/rnbApi';
 import Button from '@codegouvfr/react-dsfr/Button';
@@ -18,6 +19,7 @@ import HelpButton from './HelpButton';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
+import { ValidatorNames } from '@/components/ValidatorNames';
 import { toasterError, toasterSuccess } from './toaster';
 import { BuildingAddressType } from './types';
 
@@ -133,6 +135,9 @@ function SplitBuildingCutStep({
   const candidateShape = useSelector(
     (state: RootState) => state.edition.split.candidateShape,
   );
+  const candidateBuilding = useSelector(
+    (state: RootState) => state.edition.split.candidateBuilding,
+  );
 
   const cutLinesCount = cutLines.length;
   const resultingPolygonsCount = cutPreview ? cutPreview.length : 0;
@@ -160,6 +165,13 @@ function SplitBuildingCutStep({
       onClose={() => cancelSplit(dispatch)}
       body={
         <div className={`${styles.panelSection} ${styles.noPad}`}>
+          {candidateBuilding && candidateBuilding.validated_by.length > 0 && (
+            <div className={editPanelStyles.validationWarning}>
+              Modifier ce bâtiment aura pour effet de supprimer la validation
+              faite par{' '}
+              <ValidatorNames validatedBy={candidateBuilding.validated_by} />.
+            </div>
+          )}
           <div className="fr-pb-3v">
             <strong>Bâtiment :</strong> {splitCandidateId}
           </div>
