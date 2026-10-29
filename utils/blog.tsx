@@ -56,7 +56,14 @@ export const getPost = cache(async (slug: string) => {
     );
     return post ?? null;
   } catch (err) {
-    if (err instanceof GhostError && err.status === 404) return null;
+    // Ghost answers a missing post with a NotFoundError body. A bare 404
+    // (wrong URL or path) is a misconfiguration and must not become a 404 page.
+    if (
+      err instanceof GhostError &&
+      err.status === 404 &&
+      err.type === 'NotFoundError'
+    )
+      return null;
     throw err;
   }
 });
@@ -70,6 +77,8 @@ class GhostError extends Error {
   constructor(
     readonly status: number,
     pathname: string,
+    // Ghost error type from the response body, e.g. NotFoundError
+    readonly type?: string,
   ) {
     // Pathname only: the query string holds the Ghost API key
     super(`Ghost ${status} on ${pathname}`);
@@ -96,7 +105,12 @@ function getClient(revalidate?: number) {
         ...(revalidate !== undefined && { next: { revalidate } }),
       });
       if (!response.ok) {
-        throw new GhostError(response.status, apiUrl.pathname);
+        const body = await response.json().catch(() => null);
+        throw new GhostError(
+          response.status,
+          apiUrl.pathname,
+          body?.errors?.[0]?.type,
+        );
       }
       return { data: await response.json() };
     },

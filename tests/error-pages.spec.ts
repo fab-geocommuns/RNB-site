@@ -26,6 +26,14 @@ test.describe("Pages d'erreur", () => {
     ).toBeVisible();
   });
 
+  test('un 404 d’un Ghost mal configuré reste une erreur', async ({ page }) => {
+    const response = await page.goto('/blog/ghost-mal-configure');
+    expect(response?.status()).not.toBe(404);
+    await expect(
+      page.getByRole('heading', { name: 'Erreur inattendue' }),
+    ).toBeVisible();
+  });
+
   test('une erreur serveur affiche la page d’erreur du site', async ({
     page,
   }) => {
