@@ -38,6 +38,9 @@ test.describe('Carte', () => {
       buildingSegur.rnb_id,
     );
     await expect(mapPage.buildingDetailsPannel).toContainText(/ségur/i);
+    await expect(mapPage.buildingDetailsPannel).toContainText(
+      `Identifiant BAN : ${buildingSegur.addresses[0].ban_id}`,
+    );
   });
 
   test('le calque des bâtiments démolis ne redessine pas la carte en boucle', async ({

@@ -15,7 +15,8 @@ import {
 } from '@/utils/mapLayersDefaults';
 
 export type BuildingAddress = {
-  id: string; // Also BAN ID
+  id: string; // Clé d'interopérabilité BAN
+  ban_id: string | null;
   source: string;
   street_number: string;
   street_rep: string;
