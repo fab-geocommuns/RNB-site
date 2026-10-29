@@ -6,6 +6,7 @@ declare module 'next-auth' {
     username?: string;
     groups?: string[];
     authProvider?: string;
+    mfaSetupSuggested?: boolean;
   }
 
   interface User {
@@ -13,6 +14,7 @@ declare module 'next-auth' {
     username: string;
     groups: string[];
     authProvider?: string;
+    mfa_setup_suggested?: boolean;
   }
 }
 
@@ -22,5 +24,6 @@ declare module 'next-auth/jwt' {
     username?: string;
     groups?: string[];
     authProvider?: string;
+    mfaSetupSuggested?: boolean;
   }
 }
