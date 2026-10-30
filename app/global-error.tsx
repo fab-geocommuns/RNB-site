@@ -1,9 +1,10 @@
 'use client';
 
 import * as Sentry from '@sentry/nextjs';
-import NextError from 'next/error';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
+// Replaces the root layout: the DSFR is not loaded here, hence the bare markup
 export default function GlobalError({
   error,
 }: {
@@ -14,13 +15,16 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
+    <html lang="fr">
       <body>
-        {/* `NextError` is the default Next.js error page component. Its type
-        definition requires a `statusCode` prop. However, since the App Router
-        does not expose status codes for errors, we simply pass 0 to render a
-        generic error message. */}
-        <NextError statusCode={0} />
+        <h1>Erreur inattendue</h1>
+        <p>
+          Désolé, le service rencontre un problème. Nous travaillons à le
+          résoudre le plus rapidement possible.
+        </p>
+        <p>
+          <Link href="/">Retour à l&apos;accueil</Link>
+        </p>
       </body>
     </html>
   );

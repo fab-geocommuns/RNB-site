@@ -41,23 +41,49 @@ export function formattedDate(isoDateStr: string) {
   });
 }
 
+// Returns null for an unknown slug, so that the page can render a 404
 export const getPost = cache(async (slug: string) => {
   const api = getClient();
 
-  return api.posts.read(
-    {
-      slug: slug,
-    },
-    {
-      include: ['tags'],
-    },
-  );
+  try {
+    const post = await api.posts.read(
+      {
+        slug: slug,
+      },
+      {
+        include: ['tags'],
+      },
+    );
+    return post ?? null;
+  } catch (err) {
+    // Ghost answers a missing post with a NotFoundError body. A bare 404
+    // (wrong URL or path) is a misconfiguration and must not become a 404 page.
+    if (
+      err instanceof GhostError &&
+      err.status === 404 &&
+      err.type === 'NotFoundError'
+    )
+      return null;
+    throw err;
+  }
 });
 
 export const getBreakingNews = cache(async (revalidate?: number) => {
   const api = getClient(revalidate);
   return api.pages.read({ id: '659547553d119000087a7f19' });
 });
+
+class GhostError extends Error {
+  constructor(
+    readonly status: number,
+    pathname: string,
+    // Ghost error type from the response body, e.g. NotFoundError
+    readonly type?: string,
+  ) {
+    // Pathname only: the query string holds the Ghost API key
+    super(`Ghost ${status} on ${pathname}`);
+  }
+}
 
 function getClient(revalidate?: number) {
   return new GhostContentAPI({
@@ -79,8 +105,12 @@ function getClient(revalidate?: number) {
         ...(revalidate !== undefined && { next: { revalidate } }),
       });
       if (!response.ok) {
-        // Pathname only: the query string holds the Ghost API key
-        throw new Error(`Ghost ${response.status} on ${apiUrl.pathname}`);
+        const body = await response.json().catch(() => null);
+        throw new GhostError(
+          response.status,
+          apiUrl.pathname,
+          body?.errors?.[0]?.type,
+        );
       }
       return { data: await response.json() };
     },

@@ -171,6 +171,17 @@ const server = createServer((req, res) => {
   // Ghost CMS — only used at SSR for the home page. The Ghost client hits
   // `{NEXT_GHOST_API_URL}/ghost/api/{version}/content/{resource}`.
   if (path.startsWith('/ghost/api/')) {
+    // Blog article: no article exists, erreur-ghost simulates a Ghost outage
+    if (path.includes('/posts/slug/')) {
+      if (path.includes('/posts/slug/erreur-ghost/')) {
+        return json(res, 500, { errors: [{ message: 'mock-server' }] });
+      }
+      // 404 without a Ghost body: misconfigured Ghost URL or path
+      if (path.includes('/posts/slug/ghost-mal-configure/')) {
+        return json(res, 404, { error: 'mock-server' });
+      }
+      return json(res, 404, { errors: [{ type: 'NotFoundError' }] });
+    }
     if (path.includes('/posts/')) return json(res, 200, { posts: [] });
     if (path.includes('/pages/')) return json(res, 200, { pages: [] });
     return json(res, 200, {});
