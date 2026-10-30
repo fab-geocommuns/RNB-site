@@ -12,10 +12,12 @@ import { TagsGroup, TagsGroupProps } from '@codegouvfr/react-dsfr/TagsGroup';
 
 import {
   ContributionSummary as ContributionSummaryData,
-  DEFAULT_WINDOW,
+  DEFAULT_PERIOD,
   FigureView,
   formatNumber,
   keyFigures,
+  periodLabel,
+  periodOf,
   RankingView,
   windowView,
 } from '@/utils/contributionSummary';
@@ -70,13 +72,12 @@ function FigureCard({ figure }: { figure: FigureView }) {
   );
 }
 
-// one heading level below « Ces N derniers jours », which they belong to
 function RankingCard({ ranking }: { ranking: RankingView }) {
   return (
     <Card
       border
       size="small"
-      titleAs="h4"
+      titleAs="h3"
       title={ranking.title}
       end={
         <ol className={fr.cx('fr-raw-list')}>
@@ -118,32 +119,32 @@ function RankingCard({ ranking }: { ranking: RankingView }) {
   );
 }
 
-// « Participer au RNB » section of the home page. The key figures are global;
-// below them, a selector picks the window (7 or 30 days) of the rankings and of
-// the new contributors, with one summary per window. Renders nothing without
-// data: the home page must not break when the API fails.
+// « Participer au RNB » section of the home page. A selector picks the period
+// (the last 7 or 30 days, or since the opening of the collaborative edition),
+// which sets every number of the section: one summary per period. Renders
+// nothing without data: the home page must not break when the API fails.
 export default function ContributionSummary({
   summaries,
 }: {
   summaries: ContributionSummaryData[] | null;
 }) {
-  const [selectedDays, setSelectedDays] = useState(DEFAULT_WINDOW);
+  const [selectedPeriod, setSelectedPeriod] = useState(DEFAULT_PERIOD);
   if (!summaries?.length) return null;
 
-  const defaultSummary =
-    summaries.find((s) => s.window_days === DEFAULT_WINDOW) ?? summaries[0];
   const summary =
-    summaries.find((s) => s.window_days === selectedDays) ?? defaultSummary;
-  const figures = keyFigures(defaultSummary);
-  const { rankings, newcomers } = windowView(summary);
-  const days = summary.window_days;
+    summaries.find((s) => periodOf(s) === selectedPeriod) ??
+    summaries.find((s) => periodOf(s) === DEFAULT_PERIOD) ??
+    summaries[0];
+  const period = periodOf(summary);
+  const figures = keyFigures(summary);
+  const { rankings, newcomersTitle, newcomers } = windowView(summary);
   // the DSFR expects a tuple of 1 to 5 segments; summaries is not empty here
   const segments = summaries.map((s) => ({
-    label: `${s.window_days} derniers jours`,
+    label: periodLabel(periodOf(s)),
     nativeInputProps: {
-      value: s.window_days,
-      checked: s.window_days === days,
-      onChange: () => setSelectedDays(s.window_days),
+      value: String(periodOf(s)),
+      checked: periodOf(s) === period,
+      onChange: () => setSelectedPeriod(periodOf(s)),
     },
   })) as unknown as SegmentedControlProps['segments'];
 
@@ -164,6 +165,42 @@ export default function ContributionSummary({
           celles et ceux qui connaissent leur territoire.
         </p>
       </div>
+      {/* right under the introduction: the section raises questions for a
+          visitor who discovers the collaborative edition */}
+      <ul
+        className={fr.cx('fr-raw-list')}
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: `${fr.spacing('1w')} ${fr.spacing('3w')}`,
+        }}
+      >
+        {LINKS.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className={fr.cx(
+                'fr-link',
+                'fr-link--sm',
+                'fr-icon-arrow-right-line',
+                'fr-link--icon-right',
+              )}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {summaries.length > 1 && (
+        <div
+          className={fr.cx('fr-mt-5w', 'fr-mb-3w')}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <SegmentedControl legend="Période" hideLegend segments={segments} />
+        </div>
+      )}
 
       {/* the tiles share the whole width, whatever their number */}
       <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
@@ -174,23 +211,7 @@ export default function ContributionSummary({
         ))}
       </div>
 
-      <div
-        className={fr.cx('fr-mt-4w', 'fr-mb-2w')}
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: fr.spacing('2w'),
-        }}
-      >
-        <h3 className={fr.cx('fr-h5', 'fr-mb-0')}>Ces {days} derniers jours</h3>
-        {summaries.length > 1 && (
-          <SegmentedControl legend="Période" hideLegend segments={segments} />
-        )}
-      </div>
-
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
+      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mt-1w')}>
         {rankings.map((ranking) => (
           <div key={ranking.title} className={fr.cx('fr-col-12', 'fr-col-md')}>
             <RankingCard ranking={ranking} />
@@ -200,9 +221,7 @@ export default function ContributionSummary({
 
       {newcomers.length > 0 && (
         <div className={fr.cx('fr-mt-5w')} style={{ textAlign: 'center' }}>
-          <h4 className={fr.cx('fr-h6', 'fr-mb-1v')}>
-            Nouveaux contributeurs ces {days} derniers jours
-          </h4>
+          <h3 className={fr.cx('fr-h6', 'fr-mb-1v')}>{newcomersTitle}</h3>
           <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
             Leur toute première contribution : bienvenue !
           </p>
@@ -231,31 +250,6 @@ export default function ContributionSummary({
           },
         ]}
       />
-      <ul
-        className={fr.cx('fr-raw-list')}
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: `${fr.spacing('1w')} ${fr.spacing('3w')}`,
-        }}
-      >
-        {LINKS.map((link) => (
-          <li key={link.href}>
-            <a
-              href={link.href}
-              className={fr.cx(
-                'fr-link',
-                'fr-link--sm',
-                'fr-icon-arrow-right-line',
-                'fr-link--icon-right',
-              )}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }
