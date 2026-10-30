@@ -24,11 +24,13 @@ export default function Page() {
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/752eb314-8a49-4de1-ac6f-b39812fb451f"
+              title="Nombre de bâtiments dans le RNB"
               className="fr-col-12 fr-col-md-6"
               height="300"
             ></iframe>
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/17117ecf-f5da-4590-9c31-89149a98f25e"
+              title="Nombre de liens entre bâtiments du RNB et adresses de la BAN"
               className="fr-col-12 fr-col-md-6"
               height="300"
             ></iframe>
@@ -57,6 +59,7 @@ export default function Page() {
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/0e6f0fdc-5641-4a8b-9533-86836a58c4a9"
+              title="Nombre cumulé d'appels à l'API RNB au cours du temps"
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
@@ -66,6 +69,7 @@ export default function Page() {
             >
               <iframe
                 src="https://rnb-api.beta.gouv.fr/metabase/public/question/20d2fed4-aa37-4325-be5a-7543d8abae78"
+                title="Nombre de téléchargements du RNB sur data.gouv.fr"
                 width="100%"
                 height="280"
               ></iframe>
@@ -98,12 +102,14 @@ export default function Page() {
           <div className="fr-grid-row fr-grid-row--gutters fr-mb-12v">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/44375e16-9666-44fd-82e0-90474bcbf02b"
+              title="Modifications du RNB comparées à l'objectif"
               width="100%"
               height="500"
             ></iframe>
 
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/26709a95-83f0-47ad-819b-9108ca66aea0"
+              title="Modifications du RNB par source"
               className="fr-col-12 fr-col-md-12"
               height="600"
             ></iframe>
@@ -114,16 +120,19 @@ export default function Page() {
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/5c03dbdb-cd22-4642-8057-d539214af326"
+              title="Éditions du RNB par la communauté au cours du temps"
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/f34ddc0c-c07f-48ed-900a-41a6149106c6"
+              title="Carte des éditions du RNB par département"
               className="fr-col-12 fr-col-md-6"
               height="600"
             ></iframe>
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/6dc7902a-f054-440e-94f7-17bc4525b4fc"
+              title="Évolution des types d'éditions du RNB"
               className="fr-col-12 fr-col-md-12"
               height="600"
             ></iframe>
@@ -164,11 +173,13 @@ export default function Page() {
           <div className="fr-grid-row fr-grid-row--gutters">
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/6c9de2f4-5a5e-41f1-a42a-e9ae1dac2adf"
+              title="Nombre de DPE intégrant un ID-RNB"
               className="fr-col-12 fr-col-md-6"
               height="300"
             ></iframe>
             <iframe
               src="https://rnb-api.beta.gouv.fr/metabase/public/question/5e5d1ecf-01c9-4a91-8779-76c0b5e34cdc"
+              title="Nombre d'ID-RNB renseignés par le diagnostiqueur dans les DPE"
               className="fr-col-12 fr-col-md-6"
               height="300"
             ></iframe>
