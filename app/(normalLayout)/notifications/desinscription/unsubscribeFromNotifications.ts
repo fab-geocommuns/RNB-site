@@ -1,5 +1,7 @@
 'use server';
 
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
+
 export type UnsubscribeResult =
   | { status: 'success'; email: string }
   | { status: 'invalid_token' };
@@ -13,25 +15,22 @@ export async function unsubscribeFromNotifications(
     throw new Error('Invalid unsubscribe token argument');
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE}/notifications/unsubscribe/`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token }),
-    },
-  );
-
-  if (response.status === 400) {
-    return { status: 'invalid_token' };
-  }
-  if (!response.ok) {
-    throw new Error(
-      `POST notifications/unsubscribe failed: ${response.status}`,
+  let data: { email?: unknown } | null;
+  try {
+    data = await rnbApi.post<{ email?: unknown } | null>(
+      '/notifications/unsubscribe/',
+      { token },
     );
+  } catch (err) {
+    if (err instanceof RnbApiError) {
+      if (err.status === 400) return { status: 'invalid_token' };
+      // Le message de l'API n'est pas repris : il pourrait contenir le jeton.
+      throw new Error(`POST notifications/unsubscribe failed: ${err.status}`);
+    }
+    throw err;
   }
 
-  const { email } = await response.json();
+  const email = data?.email;
   if (typeof email !== 'string') {
     throw new Error('POST notifications/unsubscribe returned no email');
   }
