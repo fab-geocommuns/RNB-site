@@ -94,7 +94,7 @@ const testPage = baseTest.extend<PagesFixtures>({
   ) => {
     await httpMocker.install();
     // /edition shows the reports layer by default, whose panel polls the stats
-    httpMocker.get('/reports/stats/', emptyReportStats);
+    httpMocker.get('/reports/stats/?from=site', emptyReportStats);
     // /edition is gated by next-auth — sign in before navigating so the
     // middleware doesn't bounce us to /login.
     await auth.signIn();

@@ -1,34 +1,25 @@
 'use server';
 
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
+
 export async function changePassword(
   b64UserId: string,
   token: string,
   newPwd: string,
   newPwdConfirmation: string,
 ) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE}/auth/change_password/${b64UserId}/${token}`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        password: newPwd,
-        confirm_password: newPwdConfirmation,
-      }),
-    },
-  );
-
-  // Check if the response is successful
-  // If the response is not 204, we need to parse the response body
-  let resData;
-  if (res.status !== 204) {
-    resData = await res.json();
+  try {
+    await rnbApi.patch(`/auth/change_password/${b64UserId}/${token}`, {
+      password: newPwd,
+      confirm_password: newPwdConfirmation,
+    });
+    return { response_code: 204, error: undefined };
+  } catch (err) {
+    if (!(err instanceof RnbApiError)) throw err;
+    const data = err.data as { error?: string[] } | null;
+    return {
+      response_code: err.status,
+      error: data && typeof data === 'object' ? data.error : undefined,
+    };
   }
-
-  return {
-    response_code: res.status,
-    error: resData?.error,
-  };
 }
