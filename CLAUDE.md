@@ -9,7 +9,7 @@ final) : ce dépôt n'a pas de base de données.
 
 ## Commandes
 
-**pnpm uniquement** (`preinstall: only-allow pnpm`). CI sur Node 20.
+**pnpm uniquement** (`preinstall: only-allow pnpm`). CI sur Node 22 (`engines.node` = `22.x`, aligné sur le runtime Vercel).
 
 ```bash
 pnpm i
