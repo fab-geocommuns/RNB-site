@@ -161,7 +161,7 @@ function BodyPanel({
                   ) && (
                     <div className={editPanelStyles.validationWarning}>
                       Au moins un des bâtiments sélectionnés est validé. La
-                      fuison aura pour effet de supprimer toute validation
+                      fusion aura pour effet de supprimer toute validation
                       existante.
                     </div>
                   )}
