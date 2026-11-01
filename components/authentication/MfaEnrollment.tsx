@@ -293,6 +293,8 @@ export default function MfaEnrollment({
                     children: 'Plus tard',
                     priority: 'secondary' as const,
                     type: 'button' as const,
+                    // Leaving during the confirmation would lose the backup codes
+                    disabled: isSubmitting,
                     onClick: goToRedirectUrl,
                   },
                 ]

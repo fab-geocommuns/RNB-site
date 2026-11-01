@@ -256,6 +256,82 @@ test.describe('Connexion avec double authentification', () => {
     expect((await getSession(page)).username).toBe('enrolement-suggere');
   });
 
+  test('enrôlement suggéré : « Plus tard » est inactif pendant la confirmation, puis « Continuer » mène à la page demandée', async ({
+    page,
+    httpMocker,
+  }) => {
+    const credentials = {
+      username: 'enrolement-suggere@exemple.fr',
+      password: PASSWORD,
+    };
+    httpMocker.post(
+      '/auth/mfa/setup/?from=site',
+      { body: MFA_SETUP },
+      credentials,
+    );
+    httpMocker.post(
+      '/auth/mfa/confirm/?from=site',
+      {
+        body: {
+          id: 8,
+          token: 'jeton-connexion',
+          username: 'enrolement-suggere',
+          groups: ['Contributors'],
+          backup_codes: BACKUP_CODES,
+        },
+      },
+      { ...credentials, otp: '654321' },
+    );
+
+    await logIn({ page, email: credentials.username });
+    await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
+
+    let releaseConfirm = () => {};
+    const confirmHeld = new Promise<void>((resolve) => {
+      releaseConfirm = resolve;
+    });
+    await page.route('**/auth/mfa/confirm/**', async (route) => {
+      await confirmHeld;
+      await route.fallback();
+    });
+
+    await codeField(page).fill('654321');
+    await page.getByRole('button', { name: 'Activer' }).click();
+    await expect(
+      page.getByRole('button', { name: 'Plus tard' }),
+    ).toBeDisabled();
+
+    releaseConfirm();
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
+    // The session opened at login is kept: no second sign-in in suggested mode
+    expect((await getSession(page)).username).toBe('enrolement-suggere');
+    await page.getByRole('button', { name: 'Continuer' }).click();
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+  });
+
+  test('l’email et le mot de passe sont figés pendant la connexion', async ({
+    page,
+  }) => {
+    let releaseLogin = () => {};
+    const loginHeld = new Promise<void>((resolve) => {
+      releaseLogin = resolve;
+    });
+    await page.route('**/api/auth/callback/credentials', async (route) => {
+      await loginHeld;
+      await route.fallback();
+    });
+
+    await logIn({ page, email: 'mfa@exemple.fr' });
+    const form = page.getByTestId('login-form');
+    await expect(form.getByLabel('Email')).toBeDisabled();
+    await expect(form.getByLabel('Mot de passe')).toBeDisabled();
+
+    releaseLogin();
+    await expect(codeField(page)).toBeVisible();
+  });
+
   test('trop de tentatives au mot de passe : message dédié', async ({
     page,
   }) => {
@@ -319,6 +395,16 @@ test.describe('Connexion avec double authentification', () => {
     await submitCode(page);
     await expect(codeField(page)).toHaveValue('');
     await expect(page.getByText(INVALID_CODE_MESSAGE)).toHaveCount(0);
+  });
+
+  test('« Retour » efface un code saisi sans l’envoyer', async ({ page }) => {
+    await logIn({ page, email: 'mfa@exemple.fr' });
+    await codeField(page).fill('123456');
+
+    await page.getByRole('button', { name: 'Retour' }).click();
+    await submitCode(page);
+
+    await expect(codeField(page)).toHaveValue('');
   });
 
   test('enrôlement : après un échec de la configuration, « Plus tard » et « Réessayer » restent proposés', async ({
