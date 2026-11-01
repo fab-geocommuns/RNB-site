@@ -200,6 +200,9 @@ export default function LoginForm() {
             <Input
               label="Email"
               id="email"
+              // Enrollment reuses these credentials: they must not change mid-request.
+              // The DSFR prop, not nativeInputProps: Input overrides the native one.
+              disabled={isSubmitting}
               nativeInputProps={{
                 name: 'email',
                 type: 'email',
@@ -215,6 +218,7 @@ export default function LoginForm() {
             <Input
               label="Mot de passe"
               id="password"
+              disabled={isSubmitting}
               nativeInputProps={{
                 name: 'password',
                 type: 'password',
