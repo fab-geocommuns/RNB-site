@@ -8,6 +8,7 @@ import Button from '@codegouvfr/react-dsfr/Button';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import Input from '@codegouvfr/react-dsfr/Input';
 
+import CopyButton from '@/components/CopyButton';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 import {
   MFA_INVALID_MESSAGE,
@@ -200,13 +201,19 @@ export default function MfaEnrollment({
           small
           closable={false}
         />
-        <ul data-testid="backup-codes">
-          {backupCodes.map((code) => (
-            <li key={code}>
-              <code>{code}</code>
-            </li>
-          ))}
-        </ul>
+        <pre
+          data-testid="backup-codes"
+          style={{ columns: 2, maxWidth: '20rem' }}
+        >
+          {backupCodes.join('\n')}
+        </pre>
+        <div className="fr-mb-3w">
+          <CopyButton
+            valueToCopy={backupCodes.join('\n')}
+            label="Copier les codes"
+            okMsg="Codes copiés"
+          />
+        </div>
         {signInFailed ? (
           <Button onClick={onLogInAgain}>Se reconnecter</Button>
         ) : (

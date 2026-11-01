@@ -199,9 +199,12 @@ test.describe('Connexion avec double authentification', () => {
       page.getByRole('heading', { name: 'Codes de secours' }),
     ).toBeFocused();
     expect(confirmCalls.count).toBe(1);
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
     await expect(
-      page.getByTestId('backup-codes').getByRole('listitem'),
-    ).toHaveText(BACKUP_CODES);
+      page.getByRole('button', { name: 'Copier les codes' }),
+    ).toBeVisible();
     // Codes are shown first, "Continuer" waits for the session
     await expect(page.getByRole('button', { name: 'Continuer' })).toBeEnabled();
     // Identity comes from /auth/users/me/, called with the token returned by the confirmation
@@ -406,9 +409,9 @@ test.describe('Connexion avec double authentification', () => {
         { exact: false },
       ),
     ).toBeVisible();
-    await expect(
-      page.getByTestId('backup-codes').getByRole('listitem'),
-    ).toHaveText(BACKUP_CODES);
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
     await expect(page.getByRole('button', { name: 'Continuer' })).toHaveCount(
       0,
     );
@@ -446,9 +449,9 @@ test.describe('Connexion avec double authentification', () => {
     await codeField(page).fill('654321');
     await page.getByRole('button', { name: 'Activer' }).click();
 
-    await expect(
-      page.getByTestId('backup-codes').getByRole('listitem'),
-    ).toHaveText(BACKUP_CODES);
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
     await expect(
       page.getByText(
         'Votre application est configurée, mais la connexion a échoué.',
