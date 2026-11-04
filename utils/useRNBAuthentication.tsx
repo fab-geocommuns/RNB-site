@@ -1,6 +1,4 @@
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export enum RNBGroup {
   CONTRIBUTORS = 'Contributors',
@@ -29,25 +27,12 @@ export function loginUrl(redirect?: string) {
   return `/connexion?redirect=${encodeURIComponent(redirectUrl)}`;
 }
 
-export const useRNBAuthentication = (options?: {
-  require: boolean;
-}): UseRNBAuthentication => {
+export const useRNBAuthentication = (): UseRNBAuthentication => {
   const { status, data } = useSession();
-  const router = useRouter();
   const groups =
     data && (data as any).groups ? ((data as any).groups as RNBGroup[]) : [];
   const username = (data as any)?.username;
   let user = null;
-
-  useEffect(() => {
-    if (
-      options?.require &&
-      status !== 'loading' &&
-      status !== 'authenticated'
-    ) {
-      window.location.href = loginUrl();
-    }
-  }, [status, options?.require]);
 
   if (status === 'authenticated') {
     user = {

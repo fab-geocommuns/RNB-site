@@ -8,6 +8,7 @@ import '@/styles/global.scss';
 
 // Auth
 import RNBSessionProvider from '@/components/SessionProvider';
+import { auth } from '@/app/api/auth/[...nextauth]/auth';
 
 // Components
 import { Analytics } from '@vercel/analytics/react';
@@ -30,6 +31,9 @@ export default async function RootLayout({
   const lang = 'fr';
   const nonce = (await headers()).get('x-nonce');
   await connection();
+  // The session (access token included) ends up in the HTML: the page must
+  // never be cached and shared between users
+  const session = await auth();
 
   return (
     <html lang={lang} {...getHtmlAttributes({ lang })}>
@@ -47,7 +51,7 @@ heap.load("${settings.heapId}");
         {/* No Suspense around children: notFound() must be thrown before the
         response starts, otherwise a missing page is sent with a 200 */}
         <Providers>
-          <RNBSessionProvider>
+          <RNBSessionProvider session={session}>
             <DsfrProvider lang={lang}>
               <Suspense>
                 <FlashMessage />

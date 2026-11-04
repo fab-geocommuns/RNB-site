@@ -192,12 +192,18 @@ test.describe('Déconnexion depuis Mon compte', () => {
   const getSession = async (page: Page) =>
     (await page.request.get('/api/auth/session')).json();
 
-  // SessionProvider requests the session from an effect, so the request means
-  // the page is hydrated and the sign-out button has its click handler.
+  // A click before hydration would be lost: wait until React has attached its
+  // props (and so the click handler) to the sign-out button.
   const openAccountPage = async (page: Page) => {
-    const hydrated = page.waitForRequest('**/api/auth/session');
     await page.goto('/mon-compte/notifications');
-    await hydrated;
+    const signOutButton = page.getByRole('button', { name: 'Se déconnecter' });
+    await expect
+      .poll(() =>
+        signOutButton.evaluate((el) =>
+          Object.keys(el).some((key) => key.startsWith('__reactProps')),
+        ),
+      )
+      .toBe(true);
   };
 
   test('passe par ProConnect pour une session ProConnect', async ({
