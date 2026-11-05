@@ -53,6 +53,7 @@ export type SplitInfos = {
   candidateShape: GeoJSON.Geometry | null;
   candidateBuilding: SelectedBuilding | null;
   candidateAddresses: BuildingAddressType[];
+  editUnlocked: boolean;
   cutStep: 'drawing' | 'done';
 };
 
@@ -109,6 +110,7 @@ const initialState: EditionStore = {
     candidateShape: null,
     candidateBuilding: null,
     candidateAddresses: [],
+    editUnlocked: false,
     cutStep: 'drawing',
   },
   snap: {
@@ -136,6 +138,7 @@ export const editionSlice = createSlice({
       state.split.candidateShape = null;
       state.split.candidateBuilding = null;
       state.split.candidateAddresses = [];
+      state.split.editUnlocked = false;
       state.split.cutStep = 'drawing';
       state.isLoading = false;
       state.helpTopic = null;
@@ -183,6 +186,10 @@ export const editionSlice = createSlice({
     ) {
       state.split.splitCandidateId = action.payload.rnb_id;
       state.split.location = action.payload.location;
+      state.split.editUnlocked = false;
+    },
+    setSplitEditUnlocked(state, action: PayloadAction<boolean>) {
+      state.split.editUnlocked = action.payload;
     },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
       state.split.selectedChildIndex = action.payload;
