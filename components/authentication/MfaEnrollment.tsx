@@ -83,7 +83,7 @@ export default function MfaEnrollment({
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [backupCodes, setBackupCodes] = useState<string[] | null>(null);
+  const [enrollment, setEnrollment] = useState<MfaConfirmation | null>(null);
   const [signInFailed, setSignInFailed] = useState(false);
   const [mustLogInAgain, setMustLogInAgain] = useState(false);
 
@@ -144,22 +144,35 @@ export default function MfaEnrollment({
       return;
     }
 
-    // The API returns the backup codes only once: shown whatever happens to the sign-in
-    setBackupCodes(confirmation.backup_codes);
+    setEnrollment(confirmation);
     onEnrolled();
+  };
 
-    // The first code is consumed by the confirmation: the session is opened with the returned token
-    if (!canPostpone) {
-      try {
-        const signInResult = await signIn('api-token', {
-          token: confirmation.token,
-          redirect: false,
-        });
-        setSignInFailed(!signInResult?.ok);
-      } catch {
-        setSignInFailed(true);
-      }
+  // The API returns the backup codes only once, and `signIn` leaves the page when
+  // next-auth is down: the session opens on "Continuer", once they are on screen.
+  const continueToRedirectUrl = async (token: string) => {
+    // A suggested enrollment keeps the session opened at login
+    if (canPostpone) {
+      goToRedirectUrl();
+      return;
     }
+
+    setIsSubmitting(true);
+    try {
+      // The first code is consumed by the confirmation: the session is opened with the returned token
+      const signInResult = await signIn('api-token', {
+        token,
+        redirect: false,
+      });
+      if (signInResult?.ok) {
+        goToRedirectUrl();
+        return;
+      }
+    } catch {
+      // Same screen as a refused sign-in, below
+    }
+    setSignInFailed(true);
+    setIsSubmitting(false);
   };
 
   const handleConfirm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -183,7 +196,9 @@ export default function MfaEnrollment({
       </div>
     );
 
-  if (backupCodes) {
+  if (enrollment) {
+    const backupCodes = enrollment.backup_codes.join('\n');
+
     return (
       <>
         <h3 key="backup-codes-heading" ref={focusOnMount} tabIndex={-1}>
@@ -205,11 +220,11 @@ export default function MfaEnrollment({
           data-testid="backup-codes"
           style={{ columns: 2, maxWidth: '20rem' }}
         >
-          {backupCodes.join('\n')}
+          {backupCodes}
         </pre>
         <div className="fr-mb-3w">
           <CopyButton
-            valueToCopy={backupCodes.join('\n')}
+            valueToCopy={backupCodes}
             label="Copier les codes"
             okMsg="Codes copiés"
           />
@@ -217,7 +232,10 @@ export default function MfaEnrollment({
         {signInFailed ? (
           <Button onClick={onLogInAgain}>Se reconnecter</Button>
         ) : (
-          <Button onClick={goToRedirectUrl} disabled={isSubmitting}>
+          <Button
+            onClick={() => continueToRedirectUrl(enrollment.token)}
+            disabled={isSubmitting}
+          >
             Continuer
           </Button>
         )}
