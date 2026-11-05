@@ -205,16 +205,51 @@ test.describe('Connexion avec double authentification', () => {
     await expect(
       page.getByRole('button', { name: 'Copier les codes' }),
     ).toBeVisible();
-    // Codes are shown first, "Continuer" waits for the session
-    await expect(page.getByRole('button', { name: 'Continuer' })).toBeEnabled();
+    // The session opens on "Continuer", once the codes are on screen
+    expect(await getSession(page)).toEqual({});
+
+    await page.getByRole('button', { name: 'Continuer' }).click();
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+
     // Identity comes from /auth/users/me/, called with the token returned by the confirmation
     const session = await getSession(page);
     expect(session.username).toBe('enrole');
     expect(session.groups).toEqual(['Contributors']);
     expect(session.accessToken).toBe('jeton-enrole');
+  });
 
-    await page.getByRole('button', { name: 'Continuer' }).click();
-    await page.waitForURL((url) => url.pathname === '/a-propos');
+  test('enrôlement obligatoire : une panne de next-auth après la confirmation ne fait pas perdre les codes', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    httpMocker.post('/auth/mfa/confirm/?from=site', {
+      body: {
+        id: 7,
+        token: 'jeton-enrole',
+        username: 'enrole',
+        groups: ['Contributors'],
+        backup_codes: BACKUP_CODES,
+      },
+    });
+
+    await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+    await codeField(page).fill('654321');
+    // Without its providers, `signIn` leaves the page for next-auth's error page
+    await page.route('**/api/auth/providers', (route) =>
+      route.fulfill({
+        status: 502,
+        contentType: 'text/html',
+        body: '<html><body>Bad Gateway</body></html>',
+      }),
+    );
+    await page.getByRole('button', { name: 'Activer' }).click();
+
+    await expect(page.getByRole('button', { name: 'Continuer' })).toBeEnabled();
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
+    expect(new URL(page.url()).pathname).toBe('/connexion');
   });
 
   test('enrôlement obligatoire : un premier code invalide affiche une erreur', async ({
@@ -488,6 +523,7 @@ test.describe('Connexion avec double authentification', () => {
     await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
     await codeField(page).fill('654321');
     await page.getByRole('button', { name: 'Activer' }).click();
+    await page.getByRole('button', { name: 'Continuer' }).click();
 
     await expect(
       page.getByText(
@@ -534,6 +570,7 @@ test.describe('Connexion avec double authentification', () => {
     await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
     await codeField(page).fill('654321');
     await page.getByRole('button', { name: 'Activer' }).click();
+    await page.getByRole('button', { name: 'Continuer' }).click();
 
     await expect(page.getByTestId('backup-codes')).toHaveText(
       BACKUP_CODES.join('\n'),
