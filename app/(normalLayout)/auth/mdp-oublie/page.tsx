@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 // Components
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import pageTitle from '@/utils/pageTitle';
+import { rnbApi } from '@/utils/rnbApi';
 
 export const metadata = pageTitle('Mot de passe oublié');
 
@@ -22,22 +23,15 @@ export default async function ForgotPasswordPage({
     const email = data.get('email') as string;
 
     // Send the reques to the API
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/auth/reset_password/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      },
-    );
-
-    if (res.status === 204) {
-      redirect('/auth/mdp-oublie?success=true');
-    } else {
-      redirect('/auth/mdp-oublie?success=false');
+    let success = false;
+    try {
+      await rnbApi.post('/auth/reset_password/', { email });
+      success = true;
+    } catch (err) {
+      console.error(err);
     }
+    // `redirect` lève une exception : il doit rester hors du try.
+    redirect(`/auth/mdp-oublie?success=${success}`);
   }
 
   // We don't want to allow users that are already logged in to access this page

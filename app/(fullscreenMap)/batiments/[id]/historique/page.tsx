@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import HistoryClient from './HistoryClient';
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
 
 interface PageProps {
   params: Promise<{
@@ -103,17 +104,13 @@ export async function generateMetadata({
 async function fetchBuildingHistory(
   id: string,
 ): Promise<ApiHistoryItem[] | null> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE}/buildings/${id}/history/`,
-  );
-  if (response.status === 404) return null;
-  // Any other error is thrown: caught by Sentry and shown by error.tsx
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch building history for ${id}: HTTP ${response.status}`,
-    );
+  try {
+    return await rnbApi.get<ApiHistoryItem[]>(`/buildings/${id}/history/`);
+  } catch (error) {
+    if (error instanceof RnbApiError && error.status === 404) return null;
+    // Any other error is thrown: caught by Sentry and shown by error.tsx
+    throw error;
   }
-  return response.json();
 }
 
 export default async function BuildingHistoryDetail({ params }: PageProps) {

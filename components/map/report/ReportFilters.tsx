@@ -2,6 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useRef, useState } from 'react';
+import { rnbApi } from '@/utils/rnbApi';
 
 import genericStyles from '@/styles/genericPanel.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
@@ -83,14 +84,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
     async function fetchStats() {
       clearTimeout(intervalId);
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE}/reports/stats/`,
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch report stats');
-        }
-
-        const data = await response.json();
+        const data = await rnbApi.get<any>('/reports/stats/');
         if (cancelled) return;
         setStats(data);
 

@@ -160,6 +160,17 @@ const server = createServer((req, res) => {
     });
     return;
   }
+  if (method === 'GET' && path === '/api/alpha/auth/pro_connect/logout/') {
+    // Like the backend: an address outside the allowlist is refused
+    if (u.searchParams.has('post_logout_redirect_uri')) {
+      return json(res, 400, { error: 'invalid_redirect_uri' });
+    }
+    res.writeHead(302, {
+      Location:
+        'https://proconnect.example/logout?id_token_hint=jeton-id&state=etat',
+    });
+    return res.end();
+  }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
   }
@@ -167,6 +178,17 @@ const server = createServer((req, res) => {
   // Ghost CMS — only used at SSR for the home page. The Ghost client hits
   // `{NEXT_GHOST_API_URL}/ghost/api/{version}/content/{resource}`.
   if (path.startsWith('/ghost/api/')) {
+    // Blog article: no article exists, erreur-ghost simulates a Ghost outage
+    if (path.includes('/posts/slug/')) {
+      if (path.includes('/posts/slug/erreur-ghost/')) {
+        return json(res, 500, { errors: [{ message: 'mock-server' }] });
+      }
+      // 404 without a Ghost body: misconfigured Ghost URL or path
+      if (path.includes('/posts/slug/ghost-mal-configure/')) {
+        return json(res, 404, { error: 'mock-server' });
+      }
+      return json(res, 404, { errors: [{ type: 'NotFoundError' }] });
+    }
     if (path.includes('/posts/')) return json(res, 200, { posts: [] });
     if (path.includes('/pages/')) return json(res, 200, { pages: [] });
     return json(res, 200, {});

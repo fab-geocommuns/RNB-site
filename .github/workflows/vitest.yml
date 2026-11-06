@@ -16,7 +16,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@633bb92bc0aabcae06e8ea93b85aecddd374c402
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Installation des dépendances NPM

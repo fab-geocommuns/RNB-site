@@ -7,6 +7,27 @@ import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import Link from 'next/link';
 import { isSafeRedirectUrl } from '@/utils/isSafeRedirectUrl';
 import { Loader } from '@/components/Loader';
+import {
+  consumeLoginCheck,
+  LOGIN_CHECK_PARAM,
+} from '@/utils/proConnectLoginCheck';
+
+const GENERIC_ERROR =
+  "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.";
+const INVALID_LINK_ERROR =
+  'Votre lien de connexion ProConnect est invalide ou a expiré. Veuillez vous reconnecter.';
+
+// Keyed by the `error` query param set by RNB-coeur's CallbackView
+const ERROR_MESSAGES = new Map([
+  [
+    'mfa_required',
+    "Votre compte ProConnect doit utiliser une double authentification. Activez-la auprès de votre fournisseur d'identité, puis reconnectez-vous.",
+  ],
+  [
+    'access_denied',
+    "ProConnect n'a pas autorisé la connexion de votre compte à ce service.",
+  ],
+]);
 
 export default function ProConnectCallbackPage() {
   const params = useSearchParams();
@@ -18,16 +39,25 @@ export default function ProConnectCallbackPage() {
   const code = params.get('code');
   const errorParam = params.get('error');
   const redirect = params.get('redirect');
+  const loginCheck = params.get(LOGIN_CHECK_PARAM);
 
   const destination =
     redirect && isSafeRedirectUrl(redirect) ? redirect : '/edition';
 
   useEffect(() => {
-    // A code is always exchanged, whatever `error` or the current session say:
-    // an unconsumed code stays valid in the URL and could be replayed.
+    // A code from this tab is always exchanged, whatever `error` or the current
+    // session say: an unconsumed code stays valid in the URL and could be
+    // replayed. A code from elsewhere is left to expire (60 s).
     if (code) {
       if (signInCalled.current) return;
       signInCalled.current = true;
+
+      // A login started from another browser (or a link sent by someone
+      // else) is refused: it would open a session the visitor never asked for.
+      if (!consumeLoginCheck(loginCheck)) {
+        setError(INVALID_LINK_ERROR);
+        return;
+      }
 
       // Explicit callbackUrl: the default (current URL) would echo the code
       // into the next-auth callback-url cookie and response.
@@ -38,18 +68,14 @@ export default function ProConnectCallbackPage() {
       })
         .then((result) => {
           if (result?.error) {
-            setError(
-              'Votre lien de connexion ProConnect est invalide ou a expiré. Veuillez vous reconnecter.',
-            );
+            setError(INVALID_LINK_ERROR);
           } else {
             router.replace(destination);
           }
         })
         // Network failure or non-JSON response (proxy 502): signIn rejects
         .catch(() => {
-          setError(
-            "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.",
-          );
+          setError(GENERIC_ERROR);
         });
       return;
     }
@@ -60,14 +86,12 @@ export default function ProConnectCallbackPage() {
     }
 
     if (errorParam) {
-      setError(
-        "Une erreur est survenue lors de l'authentification ProConnect. Veuillez réessayer.",
-      );
+      setError(ERROR_MESSAGES.get(errorParam) ?? GENERIC_ERROR);
       return;
     }
 
     setError('Paramètres de connexion manquants.');
-  }, [code, errorParam, status, destination, router]);
+  }, [code, errorParam, loginCheck, status, destination, router]);
 
   if (error) {
     return (

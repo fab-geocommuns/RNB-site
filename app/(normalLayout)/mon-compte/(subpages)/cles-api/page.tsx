@@ -10,6 +10,7 @@ import CopyButton from '@/components/CopyButton';
 import { Notice } from '@codegouvfr/react-dsfr/Notice';
 import Link from 'next/link';
 import pageTitle from '@/utils/pageTitle';
+import { createRnbApi } from '@/utils/rnbApi';
 
 export const metadata = pageTitle('Mon compte');
 
@@ -20,18 +21,9 @@ export default async function Page() {
     redirect('/connexion?redirect=/mon-compte/cles-api');
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE}/auth/users/me/tokens`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: 'Token ' + (session as any).accessToken,
-        'Content-Type': 'application/json',
-      },
-    },
+  const data = await createRnbApi({ token: session.accessToken }).get<any>(
+    '/auth/users/me/tokens',
   );
-
-  const data = await response.json();
 
   return (
     <>

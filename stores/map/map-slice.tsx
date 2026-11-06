@@ -3,6 +3,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BuildingStatusType } from '@/stores/contribution/contribution-types';
 import { fetchBuilding } from '@/utils/requests';
+import { rnbApi, RnbApiError } from '@/utils/rnbApi';
 import {
   setArrayQueryParam,
   setQueryParam,
@@ -251,16 +252,13 @@ export const selectADS = createAsyncThunk(
   async (fileNumber: string | null, { dispatch }) => {
     if (!fileNumber) return;
 
-    const url = adsApiUrl(fileNumber + '?from=site');
-    const adsResponse = await fetch(url);
-
-    if (adsResponse.ok) {
-      const adsData = (await adsResponse.json()) as SelectedADS;
-
-      return {
-        ...adsData,
-        _type: 'ads',
-      } satisfies SelectedADS;
+    try {
+      const adsData = await rnbApi.get<SelectedADS>(`/permis/${fileNumber}/`);
+      return { ...adsData, _type: 'ads' } satisfies SelectedADS;
+    } catch (err) {
+      // ADS inconnue : rien à sélectionner.
+      if (err instanceof RnbApiError) return;
+      throw err;
     }
   },
 );
@@ -277,10 +275,6 @@ export const selectBuilding = createAsyncThunk(
     }
   },
 );
-
-export function adsApiUrl(fileNumber: string) {
-  return process.env.NEXT_PUBLIC_API_BASE + '/permis/' + fileNumber + '/';
-}
 
 export function bdgApiUrl(bdgId: string) {
   return process.env.NEXT_PUBLIC_API_BASE + '/buildings/' + bdgId;
