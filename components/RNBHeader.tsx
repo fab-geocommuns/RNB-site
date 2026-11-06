@@ -1,7 +1,7 @@
 'use client';
 
 // Comps
-import { Header } from '@codegouvfr/react-dsfr/Header';
+import { Header, type HeaderProps } from '@codegouvfr/react-dsfr/Header';
 import { Badge } from '@codegouvfr/react-dsfr/Badge';
 import { createModal } from '@codegouvfr/react-dsfr/Modal';
 import Link from 'next/link';
@@ -15,7 +15,6 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 // Logo
 import logo from '@/public/images/logo.png';
-import { useEffect, useState } from 'react';
 import EditRNBButton from './EditRNBButton';
 import NewsletterModal from './home/NewsletterModal';
 import SkipLinks, { headerId } from './SkipLinks';
@@ -37,106 +36,88 @@ export default function RNBHeader({ withNavigation = true }: Props) {
   const cleanedSearchParams = new URLSearchParams(searchParams.toString());
   cleanedSearchParams.delete('extra_layers');
 
-  const [quickActions, setQuickActions] = useState([]);
-  const [title, setTitle] = useState('Référentiel National des Bâtiments');
-
   const nav = newNav(pathname);
 
   const enableEditionMode =
     process.env.NEXT_PUBLIC_ENABLE_EDITION_MODE === 'true';
 
-  const editBtn = <EditRNBButton modal={explainModal} />;
+  // Computed during render, not in an effect, so that the server sends the
+  // header matching the session
+  const isEditionPage = pathname === '/edition';
+  const quickActions: (HeaderProps.QuickAccessItem | React.JSX.Element)[] = [];
 
-  // Change quick actions and title based on current page and user session
-  useEffect(() => {
-    let newQuickActions = [];
-
-    // Show some quick actions depending on the current page
-    // User is on the edition page or not
-    if (pathname === '/edition') {
-      // Back to site
-      let goBackToSiteQA = {
-        iconId: 'fr-icon-arrow-left-line',
-        linkProps: {
-          href: `/carte?${cleanedSearchParams.toString()}`,
-          onClick: (e: React.MouseEvent) => {
-            e.preventDefault();
-            window.location.href = `/carte?${cleanedSearchParams.toString()}`;
-          },
+  // Show some quick actions depending on the current page
+  if (isEditionPage) {
+    // Back to site
+    const backToSiteUrl = `/carte?${cleanedSearchParams.toString()}`;
+    quickActions.push({
+      iconId: 'fr-icon-arrow-left-line',
+      linkProps: {
+        href: backToSiteUrl,
+        onClick: (e: React.MouseEvent) => {
+          e.preventDefault();
+          window.location.href = backToSiteUrl;
         },
-        text: 'Retour au site',
-      };
-      newQuickActions.push(goBackToSiteQA);
+      },
+      text: 'Retour au site',
+    });
 
-      // Title
+    // Edition guide
+    quickActions.push({
+      iconId: 'fr-icon-community-line',
+      linkProps: {
+        href: '/guide',
+      },
+      text: "Guide d'édition",
+    });
+  } else if (enableEditionMode) {
+    // Go to Edition
+    quickActions.push(<EditRNBButton modal={explainModal} />);
+  }
 
-      setTitle(
-        // @ts-ignore
-        <>
-          Référentiel National des Bâtiments
-          <br />
-          <Badge as="span" noIcon severity="info" small>
-            Mode Édition
-          </Badge>
-        </>,
-      );
-
-      // Edition guide
-      let editionGuide = {
-        iconId: 'fr-icon-community-line',
-        linkProps: {
-          href: '/guide',
-        },
-        text: "Guide d'édition",
-      };
-      newQuickActions.push(editionGuide);
-    } else {
-      // Go to Edition
-
-      if (enableEditionMode) {
-        let goToEditionQA = editBtn;
-        newQuickActions.push(goToEditionQA);
-      }
-
-      setTitle('Référentiel National des Bâtiments');
-    }
-
-    // Show some quick actions depending on the login status
-    if (session) {
-      // My account
-      let myAccountQA = {
-        iconId: 'ri-arrow-down-circle-line',
-        linkProps: {
-          href: '/mon-compte',
-          'data-testid': 'my-account-button',
-        },
-        text: 'Mon compte',
-      };
-      newQuickActions.push(myAccountQA);
-    } else {
-      let loginQA = {
+  // Show some quick actions depending on the login status
+  if (session) {
+    quickActions.push({
+      iconId: 'ri-arrow-down-circle-line',
+      // @ts-ignore data-testid is not part of the DSFR link props
+      linkProps: {
+        href: '/mon-compte',
+        'data-testid': 'my-account-button',
+      },
+      text: 'Mon compte',
+    });
+  } else {
+    const search = searchParams.toString();
+    const currentUrl = search ? `${pathname}?${search}` : pathname;
+    quickActions.push(
+      {
         iconId: 'fr-icon-account-circle-line',
         linkProps: {
-          href: '/connexion?redirect=' + window.location.href,
+          href: `/connexion?redirect=${encodeURIComponent(currentUrl)}`,
         },
         text: 'Se connecter',
-      };
-      newQuickActions.push(loginQA);
-
-      let registerQA = {
+      },
+      {
         iconId: 'fr-icon-add-circle-fill',
         linkProps: {
           href: '/inscription',
         },
         text: "S'inscrire",
-      };
-      newQuickActions.push(registerQA);
-    }
+      },
+    );
+  }
 
-    // Set
-    // @ts-ignore
-    setQuickActions(newQuickActions);
-  }, [pathname, session, searchParams]);
+  const title = isEditionPage ? (
+    <>
+      Référentiel National des Bâtiments
+      <br />
+      <Badge as="span" noIcon severity="info" small>
+        Mode Édition
+      </Badge>
+    </>
+  ) : (
+    'Référentiel National des Bâtiments'
+  );
 
   return (
     <>
@@ -188,7 +169,6 @@ export default function RNBHeader({ withNavigation = true }: Props) {
           imgUrl: logo.src,
           orientation: 'vertical',
         }}
-        // @ts-ignore
         quickAccessItems={quickActions}
       />
     </>

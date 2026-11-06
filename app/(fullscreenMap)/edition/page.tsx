@@ -1,81 +1,27 @@
-'use client';
+import { redirect } from 'next/navigation';
+import { auth } from '@/app/api/auth/[...nextauth]/auth';
+import pageTitle from '@/utils/pageTitle';
+import EditionClient from './EditionClient';
 
-import EditMap from '@/components/map/EditMap';
-import EditionPanel from '@/components/contribution/EditionPanel';
-import AddressSearchMap from '@/components/address/AddressSearchMap';
-import ReportPanels from '@/components/map/report/ReportPanels';
-import { useRNBAuthentication } from '@/utils/useRNBAuthentication';
-import { Loader } from '@/components/Loader';
-import styles from '@/styles/mapPage.module.scss';
-import '@/styles/mapBanLayer.scss';
+export const metadata = pageTitle("Carte d'édition");
 
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores/store';
-import { useMemo } from 'react';
-import useClientSidePageTitle from '@/utils/useClientSidePageTitle';
-import {
-  getDefaultMapLayers,
-  MAP_LAYERS_EDITION_KEY,
-} from '@/utils/mapLayersDefaults';
+export default async function EditionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const session = await auth();
 
-export default function Page() {
-  useClientSidePageTitle("Carte d'édition");
-
-  // Feature flag
-  const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
-
-  // Map layers from store
-  const mapLayers = useSelector((state: RootState) => state.map.layers);
-
-  // On récupère les fonds de carte depuis le local storage
-  const {
-    background: defaultBackgroundLayer,
-    buildings: defaultBuildingLayer,
-    extraLayers: defaultExtraLayers,
-  } = useMemo(
-    () =>
-      getDefaultMapLayers(
-        {
-          background: 'satellite',
-          buildings: 'polygon',
-          extraLayers: ['reports', 'validated'],
-        },
-        MAP_LAYERS_EDITION_KEY,
-      ),
-    [],
-  );
-
-  const { user } = useRNBAuthentication({ require: true });
-
-  if (!user) {
-    return (
-      <>
-        <div className={styles.loaderWrapper}>
-          <span>Chargement en cours</span>
-          <Loader></Loader>
-        </div>
-      </>
-    );
+  // Redirected before rendering: a visitor does not download the map code
+  if (!session) {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(await searchParams)) {
+      for (const v of [value ?? []].flat()) query.append(key, v);
+    }
+    const search = query.toString();
+    const current = search ? `/edition?${search}` : '/edition';
+    redirect(`/connexion?redirect=${encodeURIComponent(current)}`);
   }
 
-  return (
-    <>
-      <div className={styles.map}>
-        <AddressSearchMap />
-        <EditionPanel />
-        {showReportPanels && mapLayers.extraLayers.includes('reports') && (
-          <ReportPanels />
-        )}
-        <div className={styles.map__mapShell}>
-          <EditMap
-            defaultBackgroundLayer={defaultBackgroundLayer}
-            defaultBuildingLayer={defaultBuildingLayer}
-            defaultExtraLayers={defaultExtraLayers}
-            layersKey={MAP_LAYERS_EDITION_KEY}
-            disabledLayers={['point']}
-          />
-        </div>
-      </div>
-    </>
-  );
+  return <EditionClient />;
 }
