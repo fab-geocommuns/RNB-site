@@ -23,7 +23,7 @@
     "@mapgrab/map-interface": "^1.0.0",
     "@mapgrab/playwright": "^0.0.3",
     "@private-captcha/private-captcha-js": "^0.0.12",
-    "@private-captcha/private-captcha-js-core": "0.0.24",
+    "@private-captcha/private-captcha-react": "0.0.8",
     "@reduxjs/toolkit": "^2.8.2",
     "@sentry/nextjs": "^10.66.0",
     "@terraformer/wkt": "^2.2.1",
@@ -76,6 +76,9 @@
   },
   "overrides": {
     "@types/react": "19.2.3",
-    "@types/react-dom": "19.2.3"
+    "@types/react-dom": "19.2.3",
+    "@private-captcha/private-captcha-react": {
+      "react": "19.2.3"
+    }
   }
 }
