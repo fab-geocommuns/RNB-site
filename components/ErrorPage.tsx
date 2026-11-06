@@ -39,3 +39,15 @@ export default function ErrorPage({
     </div>
   );
 }
+
+// Shared by app/not-found.tsx and app/(normalLayout)/not-found.tsx
+export function PageNotFound() {
+  return (
+    <ErrorPage
+      title="Page non trouvée"
+      lead="La page que vous cherchez est introuvable. Excusez-nous pour la gêne occasionnée."
+      details="Si vous avez tapé l'adresse web dans le navigateur, vérifiez qu'elle est correcte. La page n'est peut-être plus disponible."
+      buttons={[{ children: "Page d'accueil", linkProps: { href: '/' } }]}
+    />
+  );
+}
