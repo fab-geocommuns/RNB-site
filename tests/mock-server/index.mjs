@@ -49,8 +49,8 @@ const CONTRIBUTION_SUMMARY = {
       },
     ],
     organizations: [
-      { name: 'Commune de Talence', department: gironde, count: 42 },
-      { name: 'Syndicat SIG', department: null, count: 18 },
+      { name: 'Commune de Talence', count: 42 },
+      { name: 'Syndicat SIG', count: 18 },
     ],
     cities: [
       {
@@ -99,27 +99,34 @@ const server = createServer((req, res) => {
     return json(res, 200, HISTORY);
   }
   if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
-    // the 7-day window: fewer contributions, same rankings, another newcomer
-    const days = Number(u.searchParams.get('days') || 30);
-    return json(
-      res,
-      200,
-      days === 7
-        ? {
-            ...CONTRIBUTION_SUMMARY,
-            window_days: 7,
-            cities: { ...CONTRIBUTION_SUMMARY.cities, new: 3 },
-            top: {
-              ...CONTRIBUTION_SUMMARY.top,
-              cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
-                ...c,
-                count: 1,
-              })),
-            },
-            newcomers: { users: [{ username: 'nouvelle_contributrice_7j' }] },
-          }
-        : CONTRIBUTION_SUMMARY,
-    );
+    // the 7-day window: fewer cities, another newcomer; the whole period:
+    // more of everything, its own newcomer
+    const days = u.searchParams.get('days') || '30';
+    const summaries = {
+      30: CONTRIBUTION_SUMMARY,
+      7: {
+        ...CONTRIBUTION_SUMMARY,
+        window_days: 7,
+        cities: { total: 40, new: 3 },
+        top: {
+          ...CONTRIBUTION_SUMMARY.top,
+          cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
+            ...c,
+            count: 1,
+          })),
+        },
+        newcomers: { users: [{ username: 'nouvelle_contributrice_7j' }] },
+      },
+      all: {
+        ...CONTRIBUTION_SUMMARY,
+        window_days: null,
+        cities: { total: 17126, new: 17126 },
+        organizations: { total: 200, new: 200 },
+        building_changes: { total: 4236167, contributions: 888625 },
+        newcomers: { users: [{ username: 'derniere_arrivee' }] },
+      },
+    };
+    return json(res, 200, summaries[days] ?? CONTRIBUTION_SUMMARY);
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });

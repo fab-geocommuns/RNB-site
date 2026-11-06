@@ -30,8 +30,8 @@ const summary = (
       { username: 'bob', organization: null, count: 4 },
     ],
     organizations: [
-      { name: 'Commune de Talence', department: gironde, count: 42 },
-      { name: 'Syndicat SIG', department: null, count: 18 },
+      { name: 'Commune de Talence', count: 42 },
+      { name: 'Syndicat SIG', count: 18 },
     ],
     cities: [
       { insee_code: '33522', name: 'Talence', department: gironde, count: 7 },
@@ -43,22 +43,22 @@ const summary = (
 });
 
 describe('keyFigures et windowView', () => {
-  it('décrit les 3 chiffres clés avec leur évolution', () => {
+  it('décrit les 3 chiffres clés de la période', () => {
     expect(keyFigures(summary())).toEqual([
       {
-        value: 1248,
-        label: 'communes déjà améliorées par la communauté',
-        detail: '+12 ces 30 derniers jours',
+        value: 4310,
+        label: 'modifications de bâtiments',
+        detail: 'dont 520 par les contributeurs',
       },
       {
         value: 86,
         label: 'organisations contributrices',
-        detail: '+3 ces 30 derniers jours',
+        detail: 'dont 3 pour la première fois',
       },
       {
-        value: 4310,
-        label: 'modifications de bâtiments ces 30 derniers jours',
-        detail: 'dont 520 par les contributeurs',
+        value: 1248,
+        label: 'communes améliorées par la communauté',
+        detail: 'dont 12 pour la première fois',
       },
     ]);
   });
@@ -74,6 +74,15 @@ describe('keyFigures et windowView', () => {
     expect(figures.map((f) => f.detail)).toEqual([null, null, null]);
   });
 
+  it('ne parle pas de première fois sur toute la période', () => {
+    const figures = keyFigures(summary({ window_days: null }));
+    expect(figures.map((f) => f.detail)).toEqual([
+      'dont 520 par les contributeurs',
+      null,
+      null,
+    ]);
+  });
+
   it('accorde au singulier', () => {
     const figures = keyFigures(
       summary({
@@ -83,17 +92,18 @@ describe('keyFigures et windowView', () => {
       }),
     );
     expect(figures.map((f) => f.label)).toEqual([
-      'commune déjà améliorée par la communauté',
+      'modification de bâtiment',
       'organisation contributrice',
-      'modification de bâtiment ces 30 derniers jours',
+      'commune améliorée par la communauté',
     ]);
   });
 
-  it('écrit le département en clair', () => {
-    const [, organizations] = windowView(summary()).rankings;
-    expect(organizations.rows).toEqual([
-      { name: 'Commune de Talence', detail: 'Gironde (33)', count: 42 },
-      { name: 'Syndicat SIG', detail: null, count: 18 },
+  it('écrit le département des communes, pas des organisations', () => {
+    const [, organizations, cities] = windowView(summary()).rankings;
+    expect(organizations.rows.map((r) => r.detail)).toEqual([null, null]);
+    expect(cities.rows.map((r) => r.detail)).toEqual([
+      'Gironde (33)',
+      'Gironde (33)',
     ]);
   });
 
@@ -110,6 +120,15 @@ describe('keyFigures et windowView', () => {
     expect(rankings.map((r) => r.title)).toEqual([
       'Organisations les plus actives',
     ]);
+  });
+
+  it('titre les nouveaux contributeurs selon la période', () => {
+    expect(windowView(summary()).newcomersTitle).toBe(
+      'Nouveaux contributeurs ces 30 derniers jours',
+    );
+    expect(windowView(summary({ window_days: null })).newcomersTitle).toBe(
+      'Derniers contributeurs arrivés',
+    );
   });
 
   it('liste les nouveaux contributeurs, 8 au plus', () => {
@@ -137,16 +156,21 @@ describe('loadContributionSummary', () => {
     expect(await loadContributionSummary()).toEqual(summary());
   });
 
-  it('demande la fenêtre voulue à l’API', async () => {
+  it('demande la période voulue à l’API', async () => {
     vi.mocked(rnbApi.get).mockResolvedValue(summary());
     await loadContributionSummary(7);
-    expect(vi.mocked(rnbApi.get).mock.calls[0][1]?.query).toEqual({ days: 7 });
+    await loadContributionSummary('all');
+    expect(vi.mocked(rnbApi.get).mock.calls.map((c) => c[1]?.query)).toEqual([
+      { days: 7 },
+      { days: 'all' },
+    ]);
   });
 
-  it('garde les fenêtres chargées, null si aucune', async () => {
+  it('garde les périodes chargées, null si aucune', async () => {
     vi.mocked(rnbApi.get)
       .mockRejectedValueOnce(new Error('503'))
-      .mockResolvedValueOnce(summary());
+      .mockResolvedValueOnce(summary())
+      .mockRejectedValueOnce(new Error('503'));
     expect(await loadContributionSummaries()).toEqual([summary()]);
 
     vi.mocked(rnbApi.get).mockRejectedValue(new Error('503'));
@@ -155,6 +179,7 @@ describe('loadContributionSummary', () => {
 
   it('rejette une réponse dont un cumul n’est pas un nombre', () => {
     expect(isCompleteSummary(summary())).toBe(true);
+    expect(isCompleteSummary(summary({ window_days: null }))).toBe(true);
     expect(
       isCompleteSummary({ ...summary(), cities: { total: null, new: 1 } }),
     ).toBe(false);
@@ -189,9 +214,7 @@ describe('loadContributionSummary', () => {
       isCompleteSummary(withTop({ users: [{ username: 'alice', count: 2 }] })),
     ).toBe(false);
     expect(
-      isCompleteSummary(
-        withTop({ organizations: [{ name: 'Syndicat', department: null }] }),
-      ),
+      isCompleteSummary(withTop({ organizations: [{ name: 'Syndicat' }] })),
     ).toBe(false);
     expect(
       isCompleteSummary(
