@@ -19,6 +19,8 @@ const nextConfig = {
 
   reactStrictMode: true,
   productionBrowserSourceMaps: true,
+  // Ships raw TSX, which crashes Turbopack unless transpiled like app code.
+  transpilePackages: ['@private-captcha/private-captcha-react'],
   webpack: (config) => {
     config.module.rules.push({
       test: /\.woff2$/,
