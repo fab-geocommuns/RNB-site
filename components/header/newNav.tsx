@@ -100,7 +100,7 @@ export default function newNav(pathName: string) {
                   href: '/outils-services/rapprochement',
                   target: '_self',
                 },
-                text: 'Bases contenant des ID-RNBs',
+                text: 'Bases contenant des ID-RNB',
                 isActive: pathName === '/outils-services/rapprochement',
               },
             ],
@@ -121,7 +121,7 @@ export default function newNav(pathName: string) {
                   href: 'https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments',
                   target: '_blank',
                 },
-                text: 'Sélécteur de bâtiments',
+                text: 'Sélecteur de bâtiments',
               },
               {
                 linkProps: {

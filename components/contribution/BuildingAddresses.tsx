@@ -74,7 +74,7 @@ function AddressCreator({
             {...inputProps}
             className="fr-input"
             type="text"
-            placeholder="Nouvelle addresse"
+            placeholder="Nouvelle adresse"
             autoFocus
           />
         )}

@@ -66,7 +66,7 @@ export default function DatabaseSearchForm({
         renderInput={({ className, id, type }) => (
           <input
             className={className}
-            placeholder="Par exemple : année de construction, hauteur, accessibilité etc."
+            placeholder="Par exemple : année de construction, hauteur, accessibilité, etc."
             id={id}
             type={type}
             value={query}

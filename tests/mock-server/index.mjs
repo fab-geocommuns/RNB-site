@@ -31,6 +31,46 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
+// « Participer au RNB » section (/apercu-activite). Chosen to show the edge
+// cases: no new organization (no delta), a 1-row ranking (its card is hidden)
+const gironde = { code: '33', name: 'Gironde' };
+const CONTRIBUTION_SUMMARY = {
+  updated_at: '2026-10-15T14:10:00+02:00',
+  window_days: 30,
+  cities: { total: 1248, new: 12 },
+  organizations: { total: 86, new: 0 },
+  building_changes: { total: 4310, contributions: 520 },
+  top: {
+    users: [
+      {
+        username: 'contributrice_test',
+        organization: 'Mairie Test',
+        count: 800,
+      },
+    ],
+    organizations: [
+      { name: 'Commune de Talence', count: 42 },
+      { name: 'Syndicat SIG', count: 18 },
+    ],
+    cities: [
+      {
+        insee_code: '28158',
+        name: 'Fresnay-l’Évêque',
+        department: { code: '28', name: 'Eure-et-Loir' },
+        count: 9,
+      },
+      { insee_code: '33522', name: 'Talence', department: gironde, count: 7 },
+      {
+        insee_code: '73311',
+        name: 'Verrens-Arvey',
+        department: { code: '73', name: 'Savoie' },
+        count: 5,
+      },
+    ],
+  },
+  newcomers: { users: [{ username: 'nouvelle_contributrice' }] },
+};
+
 const server = createServer((req, res) => {
   const { method, url } = req;
   const u = new URL(url, `http://localhost:${PORT}`);
@@ -57,6 +97,36 @@ const server = createServer((req, res) => {
     path === `/api/alpha/buildings/${HISTORY[0].rnb_id}/history/`
   ) {
     return json(res, 200, HISTORY);
+  }
+  if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
+    // the 7-day window: fewer cities, another newcomer; the whole period:
+    // more of everything, its own newcomer
+    const days = u.searchParams.get('days') || '30';
+    const summaries = {
+      30: CONTRIBUTION_SUMMARY,
+      7: {
+        ...CONTRIBUTION_SUMMARY,
+        window_days: 7,
+        cities: { total: 40, new: 3 },
+        top: {
+          ...CONTRIBUTION_SUMMARY.top,
+          cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
+            ...c,
+            count: 1,
+          })),
+        },
+        newcomers: { users: [{ username: 'nouvelle_contributrice_7j' }] },
+      },
+      all: {
+        ...CONTRIBUTION_SUMMARY,
+        window_days: null,
+        cities: { total: 17126, new: 17126 },
+        organizations: { total: 200, new: 200 },
+        building_changes: { total: 4236167, contributions: 888625 },
+        newcomers: { users: [{ username: 'derniere_arrivee' }] },
+      },
+    };
+    return json(res, 200, summaries[days] ?? CONTRIBUTION_SUMMARY);
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
@@ -90,6 +160,17 @@ const server = createServer((req, res) => {
     });
     return;
   }
+  if (method === 'GET' && path === '/api/alpha/auth/pro_connect/logout/') {
+    // Like the backend: an address outside the allowlist is refused
+    if (u.searchParams.has('post_logout_redirect_uri')) {
+      return json(res, 400, { error: 'invalid_redirect_uri' });
+    }
+    res.writeHead(302, {
+      Location:
+        'https://proconnect.example/logout?id_token_hint=jeton-id&state=etat',
+    });
+    return res.end();
+  }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
   }
@@ -97,6 +178,17 @@ const server = createServer((req, res) => {
   // Ghost CMS — only used at SSR for the home page. The Ghost client hits
   // `{NEXT_GHOST_API_URL}/ghost/api/{version}/content/{resource}`.
   if (path.startsWith('/ghost/api/')) {
+    // Blog article: no article exists, erreur-ghost simulates a Ghost outage
+    if (path.includes('/posts/slug/')) {
+      if (path.includes('/posts/slug/erreur-ghost/')) {
+        return json(res, 500, { errors: [{ message: 'mock-server' }] });
+      }
+      // 404 without a Ghost body: misconfigured Ghost URL or path
+      if (path.includes('/posts/slug/ghost-mal-configure/')) {
+        return json(res, 404, { error: 'mock-server' });
+      }
+      return json(res, 404, { errors: [{ type: 'NotFoundError' }] });
+    }
     if (path.includes('/posts/')) return json(res, 200, { posts: [] });
     if (path.includes('/pages/')) return json(res, 200, { pages: [] });
     return json(res, 200, {});

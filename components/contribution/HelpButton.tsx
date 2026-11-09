@@ -8,6 +8,9 @@ import { HelpTopic } from '@/stores/edition/edition-slice';
 import { HELP_TOPICS } from './helpContents';
 import { HELP_PANEL_ID } from './HelpPanel';
 
+// Analytics
+import va from '@vercel/analytics';
+
 // Bouton « ? » qui ouvre l'aide correspondante dans le panneau d'aide, à côté
 // du panneau d'édition.
 export default function HelpButton({ topic }: { topic: HelpTopic }) {
@@ -38,9 +41,10 @@ export default function HelpButton({ topic }: { topic: HelpTopic }) {
       priority={isOpen ? 'secondary' : 'tertiary no outline'}
       size="small"
       title={`Aide : ${HELP_TOPICS[topic].title}`}
-      onClick={() =>
-        dispatch(Actions.edition.setHelpTopic(isOpen ? null : topic))
-      }
+      onClick={() => {
+        if (!isOpen) va.track('edition-help-open', { topic });
+        dispatch(Actions.edition.setHelpTopic(isOpen ? null : topic));
+      }}
       nativeButtonProps={{
         'aria-expanded': isOpen,
         'aria-controls': HELP_PANEL_ID,

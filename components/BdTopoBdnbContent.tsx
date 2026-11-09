@@ -9,7 +9,7 @@ export default function BuildingInfo({ building }: BuildingInfoProps) {
       <div className={deployableStyle.sectionBody}>
         {building?.ext_ids?.length === 0 ? (
           <div>
-            <em>Aucun lien avec une autre base de donnée.</em>
+            <em>Aucun lien avec une autre base de données.</em>
           </div>
         ) : (
           building?.ext_ids?.map((ext_id) => (

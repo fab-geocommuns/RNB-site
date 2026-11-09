@@ -3,7 +3,7 @@
 import { startTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import * as Sentry from '@sentry/nextjs';
-import Button from '@codegouvfr/react-dsfr/Button';
+import ErrorPage from '@/components/ErrorPage';
 
 export default function HistoryError({
   error,
@@ -26,17 +26,18 @@ export default function HistoryError({
     });
 
   return (
-    <div className="fr-container">
-      <div className="fr-grid-row fr-grid-row--center fr-py-12v">
-        <div className="fr-col-12 fr-col-md-8 fr-col-lg-6">
-          <h1>Historique indisponible</h1>
-          <p className="fr-text--lead">
-            Une erreur est survenue lors du chargement de l&apos;historique de
-            ce bâtiment. Veuillez réessayer dans quelques instants.
-          </p>
-          <Button onClick={retry}>Réessayer</Button>
-        </div>
-      </div>
-    </div>
+    <ErrorPage
+      title="Historique indisponible"
+      lead="Une erreur est survenue lors du chargement de l'historique de ce bâtiment."
+      details="Veuillez réessayer dans quelques instants."
+      buttons={[
+        { children: 'Réessayer', onClick: retry },
+        {
+          children: "Page d'accueil",
+          priority: 'secondary',
+          linkProps: { href: '/' },
+        },
+      ]}
+    />
   );
 }

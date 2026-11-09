@@ -119,7 +119,7 @@ test.describe('Bâtiments démolis', () => {
     await expect(mapPage.buildingDetailsPannel).toBeVisible();
     await expect(
       mapPage.buildingDetailsPannel.getByText(
-        'Cet Identifiant RNB a été désactivé.',
+        'Cet identifiant RNB a été désactivé.',
       ),
     ).toBeVisible();
     await expect(

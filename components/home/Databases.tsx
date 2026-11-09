@@ -39,7 +39,7 @@ export default function Databases({ databases }: Props) {
           </h2>
           <p className="section__subtitle">
             Croisez facilement les données de {databaseCount} bases intégrant
-            les ID-RNBs
+            les ID-RNB
           </p>
         </div>
         <div className={styles.searchContainer}>

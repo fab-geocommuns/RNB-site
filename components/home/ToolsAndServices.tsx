@@ -88,7 +88,7 @@ export default function ToolsAndServices() {
           <>
             <span className={styles.tools_desc}>
               <b>Consultez les données libres et ouvertes du RNB</b>,
-              directement sur la carte ou via nos APIs et jeux de données.
+              directement sur la carte ou via nos API et jeux de données.
             </span>
           </>
         ),
@@ -102,7 +102,7 @@ export default function ToolsAndServices() {
             link: '/doc',
           },
           {
-            title: 'Exports national et départementaux',
+            title: 'Exports nationaux et départementaux',
             link: 'https://www.data.gouv.fr/datasets/referentiel-national-des-batiments/',
           },
           {
@@ -132,11 +132,11 @@ export default function ToolsAndServices() {
             link: '/doc',
           },
           {
-            title: 'Selecteur de bâtiments',
+            title: 'Sélecteur de bâtiments',
             link: 'https://rnb-fr.gitbook.io/documentation/exemples/selecteur-de-batiments',
           },
           {
-            title: 'Exports national et départementaux',
+            title: 'Exports nationaux et départementaux',
             link: 'https://www.data.gouv.fr/datasets/referentiel-national-des-batiments/',
           },
         ],

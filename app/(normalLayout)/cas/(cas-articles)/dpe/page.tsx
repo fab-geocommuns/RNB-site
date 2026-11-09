@@ -8,10 +8,10 @@ export default function Page() {
       </h1>
 
       <h2>Le problème</h2>
-      <p>Plus de 2.7 millions de DPE ont été réalisés en France en 2022.</p>
+      <p>Plus de 2,7 millions de DPE ont été réalisés en France en 2022.</p>
       <p>
         Chaque DPE contient des informations de performance énergétique sur le
-        local (par exemple un appartement) dont il fait l’objet. Hors, le local
+        local (par exemple un appartement) dont il fait l’objet. Or, le local
         dont le DPE fait l’objet est uniquement relié à une adresse et non à un
         bâtiment géolocalisé. Ainsi,{' '}
         <span className="stab stab--green">
@@ -42,7 +42,7 @@ export default function Page() {
         possibilité d’indiquer dans chaque DPE l’identifiant unique du bâtiment
         dans lequel le local se situe permettra ainsi d’améliorer la fiabilité
         des bases de données de l’observatoire des DPE, largement réutilisées
-        par des acteurs public et privés.
+        par des acteurs publics et privés.
       </p>
       <p>
         C’est pourquoi{' '}
@@ -57,7 +57,7 @@ export default function Page() {
 
       <ul>
         <li>
-          Pour L’ADEME, en charge de l’observatoire des DPE, l’ID unique ajouté
+          Pour l’ADEME, en charge de l’observatoire des DPE, l’ID unique ajouté
           aux DPE doit permettre de mieux connaitre la performance de chaque
           bâtiment dans le temps et mieux suivre l’évolution de la rénovation du
           parc dans son ensemble.
@@ -67,10 +67,10 @@ export default function Page() {
           faciliter le croisement de ces données avec d’autres bases qui
           contiendront aussi l’ID unique du bâtiment. Il sera notamment possible
           de faciliter le croisement d’informations issues de plusieurs DPE
-          ayant été réalisées dans un même bâtiment et d’agréger les
-          informations communes à l’enveloppe du bâti (ex. année de
-          construction, typologie des murs extérieurs, connaissance des systèmes
-          centralisés d’eau et de chauffage…).
+          ayant été réalisés dans un même bâtiment et d’agréger les informations
+          communes à l’enveloppe du bâti (ex. année de construction, typologie
+          des murs extérieurs, connaissance des systèmes centralisés d’eau et de
+          chauffage…).
         </li>
         <li>
           Pour les diagnostiqueurs, l’ID unique leur permet d’être plus précis :

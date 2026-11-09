@@ -38,7 +38,7 @@ const AttributesSearchBar = ({
   return (
     <SearchBar
       className={styles.searchBar}
-      label="Par exemple : année de construction, hauteur, accessibilité etc."
+      label="Par exemple : année de construction, hauteur, accessibilité, etc."
       renderInput={({ className, id, placeholder, type }) => (
         <input
           className={className}

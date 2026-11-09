@@ -9,21 +9,21 @@ final) : ce dépôt n'a pas de base de données.
 
 ## Commandes
 
-**pnpm uniquement** (`preinstall: only-allow pnpm`). CI sur Node 20.
+**pnpm uniquement** (`preinstall: only-allow pnpm`). CI sur Node 22 (`engines.node` = `22.x`, aligné sur le runtime Vercel).
 
 ```bash
 pnpm i
 cp .env.local.example .env.local   # puis compléter (README : demander le .env.local à un collègue)
 pnpm dev                           # port 3000 ; predev lance only-include-used-icons
 pnpm lint                          # next lint (next/core-web-vitals)
-pnpm exec tsc --noEmit             # typecheck (pas de script dédié)
+pnpm typecheck                     # next typegen (types des imports d'images) puis tsc --noEmit
 pnpm exec vitest run utils/validations.test.ts          # un test unitaire
 pnpm exec playwright test tests/map-page.spec.ts        # un spec e2e
 pnpm exec playwright test -g "nom du test" --project=chromium
 ```
 
 Pré-commit (husky + lint-staged) : `prettier --write` sur les fichiers indexés (single quotes,
-trailing commas). Les deux workflows CI (vitest, playwright) tournent sur les PR vers `main`.
+trailing commas). Les workflows CI (vitest, playwright, types et lint) tournent sur les PR vers `main`.
 
 ## Tests
 

@@ -16,16 +16,16 @@
 
 - id: kiosque
   title: Kiosque et abri ouvert
-  description: Un bâtiment est "abritant", au sens d’une protection des éléments extérieurs et intempéries. Pour qu'il remplisse cette condition, il faut pouvoir facilement distinguer un dedans et un dehors, grâce une ou plusieurs entrées.
+  description: Un bâtiment est "abritant", au sens d’une protection des éléments extérieurs et intempéries. Pour qu'il remplisse cette condition, il faut pouvoir facilement distinguer un dedans et un dehors, grâce à une ou plusieurs entrées.
   isBuilding: false
   image: kiosque.png
 
 - id: hangar
   title: Hangar partiellement ouvert
-  description: Un bâtiment est "abritant", au sens d’une protection des éléments extérieurs et intempéries. Pour qu'il remplisse cette condition, il faut pouvoir facilement distinguer un dedans et un dehors, grâce une ou plusieurs entrées.
+  description: Un bâtiment est "abritant", au sens d’une protection des éléments extérieurs et intempéries. Pour qu'il remplisse cette condition, il faut pouvoir facilement distinguer un dedans et un dehors, grâce à une ou plusieurs entrées.
   isBuilding: true
   image: hangar.jpg
-  
+
 - id: abri-jardin
   title: Cabane ou abri de petite dimension
   isBuilding: false
@@ -44,7 +44,7 @@
 
 - id: balustrade
   title: Appartements en balustrade
-  description: Si elle est continue et dépourvue de séparation, on peut considérer que la balustrade fait partie du bâtiment et la traiter comme un couloir. Les appartements en questions sont alors des locaux faisant partie d’un même bâtiment.
+  description: Si elle est continue et dépourvue de séparation, on peut considérer que la balustrade fait partie du bâtiment et la traiter comme un couloir. Les appartements en question sont alors des locaux faisant partie d’un même bâtiment.
   isBuilding: true
   image: balustrade.jpg
 
@@ -91,7 +91,7 @@
 
 - id: pont
   title: Pont
-  description: Un pont, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un pont) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
+  description: Un pont, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un pont) mais l’objet de l’ouvrage d’art lui-même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: pont.png
 
@@ -103,13 +103,13 @@
 
 - id: barrage
   title: Barrage
-  description: Un barrage, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un barrage) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
+  description: Un barrage, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un barrage) mais l’objet de l’ouvrage d’art lui-même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: barrage.png
 
 - id: tunnel
   title: Tunnel, galerie
-  description: Un tunnel, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un tunnel) mais l’objet de l’ouvrage d’art lui même n’est pas à considérer comme un bâtiment.
+  description: Un tunnel, en tant qu'ouvrage d'art, n'est pas à considérer comme un bâtiment. Il est possible que des bâtiments soient rattachés à un ouvrage d’art (par ex. des locaux dans un tunnel) mais l’objet de l’ouvrage d’art lui-même n’est pas à considérer comme un bâtiment.
   isBuilding: false
   image: tunnel.png
 
@@ -133,7 +133,7 @@
 
 - id: maison-individuelle
   title: Maison individuelle
-  isBuilding: yes
+  isBuilding: true
   image: maison-individuelle.png
 
 - id: phare
@@ -200,14 +200,14 @@
 - id: annexe-contigue
   title: Annexe contiguë d’un bâtiment
   description: <a href="#annexe-contigue">Voir les explications.</a>
-  isBuilding: fasle
+  isBuilding: false
   image: annexe-contigue.jpeg
   distinctionBetweenSingleAndMultipleText: Une annexe contiguë et son bâtiment principal sont un seul et même bâtiment si l’on peut circuler de l’un à l’autre et s'il n’existe pas de délimitation non franchissable.
 
 - id: extension-sans-entree
   title: Extension sans accès depuis l'extérieur
   description: <a href="#extension-sans-entree">Voir les explications.</a>
-  isBuilding: fasle
+  isBuilding: false
   image: extension-sans-entree.jpeg
   distinctionBetweenSingleAndMultipleText: Si la partie A ne possède pas d’accès depuis l'extérieur et est accessible depuis la partie B, cet ensemble forme bien un unique bâtiment.
 
@@ -256,7 +256,7 @@
   description: <a href="#batiment-relie-sous-terrain">Voir les explications.</a>
   isBuilding: true
   image: batiment-relie-sous-terrain.jpeg
-  distinctionBetweenSingleAndMultipleText: Dans le cas de bâtiments reliés par une construction souterraine (par exemple un garage ou une cave commune), il y a autant de bâtiments à considérer que s’il n’y avait pas eu de garage souterrain. Dans le cas d’une barre d’immeuble avec plusieurs cages d’escalier non communicantes en dehors des cages et garages souterrains, on a bien autant de bâtiments que de cages d’escaliers (accès distinct depuis l’extérieur). Cette simplification permet notamment aux services d’urgences d'identifier rapidement le point d’accès à un lieu d’intervention.
+  distinctionBetweenSingleAndMultipleText: Dans le cas de bâtiments reliés par une construction souterraine (par exemple un garage ou une cave commune), il y a autant de bâtiments à considérer que s’il n’y avait pas eu de garage souterrain. Dans le cas d’une barre d’immeuble avec plusieurs cages d’escalier non communicantes en dehors des cages et garages souterrains, on a bien autant de bâtiments que de cages d’escaliers (accès distinct depuis l’extérieur). Cette simplification permet notamment aux services d’urgence d'identifier rapidement le point d’accès à un lieu d’intervention.
 
 - id: passerelle
   title: Passerelle ou couloir extérieur fermé

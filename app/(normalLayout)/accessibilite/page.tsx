@@ -39,7 +39,7 @@ export default function Page() {
               <abbr title="Référentiel général d’amélioration de l’accessibilité">
                 RGAA
               </abbr>
-              . <span>Le site n&apos;a encore pas été audité.</span>
+              . <span>Le site n&apos;a pas encore été audité.</span>
             </p>
 
             <h2>Contenus non accessibles</h2>
@@ -65,7 +65,7 @@ export default function Page() {
               </li>
               <li>
                 Adresse&nbsp;:{' '}
-                <span>73 avenue de Paris, 94165, Saint Mandé</span>
+                <span>73 avenue de Paris, 94165 Saint-Mandé</span>
               </li>
             </ul>
             <h2>Voie de recours</h2>
@@ -100,7 +100,7 @@ export default function Page() {
               </li>
             </ul>
             <p>
-              Cette déclaration d&apos;accessibilité a été créé le{' '}
+              Cette déclaration d&apos;accessibilité a été créée le{' '}
               <span>24 janvier 2024</span> grâce au{' '}
               <a href="https://betagouv.github.io/a11y-generateur-declaration/#create">
                 Générateur de Déclaration d&apos;Accessibilité de BetaGouv

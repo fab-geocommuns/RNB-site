@@ -160,15 +160,9 @@ export const getTrophiesData = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = new URL(process.env.NEXT_PUBLIC_API_BASE + `/trophies/`);
-
-        const response = await fetch(url, {
-          cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        const jsonData = await response.json();
-
-        setData(jsonData);
+        setData(
+          await rnbApi.get<TrophyData[]>('/trophies/', { cache: 'no-cache' }),
+        );
       } catch (e) {
         console.error(e);
       } finally {

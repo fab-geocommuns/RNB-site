@@ -112,7 +112,7 @@ export default function Entry({ db, attributes, displayAttributes }: Props) {
               </a>
             </h3>
             <div className={styles.meta}>
-              <span>Editée par {db.publisher}</span>
+              <span>Éditée par {db.publisher}</span>
               <span>{db.licence}</span>
             </div>
           </div>

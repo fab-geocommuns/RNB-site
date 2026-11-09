@@ -3,6 +3,9 @@
 
 import type { HelpTopic } from '@/stores/edition/edition-slice';
 
+// Analytics
+import va from '@vercel/analytics';
+
 export const GUIDE_URL =
   'https://rnb-fr.gitbook.io/documentation/guides/editer-le-rnb-dans-les-regles-de-lart';
 
@@ -20,6 +23,9 @@ function HelpLinks({
         target="_blank"
         rel="noopener"
         title="En savoir plus - nouvelle fenêtre"
+        onClick={() =>
+          va.track('edition-help-guide-click', { anchor: guideAnchor })
+        }
       >
         En savoir plus
       </a>

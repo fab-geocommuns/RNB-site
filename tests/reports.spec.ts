@@ -57,7 +57,7 @@ test.describe('Signalements', () => {
     );
 
     await httpMocker.install();
-    httpMocker.get('/reports/stats/', emptyReportStats);
+    httpMocker.get('/reports/stats/?from=site', emptyReportStats);
     httpMocker.get(
       `/buildings/${buildingSegur.rnb_id}/?from=site&withPlots=1`,
       buildingSegur,
@@ -78,12 +78,15 @@ test.describe('Signalements', () => {
     // Counts are relative: React StrictMode mounts the panel twice in dev
     let statsCalls = 0;
     let failing = true;
-    await page.route(/\/reports\/stats\/$/, (route) => {
-      statsCalls += 1;
-      return failing
-        ? route.fulfill({ status: 500 })
-        : route.fulfill({ json: emptyReportStats });
-    });
+    await page.route(
+      (url) => url.pathname.endsWith('/reports/stats/'),
+      (route) => {
+        statsCalls += 1;
+        return failing
+          ? route.fulfill({ status: 500 })
+          : route.fulfill({ json: emptyReportStats });
+      },
+    );
     const setVisibility = (state: 'visible' | 'hidden') =>
       page.evaluate((state) => {
         Object.defineProperty(document, 'visibilityState', {

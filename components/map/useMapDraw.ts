@@ -4,7 +4,10 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import drawStyle from '@/components/contribution/drawStyle';
 // @ts-ignore
 import DrawAssistedRectangle from '@geostarters/mapbox-gl-draw-rectangle-assisted-mode/dist/DrawAssistedRectangle.js';
-import { snapDrawEvent } from '@/components/map/snap/buildingSnap';
+import {
+  SNAP_INDICATOR_LAYER,
+  snapDrawEvent,
+} from '@/components/map/snap/buildingSnap';
 
 // necessary to make the mapbox plugin work with maplibre
 // @ts-ignore
@@ -108,6 +111,7 @@ MapboxDraw.modes.direct_select.dragVertex = function (state, e, delta) {
  * Ce hook ne gère QUE le cycle de vie du plugin (création, ajout du contrôle,
  * raccourci de suppression de sommet, nettoyage). La synchronisation avec le
  * store est laissée aux hooks consommateurs.
+ * Il maintient aussi le dessin au-dessus de toutes les autres couches.
  */
 export const useMapDraw = (
   map?: maplibregl.Map,
@@ -157,10 +161,23 @@ export const useMapDraw = (
       const reEnableDragPan = () => map.dragPan.enable();
       map.on('draw.selectionchange', reEnableDragPan);
 
+      // moveLayer fires styledata again: only move what is out of place,
+      // or this loops forever
+      const keepDrawOnTop = () => {
+        const order = map.getLayersOrder();
+        const top = order.filter((id) => id.includes('gl-draw'));
+        if (map.getLayer(SNAP_INDICATOR_LAYER)) top.push(SNAP_INDICATOR_LAYER);
+        const offset = order.length - top.length;
+        if (top.every((id, index) => order[offset + index] === id)) return;
+        top.forEach((id) => map.moveLayer(id));
+      };
+      map.on('styledata', keepDrawOnTop);
+
       // cleaning the hooks when the component is unmounted
       return () => {
         mapContainer.removeEventListener('keydown', handleKeyDown);
         map.off('draw.selectionchange', reEnableDragPan);
+        map.off('styledata', keepDrawOnTop);
       };
     }
   }, [map]);

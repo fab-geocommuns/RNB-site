@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Trophy } from '@/utils/trophies';
+import { rnbApi } from '@/utils/rnbApi';
 
-// Base de l'API RNB (cf. `NEXT_PUBLIC_API_BASE`). Les endpoints du jeu de l'été
-// sont désormais servis par le vrai backend (PR fab-geocommuns/RNB-coeur#947) :
+// Les endpoints du jeu de l'été sont servis par le backend
+// (PR fab-geocommuns/RNB-coeur#947) :
 //  - `GET /validation/ranking/`          -> classement (individuel/orga/dépt)
 //  - `GET /trophies/`                    -> liste des trophées + gagnants
 //  - `GET /user/<username>/trophies/`    -> trophées gagnés par un utilisateur
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 // Objectif partagé de la barre de progression. Le backend ne renvoie pas de
 // `goal` : on le fixe côté front (valeur produit, ajustable ici).
 export const SUMMER_GAME_GOAL = 100000;
-
-// Construit l'URL d'un endpoint à partir d'un chemin AVEC son slash final
-// (ex. `/trophies/`). `window.location.origin` n'est qu'une base de repli :
-// `API_BASE` étant absolue, elle est ignorée.
-const buildUrl = (path: string) =>
-  new URL(`${API_BASE}${path}`, window.location.origin);
 
 // Les types et hooks de récupération des trophées (`Trophy`, `TrophyData`,
 // `getTrophiesData`, `getUserTrophiesData`) vivent dans `@/utils/trophies`
@@ -68,17 +62,10 @@ export const useSummerGamesData = (limit: number) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = buildUrl('/validation/ranking/');
-        url.searchParams.append('max_rank', limit.toString());
-
-        const response = await fetch(url, {
+        const ranks = await rnbApi.get('/validation/ranking/', {
+          query: { max_rank: limit },
           cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
         });
-        if (!response.ok) {
-          throw new Error(`Ranking request failed: ${response.status}`);
-        }
-        const ranks = await response.json();
         setSummerGamesData(formatRanks(ranks));
       } catch (e) {
         console.error(e);
