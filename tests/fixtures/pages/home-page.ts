@@ -21,8 +21,10 @@ export class HomePage extends RNBPage {
       .first();
     this.searchMapField = page.getByPlaceholder(/un identifiant RNB/i);
     this.searchMapButton = page.locator('.fr-search-bar button[type="submit"]');
+    // Only the local class name: webpack and Turbopack prefix CSS Modules
+    // classes differently.
     this.searchMapSuggestions = page.locator(
-      '[class*="addressAutocomplete_autocomplete_suggestions"]',
+      '[class*="autocomplete_suggestions"]',
     );
     this.dbsTitle = page
       .locator('h2')
