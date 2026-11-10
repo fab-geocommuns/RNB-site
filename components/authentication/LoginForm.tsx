@@ -12,7 +12,13 @@ import Input from '@codegouvfr/react-dsfr/Input';
 
 import MfaEnrollment from '@/components/authentication/MfaEnrollment';
 import { isSafeRedirectUrl } from '@/utils/isSafeRedirectUrl';
-import { MFA_INVALID_MESSAGE, MfaError, THROTTLED_MESSAGE } from '@/utils/mfa';
+import {
+  declineMfaSetup,
+  hasDeclinedMfaSetup,
+  MFA_INVALID_MESSAGE,
+  MfaError,
+  THROTTLED_MESSAGE,
+} from '@/utils/mfa';
 
 const LOGIN_FAILED_MESSAGE = 'La connexion a échoué. Réessayez.';
 
@@ -27,7 +33,10 @@ export default function LoginForm() {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [otpError, setOtpError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [canPostponeEnrollment, setCanPostponeEnrollment] = useState(false);
+  // Set when the API only suggests enrollment: the account that may postpone it
+  const [suggestedUsername, setSuggestedUsername] = useState<string | null>(
+    null,
+  );
   // Back from the code or enrollment step, the focus goes to the email field
   const [focusEmail, setFocusEmail] = useState(false);
 
@@ -60,7 +69,7 @@ export default function LoginForm() {
         setOtp('');
         break;
       case MfaError.SetupRequired:
-        setCanPostponeEnrollment(false);
+        setSuggestedUsername(null);
         setStep(LoginStep.Enrollment);
         break;
       case MfaError.Throttled:
@@ -100,8 +109,9 @@ export default function LoginForm() {
     }
 
     const session = await getSession();
-    if (session?.mfaSetupSuggested) {
-      setCanPostponeEnrollment(true);
+    const username = session?.username ?? email;
+    if (session?.mfaSetupSuggested && !hasDeclinedMfaSetup(username)) {
+      setSuggestedUsername(username);
       setStep(LoginStep.Enrollment);
       return;
     }
@@ -135,7 +145,11 @@ export default function LoginForm() {
       <MfaEnrollment
         username={email}
         password={password}
-        canPostpone={canPostponeEnrollment}
+        onPostpone={
+          suggestedUsername
+            ? () => declineMfaSetup(suggestedUsername)
+            : undefined
+        }
         redirectUrl={redirectUrl}
         onEnrolled={() => setPassword('')}
         onLogInAgain={backToCredentials}

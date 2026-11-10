@@ -182,9 +182,9 @@ test.describe('Connexion avec double authentification', () => {
     expect(setupCalls.count).toBe(1);
     expect(await qrCode.getAttribute('src')).toMatch(/^data:image\/svg\+xml,/);
     await expect(page.getByText(MFA_SETUP.secret)).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Plus tard' })).toHaveCount(
-      0,
-    );
+    await expect(
+      page.getByRole('button', { name: 'Continuer sans activer' }),
+    ).toHaveCount(0);
 
     await codeField(page).fill('654321');
     // A second click while the confirmation is pending sends nothing
@@ -276,22 +276,49 @@ test.describe('Connexion avec double authentification', () => {
     expect(await getSession(page)).toEqual({});
   });
 
-  test('enrôlement suggéré : « Plus tard » mène à la page demandée, connecté', async ({
+  test('enrôlement suggéré : « Continuer sans activer » mène à la page demandée, connecté, et n’est plus proposé dans ce navigateur', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    const setupPosts = countPosts({ page, path: '/auth/mfa/setup/' });
+
+    await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
+    await expect(
+      page.getByRole('heading', { name: 'Vous êtes connecté' }),
+    ).toBeVisible();
+    // No QR code, and no pending key, before the user chooses to set it up
+    await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
+    expect(setupPosts.count).toBe(0);
+
+    await page.getByRole('button', { name: 'Continuer sans activer' }).click();
+
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+    expect((await getSession(page)).username).toBe('enrolement-suggere');
+
+    await page.context().clearCookies();
+    await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
+
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+    expect((await getSession(page)).username).toBe('enrolement-suggere');
+  });
+
+  test('enrôlement suggéré : « Activer maintenant » affiche le QR code', async ({
     page,
     httpMocker,
   }) => {
     httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
 
     await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
+    await page.getByRole('button', { name: 'Activer maintenant' }).click();
+
     await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
-
-    await page.getByRole('button', { name: 'Plus tard' }).click();
-
-    await page.waitForURL((url) => url.pathname === '/a-propos');
-    expect((await getSession(page)).username).toBe('enrolement-suggere');
+    await expect(
+      page.getByRole('button', { name: 'Continuer sans activer' }),
+    ).toBeVisible();
   });
 
-  test('enrôlement suggéré : « Plus tard » est inactif pendant la confirmation, puis « Continuer » mène à la page demandée', async ({
+  test('enrôlement suggéré : « Continuer sans activer » est inactif pendant la confirmation, puis « Continuer » mène à la page demandée', async ({
     page,
     httpMocker,
   }) => {
@@ -319,6 +346,7 @@ test.describe('Connexion avec double authentification', () => {
     );
 
     await logIn({ page, email: credentials.username });
+    await page.getByRole('button', { name: 'Activer maintenant' }).click();
     await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
 
     let releaseConfirm = () => {};
@@ -331,9 +359,9 @@ test.describe('Connexion avec double authentification', () => {
     });
 
     await codeField(page).fill('654321');
-    await page.getByRole('button', { name: 'Activer' }).click();
+    await page.getByRole('button', { name: 'Activer', exact: true }).click();
     await expect(
-      page.getByRole('button', { name: 'Plus tard' }),
+      page.getByRole('button', { name: 'Continuer sans activer' }),
     ).toBeDisabled();
 
     releaseConfirm();
@@ -442,7 +470,7 @@ test.describe('Connexion avec double authentification', () => {
     await expect(codeField(page)).toHaveValue('');
   });
 
-  test('enrôlement : après un échec de la configuration, « Plus tard » et « Réessayer » restent proposés', async ({
+  test('enrôlement : après un échec de la configuration, « Continuer sans activer » et « Réessayer » restent proposés', async ({
     page,
     httpMocker,
   }) => {
@@ -462,16 +490,19 @@ test.describe('Connexion avec double authentification', () => {
     );
 
     await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
+    await page.getByRole('button', { name: 'Activer maintenant' }).click();
 
     await expect(page.getByText(THROTTLED_MESSAGE)).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Plus tard' })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Continuer sans activer' }),
+    ).toBeVisible();
 
     await page.getByRole('button', { name: 'Réessayer' }).click();
     await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
     await expect(page.getByText(THROTTLED_MESSAGE)).toHaveCount(0);
 
     await codeField(page).fill('654321');
-    await page.getByRole('button', { name: 'Activer' }).click();
+    await page.getByRole('button', { name: 'Activer', exact: true }).click();
     await expect(page.getByText(THROTTLED_MESSAGE)).toBeVisible();
     await expect(page.getByTestId('backup-codes')).toHaveCount(0);
   });

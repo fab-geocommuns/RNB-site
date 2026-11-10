@@ -17,6 +17,35 @@ export const MFA_INVALID_MESSAGE =
 export const THROTTLED_MESSAGE =
   'Trop de tentatives. Réessayez dans une minute.';
 
+// A declined suggestion is remembered in this browser, per account. It comes back
+// after 30 days: no other page lets the user set up an authenticator app.
+const SETUP_DECLINED_KEY_PREFIX = 'mfaSetupDeclined:';
+const SETUP_DECLINED_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+
+export function declineMfaSetup(username: string) {
+  try {
+    localStorage.setItem(
+      `${SETUP_DECLINED_KEY_PREFIX}${username}`,
+      String(Date.now()),
+    );
+  } catch {
+    // Storage unavailable (private browsing, quota): suggested again next time
+  }
+}
+
+export function hasDeclinedMfaSetup(username: string): boolean {
+  try {
+    const declinedAt = Number(
+      localStorage.getItem(`${SETUP_DECLINED_KEY_PREFIX}${username}`),
+    );
+    return (
+      declinedAt > 0 && Date.now() - declinedAt < SETUP_DECLINED_DURATION_MS
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function mfaErrorOf(error: unknown): MfaError | null {
   if (!(error instanceof RnbApiError)) return null;
   if (error.status === 429) return MfaError.Throttled;

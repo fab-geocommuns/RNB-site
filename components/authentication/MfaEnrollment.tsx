@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
+import { Highlight } from '@codegouvfr/react-dsfr/Highlight';
 import Input from '@codegouvfr/react-dsfr/Input';
 
 import CopyButton from '@/components/CopyButton';
@@ -32,8 +33,9 @@ type MfaConfirmation = {
 type MfaEnrollmentProps = {
   username: string;
   password: string;
-  // Only offered when the API suggests enrollment: the user already has a session
-  canPostpone?: boolean;
+  // Only given when the API suggests enrollment: the user already has a session.
+  // Called when the user declines, before going to the redirect URL.
+  onPostpone?: () => void;
   redirectUrl: string;
   // Called once the backup codes are shown: the password is no longer needed
   onEnrolled: () => void;
@@ -72,11 +74,14 @@ const focusOnMount = (heading: HTMLHeadingElement | null) => heading?.focus();
 export default function MfaEnrollment({
   username,
   password,
-  canPostpone = false,
+  onPostpone,
   redirectUrl,
   onEnrolled,
   onLogInAgain,
 }: MfaEnrollmentProps) {
+  const canPostpone = onPostpone !== undefined;
+  // A suggested enrollment first asks whether to set it up, without a QR code
+  const [wantsSetup, setWantsSetup] = useState(!canPostpone);
   const [setup, setSetup] = useState<MfaSetup | null>(null);
   const [setupFailed, setSetupFailed] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -105,10 +110,10 @@ export default function MfaEnrollment({
   // Each setup call replaces the pending key, and strict mode runs effects twice
   const setupRequested = useRef(false);
   useEffect(() => {
-    if (setupRequested.current) return;
+    if (!wantsSetup || setupRequested.current) return;
     setupRequested.current = true;
     startSetup();
-  }, [startSetup]);
+  }, [wantsSetup, startSetup]);
 
   const retrySetup = () => {
     setApiError(null);
@@ -117,6 +122,11 @@ export default function MfaEnrollment({
 
   const goToRedirectUrl = () => {
     window.location.href = redirectUrl;
+  };
+
+  const postpone = () => {
+    onPostpone?.();
+    goToRedirectUrl();
   };
 
   const confirmEnrollment = async () => {
@@ -243,6 +253,40 @@ export default function MfaEnrollment({
     );
   }
 
+  if (!wantsSetup) {
+    return (
+      <>
+        <h3 key="suggestion-heading" ref={focusOnMount} tabIndex={-1}>
+          Vous êtes connecté
+        </h3>
+        <p>
+          Si vous le souhaitez, vous pouvez protéger votre compte avec la double
+          authentification.
+        </p>
+        <Highlight className="fr-ml-0 fr-mb-4w">
+          À chaque connexion, en plus de votre mot de passe, vous saisirez un
+          code affiché par une application sur votre téléphone.
+        </Highlight>
+        <ButtonsGroup
+          inlineLayoutWhen="sm and up"
+          buttons={[
+            {
+              children: 'Activer maintenant',
+              type: 'button',
+              onClick: () => setWantsSetup(true),
+            },
+            {
+              children: 'Continuer sans activer',
+              priority: 'secondary',
+              type: 'button',
+              onClick: postpone,
+            },
+          ]}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <h3 key="setup-heading" ref={focusOnMount} tabIndex={-1}>
@@ -308,12 +352,12 @@ export default function MfaEnrollment({
             ...(canPostpone
               ? [
                   {
-                    children: 'Plus tard',
+                    children: 'Continuer sans activer',
                     priority: 'secondary' as const,
                     type: 'button' as const,
                     // Leaving during the confirmation would lose the backup codes
                     disabled: isSubmitting,
-                    onClick: goToRedirectUrl,
+                    onClick: postpone,
                   },
                 ]
               : []),
