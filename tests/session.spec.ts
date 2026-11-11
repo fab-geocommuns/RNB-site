@@ -60,6 +60,35 @@ test.describe('Session rendue côté serveur', () => {
     await expect(page.locator('.maplibregl-canvas')).toBeVisible();
   });
 
+  test('/edition renvoie à la connexion quand la session est perdue', async ({
+    browserName,
+    auth,
+    context,
+    httpMocker,
+    page,
+  }) => {
+    test.skip(
+      browserName === 'firefox',
+      'Pas de support de WebGL2 sur Firefox headless',
+    );
+
+    await httpMocker.install();
+    httpMocker.get('/reports/stats/?from=site', emptyReportStats);
+    await auth.signIn();
+
+    await page.goto('/edition');
+    await expect(page.locator('.maplibregl-canvas')).toBeVisible();
+
+    // Signed out elsewhere: next-auth refetches the session when the tab
+    // becomes visible again
+    await context.clearCookies();
+    await page.evaluate(() =>
+      document.dispatchEvent(new Event('visibilitychange')),
+    );
+
+    await expect(page).toHaveURL(/\/connexion\?redirect=%2Fedition/);
+  });
+
   test('/edition redirige un visiteur vers la connexion côté serveur', async ({
     context,
   }) => {

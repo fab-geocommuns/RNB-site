@@ -9,14 +9,25 @@ import '@/styles/mapBanLayer.scss';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useSession } from 'next-auth/react';
+import { loginUrl } from '@/utils/useRNBAuthentication';
 import {
   getDefaultMapLayers,
   MAP_LAYERS_EDITION_KEY,
 } from '@/utils/mapLayersDefaults';
 
-// Access is checked by the server page
+// Access is checked by the server page on load
 export default function EditionClient() {
+  // The session can still be lost while the page is open (sign-out in another
+  // tab, expired cookie noticed on refetch): send the user back to the login
+  const { status } = useSession();
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      window.location.href = loginUrl();
+    }
+  }, [status]);
+
   // Feature flag
   const showReportPanels = process.env.NEXT_PUBLIC_SHOW_REPORTS === 'true';
 
