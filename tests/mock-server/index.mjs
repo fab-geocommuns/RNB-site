@@ -98,10 +98,9 @@ const server = createServer((req, res) => {
   ) {
     return json(res, 200, HISTORY);
   }
-  if (method === 'GET' && path === '/api/alpha/contributions/summary/') {
+  if (method === 'GET' && path === '/api/alpha/contributions/summaries/') {
     // the 7-day window: fewer cities, another newcomer; the whole period:
     // more of everything, its own newcomer
-    const days = u.searchParams.get('days') || '30';
     const summaries = {
       30: CONTRIBUTION_SUMMARY,
       7: {
@@ -126,7 +125,9 @@ const server = createServer((req, res) => {
         newcomers: { users: [{ username: 'derniere_arrivee' }] },
       },
     };
-    return json(res, 200, summaries[days] ?? CONTRIBUTION_SUMMARY);
+    return json(res, 200, {
+      summaries: [summaries[7], summaries[30], summaries.all],
+    });
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });

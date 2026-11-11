@@ -8,7 +8,6 @@ import {
   ContributionSummary,
   isCompleteSummary,
   loadContributionSummaries,
-  loadContributionSummary,
   MAX_NEWCOMERS,
   keyFigures,
   windowView,
@@ -145,35 +144,37 @@ describe('keyFigures et windowView', () => {
   });
 });
 
-describe('loadContributionSummary', () => {
+describe('loadContributionSummaries', () => {
   beforeEach(() => {
     vi.mocked(rnbApi.get).mockReset();
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('renvoie la synthèse de l’API', async () => {
-    vi.mocked(rnbApi.get).mockResolvedValue(summary());
-    expect(await loadContributionSummary()).toEqual(summary());
+  const periods = () => [
+    summary({ window_days: 7 }),
+    summary(),
+    summary({ window_days: null }),
+  ];
+
+  it('charge les 3 périodes en une seule requête', async () => {
+    vi.mocked(rnbApi.get).mockResolvedValue({ summaries: periods() });
+    expect(await loadContributionSummaries()).toEqual(periods());
+    expect(vi.mocked(rnbApi.get)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(rnbApi.get).mock.calls[0][0]).toBe(
+      'contributions/summaries/',
+    );
   });
 
-  it('demande la période voulue à l’API', async () => {
-    vi.mocked(rnbApi.get).mockResolvedValue(summary());
-    await loadContributionSummary(7);
-    await loadContributionSummary('all');
-    expect(vi.mocked(rnbApi.get).mock.calls.map((c) => c[1]?.query)).toEqual([
-      { days: 7 },
-      { days: 'all' },
-    ]);
-  });
+  it('écarte une période incomplète, null si aucune n’est complète', async () => {
+    const [week, month] = periods();
+    vi.mocked(rnbApi.get).mockResolvedValue({
+      summaries: [week, { ...month, top: null }],
+    });
+    expect(await loadContributionSummaries()).toEqual([week]);
 
-  it('garde les périodes chargées, null si aucune', async () => {
-    vi.mocked(rnbApi.get)
-      .mockRejectedValueOnce(new Error('503'))
-      .mockResolvedValueOnce(summary())
-      .mockRejectedValueOnce(new Error('503'));
-    expect(await loadContributionSummaries()).toEqual([summary()]);
-
-    vi.mocked(rnbApi.get).mockRejectedValue(new Error('503'));
+    vi.mocked(rnbApi.get).mockResolvedValue({
+      summaries: [{ ...month, top: null }],
+    });
     expect(await loadContributionSummaries()).toBeNull();
   });
 
@@ -229,16 +230,15 @@ describe('loadContributionSummary', () => {
     ).toBe(false);
   });
 
-  it('renvoie null pour une réponse incomplète, sans planter', async () => {
-    const { newcomers: _newcomers, ...withoutNewcomers } = summary();
-    vi.mocked(rnbApi.get).mockResolvedValue(withoutNewcomers);
-    expect(await loadContributionSummary()).toBeNull();
+  it('renvoie null pour une réponse sans liste de synthèses, sans planter', async () => {
+    vi.mocked(rnbApi.get).mockResolvedValue(summary());
+    expect(await loadContributionSummaries()).toBeNull();
     expect(console.error).toHaveBeenCalled();
   });
 
   it('renvoie null quand l’API échoue, pour masquer la section', async () => {
     vi.mocked(rnbApi.get).mockRejectedValue(new Error('503'));
-    expect(await loadContributionSummary()).toBeNull();
+    expect(await loadContributionSummaries()).toBeNull();
     expect(console.error).toHaveBeenCalled();
   });
 });
