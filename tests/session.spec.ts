@@ -23,19 +23,37 @@ test.describe('Session rendue côté serveur', () => {
     await httpMocker.install();
     await auth.signIn();
 
-    const sessionCalls: string[] = [];
-    page.on('request', (request) => {
-      if (request.url().includes('/api/auth/session')) {
-        sessionCalls.push(request.url());
-      }
-    });
+    // The header must not wait for the browser to fetch the session
+    await page.route('**/api/auth/session', (route) => route.abort());
 
     await page.goto('/');
     await expect(page.getByTestId('my-account-button').first()).toBeVisible();
     await expect(
       page.getByRole('link', { name: 'Se connecter' }),
     ).not.toBeVisible();
-    expect(sessionCalls).toEqual([]);
+  });
+
+  test('un chargement de page prolonge le cookie de session', async ({
+    auth,
+    context,
+    httpMocker,
+    page,
+  }) => {
+    await httpMocker.install();
+    await auth.signIn(); // cookie valid for one hour
+
+    const sessionCookieExpiry = async () =>
+      (await context.cookies()).find(
+        (cookie) => cookie.name === 'next-auth.session-token',
+      )?.expires ?? 0;
+    const before = await sessionCookieExpiry();
+
+    await page.goto('/');
+
+    // Issued again with next-auth's default max age (30 days)
+    await expect
+      .poll(sessionCookieExpiry)
+      .toBeGreaterThan(before + 24 * 60 * 60);
   });
 
   test('/edition affiche la carte sans écran de chargement à un connecté', async ({
@@ -76,8 +94,19 @@ test.describe('Session rendue côté serveur', () => {
     httpMocker.get('/reports/stats/?from=site', emptyReportStats);
     await auth.signIn();
 
+    // Session fetches made on load re-issue the cookie: let them finish so
+    // they cannot restore it after the sign-out below
+    let pendingSessionCalls = 0;
+    page.on('request', (request) => {
+      if (request.url().includes('/api/auth/session')) pendingSessionCalls++;
+    });
+    page.on('requestfinished', (request) => {
+      if (request.url().includes('/api/auth/session')) pendingSessionCalls--;
+    });
+
     await page.goto('/edition');
     await expect(page.locator('.maplibregl-canvas')).toBeVisible();
+    await expect.poll(() => pendingSessionCalls).toBe(0);
 
     // Signed out elsewhere: next-auth refetches the session when the tab
     // becomes visible again
