@@ -13,6 +13,7 @@ test.describe("Pages d'erreur", () => {
     ).toBeVisible();
     await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.getByRole('contentinfo')).toBeVisible();
+    await expect(page).toHaveTitle('Page non trouvée | RNB');
 
     await page.getByRole('link', { name: "Page d'accueil" }).click();
     await expect(page).toHaveURL('/');
@@ -24,6 +25,10 @@ test.describe("Pages d'erreur", () => {
     await expect(
       page.getByRole('heading', { name: 'Page non trouvée' }),
     ).toBeVisible();
+    // En-tête et pied de page viennent du layout (normalLayout), pas de la 404 racine
+    await expect(page.getByRole('banner')).toBeVisible();
+    await expect(page.getByRole('contentinfo')).toBeVisible();
+    await expect(page).toHaveTitle('Page non trouvée | RNB');
   });
 
   test('un 404 d’un Ghost mal configuré reste une erreur', async ({ page }) => {
