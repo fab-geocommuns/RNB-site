@@ -1,4 +1,4 @@
-// Contribution summary (GET /contributions/summary/) shown in the
+// Contribution summaries (GET /contributions/summaries/) shown in the
 // « Participer au RNB » section of the home page.
 
 import * as Sentry from '@sentry/nextjs';
@@ -39,12 +39,11 @@ export type ContributionSummary = {
   };
 };
 
-// Periods offered by the API (?days=…): the last N days, or the whole period
-// since the opening of the collaborative edition. The selected one sets every
-// number of the section.
+// Periods offered by the API, all returned together: the last N days, or the
+// whole period since the opening of the collaborative edition. The selected
+// one sets every number of the section.
 export const ALL_PERIOD = 'all';
 export type Period = number | typeof ALL_PERIOD;
-export const PERIODS: Period[] = [7, 30, ALL_PERIOD];
 export const DEFAULT_PERIOD: Period = 30;
 
 export const periodOf = (summary: ContributionSummary): Period =>
@@ -55,10 +54,11 @@ export const periodLabel = (period: Period) =>
 
 // The summary is recomputed every hour by the API
 export const SUMMARY_REVALIDATE = 3600;
-// Timeout so that a slow API does not block the home page: computing the
-// summary takes about 2 s when it is not in the API cache, up to 5 s for the
-// whole period
-const FETCH_TIMEOUT_MS = 10000;
+// Timeout so that a slow API does not block the home page. Computing the
+// summaries takes about 8 s when they are outdated in the API cache; with no
+// cache at all (right after an API deploy), the API may wait up to 20 s for
+// another request computing them first.
+const FETCH_TIMEOUT_MS = 30000;
 
 // Every value the section reads: a response missing one of them (an older API
 // version, a cached response) must hide the section, not break the page
@@ -98,40 +98,37 @@ export function isCompleteSummary(data: unknown): data is ContributionSummary {
   );
 }
 
-// The summary, or null when the API fails or answers an incomplete summary:
-// the section is then hidden, the error only goes to the server logs and to
-// Sentry
-export async function loadContributionSummary(
-  period: Period = DEFAULT_PERIOD,
-): Promise<ContributionSummary | null> {
+// The summary of every period, shortest first, or null when the API fails or
+// answers no complete summary: the section is then hidden, the error only goes
+// to the server logs and to Sentry. A single request: the API computes the
+// periods at the same instant, so that a shorter period never counts more
+// than a longer one; separate requests could get periods computed an hour
+// apart.
+export async function loadContributionSummaries(): Promise<
+  ContributionSummary[] | null
+> {
   try {
-    const data = await rnbApi.get<unknown>('contributions/summary/', {
-      query: { days: period },
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-      next: { revalidate: SUMMARY_REVALIDATE },
-    });
-    if (!isCompleteSummary(data)) {
-      throw new Error('Incomplete contribution summary');
+    const data = await rnbApi.get<{ summaries?: unknown }>(
+      'contributions/summaries/',
+      {
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        next: { revalidate: SUMMARY_REVALIDATE },
+      },
+    );
+    const summaries = Array.isArray(data?.summaries) ? data.summaries : [];
+    // a period the API answers incompletely is left out, the others shown
+    const complete = summaries.filter(isCompleteSummary);
+    if (!complete.length) {
+      throw new Error('No complete contribution summary');
     }
-    return data;
+    return complete;
   } catch (error) {
-    console.error('Error fetching contribution summary:', error);
+    console.error('Error fetching contribution summaries:', error);
     Sentry.captureException(error, {
       tags: { source: 'contribution summary' },
     });
     return null;
   }
-}
-
-// One summary per period, in PERIODS order; null when none could be loaded
-export async function loadContributionSummaries(): Promise<
-  ContributionSummary[] | null
-> {
-  const summaries = await Promise.all(
-    PERIODS.map((period) => loadContributionSummary(period)),
-  );
-  const loaded = summaries.filter((s): s is ContributionSummary => s !== null);
-  return loaded.length ? loaded : null;
 }
 
 // What the section shows, decided from the data: kept apart from the
