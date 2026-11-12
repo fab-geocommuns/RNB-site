@@ -8,7 +8,6 @@ import {
   ContributionSummary,
   isCompleteSummary,
   loadContributionSummaries,
-  loadContributionSummary,
   MAX_NEWCOMERS,
   keyFigures,
   windowView,
@@ -30,8 +29,8 @@ const summary = (
       { username: 'bob', organization: null, count: 4 },
     ],
     organizations: [
-      { name: 'Commune de Talence', department: gironde, count: 42 },
-      { name: 'Syndicat SIG', department: null, count: 18 },
+      { name: 'Commune de Talence', count: 42 },
+      { name: 'Syndicat SIG', count: 18 },
     ],
     cities: [
       { insee_code: '33522', name: 'Talence', department: gironde, count: 7 },
@@ -43,22 +42,22 @@ const summary = (
 });
 
 describe('keyFigures et windowView', () => {
-  it('décrit les 3 chiffres clés avec leur évolution', () => {
+  it('décrit les 3 chiffres clés de la période', () => {
     expect(keyFigures(summary())).toEqual([
       {
-        value: 1248,
-        label: 'communes déjà améliorées par la communauté',
-        detail: '+12 ces 30 derniers jours',
+        value: 4310,
+        label: 'modifications de bâtiments',
+        detail: 'dont 520 par les contributeurs',
       },
       {
         value: 86,
         label: 'organisations contributrices',
-        detail: '+3 ces 30 derniers jours',
+        detail: 'dont 3 pour la première fois',
       },
       {
-        value: 4310,
-        label: 'modifications de bâtiments ces 30 derniers jours',
-        detail: 'dont 520 par les contributeurs',
+        value: 1248,
+        label: 'communes améliorées par la communauté',
+        detail: 'dont 12 pour la première fois',
       },
     ]);
   });
@@ -74,6 +73,15 @@ describe('keyFigures et windowView', () => {
     expect(figures.map((f) => f.detail)).toEqual([null, null, null]);
   });
 
+  it('ne parle pas de première fois sur toute la période', () => {
+    const figures = keyFigures(summary({ window_days: null }));
+    expect(figures.map((f) => f.detail)).toEqual([
+      'dont 520 par les contributeurs',
+      null,
+      null,
+    ]);
+  });
+
   it('accorde au singulier', () => {
     const figures = keyFigures(
       summary({
@@ -83,17 +91,18 @@ describe('keyFigures et windowView', () => {
       }),
     );
     expect(figures.map((f) => f.label)).toEqual([
-      'commune déjà améliorée par la communauté',
+      'modification de bâtiment',
       'organisation contributrice',
-      'modification de bâtiment ces 30 derniers jours',
+      'commune améliorée par la communauté',
     ]);
   });
 
-  it('écrit le département en clair', () => {
-    const [, organizations] = windowView(summary()).rankings;
-    expect(organizations.rows).toEqual([
-      { name: 'Commune de Talence', detail: 'Gironde (33)', count: 42 },
-      { name: 'Syndicat SIG', detail: null, count: 18 },
+  it('écrit le département des communes, pas des organisations', () => {
+    const [, organizations, cities] = windowView(summary()).rankings;
+    expect(organizations.rows.map((r) => r.detail)).toEqual([null, null]);
+    expect(cities.rows.map((r) => r.detail)).toEqual([
+      'Gironde (33)',
+      'Gironde (33)',
     ]);
   });
 
@@ -112,6 +121,15 @@ describe('keyFigures et windowView', () => {
     ]);
   });
 
+  it('titre les nouveaux contributeurs selon la période', () => {
+    expect(windowView(summary()).newcomersTitle).toBe(
+      'Nouveaux contributeurs ces 30 derniers jours',
+    );
+    expect(windowView(summary({ window_days: null })).newcomersTitle).toBe(
+      'Derniers contributeurs arrivés',
+    );
+  });
+
   it('liste les nouveaux contributeurs, 8 au plus', () => {
     expect(windowView(summary()).newcomers).toEqual(['carol']);
     const users = Array.from({ length: 12 }, (_, i) => ({
@@ -126,35 +144,43 @@ describe('keyFigures et windowView', () => {
   });
 });
 
-describe('loadContributionSummary', () => {
+describe('loadContributionSummaries', () => {
   beforeEach(() => {
     vi.mocked(rnbApi.get).mockReset();
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('renvoie la synthèse de l’API', async () => {
-    vi.mocked(rnbApi.get).mockResolvedValue(summary());
-    expect(await loadContributionSummary()).toEqual(summary());
+  const periods = () => [
+    summary({ window_days: 7 }),
+    summary(),
+    summary({ window_days: null }),
+  ];
+
+  it('charge les 3 périodes en une seule requête', async () => {
+    vi.mocked(rnbApi.get).mockResolvedValue({ summaries: periods() });
+    expect(await loadContributionSummaries()).toEqual(periods());
+    expect(vi.mocked(rnbApi.get)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(rnbApi.get).mock.calls[0][0]).toBe(
+      'contributions/summaries/',
+    );
   });
 
-  it('demande la fenêtre voulue à l’API', async () => {
-    vi.mocked(rnbApi.get).mockResolvedValue(summary());
-    await loadContributionSummary(7);
-    expect(vi.mocked(rnbApi.get).mock.calls[0][1]?.query).toEqual({ days: 7 });
-  });
+  it('écarte une période incomplète, null si aucune n’est complète', async () => {
+    const [week, month] = periods();
+    vi.mocked(rnbApi.get).mockResolvedValue({
+      summaries: [week, { ...month, top: null }],
+    });
+    expect(await loadContributionSummaries()).toEqual([week]);
 
-  it('garde les fenêtres chargées, null si aucune', async () => {
-    vi.mocked(rnbApi.get)
-      .mockRejectedValueOnce(new Error('503'))
-      .mockResolvedValueOnce(summary());
-    expect(await loadContributionSummaries()).toEqual([summary()]);
-
-    vi.mocked(rnbApi.get).mockRejectedValue(new Error('503'));
+    vi.mocked(rnbApi.get).mockResolvedValue({
+      summaries: [{ ...month, top: null }],
+    });
     expect(await loadContributionSummaries()).toBeNull();
   });
 
   it('rejette une réponse dont un cumul n’est pas un nombre', () => {
     expect(isCompleteSummary(summary())).toBe(true);
+    expect(isCompleteSummary(summary({ window_days: null }))).toBe(true);
     expect(
       isCompleteSummary({ ...summary(), cities: { total: null, new: 1 } }),
     ).toBe(false);
@@ -189,9 +215,7 @@ describe('loadContributionSummary', () => {
       isCompleteSummary(withTop({ users: [{ username: 'alice', count: 2 }] })),
     ).toBe(false);
     expect(
-      isCompleteSummary(
-        withTop({ organizations: [{ name: 'Syndicat', department: null }] }),
-      ),
+      isCompleteSummary(withTop({ organizations: [{ name: 'Syndicat' }] })),
     ).toBe(false);
     expect(
       isCompleteSummary(
@@ -206,16 +230,15 @@ describe('loadContributionSummary', () => {
     ).toBe(false);
   });
 
-  it('renvoie null pour une réponse incomplète, sans planter', async () => {
-    const { newcomers: _newcomers, ...withoutNewcomers } = summary();
-    vi.mocked(rnbApi.get).mockResolvedValue(withoutNewcomers);
-    expect(await loadContributionSummary()).toBeNull();
+  it('renvoie null pour une réponse sans liste de synthèses, sans planter', async () => {
+    vi.mocked(rnbApi.get).mockResolvedValue(summary());
+    expect(await loadContributionSummaries()).toBeNull();
     expect(console.error).toHaveBeenCalled();
   });
 
   it('renvoie null quand l’API échoue, pour masquer la section', async () => {
     vi.mocked(rnbApi.get).mockRejectedValue(new Error('503'));
-    expect(await loadContributionSummary()).toBeNull();
+    expect(await loadContributionSummaries()).toBeNull();
     expect(console.error).toHaveBeenCalled();
   });
 });
