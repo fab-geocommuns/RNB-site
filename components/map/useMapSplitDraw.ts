@@ -30,7 +30,7 @@ export const useMapSplitDraw = (
   );
   const hasValidations =
     candidateBuilding && candidateBuilding.validated_by.length > 0;
-  const locked = !(hasValidations === false || editUnlocked);
+  const locked = hasValidations && !editUnlocked;
   const cutLines = useSelector(
     (state: RootState) => state.edition.split.cutLines,
   );

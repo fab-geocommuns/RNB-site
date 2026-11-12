@@ -39,7 +39,7 @@ export default function SplitPanel() {
   );
   const hasValidations =
     candidateBuilding && candidateBuilding.validated_by.length > 0;
-  const locked = !(hasValidations === false || editUnlocked === true);
+  const locked = hasValidations && !editUnlocked;
 
   const children: SplitChild[] = useSelector(
     (state: RootState) => state.edition.split.children,
@@ -173,7 +173,7 @@ function SplitBuildingValidationWarningStep({
           </div>
           <BuildingMainAttributes
             building={candidateBuilding}
-            allowEdit={true}
+            allowEdit={false}
           />
 
           <div>
