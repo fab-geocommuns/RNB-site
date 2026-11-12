@@ -8,6 +8,8 @@ import '@/styles/global.scss';
 
 // Auth
 import RNBSessionProvider from '@/components/SessionProvider';
+import { auth } from '@/app/api/auth/[...nextauth]/auth';
+import * as Sentry from '@sentry/nextjs';
 
 // Components
 import { Analytics } from '@vercel/analytics/react';
@@ -30,6 +32,14 @@ export default async function RootLayout({
   const lang = 'fr';
   const nonce = (await headers()).get('x-nonce');
   await connection();
+  // The session (access token included) ends up in the HTML: the page must
+  // never be cached and shared between users.
+  // A next-auth configuration error (missing secret…) must not take down every
+  // page: render them as for a visitor.
+  const session = await auth().catch((error) => {
+    Sentry.captureException(error);
+    return null;
+  });
 
   return (
     <html lang={lang} {...getHtmlAttributes({ lang })}>
@@ -47,7 +57,7 @@ heap.load("${settings.heapId}");
         {/* No Suspense around children: notFound() must be thrown before the
         response starts, otherwise a missing page is sent with a 200 */}
         <Providers>
-          <RNBSessionProvider>
+          <RNBSessionProvider session={session}>
             <DsfrProvider lang={lang}>
               <Suspense>
                 <FlashMessage />
