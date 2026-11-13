@@ -40,7 +40,7 @@ export class EditionPage extends RNBPage {
 
   get unlockButton(): Locator {
     return this.panel.getByRole('button', {
-      name: /Accéder au formulaire/i,
+      name: /Accéder au formulaire|Accéder à l’interface de découpe/i,
     });
   }
 

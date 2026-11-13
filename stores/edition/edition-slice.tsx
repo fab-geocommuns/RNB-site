@@ -51,7 +51,9 @@ export type SplitInfos = {
   // New fields for cut-based split
   cutLines: CutLine[];
   candidateShape: GeoJSON.Geometry | null;
+  candidateBuilding: SelectedBuilding | null;
   candidateAddresses: BuildingAddressType[];
+  editUnlocked: boolean;
   cutStep: 'drawing' | 'done';
 };
 
@@ -106,7 +108,9 @@ const initialState: EditionStore = {
     children: [],
     cutLines: [],
     candidateShape: null,
+    candidateBuilding: null,
     candidateAddresses: [],
+    editUnlocked: false,
     cutStep: 'drawing',
   },
   snap: {
@@ -132,7 +136,9 @@ export const editionSlice = createSlice({
       state.split.splitCandidateId = null;
       state.split.cutLines = [];
       state.split.candidateShape = null;
+      state.split.candidateBuilding = null;
       state.split.candidateAddresses = [];
+      state.split.editUnlocked = false;
       state.split.cutStep = 'drawing';
       state.isLoading = false;
       state.helpTopic = null;
@@ -180,6 +186,10 @@ export const editionSlice = createSlice({
     ) {
       state.split.splitCandidateId = action.payload.rnb_id;
       state.split.location = action.payload.location;
+      state.split.editUnlocked = false;
+    },
+    setSplitEditUnlocked(state, action: PayloadAction<boolean>) {
+      state.split.editUnlocked = action.payload;
     },
     setCurrentChildSelected(state, action: PayloadAction<number | null>) {
       state.split.selectedChildIndex = action.payload;
@@ -205,6 +215,9 @@ export const editionSlice = createSlice({
     // Cut-based split actions
     setCandidateShape(state, action: PayloadAction<GeoJSON.Geometry>) {
       state.split.candidateShape = action.payload;
+    },
+    setCandidateBuilding(state, action: PayloadAction<SelectedBuilding>) {
+      state.split.candidateBuilding = action.payload;
     },
     setCandidateAddresses(state, action: PayloadAction<BuildingAddressType[]>) {
       state.split.candidateAddresses = action.payload;
@@ -354,6 +367,9 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
           );
           // Fetch precise shape from API
           const fetched = await fetchBuilding(building.rnb_id);
+          if (fetched) {
+            listenerApi.dispatch(Actions.edition.setCandidateBuilding(fetched));
+          }
           if (fetched?.shape) {
             listenerApi.dispatch(
               Actions.edition.setCandidateShape(fetched.shape),

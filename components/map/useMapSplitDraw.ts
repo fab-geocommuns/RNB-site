@@ -19,9 +19,18 @@ export const useMapSplitDraw = (
   const cutStep = useSelector(
     (state: RootState) => state.edition.split.cutStep,
   );
+  const candidateBuilding = useSelector(
+    (state: RootState) => state.edition.split.candidateBuilding,
+  );
+  const editUnlocked = useSelector(
+    (state: RootState) => state.edition.split.editUnlocked,
+  );
   const candidateShape = useSelector(
     (state: RootState) => state.edition.split.candidateShape,
   );
+  const hasValidations =
+    candidateBuilding && candidateBuilding.validated_by.length > 0;
+  const locked = hasValidations && !editUnlocked;
   const cutLines = useSelector(
     (state: RootState) => state.edition.split.cutLines,
   );
@@ -60,13 +69,13 @@ export const useMapSplitDraw = (
   // manage the draw mode based on cutStep while splitting
   useEffect(() => {
     if (operation === 'split' && drawRef.current) {
-      if (cutStep === 'drawing' && candidateShape) {
+      if (cutStep === 'drawing' && !locked && candidateShape) {
         drawRef.current.changeMode('draw_line_string');
       } else {
         drawRef.current.changeMode('simple_select');
       }
     }
-  }, [operation, cutStep, candidateShape]);
+  }, [operation, cutStep, candidateShape, locked]);
 
   // clear all draw features when entering or leaving the split operation
   useEffect(() => {
@@ -93,11 +102,11 @@ export const useMapSplitDraw = (
           });
         }
         // Re-enter draw mode
-        if (cutStep === 'drawing' && candidateShape) {
+        if (cutStep === 'drawing' && !locked && candidateShape) {
           drawRef.current.changeMode('draw_line_string');
         }
       }
       prevCutLinesLengthRef.current = cutLines.length;
     }
-  }, [cutLines, operation, cutStep, candidateShape]);
+  }, [cutLines, operation, cutStep, candidateShape, locked]);
 };

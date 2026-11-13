@@ -42,6 +42,41 @@ test.describe('Validation depuis l’édition', () => {
     await expect(editionPage.statusSelect).toBeVisible();
   });
 
+  test('scission verrouillée tant qu’une validation existe', async ({
+    browserName,
+    editionPage,
+    httpMocker,
+  }) => {
+    test.skip(
+      browserName === 'firefox',
+      'Pas de support de WebGL2 sur Firefox headless',
+    );
+
+    // Bâtiment validé par un autre utilisateur (verrouille la scission).
+    httpMocker.get(GET_PATH, buildingValidatedBy([makeValidator()]));
+
+    await editionPage.goToBuilding(BUILDING_ID);
+    await expect(editionPage.panel).toBeVisible();
+    await editionPage.startSplit();
+
+    // Verrouillé : les données sont en lecture seule.
+    await expect(
+      editionPage.panel.getByRole('heading', { name: 'Statut du bâtiment' }),
+    ).toBeVisible();
+    await expect(editionPage.statusSelect).toHaveCount(0);
+
+    // Le bouton de déverrouillage est présent.
+    await expect(editionPage.unlockButton).toBeVisible();
+
+    // Cliquer fait passer à l'interface de découpe.
+    await editionPage.clickUnlock();
+    await expect(
+      editionPage.panel.getByRole('heading', {
+        name: 'Étape 2 - Découpe du bâtiment',
+      }),
+    ).toBeVisible();
+  });
+
   test('valider un bâtiment depuis l’édition', async ({
     browserName,
     editionPage,
