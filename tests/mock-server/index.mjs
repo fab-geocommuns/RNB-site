@@ -203,6 +203,14 @@ const server = createServer((req, res) => {
         if (username === 'enrolement-suggere@exemple.fr') {
           return json(res, 200, { ...user, mfa_setup_suggested: true });
         }
+        // Suggested enrollment, answered without a username
+        if (/^sans-nom-\w+@exemple\.fr$/.test(username)) {
+          const { username: _, ...userWithoutName } = user;
+          return json(res, 200, {
+            ...userWithoutName,
+            mfa_setup_suggested: true,
+          });
+        }
         if (username === 'enrolement-obligatoire@exemple.fr') {
           return mfaError({
             error: 'mfa_setup_required',

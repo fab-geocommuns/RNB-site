@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, Route } from '@playwright/test';
 import { test, expect } from '@/tests/fixtures';
 
 // Accounts and codes understood by the `/login/` stub of tests/mock-server
@@ -18,21 +18,46 @@ const THROTTLED_MESSAGE = 'Trop de tentatives. Réessayez dans une minute.';
 const QR_CODE_ALT =
   "QR code à scanner avec votre application d'authentification";
 
-const logIn = async ({
+// Failures of an `/auth/mfa/*` call that the enrollment cannot explain
+const SERVER_FAILURES = [
+  {
+    failure: 'une erreur du serveur affiche son message',
+    message: 'Erreur interne.',
+    fail: (route: Route) =>
+      route.fulfill({ status: 500, json: { detail: 'Erreur interne.' } }),
+  },
+  {
+    failure: 'une coupure réseau affiche un message générique',
+    message: 'Une erreur est survenue. Merci de réessayer plus tard.',
+    fail: (route: Route) => route.abort(),
+  },
+];
+
+// `signIn` chains next-auth requests (providers, csrf, callback) that `next dev`
+// can take more than 5 s to answer: assertions start once the callback answered
+const submitCredentials = async (page: Page) => {
+  const answered = page.waitForResponse('**/api/auth/callback/credentials');
+  await page.getByRole('button', { name: 'Se connecter', exact: true }).click();
+  await answered;
+};
+
+type Credentials = { page: Page; email: string; password?: string };
+
+const fillCredentials = async ({
   page,
   email,
   password = PASSWORD,
-}: {
-  page: Page;
-  email: string;
-  password?: string;
-}) => {
+}: Credentials) => {
   await page.goto('/connexion?redirect=/a-propos');
   // The newsletter modal of the footer has its own email field
   const form = page.getByTestId('login-form');
   await form.getByLabel('Email').fill(email);
   await form.getByLabel('Mot de passe').fill(password);
-  await page.getByRole('button', { name: 'Se connecter', exact: true }).click();
+};
+
+const logIn = async (credentials: Credentials) => {
+  await fillCredentials(credentials);
+  await submitCredentials(credentials.page);
 };
 
 const getSession = async (page: Page) =>
@@ -40,8 +65,7 @@ const getSession = async (page: Page) =>
 
 const codeField = (page: Page) => page.getByLabel('Code à 6 chiffres');
 
-const submitCode = (page: Page) =>
-  page.getByRole('button', { name: 'Se connecter', exact: true }).click();
+const submitCode = submitCredentials;
 
 // An HTML error page on a next-auth callback: `signIn` fails to parse it and throws
 const failNextAuthCallback = ({
@@ -272,6 +296,7 @@ test.describe('Connexion avec double authentification', () => {
 
     await expect(page.getByText(INVALID_CODE_MESSAGE)).toBeVisible();
     await expect(codeField(page)).toBeVisible();
+    await expect(codeField(page)).toHaveValue('');
     await expect(page.getByTestId('backup-codes')).toHaveCount(0);
     expect(await getSession(page)).toEqual({});
   });
@@ -284,9 +309,11 @@ test.describe('Connexion avec double authentification', () => {
     const setupPosts = countPosts({ page, path: '/auth/mfa/setup/' });
 
     await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
-    await expect(
-      page.getByRole('heading', { name: 'Vous êtes connecté' }),
-    ).toBeVisible();
+    const suggestion = page.getByRole('heading', {
+      name: 'Vous êtes connecté',
+    });
+    await expect(suggestion).toBeVisible();
+    await expect(suggestion).toBeFocused();
     // No QR code, and no pending key, before the user chooses to set it up
     await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
     expect(setupPosts.count).toBe(0);
@@ -303,7 +330,7 @@ test.describe('Connexion avec double authentification', () => {
     expect((await getSession(page)).username).toBe('enrolement-suggere');
   });
 
-  test('enrôlement suggéré : « Activer maintenant » affiche le QR code', async ({
+  test('enrôlement suggéré : « Activer maintenant » affiche le QR code, d’où « Continuer sans activer » mène à la page demandée et n’est plus proposé', async ({
     page,
     httpMocker,
   }) => {
@@ -313,9 +340,16 @@ test.describe('Connexion avec double authentification', () => {
     await page.getByRole('button', { name: 'Activer maintenant' }).click();
 
     await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: 'Continuer sans activer' }),
-    ).toBeVisible();
+    await page.getByRole('button', { name: 'Continuer sans activer' }).click();
+
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+    expect((await getSession(page)).username).toBe('enrolement-suggere');
+
+    await page.context().clearCookies();
+    await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
+
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+    expect((await getSession(page)).username).toBe('enrolement-suggere');
   });
 
   test('enrôlement suggéré : « Continuer sans activer » est inactif pendant la confirmation, puis « Continuer » mène à la page demandée', async ({
@@ -386,12 +420,15 @@ test.describe('Connexion avec double authentification', () => {
       await route.fallback();
     });
 
-    await logIn({ page, email: 'mfa@exemple.fr' });
+    await fillCredentials({ page, email: 'mfa@exemple.fr' });
+    // Settles once the held callback answers
+    const loggedIn = submitCredentials(page);
     const form = page.getByTestId('login-form');
     await expect(form.getByLabel('Email')).toBeDisabled();
     await expect(form.getByLabel('Mot de passe')).toBeDisabled();
 
     releaseLogin();
+    await loggedIn;
     await expect(codeField(page)).toBeVisible();
   });
 
@@ -407,7 +444,7 @@ test.describe('Connexion avec double authentification', () => {
     expect(await getSession(page)).toEqual({});
   });
 
-  test('trop de tentatives au code : message dédié, champ conservé', async ({
+  test('trop de tentatives au code : message dédié, champ conservé, effacé par « Retour »', async ({
     page,
   }) => {
     await logIn({ page, email: 'mfa@exemple.fr' });
@@ -420,6 +457,12 @@ test.describe('Connexion avec double authentification', () => {
     );
     await expect(codeField(page)).toBeVisible();
     expect(await getSession(page)).toEqual({});
+
+    await page.getByRole('button', { name: 'Retour' }).click();
+    await expect(
+      page.getByTestId('login-form').getByLabel('Email'),
+    ).toBeFocused();
+    await expect(page.getByText(THROTTLED_MESSAGE)).toHaveCount(0);
   });
 
   test('au code, une erreur du serveur affiche un message générique', async ({
@@ -697,11 +740,12 @@ test.describe('Connexion avec double authentification', () => {
     });
 
     await codeField(page).fill('000000');
-    await submitCode(page);
+    const submitted = submitCode(page);
     const back = page.getByRole('button', { name: 'Retour' });
     await expect(back).toBeDisabled();
 
     releaseLogin();
+    await submitted;
     await expect(page.getByText(INVALID_CODE_MESSAGE)).toBeVisible();
     await expect(back).toBeEnabled();
   });
@@ -719,5 +763,311 @@ test.describe('Connexion avec double authentification', () => {
     await expect(
       page.getByRole('button', { name: 'Se connecter', exact: true }),
     ).toBeEnabled();
+  });
+
+  test('à l’étape du code, seuls le code et « Retour » sont proposés', async ({
+    page,
+  }) => {
+    await logIn({ page, email: 'mfa@exemple.fr' });
+
+    const form = page.getByTestId('login-form');
+    const forgottenPassword = page.getByRole('link', {
+      name: 'Mot de passe oublié ?',
+    });
+    const signUp = page.getByRole('link', { name: 'Inscrivez-vous' });
+    await expect(codeField(page)).toBeFocused();
+    await expect(form.getByLabel('Email')).toHaveCount(0);
+    await expect(form.getByLabel('Mot de passe')).toHaveCount(0);
+    await expect(forgottenPassword).toHaveCount(0);
+    await expect(signUp).toHaveCount(0);
+
+    // Same locators, back on the credentials step
+    await page.getByRole('button', { name: 'Retour' }).click();
+    await expect(forgottenPassword).toBeVisible();
+    await expect(signUp).toBeVisible();
+  });
+
+  test('enrôlement : une application déjà configurée dès la configuration renvoie vers la connexion', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', {
+      status: 409,
+      body: {
+        error: 'mfa_already_configured',
+        detail: "Une application d'authentification est déjà configurée.",
+      },
+    });
+
+    await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+
+    await expect(
+      page.getByText(
+        "Une application d'authentification est déjà configurée. Connectez-vous avec votre code.",
+      ),
+    ).toBeVisible();
+    await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Réessayer' })).toHaveCount(
+      0,
+    );
+
+    await page.getByRole('button', { name: 'Se reconnecter' }).click();
+    await expect(
+      page.getByTestId('login-form').getByLabel('Email'),
+    ).toBeFocused();
+  });
+
+  test('enrôlement : identifiants refusés à la confirmation, le QR code disparaît et la reconnexion est proposée', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    // Password changed between the setup and the confirmation
+    httpMocker.post('/auth/mfa/confirm/?from=site', {
+      status: 400,
+      body: {
+        non_field_errors: [
+          "Impossible de se connecter avec les informations d'identification fournies.",
+        ],
+      },
+    });
+
+    await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+    await codeField(page).fill('654321');
+    await page.getByRole('button', { name: 'Activer' }).click();
+
+    await expect(
+      page.getByText('Email ou mot de passe incorrect. Reconnectez-vous.'),
+    ).toBeVisible();
+    await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
+    await expect(codeField(page)).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Réessayer' })).toHaveCount(
+      0,
+    );
+
+    await page.getByRole('button', { name: 'Se reconnecter' }).click();
+    await expect(
+      page.getByTestId('login-form').getByLabel('Email'),
+    ).toBeFocused();
+  });
+
+  for (const { failure, message, fail } of SERVER_FAILURES) {
+    test(`enrôlement : à la configuration, ${failure} et « Réessayer »`, async ({
+      page,
+      httpMocker,
+    }) => {
+      httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+      // Registered after the mocker, so it runs first: only the first setup fails
+      let setupCalls = 0;
+      await page.route(
+        (url) => url.pathname.endsWith('/auth/mfa/setup/'),
+        (route) => (setupCalls++ === 0 ? fail(route) : route.fallback()),
+      );
+
+      await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+
+      await expect(page.getByText(message)).toBeVisible();
+      // A page reload would request a second setup, which the mocker would serve
+      expect(setupCalls).toBe(1);
+      await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
+      await expect(
+        page.getByRole('button', { name: 'Se reconnecter' }),
+      ).toHaveCount(0);
+
+      await page.getByRole('button', { name: 'Réessayer' }).click();
+      await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
+      await expect(page.getByText(message)).toHaveCount(0);
+    });
+  }
+
+  test('enrôlement : « Activer » reste inactif tant que la configuration n’a pas répondu', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    let releaseSetup = () => {};
+    const setupHeld = new Promise<void>((resolve) => {
+      releaseSetup = resolve;
+    });
+    await page.route(
+      (url) => url.pathname.endsWith('/auth/mfa/setup/'),
+      async (route) => {
+        await setupHeld;
+        await route.fallback();
+      },
+    );
+
+    await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+    const activate = page.getByRole('button', { name: 'Activer' });
+    await expect(activate).toBeDisabled();
+
+    releaseSetup();
+    await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
+    await expect(activate).toBeEnabled();
+  });
+
+  test('enrôlement obligatoire : un double clic sur « Continuer » n’ouvre la session qu’une fois', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    httpMocker.post('/auth/mfa/confirm/?from=site', {
+      body: {
+        id: 7,
+        token: 'jeton-enrole',
+        username: 'enrole',
+        groups: ['Contributors'],
+        backup_codes: BACKUP_CODES,
+      },
+    });
+    const signInCalls = countPosts({
+      page,
+      path: '/api/auth/callback/api-token',
+    });
+    let releaseSignIn = () => {};
+    const signInHeld = new Promise<void>((resolve) => {
+      releaseSignIn = resolve;
+    });
+    await page.route('**/api/auth/callback/api-token', async (route) => {
+      await signInHeld;
+      await route.fallback();
+    });
+
+    await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+    await codeField(page).fill('654321');
+    await page.getByRole('button', { name: 'Activer' }).click();
+    const continueButton = page.getByRole('button', { name: 'Continuer' });
+    await continueButton.dblclick();
+    await expect(continueButton).toBeDisabled();
+
+    releaseSignIn();
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+    expect(signInCalls.count).toBe(1);
+  });
+
+  test('enrôlement suggéré sans nom d’utilisateur : le refus est retenu par email', async ({
+    page,
+  }) => {
+    const suggestion = page.getByRole('heading', {
+      name: 'Vous êtes connecté',
+    });
+
+    await logIn({ page, email: 'sans-nom-a@exemple.fr' });
+    await page.getByRole('button', { name: 'Continuer sans activer' }).click();
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+
+    await page.context().clearCookies();
+    await logIn({ page, email: 'sans-nom-a@exemple.fr' });
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+
+    // Another account without a username still gets the suggestion
+    await page.context().clearCookies();
+    await logIn({ page, email: 'sans-nom-b@exemple.fr' });
+    await expect(suggestion).toBeVisible();
+  });
+
+  for (const { failure, message, fail } of SERVER_FAILURES) {
+    test(`enrôlement : à la confirmation, ${failure}, le QR code et le code restent affichés`, async ({
+      page,
+      httpMocker,
+    }) => {
+      httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+      await page.route(
+        (url) => url.pathname.endsWith('/auth/mfa/confirm/'),
+        fail,
+      );
+
+      await logIn({ page, email: 'enrolement-obligatoire@exemple.fr' });
+      await codeField(page).fill('654321');
+      const activate = page.getByRole('button', { name: 'Activer' });
+      await activate.click();
+
+      await expect(page.getByText(message)).toBeVisible();
+      await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
+      await expect(codeField(page)).toHaveValue('654321');
+      await expect(activate).toBeEnabled();
+      await expect(page.getByRole('button', { name: 'Réessayer' })).toHaveCount(
+        0,
+      );
+      await expect(
+        page.getByRole('button', { name: 'Se reconnecter' }),
+      ).toHaveCount(0);
+    });
+  }
+
+  test('enrôlement suggéré : identifiants refusés à la configuration, puis reconnexion avec un compte à enrôlement obligatoire, qui ne peut pas le repousser', async ({
+    page,
+    httpMocker,
+  }) => {
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    // Registered after the mocker, so it runs first: only the first setup fails
+    let setupCalls = 0;
+    await page.route(
+      (url) => url.pathname.endsWith('/auth/mfa/setup/'),
+      (route) =>
+        setupCalls++ === 0
+          ? route.fulfill({
+              status: 400,
+              json: {
+                non_field_errors: [
+                  "Impossible de se connecter avec les informations d'identification fournies.",
+                ],
+              },
+            })
+          : route.fallback(),
+    );
+    const postpone = page.getByRole('button', {
+      name: 'Continuer sans activer',
+    });
+
+    await logIn({ page, email: 'enrolement-suggere@exemple.fr' });
+    await page.getByRole('button', { name: 'Activer maintenant' }).click();
+
+    await expect(
+      page.getByText('Email ou mot de passe incorrect. Reconnectez-vous.'),
+    ).toBeVisible();
+    await expect(postpone).toBeVisible();
+    await page.getByRole('button', { name: 'Se reconnecter' }).click();
+
+    const form = page.getByTestId('login-form');
+    await form.getByLabel('Email').fill('enrolement-obligatoire@exemple.fr');
+    await submitCredentials(page);
+
+    await expect(page.getByAltText(QR_CODE_ALT)).toBeVisible();
+    await expect(postpone).toHaveCount(0);
+  });
+
+  test('à l’étape du code, un second envoi pendant la connexion est ignoré', async ({
+    page,
+  }) => {
+    await logIn({ page, email: 'mfa@exemple.fr' });
+    await codeField(page).fill('123456');
+
+    const signInCalls = countPosts({
+      page,
+      path: '/api/auth/callback/credentials',
+    });
+    let releaseLogin = () => {};
+    const loginHeld = new Promise<void>((resolve) => {
+      releaseLogin = resolve;
+    });
+    await page.route('**/api/auth/callback/credentials', async (route) => {
+      await loginHeld;
+      await route.fallback();
+    });
+
+    await codeField(page).press('Enter');
+    await expect(
+      page.getByRole('button', { name: 'Se connecter', exact: true }),
+    ).toBeDisabled();
+    // A second Enter is already stopped by the disabled button:
+    // `requestSubmit` skips it and reaches the form's own guard
+    await page
+      .getByTestId('login-form')
+      .evaluate((form: HTMLFormElement) => form.requestSubmit());
+
+    releaseLogin();
+    await page.waitForURL((url) => url.pathname === '/a-propos');
+    expect(signInCalls.count).toBe(1);
   });
 });
