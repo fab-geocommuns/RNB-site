@@ -26,7 +26,7 @@ type MfaSetup = {
 };
 
 type MfaConfirmation = {
-  token: string;
+  login_code: string;
   backup_codes: string[];
 };
 
@@ -160,18 +160,13 @@ export default function MfaEnrollment({
 
   // The API returns the backup codes only once, and `signIn` leaves the page when
   // next-auth is down: the session opens on "Continuer", once they are on screen.
-  const continueToRedirectUrl = async (token: string) => {
-    // A suggested enrollment keeps the session opened at login
-    if (canPostpone) {
-      goToRedirectUrl();
-      return;
-    }
-
+  const continueToRedirectUrl = async (loginCode: string) => {
     setIsSubmitting(true);
     try {
-      // The first code is consumed by the confirmation: the session is opened with the returned token
-      const signInResult = await signIn('api-token', {
-        token,
+      // The confirmation renews the API token, even for a session opened at login:
+      // the session is opened again with the returned one-time code
+      const signInResult = await signIn('mfa-enrollment', {
+        code: loginCode,
         redirect: false,
       });
       if (signInResult?.ok) {
@@ -221,7 +216,7 @@ export default function MfaEnrollment({
         )}
         <Alert
           className="fr-mb-3w"
-          description="Conservez ces codes de secours en lieu sûr. Chacun permet une seule connexion si vous n'avez plus accès à votre application. Ils ne seront plus affichés."
+          description="Conservez ces codes de secours en lieu sûr. Chacun permet une seule connexion si vous n'avez plus accès à votre application. Ils ne seront plus affichés. Votre clé d'API a aussi été renouvelée : remplacez l'ancienne partout où vous l'utilisez."
           severity="warning"
           small
           closable={false}
@@ -243,7 +238,7 @@ export default function MfaEnrollment({
           <Button onClick={onLogInAgain}>Se reconnecter</Button>
         ) : (
           <Button
-            onClick={() => continueToRedirectUrl(enrollment.token)}
+            onClick={() => continueToRedirectUrl(enrollment.login_code)}
             disabled={isSubmitting}
           >
             Continuer

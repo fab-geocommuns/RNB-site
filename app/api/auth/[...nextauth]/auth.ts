@@ -72,25 +72,25 @@ export const authOptions = {
       },
     }),
     CredentialsProvider({
-      id: 'api-token',
-      name: 'API token',
+      id: 'mfa-enrollment',
+      name: 'MFA enrollment',
       credentials: {
-        token: { type: 'text' },
+        code: { type: 'text' },
       },
       async authorize(credentials) {
-        if (!credentials?.token) {
+        if (!credentials?.code) {
           return null;
         }
 
         try {
-          // Identity and token come from the API, never from the submitted credentials
-          const user = await rnbApi.get<User>('/auth/users/me/', {
-            token: credentials.token,
+          // One-time code returned by /auth/mfa/confirm/, the only proof of the password and the first code
+          const user = await rnbApi.post<User>('/auth/pro_connect/exchange/', {
+            code: credentials.code,
           });
 
           return { ...user, id: String(user.id) };
         } catch (error) {
-          console.error('API token sign-in error:', error);
+          console.error('MFA enrollment exchange error:', error);
           return null;
         }
       },

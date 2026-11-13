@@ -157,6 +157,23 @@ const server = createServer((req, res) => {
           groups: ['Contributors', 'Admins'],
         });
       }
+      // Login codes returned by /auth/mfa/confirm/ (cf. tests/login-mfa.spec.ts)
+      if (code === 'code-enrolement') {
+        return json(res, 200, {
+          id: 7,
+          token: 'jeton-enrole',
+          username: 'enrole',
+          groups: ['Contributors'],
+        });
+      }
+      if (code === 'code-enrolement-suggere') {
+        return json(res, 200, {
+          id: 12,
+          token: 'jeton-renouvele',
+          username: 'enrolement-suggere',
+          groups: ['Contributors'],
+        });
+      }
       json(res, 400, { error: 'invalid_code' });
     });
     return;
@@ -244,18 +261,6 @@ const server = createServer((req, res) => {
       });
     });
     return;
-  }
-  // Session opened with the token returned by /auth/mfa/confirm/
-  if (method === 'GET' && path === '/api/alpha/auth/users/me/') {
-    if (req.headers.authorization === 'Token jeton-enrole') {
-      return json(res, 200, {
-        id: 7,
-        token: 'jeton-enrole',
-        username: 'enrole',
-        groups: ['Contributors'],
-      });
-    }
-    return json(res, 401, { detail: 'Jeton invalide.' });
   }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });

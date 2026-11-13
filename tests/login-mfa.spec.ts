@@ -181,10 +181,7 @@ test.describe('Connexion avec double authentification', () => {
       '/auth/mfa/confirm/?from=site',
       {
         body: {
-          id: 7,
-          token: 'jeton-enrole',
-          username: 'enrole',
-          groups: ['Contributors'],
+          login_code: 'code-enrolement',
           backup_codes: BACKUP_CODES,
         },
       },
@@ -235,7 +232,7 @@ test.describe('Connexion avec double authentification', () => {
     await page.getByRole('button', { name: 'Continuer' }).click();
     await page.waitForURL((url) => url.pathname === '/a-propos');
 
-    // Identity comes from /auth/users/me/, called with the token returned by the confirmation
+    // Identity and token come from exchanging the login code returned by the confirmation
     const session = await getSession(page);
     expect(session.username).toBe('enrole');
     expect(session.groups).toEqual(['Contributors']);
@@ -249,10 +246,7 @@ test.describe('Connexion avec double authentification', () => {
     httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
     httpMocker.post('/auth/mfa/confirm/?from=site', {
       body: {
-        id: 7,
-        token: 'jeton-enrole',
-        username: 'enrole',
-        groups: ['Contributors'],
+        login_code: 'code-enrolement',
         backup_codes: BACKUP_CODES,
       },
     });
@@ -352,7 +346,7 @@ test.describe('Connexion avec double authentification', () => {
     expect((await getSession(page)).username).toBe('enrolement-suggere');
   });
 
-  test('enrôlement suggéré : « Continuer sans activer » est inactif pendant la confirmation, puis « Continuer » mène à la page demandée', async ({
+  test('enrôlement suggéré : « Continuer sans activer » est inactif pendant la confirmation, puis « Continuer » rouvre la session avec le jeton renouvelé', async ({
     page,
     httpMocker,
   }) => {
@@ -369,10 +363,7 @@ test.describe('Connexion avec double authentification', () => {
       '/auth/mfa/confirm/?from=site',
       {
         body: {
-          id: 8,
-          token: 'jeton-connexion',
-          username: 'enrolement-suggere',
-          groups: ['Contributors'],
+          login_code: 'code-enrolement-suggere',
           backup_codes: BACKUP_CODES,
         },
       },
@@ -402,10 +393,14 @@ test.describe('Connexion avec double authentification', () => {
     await expect(page.getByTestId('backup-codes')).toHaveText(
       BACKUP_CODES.join('\n'),
     );
-    // The session opened at login is kept: no second sign-in in suggested mode
-    expect((await getSession(page)).username).toBe('enrolement-suggere');
+    expect((await getSession(page)).accessToken).toBe('jeton-connexion');
     await page.getByRole('button', { name: 'Continuer' }).click();
     await page.waitForURL((url) => url.pathname === '/a-propos');
+
+    // The confirmation renews the API token: the session is opened again with it
+    const session = await getSession(page);
+    expect(session.username).toBe('enrolement-suggere');
+    expect(session.accessToken).toBe('jeton-renouvele');
   });
 
   test('l’email et le mot de passe sont figés pendant la connexion', async ({
@@ -583,13 +578,10 @@ test.describe('Connexion avec double authentification', () => {
     httpMocker,
   }) => {
     httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
-    // Unknown to the `/auth/users/me/` stub: the `api-token` sign-in fails
+    // Refused by the exchange stub: the `mfa-enrollment` sign-in fails
     httpMocker.post('/auth/mfa/confirm/?from=site', {
       body: {
-        id: 7,
-        token: 'jeton-inconnu',
-        username: 'enrole',
-        groups: ['Contributors'],
+        login_code: 'code-inconnu',
         backup_codes: BACKUP_CODES,
       },
     });
@@ -630,14 +622,11 @@ test.describe('Connexion avec double authentification', () => {
     httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
     httpMocker.post('/auth/mfa/confirm/?from=site', {
       body: {
-        id: 7,
-        token: 'jeton-enrole',
-        username: 'enrole',
-        groups: ['Contributors'],
+        login_code: 'code-enrolement',
         backup_codes: BACKUP_CODES,
       },
     });
-    await failNextAuthCallback({ page, provider: 'api-token' });
+    await failNextAuthCallback({ page, provider: 'mfa-enrollment' });
     const pageErrors: Error[] = [];
     page.on('pageerror', (error) => pageErrors.push(error));
 
@@ -913,22 +902,19 @@ test.describe('Connexion avec double authentification', () => {
     httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
     httpMocker.post('/auth/mfa/confirm/?from=site', {
       body: {
-        id: 7,
-        token: 'jeton-enrole',
-        username: 'enrole',
-        groups: ['Contributors'],
+        login_code: 'code-enrolement',
         backup_codes: BACKUP_CODES,
       },
     });
     const signInCalls = countPosts({
       page,
-      path: '/api/auth/callback/api-token',
+      path: '/api/auth/callback/mfa-enrollment',
     });
     let releaseSignIn = () => {};
     const signInHeld = new Promise<void>((resolve) => {
       releaseSignIn = resolve;
     });
-    await page.route('**/api/auth/callback/api-token', async (route) => {
+    await page.route('**/api/auth/callback/mfa-enrollment', async (route) => {
       await signInHeld;
       await route.fallback();
     });
