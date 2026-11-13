@@ -1,6 +1,6 @@
 import { RNBPage } from '@/tests/fixtures/pages/_page';
 import { MapController } from '@mapgrab/playwright';
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class EditionPage extends RNBPage {
   readonly panel: Locator;
@@ -17,6 +17,9 @@ export class EditionPage extends RNBPage {
   async goToBuilding(buildingId: string) {
     await this.page.goto(`/edition?q=${buildingId}`);
     await this.expectLoggedIn();
+    // The header is rendered on the server: wait for the building to be
+    // loaded, otherwise its late load switches the panel back to « Modifier »
+    await expect(this.panel).toContainText(buildingId);
   }
 
   async deactivateBuilding() {
