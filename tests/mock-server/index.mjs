@@ -157,6 +157,23 @@ const server = createServer((req, res) => {
           groups: ['Contributors', 'Admins'],
         });
       }
+      // Login codes returned by /auth/mfa/confirm/ (cf. tests/login-mfa.spec.ts)
+      if (code === 'code-enrolement') {
+        return json(res, 200, {
+          id: 7,
+          token: 'jeton-enrole',
+          username: 'enrole',
+          groups: ['Contributors'],
+        });
+      }
+      if (code === 'code-enrolement-suggere') {
+        return json(res, 200, {
+          id: 12,
+          token: 'jeton-renouvele',
+          username: 'enrolement-suggere',
+          groups: ['Contributors'],
+        });
+      }
       json(res, 400, { error: 'invalid_code' });
     });
     return;
@@ -171,6 +188,79 @@ const server = createServer((req, res) => {
         'https://proconnect.example/logout?id_token_hint=jeton-id&state=etat',
     });
     return res.end();
+  }
+  // Login from next-auth `authorize` (cf. tests/login-mfa.spec.ts): the
+  // outcome depends on the account, the code is checked for `mfa@exemple.fr`
+  // (`429429` hits the rate limit, `500500` a server error).
+  if (method === 'POST' && path === '/api/alpha/login/') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const body = JSON.parse(raw || '{}');
+      const { username, password, otp } = body;
+      const user = {
+        id: 12,
+        token: 'jeton-connexion',
+        username: String(username).split('@')[0],
+        groups: ['Contributors'],
+      };
+      const mfaError = ({ error, detail }) => json(res, 401, { error, detail });
+      const throttled = () =>
+        json(res, 429, {
+          detail: 'Requête limitée. Expected available in 60 seconds.',
+        });
+      // Only the login fields reach the API, not next-auth's own ones
+      const onlyLoginFields = Object.keys(body).every((field) =>
+        ['username', 'password', 'otp'].includes(field),
+      );
+
+      if (password === 'mot-de-passe' && onlyLoginFields) {
+        if (username === 'trop-de-tentatives@exemple.fr') return throttled();
+        if (username === 'sans-mfa@exemple.fr') return json(res, 200, user);
+        if (username === 'enrolement-suggere@exemple.fr') {
+          return json(res, 200, { ...user, mfa_setup_suggested: true });
+        }
+        // Suggested enrollment, answered without a username
+        if (/^sans-nom-\w+@exemple\.fr$/.test(username)) {
+          const { username: _, ...userWithoutName } = user;
+          return json(res, 200, {
+            ...userWithoutName,
+            mfa_setup_suggested: true,
+          });
+        }
+        if (username === 'enrolement-obligatoire@exemple.fr') {
+          return mfaError({
+            error: 'mfa_setup_required',
+            detail:
+              "Configurez une application d'authentification pour vous connecter.",
+          });
+        }
+        if (username === 'mfa@exemple.fr') {
+          if (!otp) {
+            return mfaError({
+              error: 'mfa_required',
+              detail: "Code d'authentification requis.",
+            });
+          }
+          if (otp === '123456' || otp === 'k3m7qz2a') {
+            return json(res, 200, user);
+          }
+          if (otp === '429429') return throttled();
+          if (otp === '500500') return json(res, 500, { detail: 'Erreur' });
+          return mfaError({
+            error: 'mfa_invalid',
+            detail:
+              "Code d'authentification invalide ou expiré. Patientez quelques secondes avant de réessayer.",
+          });
+        }
+      }
+      json(res, 400, {
+        non_field_errors: [
+          "Impossible de se connecter avec les informations d'identification fournies.",
+        ],
+      });
+    });
+    return;
   }
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
