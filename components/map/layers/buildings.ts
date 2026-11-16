@@ -85,7 +85,7 @@ export const installBuildings = async (
   removeBuildingsLayers(map);
   if (!options.keepSources) {
     removeBuildingsSource(map);
-    installBuildingsSource(map);
+    installBuildingsSource(map, options);
   }
 
   installBuildingsLayers(map, options);
@@ -104,12 +104,26 @@ const loadCheckImage = async (map: maplibregl.Map) => {
   if (!map.hasImage('checkGreen')) map.addImage('checkGreen', check.data);
 };
 
-const installBuildingsSource = (map: maplibregl.Map) => {
+// The API serves the same buildings at every zoom from 16 (no simplification),
+// and a z16 tile is precise to about 10 cm: MapLibre overzooms it instead of
+// fetching one tile per zoom level up to 22.
+// Edition keeps z22 tiles: snapping copies the tile vertices into the saved shape.
+const BUILDINGS_MAX_ZOOM = 16;
+const BUILDINGS_MAX_ZOOM_EDITION = 22;
+
+const installBuildingsSource = (
+  map: maplibregl.Map,
+  options: BuildingsOptions,
+) => {
+  const maxzoom = options.editionMode
+    ? BUILDINGS_MAX_ZOOM_EDITION
+    : BUILDINGS_MAX_ZOOM;
+
   map.addSource(SRC_BDGS_POINTS, {
     type: 'vector',
     tiles: [SRC_BDGS_POINTS_URL],
     minzoom: 16,
-    maxzoom: 22,
+    maxzoom,
     promoteId: 'rnb_id',
   });
 
@@ -120,7 +134,7 @@ const installBuildingsSource = (map: maplibregl.Map) => {
     // to force a clean re-render of the data on the map
     tiles: [SRC_BDGS_SHAPES_URL + '#' + Math.random()],
     minzoom: 16,
-    maxzoom: 22,
+    maxzoom,
     promoteId: 'rnb_id',
   });
 };

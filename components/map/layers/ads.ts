@@ -39,7 +39,8 @@ export const installADS = async (map: maplibregl.Map) => {
     type: 'vector',
     tiles: [SRC_ADS_URL + '#' + Math.random()],
     minzoom: 16,
-    maxzoom: 22,
+    // Overzoomed beyond 16: the API serves the same permits at every zoom
+    maxzoom: 16,
     promoteId: 'file_number',
   });
 

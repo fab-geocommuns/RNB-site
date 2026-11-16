@@ -14,7 +14,8 @@ export const installPlots = (map: maplibregl.Map) => {
     type: 'vector',
     tiles: [process.env.NEXT_PUBLIC_API_BASE + '/plots/tiles/{x}/{y}/{z}.pbf'],
     minzoom: 16,
-    maxzoom: 22,
+    // Overzoomed beyond 16: the API serves the same plots at every zoom
+    maxzoom: 16,
     promoteId: 'id',
   });
 
