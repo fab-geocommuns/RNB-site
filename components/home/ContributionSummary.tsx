@@ -10,6 +10,7 @@ import {
 } from '@codegouvfr/react-dsfr/SegmentedControl';
 import { TagsGroup, TagsGroupProps } from '@codegouvfr/react-dsfr/TagsGroup';
 
+import { OrganizationName } from '@/components/OrganizationName';
 import {
   ContributionSummary as ContributionSummaryData,
   DEFAULT_PERIOD,
@@ -28,8 +29,11 @@ const EDITION_GUIDE_URL =
   'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb';
 
 const LINKS = [
-  { label: 'Comment est construit le RNB', href: '/a-propos' },
-  { label: 'Le guide de l’édition', href: EDITION_GUIDE_URL },
+  {
+    label: 'Comment est construit le RNB',
+    href: '/a-propos#sources-et-mise-a-jour',
+  },
+  { label: 'Guide de l’édition', href: EDITION_GUIDE_URL },
   { label: 'Foire aux questions', href: '/faq' },
   { label: 'Toutes les statistiques', href: '/stats' },
 ];
@@ -42,10 +46,13 @@ function FigureCard({ figure }: { figure: FigureView }) {
       border
       size="small"
       titleAs="h3"
+      // the empty end block would add a blank space under the figure; the
+      // detail stays close to the label it qualifies
+      classes={{ end: fr.cx('fr-hidden'), desc: fr.cx('fr-mt-0') }}
       title={
         <>
           <span
-            className={fr.cx('fr-display--xs', 'fr-mb-1w')}
+            className={fr.cx('fr-display--xs', 'fr-mb-0')}
             style={{
               display: 'block',
               color: colors.text.actionHigh.blueFrance.default,
@@ -53,7 +60,12 @@ function FigureCard({ figure }: { figure: FigureView }) {
           >
             {formatNumber(figure.value)}
           </span>
-          <span className={fr.cx('fr-text--regular', 'fr-text--md')}>
+          {/* block, so that its own line height applies instead of the
+              heading's */}
+          <span
+            className={fr.cx('fr-text--regular', 'fr-text--md', 'fr-mb-0')}
+            style={{ display: 'block' }}
+          >
             {figure.label}
           </span>
         </>
@@ -83,7 +95,7 @@ function RankingCard({ ranking }: { ranking: RankingView }) {
         <ol className={fr.cx('fr-raw-list')}>
           {ranking.rows.map((row, i) => (
             <li
-              key={`${row.name}-${i}`}
+              key={`${row.name.name}-${i}`}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -95,15 +107,17 @@ function RankingCard({ ranking }: { ranking: RankingView }) {
                     : undefined,
               }}
             >
-              <span>
-                {row.name}
+              {/* a long name without spaces (a username) is cut, rather than
+                  widening its column */}
+              <span style={{ overflowWrap: 'anywhere' }}>
+                <OrganizationName {...row.name} />
                 {row.detail && (
                   <span
                     className={fr.cx('fr-text--sm')}
                     style={{ color: colors.text.mention.grey.default }}
                   >
                     {' '}
-                    · {row.detail}
+                    · <OrganizationName {...row.detail} />
                   </span>
                 )}
               </span>
@@ -152,19 +166,26 @@ export default function ContributionSummary({
     // colored band, like the other home page sections, so that the cards do
     // not merge with the white cards of the next section
     <section
-      className={fr.cx('fr-my-8w')}
+      className={fr.cx('fr-my-8w', 'fr-py-6w', 'fr-px-3w', 'fr-px-md-5w')}
       style={{
-        padding: `${fr.spacing('6w')} ${fr.spacing('3w')}`,
         backgroundColor: colors.background.alt.blueFrance.default,
       }}
     >
-      <div className="section__titleblock">
-        <h2 className="section__title">Participer au RNB</h2>
-        <p className={fr.cx('fr-text--regular') + ' section__subtitle'}>
-          Le RNB se construit en continu : avec les bases nationales, et avec
-          celles et ceux qui connaissent leur territoire.
-        </p>
-      </div>
+      {/* left-aligned, unlike the other home page sections */}
+      <h2
+        className={fr.cx('fr-mb-2w') + ' section__title'}
+        style={{ textAlign: 'left' }}
+      >
+        Participer au RNB
+      </h2>
+      <p
+        className={fr.cx('fr-text--regular', 'fr-mb-2w') + ' section__subtitle'}
+        style={{ textAlign: 'left' }}
+      >
+        Le RNB est construit en continu grâce aux imports de la BD Topo et de la
+        BAN ainsi qu’aux contributions de ceux ayant une connaissance fine de
+        leur territoire.
+      </p>
       {/* right under the introduction: the section raises questions for a
           visitor who discovers the collaborative edition */}
       <ul
@@ -172,21 +193,12 @@ export default function ContributionSummary({
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'center',
           gap: `${fr.spacing('1w')} ${fr.spacing('3w')}`,
         }}
       >
         {LINKS.map((link) => (
           <li key={link.href}>
-            <a
-              href={link.href}
-              className={fr.cx(
-                'fr-link',
-                'fr-link--sm',
-                'fr-icon-arrow-right-line',
-                'fr-link--icon-right',
-              )}
-            >
+            <a href={link.href} className={fr.cx('fr-link', 'fr-link--sm')}>
               {link.label}
             </a>
           </li>
@@ -194,11 +206,16 @@ export default function ContributionSummary({
       </ul>
 
       {summaries.length > 1 && (
-        <div
-          className={fr.cx('fr-mt-5w', 'fr-mb-3w')}
-          style={{ display: 'flex', justifyContent: 'center' }}
-        >
-          <SegmentedControl legend="Période" hideLegend segments={segments} />
+        <div className={fr.cx('fr-mt-5w', 'fr-mb-3w')}>
+          {/* white, so that it stands out on the colored band */}
+          <SegmentedControl
+            legend="Période"
+            hideLegend
+            segments={segments}
+            style={{
+              backgroundColor: colors.background.default.grey.default,
+            }}
+          />
         </div>
       )}
 
@@ -220,7 +237,7 @@ export default function ContributionSummary({
       </div>
 
       {newcomers.length > 0 && (
-        <div className={fr.cx('fr-mt-5w')} style={{ textAlign: 'center' }}>
+        <div className={fr.cx('fr-mt-5w')}>
           <h3 className={fr.cx('fr-h6', 'fr-mb-1v')}>{newcomersTitle}</h3>
           <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
             Leur toute première contribution : bienvenue !
@@ -228,7 +245,6 @@ export default function ContributionSummary({
           {/* keyed by position: two usernames can be the same once the
               emails are cut before the @ */}
           <TagsGroup
-            style={{ justifyContent: 'center' }}
             tags={
               newcomers.map((username) => ({
                 children: username,
@@ -242,7 +258,6 @@ export default function ContributionSummary({
       <ButtonsGroup
         className={fr.cx('fr-mt-5w')}
         inlineLayoutWhen="md and up"
-        alignment="center"
         buttons={[
           {
             children: 'S’inscrire pour contribuer',

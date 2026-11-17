@@ -48,6 +48,25 @@ test.describe("Aperçu de l'activité", () => {
     ).toHaveCount(0);
   });
 
+  test('affiche le nom court des organisations, le nom complet au survol', async ({
+    activityPreviewPage,
+  }) => {
+    const { page, section } = activityPreviewPage;
+    const organizations = section
+      .locator('.fr-card')
+      .filter({ hasText: 'Organisations les plus actives' });
+    await expect(organizations.getByText('Commune de Talence')).toBeVisible();
+    await expect(
+      organizations.getByText('Syndicat intercommunal SIG'),
+    ).toBeHidden();
+
+    await organizations.getByText('Syndicat SIG', { exact: true }).hover();
+
+    await expect(
+      page.getByRole('tooltip', { name: 'Syndicat intercommunal SIG' }),
+    ).toBeVisible();
+  });
+
   test('accueille les nouveaux contributeurs, et eux seuls', async ({
     activityPreviewPage,
   }) => {

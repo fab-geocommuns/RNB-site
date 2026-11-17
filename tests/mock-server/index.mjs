@@ -32,7 +32,8 @@ const json = (res, status, body) => {
 };
 
 // « Participer au RNB » section (/apercu-activite). Chosen to show the edge
-// cases: no new organization (no delta), a 1-row ranking (its card is hidden)
+// cases: no new organization (no delta), a 1-row ranking (its card is hidden),
+// an organization with a short name (the full name in a tooltip) or without
 const gironde = { code: '33', name: 'Gironde' };
 const CONTRIBUTION_SUMMARY = {
   updated_at: '2026-10-15T14:10:00+02:00',
@@ -45,12 +46,17 @@ const CONTRIBUTION_SUMMARY = {
       {
         username: 'contributrice_test',
         organization: 'Mairie Test',
+        organization_short_name: null,
         count: 800,
       },
     ],
     organizations: [
-      { name: 'Commune de Talence', count: 42 },
-      { name: 'Syndicat SIG', count: 18 },
+      { name: 'Commune de Talence', short_name: null, count: 42 },
+      {
+        name: 'Syndicat intercommunal SIG',
+        short_name: 'Syndicat SIG',
+        count: 18,
+      },
     ],
     cities: [
       {

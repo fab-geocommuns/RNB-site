@@ -25,12 +25,26 @@ const summary = (
   building_changes: { total: 4310, contributions: 520 },
   top: {
     users: [
-      { username: 'alice', organization: 'Mairie', count: 9 },
-      { username: 'bob', organization: null, count: 4 },
+      {
+        username: 'alice',
+        organization: 'Mairie',
+        organization_short_name: null,
+        count: 9,
+      },
+      {
+        username: 'bob',
+        organization: null,
+        organization_short_name: null,
+        count: 4,
+      },
     ],
     organizations: [
-      { name: 'Commune de Talence', count: 42 },
-      { name: 'Syndicat SIG', count: 18 },
+      { name: 'Commune de Talence', short_name: null, count: 42 },
+      {
+        name: 'Syndicat intercommunal SIG',
+        short_name: 'Syndicat SIG',
+        count: 18,
+      },
     ],
     cities: [
       { insee_code: '33522', name: 'Talence', department: gironde, count: 7 },
@@ -101,9 +115,65 @@ describe('keyFigures et windowView', () => {
     const [, organizations, cities] = windowView(summary()).rankings;
     expect(organizations.rows.map((r) => r.detail)).toEqual([null, null]);
     expect(cities.rows.map((r) => r.detail)).toEqual([
-      'Gironde (33)',
-      'Gironde (33)',
+      { name: 'Gironde (33)', shortName: null },
+      { name: 'Gironde (33)', shortName: null },
     ]);
+  });
+
+  it('garde le nom court des organisations, pour l’afficher', () => {
+    const [users, organizations] = windowView(
+      summary({
+        top: {
+          ...summary().top,
+          users: [
+            {
+              username: 'alice',
+              organization: 'Ministère de la Transition écologique',
+              organization_short_name: 'MTE',
+              count: 9,
+            },
+            {
+              username: 'bob',
+              organization: null,
+              organization_short_name: null,
+              count: 4,
+            },
+          ],
+        },
+      }),
+    ).rankings;
+    expect(users.rows.map((r) => r.detail)).toEqual([
+      { name: 'Ministère de la Transition écologique', shortName: 'MTE' },
+      null,
+    ]);
+    expect(organizations.rows.map((r) => r.name)).toEqual([
+      { name: 'Commune de Talence', shortName: null },
+      { name: 'Syndicat intercommunal SIG', shortName: 'Syndicat SIG' },
+    ]);
+  });
+
+  it('accepte une réponse sans nom court (ancienne API)', () => {
+    const old = {
+      ...summary(),
+      top: {
+        ...summary().top,
+        users: [
+          { username: 'alice', organization: 'MTE', count: 9 },
+          { username: 'bob', organization: null, count: 4 },
+        ],
+        organizations: [
+          { name: 'MTE', count: 9 },
+          { name: 'Valoen', count: 4 },
+        ],
+      },
+    };
+    expect(isCompleteSummary(old)).toBe(true);
+    const [users, organizations] = windowView(old).rankings;
+    expect(users.rows[0].detail).toEqual({ name: 'MTE', shortName: null });
+    expect(organizations.rows[0].name).toEqual({
+      name: 'MTE',
+      shortName: null,
+    });
   });
 
   it('masque un classement de moins de 2 lignes', () => {
@@ -216,6 +286,13 @@ describe('loadContributionSummaries', () => {
     ).toBe(false);
     expect(
       isCompleteSummary(withTop({ organizations: [{ name: 'Syndicat' }] })),
+    ).toBe(false);
+    expect(
+      isCompleteSummary(
+        withTop({
+          organizations: [{ name: 'Syndicat', short_name: 3, count: 1 }],
+        }),
+      ),
     ).toBe(false);
     expect(
       isCompleteSummary(

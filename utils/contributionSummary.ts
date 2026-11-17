@@ -23,8 +23,19 @@ export type ContributionSummary = {
   // building changes of the period, all sources (imports included)
   building_changes: { total: number; contributions: number };
   top: {
-    users: { username: string; organization: string | null; count: number }[];
-    organizations: { name: string; count: number }[];
+    // organization: the full name. The short names are absent from the API
+    // versions that sent a single label (the short name, else the name)
+    users: {
+      username: string;
+      organization: string | null;
+      organization_short_name?: string | null;
+      count: number;
+    }[];
+    organizations: {
+      name: string;
+      short_name?: string | null;
+      count: number;
+    }[];
     cities: {
       insee_code: string;
       name: string;
@@ -64,6 +75,7 @@ const FETCH_TIMEOUT_MS = 30000;
 // version, a cached response) must hide the section, not break the page
 const isNumber = (v: unknown) => typeof v === 'number';
 const isText = (v: unknown) => typeof v === 'string';
+const isOptionalText = (v: unknown) => v == null || isText(v);
 // a list whose every element passes the check: one bad row would break the
 // rendering of the whole section
 const isList = (v: unknown, isRow: (row: any) => boolean) =>
@@ -74,8 +86,10 @@ const isDepartment = (d: any) =>
 const isUser = (u: any) =>
   isText(u?.username) &&
   (u.organization === null || isText(u.organization)) &&
+  isOptionalText(u.organization_short_name) &&
   isNumber(u.count);
-const isOrganization = (o: any) => isText(o?.name) && isNumber(o.count);
+const isOrganization = (o: any) =>
+  isText(o?.name) && isOptionalText(o.short_name) && isNumber(o.count);
 const isCity = (c: any) =>
   isText(c?.name) && isDepartment(c.department) && isNumber(c.count);
 const isNewcomer = (u: any) => isText(u?.username);
@@ -144,8 +158,8 @@ const plural = (n: number, singular: string, pluralForm: string) =>
   n > 1 ? pluralForm : singular;
 
 // "Gironde (33)"
-export const departmentLabel = (d: SummaryDepartment | null) =>
-  d ? `${d.name} (${d.code})` : null;
+export const departmentLabel = (d: SummaryDepartment) =>
+  `${d.name} (${d.code})`;
 
 export type FigureView = {
   value: number;
@@ -154,9 +168,15 @@ export type FigureView = {
   detail: string | null;
 };
 
+// A name and, for an organization, its short name: shown in place of the
+// name, which then goes into a tooltip (OrganizationName)
+export type RowName = { name: string; shortName: string | null };
+
+const plainName = (name: string): RowName => ({ name, shortName: null });
+
 export type RankingView = {
   title: string;
-  rows: { name: string; detail: string | null; count: number }[];
+  rows: { name: RowName; detail: RowName | null; count: number }[];
 };
 
 // The key figures of the period, in the order of the rankings below them:
@@ -215,15 +235,20 @@ export function windowView(summary: ContributionSummary): {
     {
       title: 'Contributeurs les plus actifs',
       rows: top.users.map((u) => ({
-        name: u.username,
-        detail: u.organization,
+        name: plainName(u.username),
+        detail: u.organization
+          ? {
+              name: u.organization,
+              shortName: u.organization_short_name ?? null,
+            }
+          : null,
         count: u.count,
       })),
     },
     {
       title: 'Organisations les plus actives',
       rows: top.organizations.map((o) => ({
-        name: o.name,
+        name: { name: o.name, shortName: o.short_name ?? null },
         detail: null,
         count: o.count,
       })),
@@ -231,8 +256,8 @@ export function windowView(summary: ContributionSummary): {
     {
       title: 'Communes les plus éditées',
       rows: top.cities.map((c) => ({
-        name: c.name,
-        detail: departmentLabel(c.department),
+        name: plainName(c.name),
+        detail: c.department ? plainName(departmentLabel(c.department)) : null,
         count: c.count,
       })),
     },
