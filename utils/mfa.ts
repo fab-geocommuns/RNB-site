@@ -37,7 +37,7 @@ export const focusOnMount = (heading: HTMLHeadingElement | null) =>
   heading?.focus();
 
 // A declined suggestion is remembered in this browser, per account. It comes back
-// after 30 days: no other page lets the user set up an authenticator app.
+// after 30 days; the Sécurité page of Mon compte also lets the user set one up.
 const SETUP_DECLINED_KEY_PREFIX = 'mfaSetupDeclined:';
 const SETUP_DECLINED_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
 

@@ -265,6 +265,19 @@ const server = createServer((req, res) => {
   if (method === 'GET' && path === '/api/alpha/notifications/preferences/') {
     return json(res, 200, { subscribed: true });
   }
+  // Server-side read of /mon-compte/securite (cf. tests/mfa-security.spec.ts):
+  // `jeton-enrole` is the token of an account that has just activated it
+  if (method === 'GET' && path === '/api/alpha/auth/mfa/status/') {
+    const configured = {
+      'Token jeton-mfa': true,
+      'Token jeton-enrole': true,
+      'Token jeton-sans-application': false,
+    }[req.headers.authorization];
+    if (configured === undefined) {
+      return json(res, 401, { detail: 'Token invalide.' });
+    }
+    return json(res, 200, { configured });
+  }
 
   // Ghost CMS — only used at SSR for the home page. The Ghost client hits
   // `{NEXT_GHOST_API_URL}/ghost/api/{version}/content/{resource}`.
