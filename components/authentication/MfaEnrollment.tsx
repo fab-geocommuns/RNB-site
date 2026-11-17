@@ -9,21 +9,18 @@ import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { Highlight } from '@codegouvfr/react-dsfr/Highlight';
 import Input from '@codegouvfr/react-dsfr/Input';
 
-import CopyButton from '@/components/CopyButton';
+import BackupCodes from '@/components/authentication/BackupCodes';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 import {
+  focusOnMount,
+  isCredentialsError,
   MFA_INVALID_MESSAGE,
   MfaError,
   mfaErrorOf,
+  MfaSetup,
   THROTTLED_MESSAGE,
 } from '@/utils/mfa';
 import { rnbApi, RnbApiError } from '@/utils/rnbApi';
-
-type MfaSetup = {
-  otpauth_uri: string;
-  secret: string;
-  qr_code_svg: string;
-};
 
 type MfaConfirmation = {
   login_code: string;
@@ -42,14 +39,6 @@ type MfaEnrollmentProps = {
   onLogInAgain: () => void;
 };
 
-// Credentials refused by the API, e.g. password changed since the login
-const isCredentialsError = (error: unknown) =>
-  error instanceof RnbApiError &&
-  error.status === 400 &&
-  !!error.data &&
-  typeof error.data === 'object' &&
-  'non_field_errors' in error.data;
-
 // Errors the enrollment cannot recover from: the user has to log in again
 const mustLogInAgainAfter = (error: unknown) =>
   mfaErrorOf(error) === MfaError.AlreadyConfigured || isCredentialsError(error);
@@ -67,9 +56,6 @@ const errorMessage = (error: unknown) => {
     ? error.message
     : UNEXPECTED_ERROR_MESSAGE;
 };
-
-// Each screen heading has its own `key`, so it is a new element that takes the focus
-const focusOnMount = (heading: HTMLHeadingElement | null) => heading?.focus();
 
 export default function MfaEnrollment({
   username,
@@ -202,8 +188,6 @@ export default function MfaEnrollment({
     );
 
   if (enrollment) {
-    const backupCodes = enrollment.backup_codes.join('\n');
-
     return (
       <>
         <h3 key="backup-codes-heading" ref={focusOnMount} tabIndex={-1}>
@@ -214,26 +198,7 @@ export default function MfaEnrollment({
             ? 'Votre application est configurée, mais la connexion a échoué. Reconnectez-vous avec un code.'
             : null,
         )}
-        <Alert
-          className="fr-mb-3w"
-          description="Conservez ces codes de secours en lieu sûr. Chacun permet une seule connexion si vous n'avez plus accès à votre application. Ils ne seront plus affichés. Votre clé d'API a aussi été renouvelée : remplacez l'ancienne partout où vous l'utilisez."
-          severity="warning"
-          small
-          closable={false}
-        />
-        <pre
-          data-testid="backup-codes"
-          style={{ columns: 2, maxWidth: '20rem' }}
-        >
-          {backupCodes}
-        </pre>
-        <div className="fr-mb-3w">
-          <CopyButton
-            valueToCopy={backupCodes}
-            label="Copier les codes"
-            okMsg="Codes copiés"
-          />
-        </div>
+        <BackupCodes codes={enrollment.backup_codes} apiTokenRenewed />
         {signInFailed ? (
           <Button onClick={onLogInAgain}>Se reconnecter</Button>
         ) : (
