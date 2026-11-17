@@ -137,6 +137,52 @@ test.describe('Sécurité dans Mon compte', () => {
     expect(new URL(page.url()).pathname).toBe(PAGE_PATH);
   });
 
+  test('le mot de passe vérifié sert à la confirmation, même retapé pendant la vérification', async ({
+    page,
+    auth,
+    httpMocker,
+  }) => {
+    await auth.signIn(MFA_USER);
+    const credentials = { username: MFA_USER.username, password: PASSWORD };
+    httpMocker.post(
+      '/auth/mfa/replace/setup/?from=site',
+      { body: MFA_SETUP },
+      { ...credentials, otp: '123456' },
+    );
+    // Answers only to the password checked at the proof step
+    httpMocker.post(
+      '/auth/mfa/replace/confirm/?from=site',
+      { body: { backup_codes: BACKUP_CODES } },
+      { ...credentials, otp: '654321' },
+    );
+    // Holds the proof answer while the user keeps typing
+    let releaseSetup = () => {};
+    const setupHeld = new Promise<void>((held) =>
+      page.route('**/auth/mfa/replace/setup/**', async (route) => {
+        await new Promise<void>((release) => {
+          releaseSetup = release;
+          held();
+        });
+        await route.fallback();
+      }),
+    );
+
+    await openSecurityPage(page);
+    await page.getByRole('button', { name: "Changer d'application" }).click();
+    await fillProof({ page, otp: '123456' });
+    await passwordField(page).press('Enter');
+    await setupHeld;
+    await page.keyboard.type('-modifie');
+    releaseSetup();
+
+    await codeField(page).fill('654321');
+    await page.getByRole('button', { name: 'Confirmer' }).click();
+
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
+  });
+
   test('régénérer les codes de secours', async ({ page, auth, httpMocker }) => {
     await auth.signIn(MFA_USER);
     httpMocker.post(

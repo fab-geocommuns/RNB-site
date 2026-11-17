@@ -238,8 +238,10 @@ export default function SecuritySettings({
         </div>
       )}
       <form onSubmit={handleProof}>
+        {/* Locked while pending: the next step reuses the password checked here */}
         <PasswordInput
           label="Mot de passe"
+          disabled={isSubmitting}
           messagesHint=""
           messages={
             passwordError
@@ -258,6 +260,7 @@ export default function SecuritySettings({
           <Input
             label="Code à 6 chiffres"
             hintText="Ou l'un de vos codes de secours"
+            disabled={isSubmitting}
             state={otpError ? 'error' : 'default'}
             stateRelatedMessage={otpError ? MFA_INVALID_MESSAGE : undefined}
             nativeInputProps={{
