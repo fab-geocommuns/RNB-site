@@ -31,16 +31,17 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
-// « Participer au RNB » section (/apercu-activite). Chosen to show the edge
-// cases: no new organization (no delta), a 1-row ranking (its card is hidden),
-// an organization with a short name (the full name in a tooltip) or without
+// « Participer au RNB » section (/apercu-activite) and its details page.
+// Chosen to show the edge cases: no new organization over 7 days (no delta), a
+// 1-row ranking (its card is hidden), an organization with a short name (the
+// full name in a tooltip) or without
 const gironde = { code: '33', name: 'Gironde' };
 const CONTRIBUTION_SUMMARY = {
   updated_at: '2026-10-15T14:10:00+02:00',
   window_days: 30,
   cities: { total: 1248, new: 12 },
-  organizations: { total: 86, new: 0 },
-  building_changes: { total: 4310, contributions: 520 },
+  organizations: { total: 86, new: 5 },
+  contributions: { total: 520 },
   top: {
     users: [
       {
@@ -113,6 +114,8 @@ const server = createServer((req, res) => {
         ...CONTRIBUTION_SUMMARY,
         window_days: 7,
         cities: { total: 40, new: 3 },
+        organizations: { total: 20, new: 0 },
+        contributions: { total: 140 },
         top: {
           ...CONTRIBUTION_SUMMARY.top,
           cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
@@ -127,7 +130,7 @@ const server = createServer((req, res) => {
         window_days: null,
         cities: { total: 17126, new: 17126 },
         organizations: { total: 200, new: 200 },
-        building_changes: { total: 4236167, contributions: 888625 },
+        contributions: { total: 888625 },
         newcomers: { users: [{ username: 'derniere_arrivee' }] },
       },
     };

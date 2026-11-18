@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { fr } from '@codegouvfr/react-dsfr';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { Card } from '@codegouvfr/react-dsfr/Card';
@@ -8,7 +9,6 @@ import {
   SegmentedControl,
   SegmentedControlProps,
 } from '@codegouvfr/react-dsfr/SegmentedControl';
-import { TagsGroup, TagsGroupProps } from '@codegouvfr/react-dsfr/TagsGroup';
 
 import { OrganizationName } from '@/components/OrganizationName';
 import {
@@ -17,10 +17,11 @@ import {
   FigureView,
   formatNumber,
   keyFigures,
+  Period,
   periodLabel,
   periodOf,
   RankingView,
-  windowView,
+  summaryOf,
 } from '@/utils/contributionSummary';
 
 const colors = fr.colors.decisions;
@@ -40,12 +41,18 @@ const LINKS = [
 
 // Key figure: the number and its label make one heading, so that the number
 // is never read alone
-function FigureCard({ figure }: { figure: FigureView }) {
+export function FigureCard({
+  figure,
+  titleAs = 'h3',
+}: {
+  figure: FigureView;
+  titleAs?: 'h2' | 'h3';
+}) {
   return (
     <Card
       border
       size="small"
-      titleAs="h3"
+      titleAs={titleAs}
       // the empty end block would add a blank space under the figure; the
       // detail stays close to the label it qualifies
       classes={{ end: fr.cx('fr-hidden'), desc: fr.cx('fr-mt-0') }}
@@ -84,12 +91,18 @@ function FigureCard({ figure }: { figure: FigureView }) {
   );
 }
 
-function RankingCard({ ranking }: { ranking: RankingView }) {
+export function RankingCard({
+  ranking,
+  titleAs = 'h3',
+}: {
+  ranking: RankingView;
+  titleAs?: 'h2' | 'h3';
+}) {
   return (
     <Card
       border
       size="small"
-      titleAs="h3"
+      titleAs={titleAs}
       title={ranking.title}
       end={
         <ol className={fr.cx('fr-raw-list')}>
@@ -133,10 +146,70 @@ function RankingCard({ ranking }: { ranking: RankingView }) {
   );
 }
 
-// « Participer au RNB » section of the home page. A selector picks the period
-// (the last 7 or 30 days, or since the opening of the collaborative edition),
-// which sets every number of the section: one summary per period. Renders
-// nothing without data: the home page must not break when the API fails.
+// Selector of the period shown, one segment per summary; nothing with a
+// single summary
+export function PeriodSelector({
+  summaries,
+  period,
+  onChange,
+}: {
+  summaries: ContributionSummaryData[];
+  period: Period;
+  onChange: (period: Period) => void;
+}) {
+  if (summaries.length < 2) return null;
+  // the DSFR expects a tuple of 1 to 5 segments
+  const segments = summaries.map((s) => ({
+    label: periodLabel(periodOf(s)),
+    nativeInputProps: {
+      value: String(periodOf(s)),
+      checked: periodOf(s) === period,
+      onChange: () => onChange(periodOf(s)),
+    },
+  })) as unknown as SegmentedControlProps['segments'];
+  return (
+    <div className={fr.cx('fr-mt-5w', 'fr-mb-3w')}>
+      {/* white, so that it stands out on the colored band */}
+      <SegmentedControl
+        legend="Période"
+        hideLegend
+        segments={segments}
+        style={{
+          backgroundColor: colors.background.default.grey.default,
+        }}
+      />
+    </div>
+  );
+}
+
+// Key figures side by side, sharing the whole width whatever their number
+export function FigureCards({
+  figures,
+  titleAs,
+}: {
+  figures: FigureView[];
+  titleAs?: 'h2' | 'h3';
+}) {
+  return (
+    <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
+      {figures.map((figure) => (
+        <div key={figure.label} className={fr.cx('fr-col-12', 'fr-col-md')}>
+          <FigureCard figure={figure} titleAs={titleAs} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Page of the rankings, cities and newcomers, opened on the selected period
+export const detailsHref = (period: Period) =>
+  `/apercu-activite/details?periode=${period}`;
+
+// « Participer au RNB » section of the home page: the number of contributions
+// and of contributing organizations. A selector picks the period (the last 7
+// or 30 days, or since the opening of the collaborative edition), one summary
+// per period; the rest of the summary is on the details page. Renders nothing
+// without data: the home page must not break when the API fails.
 export default function ContributionSummary({
   summaries,
 }: {
@@ -145,22 +218,9 @@ export default function ContributionSummary({
   const [selectedPeriod, setSelectedPeriod] = useState(DEFAULT_PERIOD);
   if (!summaries?.length) return null;
 
-  const summary =
-    summaries.find((s) => periodOf(s) === selectedPeriod) ??
-    summaries.find((s) => periodOf(s) === DEFAULT_PERIOD) ??
-    summaries[0];
+  const summary = summaryOf(summaries, selectedPeriod);
   const period = periodOf(summary);
-  const figures = keyFigures(summary);
-  const { rankings, newcomersTitle, newcomers } = windowView(summary);
-  // the DSFR expects a tuple of 1 to 5 segments; summaries is not empty here
-  const segments = summaries.map((s) => ({
-    label: periodLabel(periodOf(s)),
-    nativeInputProps: {
-      value: String(periodOf(s)),
-      checked: periodOf(s) === period,
-      onChange: () => setSelectedPeriod(periodOf(s)),
-    },
-  })) as unknown as SegmentedControlProps['segments'];
+  const { contributions, organizations } = keyFigures(summary);
 
   return (
     // colored band, like the other home page sections, so that the cards do
@@ -205,55 +265,26 @@ export default function ContributionSummary({
         ))}
       </ul>
 
-      {summaries.length > 1 && (
-        <div className={fr.cx('fr-mt-5w', 'fr-mb-3w')}>
-          {/* white, so that it stands out on the colored band */}
-          <SegmentedControl
-            legend="Période"
-            hideLegend
-            segments={segments}
-            style={{
-              backgroundColor: colors.background.default.grey.default,
-            }}
-          />
-        </div>
-      )}
+      <PeriodSelector
+        summaries={summaries}
+        period={period}
+        onChange={setSelectedPeriod}
+      />
 
-      {/* the tiles share the whole width, whatever their number */}
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-        {figures.map((figure) => (
-          <div key={figure.label} className={fr.cx('fr-col-12', 'fr-col-md')}>
-            <FigureCard figure={figure} />
-          </div>
-        ))}
-      </div>
+      <FigureCards figures={[contributions, organizations]} />
 
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mt-1w')}>
-        {rankings.map((ranking) => (
-          <div key={ranking.title} className={fr.cx('fr-col-12', 'fr-col-md')}>
-            <RankingCard ranking={ranking} />
-          </div>
-        ))}
-      </div>
-
-      {newcomers.length > 0 && (
-        <div className={fr.cx('fr-mt-5w')}>
-          <h3 className={fr.cx('fr-h6', 'fr-mb-1v')}>{newcomersTitle}</h3>
-          <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
-            Leur toute première contribution : bienvenue !
-          </p>
-          {/* keyed by position: two usernames can be the same once the
-              emails are cut before the @ */}
-          <TagsGroup
-            tags={
-              newcomers.map((username) => ({
-                children: username,
-                iconId: 'fr-icon-user-line',
-              })) as TagsGroupProps['tags']
-            }
-          />
-        </div>
-      )}
+      <p className={fr.cx('fr-mt-3w', 'fr-mb-0')}>
+        <Link
+          href={detailsHref(period)}
+          className={fr.cx(
+            'fr-link',
+            'fr-icon-arrow-right-line',
+            'fr-link--icon-right',
+          )}
+        >
+          Voir le détail de l’activité
+        </Link>
+      </p>
 
       <ButtonsGroup
         className={fr.cx('fr-mt-5w')}

@@ -20,8 +20,9 @@ export type ContributionSummary = {
   cities: { total: number; new: number };
   // organizations whose members contributed in the period
   organizations: { total: number; new: number };
-  // building changes of the period, all sources (imports included)
-  building_changes: { total: number; contributions: number };
+  // edition requests of the period, imports excluded: a merge or a split
+  // counts once, whatever the number of buildings it touches
+  contributions: { total: number };
   top: {
     // organization: the full name. The short names are absent from the API
     // versions that sent a single label (the short name, else the name)
@@ -63,6 +64,25 @@ export const periodOf = (summary: ContributionSummary): Period =>
 export const periodLabel = (period: Period) =>
   period === ALL_PERIOD ? 'Depuis toujours' : `${period} derniers jours`;
 
+// The period in a URL (?periode=7, ?periode=all), so that the details page
+// opens on the period chosen in the section; anything else is the default one
+export const parsePeriod = (value: unknown): Period => {
+  if (value === ALL_PERIOD) return ALL_PERIOD;
+  const days = Number(value);
+  return typeof value === 'string' && Number.isInteger(days) && days > 0
+    ? days
+    : DEFAULT_PERIOD;
+};
+
+// The summary of a period, else of the default one, else the first one
+export const summaryOf = (
+  summaries: ContributionSummary[],
+  period: Period,
+): ContributionSummary =>
+  summaries.find((s) => periodOf(s) === period) ??
+  summaries.find((s) => periodOf(s) === DEFAULT_PERIOD) ??
+  summaries[0];
+
 // The summary is recomputed every hour by the API
 export const SUMMARY_REVALIDATE = 3600;
 // Timeout so that a slow API does not block the home page. Computing the
@@ -103,8 +123,7 @@ export function isCompleteSummary(data: unknown): data is ContributionSummary {
     isNumber(d?.cities?.new) &&
     isNumber(d?.organizations?.total) &&
     isNumber(d?.organizations?.new) &&
-    isNumber(d?.building_changes?.total) &&
-    isNumber(d?.building_changes?.contributions) &&
+    isNumber(d?.contributions?.total) &&
     isList(d?.top?.users, isUser) &&
     isList(d?.top?.organizations, isOrganization) &&
     isList(d?.top?.cities, isCity) &&
@@ -179,30 +198,25 @@ export type RankingView = {
   rows: { name: RowName; detail: RowName | null; count: number }[];
 };
 
-// The key figures of the period, in the order of the rankings below them:
-// building changes (contributors), organizations, cities. The first
-// contributions are only told for a rolling window: over the whole period,
-// every one is a first one.
-export function keyFigures(summary: ContributionSummary): FigureView[] {
-  const { cities, organizations, building_changes } = summary;
+// The key figures of the period. The first contributions are only told for a
+// rolling window: over the whole period, every one is a first one.
+export function keyFigures(summary: ContributionSummary): {
+  contributions: FigureView;
+  organizations: FigureView;
+  cities: FigureView;
+} {
+  const { cities, organizations, contributions } = summary;
   const firstTimes = (n: number) =>
     summary.window_days !== null && n > 0
       ? `dont ${formatNumber(n)} pour la première fois`
       : null;
-  return [
-    {
-      value: building_changes.total,
-      label: plural(
-        building_changes.total,
-        'modification de bâtiment',
-        'modifications de bâtiments',
-      ),
-      detail:
-        building_changes.contributions > 0
-          ? `dont ${formatNumber(building_changes.contributions)} par les contributeurs`
-          : null,
+  return {
+    contributions: {
+      value: contributions.total,
+      label: plural(contributions.total, 'contribution', 'contributions'),
+      detail: null,
     },
-    {
+    organizations: {
       value: organizations.total,
       label: plural(
         organizations.total,
@@ -211,7 +225,7 @@ export function keyFigures(summary: ContributionSummary): FigureView[] {
       ),
       detail: firstTimes(organizations.new),
     },
-    {
+    cities: {
       value: cities.total,
       label: plural(
         cities.total,
@@ -220,10 +234,10 @@ export function keyFigures(summary: ContributionSummary): FigureView[] {
       ),
       detail: firstTimes(cities.new),
     },
-  ];
+  };
 }
 
-// What follows the key figures: the rankings of 2 rows or more, and the
+// The details of the period: the rankings of 2 rows or more, and the
 // usernames of the contributors who made their very first contribution
 export function windowView(summary: ContributionSummary): {
   rankings: RankingView[];

@@ -10,6 +10,8 @@ import {
   loadContributionSummaries,
   MAX_NEWCOMERS,
   keyFigures,
+  parsePeriod,
+  summaryOf,
   windowView,
 } from './contributionSummary';
 
@@ -22,7 +24,7 @@ const summary = (
   window_days: 30,
   cities: { total: 1248, new: 12 },
   organizations: { total: 86, new: 3 },
-  building_changes: { total: 4310, contributions: 520 },
+  contributions: { total: 520 },
   top: {
     users: [
       {
@@ -56,24 +58,20 @@ const summary = (
 });
 
 describe('keyFigures et windowView', () => {
-  it('décrit les 3 chiffres clés de la période', () => {
-    expect(keyFigures(summary())).toEqual([
-      {
-        value: 4310,
-        label: 'modifications de bâtiments',
-        detail: 'dont 520 par les contributeurs',
-      },
-      {
+  it('décrit les chiffres clés de la période', () => {
+    expect(keyFigures(summary())).toEqual({
+      contributions: { value: 520, label: 'contributions', detail: null },
+      organizations: {
         value: 86,
         label: 'organisations contributrices',
         detail: 'dont 3 pour la première fois',
       },
-      {
+      cities: {
         value: 1248,
         label: 'communes améliorées par la communauté',
         detail: 'dont 12 pour la première fois',
       },
-    ]);
+    });
   });
 
   it('n’affiche pas d’évolution nulle', () => {
@@ -81,16 +79,16 @@ describe('keyFigures et windowView', () => {
       summary({
         cities: { total: 10, new: 0 },
         organizations: { total: 2, new: 0 },
-        building_changes: { total: 50, contributions: 0 },
       }),
     );
-    expect(figures.map((f) => f.detail)).toEqual([null, null, null]);
+    expect(figures.organizations.detail).toBeNull();
+    expect(figures.cities.detail).toBeNull();
   });
 
   it('ne parle pas de première fois sur toute la période', () => {
     const figures = keyFigures(summary({ window_days: null }));
-    expect(figures.map((f) => f.detail)).toEqual([
-      'dont 520 par les contributeurs',
+    expect(Object.values(figures).map((f) => f.detail)).toEqual([
+      null,
       null,
       null,
     ]);
@@ -101,14 +99,30 @@ describe('keyFigures et windowView', () => {
       summary({
         cities: { total: 1, new: 1 },
         organizations: { total: 1, new: 1 },
-        building_changes: { total: 1, contributions: 1 },
+        contributions: { total: 1 },
       }),
     );
-    expect(figures.map((f) => f.label)).toEqual([
-      'modification de bâtiment',
+    expect(Object.values(figures).map((f) => f.label)).toEqual([
+      'contribution',
       'organisation contributrice',
       'commune améliorée par la communauté',
     ]);
+  });
+
+  it('lit la période dans l’URL, la période par défaut sinon', () => {
+    expect(parsePeriod('7')).toBe(7);
+    expect(parsePeriod('all')).toBe('all');
+    expect(parsePeriod(undefined)).toBe(30);
+    expect(parsePeriod('abc')).toBe(30);
+    expect(parsePeriod('-7')).toBe(30);
+    expect(parsePeriod(['7'])).toBe(30);
+  });
+
+  it('retombe sur la période par défaut si la période manque', () => {
+    const summaries = [summary({ window_days: 7 }), summary()];
+    expect(summaryOf(summaries, 7).window_days).toBe(7);
+    expect(summaryOf(summaries, 'all').window_days).toBe(30);
+    expect(summaryOf([summary({ window_days: 7 })], 'all').window_days).toBe(7);
   });
 
   it('écrit le département des communes, pas des organisations', () => {
@@ -265,8 +279,14 @@ describe('loadContributionSummaries', () => {
     expect(isCompleteSummary({ ...summary(), newcomers: { cities: [] } })).toBe(
       false,
     );
+    expect(isCompleteSummary({ ...summary(), contributions: {} })).toBe(false);
+    // the previous format, before contributions
+    const { contributions: _, ...previous } = summary();
     expect(
-      isCompleteSummary({ ...summary(), building_changes: { total: 3 } }),
+      isCompleteSummary({
+        ...previous,
+        building_changes: { total: 4310, contributions: 520 },
+      }),
     ).toBe(false);
     expect(isCompleteSummary({ ...summary(), window_days: undefined })).toBe(
       false,
