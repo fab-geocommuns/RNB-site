@@ -444,4 +444,174 @@ test.describe('Sécurité dans Mon compte', () => {
     await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
     expect(confirmCalls.count).toBe(0);
   });
+
+  test('« Annuler » au formulaire de preuve revient à la vue d’ensemble sans rien envoyer', async ({
+    page,
+    auth,
+  }) => {
+    await auth.signIn(MFA_USER);
+    const setupCalls = countPosts({ page, path: '/auth/mfa/replace/setup/' });
+
+    await openSecurityPage(page);
+    await page.getByRole('button', { name: "Changer d'application" }).click();
+    await fillProof({ page, otp: '123456' });
+    await page.getByRole('button', { name: 'Annuler' }).click();
+
+    await expect(
+      page.getByRole('button', { name: "Changer d'application" }),
+    ).toBeVisible();
+    await expect(passwordField(page)).toHaveCount(0);
+    expect(setupCalls.count).toBe(0);
+
+    // Reopened, the form is empty
+    await page.getByRole('button', { name: "Changer d'application" }).click();
+    await expect(passwordField(page)).toHaveValue('');
+    await expect(codeField(page)).toHaveValue('');
+  });
+
+  for (const { failure, response, message } of [
+    {
+      failure: 'application retirée entre-temps',
+      response: {
+        status: 400,
+        body: {
+          error: 'mfa_setup_not_started',
+          detail: "Commencez par configurer l'application d'authentification.",
+        },
+      },
+      message: "Commencez par configurer l'application d'authentification.",
+    },
+    {
+      failure: 'erreur du serveur',
+      response: { status: 500, body: {} },
+      message: 'Une erreur est survenue. Merci de réessayer plus tard.',
+    },
+  ]) {
+    test(`preuve refusée, ${failure} : message dans l’alerte, formulaire conservé`, async ({
+      page,
+      auth,
+      httpMocker,
+    }) => {
+      await auth.signIn(MFA_USER);
+      httpMocker.post('/auth/mfa/backup_codes/?from=site', response);
+
+      await openSecurityPage(page);
+      await page.getByRole('button', { name: 'Régénérer les codes' }).click();
+      await fillProof({ page, otp: '123456' });
+      await page.getByRole('button', { name: 'Vérifier' }).click();
+
+      await expect(page.getByText(message)).toBeVisible();
+      await expect(page.getByText('Mot de passe incorrect.')).toHaveCount(0);
+      await expect(page.getByText(INVALID_CODE_MESSAGE)).toHaveCount(0);
+      await expect(page.getByTestId('backup-codes')).toHaveCount(0);
+      await expect(passwordField(page)).toHaveValue(PASSWORD);
+    });
+  }
+
+  test('mot de passe refusé à la confirmation du changement : Recommencer, sans déconnexion', async ({
+    page,
+    auth,
+    httpMocker,
+  }) => {
+    await auth.signIn(MFA_USER);
+    httpMocker.post('/auth/mfa/replace/setup/?from=site', { body: MFA_SETUP });
+    // Password changed from another session between the two steps
+    httpMocker.post('/auth/mfa/replace/confirm/?from=site', {
+      status: 400,
+      body: {
+        non_field_errors: [
+          "Impossible de se connecter avec les informations d'identification fournies.",
+        ],
+      },
+    });
+
+    await openSecurityPage(page);
+    await page.getByRole('button', { name: "Changer d'application" }).click();
+    await fillProof({ page, otp: '123456' });
+    await page.getByRole('button', { name: 'Vérifier' }).click();
+    await codeField(page).fill('654321');
+    await page.getByRole('button', { name: 'Confirmer' }).click();
+
+    await expect(
+      page.getByText('Cette opération ne peut plus aboutir. Recommencez.'),
+    ).toBeVisible();
+    await expect(page.getByAltText(QR_CODE_ALT)).toHaveCount(0);
+    await expect(
+      page.getByRole('button', { name: 'Se reconnecter' }),
+    ).toHaveCount(0);
+    expect((await getSession(page)).accessToken).toBe(MFA_USER.accessToken);
+
+    await page.getByRole('button', { name: 'Recommencer' }).click();
+    await expect(
+      page.getByRole('heading', { name: "Changer d'application" }),
+    ).toBeFocused();
+    await expect(passwordField(page)).toHaveValue('');
+  });
+
+  test('activation : si la session ne se rouvre pas, les codes restent affichés et « Se reconnecter » ramène à la page', async ({
+    page,
+    auth,
+    httpMocker,
+  }) => {
+    await auth.signIn(USER_WITHOUT_APP);
+    httpMocker.post('/auth/mfa/setup/?from=site', { body: MFA_SETUP });
+    // Refused by the exchange stub: the `mfa-enrollment` sign-in fails
+    httpMocker.post('/auth/mfa/confirm/?from=site', {
+      body: { login_code: 'code-inconnu', backup_codes: BACKUP_CODES },
+    });
+
+    await openSecurityPage(page);
+    await page
+      .getByRole('button', { name: 'Activer la double authentification' })
+      .click();
+    await fillProof({ page });
+    await page.getByRole('button', { name: 'Vérifier' }).click();
+    await codeField(page).fill('654321');
+    await page.getByRole('button', { name: 'Activer', exact: true }).click();
+    await page.getByRole('button', { name: 'Continuer' }).click();
+
+    await expect(
+      page.getByText(
+        'Votre application est configurée, mais la connexion a échoué.',
+        { exact: false },
+      ),
+    ).toBeVisible();
+    await expect(page.getByTestId('backup-codes')).toHaveText(
+      BACKUP_CODES.join('\n'),
+    );
+
+    await page.getByRole('button', { name: 'Se reconnecter' }).click();
+    await page.waitForURL(
+      (url) =>
+        url.pathname === '/connexion' &&
+        url.searchParams.get('redirect') === PAGE_PATH,
+    );
+    expect(await getSession(page)).toEqual({});
+  });
+
+  for (const { failure, user } of [
+    {
+      failure: 'jeton refusé par l’API',
+      user: { username: 'mfa', accessToken: 'jeton-inconnu' },
+    },
+    {
+      failure: 'réponse sans état',
+      user: { username: 'mfa', accessToken: 'jeton-etat-illisible' },
+    },
+    {
+      failure: 'session sans nom d’utilisateur',
+      user: { username: '', accessToken: MFA_USER.accessToken },
+    },
+  ]) {
+    test(`page d’erreur du site : ${failure}`, async ({ page, auth }) => {
+      await auth.signIn(user);
+
+      await page.goto(PAGE_PATH);
+
+      await expect(
+        page.getByRole('heading', { name: 'Erreur inattendue' }),
+      ).toBeVisible();
+      await expect(passwordField(page)).toHaveCount(0);
+    });
+  }
 });

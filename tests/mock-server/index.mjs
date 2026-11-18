@@ -266,8 +266,12 @@ const server = createServer((req, res) => {
     return json(res, 200, { subscribed: true });
   }
   // Server-side read of /mon-compte/securite (cf. tests/mfa-security.spec.ts):
-  // `jeton-enrole` is the token of an account that has just activated it
+  // `jeton-enrole` is the token of an account that has just activated it,
+  // `jeton-etat-illisible` gets a body without the flag
   if (method === 'GET' && path === '/api/alpha/auth/mfa/status/') {
+    if (req.headers.authorization === 'Token jeton-etat-illisible') {
+      return json(res, 200, {});
+    }
     const configured = {
       'Token jeton-mfa': true,
       'Token jeton-enrole': true,
