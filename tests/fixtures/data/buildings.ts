@@ -30,6 +30,7 @@ export const buildingSegur = {
   addresses: [
     {
       id: '75107_8909_00020',
+      ban_id: 'f1e3a2b4-5c6d-4e7f-8a9b-0c1d2e3f4a5b',
       source: 'BAN',
       street_number: '20',
       street_rep: '',
