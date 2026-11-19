@@ -6,6 +6,7 @@ import {
 import { SplitChild } from '@/stores/edition/edition-slice';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import styles from '@/styles/contribution/splitPanel.module.scss';
+import editPanelStyles from '@/styles/contribution/editPanel.module.scss';
 import { useRnbApi } from '@/utils/useRnbApi';
 import { RnbApi, RnbApiError } from '@/utils/rnbApi';
 import Button from '@codegouvfr/react-dsfr/Button';
@@ -18,13 +19,28 @@ import HelpButton from './HelpButton';
 import BuildingInfo from './BuildingInfo';
 import GenericPanel from '@/components/panel/GenericPanel';
 import MapPointerClaim from '@/components/map/MapPointerClaim';
+import RNBIDHeader from './RNBIDHeader';
+import PanelTabs from '@/components/panel/PanelTabs';
+import BuildingMainAttributes from '@/components/BuildingMainAttributes';
+import { ValidatorNames } from '@/components/ValidatorNames';
 import { toasterError, toasterSuccess } from './toaster';
 import { BuildingAddressType } from './types';
+import { SelectedBuilding } from '@/stores/map/map-slice';
 
 export default function SplitPanel() {
+  const candidateBuilding = useSelector(
+    (state: RootState) => state.edition.split.candidateBuilding,
+  );
   const splitCandidateId = useSelector(
     (state: RootState) => state.edition.split.splitCandidateId,
   );
+  const editUnlocked = useSelector(
+    (state: RootState) => state.edition.split.editUnlocked,
+  );
+  const hasValidations =
+    candidateBuilding && candidateBuilding.validated_by.length > 0;
+  const locked = hasValidations && !editUnlocked;
+
   const children: SplitChild[] = useSelector(
     (state: RootState) => state.edition.split.children,
   );
@@ -36,14 +52,29 @@ export default function SplitPanel() {
     (state: RootState) => state.edition.split.cutStep,
   );
 
-  // Step 1: Select building (no candidate yet)
+  // Step 1.1: Select building (no candidate yet)
   if (!splitCandidateId) {
     return <SplitBuildingInitialStep />;
   }
 
+  // Step 1.2: Select building (validated candidate selected)
+  if (candidateBuilding && locked) {
+    return (
+      <SplitBuildingValidationWarningStep
+        splitCandidateId={splitCandidateId}
+        candidateBuilding={candidateBuilding}
+      />
+    );
+  }
+
   // Step 2: Cut step (drawing cut lines)
-  if (cutStep === 'drawing') {
-    return <SplitBuildingCutStep splitCandidateId={splitCandidateId} />;
+  if (!locked && cutStep === 'drawing') {
+    return (
+      <SplitBuildingCutStep
+        splitCandidateId={splitCandidateId}
+        candidateBuilding={candidateBuilding}
+      />
+    );
   }
 
   // Steps 3-N: Child info steps
@@ -70,6 +101,7 @@ export default function SplitPanel() {
     return (
       <SplitBuildingSummaryStep
         splitCandidateId={splitCandidateId}
+        candidateBuilding={candidateBuilding}
         selectedChildIndex={selectedChildIndex}
         splitChildrenCount={splitChildrenCount}
         childrenB={children}
@@ -80,7 +112,7 @@ export default function SplitPanel() {
   return null;
 }
 
-// Step 1: Select the building to split
+// Step 1.1: Select the building to split
 function SplitBuildingInitialStep() {
   const dispatch: AppDispatch = useDispatch();
   const splitCandidateId = useSelector(
@@ -119,11 +151,75 @@ function SplitBuildingInitialStep() {
   );
 }
 
+// Step 1.2: Warning about validation on the selected building
+function SplitBuildingValidationWarningStep({
+  splitCandidateId,
+  candidateBuilding,
+}: {
+  splitCandidateId: string;
+  candidateBuilding: SelectedBuilding;
+}) {
+  const dispatch: AppDispatch = useDispatch();
+
+  return (
+    <GenericPanel
+      title="Scinder un bâtiment"
+      onClose={() => cancelSplit(dispatch)}
+      body={
+        <>
+          <div className={editPanelStyles.headSection}>
+            <RNBIDHeader rnbId={splitCandidateId}></RNBIDHeader>
+            <PanelTabs rnbId={splitCandidateId}></PanelTabs>
+          </div>
+          <BuildingMainAttributes
+            building={candidateBuilding}
+            allowEdit={false}
+          />
+
+          <div>
+            <p>
+              Vous avez une scission à effectuer malgré la validation du
+              bâtiment ?{' '}
+            </p>
+            <Button
+              size="small"
+              onClick={() =>
+                dispatch(Actions.edition.setSplitEditUnlocked(true))
+              }
+            >
+              Accéder à l&apos;interface de découpe
+            </Button>
+          </div>
+        </>
+      }
+      footer={
+        <>
+          <Button
+            onClick={() => cancelSplit(dispatch)}
+            priority="tertiary no outline"
+          >
+            Annuler
+          </Button>
+        </>
+      }
+      header={
+        <h1 className={`fr-text--lg fr-m-0 ${styles.stepTitle}`}>
+          Étape 1 - Sélection du bâtiment
+        </h1>
+      }
+      headerActions={<HelpButton topic="split" />}
+      testId="edition-panel"
+    />
+  );
+}
+
 // Step 2: Draw cut lines
 function SplitBuildingCutStep({
   splitCandidateId,
+  candidateBuilding,
 }: {
   splitCandidateId: string;
+  candidateBuilding: SelectedBuilding | null;
 }) {
   const dispatch: AppDispatch = useDispatch();
   const cutLines = useSelector(
@@ -160,6 +256,13 @@ function SplitBuildingCutStep({
       onClose={() => cancelSplit(dispatch)}
       body={
         <div className={`${styles.panelSection} ${styles.noPad}`}>
+          {candidateBuilding && candidateBuilding.validated_by.length > 0 && (
+            <div className={editPanelStyles.validationWarning}>
+              Scinder ce bâtiment aura pour effet de supprimer la validation
+              faite par{' '}
+              <ValidatorNames validatedBy={candidateBuilding.validated_by} />.
+            </div>
+          )}
           <div className="fr-pb-3v">
             <strong>Bâtiment :</strong> {splitCandidateId}
           </div>
@@ -360,11 +463,13 @@ function SplitBuildingSummaryStep({
   splitChildrenCount,
   childrenB,
   splitCandidateId,
+  candidateBuilding,
 }: {
   selectedChildIndex: number;
   splitChildrenCount: number;
   childrenB: SplitChild[];
   splitCandidateId: string;
+  candidateBuilding: SelectedBuilding | null;
 }) {
   const dispatch: AppDispatch = useDispatch();
   const splitChildrenForAPI = useSelector(selectSplitChildrenForAPI);
@@ -402,6 +507,17 @@ function SplitBuildingSummaryStep({
               <div>
                 <strong>Bâtiment à scinder :</strong> {splitCandidateId}
               </div>
+              {candidateBuilding &&
+                candidateBuilding.validated_by.length > 0 && (
+                  <div className={editPanelStyles.validationWarning}>
+                    Scinder ce bâtiment aura pour effet de supprimer la
+                    validation faite par{' '}
+                    <ValidatorNames
+                      validatedBy={candidateBuilding.validated_by}
+                    />
+                    .
+                  </div>
+                )}
               <div className={styles.text}>
                 {splitChildrenCount} nouveaux bâtiments créés
               </div>
