@@ -9,50 +9,71 @@ import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { Highlight } from '@codegouvfr/react-dsfr/Highlight';
 import Input from '@codegouvfr/react-dsfr/Input';
 
-import CopyButton from '@/components/CopyButton';
+import BackupCodes from '@/components/authentication/BackupCodes';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/utils/actionResult';
 import {
+  focusOnMount,
+  isCredentialsError,
   MFA_INVALID_MESSAGE,
   MfaError,
   mfaErrorOf,
+  MfaSetup,
   THROTTLED_MESSAGE,
 } from '@/utils/mfa';
 import { rnbApi, RnbApiError } from '@/utils/rnbApi';
 
-type MfaSetup = {
-  otpauth_uri: string;
-  secret: string;
-  qr_code_svg: string;
+type MfaConfirmation = {
+  // Absent from a replacement, which keeps the session and its API token
+  login_code?: string;
+  backup_codes: string[];
 };
 
-type MfaConfirmation = {
-  login_code: string;
-  backup_codes: string[];
+type Replacement = {
+  // Back to the overview: "Annuler" before the confirmation, "Terminer" after it.
+  // An abandoned pending app is inert, no API call is needed.
+  onClose: () => void;
+  // The confirmation can no longer succeed: back to the proof of the current factor
+  onRestart: () => void;
 };
 
 type MfaEnrollmentProps = {
   username: string;
   password: string;
-  // Only given when the API suggests enrollment: the user already has a session.
-  // Called when the user declines, before going to the redirect URL.
-  onPostpone?: () => void;
-  redirectUrl: string;
   // Called once the backup codes are shown: the password is no longer needed
   onEnrolled: () => void;
-  onLogInAgain: () => void;
-};
-
-// Credentials refused by the API, e.g. password changed since the login
-const isCredentialsError = (error: unknown) =>
-  error instanceof RnbApiError &&
-  error.status === 400 &&
-  !!error.data &&
-  typeof error.data === 'object' &&
-  'non_field_errors' in error.data;
+} & (
+  | {
+      // Replaces the confirmed app of a signed-in user.
+      // initialSetup: from /auth/mfa/replace/setup/, posted after the proof
+      replacement: Replacement;
+      initialSetup: MfaSetup;
+      onPostpone?: never;
+      redirectUrl?: never;
+      onLogInAgain?: never;
+    }
+  | {
+      replacement?: never;
+      // From /auth/mfa/setup/, posted by the Sécurité page; absent at login
+      initialSetup?: MfaSetup;
+      // Only given when the API suggests enrollment: the user already has a session.
+      // Called when the user declines, before going to the redirect URL.
+      onPostpone?: () => void;
+      redirectUrl: string;
+      onLogInAgain: () => void;
+    }
+);
 
 // Errors the enrollment cannot recover from: the user has to log in again
 const mustLogInAgainAfter = (error: unknown) =>
   mfaErrorOf(error) === MfaError.AlreadyConfigured || isCredentialsError(error);
+
+// Errors after which a replacement cannot be confirmed: its pending app is gone,
+// or the credentials changed
+const mustRestartReplacementAfter = (error: unknown) =>
+  mfaErrorOf(error) === MfaError.SetupNotStarted || mustLogInAgainAfter(error);
+
+const RESTART_REPLACEMENT_MESSAGE =
+  'Cette opération ne peut plus aboutir. Recommencez.';
 
 const errorMessage = (error: unknown) => {
   const mfaError = mfaErrorOf(error);
@@ -68,21 +89,20 @@ const errorMessage = (error: unknown) => {
     : UNEXPECTED_ERROR_MESSAGE;
 };
 
-// Each screen heading has its own `key`, so it is a new element that takes the focus
-const focusOnMount = (heading: HTMLHeadingElement | null) => heading?.focus();
-
 export default function MfaEnrollment({
   username,
   password,
+  onEnrolled,
+  replacement,
+  initialSetup,
   onPostpone,
   redirectUrl,
-  onEnrolled,
   onLogInAgain,
 }: MfaEnrollmentProps) {
   const canPostpone = onPostpone !== undefined;
   // A suggested enrollment first asks whether to set it up, without a QR code
   const [wantsSetup, setWantsSetup] = useState(!canPostpone);
-  const [setup, setSetup] = useState<MfaSetup | null>(null);
+  const [setup, setSetup] = useState<MfaSetup | null>(initialSetup ?? null);
   const [setupFailed, setSetupFailed] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [otp, setOtp] = useState('');
@@ -91,6 +111,7 @@ export default function MfaEnrollment({
   const [enrollment, setEnrollment] = useState<MfaConfirmation | null>(null);
   const [signInFailed, setSignInFailed] = useState(false);
   const [mustLogInAgain, setMustLogInAgain] = useState(false);
+  const [mustRestart, setMustRestart] = useState(false);
 
   const startSetup = useCallback(async () => {
     setSetup(null);
@@ -107,8 +128,9 @@ export default function MfaEnrollment({
     }
   }, [username, password]);
 
-  // Each setup call replaces the pending key, and strict mode runs effects twice
-  const setupRequested = useRef(false);
+  // Each setup call replaces the pending key, and strict mode runs effects twice.
+  // A given setup is already pending: during a replacement /auth/mfa/setup/ answers 409.
+  const setupRequested = useRef(initialSetup !== undefined);
   useEffect(() => {
     if (!wantsSetup || setupRequested.current) return;
     setupRequested.current = true;
@@ -121,7 +143,8 @@ export default function MfaEnrollment({
   };
 
   const goToRedirectUrl = () => {
-    window.location.href = redirectUrl;
+    // Always given outside a replacement, which never leaves the page
+    if (redirectUrl) window.location.href = redirectUrl;
   };
 
   const postpone = () => {
@@ -132,16 +155,22 @@ export default function MfaEnrollment({
   const confirmEnrollment = async () => {
     let confirmation: MfaConfirmation;
     try {
-      confirmation = await rnbApi.post<MfaConfirmation>('/auth/mfa/confirm/', {
-        username,
-        password,
-        otp,
-      });
+      confirmation = await rnbApi.post<MfaConfirmation>(
+        replacement ? '/auth/mfa/replace/confirm/' : '/auth/mfa/confirm/',
+        { username, password, otp },
+      );
     } catch (error) {
       const mfaError = mfaErrorOf(error);
       if (mfaError === MfaError.Invalid) {
         setOtpError(true);
         setOtp('');
+        return;
+      }
+      // "Reconnectez-vous" would be wrong: the session stays open
+      if (replacement && mustRestartReplacementAfter(error)) {
+        setApiError(RESTART_REPLACEMENT_MESSAGE);
+        setSetup(null);
+        setMustRestart(true);
         return;
       }
       setApiError(errorMessage(error));
@@ -160,7 +189,7 @@ export default function MfaEnrollment({
 
   // The API returns the backup codes only once, and `signIn` leaves the page when
   // next-auth is down: the session opens on "Continuer", once they are on screen.
-  const continueToRedirectUrl = async (loginCode: string) => {
+  const continueToRedirectUrl = async (loginCode: string | undefined) => {
     setIsSubmitting(true);
     try {
       // The confirmation renews the API token, even for a session opened at login:
@@ -202,8 +231,6 @@ export default function MfaEnrollment({
     );
 
   if (enrollment) {
-    const backupCodes = enrollment.backup_codes.join('\n');
-
     return (
       <>
         <h3 key="backup-codes-heading" ref={focusOnMount} tabIndex={-1}>
@@ -214,27 +241,13 @@ export default function MfaEnrollment({
             ? 'Votre application est configurée, mais la connexion a échoué. Reconnectez-vous avec un code.'
             : null,
         )}
-        <Alert
-          className="fr-mb-3w"
-          description="Conservez ces codes de secours en lieu sûr. Chacun permet une seule connexion si vous n'avez plus accès à votre application. Ils ne seront plus affichés. Votre clé d'API a aussi été renouvelée : remplacez l'ancienne partout où vous l'utilisez."
-          severity="warning"
-          small
-          closable={false}
+        <BackupCodes
+          codes={enrollment.backup_codes}
+          apiTokenRenewed={!replacement}
         />
-        <pre
-          data-testid="backup-codes"
-          style={{ columns: 2, maxWidth: '20rem' }}
-        >
-          {backupCodes}
-        </pre>
-        <div className="fr-mb-3w">
-          <CopyButton
-            valueToCopy={backupCodes}
-            label="Copier les codes"
-            okMsg="Codes copiés"
-          />
-        </div>
-        {signInFailed ? (
+        {replacement ? (
+          <Button onClick={replacement.onClose}>Terminer</Button>
+        ) : signInFailed ? (
           <Button onClick={onLogInAgain}>Se reconnecter</Button>
         ) : (
           <Button
@@ -285,13 +298,25 @@ export default function MfaEnrollment({
   return (
     <>
       <h3 key="setup-heading" ref={focusOnMount} tabIndex={-1}>
-        Configurer la double authentification
+        {replacement
+          ? 'Configurer la nouvelle application'
+          : 'Configurer la double authentification'}
       </h3>
       {errorAlert(apiError)}
-      <p>
-        Pour sécuriser votre compte, installez une application
-        d&apos;authentification sur votre téléphone, puis scannez ce QR code.
-      </p>
+      {replacement ? (
+        // Once the pending app is gone, there is nothing left to scan
+        setup && (
+          <p>
+            Scannez ce QR code avec votre nouvelle application. Votre
+            application actuelle reste active jusqu&apos;à la confirmation.
+          </p>
+        )
+      ) : (
+        <p>
+          Pour sécuriser votre compte, installez une application
+          d&apos;authentification sur votre téléphone, puis scannez ce QR code.
+        </p>
+      )}
       {setup && (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element -- inline SVG from the API, nothing to optimize */}
@@ -327,23 +352,29 @@ export default function MfaEnrollment({
         <ButtonsGroup
           inlineLayoutWhen="sm and up"
           buttons={[
-            mustLogInAgain
+            mustRestart && replacement
               ? {
-                  children: 'Se reconnecter',
+                  children: 'Recommencer',
                   type: 'button',
-                  onClick: onLogInAgain,
+                  onClick: replacement.onRestart,
                 }
-              : setupFailed
+              : mustLogInAgain
                 ? {
-                    children: 'Réessayer',
+                    children: 'Se reconnecter',
                     type: 'button',
-                    onClick: retrySetup,
+                    onClick: onLogInAgain,
                   }
-                : {
-                    children: 'Activer',
-                    type: 'submit',
-                    disabled: !setup || isSubmitting,
-                  },
+                : setupFailed
+                  ? {
+                      children: 'Réessayer',
+                      type: 'button',
+                      onClick: retrySetup,
+                    }
+                  : {
+                      children: replacement ? 'Confirmer' : 'Activer',
+                      type: 'submit',
+                      disabled: !setup || isSubmitting,
+                    },
             ...(canPostpone
               ? [
                   {
@@ -353,6 +384,17 @@ export default function MfaEnrollment({
                     // Leaving during the confirmation would lose the backup codes
                     disabled: isSubmitting,
                     onClick: postpone,
+                  },
+                ]
+              : []),
+            ...(replacement
+              ? [
+                  {
+                    children: 'Annuler',
+                    priority: 'secondary' as const,
+                    type: 'button' as const,
+                    disabled: isSubmitting,
+                    onClick: replacement.onClose,
                   },
                 ]
               : []),

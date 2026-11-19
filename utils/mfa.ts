@@ -17,8 +17,27 @@ export const MFA_INVALID_MESSAGE =
 export const THROTTLED_MESSAGE =
   'Trop de tentatives. Réessayez dans une minute.';
 
+// Response of `/auth/mfa/setup/` and `/auth/mfa/replace/setup/`
+export type MfaSetup = {
+  otpauth_uri: string;
+  secret: string;
+  qr_code_svg: string;
+};
+
+// Credentials refused by the API, e.g. a mistyped or changed password
+export const isCredentialsError = (error: unknown) =>
+  error instanceof RnbApiError &&
+  error.status === 400 &&
+  !!error.data &&
+  typeof error.data === 'object' &&
+  'non_field_errors' in error.data;
+
+// Each screen heading has its own `key`, so it is a new element that takes the focus
+export const focusOnMount = (heading: HTMLHeadingElement | null) =>
+  heading?.focus();
+
 // A declined suggestion is remembered in this browser, per account. It comes back
-// after 30 days: no other page lets the user set up an authenticator app.
+// after 30 days; the Sécurité page of Mon compte also lets the user set one up.
 const SETUP_DECLINED_KEY_PREFIX = 'mfaSetupDeclined:';
 const SETUP_DECLINED_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
 

@@ -4,7 +4,7 @@
 import { SideMenu } from '@codegouvfr/react-dsfr/SideMenu';
 
 // Auth
-import { getSession, signOut } from 'next-auth/react';
+import { getSession, signOut, useSession } from 'next-auth/react';
 
 // Nav & routes
 import { usePathname } from 'next/navigation';
@@ -20,6 +20,7 @@ export default function MyAccountLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
 
   const handleSignout = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -71,6 +72,17 @@ export default function MyAccountLayout({
       href: '/mon-compte/notifications',
     },
   });
+
+  // ProConnect manages the second factor of its accounts
+  if (status === 'authenticated' && session.authProvider !== 'proconnect') {
+    menuItems.push({
+      text: 'Sécurité',
+      isActive: pathname === '/mon-compte/securite',
+      linkProps: {
+        href: '/mon-compte/securite',
+      },
+    });
+  }
 
   menuItems.push({
     text: 'Se déconnecter',
