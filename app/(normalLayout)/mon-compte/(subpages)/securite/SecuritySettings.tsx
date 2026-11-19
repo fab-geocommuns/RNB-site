@@ -6,6 +6,7 @@ import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import Input from '@codegouvfr/react-dsfr/Input';
 import { PasswordInput } from '@codegouvfr/react-dsfr/blocks/PasswordInput';
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import BackupCodes from '@/components/authentication/BackupCodes';
@@ -43,6 +44,7 @@ export default function SecuritySettings({
   username: string;
   mfaConfigured: boolean;
 }) {
+  const router = useRouter();
   const [action, setAction] = useState<SecurityAction | null>(null);
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
@@ -73,6 +75,13 @@ export default function SecuritySettings({
       setOtp('');
     } else if (mfaError === MfaError.Throttled) {
       setApiError(THROTTLED_MESSAGE);
+    } else if (
+      mfaError === MfaError.AlreadyConfigured ||
+      mfaError === MfaError.SetupNotStarted
+    ) {
+      // The app was set up or removed in another session: show the current state
+      backToOverview();
+      router.refresh();
     } else if (isCredentialsError(error)) {
       setPasswordError(true);
     } else {

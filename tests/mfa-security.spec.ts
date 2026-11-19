@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import { test, expect } from '@/tests/fixtures';
+import { MOCK_HOST, MOCK_PORT } from '@/tests/config';
 
 // Tokens understood by the `/auth/mfa/status/` stub of tests/mock-server
 const MFA_USER = { username: 'mfa', accessToken: 'jeton-mfa' };
@@ -27,6 +28,10 @@ const QR_CODE_ALT =
 const API_TOKEN_RENEWED = "Votre clé d'API a aussi été renouvelée";
 const REPLACEMENT_INTRO =
   "Scannez ce QR code avec votre nouvelle application. Votre application actuelle reste active jusqu'à la confirmation.";
+const ALREADY_CONFIGURED_DETAIL =
+  "Une application d'authentification est déjà configurée. Contactez le support pour la réinitialiser.";
+const SETUP_NOT_STARTED_DETAIL =
+  "Commencez par configurer l'application d'authentification.";
 const BACKUP_CODE_SPENT_HINT =
   'Un code de secours saisi ici ne servira plus, même si vous annulez ensuite.';
 
@@ -49,6 +54,25 @@ const countPosts = ({ page, path }: { page: Page; path: string }) => {
     }
   });
   return counter;
+};
+
+// What GET /auth/mfa/status/ answers for this token, as if changed by another session
+const setMfaStatus = async ({
+  page,
+  accessToken,
+  configured,
+}: {
+  page: Page;
+  accessToken: string;
+  configured: boolean;
+}) => {
+  const response = await page.request.post(
+    `http://${MOCK_HOST}:${MOCK_PORT}/__mfa-status`,
+    {
+      data: { accessToken, configured },
+    },
+  );
+  expect(response.ok()).toBe(true);
 };
 
 const openSecurityPage = async (page: Page) => {
@@ -271,6 +295,86 @@ test.describe('Sécurité dans Mon compte', () => {
     await expect(codeField(page)).toBeVisible();
   });
 
+  test('activation : application activée entre-temps, la page affiche le bon état', async ({
+    page,
+    auth,
+    httpMocker,
+  }) => {
+    const user = {
+      username: 'active-ailleurs',
+      accessToken: 'jeton-active-ailleurs',
+    };
+    await setMfaStatus({
+      page,
+      accessToken: user.accessToken,
+      configured: false,
+    });
+    await auth.signIn(user);
+    httpMocker.post('/auth/mfa/setup/?from=site', {
+      status: 409,
+      body: {
+        error: 'mfa_already_configured',
+        detail: ALREADY_CONFIGURED_DETAIL,
+      },
+    });
+
+    await openSecurityPage(page);
+    await page
+      .getByRole('button', { name: 'Activer la double authentification' })
+      .click();
+    await setMfaStatus({
+      page,
+      accessToken: user.accessToken,
+      configured: true,
+    });
+    await fillProof({ page });
+    await page.getByRole('button', { name: 'Vérifier' }).click();
+
+    await expect(
+      page.getByRole('button', { name: "Changer d'application" }),
+    ).toBeVisible();
+    await expect(page.getByText(ALREADY_CONFIGURED_DETAIL)).toHaveCount(0);
+  });
+
+  test('régénération : application supprimée entre-temps, la page affiche le bon état', async ({
+    page,
+    auth,
+    httpMocker,
+  }) => {
+    const user = {
+      username: 'supprimee-ailleurs',
+      accessToken: 'jeton-supprimee-ailleurs',
+    };
+    await setMfaStatus({
+      page,
+      accessToken: user.accessToken,
+      configured: true,
+    });
+    await auth.signIn(user);
+    httpMocker.post('/auth/mfa/backup_codes/?from=site', {
+      status: 400,
+      body: {
+        error: 'mfa_setup_not_started',
+        detail: SETUP_NOT_STARTED_DETAIL,
+      },
+    });
+
+    await openSecurityPage(page);
+    await page.getByRole('button', { name: 'Régénérer les codes' }).click();
+    await setMfaStatus({
+      page,
+      accessToken: user.accessToken,
+      configured: false,
+    });
+    await fillProof({ page, otp: '123456' });
+    await page.getByRole('button', { name: 'Vérifier' }).click();
+
+    await expect(
+      page.getByRole('button', { name: 'Activer la double authentification' }),
+    ).toBeVisible();
+    await expect(page.getByText(SETUP_NOT_STARTED_DETAIL)).toHaveCount(0);
+  });
+
   test('activation sur la page sans application', async ({
     page,
     auth,
@@ -474,44 +578,30 @@ test.describe('Sécurité dans Mon compte', () => {
     await expect(codeField(page)).toHaveValue('');
   });
 
-  for (const { failure, response, message } of [
-    {
-      failure: 'application retirée entre-temps',
-      response: {
-        status: 400,
-        body: {
-          error: 'mfa_setup_not_started',
-          detail: "Commencez par configurer l'application d'authentification.",
-        },
-      },
-      message: "Commencez par configurer l'application d'authentification.",
-    },
-    {
-      failure: 'erreur du serveur',
-      response: { status: 500, body: {} },
-      message: 'Une erreur est survenue. Merci de réessayer plus tard.',
-    },
-  ]) {
-    test(`preuve refusée, ${failure} : message dans l’alerte, formulaire conservé`, async ({
-      page,
-      auth,
-      httpMocker,
-    }) => {
-      await auth.signIn(MFA_USER);
-      httpMocker.post('/auth/mfa/backup_codes/?from=site', response);
-
-      await openSecurityPage(page);
-      await page.getByRole('button', { name: 'Régénérer les codes' }).click();
-      await fillProof({ page, otp: '123456' });
-      await page.getByRole('button', { name: 'Vérifier' }).click();
-
-      await expect(page.getByText(message)).toBeVisible();
-      await expect(page.getByText('Mot de passe incorrect.')).toHaveCount(0);
-      await expect(page.getByText(INVALID_CODE_MESSAGE)).toHaveCount(0);
-      await expect(page.getByTestId('backup-codes')).toHaveCount(0);
-      await expect(passwordField(page)).toHaveValue(PASSWORD);
+  test('preuve refusée, erreur du serveur : message dans l’alerte, formulaire conservé', async ({
+    page,
+    auth,
+    httpMocker,
+  }) => {
+    await auth.signIn(MFA_USER);
+    httpMocker.post('/auth/mfa/backup_codes/?from=site', {
+      status: 500,
+      body: {},
     });
-  }
+
+    await openSecurityPage(page);
+    await page.getByRole('button', { name: 'Régénérer les codes' }).click();
+    await fillProof({ page, otp: '123456' });
+    await page.getByRole('button', { name: 'Vérifier' }).click();
+
+    await expect(
+      page.getByText('Une erreur est survenue. Merci de réessayer plus tard.'),
+    ).toBeVisible();
+    await expect(page.getByText('Mot de passe incorrect.')).toHaveCount(0);
+    await expect(page.getByText(INVALID_CODE_MESSAGE)).toHaveCount(0);
+    await expect(page.getByTestId('backup-codes')).toHaveCount(0);
+    await expect(passwordField(page)).toHaveValue(PASSWORD);
+  });
 
   test('mot de passe refusé à la confirmation du changement : Recommencer, sans déconnexion', async ({
     page,

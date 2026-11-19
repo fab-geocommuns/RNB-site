@@ -19,6 +19,9 @@ const HISTORY = JSON.parse(
   readFileSync(new URL('../fixtures/data/history.json', import.meta.url)),
 );
 
+// GET /auth/mfa/status/ answers, per token, set through POST /__mfa-status
+const mfaStatusSetByTests = new Map();
+
 const PORT = Number(process.env.MOCK_SERVER_PORT || 8001);
 const HOST = process.env.MOCK_SERVER_HOST || '127.0.0.1';
 console.log(`[mock-server] starting on ${HOST}:${PORT} (pid=${process.pid})`);
@@ -82,6 +85,17 @@ const server = createServer((req, res) => {
 
   if (path === '/__health') {
     return json(res, 200, { ok: true });
+  }
+  // Lets a test change the MFA status of its own token, as another session would
+  if (method === 'POST' && path === '/__mfa-status') {
+    let raw = '';
+    req.on('data', (chunk) => (raw += chunk));
+    req.on('end', () => {
+      const { accessToken, configured } = JSON.parse(raw || '{}');
+      mfaStatusSetByTests.set(`Token ${accessToken}`, configured);
+      json(res, 200, {});
+    });
+    return;
   }
 
   // RNB API
@@ -272,11 +286,13 @@ const server = createServer((req, res) => {
     if (req.headers.authorization === 'Token jeton-etat-illisible') {
       return json(res, 200, {});
     }
-    const configured = {
-      'Token jeton-mfa': true,
-      'Token jeton-enrole': true,
-      'Token jeton-sans-application': false,
-    }[req.headers.authorization];
+    const configured =
+      mfaStatusSetByTests.get(req.headers.authorization) ??
+      {
+        'Token jeton-mfa': true,
+        'Token jeton-enrole': true,
+        'Token jeton-sans-application': false,
+      }[req.headers.authorization];
     if (configured === undefined) {
       return json(res, 401, { detail: 'Token invalide.' });
     }
