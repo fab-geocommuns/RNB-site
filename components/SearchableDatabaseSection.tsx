@@ -78,12 +78,6 @@ const debouncedTrackSearch = debounce(trackSearch, 2000);
 export default function SearchableDatabaseSection({ databases }: Props) {
   const [search, setSearch] = useQueryParamState('search', '');
 
-  const databaseCount = databases.length;
-  const attributeCount = databases.reduce(
-    (acc, db) => acc + db.attributes.length,
-    0,
-  );
-
   useEffect(() => {
     debouncedTrackSearch(search);
   }, [search]);
@@ -105,8 +99,8 @@ export default function SearchableDatabaseSection({ databases }: Props) {
       </h2>
       <div className={styles.searchBlock} id="search-block">
         <p className="section__subtitle">
-          Recherchez parmi {attributeCount} attributs accessibles dans{' '}
-          {databaseCount} bases répertoriées
+          Les ID-RNB sont présents dans de nombreuses bases, dont les plus
+          grandes bases de l&apos;État. En voici quelques exemples.
         </p>
         <AttributesSearchBar
           onDebouncedChange={setSearch}
