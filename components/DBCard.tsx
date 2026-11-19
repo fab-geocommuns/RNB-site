@@ -6,82 +6,16 @@ import styles from '@/styles/dbcard.module.scss';
 // Components
 import ImageNext from 'next/image';
 import Badge from '@codegouvfr/react-dsfr/Badge';
-import Table from '@codegouvfr/react-dsfr/Table';
 
 // Analytics
 import va from '@vercel/analytics';
 import { DiffusionDatabase } from './diffusionDatabase.type';
-import {
-  HighlightToken,
-  FuzzySearchAttributeResult,
-} from './util/fuzzySearchAttributes';
-
-const HighlightedText = ({
-  text,
-  tokens,
-}: {
-  text: string;
-  tokens: HighlightToken[];
-}) => {
-  if (!tokens) {
-    return <span>{text}</span>;
-  }
-
-  return (
-    <span>
-      {tokens.map((token, i) =>
-        token.isHighlighted ? (
-          <span
-            key={i}
-            style={{ backgroundColor: 'yellow', borderRadius: '4px' }}
-          >
-            {token.token}
-          </span>
-        ) : (
-          token.token
-        ),
-      )}
-    </span>
-  );
-};
-
-const AttributesTable = ({
-  attributes,
-}: {
-  attributes: FuzzySearchAttributeResult[];
-}) => {
-  return (
-    <Table
-      className={styles.attributesTable}
-      data={attributes.map((attribute, i) => [
-        <HighlightedText
-          key={i}
-          text={attribute.name}
-          // @ts-ignore
-          tokens={attribute.nameTokens}
-        />,
-        <HighlightedText
-          key={i}
-          text={attribute.description}
-          // @ts-ignore
-          tokens={attribute.descriptionTokens}
-        />,
-      ])}
-      // @ts-ignore
-      hasHeader={false}
-      size={'sm'}
-      noCaption
-    />
-  );
-};
 
 type Props = {
   db: DiffusionDatabase;
-  attributes: FuzzySearchAttributeResult[];
-  displayAttributes: boolean;
 };
 
-export default function Entry({ db, attributes, displayAttributes }: Props) {
+export default function Entry({ db }: Props) {
   const trackDbClick = (db: DiffusionDatabase) => {
     return () => {
       va.track('db-click-on-page', {
@@ -117,10 +51,7 @@ export default function Entry({ db, attributes, displayAttributes }: Props) {
             </div>
           </div>
 
-          {!displayAttributes && (
-            <p className={styles.description}>{db.description}</p>
-          )}
-          {displayAttributes && <AttributesTable attributes={attributes} />}
+          <p className={styles.description}>{db.description}</p>
 
           <div>
             {db.tags.map((tag) => (

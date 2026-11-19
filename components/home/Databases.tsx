@@ -27,7 +27,6 @@ function FeaturedDatabases({ dbs }: { dbs: DiffusionDatabase[] }) {
 }
 
 export default function Databases({ databases }: Props) {
-  const databaseCount = databases.length;
   const featuredDatabases = databases.filter((db) => db.is_featured);
 
   return (
@@ -38,8 +37,8 @@ export default function Databases({ databases }: Props) {
             Enrichissez vos données bâtimentaires
           </h2>
           <p className="section__subtitle">
-            Croisez facilement les données de {databaseCount} bases intégrant
-            les ID-RNB
+            Croisez facilement vos données avec celles des bases intégrant les
+            ID-RNB
           </p>
         </div>
         <div className={styles.searchContainer}>
@@ -49,7 +48,7 @@ export default function Databases({ databases }: Props) {
               href="/outils-services/rapprochement"
               className={fr.cx('fr-btn', 'fr-btn--tertiary')}
             >
-              Voir l&apos;ensemble des bases contenant des ID-RNB
+              Voir quelques exemples de bases intégrant des ID-RNB
             </a>
           </div>
         </div>
