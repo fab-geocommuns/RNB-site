@@ -27,6 +27,8 @@ const QR_CODE_ALT =
 const API_TOKEN_RENEWED = "Votre clé d'API a aussi été renouvelée";
 const REPLACEMENT_INTRO =
   "Scannez ce QR code avec votre nouvelle application. Votre application actuelle reste active jusqu'à la confirmation.";
+const BACKUP_CODE_SPENT_HINT =
+  'Un code de secours saisi ici ne servira plus, même si vous annulez ensuite.';
 
 const getSession = async (page: Page) =>
   (await page.request.get('/api/auth/session')).json();
@@ -102,6 +104,7 @@ test.describe('Sécurité dans Mon compte', () => {
 
     await openSecurityPage(page);
     await page.getByRole('button', { name: "Changer d'application" }).click();
+    await expect(page.getByText(BACKUP_CODE_SPENT_HINT)).toBeVisible();
     await fillProof({ page, otp: '123456' });
     // A second click while the proof is pending sends nothing
     await page.getByRole('button', { name: 'Vérifier' }).dblclick();
@@ -193,6 +196,8 @@ test.describe('Sécurité dans Mon compte', () => {
 
     await openSecurityPage(page);
     await page.getByRole('button', { name: 'Régénérer les codes' }).click();
+    // The new codes come with the same answer: nothing to finish afterwards
+    await expect(page.getByText(BACKUP_CODE_SPENT_HINT)).toHaveCount(0);
     await fillProof({ page, otp: 'k3m7qz2a' });
     await page.getByRole('button', { name: 'Vérifier' }).click();
 

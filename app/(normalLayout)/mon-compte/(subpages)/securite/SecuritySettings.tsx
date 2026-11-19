@@ -259,7 +259,12 @@ export default function SecuritySettings({
         {action !== SecurityAction.EnableApp && (
           <Input
             label="Code à 6 chiffres"
-            hintText="Ou l'un de vos codes de secours"
+            hintText={
+              // The backup code is spent at "Vérifier", before the new app is confirmed
+              action === SecurityAction.ReplaceApp
+                ? "Ou l'un de vos codes de secours. Un code de secours saisi ici ne servira plus, même si vous annulez ensuite."
+                : "Ou l'un de vos codes de secours"
+            }
             disabled={isSubmitting}
             state={otpError ? 'error' : 'default'}
             stateRelatedMessage={otpError ? MFA_INVALID_MESSAGE : undefined}
