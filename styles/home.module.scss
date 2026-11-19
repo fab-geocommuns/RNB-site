@@ -344,7 +344,11 @@
 }
 
 .featuredDatabases {
-  // create a grid of 4 cols and two rows
+  // Largeur explicite : dans un parent flex centré, la grille prendrait sinon
+  // la largeur de son contenu, et auto-fit retomberait à une seule colonne tant
+  // que les logos n'ont pas de taille intrinsèque (pas encore chargés, SVG sans width).
+  width: 100%;
+  max-width: 60rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
   gap: 1rem;
