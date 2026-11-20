@@ -1,18 +1,85 @@
 @import 'vars.scss';
 $title-color: #414e71;
 
+$map-gutter: 12px;
+// .map__InputShell (styles/mapPage.module.scss): height on mobile, width on desktop
+$map-search-height: 52px;
+$map-search-width: 400px;
+// Keeps the panel above the Calques button (styles/layerSwitcher.module.scss .btn) and the map controls under it
+$report-bottom-reserve: 227px;
+$report-bottom-reserve-md: 168px;
+// On a short map (landscape phone) the panel keeps this height over the controls, within the map
+$report-min-height: 150px;
+$report-top: $map-gutter + $map-search-height + $map-gutter;
+// .actions of styles/contribution/editPanel.module.scss, which starts at $report-top on mobile
+$edition-actions-height: 3.75rem;
+
+// Bounded by the map so the panels scroll inside, never the page
+@mixin report-shell-bounds($top, $bottom-reserve) {
+  top: $top;
+  max-height: max(
+    calc(100% - #{$top} - #{$bottom-reserve}),
+    min($report-min-height, calc(100% - #{$top} - #{$map-gutter}))
+  );
+}
+
 .reportShell {
   position: absolute;
-  right: 12px;
-  // Laisse la place à la recherche d'adresse sur mobile.
-  top: 100px;
   z-index: 350;
-  max-width: 350px;
-  width: 350px;
-  // Bounded by the map so the panels scroll inside, never the page
-  max-height: calc(100% - 112px);
+  @include report-shell-bounds(
+    $top: $report-top,
+    $bottom-reserve: $report-bottom-reserve
+  );
+  left: $map-gutter;
+  right: $map-gutter;
   display: flex;
   flex-direction: column;
+
+  @media (min-width: $bp-md) {
+    @include report-shell-bounds(
+      $top: $map-gutter,
+      $bottom-reserve: $report-bottom-reserve-md
+    );
+    left: auto;
+    width: 350px;
+    // Narrows instead of covering the search on screens just above $bp-md
+    max-width: calc(
+      100% - #{$map-gutter + $map-search-width + $map-gutter + $map-gutter}
+    );
+  }
+}
+
+@media (max-width: $bp-md - 1px) {
+  .reportShellBelowEditionActions {
+    @include report-shell-bounds(
+      $top: calc(#{$report-top} + #{$edition-actions-height} + #{$map-gutter}),
+      $bottom-reserve: $report-bottom-reserve
+    );
+  }
+  .reportShellHiddenOnMobile {
+    display: none;
+  }
+}
+
+// Scroll shadows: the `local` covers hide the `scroll` shadows at each end of the content
+.reportShell .body {
+  background:
+    linear-gradient(var(--background-default-grey) 30%, transparent) top / 100%
+      40px no-repeat local,
+    linear-gradient(transparent, var(--background-default-grey) 70%) bottom /
+      100% 40px no-repeat local,
+    radial-gradient(
+        farthest-side at 50% 0,
+        var(--background-contrast-grey-active),
+        transparent
+      )
+      top / 100% 12px no-repeat scroll,
+    radial-gradient(
+        farthest-side at 50% 100%,
+        var(--background-contrast-grey-active),
+        transparent
+      )
+      bottom / 100% 12px no-repeat scroll;
 }
 
 .shell {

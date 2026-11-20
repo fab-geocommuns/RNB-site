@@ -32,12 +32,16 @@ function getDisplayedTagsFromUrl() {
   );
 }
 
+const displayedTags = getDisplayedTagsFromUrl();
+const showClosedReports = getQueryParam('report_closed') === '1';
+
 const initialState: ReportStore = {
-  filtersDrawerOpen: true,
+  // A shared link that filters the map shows its filters
+  filtersDrawerOpen: displayedTags !== 'all' || showClosedReports,
   selectedReport: null,
   lastReportUpdate: Date.now(),
-  displayedTags: getDisplayedTagsFromUrl(),
-  showClosedReports: getQueryParam('report_closed') === '1',
+  displayedTags,
+  showClosedReports,
   reportIdsAtPoint: [],
 };
 

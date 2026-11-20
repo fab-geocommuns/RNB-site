@@ -4,6 +4,11 @@
   margin-bottom: 12px;
 }
 
+// Lets the open panel shrink in .reportShell so its body scrolls
+.open {
+  min-height: 0;
+}
+
 body .head {
   cursor: pointer;
 

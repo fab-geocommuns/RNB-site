@@ -86,3 +86,51 @@ export const emptyReportStats = {
   total_report_count: 0,
   tag_stats: [],
 };
+
+const tagStat = ({
+  tag,
+  total,
+  closed,
+}: {
+  tag: Tag;
+  total: number;
+  closed: number;
+}) => ({
+  tag_id: tag.id,
+  tag_slug: `tag-${tag.id}`,
+  tag_name: tag.name,
+  total_report_count: total,
+  closed_report_count: closed,
+});
+
+// Open counts differ per selection: 2 for tag 1, 4 for tag 12, 6 for all tags
+export const reportStatsWithTags = {
+  closed_report_count: 1,
+  total_report_count: 7,
+  tag_stats: [
+    tagStat({ tag: tagAddress, total: 3, closed: 1 }),
+    tagStat({ tag: tagMissingBuilding, total: 4, closed: 0 }),
+  ],
+};
+
+// 13 295 open and 1 205 closed: counts written with a thousands separator
+export const thousandsReportStats = {
+  closed_report_count: 1205,
+  total_report_count: 14500,
+  tag_stats: [tagStat({ tag: tagAddress, total: 14500, closed: 1205 })],
+};
+
+// Enough tags for the open filters panel to overflow the map height
+const manyTags = Array.from({ length: 10 }, (_, index) =>
+  tagStat({
+    tag: { id: 100 + index, name: `Étiquette ${index + 1}` },
+    total: 10,
+    closed: 2,
+  }),
+);
+
+export const manyTagsReportStats = {
+  closed_report_count: 20,
+  total_report_count: 100,
+  tag_stats: manyTags,
+};
