@@ -138,6 +138,40 @@ const server = createServer((req, res) => {
       summaries: [summaries[7], summaries[30], summaries.all],
     });
   }
+  if (method === 'GET' && path === '/api/alpha/contributions/rankings/') {
+    // the full lists: more contributors than the top of the summary over 30
+    // days, the cities capped at 100 over the whole period
+    const { users, organizations, cities } = CONTRIBUTION_SUMMARY.top;
+    const period = (window_days, rankings) => ({
+      updated_at: CONTRIBUTION_SUMMARY.updated_at,
+      window_days,
+      since: window_days === null ? null : '2026-09-15T14:10:00+02:00',
+      users,
+      organizations,
+      cities,
+      ...rankings,
+    });
+    const moreUsers = Array.from({ length: 11 }, (_, i) => ({
+      username: `contributeur_${i + 1}`,
+      organization: null,
+      count: 11 - i,
+    }));
+    const manyCities = Array.from({ length: 100 }, (_, i) => ({
+      insee_code: String(33001 + i),
+      name: `Commune ${i + 1}`,
+      department: gironde,
+      count: 100 - i,
+    }));
+    return json(res, 200, {
+      rankings: [
+        period(7, {
+          cities: cities.map((c) => ({ ...c, count: 1 })),
+        }),
+        period(30, { users: [...users, ...moreUsers] }),
+        period(null, { cities: manyCities }),
+      ],
+    });
+  }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {
     return json(res, 404, { detail: 'Not found (mock).' });
   }

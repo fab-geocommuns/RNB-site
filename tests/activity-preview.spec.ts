@@ -101,46 +101,57 @@ test.describe("Détail de l'activité", () => {
       /^520\s*contributions$/,
       /^86\s*organisations contributrices$/,
       /^1\s248\s*communes améliorées par la communauté$/,
-      'Organisations les plus actives',
-      'Communes les plus éditées',
     ]);
     await expect(main.getByText('dont 12 pour la première fois')).toBeVisible();
   });
 
-  test('affiche les classements de plus d’une ligne', async ({
+  test('affiche les classements complets, un onglet chacun', async ({
     activityDetailsPage,
   }) => {
     const { main } = activityDetailsPage;
-    const cities = main
-      .locator('.fr-card')
-      .filter({ hasText: 'Communes les plus éditées' });
-    await expect(cities.getByRole('listitem')).toHaveCount(3);
-    await expect(cities.getByText('· Gironde (33)')).toBeVisible();
-    // an organization is shown without department
-    const organizations = main
-      .locator('.fr-card')
-      .filter({ hasText: 'Organisations les plus actives' });
-    await expect(organizations.getByRole('listitem')).toHaveCount(2);
-    await expect(organizations.getByText(/·/)).toHaveCount(0);
-    // a single contributor: the card is hidden
     await expect(
-      main.getByRole('heading', { name: 'Contributeurs les plus actifs' }),
-    ).toHaveCount(0);
+      main.getByRole('heading', { name: 'Classements' }),
+    ).toBeVisible();
+    const table = main.locator('.fr-table table');
+
+    // every contributor, not only the top of the summary
+    await expect(table.locator('caption')).toHaveText(
+      'Contributeurs les plus actifs',
+    );
+    await expect(table.locator('tbody tr')).toHaveCount(12);
+    await expect(table.locator('tbody tr').first()).toContainText(
+      /1\s*contributrice_test\s*Mairie Test\s*800/,
+    );
+    await expect(table.locator('tbody tr').last()).toContainText(
+      /12\s*contributeur_11\s*–\s*1/,
+    );
+
+    await main.getByRole('tab', { name: 'Organisations (2)' }).click();
+    await expect(table.locator('caption')).toHaveText(
+      'Organisations les plus actives',
+    );
+    await expect(table.locator('thead th')).toHaveText([
+      'Rang',
+      'Organisation',
+      'Contributions',
+    ]);
+    await expect(table.locator('tbody tr')).toHaveCount(2);
+
+    await main.getByRole('tab', { name: 'Communes (3)' }).click();
+    await expect(table.locator('tbody tr')).toHaveCount(3);
+    await expect(table.getByText('Gironde (33)')).toBeVisible();
   });
 
   test('affiche le nom court des organisations, le nom complet au survol', async ({
     activityDetailsPage,
   }) => {
     const { page, main } = activityDetailsPage;
-    const organizations = main
-      .locator('.fr-card')
-      .filter({ hasText: 'Organisations les plus actives' });
-    await expect(organizations.getByText('Commune de Talence')).toBeVisible();
-    await expect(
-      organizations.getByText('Syndicat intercommunal SIG'),
-    ).toBeHidden();
+    await main.getByRole('tab', { name: /^Organisations/ }).click();
+    const table = main.locator('.fr-table table');
+    await expect(table.getByText('Commune de Talence')).toBeVisible();
+    await expect(table.getByText('Syndicat intercommunal SIG')).toBeHidden();
 
-    await organizations.getByText('Syndicat SIG', { exact: true }).hover();
+    await table.getByText('Syndicat SIG', { exact: true }).hover();
 
     await expect(
       page.getByRole('tooltip', { name: 'Syndicat intercommunal SIG' }),
@@ -167,10 +178,9 @@ test.describe("Détail de l'activité", () => {
     activityDetailsPage,
   }) => {
     const { page, main } = activityDetailsPage;
-    const cities = main
-      .locator('.fr-card')
-      .filter({ hasText: 'Communes les plus éditées' });
+    const table = main.locator('.fr-table table');
     const tags = main.locator('.fr-tags-group');
+    await main.getByRole('tab', { name: /^Communes/ }).click();
 
     await main.getByText('7 derniers jours').click();
 
@@ -181,7 +191,14 @@ test.describe("Détail de l'activité", () => {
       }),
     ).toBeVisible();
     await expect(main.getByText('dont 3 pour la première fois')).toBeVisible();
-    await expect(cities.getByText('9', { exact: true })).toHaveCount(0);
+    // the tab stays, the rankings are the ones of the period
+    await expect(table.locator('caption')).toHaveText(
+      'Communes les plus éditées',
+    );
+    await expect(table.getByText('9', { exact: true })).toHaveCount(0);
+    await expect(
+      main.getByRole('tab', { name: 'Contributeurs (1)' }),
+    ).toBeVisible();
     await expect(
       main.getByRole('heading', {
         name: 'Nouveaux contributeurs ces 7 derniers jours',
@@ -208,6 +225,11 @@ test.describe("Détail de l'activité", () => {
       }),
     ).toBeVisible();
     await expect(main.getByText(/pour la première fois/)).toHaveCount(0);
+    // the cities capped by the API, and said so
+    await main.getByRole('tab', { name: 'Communes (100)' }).click();
+    await expect(main.locator('.fr-table caption')).toHaveText(
+      'Les 100 communes les plus éditées',
+    );
     await expect(
       main.getByRole('heading', { name: 'Derniers contributeurs arrivés' }),
     ).toBeVisible();

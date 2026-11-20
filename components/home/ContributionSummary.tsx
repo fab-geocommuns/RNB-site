@@ -207,7 +207,7 @@ export const detailsHref = (period: Period) =>
 
 // « Participer au RNB » section of the home page: the number of contributions
 // and of contributing organizations. A selector picks the period (the last 7
-// or 30 days, or since the opening of the collaborative edition), one summary
+// or 30 days, or the whole period), one summary
 // per period; the rest of the summary is on the details page. Renders nothing
 // without data: the home page must not break when the API fails.
 export default function ContributionSummary({

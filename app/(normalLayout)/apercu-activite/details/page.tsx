@@ -3,6 +3,7 @@ import Breadcrumb from '@codegouvfr/react-dsfr/Breadcrumb';
 
 import ContributionDetails from '@/components/home/ContributionDetails';
 import {
+  loadContributionRankings,
   loadContributionSummaries,
   parsePeriod,
 } from '@/utils/contributionSummary';
@@ -20,8 +21,12 @@ export default async function Page({
   searchParams: Promise<{ periode?: string | string[] }>;
 }) {
   const { periode } = await searchParams;
-  // a single API call, as the section: the same summaries, all periods
-  const summaries = await loadContributionSummaries();
+  // the same summaries as the section, all periods, and the full rankings
+  // of all periods: one request each, in parallel
+  const [summaries, rankings] = await Promise.all([
+    loadContributionSummaries(),
+    loadContributionRankings(),
+  ]);
 
   return (
     <main className="fr-container fr-mb-8w">
@@ -43,6 +48,7 @@ export default async function Page({
       {summaries ? (
         <ContributionDetails
           summaries={summaries}
+          rankings={rankings}
           initialPeriod={parsePeriod(periode)}
         />
       ) : (
