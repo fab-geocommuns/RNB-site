@@ -11,3 +11,13 @@ export class ActivityPreviewPage extends RNBPage {
     });
   }
 }
+
+// Details of the section, opened on the period in its URL
+export class ActivityDetailsPage extends RNBPage {
+  readonly main: Locator;
+
+  constructor(page: Page) {
+    super(page, '/apercu-activite/details');
+    this.main = page.locator('main');
+  }
+}
