@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Actions, AppDispatch, RootState } from '@/stores/store';
 import { useEffect, useRef, useState } from 'react';
 import { rnbApi } from '@/utils/rnbApi';
+import { formatNumber } from '@/utils/contributionSummary';
 
 import genericStyles from '@/styles/genericPanel.module.scss';
 import panelStyles from '@/styles/panel.module.scss';
 import filterStyles from '@/styles/report/reportFilters.module.scss';
 
+import { fr } from '@codegouvfr/react-dsfr';
+import Badge from '@codegouvfr/react-dsfr/Badge';
 import Checkbox from '@codegouvfr/react-dsfr/Checkbox';
 import ToggleSwitch from '@codegouvfr/react-dsfr/ToggleSwitch';
 import Tooltip from '@codegouvfr/react-dsfr/Tooltip';
@@ -38,7 +41,7 @@ const reportLabel = ({ count, status }: ReportCount) =>
   `${pluralize({ count, word: 'signalement' })} ${pluralize({ count, word: status })}`;
 
 const statusCountLabel = ({ count, status }: ReportCount) =>
-  `${count} ${pluralize({ count, word: status })}`;
+  `${formatNumber(count)} ${pluralize({ count, word: status })}`;
 
 const openCount = (tag: TagStat) =>
   tag.total_report_count - tag.closed_report_count;
@@ -53,7 +56,7 @@ const tagHint = ({
   const open = openCount(tag);
   return showClosedReports
     ? `${statusCountLabel({ count: open, status: 'ouvert' })} · ${statusCountLabel({ count: tag.closed_report_count, status: 'clôturé' })}`
-    : `${open} ${reportLabel({ count: open, status: 'ouvert' })}`;
+    : `${formatNumber(open)} ${reportLabel({ count: open, status: 'ouvert' })}`;
 };
 
 // A report with several tags is counted once per tag: an exact count would need a tag filter on the stats API
@@ -192,17 +195,28 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
             </Tooltip>
           </div>
         </div>
-        <a href="#" className={genericStyles.closeLink}>
-          <i
-            className={[
-              'fr-icon-arrow-down-s-line',
-              genericStyles.closeLinkIcon,
-              isOpen ? genericStyles.closeLinkIconOpen : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          />
-        </a>
+        <div className={genericStyles.headActions}>
+          {!isOpen && stats && (
+            <Badge as="span" small className={fr.cx('fr-ml-1w')}>
+              {formatNumber(selectedOpenCount)}
+              <span className={fr.cx('fr-sr-only')}>
+                {' '}
+                {reportLabel({ count: selectedOpenCount, status: 'ouvert' })}
+              </span>
+            </Badge>
+          )}
+          <a href="#" className={genericStyles.closeLink}>
+            <i
+              className={[
+                'fr-icon-arrow-down-s-line',
+                genericStyles.closeLinkIcon,
+                isOpen ? genericStyles.closeLinkIconOpen : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            />
+          </a>
+        </div>
       </div>
 
       {isOpen && stats && (
@@ -210,7 +224,7 @@ export default function ReportFilters({ isOpen }: { isOpen?: boolean }) {
           <div className={panelStyles.section}>
             <div className={filterStyles.totalShell}>
               <span className={filterStyles.totalCount}>
-                {selectedOpenCount}
+                {formatNumber(selectedOpenCount)}
               </span>{' '}
               <span className={filterStyles.totalLabel}>
                 {reportLabel({ count: selectedOpenCount, status: 'ouvert' })}

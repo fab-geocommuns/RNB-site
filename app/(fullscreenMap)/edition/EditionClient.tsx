@@ -33,6 +33,7 @@ export default function EditionClient() {
 
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
+  const operation = useSelector((state: RootState) => state.edition.operation);
 
   // On récupère les fonds de carte depuis le local storage
   const {
@@ -58,7 +59,7 @@ export default function EditionClient() {
         <AddressSearchMap />
         <EditionPanel />
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
-          <ReportPanels />
+          <ReportPanels mapPanelOpen={operation !== null} belowEditionActions />
         )}
         <div className={styles.map__mapShell}>
           <EditMap

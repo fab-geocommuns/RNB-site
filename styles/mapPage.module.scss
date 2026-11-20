@@ -25,6 +25,11 @@
     width: 400px;
     right: auto;
   }
+
+  // Lifts the address suggestions over the reports panel (.reportShell, styles/genericPanel.module.scss) while typing
+  &:focus-within {
+    z-index: 351;
+  }
 }
 
 .geodisplay {
