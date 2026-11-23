@@ -39,6 +39,9 @@ export default function RNBMap() {
 
   // Map layers from store
   const mapLayers = useSelector((state: RootState) => state.map.layers);
+  const selectedItem = useSelector(
+    (state: RootState) => state.map.selectedItem,
+  );
 
   // On récupère les fonds de carte depuis le local storage
   const {
@@ -100,7 +103,7 @@ export default function RNBMap() {
         <AddressSearchMap />
         <VisuPanel />
         {showReportPanels && mapLayers.extraLayers.includes('reports') && (
-          <ReportPanels />
+          <ReportPanels mapPanelOpen={!!selectedItem} />
         )}
         {helpVariation && (
           <HelpSourcePanel

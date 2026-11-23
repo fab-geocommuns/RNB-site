@@ -4,9 +4,12 @@
  * vraies features (cf. `encodePointTile`), tous les signalements étant
  * superposés sur `REPORTS_POINT`.
  */
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 import { test, expect } from '@/tests/fixtures';
-import { buildingSegur } from '@/tests/fixtures/data/buildings';
+import {
+  banFeatureSegur,
+  buildingSegur,
+} from '@/tests/fixtures/data/buildings';
 import {
   REPORTS_POINT,
   ReportFixture,
@@ -15,11 +18,83 @@ import {
   missingBuildingReport,
   newReport,
   emptyReportStats,
+  manyTagsReportStats,
+  reportStatsWithTags,
+  thousandsReportStats,
 } from '@/tests/fixtures/data/reports';
 import { encodePointTile } from '@/tests/fixtures/utils/vector-tile';
 
 const REPORTS_MAP_URL = `/carte?extra_layers=reports&coords=${REPORTS_POINT.lat},${REPORTS_POINT.lng},17`;
 const REPORTS_ON_MAP = 'map[id=mainMap] layer[id=reports_circle]';
+const REPORT_PANEL = '[class*="reportShell"]';
+const ADDRESS_SEARCH = '[class*="map__InputShell"]';
+
+const reportFiltersHeading = (page: Page) =>
+  page.getByRole('heading', { name: 'Suivi des signalements' });
+
+// Registered after the `HttpMocker` stub of beforeEach, so it wins
+const serveReportStats = ({
+  page,
+  stats,
+}: {
+  page: Page;
+  stats: typeof reportStatsWithTags;
+}) =>
+  page.route(
+    (url) => url.pathname.endsWith('/reports/stats/'),
+    (route) => route.fulfill({ json: stats }),
+  );
+
+// Without a building, opening the report leaves the building and edition panels closed
+const serveReportWithoutBuilding = async (page: Page) => {
+  const report = { ...missingBuildingReport.api, rnb_id: null };
+  await page.route(
+    (url) => url.pathname.endsWith(`/reports/${report.id}/`),
+    (route) => route.fulfill({ json: report }),
+  );
+  return report.id;
+};
+
+// True when no other element covers the centre of the located one
+const isOnTop = (locator: Locator) =>
+  locator.evaluate((element) => {
+    const { x, y, width, height } = element.getBoundingClientRect();
+    return element.contains(
+      document.elementFromPoint(x + width / 2, y + height / 2),
+    );
+  });
+
+const layersButtonTop = async (page: Page) => {
+  const box = await page
+    .getByAltText('Voir les calques')
+    .filter({ visible: true })
+    .boundingBox();
+  return box!.y;
+};
+
+// The shell's scroll height counts the content drawn below it, not the content its panels clip
+const expectReportPanelContentInside = async (page: Page) => {
+  const shell = page.locator(REPORT_PANEL);
+  const mapBox = (await page
+    .locator('[class*="map__mapShell"]')
+    .boundingBox())!;
+  const shellBox = (await shell.boundingBox())!;
+  expect(shellBox.y + shellBox.height).toBeLessThanOrEqual(
+    mapBox.y + mapBox.height,
+  );
+  expect(
+    await shell.evaluate(
+      (element) => element.scrollHeight - element.clientHeight,
+    ),
+  ).toBeLessThanOrEqual(0);
+};
+
+const openReportFiltersWithManyTags = async (page: Page) => {
+  await serveReportStats({ page, stats: manyTagsReportStats });
+  await page.goto(REPORTS_MAP_URL);
+  await reportFiltersHeading(page).click();
+  await expect(page.getByText('Étiquette 10')).toBeAttached();
+};
 
 const reportOnMap = (report: ReportFixture) =>
   `${REPORTS_ON_MAP} filter["==", ["get", "id"], ${report.api.id}]`;
@@ -127,10 +202,12 @@ test.describe('Signalements', () => {
     await page.goto(REPORTS_MAP_URL);
     await expect(mapLocator(REPORTS_ON_MAP)).toHaveCountOnMap(2);
 
+    await reportFiltersHeading(page).click();
     await page.getByText('Afficher les clôturés').click();
     await expect(page).toHaveURL(/report_closed=1/);
     await expect(mapLocator(reportOnMap(closedReport))).toHaveCountOnMap(1);
 
+    // The URL filters the map, so the panel loads open on its filters
     await page.reload();
     await expect(
       page.getByRole('checkbox', { name: 'Afficher les clôturés' }),
@@ -240,6 +317,281 @@ test.describe('Signalements', () => {
       .boundingBox();
     expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(
       mapBox!.y + mapBox!.height,
+    );
+    expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(
+      await layersButtonTop(page),
+    );
+  });
+
+  test("replié par défaut, l'en-tête affiche les signalements ouverts sélectionnés et s'ouvre au clic", async ({
+    page,
+  }) => {
+    await serveReportStats({ page, stats: reportStatsWithTags });
+    await page.goto(REPORTS_MAP_URL);
+
+    const openCountBadge = page.locator(`${REPORT_PANEL} .fr-badge`);
+    await expect(openCountBadge).toHaveText('6 signalements ouverts');
+    await expect(page.getByText('Afficher les clôturés')).toBeHidden();
+
+    await reportFiltersHeading(page).click();
+    await expect(page.getByText('Afficher les clôturés')).toBeVisible();
+    await expect(openCountBadge).toBeHidden();
+  });
+
+  test('un lien filtré par étiquette ouvre les filtres, et replié le badge compte la sélection', async ({
+    page,
+  }) => {
+    await serveReportStats({ page, stats: reportStatsWithTags });
+    await page.goto(`${REPORTS_MAP_URL}&report_tags=1`);
+
+    await expect(page.getByText('Afficher les clôturés')).toBeVisible();
+    const openCountBadge = page.locator(`${REPORT_PANEL} .fr-badge`);
+    await expect(openCountBadge).toBeHidden();
+
+    await reportFiltersHeading(page).click();
+    await expect(openCountBadge).toHaveText('2 signalements ouverts');
+  });
+
+  for (const viewport of [
+    { width: 667, height: 375 },
+    { width: 844, height: 390 },
+  ]) {
+    test(`sur une carte basse (${viewport.width}x${viewport.height}), la fiche et les filtres restent dans le panneau`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await serveReportStats({ page, stats: manyTagsReportStats });
+      await serveReportTiles({ page, reports: [addressReport] });
+      await page.goto(`${REPORTS_MAP_URL}&report=${addressReport.api.id}`);
+      await expect(page.getByText(addressReport.text)).toBeAttached();
+      await expectReportPanelContentInside(page);
+
+      await reportFiltersHeading(page).click();
+      await expect(page.getByText('Étiquette 10')).toBeAttached();
+      await expectReportPanelContentInside(page);
+    });
+  }
+
+  test("sur mobile, les suggestions d'adresse passent devant le panneau replié", async ({
+    page,
+    httpMocker,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await httpMocker.banSearch(
+      ['1', '2', '3'].map((id) => ({
+        ...banFeatureSegur,
+        properties: { ...banFeatureSegur.properties, id },
+      })),
+    );
+    await page.goto(REPORTS_MAP_URL);
+    await expect(reportFiltersHeading(page)).toBeVisible();
+
+    await page
+      .getByPlaceholder('Chercher une adresse, un identifiant RNB')
+      .fill('73 Av. de Paris');
+    const suggestions = page.locator(
+      '[class*="autocomplete_suggestions"] > div',
+    );
+    await expect(suggestions).toHaveCount(3);
+
+    for (const suggestion of await suggestions.all()) {
+      expect(await isOnTop(suggestion)).toBe(true);
+    }
+  });
+
+  test('sur mobile, le panneau Bâtiment masque les signalements, qui reviennent à sa fermeture', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await serveReportStats({ page, stats: reportStatsWithTags });
+    await page.goto(`${REPORTS_MAP_URL}&q=${buildingSegur.rnb_id}`);
+    const buildingPanel = page.getByTestId('visu-panel');
+    await expect(buildingPanel).toContainText(buildingSegur.rnb_id);
+    await expect(reportFiltersHeading(page)).toBeHidden();
+
+    const close = buildingPanel.getByRole('link', {
+      name: 'Fermer',
+      exact: true,
+    });
+    expect(await isOnTop(close)).toBe(true);
+    await close.click();
+    await expect(buildingPanel).toBeHidden();
+    await expect(reportFiltersHeading(page)).toBeVisible();
+  });
+
+  test('sur mobile, la fiche du signalement ouvert passe devant son bâtiment, puis le panneau Bâtiment reprend la main', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await serveReportTiles({ page, reports: [addressReport] });
+    await page.goto(`${REPORTS_MAP_URL}&report=${addressReport.api.id}`);
+    const buildingPanel = page.getByTestId('visu-panel');
+    await expect(buildingPanel).toContainText(buildingSegur.rnb_id);
+    await expect(page.getByText(addressReport.text)).toBeVisible();
+
+    await page
+      .locator(`${REPORT_PANEL} [class*="detailsContainer"] a`)
+      .filter({ has: page.locator('.fr-icon-close-line') })
+      .click();
+    await expect(reportFiltersHeading(page)).toBeHidden();
+    expect(
+      await isOnTop(
+        buildingPanel.getByRole('link', { name: 'Fermer', exact: true }),
+      ),
+    ).toBe(true);
+  });
+
+  test('sur mobile, un bâtiment ouvert après les filtres passe devant eux, qui reviennent à sa fermeture', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await serveReportStats({ page, stats: reportStatsWithTags });
+    await page.goto(
+      `${REPORTS_MAP_URL}&report_tags=1&q=${buildingSegur.rnb_id}`,
+    );
+    const buildingPanel = page.getByTestId('visu-panel');
+    await expect(buildingPanel).toContainText(buildingSegur.rnb_id);
+    await expect(reportFiltersHeading(page)).toBeHidden();
+
+    await buildingPanel
+      .getByRole('link', { name: 'Fermer', exact: true })
+      .click();
+    await expect(page.getByText('Afficher les clôturés')).toBeVisible();
+  });
+
+  test("sur mobile, un bâtiment cherché après la fiche d'un signalement passe devant elle, qui revient à sa fermeture", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const reportId = await serveReportWithoutBuilding(page);
+    await page.goto(`${REPORTS_MAP_URL}&report=${reportId}`);
+    const reportText = page.getByText(missingBuildingReport.text);
+    await expect(reportText).toBeVisible();
+
+    const search = page.getByPlaceholder(
+      'Chercher une adresse, un identifiant RNB',
+    );
+    await search.fill(buildingSegur.rnb_id);
+    await search.press('Enter');
+    const buildingPanel = page.getByTestId('visu-panel');
+    await expect(buildingPanel).toContainText(buildingSegur.rnb_id);
+    await expect(reportText).toBeHidden();
+    const close = buildingPanel.getByRole('link', {
+      name: 'Fermer',
+      exact: true,
+    });
+    expect(await isOnTop(close)).toBe(true);
+
+    await close.click();
+    await expect(reportText).toBeVisible();
+  });
+
+  test("sur /edition mobile, la création ouverte depuis la fiche d'un signalement passe devant elle", async ({
+    page,
+    editionPage,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const reportId = await serveReportWithoutBuilding(page);
+    await page.goto(
+      `/edition?extra_layers=reports&coords=${REPORTS_POINT.lat},${REPORTS_POINT.lng},17&report=${reportId}`,
+    );
+    const reportText = page.getByText(missingBuildingReport.text);
+    await expect(reportText).toBeVisible();
+
+    await page.getByTestId('create-action-button').click();
+    await expect(editionPage.panel).toBeVisible();
+    await expect(reportText).toBeHidden();
+  });
+
+  test("sur /edition mobile sans bâtiment, le panneau se place sous la barre d'outils d'édition", async ({
+    page,
+    editionPage,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await editionPage.goto();
+    await expect(reportFiltersHeading(page)).toBeVisible();
+
+    const panelTop = (await page.locator(REPORT_PANEL).boundingBox())!.y;
+    for (const testId of [
+      'create-action-button',
+      'merge-action-button',
+      'split-action-button',
+    ]) {
+      const action = page.getByTestId(testId);
+      const actionBox = (await action.boundingBox())!;
+      expect(panelTop).toBeGreaterThan(actionBox.y + actionBox.height);
+      expect(await isOnTop(action)).toBe(true);
+    }
+  });
+
+  test('les nombres du panneau ont le même séparateur de milliers partout', async ({
+    page,
+  }) => {
+    await serveReportStats({ page, stats: thousandsReportStats });
+    await page.goto(REPORTS_MAP_URL);
+
+    await expect(page.locator(`${REPORT_PANEL} .fr-badge`)).toHaveText(
+      '13 295 signalements ouverts',
+    );
+    await reportFiltersHeading(page).click();
+    await expect(
+      page.locator(`${REPORT_PANEL} [class*="totalCount"]`),
+    ).toHaveText('13 295');
+    await expect(page.locator(`${REPORT_PANEL} .fr-hint-text`)).toHaveText(
+      '13 295 signalements ouverts',
+    );
+    await page.getByText('Afficher les clôturés').click();
+    await expect(page.locator(`${REPORT_PANEL} .fr-hint-text`)).toHaveText(
+      '13 295 ouverts · 1 205 clôturés',
+    );
+  });
+
+  test("sur grand écran, le panneau s'aligne sur la recherche et s'arrête au-dessus du bouton Calques", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1366, height: 768 });
+    await openReportFiltersWithManyTags(page);
+
+    const searchBox = await page.locator(ADDRESS_SEARCH).boundingBox();
+    const panelBox = await page.locator(REPORT_PANEL).boundingBox();
+    expect(panelBox!.y).toBeCloseTo(searchBox!.y, 0);
+    expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(
+      await layersButtonTop(page),
+    );
+
+    // Only the body scrolls: the header stays in place
+    const body = page.locator(`${REPORT_PANEL} [class$="__body"]`);
+    expect(
+      await body.evaluate(
+        (element) => element.scrollHeight > element.clientHeight,
+      ),
+    ).toBe(true);
+    const headingY = (await reportFiltersHeading(page).boundingBox())!.y;
+    await body.evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
+    expect(await body.evaluate((element) => element.scrollTop)).toBeGreaterThan(
+      0,
+    );
+    expect((await reportFiltersHeading(page).boundingBox())!.y).toBe(headingY);
+  });
+
+  test('sur mobile, le panneau se place sous la recherche, à sa largeur, sans couvrir les contrôles', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await openReportFiltersWithManyTags(page);
+
+    const searchBox = await page.locator(ADDRESS_SEARCH).boundingBox();
+    const panelBox = await page.locator(REPORT_PANEL).boundingBox();
+    expect(panelBox!.y).toBeCloseTo(searchBox!.y + searchBox!.height + 12, 0);
+    expect(panelBox!.x).toBeCloseTo(searchBox!.x, 0);
+    expect(panelBox!.x + panelBox!.width).toBeCloseTo(
+      searchBox!.x + searchBox!.width,
+      0,
+    );
+    expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(
+      await layersButtonTop(page),
     );
   });
 

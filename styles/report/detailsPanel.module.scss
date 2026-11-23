@@ -2,6 +2,8 @@
 
 .detailsContainer {
   min-height: 0;
+  // On a short map, the scroll body cannot shrink below its padding: clip it inside the panel
+  overflow: hidden;
 }
 
 body .head {
