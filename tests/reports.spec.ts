@@ -45,6 +45,16 @@ const serveReportStats = ({
     (route) => route.fulfill({ json: stats }),
   );
 
+// Without a building, opening the report leaves the building and edition panels closed
+const serveReportWithoutBuilding = async (page: Page) => {
+  const report = { ...missingBuildingReport.api, rnb_id: null };
+  await page.route(
+    (url) => url.pathname.endsWith(`/reports/${report.id}/`),
+    (route) => route.fulfill({ json: report }),
+  );
+  return report.id;
+};
+
 // True when no other element covers the centre of the located one
 const isOnTop = (locator: Locator) =>
   locator.evaluate((element) => {
@@ -429,6 +439,68 @@ test.describe('Signalements', () => {
         buildingPanel.getByRole('link', { name: 'Fermer', exact: true }),
       ),
     ).toBe(true);
+  });
+
+  test('sur mobile, un bâtiment ouvert après les filtres passe devant eux, qui reviennent à sa fermeture', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await serveReportStats({ page, stats: reportStatsWithTags });
+    await page.goto(
+      `${REPORTS_MAP_URL}&report_tags=1&q=${buildingSegur.rnb_id}`,
+    );
+    const buildingPanel = page.getByTestId('visu-panel');
+    await expect(buildingPanel).toContainText(buildingSegur.rnb_id);
+    await expect(reportFiltersHeading(page)).toBeHidden();
+
+    await buildingPanel
+      .getByRole('link', { name: 'Fermer', exact: true })
+      .click();
+    await expect(page.getByText('Afficher les clôturés')).toBeVisible();
+  });
+
+  test("sur mobile, un bâtiment cherché après la fiche d'un signalement passe devant elle, qui revient à sa fermeture", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const reportId = await serveReportWithoutBuilding(page);
+    await page.goto(`${REPORTS_MAP_URL}&report=${reportId}`);
+    const reportText = page.getByText(missingBuildingReport.text);
+    await expect(reportText).toBeVisible();
+
+    const search = page.getByPlaceholder(
+      'Chercher une adresse, un identifiant RNB',
+    );
+    await search.fill(buildingSegur.rnb_id);
+    await search.press('Enter');
+    const buildingPanel = page.getByTestId('visu-panel');
+    await expect(buildingPanel).toContainText(buildingSegur.rnb_id);
+    await expect(reportText).toBeHidden();
+    const close = buildingPanel.getByRole('link', {
+      name: 'Fermer',
+      exact: true,
+    });
+    expect(await isOnTop(close)).toBe(true);
+
+    await close.click();
+    await expect(reportText).toBeVisible();
+  });
+
+  test("sur /edition mobile, la création ouverte depuis la fiche d'un signalement passe devant elle", async ({
+    page,
+    editionPage,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const reportId = await serveReportWithoutBuilding(page);
+    await page.goto(
+      `/edition?extra_layers=reports&coords=${REPORTS_POINT.lat},${REPORTS_POINT.lng},17&report=${reportId}`,
+    );
+    const reportText = page.getByText(missingBuildingReport.text);
+    await expect(reportText).toBeVisible();
+
+    await page.getByTestId('create-action-button').click();
+    await expect(editionPage.panel).toBeVisible();
+    await expect(reportText).toBeHidden();
   });
 
   test("sur /edition mobile sans bâtiment, le panneau se place sous la barre d'outils d'édition", async ({

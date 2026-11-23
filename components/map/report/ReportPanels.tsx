@@ -10,7 +10,7 @@ export default function ReportPanels({
   mapPanelOpen,
   belowEditionActions = false,
 }: {
-  // On mobile, hides behind the page's own panel (building, edition) unless a report is selected or the filters are open
+  // On mobile, hides behind the page's own panel (building, edition) when that one was opened last
   mapPanelOpen: boolean;
   belowEditionActions?: boolean;
 }) {
@@ -19,6 +19,9 @@ export default function ReportPanels({
   );
   const selectedReport = useSelector(
     (state: RootState) => state.report.selectedReport,
+  );
+  const reportPanelInFront = useSelector(
+    (state: RootState) => state.report.reportPanelInFront,
   );
   const layersSwitcherOpen = useSelector(
     (state: RootState) => state.map.layersSwitcherOpen,
@@ -29,10 +32,7 @@ export default function ReportPanels({
   const className = [
     styles.reportShell,
     belowEditionActions && styles.reportShellBelowEditionActions,
-    mapPanelOpen &&
-      !selectedReport &&
-      !filtersDrawerOpen &&
-      styles.reportShellHiddenOnMobile,
+    mapPanelOpen && !reportPanelInFront && styles.reportShellHiddenOnMobile,
   ]
     .filter(Boolean)
     .join(' ');

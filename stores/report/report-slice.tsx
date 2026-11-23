@@ -11,10 +11,14 @@ import {
   setQueryParam,
   removeQueryParam,
 } from '@/utils/queryParams';
+import { selectADS, selectBuilding } from '@/stores/map/map-slice';
+import { editionActions } from '@/stores/edition/edition-slice';
 import type { AppDispatch, RootState } from '../store';
 
 export type ReportStore = {
   filtersDrawerOpen: boolean;
+  // On mobile, the last panel opened between the reports one and the page's own one (building, edition) is shown
+  reportPanelInFront: boolean;
   selectedReport: Report | null;
   lastReportUpdate: number;
   displayedTags: 'all' | number[];
@@ -38,6 +42,7 @@ const showClosedReports = getQueryParam('report_closed') === '1';
 const initialState: ReportStore = {
   // A shared link that filters the map shows its filters
   filtersDrawerOpen: displayedTags !== 'all' || showClosedReports,
+  reportPanelInFront: false,
   selectedReport: null,
   lastReportUpdate: Date.now(),
   displayedTags,
@@ -51,6 +56,7 @@ export const reportSlice = createSlice({
   reducers: {
     toggleFiltersDrawer(state) {
       state.filtersDrawerOpen = !state.filtersDrawerOpen;
+      state.reportPanelInFront = state.filtersDrawerOpen;
       if (state.filtersDrawerOpen) {
         state.selectedReport = null;
         removeQueryParam('report');
@@ -76,6 +82,7 @@ export const reportSlice = createSlice({
     builder.addCase(selectReport.fulfilled, (state, action) => {
       // In all cases, set the selected report
       state.selectedReport = action.payload || null;
+      state.reportPanelInFront = Boolean(action.payload?.id);
 
       if (action.payload?.id) {
         // If there is something to show, open the details panel
@@ -86,6 +93,22 @@ export const reportSlice = createSlice({
         // Remove report parameter when no report is selected
         removeQueryParam('report');
       }
+    });
+    // The selected report opens its own building: that one stays behind the report
+    builder.addCase(selectBuilding.fulfilled, (state, action) => {
+      if (
+        action.payload &&
+        action.payload.rnb_id !== state.selectedReport?.rnb_id
+      )
+        state.reportPanelInFront = false;
+    });
+    builder.addCase(selectADS.fulfilled, (state, action) => {
+      if (action.payload) state.reportPanelInFront = false;
+    });
+    // 'update' always follows a building selection, handled above
+    builder.addCase(editionActions.setOperation, (state, action) => {
+      if (action.payload !== null && action.payload !== 'update')
+        state.reportPanelInFront = false;
     });
   },
 });
