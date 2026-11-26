@@ -3,7 +3,7 @@ import { getDatabases } from '@/utils/databases';
 
 // Comps
 import { Card } from '@codegouvfr/react-dsfr/Card';
-import SearchableDatabaseSection from '@/components/SearchableDatabaseSection';
+import DatabaseListSection from '@/components/DatabaseListSection';
 import PivotIllustration from '@/components/PivotIllustration';
 
 // Settings
@@ -67,7 +67,7 @@ export default async function Page() {
           </div>
         </div>
 
-        {dbs && <SearchableDatabaseSection databases={dbs} />}
+        {dbs && <DatabaseListSection databases={dbs} />}
 
         <div className="section">
           <div className="fr-grid-row ">
