@@ -155,6 +155,16 @@ function BodyPanel({
             <div>
               {candidatesWithAddresses?.length ? (
                 <div>
+                  {candidatesWithAddresses.some(
+                    (candidate) =>
+                      candidate && candidate.validated_by.length > 0,
+                  ) && (
+                    <div className={editPanelStyles.validationWarning}>
+                      Au moins un des bâtiments sélectionnés est validé. La
+                      fusion aura pour effet de supprimer toute validation
+                      existante.
+                    </div>
+                  )}
                   <div className={styles.buildingWrapper}>
                     {candidatesWithAddresses.map(
                       (candidate) =>
