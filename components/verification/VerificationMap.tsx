@@ -229,6 +229,22 @@ async function installOverlays(
   installExtra(map);
 }
 
+// Nos couches (contours RNB et BD Topo, adresses et liens) : masquables
+// d'un coup pour mieux voir le fond de carte.
+const OWN_SOURCES = [SRC_RNB, SRC_BDTOPO, SRC_EXTRA];
+
+function setOverlaysVisible(map: maplibregl.Map, visible: boolean) {
+  for (const layer of map.getStyle()?.layers ?? []) {
+    if ('source' in layer && OWN_SOURCES.includes(layer.source)) {
+      map.setLayoutProperty(
+        layer.id,
+        'visibility',
+        visible ? 'visible' : 'none',
+      );
+    }
+  }
+}
+
 function setExtraData(
   map: maplibregl.Map,
   extra: GeoJSON.FeatureCollection | undefined,
@@ -255,6 +271,7 @@ export default function VerificationMap({
   mapStyle,
   withBan = false,
   withRnbBuildings = false,
+  overlaysVisible = true,
   extra,
   onReportsInView,
   geometries,
@@ -265,6 +282,8 @@ export default function VerificationMap({
   withBan?: boolean;
   // Couche bâtiments de la carte du site, comme sur /carte.
   withRnbBuildings?: boolean;
+  // false : masque les contours et les adresses, pour voir le fond.
+  overlaysVisible?: boolean;
   // Points et traits en plus (adresses, liens bâti-adresse).
   extra?: GeoJSON.FeatureCollection;
   // Si fourni : affiche les signalements et donne ceux des tuiles chargées.
@@ -279,6 +298,8 @@ export default function VerificationMap({
   geometriesRef.current = geometries;
   const extraRef = useRef(extra);
   extraRef.current = extra;
+  const visibleRef = useRef(overlaysVisible);
+  visibleRef.current = overlaysVisible;
   const onReportsRef = useRef(onReportsInView);
   onReportsRef.current = onReportsInView;
 
@@ -301,6 +322,7 @@ export default function VerificationMap({
       });
       setOverlayData(map, geometriesRef.current);
       setExtraData(map, extraRef.current);
+      setOverlaysVisible(map, visibleRef.current);
     });
     map.on('idle', () => onReportsRef.current?.(reportsInView(map)));
     mapRef.current = map;
@@ -336,6 +358,11 @@ export default function VerificationMap({
     const map = mapRef.current;
     if (map?.getSource(SRC_EXTRA)) setExtraData(map, extra);
   }, [extra]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map?.getSource(SRC_RNB)) setOverlaysVisible(map, overlaysVisible);
+  }, [overlaysVisible]);
 
   useEffect(() => {
     const map = mapRef.current;

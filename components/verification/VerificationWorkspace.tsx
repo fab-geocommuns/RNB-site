@@ -356,6 +356,7 @@ export default function VerificationWorkspace() {
   const [storageError, setStorageError] = useState(false);
   const [oldPeriod, setOldPeriod] = useState<OrthoPeriod>(DEFAULT_OLD_PERIOD);
   const [view, setView] = useState<ViewId>('cartes');
+  const [overlaysVisible, setOverlaysVisible] = useState(true);
   const [mapReports, setMapReports] = useState<MapReport[]>([]);
   const registry = useMapRegistry();
   const commentRef = useRef<HTMLTextAreaElement>(null);
@@ -456,6 +457,8 @@ export default function VerificationWorkspace() {
         goTo(isOffList ? current : current + 1);
       } else if (e.key === 'ArrowLeft' && session) {
         goTo(isOffList ? current : current - 1);
+      } else if (e.key === 'm') {
+        setOverlaysVisible((v) => !v);
       } else if (e.key === 'c' && session && !isOffList) {
         e.preventDefault();
         commentRef.current?.focus();
@@ -748,21 +751,38 @@ export default function VerificationWorkspace() {
             view={view}
             withBdTopo={!isOffList && cleabsIdx !== -1}
             actions={
-              <Select
-                label={null}
-                className="fr-mb-0"
-                nativeSelectProps={{
-                  value: view,
-                  onChange: (e) => changeView(e.target.value as ViewId),
-                  'aria-label': 'Vue',
-                }}
-              >
-                {Object.entries(VIEWS).map(([id, label]) => (
-                  <option key={id} value={id}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
+              <>
+                <Button
+                  size="small"
+                  priority={overlaysVisible ? 'tertiary' : 'secondary'}
+                  iconId={
+                    overlaysVisible
+                      ? 'fr-icon-eye-off-line'
+                      : 'fr-icon-eye-line'
+                  }
+                  title="Masquer ou afficher les contours (touche m)"
+                  onClick={() => setOverlaysVisible((v) => !v)}
+                >
+                  {overlaysVisible
+                    ? 'Masquer les contours (m)'
+                    : 'Afficher les contours (m)'}
+                </Button>
+                <Select
+                  label={null}
+                  className="fr-mb-0"
+                  nativeSelectProps={{
+                    value: view,
+                    onChange: (e) => changeView(e.target.value as ViewId),
+                    'aria-label': 'Vue',
+                  }}
+                >
+                  {Object.entries(VIEWS).map(([id, label]) => (
+                    <option key={id} value={id}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+              </>
             }
           />
           {view === 'cartes' ? (
@@ -776,6 +796,7 @@ export default function VerificationWorkspace() {
                   geometries={geometries}
                   bounds={bounds}
                   registry={registry}
+                  overlaysVisible={overlaysVisible}
                 />
               </Pane>
               <Pane title="Ortho actuelle">
@@ -785,6 +806,7 @@ export default function VerificationWorkspace() {
                   geometries={geometries}
                   bounds={bounds}
                   registry={registry}
+                  overlaysVisible={overlaysVisible}
                 />
               </Pane>
               <Pane
@@ -814,6 +836,7 @@ export default function VerificationWorkspace() {
                   geometries={geometries}
                   bounds={bounds}
                   registry={registry}
+                  overlaysVisible={overlaysVisible}
                 />
               </Pane>
               <Pane title="Carte RNB (bâtiments du référentiel)">
@@ -824,6 +847,7 @@ export default function VerificationWorkspace() {
                   geometries={geometries}
                   bounds={bounds}
                   registry={registry}
+                  overlaysVisible={overlaysVisible}
                 />
               </Pane>
             </>
@@ -837,6 +861,7 @@ export default function VerificationWorkspace() {
                   geometries={geometries}
                   bounds={bounds}
                   registry={registry}
+                  overlaysVisible={overlaysVisible}
                 />
               </Pane>
               <Pane title="Validation" scroll>
