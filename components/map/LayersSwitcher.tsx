@@ -56,7 +56,10 @@ function LayerButton({
 }: LayerButtonProps) {
   const getTitle = () => {
     let imageLabel = label;
-    if (label === 'Satellite' || label === 'Satellite 2016-2020') {
+    if (
+      label === 'Vue aérienne (IGN)' ||
+      label === 'Vue aérienne 2016-2020 (IGN)'
+    ) {
       imageLabel += ' (shift + s)';
     }
     // TODO: Use a Tooltip for better UX, but we need to update DSFR
@@ -112,10 +115,10 @@ export default function LayersSwitcher({
   useHotkeys('shift+s', () => {
     if (mapLayers.background !== 'satellite') {
       handleChangeBackgroundClick('satellite');
-      toasterSuccess(dispatch, 'Satellite');
+      toasterSuccess(dispatch, 'Vue aérienne (IGN)');
     } else {
       handleChangeBackgroundClick('satellite_2016_2020');
-      toasterSuccess(dispatch, 'Satellite 2016-2020');
+      toasterSuccess(dispatch, 'Vue aérienne 2016-2020 (IGN)');
     }
   });
 
@@ -214,14 +217,14 @@ export default function LayersSwitcher({
                   <LayerButton
                     isAvailable={isAvailable('satellite')}
                     isActive={mapLayers.background === 'satellite'}
-                    label="Satellite"
+                    label="Vue aérienne (IGN)"
                     onClick={() => handleChangeBackgroundClick('satellite')}
                     image={backgroundSatellite}
                   />
                   <LayerButton
                     isAvailable={isAvailable('satellite_2016_2020')}
                     isActive={mapLayers.background === 'satellite_2016_2020'}
-                    label="Satellite 2016-2020"
+                    label="Vue aérienne 2016-2020 (IGN)"
                     onClick={() =>
                       handleChangeBackgroundClick('satellite_2016_2020')
                     }
