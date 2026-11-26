@@ -214,7 +214,10 @@ export default function Page() {
               ).
             </p>
 
-            <div className="block block--yellow fr-mt-12v">
+            <div
+              id="sources-et-mise-a-jour"
+              className="block block--yellow fr-mt-12v"
+            >
               <div className="fr-grid-row fr-grid-row--gutters ">
                 <div className="fr-col-12">
                   <p className="block__title">

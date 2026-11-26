@@ -34,26 +34,33 @@ const json = (res, status, body) => {
   res.end(JSON.stringify(body));
 };
 
-// « Participer au RNB » section (/apercu-activite). Chosen to show the edge
-// cases: no new organization (no delta), a 1-row ranking (its card is hidden)
+// « Participer au RNB » section (/apercu-activite) and its details page.
+// Chosen to show the edge cases: no new organization over 7 days (no delta), a
+// 1-row ranking (its card is hidden), an organization with a short name (the
+// full name in a tooltip) or without
 const gironde = { code: '33', name: 'Gironde' };
 const CONTRIBUTION_SUMMARY = {
   updated_at: '2026-10-15T14:10:00+02:00',
   window_days: 30,
   cities: { total: 1248, new: 12 },
-  organizations: { total: 86, new: 0 },
-  building_changes: { total: 4310, contributions: 520 },
+  organizations: { total: 86, new: 5 },
+  contributions: { total: 520 },
   top: {
     users: [
       {
         username: 'contributrice_test',
         organization: 'Mairie Test',
+        organization_short_name: null,
         count: 800,
       },
     ],
     organizations: [
-      { name: 'Commune de Talence', count: 42 },
-      { name: 'Syndicat SIG', count: 18 },
+      { name: 'Commune de Talence', short_name: null, count: 42 },
+      {
+        name: 'Syndicat intercommunal SIG',
+        short_name: 'Syndicat SIG',
+        count: 18,
+      },
     ],
     cities: [
       {
@@ -121,6 +128,8 @@ const server = createServer((req, res) => {
         ...CONTRIBUTION_SUMMARY,
         window_days: 7,
         cities: { total: 40, new: 3 },
+        organizations: { total: 20, new: 0 },
+        contributions: { total: 140 },
         top: {
           ...CONTRIBUTION_SUMMARY.top,
           cities: CONTRIBUTION_SUMMARY.top.cities.map((c) => ({
@@ -135,12 +144,46 @@ const server = createServer((req, res) => {
         window_days: null,
         cities: { total: 17126, new: 17126 },
         organizations: { total: 200, new: 200 },
-        building_changes: { total: 4236167, contributions: 888625 },
+        contributions: { total: 888625 },
         newcomers: { users: [{ username: 'derniere_arrivee' }] },
       },
     };
     return json(res, 200, {
       summaries: [summaries[7], summaries[30], summaries.all],
+    });
+  }
+  if (method === 'GET' && path === '/api/alpha/contributions/rankings/') {
+    // the full lists: more contributors than the top of the summary over 30
+    // days, the cities capped at 100 over the whole period
+    const { users, organizations, cities } = CONTRIBUTION_SUMMARY.top;
+    const period = (window_days, rankings) => ({
+      updated_at: CONTRIBUTION_SUMMARY.updated_at,
+      window_days,
+      since: window_days === null ? null : '2026-09-15T14:10:00+02:00',
+      users,
+      organizations,
+      cities,
+      ...rankings,
+    });
+    const moreUsers = Array.from({ length: 11 }, (_, i) => ({
+      username: `contributeur_${i + 1}`,
+      organization: null,
+      count: 11 - i,
+    }));
+    const manyCities = Array.from({ length: 100 }, (_, i) => ({
+      insee_code: String(33001 + i),
+      name: `Commune ${i + 1}`,
+      department: gironde,
+      count: 100 - i,
+    }));
+    return json(res, 200, {
+      rankings: [
+        period(7, {
+          cities: cities.map((c) => ({ ...c, count: 1 })),
+        }),
+        period(30, { users: [...users, ...moreUsers] }),
+        period(null, { cities: manyCities }),
+      ],
     });
   }
   if (method === 'GET' && path.startsWith('/api/alpha/buildings/')) {

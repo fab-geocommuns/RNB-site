@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { fr } from '@codegouvfr/react-dsfr';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { Card } from '@codegouvfr/react-dsfr/Card';
@@ -8,18 +9,19 @@ import {
   SegmentedControl,
   SegmentedControlProps,
 } from '@codegouvfr/react-dsfr/SegmentedControl';
-import { TagsGroup, TagsGroupProps } from '@codegouvfr/react-dsfr/TagsGroup';
 
+import { OrganizationName } from '@/components/OrganizationName';
 import {
   ContributionSummary as ContributionSummaryData,
   DEFAULT_PERIOD,
   FigureView,
   formatNumber,
   keyFigures,
+  Period,
   periodLabel,
   periodOf,
   RankingView,
-  windowView,
+  summaryOf,
 } from '@/utils/contributionSummary';
 
 const colors = fr.colors.decisions;
@@ -28,24 +30,36 @@ const EDITION_GUIDE_URL =
   'https://rnb-fr.gitbook.io/documentation/api-et-outils/api-batiments/editer-le-rnb/guide-dedition-du-rnb';
 
 const LINKS = [
-  { label: 'Comment est construit le RNB', href: '/a-propos' },
-  { label: 'Le guide de l’édition', href: EDITION_GUIDE_URL },
+  {
+    label: 'Comment est construit le RNB',
+    href: '/a-propos#sources-et-mise-a-jour',
+  },
+  { label: 'Guide de l’édition', href: EDITION_GUIDE_URL },
   { label: 'Foire aux questions', href: '/faq' },
   { label: 'Toutes les statistiques', href: '/stats' },
 ];
 
 // Key figure: the number and its label make one heading, so that the number
 // is never read alone
-function FigureCard({ figure }: { figure: FigureView }) {
+export function FigureCard({
+  figure,
+  titleAs = 'h3',
+}: {
+  figure: FigureView;
+  titleAs?: 'h2' | 'h3';
+}) {
   return (
     <Card
       border
       size="small"
-      titleAs="h3"
+      titleAs={titleAs}
+      // the empty end block would add a blank space under the figure; the
+      // detail stays close to the label it qualifies
+      classes={{ end: fr.cx('fr-hidden'), desc: fr.cx('fr-mt-0') }}
       title={
         <>
           <span
-            className={fr.cx('fr-display--xs', 'fr-mb-1w')}
+            className={fr.cx('fr-display--xs', 'fr-mb-0')}
             style={{
               display: 'block',
               color: colors.text.actionHigh.blueFrance.default,
@@ -53,7 +67,12 @@ function FigureCard({ figure }: { figure: FigureView }) {
           >
             {formatNumber(figure.value)}
           </span>
-          <span className={fr.cx('fr-text--regular', 'fr-text--md')}>
+          {/* block, so that its own line height applies instead of the
+              heading's */}
+          <span
+            className={fr.cx('fr-text--regular', 'fr-text--md', 'fr-mb-0')}
+            style={{ display: 'block' }}
+          >
             {figure.label}
           </span>
         </>
@@ -72,18 +91,24 @@ function FigureCard({ figure }: { figure: FigureView }) {
   );
 }
 
-function RankingCard({ ranking }: { ranking: RankingView }) {
+export function RankingCard({
+  ranking,
+  titleAs = 'h3',
+}: {
+  ranking: RankingView;
+  titleAs?: 'h2' | 'h3';
+}) {
   return (
     <Card
       border
       size="small"
-      titleAs="h3"
+      titleAs={titleAs}
       title={ranking.title}
       end={
         <ol className={fr.cx('fr-raw-list')}>
           {ranking.rows.map((row, i) => (
             <li
-              key={`${row.name}-${i}`}
+              key={`${row.name.name}-${i}`}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -95,15 +120,17 @@ function RankingCard({ ranking }: { ranking: RankingView }) {
                     : undefined,
               }}
             >
-              <span>
-                {row.name}
+              {/* a long name without spaces (a username) is cut, rather than
+                  widening its column */}
+              <span style={{ overflowWrap: 'anywhere' }}>
+                <OrganizationName {...row.name} />
                 {row.detail && (
                   <span
                     className={fr.cx('fr-text--sm')}
                     style={{ color: colors.text.mention.grey.default }}
                   >
                     {' '}
-                    · {row.detail}
+                    · <OrganizationName {...row.detail} />
                   </span>
                 )}
               </span>
@@ -119,10 +146,70 @@ function RankingCard({ ranking }: { ranking: RankingView }) {
   );
 }
 
-// « Participer au RNB » section of the home page. A selector picks the period
-// (the last 7 or 30 days, or since the opening of the collaborative edition),
-// which sets every number of the section: one summary per period. Renders
-// nothing without data: the home page must not break when the API fails.
+// Selector of the period shown, one segment per summary; nothing with a
+// single summary
+export function PeriodSelector({
+  summaries,
+  period,
+  onChange,
+}: {
+  summaries: ContributionSummaryData[];
+  period: Period;
+  onChange: (period: Period) => void;
+}) {
+  if (summaries.length < 2) return null;
+  // the DSFR expects a tuple of 1 to 5 segments
+  const segments = summaries.map((s) => ({
+    label: periodLabel(periodOf(s)),
+    nativeInputProps: {
+      value: String(periodOf(s)),
+      checked: periodOf(s) === period,
+      onChange: () => onChange(periodOf(s)),
+    },
+  })) as unknown as SegmentedControlProps['segments'];
+  return (
+    <div className={fr.cx('fr-mt-5w', 'fr-mb-3w')}>
+      {/* white, so that it stands out on the colored band */}
+      <SegmentedControl
+        legend="Période"
+        hideLegend
+        segments={segments}
+        style={{
+          backgroundColor: colors.background.default.grey.default,
+        }}
+      />
+    </div>
+  );
+}
+
+// Key figures side by side, sharing the whole width whatever their number
+export function FigureCards({
+  figures,
+  titleAs,
+}: {
+  figures: FigureView[];
+  titleAs?: 'h2' | 'h3';
+}) {
+  return (
+    <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
+      {figures.map((figure) => (
+        <div key={figure.label} className={fr.cx('fr-col-12', 'fr-col-md')}>
+          <FigureCard figure={figure} titleAs={titleAs} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Page of the rankings, cities and newcomers, opened on the selected period
+export const detailsHref = (period: Period) =>
+  `/apercu-activite/details?periode=${period}`;
+
+// « Participer au RNB » section of the home page: the number of contributions
+// and of contributing organizations. A selector picks the period (the last 7
+// or 30 days, or the whole period), one summary
+// per period; the rest of the summary is on the details page. Renders nothing
+// without data: the home page must not break when the API fails.
 export default function ContributionSummary({
   summaries,
 }: {
@@ -131,40 +218,34 @@ export default function ContributionSummary({
   const [selectedPeriod, setSelectedPeriod] = useState(DEFAULT_PERIOD);
   if (!summaries?.length) return null;
 
-  const summary =
-    summaries.find((s) => periodOf(s) === selectedPeriod) ??
-    summaries.find((s) => periodOf(s) === DEFAULT_PERIOD) ??
-    summaries[0];
+  const summary = summaryOf(summaries, selectedPeriod);
   const period = periodOf(summary);
-  const figures = keyFigures(summary);
-  const { rankings, newcomersTitle, newcomers } = windowView(summary);
-  // the DSFR expects a tuple of 1 to 5 segments; summaries is not empty here
-  const segments = summaries.map((s) => ({
-    label: periodLabel(periodOf(s)),
-    nativeInputProps: {
-      value: String(periodOf(s)),
-      checked: periodOf(s) === period,
-      onChange: () => setSelectedPeriod(periodOf(s)),
-    },
-  })) as unknown as SegmentedControlProps['segments'];
+  const { contributions, organizations } = keyFigures(summary);
 
   return (
     // colored band, like the other home page sections, so that the cards do
     // not merge with the white cards of the next section
     <section
-      className={fr.cx('fr-my-8w')}
+      className={fr.cx('fr-my-8w', 'fr-py-6w', 'fr-px-3w', 'fr-px-md-5w')}
       style={{
-        padding: `${fr.spacing('6w')} ${fr.spacing('3w')}`,
         backgroundColor: colors.background.alt.blueFrance.default,
       }}
     >
-      <div className="section__titleblock">
-        <h2 className="section__title">Participer au RNB</h2>
-        <p className={fr.cx('fr-text--regular') + ' section__subtitle'}>
-          Le RNB se construit en continu : avec les bases nationales, et avec
-          celles et ceux qui connaissent leur territoire.
-        </p>
-      </div>
+      {/* left-aligned, unlike the other home page sections */}
+      <h2
+        className={fr.cx('fr-mb-2w') + ' section__title'}
+        style={{ textAlign: 'left' }}
+      >
+        Participer au RNB
+      </h2>
+      <p
+        className={fr.cx('fr-text--regular', 'fr-mb-2w') + ' section__subtitle'}
+        style={{ textAlign: 'left' }}
+      >
+        Le RNB est construit en continu grâce aux imports de la BD Topo et de la
+        BAN ainsi qu’aux contributions de ceux ayant une connaissance fine de
+        leur territoire.
+      </p>
       {/* right under the introduction: the section raises questions for a
           visitor who discovers the collaborative edition */}
       <ul
@@ -172,77 +253,42 @@ export default function ContributionSummary({
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'center',
           gap: `${fr.spacing('1w')} ${fr.spacing('3w')}`,
         }}
       >
         {LINKS.map((link) => (
           <li key={link.href}>
-            <a
-              href={link.href}
-              className={fr.cx(
-                'fr-link',
-                'fr-link--sm',
-                'fr-icon-arrow-right-line',
-                'fr-link--icon-right',
-              )}
-            >
+            <a href={link.href} className={fr.cx('fr-link', 'fr-link--sm')}>
               {link.label}
             </a>
           </li>
         ))}
       </ul>
 
-      {summaries.length > 1 && (
-        <div
-          className={fr.cx('fr-mt-5w', 'fr-mb-3w')}
-          style={{ display: 'flex', justifyContent: 'center' }}
+      <PeriodSelector
+        summaries={summaries}
+        period={period}
+        onChange={setSelectedPeriod}
+      />
+
+      <FigureCards figures={[contributions, organizations]} />
+
+      <p className={fr.cx('fr-mt-3w', 'fr-mb-0')}>
+        <Link
+          href={detailsHref(period)}
+          className={fr.cx(
+            'fr-link',
+            'fr-icon-arrow-right-line',
+            'fr-link--icon-right',
+          )}
         >
-          <SegmentedControl legend="Période" hideLegend segments={segments} />
-        </div>
-      )}
-
-      {/* the tiles share the whole width, whatever their number */}
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters')}>
-        {figures.map((figure) => (
-          <div key={figure.label} className={fr.cx('fr-col-12', 'fr-col-md')}>
-            <FigureCard figure={figure} />
-          </div>
-        ))}
-      </div>
-
-      <div className={fr.cx('fr-grid-row', 'fr-grid-row--gutters', 'fr-mt-1w')}>
-        {rankings.map((ranking) => (
-          <div key={ranking.title} className={fr.cx('fr-col-12', 'fr-col-md')}>
-            <RankingCard ranking={ranking} />
-          </div>
-        ))}
-      </div>
-
-      {newcomers.length > 0 && (
-        <div className={fr.cx('fr-mt-5w')} style={{ textAlign: 'center' }}>
-          <h3 className={fr.cx('fr-h6', 'fr-mb-1v')}>{newcomersTitle}</h3>
-          <p className={fr.cx('fr-text--sm', 'fr-mb-2w')}>
-            Leur toute première contribution : bienvenue !
-          </p>
-          {/* keyed by position: two usernames can be the same once the
-              emails are cut before the @ */}
-          <TagsGroup
-            style={{ justifyContent: 'center' }}
-            tags={
-              newcomers.map((username) => ({
-                children: username,
-                iconId: 'fr-icon-user-line',
-              })) as TagsGroupProps['tags']
-            }
-          />
-        </div>
-      )}
+          Voir le détail de l’activité
+        </Link>
+      </p>
 
       <ButtonsGroup
         className={fr.cx('fr-mt-5w')}
         inlineLayoutWhen="md and up"
-        alignment="center"
         buttons={[
           {
             children: 'S’inscrire pour contribuer',
