@@ -40,7 +40,7 @@
   title: Box ou garages en rangée
   description: Chaque box est considéré comme un bâtiment, à l'image des maisons en rangée. <a href="#maisons-en-rangee">Voir les explications.</a>
   isBuilding: true
-  image: maisons-en-rangee.jpeg
+  image: box.jpg
 
 - id: balustrade
   title: Appartements en balustrade
@@ -177,7 +177,7 @@
   title: Bâtiment agricole (ex. étable, serre permanente, grange, écurie)
   description: Les constructions abritant des activités humaines uniquement (sans abriter des humains) sont des bâtiments au sens du RNB.
   isBuilding: true
-  image: batiment-agricole.png
+  image: ecurie.jpg
 
 - id: grande-eolienne
   title: Grande éolienne
